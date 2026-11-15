@@ -1,0 +1,264 @@
+{
+  "page_name": "WDT_CORE",
+  "out_name": "wdt_core_diagram.drawio",
+  "table_suffix": " (CORE)",
+  "layout": {
+    "gap_h": 140,
+    "gap_v": 120,
+    "margin": 50,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "WDT CORE",
+      "(m_fpt_wdt_core)"
+    ],
+    "block_label": [
+      "WDT CORE",
+      "(m_fpt_wdt_core)"
+    ],
+    "block_row": [
+      "m_fpt_wdt_core",
+      "Watchdog counter, interrupt/reset logic, and pulse generation.",
+      "rtl/m_fpt_wdt_core.sv"
+    ]
+  },
+  "frame_row": [
+    "m_fpt_wdt_core frame",
+    "Three existing watchdog-core modules connected in the WDT clock domain.",
+    "rtl/m_fpt_wdt_core.sv"
+  ],
+  "frame_interfaces": [
+    "CFG",
+    "CFG2",
+    "CFG3",
+    "CNT",
+    "IRQ",
+    "RSTQ",
+    "RSET",
+    "CR1",
+    "CR2",
+    "CR3"
+  ],
+  "blocks": [
+    {
+      "key": "cnt",
+      "label": [
+        "u_fpt_wdt_counter",
+        "(m_fpt_wdt_counter)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_fpt_wdt_counter (m_fpt_wdt_counter)",
+      "function": "Loads, holds, decrements, and reloads the 32-bit counter.",
+      "source": "rtl/m_fpt_wdt_counter.sv"
+    },
+    {
+      "key": "int",
+      "label": [
+        "u_fpt_wdt_int_rst",
+        "(m_fpt_wdt_int_rst)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_fpt_wdt_int_rst (m_fpt_wdt_int_rst)",
+      "function": "Tracks first timeout, masks interrupt output, and issues the second-timeout reset request.",
+      "source": "rtl/m_fpt_wdt_int_rst.sv"
+    },
+    {
+      "key": "pulse",
+      "label": [
+        "u_fpt_wdt_rst_pulse",
+        "(m_fpt_wdt_rst_pulse)"
+      ],
+      "width": 280,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_fpt_wdt_rst_pulse (m_fpt_wdt_rst_pulse)",
+      "function": "Converts reset request and RESDIV into a 2^RESDIV-cycle active-high pulse.",
+      "source": "rtl/m_fpt_wdt_rst_pulse.sv"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "CNT",
+      "src": "cnt",
+      "src_side": "B",
+      "dst": "int",
+      "dst_side": "T"
+    },
+    {
+      "id": "RSTQ",
+      "src": "int",
+      "src_side": "B",
+      "dst": "pulse",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "CFG",
+      "block": "cnt",
+      "side": "L",
+      "dir": "in",
+      "pos": -10,
+      "text": [
+        "CFG",
+        "counter controls"
+      ]
+    },
+    {
+      "id": "CR1",
+      "block": "cnt",
+      "side": "L",
+      "dir": "in",
+      "pos": 30,
+      "text": [
+        "CR1",
+        "WDT clock/reset"
+      ]
+    },
+    {
+      "id": "IRQ",
+      "block": "int",
+      "side": "R",
+      "dir": "out",
+      "pos": -10,
+      "text": [
+        "IRQ",
+        "interrupt"
+      ]
+    },
+    {
+      "id": "CFG2",
+      "block": "int",
+      "side": "L",
+      "dir": "in",
+      "pos": -20,
+      "text": [
+        "CFG2",
+        "timeout controls"
+      ]
+    },
+    {
+      "id": "CR2",
+      "block": "int",
+      "side": "L",
+      "dir": "in",
+      "pos": 30,
+      "text": [
+        "CR2",
+        "WDT clock/reset"
+      ]
+    },
+    {
+      "id": "RSET",
+      "block": "pulse",
+      "side": "R",
+      "dir": "out",
+      "pos": 10,
+      "text": [
+        "RSET",
+        "reset pulse"
+      ]
+    },
+    {
+      "id": "CFG3",
+      "block": "pulse",
+      "side": "L",
+      "dir": "in",
+      "pos": -20,
+      "text": [
+        "CFG3",
+        "pulse width"
+      ]
+    },
+    {
+      "id": "CR3",
+      "block": "pulse",
+      "side": "L",
+      "dir": "in",
+      "pos": 30,
+      "text": [
+        "CR3",
+        "WDT clock/reset"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "CFG",
+      "name": "Counter control",
+      "category": "custom",
+      "active": "parent CSR -> counter",
+      "signals": "CSR -> counter: i_load_val, i_cnt_en, i_ld_write, i_int_clr, i_halt"
+    },
+    {
+      "id": "CFG2",
+      "name": "Timeout control",
+      "category": "custom",
+      "active": "parent CSR -> timeout logic",
+      "signals": "CSR -> int/reset: i_inten, i_resen, i_halt, i_cnt_en"
+    },
+    {
+      "id": "CFG3",
+      "name": "Pulse-width control",
+      "category": "custom",
+      "active": "parent CSR -> pulse generator",
+      "signals": "CSR -> pulse: i_resdiv"
+    },
+    {
+      "id": "CNT",
+      "name": "Counter value and stop control",
+      "category": "custom",
+      "active": "counter value -> timeout logic",
+      "signals": "Counter -> int/reset: o_cnt_val; int/reset -> counter: o_cnt_stop"
+    },
+    {
+      "id": "IRQ",
+      "name": "Watchdog interrupt",
+      "category": "interrupt",
+      "active": "int/reset logic -> parent",
+      "signals": "m_fpt_wdt_int_rst -> parent: o_int_wdog"
+    },
+    {
+      "id": "RSTQ",
+      "name": "Reset request",
+      "category": "reset",
+      "active": "int/reset logic -> pulse generator",
+      "signals": "m_fpt_wdt_int_rst -> m_fpt_wdt_rst_pulse: o_rst_set / i_rst_set"
+    },
+    {
+      "id": "RSET",
+      "name": "Watchdog reset pulse",
+      "category": "reset",
+      "active": "pulse generator -> parent",
+      "signals": "m_fpt_wdt_rst_pulse -> parent: o_wdogres"
+    },
+    {
+      "id": "CR1",
+      "name": "Clock/reset to counter",
+      "category": "clock/reset",
+      "active": "SoC -> counter",
+      "signals": "SoC -> counter: i_clk_wdog, i_rst_n_wdog"
+    },
+    {
+      "id": "CR2",
+      "name": "Clock/reset to timeout logic",
+      "category": "clock/reset",
+      "active": "SoC -> timeout logic",
+      "signals": "SoC -> int/reset: i_clk_wdog, i_rst_n_wdog"
+    },
+    {
+      "id": "CR3",
+      "name": "Clock/reset to pulse generator",
+      "category": "clock/reset",
+      "active": "SoC -> pulse generator",
+      "signals": "SoC -> pulse: i_clk_wdog, i_rst_n_wdog"
+    }
+  ],
+  "legend_note": "CR1/CR2/CR3 are the same WDT clock/reset nets fanned out to each child block. RSTQ is the internal reset request; RSET is the external reset pulse."
+}

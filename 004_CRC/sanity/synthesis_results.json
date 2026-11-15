@@ -1,0 +1,300 @@
+[
+  {
+    "config": "base0",
+    "result": "PASS",
+    "cells": 168,
+    "flipflops": 52,
+    "combinational": 116,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "base1",
+    "result": "PASS",
+    "cells": 449,
+    "flipflops": 138,
+    "combinational": 311,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "base2",
+    "result": "PASS",
+    "cells": 480,
+    "flipflops": 118,
+    "combinational": 362,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "base3",
+    "result": "PASS",
+    "cells": 722,
+    "flipflops": 126,
+    "combinational": 596,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "base4",
+    "result": "PASS",
+    "cells": 480,
+    "flipflops": 118,
+    "combinational": 362,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "ref0",
+    "result": "PASS",
+    "cells": 174,
+    "flipflops": 52,
+    "combinational": 122,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "ref1",
+    "result": "PASS",
+    "cells": 461,
+    "flipflops": 138,
+    "combinational": 323,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "ref2",
+    "result": "PASS",
+    "cells": 481,
+    "flipflops": 118,
+    "combinational": 363,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "ref3",
+    "result": "PASS",
+    "cells": 708,
+    "flipflops": 126,
+    "combinational": 582,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "ref4",
+    "result": "PASS",
+    "cells": 481,
+    "flipflops": 118,
+    "combinational": 363,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "chunk6_partial",
+    "result": "PASS",
+    "cells": 640,
+    "flipflops": 100,
+    "combinational": 540,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "word8_crc16",
+    "result": "PASS",
+    "cells": 395,
+    "flipflops": 104,
+    "combinational": 291,
+    "latches": 0,
+    "warnings": [
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "chunk32",
+    "result": "PASS",
+    "cells": 4608,
+    "flipflops": 242,
+    "combinational": 4366,
+    "latches": 0,
+    "warnings": [
+      "rtl\\m_crc_engine.sv:83: Warning: shift count of '32'd32' overflows 32-bit operand [-Wshift-count-overflow]",
+      "rtl\\m_crc_engine.sv:84: Warning: shift count of '32'd32' overflows 32-bit operand [-Wshift-count-overflow]",
+      "rtl\\m_crc_engine.sv:85: Warning: shift count of '32'd32' overflows 32-bit operand [-Wshift-count-overflow]",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  },
+  {
+    "config": "full32",
+    "result": "PASS",
+    "cells": 1981,
+    "flipflops": 238,
+    "combinational": 1743,
+    "latches": 0,
+    "warnings": [
+      "rtl\\m_crc_engine.sv:83: Warning: shift count of '32'd32' overflows 32-bit operand [-Wshift-count-overflow]",
+      "rtl\\m_crc_engine.sv:84: Warning: shift count of '32'd32' overflows 32-bit operand [-Wshift-count-overflow]",
+      "rtl\\m_crc_engine.sv:85: Warning: shift count of '32'd32' overflows 32-bit operand [-Wshift-count-overflow]",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\").",
+      "ABC: Warning: The network is combinational (run \"fraig\" or \"fraig_sweep\")."
+    ]
+  }
+]

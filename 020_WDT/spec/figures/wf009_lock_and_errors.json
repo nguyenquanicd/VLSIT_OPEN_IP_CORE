@@ -1,0 +1,69 @@
+{
+  "head": {
+    "text": "Locked writes are ignored; invalid addresses return PSLVERR"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_pclk",
+      "wave": "p................"
+    },
+    [
+      "APB transfers",
+      {
+        "name": "i_wdt_apb_psel",
+        "wave": "01100110011000000"
+      },
+      {
+        "name": "i_wdt_apb_penable",
+        "wave": "00100100100000000"
+      },
+      {
+        "name": "i_wdt_apb_pwrite",
+        "wave": "x1..1..1........."
+      },
+      {
+        "name": "i_wdt_apb_paddr",
+        "wave": "x=..=..=.........",
+        "data": [
+          "WD_CNT_CTRL",
+          "0x0001",
+          "0x1024"
+        ]
+      },
+      {
+        "name": "i_wdt_apb_pwdata",
+        "wave": "x=..=..=.........",
+        "data": [
+          "CTRL_UPDATE",
+          "ANY",
+          "ANY"
+        ]
+      },
+      {
+        "name": "i_wdt_other_unlock",
+        "wave": "0..11111111111111"
+      },
+      {
+        "name": "o_wdt_apb_pready",
+        "wave": "00100100100000000"
+      },
+      {
+        "name": "o_wdt_apb_pslverr",
+        "wave": "00000100100000000"
+      }
+    ],
+    [
+      "Result",
+      {
+        "name": "WD_CNT_CTRL",
+        "wave": "=................",
+        "data": [
+          "UNCHANGED"
+        ]
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Transfer 1 is locked and completes without update. Transfers 2 and 3 use misaligned and unmapped addresses and return PSLVERR. Pulse-width values are all legal; no RESDIV encoding error exists in the target."
+  }
+}

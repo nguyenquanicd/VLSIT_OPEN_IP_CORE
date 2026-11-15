@@ -1,0 +1,57 @@
+{
+  "head": {
+    "text": "Coordinated resets and APB-to-WDT request/ack"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_pclk",
+      "wave": "p........"
+    },
+    {
+      "name": "i_wdt_clk",
+      "wave": "p........",
+      "phase": 0.5
+    },
+    [
+      "Reset",
+      {
+        "name": "i_wdt_preset_n",
+        "wave": "0..111111"
+      },
+      {
+        "name": "i_wdt_rst_n",
+        "wave": "0...11111"
+      }
+    ],
+    [
+      "APB / CDC",
+      {
+        "name": "i_wdt_apb_psel",
+        "wave": "000110000"
+      },
+      {
+        "name": "i_wdt_apb_penable",
+        "wave": "000010000"
+      },
+      {
+        "name": "reg_write_req",
+        "wave": "000111100"
+      },
+      {
+        "name": "write_req_reg_clk",
+        "wave": "000001110"
+      },
+      {
+        "name": "write_ack",
+        "wave": "000000110"
+      },
+      {
+        "name": "o_wdt_apb_pready",
+        "wave": "000000010"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Relative phases are illustrative. External logic asserts both resets; each release is synchronized to its clock."
+  }
+}

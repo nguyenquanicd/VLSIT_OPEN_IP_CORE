@@ -1,0 +1,55 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_src",
+    "wave": "==..............",
+    "data": [
+     "0",
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_gray",
+    "wave": "=.=.............",
+    "data": [
+     "0",
+     "G0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "o_data",
+    "wave": "=...=...........",
+    "data": [
+     "0",
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-003: registered source input, PARA_AGRAY_SRC_REG = 1"
+ },
+ "foot": {
+  "text": "reg_src captures D0 at t0; reg_gray = G0 at t1; o_data = D0 at t3. One source cycle is added, so the latency is 2 source + 2 destination cycles."
+ }
+}

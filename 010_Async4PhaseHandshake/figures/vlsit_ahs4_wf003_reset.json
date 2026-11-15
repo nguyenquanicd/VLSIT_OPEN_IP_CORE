@@ -1,0 +1,77 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_src",
+    "wave": "11111000111111"
+   },
+   {
+    "name": "i_req",
+    "wave": "11111000000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "=....x........",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "o_ack",
+    "wave": "00000000000000"
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_req",
+    "wave": "1....0........"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0............."
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0............."
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_dst",
+    "wave": "11111000111111"
+   },
+   {
+    "name": "o_req",
+    "wave": "00111000000000"
+   },
+   {
+    "name": "o_data",
+    "wave": "xx=..0........",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "i_ack",
+    "wave": "00000000000000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-003: reset during a transaction, both resets asserted together"
+ },
+ "foot": {
+  "text": "Asynchronous assertion clears reg_req, reg_ack, the payload register, o_req and o_data. Both domains return idle; no partial transfer is reported as complete. Release is synchronous in each domain."
+ }
+}

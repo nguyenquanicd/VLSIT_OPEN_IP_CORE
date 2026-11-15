@@ -1,0 +1,69 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "ppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "11111110......."
+   },
+   {
+    "name": "i_data",
+    "wave": "=......x.......",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "o_ack",
+    "wave": "000000100000000"
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_req",
+    "wave": "1.....0........"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0.....10......."
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0....1.....0..."
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "ppppppppppppppp"
+   },
+   {
+    "name": "o_req",
+    "wave": "001111111000000"
+   },
+   {
+    "name": "o_data",
+    "wave": "xx=......xxxxxx",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "i_ack",
+    "wave": "000111111000000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-001: single transfer, N=2, 1:1 clocks, one destination wait cycle"
+ },
+ "foot": {
+  "text": "Launch at t0; o_req after two destination edges; o_ack after two source edges; the cycle closes 12 source cycles after launch. Payload D0 is held from launch until o_req falls. reg_req and reg_ack are the two source flags; no FSM state exists."
+ }
+}

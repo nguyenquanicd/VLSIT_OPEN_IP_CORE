@@ -1,0 +1,80 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "0111110000000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "x=.=............",
+    "data": [
+     "D0",
+     "D1"
+    ]
+   },
+   {
+    "name": "reg_req",
+    "wave": "0011111111111111"
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0000000111111111"
+   },
+   {
+    "name": "o_ack_data",
+    "wave": "=...............",
+    "data": [
+     "0"
+    ]
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_data",
+    "wave": "x.=.............",
+    "data": [
+     "D0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "w_req_s",
+    "wave": "0000111111111111"
+   },
+   {
+    "name": "i_ack",
+    "wave": "1111111111111111"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0000011111111111"
+   },
+   {
+    "name": "o_data",
+    "wave": "x....=..........",
+    "data": [
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-008: spurious i_ack before any request, and i_data changed in flight"
+ },
+ "foot": {
+  "text": "i_ack with no pending word causes no accept. Launch t2, i_data changes at t3, accept t5 leaves o_data at D0."
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppppp"
+   },
+   {
+    "name": "i_data",
+    "wave": "=...=...=...=.....",
+    "data": [
+     "D0",
+     "D1",
+     "D2",
+     "D3"
+    ]
+   },
+   {
+    "name": "reg_gray",
+    "wave": "==...=...=...=....",
+    "data": [
+     "0",
+     "G0",
+     "G1",
+     "G2",
+     "G3"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppppp"
+   },
+   {
+    "name": "o_data",
+    "wave": "=..=...=...=......",
+    "data": [
+     "0",
+     "D0",
+     "D1",
+     "D2"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-002: increment streaming, N=2"
+ },
+ "foot": {
+  "text": "i_data increments every four source edges; reg_gray follows one cycle later; o_data is a 3-cycle delayed copy (D0 from t3). Each increment changes exactly one Gray bit."
+ }
+}

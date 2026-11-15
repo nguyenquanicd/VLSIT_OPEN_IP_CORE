@@ -1,0 +1,197 @@
+{
+ "page_name": "BLOCK_DIAGRAM",
+ "out_name": "vlsit_ahs4_block_diagram.drawio",
+ "table_suffix": "",
+ "layout": {
+  "gap_h": 80,
+  "gap_v": 90,
+  "margin": 40,
+  "block_h": 80
+ },
+ "top": {
+  "frame_label": [
+   "TOP",
+   "(m_vlsit_ahs4_top)"
+  ],
+  "block_label": [
+   "TOP",
+   "(m_vlsit_ahs4_top)"
+  ],
+  "block_row": [
+   "TOP (m_vlsit_ahs4_top)",
+   "Structural top: ports, interconnect and named instances only.",
+   "Section 14.2"
+  ]
+ },
+ "frame_row": [
+  "TOP (m_vlsit_ahs4_top) frame",
+  "Structural top of the asynchronous four-phase handshake IP.",
+  "Section 14.2"
+ ],
+ "frame_interfaces": [
+  "SREQ",
+  "SACK",
+  "DREQ",
+  "DACK",
+  "CSRC",
+  "CDST"
+ ],
+ "blocks": [
+  {
+   "key": "U_SRC",
+   "label": [
+    "u_src",
+    "(m_vlsit_ahs4_src)"
+   ],
+   "width": 240,
+   "row": 0,
+   "col": 0,
+   "row_name": "u_src (m_vlsit_ahs4_src)",
+   "function": "Source request and completion flags, payload register, acknowledge synchronizer instance.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "U_DST",
+   "label": [
+    "u_dst",
+    "(m_vlsit_ahs4_dst)"
+   ],
+   "width": 240,
+   "row": 0,
+   "col": 1,
+   "row_name": "u_dst (m_vlsit_ahs4_dst)",
+   "function": "Request synchronizer instance; transparent (mode 0) or captured (mode 1) data and acknowledge path.",
+   "source": "Section 14.2"
+  }
+ ],
+ "connectors": [
+  {
+   "id": "REQ",
+   "src": "U_SRC",
+   "src_side": "R",
+   "dst": "U_DST",
+   "dst_side": "L"
+  }
+ ],
+ "externals": [
+  {
+   "id": "SREQ",
+   "block": "U_SRC",
+   "side": "B",
+   "dir": "in",
+   "pos": -30,
+   "text": [
+    "SREQ",
+    "i_req, i_data"
+   ]
+  },
+  {
+   "id": "SACK",
+   "block": "U_SRC",
+   "side": "B",
+   "dir": "out",
+   "pos": 30,
+   "text": [
+    "SACK",
+    "o_ack"
+   ]
+  },
+  {
+   "id": "CSRC",
+   "block": "U_SRC",
+   "side": "T",
+   "dir": "in",
+   "pos": 0,
+   "text": [
+    "CSRC",
+    "i_clk_src, i_rst_n_src"
+   ]
+  },
+  {
+   "id": "DREQ",
+   "block": "U_DST",
+   "side": "R",
+   "dir": "out",
+   "pos": 0,
+   "text": [
+    "DREQ",
+    "o_req, o_data"
+   ]
+  },
+  {
+   "id": "DACK",
+   "block": "U_DST",
+   "side": "B",
+   "dir": "in",
+   "pos": -30,
+   "text": [
+    "DACK",
+    "i_ack"
+   ]
+  },
+  {
+   "id": "CDST",
+   "block": "U_DST",
+   "side": "B",
+   "dir": "in",
+   "pos": 30,
+   "text": [
+    "CDST",
+    "i_clk_dst, i_rst_n_dst"
+   ]
+  }
+ ],
+ "nets": [],
+ "interfaces": [
+  {
+   "id": "SREQ",
+   "name": "Source request interface (requester side)",
+   "category": "handshake",
+   "active": "external -> TOP -> u_src",
+   "signals": "external -> TOP: i_req, i_data; TOP -> u_src: i_req, i_data"
+  },
+  {
+   "id": "SACK",
+   "name": "Source completion interface (requester side)",
+   "category": "handshake",
+   "active": "u_src -> TOP -> external",
+   "signals": "u_src -> TOP: o_ack; TOP -> external: o_ack"
+  },
+  {
+   "id": "REQ",
+   "name": "Request and payload crossing, CDC-001 and CDC-003",
+   "category": "custom",
+   "active": "u_src -> u_dst",
+   "signals": "u_src -> u_dst: w_req, w_data"
+  },
+  {
+   "id": "DREQ",
+   "name": "Destination request interface (completer side)",
+   "category": "handshake",
+   "active": "u_dst -> TOP -> external",
+   "signals": "u_dst -> TOP: o_req, o_data; TOP -> external: o_req, o_data"
+  },
+  {
+   "id": "DACK",
+   "name": "Destination acknowledge input and acknowledge crossing, CDC-002",
+   "category": "handshake",
+   "active": "external -> TOP -> u_dst -> u_src",
+   "signals": "external -> TOP: i_ack; TOP -> u_dst: i_ack; u_dst -> u_src: w_ack"
+  },
+  {
+   "id": "CSRC",
+   "name": "Source clock and reset",
+   "category": "custom",
+   "active": "SoC -> TOP -> u_src",
+   "signals": "SoC -> TOP: i_clk_src, i_rst_n_src; TOP -> u_src: i_clk_src, i_rst_n_src"
+  },
+  {
+   "id": "CDST",
+   "name": "Destination clock and reset",
+   "category": "custom",
+   "active": "SoC -> TOP -> u_dst",
+   "signals": "SoC -> TOP: i_clk_dst, i_rst_n_dst; TOP -> u_dst: i_clk_dst, i_rst_n_dst"
+  }
+ ],
+ "legend_note": "The enclosing frame is the top module; the two blocks are its instances. The synchronizer instances u_sync_ack and u_sync_req are inside u_src and u_dst respectively. i_ack enters u_dst; in mode 0 it passes through, in mode 1 it is registered, and in both modes u_dst returns the acknowledge to u_src as the internal net w_ack listed in the DACK row of the interface table."
+}

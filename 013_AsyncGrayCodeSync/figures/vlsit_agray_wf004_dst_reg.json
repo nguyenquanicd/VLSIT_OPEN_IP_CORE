@@ -1,0 +1,54 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_gray",
+    "wave": "=...............",
+    "data": [
+     "G0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "reg_dst",
+    "wave": "=..=............",
+    "data": [
+     "0",
+     "D0"
+    ]
+   },
+   {
+    "name": "o_data",
+    "wave": "=...=...........",
+    "data": [
+     "0",
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-004: registered destination output, PARA_AGRAY_DST_REG = 1"
+ },
+ "foot": {
+  "text": "reg_gray = G0 at t0; the decode resolves at t2 and is registered as reg_dst = D0 at t3; o_data = D0 at t4. One destination cycle is added."
+ }
+}

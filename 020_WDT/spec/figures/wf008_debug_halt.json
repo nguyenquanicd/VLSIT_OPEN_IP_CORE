@@ -1,0 +1,37 @@
+{
+  "head": {
+    "text": "DBGEN directly holds and releases the counter"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_clk",
+      "wave": "p.........."
+    },
+    [
+      "WDT control",
+      {
+        "name": "DBGEN",
+        "wave": "00111000000"
+      },
+      {
+        "name": "o_cnt_val",
+        "wave": "=.=.=.=.=.=",
+        "data": [
+          "3",
+          "2",
+          "2",
+          "2",
+          "1",
+          "0"
+        ]
+      },
+      {
+        "name": "timeout_seen",
+        "wave": "0.........."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "DBGEN is an unconditional halt control in this RTL; no live processor debug input exists."
+  }
+}

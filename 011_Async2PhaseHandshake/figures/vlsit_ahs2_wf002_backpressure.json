@@ -1,0 +1,79 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "1111110000000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_req",
+    "wave": "1111111111111111"
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0000000111111111"
+   },
+   {
+    "name": "o_ack_data",
+    "wave": "=...............",
+    "data": [
+     "0"
+    ]
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "w_req_s",
+    "wave": "0011111111111111"
+   },
+   {
+    "name": "i_ack",
+    "wave": "0000111111111111"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0000011111111111"
+   },
+   {
+    "name": "o_data",
+    "wave": "x....=..........",
+    "data": [
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-002: backpressured transfer, i_ack low for four destination cycles"
+ },
+ "foot": {
+  "text": "i_ack applied t4, accept t5, w_ack_s t7, completion t8. No loss and no duplication."
+ }
+}

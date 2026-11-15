@@ -1,0 +1,52 @@
+{
+  "head": {
+    "text": "Unserviced second timeout starts the exact programmed reset pulse"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_clk",
+      "wave": "p............"
+    },
+    [
+      "Second timeout",
+      {
+        "name": "timeout_pending",
+        "wave": "1............"
+      },
+      {
+        "name": "RESEN",
+        "wave": "1............"
+      },
+      {
+        "name": "o_cnt_val",
+        "wave": "=.=.=........",
+        "data": [
+          "2",
+          "1",
+          "0"
+        ]
+      },
+      {
+        "name": "second_timeout_req",
+        "wave": "0....10......"
+      }
+    ],
+    [
+      "Exact pulse",
+      {
+        "name": "pulse_m1",
+        "wave": "=............",
+        "data": [
+          "2 (N=3)"
+        ]
+      },
+      {
+        "name": "o_wdt_rst",
+        "wave": "0....1110...."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "The unserviced real timeout reaches its next expiration with RESEN=1. pulse_m1=2 produces exactly three full WDT clock periods high; the active pulse completes even if WDT_EN is cleared."
+  }
+}

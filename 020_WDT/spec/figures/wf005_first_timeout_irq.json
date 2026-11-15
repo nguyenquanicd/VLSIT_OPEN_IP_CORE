@@ -1,0 +1,56 @@
+{
+  "head": {
+    "text": "WDT enable is independent of interrupt enable"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_clk",
+      "wave": "p..........."
+    },
+    [
+      "Watchdog",
+      {
+        "name": "WDT_EN",
+        "wave": "1..........0"
+      },
+      {
+        "name": "o_cnt_val",
+        "wave": "=.=.=.=.=.=.",
+        "data": [
+          "4",
+          "3",
+          "2",
+          "1",
+          "0",
+          "4"
+        ]
+      },
+      {
+        "name": "timeout_pending",
+        "wave": "0.........10"
+      }
+    ],
+    [
+      "Interrupt",
+      {
+        "name": "wd_irq_raw.timeout",
+        "wave": "0.........1."
+      },
+      {
+        "name": "wd_irq_en.timeout",
+        "wave": "0......1...."
+      },
+      {
+        "name": "wd_irq_sts.timeout",
+        "wave": "0.........1."
+      },
+      {
+        "name": "o_wdt_int",
+        "wave": "0.........1."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "WDT_EN runs the counter through the first timeout, then disabling clears escalation-pending but preserves the raw cause. IRQ_EN is independent: it exposes the pending raw cause on status and o_wdt_int."
+  }
+}

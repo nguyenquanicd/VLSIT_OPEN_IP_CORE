@@ -1,0 +1,58 @@
+{
+  "head": {
+    "text": "Injection sets the raw IRQ cause without changing WDT state"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_clk",
+      "wave": "p..........."
+    },
+    [
+      "Watchdog",
+      {
+        "name": "WDT_EN",
+        "wave": "1..........."
+      },
+      {
+        "name": "o_cnt_val",
+        "wave": "=..=..=..=..",
+        "data": [
+          "8",
+          "7",
+          "6",
+          "5"
+        ]
+      },
+      {
+        "name": "timeout_pending",
+        "wave": "0..........."
+      }
+    ],
+    [
+      "Injection and IRQ",
+      {
+        "name": "wd_irq_inj.timeout",
+        "wave": "0....1.0...."
+      },
+      {
+        "name": "wd_irq_raw.timeout",
+        "wave": "0.....1....."
+      },
+      {
+        "name": "wd_irq_en.timeout",
+        "wave": "1..........."
+      },
+      {
+        "name": "wd_irq_sts.timeout",
+        "wave": "0.....1....."
+      },
+      {
+        "name": "o_wdt_int",
+        "wave": "0.....1....."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "A rising injection field sets raw/status/IRQ when enabled. The counter continues normally and escalation-pending remains clear; write injection back to zero to rearm."
+  }
+}

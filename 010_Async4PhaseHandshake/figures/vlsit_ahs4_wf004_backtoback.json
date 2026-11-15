@@ -1,0 +1,71 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "11111110000001111111000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "=......xxxxxx=......xxxxxx",
+    "data": [
+     "D0",
+     "D1"
+    ]
+   },
+   {
+    "name": "o_ack",
+    "wave": "00000010000000000001000000"
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_req",
+    "wave": "1.....0......1.....0......"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0.....10...........10....."
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0....1.....0......1.....0."
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppppppppppppp"
+   },
+   {
+    "name": "o_req",
+    "wave": "00111111100000011111110000"
+   },
+   {
+    "name": "o_data",
+    "wave": "xx=......xxxxxx=......xxxx",
+    "data": [
+     "D0",
+     "D1"
+    ]
+   },
+   {
+    "name": "i_ack",
+    "wave": "00011111100000001111110000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-004: back-to-back transfer with the minimum gap"
+ },
+ "foot": {
+  "text": "The second request is accepted at the first source edge with reg_req, reg_ack, and the acknowledge crossing low, so D0 and D1 are transferred in order with no overlap."
+ }
+}

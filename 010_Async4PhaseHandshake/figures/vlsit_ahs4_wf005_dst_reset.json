@@ -1,0 +1,77 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_src",
+    "wave": "11111111111111"
+   },
+   {
+    "name": "i_req",
+    "wave": "11111111111111"
+   },
+   {
+    "name": "i_data",
+    "wave": "=.............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "o_ack",
+    "wave": "00000000000000"
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_req",
+    "wave": "1............."
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0............."
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0............."
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_dst",
+    "wave": "11110001111111"
+   },
+   {
+    "name": "o_req",
+    "wave": "00110000000000"
+   },
+   {
+    "name": "o_data",
+    "wave": "xx=.0000000000",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "i_ack",
+    "wave": "00000000000000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-005: illegal destination-only reset while the source keeps running"
+ },
+ "foot": {
+  "text": "Destination-only reset is outside the contract. o_req and o_data clear in the destination domain, but the source holds reg_req high with o_ack low because no acknowledge was returned. The defined recovery is i_rst_n_src."
+ }
+}

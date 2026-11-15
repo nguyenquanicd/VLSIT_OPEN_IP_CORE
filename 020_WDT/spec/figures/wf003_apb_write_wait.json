@@ -1,0 +1,62 @@
+{
+  "head": {
+    "text": "APB write waits for WDT-domain acknowledgement"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_pclk",
+      "wave": "p........."
+    },
+    [
+      "APB write",
+      {
+        "name": "i_wdt_apb_psel",
+        "wave": "0111111110"
+      },
+      {
+        "name": "i_wdt_apb_penable",
+        "wave": "0011111110"
+      },
+      {
+        "name": "i_wdt_apb_pwrite",
+        "wave": "x1.......x"
+      },
+      {
+        "name": "i_wdt_apb_paddr",
+        "wave": "x=.......x",
+        "data": [
+          "WD_CNT_LD"
+        ]
+      },
+      {
+        "name": "i_wdt_apb_pwdata",
+        "wave": "x=.......x",
+        "data": [
+          "LOAD_VALUE"
+        ]
+      },
+      {
+        "name": "o_wdt_apb_pready",
+        "wave": "0000001000"
+      }
+    ],
+    [
+      "Write CDC",
+      {
+        "name": "reg_write_req",
+        "wave": "0011111000"
+      },
+      {
+        "name": "write_req_reg_clk",
+        "wave": "0000011100"
+      },
+      {
+        "name": "write_ack_bus_clk",
+        "wave": "0000001100"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Illustrative wait-state length only; APB requester holds address and data until completion."
+  }
+}

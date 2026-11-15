@@ -1,0 +1,281 @@
+{
+  "page_name": "WDT_FUNCTION",
+  "out_name": "wdt_top_function_diagram.drawio",
+  "table_suffix": " (TOP)",
+  "layout": {
+    "gap_h": 140,
+    "gap_v": 120,
+    "margin": 50,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "WDT TOP",
+      "(m_fpt_wdt_top)"
+    ],
+    "block_label": [
+      "WDT TOP",
+      "(m_fpt_wdt_top)"
+    ],
+    "block_row": [
+      "m_fpt_wdt_top",
+      "APB error, CSR and watchdog-core integration.",
+      "rtl/m_fpt_wdt_top.sv"
+    ]
+  },
+  "frame_row": [
+    "m_fpt_wdt_top frame",
+    "Functional partition of the existing WDT top module.",
+    "rtl/m_fpt_wdt_top.sv"
+  ],
+  "frame_interfaces": [
+    "APBI",
+    "AERR",
+    "APBO",
+    "UNL",
+    "INT",
+    "RSTO",
+    "CR1",
+    "CR2",
+    "CR3"
+  ],
+  "blocks": [
+    {
+      "key": "err",
+      "label": [
+        "u_fpt_wdt_apb_err",
+        "(m_fpt_wdt_apb_err)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_fpt_wdt_apb_err (m_fpt_wdt_apb_err)",
+      "function": "Checks local APB address alignment/range and rejects unsupported RESDIV values.",
+      "source": "rtl/m_fpt_wdt_apb_err.sv"
+    },
+    {
+      "key": "csr",
+      "label": [
+        "u_fpt_wdt_csr",
+        "(m_fpt_wdt_csr)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_fpt_wdt_csr (m_fpt_wdt_csr)",
+      "function": "Captures APB transfers, synchronizes requests/acknowledgements, and holds WDT control/status registers.",
+      "source": "rtl/m_fpt_wdt_csr.sv"
+    },
+    {
+      "key": "core",
+      "label": [
+        "u_fpt_wdt_core",
+        "(m_fpt_wdt_core)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_fpt_wdt_core (m_fpt_wdt_core)",
+      "function": "Counts down, records timeout state, raises interrupt and generates the reset pulse.",
+      "source": "rtl/m_fpt_wdt_core.sv"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "ERR",
+      "src": "err",
+      "src_side": "B",
+      "dst": "csr",
+      "dst_side": "T"
+    },
+    {
+      "id": "CSR",
+      "src": "csr",
+      "src_side": "B",
+      "dst": "core",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "APBI",
+      "block": "csr",
+      "side": "L",
+      "dir": "in",
+      "pos": -15,
+      "text": [
+        "APBI",
+        "APB request"
+      ]
+    },
+    {
+      "id": "AERR",
+      "block": "err",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AERR",
+        "address check"
+      ]
+    },
+    {
+      "id": "APBO",
+      "block": "csr",
+      "side": "R",
+      "dir": "out",
+      "pos": -10,
+      "text": [
+        "APBO",
+        "APB response"
+      ]
+    },
+    {
+      "id": "UNL",
+      "block": "csr",
+      "side": "R",
+      "dir": "in",
+      "pos": -30,
+      "text": [
+        "UNL",
+        "unlock"
+      ]
+    },
+    {
+      "id": "INT",
+      "block": "core",
+      "side": "R",
+      "dir": "out",
+      "pos": 10,
+      "text": [
+        "INT",
+        "interrupt"
+      ]
+    },
+    {
+      "id": "RSTO",
+      "block": "core",
+      "side": "R",
+      "dir": "out",
+      "pos": 40,
+      "text": [
+        "RSTO",
+        "reset pulse"
+      ]
+    },
+    {
+      "id": "CR1",
+      "block": "err",
+      "side": "L",
+      "dir": "in",
+      "pos": 30,
+      "text": [
+        "CR1",
+        "WDT clock/reset"
+      ]
+    },
+    {
+      "id": "CR2",
+      "block": "csr",
+      "side": "L",
+      "dir": "in",
+      "pos": 35,
+      "text": [
+        "CR2",
+        "APB/WDT clock/reset"
+      ]
+    },
+    {
+      "id": "CR3",
+      "block": "core",
+      "side": "L",
+      "dir": "in",
+      "pos": 25,
+      "text": [
+        "CR3",
+        "WDT clock/reset"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "APBI",
+      "name": "APB request path",
+      "category": "bus",
+      "active": "SoC -> CSR",
+      "signals": "SoC -> CSR: PSEL, PENABLE, PADDR, PWRITE, PWDATA"
+    },
+    {
+      "id": "AERR",
+      "name": "Address/error-check input",
+      "category": "custom",
+      "active": "Top inputs -> error checker",
+      "signals": "Top inputs -> checker: PADDR, PWRITE, PWDATA"
+    },
+    {
+      "id": "ERR",
+      "name": "APB error indication",
+      "category": "custom",
+      "active": "m_fpt_wdt_apb_err -> m_fpt_wdt_csr",
+      "signals": "u_fpt_wdt_apb_err -> u_fpt_wdt_csr: w_apb_err"
+    },
+    {
+      "id": "APBO",
+      "name": "APB response path",
+      "category": "bus",
+      "active": "CSR -> SoC",
+      "signals": "CSR -> SoC: PRDATA, PREADY, PSLVERR"
+    },
+    {
+      "id": "UNL",
+      "name": "Write unlock",
+      "category": "control",
+      "active": "SoC -> CSR",
+      "signals": "SoC -> CSR: i_unlock"
+    },
+    {
+      "id": "CSR",
+      "name": "CSR and watchdog control/status",
+      "category": "custom",
+      "active": "CSR -> core control; core -> CSR status",
+      "signals": "CSR -> core: load/control/clear; core -> CSR: count/timeout/status"
+    },
+    {
+      "id": "INT",
+      "name": "Watchdog interrupt",
+      "category": "interrupt",
+      "active": "Core -> SoC",
+      "signals": "Core -> SoC: o_int_wdog"
+    },
+    {
+      "id": "RSTO",
+      "name": "Watchdog reset pulse",
+      "category": "reset",
+      "active": "Core -> SoC",
+      "signals": "Core -> SoC: o_wdogres"
+    },
+    {
+      "id": "CR1",
+      "name": "Clock/reset to APB checker",
+      "category": "clock/reset",
+      "active": "SoC -> APB error checker",
+      "signals": "SoC -> checker: i_clk_wdog, i_rst_n_wdog"
+    },
+    {
+      "id": "CR2",
+      "name": "Clock/reset to CSR",
+      "category": "clock/reset",
+      "active": "SoC -> CSR",
+      "signals": "SoC -> CSR: i_clk_apb, i_clk_wdog, i_rst_n_apb, i_rst_n_wdog"
+    },
+    {
+      "id": "CR3",
+      "name": "Clock/reset to watchdog core",
+      "category": "clock/reset",
+      "active": "SoC -> watchdog core",
+      "signals": "SoC -> core: i_clk_wdog, i_rst_n_wdog"
+    }
+  ],
+  "legend_note": "APB address/error inputs are shown at the checker and CSR boundary; they are driven by the same top-level APB pins."
+}

@@ -1,0 +1,93 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "1111100000000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_req",
+    "wave": "1111111111111111"
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0000011111111111"
+   },
+   {
+    "name": "o_ack_data",
+    "wave": "x..=............",
+    "data": [
+     "A0"
+    ]
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "w_req_s",
+    "wave": "0011111111111111"
+   },
+   {
+    "name": "i_ack",
+    "wave": "1111111111111111"
+   },
+   {
+    "name": "i_ack_data",
+    "wave": "x.=.............",
+    "data": [
+     "A0"
+    ]
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0001111111111111"
+   },
+   {
+    "name": "reg_ack_data",
+    "wave": "x..=............",
+    "data": [
+     "A0"
+    ]
+   },
+   {
+    "name": "o_data",
+    "wave": "x..=............",
+    "data": [
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-005: captured return payload, ACK_DATA_MODE=2"
+ },
+ "foot": {
+  "text": "A0 is valid at t2 and captured at the accept edge t3 with D0; it is held until the next accept."
+ }
+}

@@ -1,0 +1,46 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_gray",
+    "wave": "=...............",
+    "data": [
+     "G0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "o_data",
+    "wave": "=.=.............",
+    "data": [
+     "0",
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-001: single value crossing, N=2, no optional registers"
+ },
+ "foot": {
+  "text": "i_data = D0 is Gray-encoded to G0 and launched at t0; the 2-stage synchronizer delivers it at t2, where o_data = D0. Latency = 1 source + 2 destination cycles."
+ }
+}

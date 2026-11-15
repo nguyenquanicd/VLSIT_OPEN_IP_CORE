@@ -1,0 +1,62 @@
+{
+  "head": {
+    "text": "W1C of a real timeout services and reloads the watchdog"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_clk",
+      "wave": "p........."
+    },
+    [
+      "APB W1C write",
+      {
+        "name": "i_wdt_apb_psel",
+        "wave": "0111111000"
+      },
+      {
+        "name": "i_wdt_apb_penable",
+        "wave": "0011111000"
+      },
+      {
+        "name": "PADDR",
+        "wave": "x=.......x",
+        "data": [
+          "WD_IRQ_RAW"
+        ]
+      },
+      {
+        "name": "PWDATA",
+        "wave": "x=.......x",
+        "data": [
+          "W1C_TIMEOUT"
+        ]
+      }
+    ],
+    [
+      "WDT response",
+      {
+        "name": "timeout_pending",
+        "wave": "1....0...."
+      },
+      {
+        "name": "wd_irq_raw.timeout",
+        "wave": "1....0...."
+      },
+      {
+        "name": "o_wdt_int",
+        "wave": "1....0...."
+      },
+      {
+        "name": "o_cnt_val",
+        "wave": "=....=....",
+        "data": [
+          "0",
+          "LOAD"
+        ]
+      }
+    ]
+  ],
+  "foot": {
+    "text": "An accepted W1C clears the real-timeout cause and escalation state, reloads the counter, and lowers IRQ. Injection-only raw clear does not reload the counter."
+  }
+}

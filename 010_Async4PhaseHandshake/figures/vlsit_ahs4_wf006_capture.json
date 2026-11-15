@@ -1,0 +1,66 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "ppppppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "1111111110000000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "=........x........"
+   },
+   {
+    "name": "o_ack",
+    "wave": "0000000010000000000"
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_req",
+    "wave": "1.......0.........."
+   },
+   {
+    "name": "reg_ack",
+    "wave": "0000000010000000000"
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "0000000111111100000"
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "ppppppppppppppppppp"
+   },
+   {
+    "name": "o_req",
+    "wave": "0001111111100000000"
+   },
+   {
+    "name": "o_data",
+    "wave": "xxx=.......x.......",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "i_ack",
+    "wave": "0000111111100000000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-006: captured transfer (option B), N=2, 1:1 clocks, one destination wait cycle"
+ },
+ "foot": {
+  "text": "PARA_AHS4_DST_MODE=1: o_req and o_data are registered one destination cycle after the synchronized request; the destination acknowledge is registered one destination cycle after reg_req && i_ack. o_ack is 8 source cycles after launch; the cycle closes in 15 source cycles."
+ }
+}

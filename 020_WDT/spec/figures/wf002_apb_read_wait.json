@@ -1,0 +1,58 @@
+{
+  "head": {
+    "text": "APB read waits for WDT-domain acknowledgement"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_pclk",
+      "wave": "p........."
+    },
+    [
+      "APB read",
+      {
+        "name": "i_wdt_apb_psel",
+        "wave": "0111111110"
+      },
+      {
+        "name": "i_wdt_apb_penable",
+        "wave": "0011111110"
+      },
+      {
+        "name": "i_wdt_apb_paddr",
+        "wave": "x=.......x",
+        "data": [
+          "WD_CNT_VAL"
+        ]
+      },
+      {
+        "name": "o_wdt_apb_pready",
+        "wave": "0000001000"
+      },
+      {
+        "name": "o_wdt_apb_prdata",
+        "wave": "x.....=..x",
+        "data": [
+          "COUNT_VAL"
+        ]
+      }
+    ],
+    [
+      "Read CDC",
+      {
+        "name": "reg_read_req",
+        "wave": "0011111000"
+      },
+      {
+        "name": "read_req_reg_clk",
+        "wave": "0000011100"
+      },
+      {
+        "name": "read_ack_bus_clk",
+        "wave": "0000001100"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Address/control remain stable through wait states. Wait length depends on clock phase and ratio."
+  }
+}

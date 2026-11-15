@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2460" height="1367" viewBox="70 360 2460 1367" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="70" y="360" width="2460" height="1367" fill="#FFFFFF"/>
+<rect x="550" y="390" width="300" height="240" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="600" y="500" width="200" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_fpt_wdt_top</text>
+<text x="700" y="558" text-anchor="middle">(m_fpt_wdt_top)</text>
+<text x="935" y="591" text-anchor="middle">RSTO</text>
+<text x="935" y="613" text-anchor="middle">reset pulse</text>
+<text x="1075" y="536" text-anchor="middle">INT</text>
+<text x="1075" y="558" text-anchor="middle">interrupt</text>
+<text x="828" y="431" text-anchor="end">WDT</text>
+<text x="828" y="453" text-anchor="end">(m_fpt_wdt_wrap)</text>
+<text x="104" y="1543" text-anchor="start" font-weight="bold">Legend</text>
+<text x="284" y="1584" text-anchor="start">Interface connector (one per signal group; arrow = active to passive)</text>
+<text x="104" y="1659" text-anchor="start">The enclosing frame is the RTL wrapper. The child block is its single instantiated module.</text>
+<text x="465" y="481" text-anchor="middle">APBI</text>
+<text x="465" y="503" text-anchor="middle">APB request</text>
+<text x="435" y="591" text-anchor="middle">CRST</text>
+<text x="435" y="613" text-anchor="middle">clocks and resets</text>
+<text x="250" y="536" text-anchor="middle">UNL</text>
+<text x="250" y="558" text-anchor="middle">write unlock</text>
+<text x="940" y="481" text-anchor="middle">APBO</text>
+<text x="940" y="503" text-anchor="middle">APB response</text>
+<rect x="100" y="960" width="2400" height="148" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="987" text-anchor="middle" font-weight="bold">Block Functions &amp; Interfaces</text>
+<rect x="100" y="1000" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1025" text-anchor="start" font-weight="bold">Block</text>
+<rect x="430" y="1000" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1025" text-anchor="start" font-weight="bold">Function</text>
+<rect x="1910" y="1000" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1025" text-anchor="start" font-weight="bold">Source</text>
+<rect x="2140" y="1000" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1025" text-anchor="start" font-weight="bold">Interfaces (mnemonics)</text>
+<rect x="100" y="1036" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1061" text-anchor="start">m_fpt_wdt_wrap frame</text>
+<rect x="430" y="1036" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1061" text-anchor="start">Top-level WDT integration boundary. It contains one fixed-configuration top module.</text>
+<rect x="1910" y="1036" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1061" text-anchor="start">rtl/m_fpt_wdt_wrap.sv</text>
+<rect x="2140" y="1036" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1061" text-anchor="start">APBI, APBO, UNL, INT, RSTO, CRST</text>
+<rect x="100" y="1072" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1097" text-anchor="start">u_fpt_wdt_top (m_fpt_wdt_top)</text>
+<rect x="430" y="1072" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1097" text-anchor="start">Integrates APB error detection, the asynchronous CSR path, and watchdog timeout/reset logic.</text>
+<rect x="1910" y="1072" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1097" text-anchor="start">rtl/m_fpt_wdt_top.sv</text>
+<rect x="2140" y="1072" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1097" text-anchor="start">APBI, UNL, APBO, INT, RSTO, CRST</text>
+<rect x="100" y="1148" width="2400" height="314" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1175" text-anchor="middle" font-weight="bold">Interface Table</text>
+<rect x="100" y="1188" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1213" text-anchor="start" font-weight="bold">ID</text>
+<rect x="190" y="1188" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1213" text-anchor="start" font-weight="bold">Interface</text>
+<rect x="490" y="1188" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1213" text-anchor="start" font-weight="bold">Category</text>
+<rect x="600" y="1188" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1213" text-anchor="start" font-weight="bold">Active side -&gt; passive side</text>
+<rect x="1070" y="1188" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1213" text-anchor="start" font-weight="bold">Key signals</text>
+<rect x="100" y="1224" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1249" text-anchor="start">APBI</text>
+<rect x="190" y="1224" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1249" text-anchor="start">APB request</text>
+<rect x="490" y="1224" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1249" text-anchor="start">bus</text>
+<rect x="600" y="1224" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1249" text-anchor="start">SoC -&gt; WDT</text>
+<rect x="1070" y="1224" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1249" text-anchor="start">SoC -&gt; WDT: i_wdt_apb_psel, i_wdt_apb_penable, i_wdt_apb_paddr, i_wdt_apb_pwrite, i_wdt_apb_pwdata</text>
+<rect x="100" y="1260" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1285" text-anchor="start">APBO</text>
+<rect x="190" y="1260" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1285" text-anchor="start">APB response</text>
+<rect x="490" y="1260" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1285" text-anchor="start">bus</text>
+<rect x="600" y="1260" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1285" text-anchor="start">WDT -&gt; SoC</text>
+<rect x="1070" y="1260" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1285" text-anchor="start">WDT -&gt; SoC: o_wdt_apb_prdata, o_wdt_apb_pready, o_wdt_apb_pslverr</text>
+<rect x="100" y="1296" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1332" text-anchor="start">CRST</text>
+<rect x="190" y="1296" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1332" text-anchor="start">Clocks and resets</text>
+<rect x="490" y="1296" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1332" text-anchor="start">clock/reset</text>
+<rect x="600" y="1296" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1332" text-anchor="start">SoC -&gt; WDT</text>
+<rect x="1070" y="1296" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1332" text-anchor="start">SoC -&gt; WDT: i_wdt_pclk, i_wdt_clk, i_wdt_preset_n, i_wdt_rst_n</text>
+<rect x="100" y="1354" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1379" text-anchor="start">INT</text>
+<rect x="190" y="1354" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1379" text-anchor="start">Watchdog interrupt</text>
+<rect x="490" y="1354" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1379" text-anchor="start">interrupt</text>
+<rect x="600" y="1354" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1379" text-anchor="start">WDT -&gt; SoC</text>
+<rect x="1070" y="1354" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1379" text-anchor="start">WDT -&gt; SoC: o_wdt_int</text>
+<rect x="100" y="1390" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1415" text-anchor="start">RSTO</text>
+<rect x="190" y="1390" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1415" text-anchor="start">Watchdog reset pulse</text>
+<rect x="490" y="1390" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1415" text-anchor="start">reset</text>
+<rect x="600" y="1390" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1415" text-anchor="start">WDT -&gt; SoC reset controller</text>
+<rect x="1070" y="1390" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1415" text-anchor="start">WDT -&gt; SoC: o_wdt_rst</text>
+<rect x="100" y="1426" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1451" text-anchor="start">UNL</text>
+<rect x="190" y="1426" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1451" text-anchor="start">CSR unlock</text>
+<rect x="490" y="1426" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1451" text-anchor="start">control</text>
+<rect x="600" y="1426" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1451" text-anchor="start">SoC -&gt; WDT</text>
+<rect x="1070" y="1426" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1451" text-anchor="start">SoC -&gt; WDT: i_wdt_other_unlock</text>
+<path d="M 500 520 L 600 520" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="600,520 588,526 588,514" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 500 560 L 600 560" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="600,560 588,566 588,554" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 320 540 L 600 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="600,540 588,546 588,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 800 520 L 900 520" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="900,520 888,526 888,514" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 800 560 L 900 560" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="900,560 888,566 888,554" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 800 540 L 1020 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1020,540 1008,546 1008,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 100 1577 L 260 1577" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,1577 248,1583 248,1571" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

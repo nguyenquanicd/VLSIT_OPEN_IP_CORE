@@ -1,0 +1,161 @@
+{
+ "page_name": "BLOCK_DIAGRAM",
+ "out_name": "vlsit_agray_block_diagram.drawio",
+ "table_suffix": "",
+ "layout": {
+  "gap_h": 80,
+  "gap_v": 90,
+  "margin": 40,
+  "block_h": 80
+ },
+ "top": {
+  "frame_label": [
+   "TOP",
+   "(m_vlsit_agray_sync_top)"
+  ],
+  "block_label": [
+   "TOP",
+   "(m_vlsit_agray_sync_top)"
+  ],
+  "block_row": [
+   "TOP (m_vlsit_agray_sync_top)",
+   "Structural top: ports, interconnect and named instances only.",
+   "Section 14.2"
+  ]
+ },
+ "frame_row": [
+  "TOP (m_vlsit_agray_sync_top) frame",
+  "Structural top of the asynchronous Gray-code synchronizer IP.",
+  "Section 14.2"
+ ],
+ "frame_interfaces": [
+  "SREQ",
+  "CSRC",
+  "CDST",
+  "DDAT",
+  "GRAY"
+ ],
+ "blocks": [
+  {
+   "key": "U_SRC",
+   "label": [
+    "u_src",
+    "(m_vlsit_agray_sync_src)"
+   ],
+   "width": 240,
+   "row": 0,
+   "col": 0,
+   "row_name": "u_src (m_vlsit_agray_sync_src)",
+   "function": "Optional input register, binary-to-Gray encoding, Gray launch register.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "U_DST",
+   "label": [
+    "u_dst",
+    "(m_vlsit_agray_sync_dst)"
+   ],
+   "width": 240,
+   "row": 0,
+   "col": 1,
+   "row_name": "u_dst (m_vlsit_agray_sync_dst)",
+   "function": "Gray synchronizer, Gray-to-binary decoding, optional output register.",
+   "source": "Section 14.2"
+  }
+ ],
+ "connectors": [
+  {
+   "id": "GRAY",
+   "src": "U_SRC",
+   "src_side": "R",
+   "dst": "U_DST",
+   "dst_side": "L"
+  }
+ ],
+ "externals": [
+  {
+   "id": "SREQ",
+   "block": "U_SRC",
+   "side": "B",
+   "dir": "in",
+   "pos": -30,
+   "text": [
+    "SREQ",
+    "i_data"
+   ]
+  },
+  {
+   "id": "CSRC",
+   "block": "U_SRC",
+   "side": "T",
+   "dir": "in",
+   "pos": 0,
+   "text": [
+    "CSRC",
+    "i_clk_src, i_rst_n_src"
+   ]
+  },
+  {
+   "id": "CDST",
+   "block": "U_DST",
+   "side": "B",
+   "dir": "in",
+   "pos": 60,
+   "text": [
+    "CDST",
+    "i_clk_dst",
+    "i_rst_n_dst"
+   ]
+  },
+  {
+   "id": "DDAT",
+   "block": "U_DST",
+   "side": "R",
+   "dir": "out",
+   "pos": 0,
+   "text": [
+    "DDAT",
+    "o_data"
+   ]
+  }
+ ],
+ "nets": [],
+ "interfaces": [
+  {
+   "id": "SREQ",
+   "name": "Source binary input",
+   "category": "custom",
+   "active": "external -> TOP -> u_src",
+   "signals": "external -> TOP: i_data; TOP -> u_src: i_data"
+  },
+  {
+   "id": "CSRC",
+   "name": "Source clock and reset",
+   "category": "custom",
+   "active": "SoC -> TOP -> u_src",
+   "signals": "SoC -> TOP: i_clk_src, i_rst_n_src; TOP -> u_src: i_clk_src, i_rst_n_src"
+  },
+  {
+   "id": "CDST",
+   "name": "Destination clock and reset",
+   "category": "custom",
+   "active": "SoC -> TOP -> u_dst",
+   "signals": "SoC -> TOP: i_clk_dst, i_rst_n_dst; TOP -> u_dst: i_clk_dst, i_rst_n_dst"
+  },
+  {
+   "id": "DDAT",
+   "name": "Destination binary output",
+   "category": "custom",
+   "active": "u_dst -> TOP -> external",
+   "signals": "u_dst -> TOP: o_data; TOP -> external: o_data"
+  },
+  {
+   "id": "GRAY",
+   "name": "Gray code bus crossing, CDC-001",
+   "category": "custom",
+   "active": "u_src -> u_dst",
+   "signals": "u_src -> u_dst: reg_gray (w_gray)"
+  }
+ ],
+ "legend_note": "The enclosing frame is the top module; the two blocks are its instances. The Gray launch register is in u_src and the n-stage synchronizer instances are in u_dst. The Gray bus crosses from u_src to u_dst on the drawn GRAY connector. Each Gray bit is a one-bit toggle through m_vlsit_afifo_cell_sync; the single-bit-change Gray property makes the multi-bit crossing safe."
+}

@@ -1,0 +1,83 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "111110000000000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "=.................",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_req",
+    "wave": "111111111111111111"
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "000000011111111111"
+   },
+   {
+    "name": "o_ack_data",
+    "wave": "=.................",
+    "data": [
+     "0"
+    ]
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_data",
+    "wave": "=.................",
+    "data": [
+     "D0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppppp"
+   },
+   {
+    "name": "w_req_s",
+    "wave": "001111111111111111"
+   },
+   {
+    "name": "i_ack",
+    "wave": "000111111111111111"
+   },
+   {
+    "name": "reg_ready",
+    "wave": "000011111111111111"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "000001111111111111"
+   },
+   {
+    "name": "o_data",
+    "wave": "x....=............",
+    "data": [
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-006: registered ready, DST_MODE=1, late i_ack"
+ },
+ "foot": {
+  "text": "i_ack at t3: direct ready would accept at t4, the register accepts at t5 and completes at t8. One cycle added."
+ }
+}

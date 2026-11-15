@@ -1,0 +1,88 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_src",
+    "wave": "111111111111111111"
+   },
+   {
+    "name": "i_req",
+    "wave": "111000000000000000"
+   },
+   {
+    "name": "i_data",
+    "wave": "=..x..............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_req",
+    "wave": "111111111111111111"
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "000001111000000111"
+   },
+   {
+    "name": "o_ack_data",
+    "wave": "=.................",
+    "data": [
+     "0"
+    ]
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_data",
+    "wave": "=.................",
+    "data": [
+     "D0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_dst",
+    "wave": "111111100011111111"
+   },
+   {
+    "name": "w_req_s",
+    "wave": "001111100000111111"
+   },
+   {
+    "name": "i_ack",
+    "wave": "111111111111111111"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "000111100000011111"
+   },
+   {
+    "name": "o_data",
+    "wave": "x..=...0.....=....",
+    "data": [
+     "D0",
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-007: destination-only reset delivers the same word twice"
+ },
+ "foot": {
+  "text": "Accept t3; reset t7 clears reg_ack and o_data; the still-high request is accepted again at t13."
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_src",
+    "wave": "1111000111111111"
+   },
+   {
+    "name": "i_data",
+    "wave": "=...............",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "reg_gray",
+    "wave": "==..............",
+    "data": [
+     "0",
+     "G0"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "pppppppppppppppp"
+   },
+   {
+    "name": "i_rst_n_dst",
+    "wave": "1111000111111111"
+   },
+   {
+    "name": "o_data",
+    "wave": "=..=............",
+    "data": [
+     "0",
+     "D0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-005: paired reset during a stream"
+ },
+ "foot": {
+  "text": "Both resets low at t4-t6 clear reg_gray and the synchronizer to 0; o_data returns to 0 and recovers from 0 after release."
+ }
+}

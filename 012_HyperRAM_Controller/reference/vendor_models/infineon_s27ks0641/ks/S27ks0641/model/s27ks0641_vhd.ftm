@@ -1,0 +1,53 @@
+<!DOCTYPE FTML SYSTEM "ftml.dtd">
+<FTML><HEAD><TITLE>FMF Timing for s27ks0641 Parts</TITLE></HEAD>
+<BODY>
+<REVISION.HISTORY>
+version: |  author:     |  mod date: |  changes made:
+  V1.0    M.Stojanovic    15 June 24    Initial release
+  V1.1    M.Stojanovic    16 Mar  01    Changed tDSV time (bug #500 fixed)
+</REVISION.HISTORY>
+<TIMESCALE>1ns</TIMESCALE>
+<MODEL>s27ks0641</MODEL>
+<FMFTIME>
+S27KS0641DPBHI020<SOURCE>Spansion, Publication Number HBP_DRS_2_150508.pdf Revision 2 Issue Date May 8,2015</SOURCE>
+S27KS0641DPBHI023<SOURCE>Spansion, Publication Number HBP_DRS_2_150508.pdf Revision 2 Issue Date May 8,2015</SOURCE>
+S27KS0641DPBHV020<SOURCE>Spansion, Publication Number HBP_DRS_2_150508.pdf Revision 2 Issue Date May 8,2015</SOURCE>
+S27KS0641DPBHV023<SOURCE>Spansion, Publication Number HBP_DRS_2_150508.pdf Revision 2 Issue Date May 8,2015</SOURCE>
+<COMMENT>The values listed are for TA=-40 to +85 Celsius, VCC=+1.8V </COMMENT>
+<TIMING>
+(DELAY (ABSOLUTE
+        (IOPATH CSNeg RWDS () () (2:4:6) (4:8:12) (2:4:6) (4:8:12))
+        (IOPATH CSNeg DQ0  () () (2:4:6) () (2:4:6) ())
+
+        (IOPATH CK RWDS (3.5:4:5.5) (3.5:4:5.5) () () () ())
+        (IOPATH CK DQ0 (3.95:4.45:5.95) (3.95:4.45:5.95) () (3.95:4.45:5.95) () (3.95:4.45:5.95))
+   ))
+  (TIMINGCHECK
+        (SETUP DQ0 CK (0.6))
+        (SETUP CSNeg CK (3))
+
+        (HOLD DQ0 CK (0.6))
+        (HOLD CSNeg RESETNeg (200))
+        (HOLD CSNeg CK (0))
+
+        (RECOVERY (posedge CSNeg) (negedge CK) (36))
+
+        (WIDTH (negedge CK) (2.7))
+        (WIDTH (posedge CK) (2.7))
+        (WIDTH (negedge RESETNeg) (200))
+        (WIDTH (posedge CSNeg) (6))
+        (PERIOD  CK (6))
+    ))
+  (CELL (CELLTYPE "VITALbuf")
+   (INSTANCE %LABEL%/VCS) (DELAY (ABSOLUTE (DEVICE(150e3:150e3:150e3)))))
+  (CELL (CELLTYPE "VITALbuf")
+   (INSTANCE %LABEL%/RPH) (DELAY (ABSOLUTE (DEVICE(400:400:400)))))
+  (CELL (CELLTYPE "VITALbuf")
+   (INSTANCE %LABEL%/REF166) (DELAY (ABSOLUTE (DEVICE(36:36:36)))))
+  (CELL (CELLTYPE "VITALbuf")
+   (INSTANCE %LABEL%/PO166) (DELAY (ABSOLUTE (DEVICE(36:36:36)))))
+  (CELL (CELLTYPE "VITALbuf")
+   (INSTANCE %LABEL%/CSM) (DELAY (ABSOLUTE (DEVICE(4000:4000:4000))))
+
+</TIMING></FMFTIME>
+</BODY></FTML>

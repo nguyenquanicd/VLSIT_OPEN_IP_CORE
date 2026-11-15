@@ -1,0 +1,169 @@
+{
+  "page_name": "WDT_TOP",
+  "out_name": "wdt_top_diagram.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 100,
+    "margin": 50,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "WDT",
+      "(m_fpt_wdt_wrap)"
+    ],
+    "block_label": [
+      "WDT",
+      "(m_fpt_wdt_wrap)"
+    ],
+    "block_row": [
+      "m_fpt_wdt_wrap",
+      "External wrapper and fixed WDT configuration.",
+      "rtl/m_fpt_wdt_wrap.sv"
+    ]
+  },
+  "frame_row": [
+    "m_fpt_wdt_wrap frame",
+    "Top-level WDT integration boundary. It contains one fixed-configuration top module.",
+    "rtl/m_fpt_wdt_wrap.sv"
+  ],
+  "frame_interfaces": [
+    "APBI",
+    "APBO",
+    "UNL",
+    "INT",
+    "RSTO",
+    "CRST"
+  ],
+  "blocks": [
+    {
+      "key": "top",
+      "label": [
+        "u_fpt_wdt_top",
+        "(m_fpt_wdt_top)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_fpt_wdt_top (m_fpt_wdt_top)",
+      "function": "Integrates APB error detection, the asynchronous CSR path, and watchdog timeout/reset logic.",
+      "source": "rtl/m_fpt_wdt_top.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [
+    {
+      "id": "APBI",
+      "block": "top",
+      "side": "L",
+      "dir": "in",
+      "pos": -20,
+      "text": [
+        "APBI",
+        "APB request"
+      ]
+    },
+    {
+      "id": "UNL",
+      "block": "top",
+      "side": "L",
+      "dir": "in",
+      "pos": 30,
+      "text": [
+        "UNL",
+        "write unlock"
+      ]
+    },
+    {
+      "id": "APBO",
+      "block": "top",
+      "side": "R",
+      "dir": "out",
+      "pos": -20,
+      "text": [
+        "APBO",
+        "APB response"
+      ]
+    },
+    {
+      "id": "INT",
+      "block": "top",
+      "side": "R",
+      "dir": "out",
+      "pos": 30,
+      "text": [
+        "INT",
+        "interrupt"
+      ]
+    },
+    {
+      "id": "RSTO",
+      "block": "top",
+      "side": "R",
+      "dir": "out",
+      "pos": 60,
+      "text": [
+        "RSTO",
+        "reset pulse"
+      ]
+    },
+    {
+      "id": "CRST",
+      "block": "top",
+      "side": "L",
+      "dir": "in",
+      "pos": 80,
+      "text": [
+        "CRST",
+        "clocks and resets"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "APBI",
+      "name": "APB request",
+      "category": "bus",
+      "active": "SoC -> WDT",
+      "signals": "SoC -> WDT: i_wdt_apb_psel, i_wdt_apb_penable, i_wdt_apb_paddr, i_wdt_apb_pwrite, i_wdt_apb_pwdata"
+    },
+    {
+      "id": "APBO",
+      "name": "APB response",
+      "category": "bus",
+      "active": "WDT -> SoC",
+      "signals": "WDT -> SoC: o_wdt_apb_prdata, o_wdt_apb_pready, o_wdt_apb_pslverr"
+    },
+    {
+      "id": "UNL",
+      "name": "CSR unlock",
+      "category": "control",
+      "active": "SoC -> WDT",
+      "signals": "SoC -> WDT: i_wdt_other_unlock"
+    },
+    {
+      "id": "INT",
+      "name": "Watchdog interrupt",
+      "category": "interrupt",
+      "active": "WDT -> SoC",
+      "signals": "WDT -> SoC: o_wdt_int"
+    },
+    {
+      "id": "RSTO",
+      "name": "Watchdog reset pulse",
+      "category": "reset",
+      "active": "WDT -> SoC reset controller",
+      "signals": "WDT -> SoC: o_wdt_rst"
+    },
+    {
+      "id": "CRST",
+      "name": "Clocks and resets",
+      "category": "clock/reset",
+      "active": "SoC -> WDT",
+      "signals": "SoC -> WDT: i_wdt_pclk, i_wdt_clk, i_wdt_preset_n, i_wdt_rst_n"
+    }
+  ],
+  "legend_note": "The enclosing frame is the RTL wrapper. The child block is its single instantiated module."
+}

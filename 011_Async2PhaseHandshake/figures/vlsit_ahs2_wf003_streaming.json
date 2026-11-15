@@ -1,0 +1,85 @@
+{
+ "signal": [
+  [
+   "CLK-SRC (source domain)",
+   {
+    "name": "i_clk_src",
+    "wave": "ppppppppppppppppppppp"
+   },
+   {
+    "name": "i_req",
+    "wave": "111111111111111111111"
+   },
+   {
+    "name": "i_data",
+    "wave": "=.....=.....=........",
+    "data": [
+     "D0",
+     "D1",
+     "D2"
+    ]
+   },
+   {
+    "name": "reg_req",
+    "wave": "111111000000111111111"
+   },
+   {
+    "name": "w_ack_s",
+    "wave": "000001111110000001111"
+   },
+   {
+    "name": "o_ack_data",
+    "wave": "=....................",
+    "data": [
+     "0"
+    ]
+   }
+  ],
+  [
+   "source flags",
+   {
+    "name": "reg_data",
+    "wave": "=.....=.....=........",
+    "data": [
+     "D0",
+     "D1",
+     "D2"
+    ]
+   }
+  ],
+  [
+   "CLK-DST (destination domain)",
+   {
+    "name": "i_clk_dst",
+    "wave": "ppppppppppppppppppppp"
+   },
+   {
+    "name": "w_req_s",
+    "wave": "001111110000001111111"
+   },
+   {
+    "name": "i_ack",
+    "wave": "111111111111111111111"
+   },
+   {
+    "name": "reg_ack",
+    "wave": "000111111000000111111"
+   },
+   {
+    "name": "o_data",
+    "wave": "x..=.....=.....=.....",
+    "data": [
+     "D0",
+     "D1",
+     "D2"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-003: streaming with i_req held high, minimum initiation interval"
+ },
+ "foot": {
+  "text": "Launches t0, t6, t12; accepts t3, t9, t15. One word per round trip, no idle cycle."
+ }
+}

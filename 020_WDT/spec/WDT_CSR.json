@@ -1,0 +1,218 @@
+{
+  "module": "m_fpt_wdt_csr",
+  "prefix": "wd",
+  "async": 1,
+  "event_sideband": 1,
+  "registers": [
+    {
+      "name": "wd_version",
+      "offset": "0x0000",
+      "description": "Watchdog version register. Identifies the fixed major and minor release values.",
+      "fields": [
+        {
+          "name": "major",
+          "bits": "[31:16]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Major version identifies the incompatible feature generation of this watchdog IP.\n\nUsage: Read this field during driver initialization to confirm the supported register programming model.\n\nValues:\n0x0 to 0xFFFF Fixed major version is 0x1 (reset value).\n\nUnit: none\n\nLimits: The value is fixed in hardware."
+        },
+        {
+          "name": "minor",
+          "bits": "[15:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Minor version identifies the compatible revision of this watchdog IP.\n\nUsage: Read this field during driver initialization for diagnostics and build identification.\n\nValues:\n0x0 to 0xFFFF Fixed minor version is 0x0 (reset value).\n\nUnit: none\n\nLimits: The value is fixed in hardware."
+        }
+      ]
+    },
+    {
+      "name": "wd_cnt_ld",
+      "offset": "0x1004",
+      "description": "Watchdog counter-load register. Stores the value used to reload the down-counter.",
+      "fields": [
+        {
+          "name": "load",
+          "bits": "[31:0]",
+          "type": "rw",
+          "reset": "0xFFFFFFFF",
+          "description": "Counter load value sets the unsigned count interval before a watchdog timeout.\n\nUsage: Program the reload value before setting WDT_EN. A write also reloads the live counter but does not acknowledge an existing raw cause or escalation state.\n\nValues:\n0x00000000 to 0xFFFFFFFF Counter reload value; timeout interval is LOAD + 1 WDT clock periods (reset value 0xFFFFFFFF).\n\nUnit: WDT clock periods\n\nLimits: None."
+        }
+      ]
+    },
+    {
+      "name": "wd_cnt_val",
+      "offset": "0x1008",
+      "description": "Watchdog counter-value register. Reports the live down-counter value for software diagnostics.",
+      "fields": [
+        {
+          "name": "cnt_val",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0xFFFFFFFF",
+          "description": "Counter value reports the current unsigned watchdog down-counter state sampled for APB readback.\n\nUsage: Read this field to monitor watchdog progress or diagnose a pending timeout. The value can change between reads.\n\nValues:\n0x00000000 to 0xFFFFFFFF Current down-counter value (reset value 0xFFFFFFFF).\n\nUnit: WDT clock periods\n\nLimits: The zero value may be brief because the counter reloads at timeout."
+        }
+      ]
+    },
+    {
+      "name": "wd_cnt_ctrl",
+      "offset": "0x100C",
+      "description": "Watchdog control register. Enables counting and selects timeout and reset-pulse behavior.",
+      "fields": [
+        {
+          "name": "pulse_m1",
+          "bits": "[15:8]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Reset pulse width encodes the requested number of WDT clock periods minus one.\n\nUsage: Program while WDT_EN is zero, before enabling the watchdog; the value is captured when a reset pulse starts.\n\nValues:\n0x00 to 0xFF Encodes 1 to 256 WDT periods as value plus one (reset value 0x00).\n\nUnit: WDT clock periods\n\nLimits: All encodings are valid; a write during an active pulse affects only a later pulse."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:16]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        },
+        {
+          "name": "dbgen",
+          "bits": "[3]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Debug halt control holds the watchdog counter and suppresses timeout processing when set.\n\nUsage: Set only when software intends to halt the watchdog; clear it to resume. No live processor-debug input qualifies this control.\n\nValues:\n0x0 Normal counting behavior (reset value);\n0x1 Counter halted.\n\nUnit: none\n\nLimits: This control is unconditional and independent of processor debug state."
+        },
+        {
+          "name": "wdt_en",
+          "bits": "[2]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Watchdog enable starts or stops timeout counting independently from interrupt masking.\n\nUsage: Program the load, pulse width, and reset response first. Clear to stop and reload the counter; set to begin a fresh interval.\n\nValues:\n0x0 Watchdog counting disabled (reset value);\n0x1 Watchdog counting enabled.\n\nUnit: none\n\nLimits: Disabling clears escalation-pending state but preserves raw IRQ causes; an active reset pulse completes."
+        },
+        {
+          "name": "reserved",
+          "bits": "[7:4]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        },
+        {
+          "name": "reserved",
+          "bits": "[1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        },
+        {
+          "name": "resen",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Reset enable permits a second unserviced real timeout to start the programmed reset pulse.\n\nUsage: Set or clear while WDT_EN is zero when changing reset policy. IRQ enable does not affect this control.\n\nValues:\n0x0 Second-timeout reset disabled;\n0x1 Second-timeout reset enabled (reset value).\n\nUnit: none\n\nLimits: A reset pulse already in progress completes if this field is cleared."
+        }
+      ]
+    },
+    {
+      "name": "wd_irq_en",
+      "offset": "0x1010",
+      "description": "Watchdog interrupt-enable register. Masks delivery of the matching raw timeout cause.",
+      "fields": [
+        {
+          "name": "timeout",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Timeout interrupt enable controls delivery of the sticky timeout cause to status and the interrupt output.\n\nUsage: Set or clear independently of WDT_EN. Enabling while raw timeout is already set asserts the masked status and interrupt.\n\nValues:\n0x0 Timeout interrupt masked (reset value);\n0x1 Timeout interrupt enabled.\n\nUnit: none\n\nLimits: Does not gate counter operation, raw event capture, or reset escalation."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "wd_irq_raw",
+      "offset": "0x1014",
+      "description": "Watchdog raw interrupt register. Retains timeout causes until software acknowledges them.",
+      "fields": [
+        {
+          "name": "timeout",
+          "bits": "[0]",
+          "type": "w1c",
+          "reset": "0x0",
+          "description": "Raw timeout cause records either a real first timeout or a software-injected timeout event.\n\nUsage: Read for diagnosis. Write one to clear; clearing a real timeout also services and reloads the watchdog, while clearing an injection-only cause does not reload it.\n\nValues:\n0x0 No raw timeout cause (reset value);\n0x1 Timeout cause pending.\n\nUnit: none\n\nLimits: A simultaneous new hardware event takes priority over software clear."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "wd_irq_sts",
+      "offset": "0x1018",
+      "description": "Watchdog interrupt-status register. Reports the raw timeout cause after enable masking.",
+      "fields": [
+        {
+          "name": "timeout",
+          "bits": "[0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Masked timeout status is the logical AND of the raw timeout cause and its interrupt enable.\n\nUsage: Read to determine whether the timeout interrupt is currently enabled and pending; this field also drives the top-level interrupt.\n\nValues:\n0x0 No enabled timeout interrupt (reset value);\n0x1 Raw timeout cause is enabled.\n\nUnit: none\n\nLimits: Read-only status; clearing requires W1C to the raw register."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "wd_irq_inj",
+      "offset": "0x101C",
+      "description": "Watchdog interrupt-injection register. Generates a raw cause on a rising injection bit.",
+      "fields": [
+        {
+          "name": "timeout",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Timeout injection creates a raw interrupt cause without changing the watchdog counter or escalation state.\n\nUsage: Write zero, then one to inject a test event. Return the bit to zero before injecting another event.\n\nValues:\n0x0 Injection inactive (reset value);\n0x1 Inject one raw timeout cause on the rising transition.\n\nUnit: none\n\nLimits: Injection tests IRQ handling only and cannot trigger watchdog reset escalation."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "wd_dbg_stat",
+      "offset": "0x1020",
+      "description": "Watchdog debug-status register. Mirrors the configured counter halt control.",
+      "fields": [
+        {
+          "name": "dbg_stat",
+          "bits": "[0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Debug status reports the DBGEN control value and does not sense processor debug mode.\n\nUsage: Read to confirm whether the watchdog counter halt control is configured.\n\nValues:\n0x0 DBGEN clear (reset value);\n0x1 DBGEN set and counter halted.\n\nUnit: none\n\nLimits: No live processor-debug input is present."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "head": {
+    "text": "Counter reload and APB readback"
+  },
+  "signal": [
+    {
+      "name": "i_wdt_clk",
+      "wave": "p............"
+    },
+    [
+      "WDT counter",
+      {
+        "name": "o_ld_write",
+        "wave": "0100000000000"
+      },
+      {
+        "name": "o_cnt_val",
+        "wave": "=.=.=.=.=.=.=",
+        "data": [
+          "3",
+          "3",
+          "2",
+          "1",
+          "0",
+          "3",
+          "2"
+        ]
+      }
+    ],
+    [
+      "APB read",
+      {
+        "name": "read_req",
+        "wave": "0000001110000"
+      },
+      {
+        "name": "o_wdt_apb_prdata",
+        "wave": "x......=....x",
+        "data": [
+          "3"
+        ]
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Illustrative load value is 3. First timeout occurs after four WDT edges; count reloads from WD_CNT_LD."
+  }
+}

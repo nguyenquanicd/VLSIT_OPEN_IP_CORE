@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2460" height="1731" viewBox="70 270 2460 1731" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="70" y="270" width="2460" height="1731" fill="#FFFFFF"/>
+<rect x="540" y="400" width="640" height="220" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="580" y="500" width="240" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_src</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_ahs2_src)</text>
+<rect x="900" y="500" width="240" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1020" y="536" text-anchor="middle">u_dst</text>
+<text x="1020" y="558" text-anchor="middle">(m_vlsit_ahs2_dst)</text>
+<text x="1270" y="536" text-anchor="middle">DREQ</text>
+<text x="1270" y="558" text-anchor="middle">o_data</text>
+<text x="575" y="666" text-anchor="middle">SREQ</text>
+<text x="575" y="688" text-anchor="middle">i_req, i_data</text>
+<text x="750" y="691" text-anchor="middle">SRET</text>
+<text x="750" y="713" text-anchor="middle">o_ack_data</text>
+<text x="700" y="321" text-anchor="middle">CSRC</text>
+<text x="700" y="343" text-anchor="middle">i_clk_src, i_rst_n_src</text>
+<text x="1158" y="441" text-anchor="end">TOP</text>
+<text x="1158" y="463" text-anchor="end">(m_vlsit_ahs2_top)</text>
+<text x="845" y="526" text-anchor="middle">REQ</text>
+<text x="104" y="1817" text-anchor="start" font-weight="bold">Legend</text>
+<text x="284" y="1858" text-anchor="start">Interface connector (one per signal group; arrow = active to passive)</text>
+<text x="104" y="1933" text-anchor="start">The enclosing frame is the top module; the two blocks are its instances. The synchronizer instances u_sync_req and u_sync_ack are inside u_dst and u_src respectively. The request toggle and the bundled payload cross from u_src to u_dst on the drawn REQ connector. The acknowledge toggle and the bundled return payload cross back from u_dst to u_src and are listed in the DACK row of the interface table, because the forward and return crossings share one block boundary. Both cross-domain control signals are one-bit toggles through m_vlsit_afifo_cell_sync; both payloads are held for the whole handshake.</text>
+<text x="885" y="666" text-anchor="middle">DACK</text>
+<text x="885" y="688" text-anchor="middle">i_ack</text>
+<text x="1185" y="655" text-anchor="middle">CDST</text>
+<text x="1185" y="677" text-anchor="middle">i_clk_dst</text>
+<text x="1185" y="699" text-anchor="middle">i_rst_n_dst</text>
+<text x="1020" y="691" text-anchor="middle">DRET</text>
+<text x="1020" y="713" text-anchor="middle">i_ack_data</text>
+<rect x="100" y="950" width="2400" height="206" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="977" text-anchor="middle" font-weight="bold">Block Functions &amp; Interfaces</text>
+<rect x="100" y="990" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1015" text-anchor="start" font-weight="bold">Block</text>
+<rect x="430" y="990" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1015" text-anchor="start" font-weight="bold">Function</text>
+<rect x="1910" y="990" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1015" text-anchor="start" font-weight="bold">Source</text>
+<rect x="2140" y="990" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1015" text-anchor="start" font-weight="bold">Interfaces (mnemonics)</text>
+<rect x="100" y="1026" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1062" text-anchor="start">TOP (m_vlsit_ahs2_top) frame</text>
+<rect x="430" y="1026" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1062" text-anchor="start">Structural top of the asynchronous two-phase handshake IP.</text>
+<rect x="1910" y="1026" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1062" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1026" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1051" text-anchor="start">SREQ, SRET, CSRC, DREQ, DACK, DRET,</text>
+<text x="2144" y="1073" text-anchor="start">CDST</text>
+<rect x="100" y="1084" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1109" text-anchor="start">u_src (m_vlsit_ahs2_src)</text>
+<rect x="430" y="1084" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1109" text-anchor="start">Request toggle, payload register, acknowledge synchronizer, and return-payload output selection.</text>
+<rect x="1910" y="1084" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1109" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1084" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1109" text-anchor="start">REQ, SREQ, SRET, CSRC</text>
+<rect x="100" y="1120" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1145" text-anchor="start">u_dst (m_vlsit_ahs2_dst)</text>
+<rect x="430" y="1120" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1145" text-anchor="start">Request synchronizer, accept detection, payload capture, acknowledge toggle, and optional ready and return registers.</text>
+<rect x="1910" y="1120" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1145" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1120" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1145" text-anchor="start">REQ, DREQ, DACK, DRET, CDST</text>
+<rect x="100" y="1196" width="2400" height="540" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1223" text-anchor="middle" font-weight="bold">Interface Table</text>
+<rect x="100" y="1236" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1261" text-anchor="start" font-weight="bold">ID</text>
+<rect x="190" y="1236" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1261" text-anchor="start" font-weight="bold">Interface</text>
+<rect x="490" y="1236" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1261" text-anchor="start" font-weight="bold">Category</text>
+<rect x="600" y="1236" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1261" text-anchor="start" font-weight="bold">Active side -&gt; passive side</text>
+<rect x="1070" y="1236" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1261" text-anchor="start" font-weight="bold">Key signals</text>
+<rect x="100" y="1272" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1297" text-anchor="start">CDST</text>
+<rect x="190" y="1272" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1297" text-anchor="start">Destination clock and reset</text>
+<rect x="490" y="1272" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1297" text-anchor="start">custom</text>
+<rect x="600" y="1272" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1297" text-anchor="start">SoC -&gt; TOP -&gt; u_dst</text>
+<rect x="1070" y="1272" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1297" text-anchor="start">SoC -&gt; TOP: i_clk_dst, i_rst_n_dst; TOP -&gt; u_dst: i_clk_dst, i_rst_n_dst</text>
+<rect x="100" y="1308" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1333" text-anchor="start">CSRC</text>
+<rect x="190" y="1308" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1333" text-anchor="start">Source clock and reset</text>
+<rect x="490" y="1308" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1333" text-anchor="start">custom</text>
+<rect x="600" y="1308" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1333" text-anchor="start">SoC -&gt; TOP -&gt; u_src</text>
+<rect x="1070" y="1308" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1333" text-anchor="start">SoC -&gt; TOP: i_clk_src, i_rst_n_src; TOP -&gt; u_src: i_clk_src, i_rst_n_src</text>
+<rect x="100" y="1344" width="90" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1391" text-anchor="start">DACK</text>
+<rect x="190" y="1344" width="300" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1369" text-anchor="start">Destination accept level and</text>
+<text x="194" y="1391" text-anchor="start">acknowledge-toggle crossing,</text>
+<text x="194" y="1413" text-anchor="start">CDC-002 and CDC-004</text>
+<rect x="490" y="1344" width="110" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1391" text-anchor="start">handshake</text>
+<rect x="600" y="1344" width="470" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1391" text-anchor="start">external -&gt; TOP -&gt; u_dst -&gt; u_src</text>
+<rect x="1070" y="1344" width="1430" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1391" text-anchor="start">external -&gt; TOP: i_ack; TOP -&gt; u_dst: i_ack; u_dst -&gt; u_src: reg_ack (w_ack); u_dst -&gt; u_src: reg_ack_data (w_ack_data)</text>
+<rect x="100" y="1424" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1460" text-anchor="start">DREQ</text>
+<rect x="190" y="1424" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1449" text-anchor="start">Destination data interface</text>
+<text x="194" y="1471" text-anchor="start">(completer side)</text>
+<rect x="490" y="1424" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1460" text-anchor="start">custom</text>
+<rect x="600" y="1424" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1460" text-anchor="start">u_dst -&gt; TOP -&gt; external</text>
+<rect x="1070" y="1424" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1460" text-anchor="start">u_dst -&gt; TOP: o_data; TOP -&gt; external: o_data</text>
+<rect x="100" y="1482" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1518" text-anchor="start">DRET</text>
+<rect x="190" y="1482" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1507" text-anchor="start">Destination return-payload</text>
+<text x="194" y="1529" text-anchor="start">input</text>
+<rect x="490" y="1482" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1518" text-anchor="start">custom</text>
+<rect x="600" y="1482" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1518" text-anchor="start">external -&gt; TOP -&gt; u_dst</text>
+<rect x="1070" y="1482" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1518" text-anchor="start">external -&gt; TOP: i_ack_data; TOP -&gt; u_dst: i_ack_data</text>
+<rect x="100" y="1540" width="90" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1587" text-anchor="start">REQ</text>
+<rect x="190" y="1540" width="300" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1565" text-anchor="start">Request toggle and bundled</text>
+<text x="194" y="1587" text-anchor="start">payload crossing, CDC-001 and</text>
+<text x="194" y="1609" text-anchor="start">CDC-003</text>
+<rect x="490" y="1540" width="110" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1587" text-anchor="start">custom</text>
+<rect x="600" y="1540" width="470" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1587" text-anchor="start">u_src -&gt; u_dst</text>
+<rect x="1070" y="1540" width="1430" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1587" text-anchor="start">u_src -&gt; u_dst: reg_req (w_req), reg_data (w_data)</text>
+<rect x="100" y="1620" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1656" text-anchor="start">SREQ</text>
+<rect x="190" y="1620" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1645" text-anchor="start">Source request interface</text>
+<text x="194" y="1667" text-anchor="start">(requester side)</text>
+<rect x="490" y="1620" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1656" text-anchor="start">handshake</text>
+<rect x="600" y="1620" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1656" text-anchor="start">external -&gt; TOP -&gt; u_src</text>
+<rect x="1070" y="1620" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1656" text-anchor="start">external -&gt; TOP: i_req, i_data; TOP -&gt; u_src: i_req, i_data</text>
+<rect x="100" y="1678" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1714" text-anchor="start">SRET</text>
+<rect x="190" y="1678" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1703" text-anchor="start">Source return-payload</text>
+<text x="194" y="1725" text-anchor="start">interface</text>
+<rect x="490" y="1678" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1714" text-anchor="start">custom</text>
+<rect x="600" y="1678" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1714" text-anchor="start">u_src -&gt; TOP -&gt; external</text>
+<rect x="1070" y="1678" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1714" text-anchor="start">u_src -&gt; TOP: o_ack_data; TOP -&gt; external: o_ack_data</text>
+<path d="M 930 670 L 930 580" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="930,580 936,592 924,592" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1110 670 L 1110 580" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1110,580 1116,592 1104,592" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1020 670 L 1020 580" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1020,580 1026,592 1014,592" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1140 540 L 1230 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1230,540 1218,546 1218,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 660 670 L 660 580" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="660,580 666,592 654,592" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 580 L 750 670" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="750,670 744,658 756,658" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 350 L 700 500" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,500 694,488 706,488" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 820 540 L 900 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="900,540 888,546 888,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 100 1851 L 260 1851" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,1851 248,1857 248,1845" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>
