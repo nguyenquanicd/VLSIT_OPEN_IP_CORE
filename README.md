@@ -24,9 +24,7 @@ This directory contains reusable ASIC RTL blocks, example cell models, and desig
 | [`013_AsyncGrayCodeSync`](013_AsyncGrayCodeSync/VLSIT_ASYNC_GRAY_SYNC_HDS.md) | Gray-code synchronizer for asynchronous clock-domain crossings, with RTL and a self-checking testbench. |
 | [`014_AXI4_Upsizer`](014_AXI4_Upsizer/README.md) | AXI4/AXI3 data-width upsizer: design specification, RTL profiles, constraints, waveforms, and verification. |
 | [`015_Timer`](015_Timer/README.md) | Configurable Timer with capture, compare, PWM, one-pulse, APB and DMA request/ack functions. |
-| [`016_CAN_Controller`](016_CAN_Controller/README.md) | CAN FD controller RTL, reference model, and regression suite. |
 | [`017_QSPI_Controller`](017_QSPI_Controller/README.md) | SPI controller/target and controller-only Dual/Quad/QPI IP: VLSIT HDS, CSR workbook, generated RTL, diagrams, waveforms, lint and research collateral. |
-| [`018_MKV_Block_Cipher`](018_MKV_Block_Cipher/spec/VLSIT_MKV_BLOCK_CIPHER_HDS.md) | MKV block-cipher RTL with internal/external DMA profiles and regression verification. |
 | [`019_SHA2_SHA3_Hash`](019_SHA2_SHA3_Hash/spec/VLSIT_SHA2_SHA3_HASH_HDS.md) | SHA-2/SHA-3 hashing RTL with APB/AXI interfaces, CSR and DMA options, and a full regression suite. |
 | [`020_WDT`](020_WDT/spec/VLSIT_WDT_HDS.md) | Watchdog timer RTL and design specification. |
 | [`021_UART`](021_UART/rtl/filelist.f) | UART RTL and its simulator-specific verification flow. |
@@ -69,16 +67,14 @@ This table summarizes current collateral and identifies the available regression
 | `013_AsyncGrayCodeSync` | HDS, RTL and self-checking testbench | `make lint` | `make verify` |
 | `014_AXI4_Upsizer` | specification, AXI4/AXI3 RTL profiles, waveforms | `lint/` | `verification/` |
 | `015_Timer` | refreshed `rtl/` (12 files) uses generator v3.3; retained earlier RTL | `make lint`; rule check | `verification/Makefile` DMA request/ack regression |
-| `016_CAN_Controller` | CAN FD RTL, reference model and self-checking regression | `make lint` | `verification/Makefile` regression |
 | `017_QSPI_Controller` | VLSIT HDS, CSR workbook, generated RTL, diagrams, waveforms, research and archive | `make lint`; rule check | no simulation testbench |
-| `018_MKV_Block_Cipher` | HDS, RTL profiles and verification suite | `make lint` | `verification/Makefile` regression |
 | `019_SHA2_SHA3_Hash` | HDS, RTL and extensive vector/assertion/coverage collateral | `make lint` | `verification/scripts/run_all.py` |
 | `020_WDT` | HDS and RTL | `make lint` | no testbench |
 | `021_UART` | RTL and VCS-based verification collateral | `make lint` | requires Synopsys VCS |
 
 ### Verification review notes (2026-11-15)
 
-All 21 IP lint targets passed. The functional regressions passed for the common cells, SyncFIFO, AsyncAPB, AXI2TLUL, APB2TLUL, the two-phase handshake, HyperRAM, Gray-code synchronizer, AXI upsizer, Timer DMA, CAN FD, CRC, Async AXI evidence, and SHA-2/SHA-3. The AHB2AXI regression still fails WF-003, WF-004, and WF-006. MKV reports 399 cases passed with none skipped or failed, but exits nonzero because six AW/W/AR backpressure-stability assertions never fire. UART was skipped because Synopsys VCS is unavailable.
+All 19 IP lint targets passed. The functional regressions passed for the common cells, SyncFIFO, AsyncAPB, AXI2TLUL, APB2TLUL, the two-phase handshake, HyperRAM, Gray-code synchronizer, AXI upsizer, Timer DMA, CRC, Async AXI evidence, and SHA-2/SHA-3. The AHB2AXI regression still fails WF-003, WF-004, and WF-006. UART was skipped because Synopsys VCS is unavailable.
 
 ### Shared RTL and example cells
 
@@ -151,9 +147,7 @@ Thư mục này chứa các khối RTL ASIC dùng chung, mô hình cell ví dụ
 | [`013_AsyncGrayCodeSync`](013_AsyncGrayCodeSync/VLSIT_ASYNC_GRAY_SYNC_HDS.md) | Bộ đồng bộ Gray-code cho CDC giữa các clock bất đồng bộ, có RTL và testbench tự kiểm. |
 | [`014_AXI4_Upsizer`](014_AXI4_Upsizer/README.md) | Bộ tăng độ rộng dữ liệu AXI4/AXI3: đặc tả thiết kế, các profile RTL, constraint, waveform và verification. |
 | [`015_Timer`](015_Timer/README.md) | Timer hỗ trợ capture, compare, PWM, one-pulse, APB và DMA req/ack. |
-| [`016_CAN_Controller`](016_CAN_Controller/README.md) | RTL CAN FD controller, reference model và regression tự kiểm. |
 | [`017_QSPI_Controller`](017_QSPI_Controller/README.md) | IP SPI controller/target và Dual/Quad/QPI chỉ ở controller: HDS VLSIT, workbook CSR, RTL, sơ đồ, waveform, lint và tài liệu nghiên cứu. |
-| [`018_MKV_Block_Cipher`](018_MKV_Block_Cipher/spec/VLSIT_MKV_BLOCK_CIPHER_HDS.md) | RTL mã hóa khối MKV với profile DMA nội bộ/bên ngoài và bộ regression verification. |
 | [`019_SHA2_SHA3_Hash`](019_SHA2_SHA3_Hash/spec/VLSIT_SHA2_SHA3_HASH_HDS.md) | RTL SHA-2/SHA-3 với giao tiếp APB/AXI, tùy chọn CSR/DMA và regression toàn diện. |
 | [`020_WDT`](020_WDT/spec/VLSIT_WDT_HDS.md) | RTL watchdog timer và đặc tả thiết kế. |
 | [`021_UART`](021_UART/rtl/filelist.f) | RTL UART và flow verification phụ thuộc simulator. |
@@ -196,16 +190,14 @@ Bảng này tóm tắt tài liệu hiện có và lối chạy regression tươn
 | `013_AsyncGrayCodeSync` | HDS, RTL và testbench tự kiểm | `make lint` | `make verify` |
 | `014_AXI4_Upsizer` | đặc tả, các profile RTL AXI4/AXI3, waveform | `lint/` | `verification/` |
 | `015_Timer` | bộ RTL mới gồm 12 file, CSR dùng generator v3.3; lưu bộ cũ để đối chiếu | `make lint`; rule check | regression req/ack DMA trong `verification/Makefile` |
-| `016_CAN_Controller` | RTL CAN FD, reference model và regression tự kiểm | `make lint` | regression trong `verification/Makefile` |
 | `017_QSPI_Controller` | HDS VLSIT, workbook CSR, RTL, sơ đồ, waveform, nghiên cứu và lưu trữ bản cũ | `make lint`; rule check | chưa có testbench mô phỏng |
-| `018_MKV_Block_Cipher` | HDS, các profile RTL và bộ verification | `make lint` | regression trong `verification/Makefile` |
 | `019_SHA2_SHA3_Hash` | HDS, RTL và vector/assertion/coverage collateral | `make lint` | `verification/scripts/run_all.py` |
 | `020_WDT` | HDS và RTL | `make lint` | chưa có testbench |
 | `021_UART` | RTL và collateral verification dùng VCS | `make lint` | cần Synopsys VCS |
 
 ### Ghi chú rà soát verification (2026-11-15)
 
-Toàn bộ 21 mục lint của IP đều pass. Các regression chức năng của common cells, SyncFIFO, AsyncAPB, AXI2TLUL, APB2TLUL, handshake hai pha, HyperRAM, Gray-code synchronizer, AXI upsizer, Timer DMA, CAN FD, CRC, bằng chứng Async AXI và SHA-2/SHA-3 đều pass. Regression AHB2AXI vẫn fail tại WF-003, WF-004 và WF-006. MKV báo 399 testcase pass, không skip và không fail, nhưng trả mã lỗi vì sáu assertion ổn định backpressure AW/W/AR không được kích hoạt. UART được bỏ qua do không có Synopsys VCS.
+Toàn bộ 19 mục lint của IP đều pass. Các regression chức năng của common cells, SyncFIFO, AsyncAPB, AXI2TLUL, APB2TLUL, handshake hai pha, HyperRAM, Gray-code synchronizer, AXI upsizer, Timer DMA, CRC, bằng chứng Async AXI và SHA-2/SHA-3 đều pass. Regression AHB2AXI vẫn fail tại WF-003, WF-004 và WF-006. UART được bỏ qua do không có Synopsys VCS.
 
 ### RTL dùng chung và mô hình cell
 
