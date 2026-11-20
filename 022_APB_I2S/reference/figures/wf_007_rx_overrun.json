@@ -1,0 +1,52 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p..........."
+  },
+  {
+   "name": "w_rx_fifo_full",
+   "wave": "011111111111"
+  },
+  {
+   "name": "w_rx_pair_done",
+   "wave": "000100000000"
+  },
+  {
+   "name": "w_rx_overrun",
+   "wave": "000011110000"
+  },
+  {
+   "name": "o_int_rx_or_0",
+   "wave": "000001111000"
+  },
+  {
+   "name": "i_apb_psel",
+   "wave": "000001110000"
+  },
+  {
+   "name": "i_apb_penable",
+   "wave": "000000110000"
+  },
+  {
+   "name": "o_apb_prdata",
+   "wave": "x......=x...",
+   "data": [
+    "1"
+   ]
+  },
+  {
+   "name": "o_reg_rd_en",
+   "wave": "000000010000"
+  }
+ ],
+ "head": {
+  "text": "WF-007 OP-004 RX FIFO overrun and its clearing (error)"
+ },
+ "foot": {
+  "text": "APB clock domain. A pair arrives while the RX FIFO is full: it is dropped, the cause sets, the interrupt rises; a read of i2s_ror returns rxcho = 1 and clears it."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

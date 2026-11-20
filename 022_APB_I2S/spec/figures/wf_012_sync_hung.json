@@ -1,0 +1,48 @@
+{
+ "signal": [
+  {
+   "name": "i_bclk_rx",
+   "wave": "p.............0000000000"
+  },
+  {
+   "name": "i_ws_rx",
+   "wave": "100010001000000000000000"
+  },
+  {
+   "name": "w_fsm_frame_state",
+   "wave": "=.......................",
+   "data": [
+    "RUN"
+   ]
+  },
+  {
+   "name": "w_sync_err",
+   "wave": "000001000000000000000000"
+  },
+  {
+   "name": "i2s_irq_raw.sync",
+   "wave": "000000111111111111111111"
+  },
+  {
+   "name": "w_tmo_run",
+   "wave": "000000000000001111111100"
+  },
+  {
+   "name": "w_hung",
+   "wave": "000000000000000000000010"
+  },
+  {
+   "name": "i2s_irq_raw.hung",
+   "wave": "000000000000000000000001"
+  }
+ ],
+ "head": {
+  "text": "WF-012 OP-010 Frame sync error and hung clock, slave (error)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock, TDM slave with a timeout. A frame sync pulse inside a frame is ignored and sets the sync cause; later the bit clock stops, the timeout runs out and the hung cause is set."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

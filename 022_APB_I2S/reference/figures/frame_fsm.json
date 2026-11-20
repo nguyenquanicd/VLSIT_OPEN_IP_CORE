@@ -1,0 +1,61 @@
+{
+  "page_name": "FSM_FRAME",
+  "out_name": "frame_fsm.drawio",
+  "function": "frame",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_START"
+    },
+    {
+      "name": "ENUM_ST_LEFT"
+    },
+    {
+      "name": "ENUM_ST_RIGHT"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_START",
+      "label": "enable & ws high"
+    },
+    {
+      "src": "ENUM_ST_START",
+      "dst": "ENUM_ST_LEFT",
+      "label": "ws falls"
+    },
+    {
+      "src": "ENUM_ST_LEFT",
+      "dst": "ENUM_ST_RIGHT",
+      "label": "ws rises"
+    },
+    {
+      "src": "ENUM_ST_RIGHT",
+      "dst": "ENUM_ST_LEFT",
+      "label": "ws falls: pair done"
+    },
+    {
+      "src": "ENUM_ST_START",
+      "dst": "ENUM_ST_IDLE",
+      "label": "!enable"
+    },
+    {
+      "src": "ENUM_ST_LEFT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "!enable"
+    },
+    {
+      "src": "ENUM_ST_RIGHT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "!enable"
+    }
+  ],
+  "layout": {
+    "margin": 40
+  }
+}

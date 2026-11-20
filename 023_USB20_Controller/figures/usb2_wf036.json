@@ -1,0 +1,86 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p...........|||.........."
+  },
+  {
+   "name": "reg_fsm_dma_axi_current_state",
+   "wave": "==.....=..=.|||.=......=.",
+   "data": [
+    "IDLE",
+    "DESC_RD",
+    "AR",
+    "RDATA",
+    "DESC_WB",
+    "IDLE"
+   ]
+  },
+  [
+   "Read channel",
+   {
+    "name": "o_axim_arvalid",
+    "wave": "01.0....1.0.|||.........."
+   },
+   {
+    "name": "i_axim_arready",
+    "wave": "0.10.....10.|||.........."
+   },
+   {
+    "name": "o_axim_araddr",
+    "wave": "x=.x....=.x.|||..........",
+    "data": [
+     "DESC0",
+     "BUF0"
+    ]
+   },
+   {
+    "name": "o_axim_arlen",
+    "wave": "x=.x....=.x.|||..........",
+    "data": [
+     "1",
+     "15"
+    ]
+   },
+   {
+    "name": "i_axim_rvalid",
+    "wave": "0...1.0....1|||0........."
+   }
+  ],
+  [
+   "Write-back channel",
+   {
+    "name": "o_axim_awvalid",
+    "wave": "0...........|||..1.0....."
+   },
+   {
+    "name": "i_axim_awready",
+    "wave": "0...........|||...10....."
+   },
+   {
+    "name": "o_axim_awaddr",
+    "wave": "x...........|||..=.x.....",
+    "data": [
+     "DESC0+4"
+    ]
+   },
+   {
+    "name": "o_axim_wvalid",
+    "wave": "0...........|||....10...."
+   },
+   {
+    "name": "i_axim_bvalid",
+    "wave": "0...........|||......10.."
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-036: scatter-gather: descriptor read, data burst, status write-back (OP-021, success)"
+ },
+ "foot": {
+  "text": "Not to scale. The descriptor (two beats) is read, its buffer is moved in a 16-beat burst (IN endpoint), then word 1 is rewritten with done and the bytes not transferred; with ioc = 0 no interrupt is raised for this descriptor."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

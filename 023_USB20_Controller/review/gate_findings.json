@@ -1,0 +1,344 @@
+{
+ "findings": [
+  {
+   "id": "F-001",
+   "severity": "Critical",
+   "verdict": "fix HAS",
+   "root_cause": "CSR multi-bit CDC structure",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:930",
+   "traced": true,
+   "area": "clock_reset_cdc",
+   "title": "No approved crossing structure for the multi-bit endpoint and channel registers"
+  },
+  {
+   "id": "F-002",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "CSR multi-bit CDC structure",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:931",
+   "traced": false,
+   "area": "clock_reset_cdc",
+   "title": "Hardware-updated counters are read across CLK-PHY to CLK-BUS as levels"
+  },
+  {
+   "id": "F-003",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "FIFO RAM bandwidth",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4668",
+   "traced": true,
+   "area": "performance",
+   "title": "The single-port FIFO RAM has no bandwidth margin in the 16-bit UTMI+ configuration"
+  },
+  {
+   "id": "F-004",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "ULPI low power and clock stop",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:5205",
+   "traced": true,
+   "area": "functions",
+   "title": "ULPI low power mode, clock restart and resume are not specified"
+  },
+  {
+   "id": "F-005",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "UTMI+ control encodings",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:802",
+   "traced": false,
+   "area": "interfaces",
+   "title": "The UTMI+ mode signals have no value table per bus state"
+  },
+  {
+   "id": "F-006",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Protocol source evidence",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:162",
+   "traced": true,
+   "area": "interfaces",
+   "title": "The AXI4 profile is specified against AXI3 text"
+  },
+  {
+   "id": "F-007",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Protocol source evidence",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:5178",
+   "traced": true,
+   "area": "documentation",
+   "title": "UTMI+ and ULPI statements rest on unofficial copies and unverified conversions"
+  },
+  {
+   "id": "F-008",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Split transaction detail",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:80",
+   "traced": false,
+   "area": "functions",
+   "title": "Split transactions have a token format but no timing or retry rules"
+  },
+  {
+   "id": "F-009",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Turnaround latency budget",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4847",
+   "traced": true,
+   "area": "performance",
+   "title": "The 192 bit-time turnaround budget is stated but not derived"
+  },
+  {
+   "id": "F-010",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Timing numbers missing",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:5003",
+   "traced": false,
+   "area": "sdc_timing",
+   "title": "The UTMI+ and ULPI interface timing budgets have no numbers"
+  },
+  {
+   "id": "F-011",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Timing numbers missing",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4994",
+   "traced": false,
+   "area": "sdc_timing",
+   "title": "The SDC files named by the specification do not exist"
+  },
+  {
+   "id": "F-012",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Area and power not quantified",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4844",
+   "traced": true,
+   "area": "area_power",
+   "title": "Area and power have no number and no activity assumption"
+  },
+  {
+   "id": "F-013",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "Software stack compatibility",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4688",
+   "traced": true,
+   "area": "software_ease",
+   "title": "The register model is custom, so no existing USB driver runs on it"
+  },
+  {
+   "id": "F-014",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "CSR multi-bit CDC structure",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4801",
+   "traced": false,
+   "area": "software_ease",
+   "title": "The rule for a lost rwi load is stated but not defined per field"
+  },
+  {
+   "id": "F-015",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Over-current timing",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:202",
+   "traced": true,
+   "area": "functions",
+   "title": "The over-current requirement gives one latency for two outputs in different clock domains"
+  },
+  {
+   "id": "F-016",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "ULPI low power and clock stop",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:72",
+   "traced": false,
+   "area": "interfaces",
+   "title": "The ID source of the dual-role port is not stated for ULPI builds"
+  },
+  {
+   "id": "F-017",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RAM soft error",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:5053",
+   "traced": true,
+   "area": "security_ras",
+   "title": "The soft-error statement for the FIFO RAM is not correct"
+  },
+  {
+   "id": "F-018",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "DMA access protection",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4803",
+   "traced": false,
+   "area": "security_ras",
+   "title": "DMA addresses are unrestricted software values"
+  },
+  {
+   "id": "F-019",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "ULPI low power and clock stop",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:937",
+   "traced": false,
+   "area": "clock_reset_cdc",
+   "title": "Reset behavior with a stopped CLK-PHY is not stated"
+  },
+  {
+   "id": "F-020",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Parameter checking",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:219",
+   "traced": false,
+   "area": "parameters",
+   "title": "Illegal parameters are undefined and the CSR bank counts are 19 separate parameters"
+  },
+  {
+   "id": "F-021",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "FIFO sizing rule",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:962",
+   "traced": false,
+   "area": "parameters",
+   "title": "The minimum FIFO depth rule does not cover high-bandwidth and double buffering"
+  },
+  {
+   "id": "F-022",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Host scheduling rules",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:183",
+   "traced": false,
+   "area": "functions",
+   "title": "Host scheduling cites an open assumption and omits the periodic bandwidth limits"
+  },
+  {
+   "id": "F-023",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Unquantified timing",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:193",
+   "traced": false,
+   "area": "functions",
+   "title": "The time-out requirement has no number"
+  },
+  {
+   "id": "F-024",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Test mode entry",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:82",
+   "traced": false,
+   "area": "functions",
+   "title": "Test mode entry and exit commands are not specified"
+  },
+  {
+   "id": "F-025",
+   "severity": "Low",
+   "verdict": "fix HAS",
+   "root_cause": "Protocol source evidence",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:138",
+   "traced": false,
+   "area": "documentation",
+   "title": "Other ECNs of the USB 2.0 package are not cited"
+  },
+  {
+   "id": "F-026",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Verification coverage",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4902",
+   "traced": true,
+   "area": "verification_quality",
+   "title": "The plan has no interoperability or compliance test with real stacks"
+  },
+  {
+   "id": "F-027",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Open items",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:5171",
+   "traced": false,
+   "area": "documentation",
+   "title": "Several requirements take their source from open assumptions, and the open items have no owner or date"
+  },
+  {
+   "id": "F-028",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Verification coverage",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4916",
+   "traced": false,
+   "area": "verification_quality",
+   "title": "Millisecond timings have no simulation time scaling"
+  },
+  {
+   "id": "F-029",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Critical path statement",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4889",
+   "traced": false,
+   "area": "asic_feasibility",
+   "title": "No critical-path statement for the 60 MHz domain"
+  },
+  {
+   "id": "F-030",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "Integration guide",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:766",
+   "traced": false,
+   "area": "integration_effort",
+   "title": "The specification has no integration checklist"
+  },
+  {
+   "id": "F-031",
+   "severity": "Low",
+   "verdict": "fix HAS",
+   "root_cause": "DFT detail",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4971",
+   "traced": false,
+   "area": "dft",
+   "title": "DFT ports and RAM test position are deferred to the SoC flow"
+  },
+  {
+   "id": "F-032",
+   "severity": "Low",
+   "verdict": "not a defect",
+   "root_cause": "Market comparison",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:66",
+   "traced": false,
+   "area": "market_position",
+   "title": "Feature set is close to the DWC_otg and the reference SoCs, with deliberate omissions"
+  },
+  {
+   "id": "F-033",
+   "severity": "Low",
+   "verdict": "not a defect",
+   "root_cause": "Traceability",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:5057",
+   "traced": false,
+   "area": "verification_quality",
+   "title": "Every requirement has a test"
+  },
+  {
+   "id": "F-034",
+   "severity": "Low",
+   "verdict": "fix HAS",
+   "root_cause": "Application evidence",
+   "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:94",
+   "traced": false,
+   "area": "application_fit",
+   "title": "The application numbers are the author's proposals"
+  }
+ ]
+}

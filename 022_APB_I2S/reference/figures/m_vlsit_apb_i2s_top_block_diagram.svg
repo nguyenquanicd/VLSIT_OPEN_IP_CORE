@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1620" height="1160" viewBox="290 270 1620 1160" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="290" y="270" width="1620" height="1160" fill="#FFFFFF"/>
+<rect x="520" y="400" width="1120" height="900" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="1330" y="500" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1460" y="536" text-anchor="middle">u_clkgen</text>
+<text x="1460" y="558" text-anchor="middle">(m_vlsit_i2s_clkgen)</text>
+<rect x="1330" y="670" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1460" y="706" text-anchor="middle">u_frame</text>
+<text x="1460" y="728" text-anchor="middle">(m_vlsit_i2s_frame)</text>
+<rect x="1330" y="840" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1460" y="876" text-anchor="middle">u_txser</text>
+<text x="1460" y="898" text-anchor="middle">(m_vlsit_i2s_txser)</text>
+<rect x="1330" y="1010" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1460" y="1046" text-anchor="middle">u_rxdes</text>
+<text x="1460" y="1068" text-anchor="middle">(m_vlsit_i2s_rxdes)</text>
+<rect x="1320" y="1180" width="280" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1460" y="1216" text-anchor="middle">u_rstsync_sclk</text>
+<text x="1460" y="1238" text-anchor="middle">(m_vlsit_i2s_rstsync)</text>
+<rect x="590" y="500" width="220" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_csr_i2s</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_csr_i2s)</text>
+<rect x="570" y="670" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">u_regctl</text>
+<text x="700" y="728" text-anchor="middle">(m_vlsit_i2s_regctl)</text>
+<rect x="580" y="840" width="240" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">u_intr</text>
+<text x="700" y="898" text-anchor="middle">(m_vlsit_i2s_intr)</text>
+<rect x="570" y="1010" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">u_dmahs</text>
+<text x="700" y="1068" text-anchor="middle">(m_vlsit_i2s_dmahs)</text>
+<rect x="560" y="1180" width="280" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1216" text-anchor="middle">u_rstsync_apb</text>
+<text x="700" y="1238" text-anchor="middle">(m_vlsit_i2s_rstsync)</text>
+<rect x="940" y="500" width="280" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1080" y="536" text-anchor="middle">u_cfgsync</text>
+<text x="1080" y="558" text-anchor="middle">(m_vlsit_i2s_cfgsync)</text>
+<rect x="950" y="840" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1080" y="876" text-anchor="middle">u_txfifo</text>
+<text x="1080" y="898" text-anchor="middle">(m_vlsit_i2s_txfifo)</text>
+<rect x="950" y="1010" width="260" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1080" y="1046" text-anchor="middle">u_rxfifo</text>
+<text x="1080" y="1068" text-anchor="middle">(m_vlsit_i2s_rxfifo)</text>
+<text x="1080" y="321" text-anchor="middle">MODE</text>
+<text x="1080" y="343" text-anchor="middle">mode status</text>
+<text x="1785" y="536" text-anchor="middle">CLKO</text>
+<text x="1785" y="558" text-anchor="middle">controller clocks</text>
+<text x="440" y="481" text-anchor="middle">APB</text>
+<text x="440" y="503" text-anchor="middle">APB4 slave</text>
+<text x="420" y="591" text-anchor="middle">CFGIN</text>
+<text x="420" y="613" text-anchor="middle">static options</text>
+<text x="395" y="1046" text-anchor="middle">DMA</text>
+<text x="395" y="1068" text-anchor="middle">DMA handshake</text>
+<text x="1770" y="706" text-anchor="middle">WSIN</text>
+<text x="1770" y="728" text-anchor="middle">word select in</text>
+<text x="410" y="876" text-anchor="middle">INT</text>
+<text x="410" y="898" text-anchor="middle">interrupts</text>
+<text x="700" y="1371" text-anchor="middle">CRAPB</text>
+<text x="700" y="1393" text-anchor="middle">APB clock, reset</text>
+<text x="1460" y="1371" text-anchor="middle">CRSCK</text>
+<text x="1460" y="1393" text-anchor="middle">sclk clocks, reset</text>
+<text x="1745" y="1046" text-anchor="middle">SDI</text>
+<text x="1745" y="1068" text-anchor="middle">serial in</text>
+<text x="1750" y="876" text-anchor="middle">SDO</text>
+<text x="1750" y="898" text-anchor="middle">serial out</text>
+<text x="1618" y="441" text-anchor="end">TOP</text>
+<text x="1618" y="463" text-anchor="end">(m_vlsit_apb_i2s_top)</text>
+<text x="738" y="612" text-anchor="middle">REGS</text>
+<text x="850" y="526" text-anchor="middle">CTRL</text>
+<text x="1260" y="526" text-anchor="middle">CFGS</text>
+<text x="1498" y="612" text-anchor="middle">WORD</text>
+<text x="968" y="702" text-anchor="middle">PUSH</text>
+<text x="857" y="762" text-anchor="middle">POP</text>
+<text x="1235" y="866" text-anchor="middle">TXD</text>
+<text x="1235" y="1036" text-anchor="middle">RXD</text>
+<text x="1498" y="782" text-anchor="middle">FRTX</text>
+<text x="820" y="952" text-anchor="middle">LVLT</text>
+<text x="870" y="1098" text-anchor="middle">LVLR</text>
+<path d="M 1080 500 L 1080 350" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1080,350 1086,362 1074,362" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1590 540 L 1690 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1690,540 1678,546 1678,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 470 520 L 590 520" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="590,520 578,526 578,514" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 470 560 L 590 560" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="590,560 578,566 578,554" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 570 1050 L 470 1050" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="470,1050 482,1044 482,1056" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1690 710 L 1590 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1590,710 1602,704 1602,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 580 880 L 470 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="470,880 482,874 482,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 1350 L 700 1260" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,1260 706,1272 694,1272" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1460 1350 L 1460 1260" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1460,1260 1466,1272 1454,1272" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1690 1050 L 1590 1050" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1590,1050 1602,1044 1602,1056" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1590 880 L 1690 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1690,880 1678,886 1678,874" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 580 L 700 670" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,670 694,658 706,658" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 810 540 L 940 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="940,540 928,546 928,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1220 540 L 1330 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1330,540 1318,546 1318,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1460 580 L 1460 670" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1460,670 1454,658 1466,658" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1210 880 L 1330 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1330,880 1318,886 1318,874" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1330 1050 L 1210 1050" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1210,1050 1222,1044 1222,1056" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1460 750 L 1460 840" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1460,840 1454,828 1466,828" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 950 900 L 820 900" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="820,900 832,894 832,906" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 950 1070 L 830 1070" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="830,1070 842,1064 842,1076" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 830 690 L 930 690 L 930 860 L 950 860" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="950,860 938,866 938,854" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 830 730 L 890 730 L 890 894 A 6 6 0 0 0 890 906 L 890 1030 L 950 1030" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="950,1030 938,1036 938,1024" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

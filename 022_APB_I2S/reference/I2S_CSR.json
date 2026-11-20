@@ -1,0 +1,1154 @@
+{
+  "module": "m_vlsit_csr_i2s",
+  "prefix": "i2s",
+  "async": 0,
+  "event_sideband": 1,
+  "ip_version": {
+    "major": 1,
+    "minor": 0
+  },
+  "registers": [
+    {
+      "name": "i2s_version",
+      "offset": "0x0",
+      "description": "I2S controller version register. Reports the major and minor release numbers of this IP.",
+      "fields": [
+        {
+          "name": "major",
+          "bits": "[31:16]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Major version number of the I2S controller. A change of this number marks an incompatible register or behavior change.\n\nUsage: Read once after reset so the driver can select the matching programming model; software never writes it.\n\nValues:\n0x0001 major version 1 (reset value).\n\nUnit: none.\n\nLimits: fixed by the IP release."
+        },
+        {
+          "name": "minor",
+          "bits": "[15:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Minor version number of the I2S controller. A change of this number marks a compatible addition.\n\nUsage: Read once after reset for diagnostics; software never writes it.\n\nValues:\n0x0000 minor version 0 (reset value).\n\nUnit: none.\n\nLimits: fixed by the IP release."
+        }
+      ]
+    },
+    {
+      "name": "i2s_ier",
+      "offset": "0x4",
+      "description": "I2S enable register. Globally enables the controller and selects the interface type, the TDM frame format and the operating mode.",
+      "fields": [
+        {
+          "name": "ien",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "I2S global enable. While it is 0 the whole controller is held idle: both FIFO banks are emptied, in-flight serial data is dropped and every block, channel and slot enable is overridden.\n\nUsage: Set after the other registers are programmed; clear to stop everything. The fields intf_type, frame_off, tdm_slots and i2s_op_mode must be written only while this bit is 0.\n\nValues:\n0x0 controller disabled (reset value);\n0x1 controller enabled.\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "intf_type",
+          "bits": "[1]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Audio interface type. Selects between the standard two-slot I2S frame and the multi-slot TDM frame on the single serial data line.\n\nUsage: Write while ien is 0. The bit is writable only when the configuration supports both interfaces; in a TDM-only build it reads 1 and ignores writes, in a build without TDM it reads 0.\n\nValues:\n0x0 standard I2S interface (reset value in an I2S build);\n0x1 TDM interface.\n\nUnit: none.\n\nLimits: effective only when PARA_I2S_HAS_TDM is 1."
+        },
+        {
+          "name": "frame_off",
+          "bits": "[5]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "TDM frame offset. Chooses whether slot data starts at the word-select pulse itself or one serial-clock cycle after it.\n\nUsage: Write while ien is 0 and only in TDM mode. It also moves the sclk_gate timing of the first slot in controller mode.\n\nValues:\n0x0 data aligned with the word-select pulse, 0 sclk delay (reset value);\n0x1 data starts 1 sclk cycle after the pulse.\n\nUnit: sclk cycles.\n\nLimits: effective only in TDM mode."
+        },
+        {
+          "name": "tdm_slots",
+          "bits": "[11:8]",
+          "type": "rw",
+          "reset": "0x3",
+          "description": "Number of TDM slots minus one. Sets how many 32-bit slots form one TDM frame for both the transmitter and the receiver.\n\nUsage: Write while ien is 0. A value above the configured maximum slot count minus one is replaced by that maximum.\n\nValues:\n0x0 to 0xF frame has value plus one slots; reset value is the maximum slot count of the delivered configuration minus one, 0x3.\n\nUnit: slots minus one.\n\nLimits: at most PARA_I2S_TDM_SLOTS minus one; effective only in TDM mode."
+        },
+        {
+          "name": "i2s_op_mode",
+          "bits": "[15]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Operating mode. Selects whether the controller generates the serial clock gating and word select as a controller or follows external signals as a target.\n\nUsage: Write while ien is 0. The bit is writable only when programmable controller/target mode is configured.\n\nValues:\n0x0 target mode (reset value);\n0x1 controller mode.\n\nUnit: none.\n\nLimits: writable only when PARA_I2S_MODE_EN is 2."
+        }
+      ]
+    },
+    {
+      "name": "i2s_irer",
+      "offset": "0x8",
+      "description": "I2S receiver block enable register. Enables or disables every receive channel together.",
+      "fields": [
+        {
+          "name": "rxen",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Receiver block enable. A 0 overrides every individual receive channel enable and discards incoming data while the RX FIFOs keep their content.\n\nUsage: Set after the receive channels are programmed. When set, reception resumes at the next left-channel cycle. In TDM mode the single receive channel is always on and this bit is the only control.\n\nValues:\n0x0 receiver block disabled (reset value);\n0x1 receiver block enabled.\n\nUnit: none.\n\nLimits: none."
+        }
+      ]
+    },
+    {
+      "name": "i2s_iter",
+      "offset": "0xC",
+      "description": "I2S transmitter block enable register. Enables or disables every transmit channel together.",
+      "fields": [
+        {
+          "name": "txen",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Transmitter block enable. A 0 overrides every individual transmit channel enable, drops outgoing data and holds the serial data outputs low while the TX FIFOs keep their content.\n\nUsage: Set after the TX FIFOs are filled. When set, transmission resumes at the next left-channel cycle. In TDM mode the single transmit channel is always on and this bit is the only control.\n\nValues:\n0x0 transmitter block disabled (reset value);\n0x1 transmitter block enabled.\n\nUnit: none.\n\nLimits: none."
+        }
+      ]
+    },
+    {
+      "name": "i2s_cer",
+      "offset": "0x10",
+      "description": "I2S clock enable register. Starts and stops the controller-mode clock generation block.",
+      "fields": [
+        {
+          "name": "clken",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Clock generation enable. Enables the controller-mode outputs ws_out, sclk_en and sclk_gate. When 0, ws_out is held low and any serial data in flight is lost while FIFO content is preserved.\n\nUsage: Set last, after the channels and the i2s_ccr fields are programmed. After enabling, ws_out starts in the left cycle. Meaningful only in controller mode.\n\nValues:\n0x0 clock generation disabled (reset value);\n0x1 clock generation enabled.\n\nUnit: none.\n\nLimits: present only when PARA_I2S_MODE_EN is not 0."
+        }
+      ]
+    },
+    {
+      "name": "i2s_ccr",
+      "offset": "0x14",
+      "description": "I2S clock configuration register. Sets the word select length and the serial clock gating of the controller mode.",
+      "fields": [
+        {
+          "name": "wss",
+          "bits": "[5:3]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Word select size. Sets the number of sclk cycles for which ws_out stays in the left and in the right cycle.\n\nUsage: Write only while clken is 0. Choose a size not smaller than the audio word length of every enabled channel, otherwise the least significant bits are truncated.\n\nValues:\n0x0 16 sclk cycles (reset value of the default configuration);\n0x1 24 sclk cycles;\n0x2 32 sclk cycles;\n0x3 64 sclk cycles;\n0x4 128 sclk cycles;\n0x5 256 sclk cycles.\n\nUnit: sclk cycles.\n\nLimits: 0x6 and 0x7 are reserved; sizes above 32 need the extended word-select configuration."
+        },
+        {
+          "name": "sclkg",
+          "bits": "[2:0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Serial clock gating. Selects after how many sclk cycles of a left or right cycle sclk_gate turns the clock off for the rest of that cycle.\n\nUsage: Write only while clken is 0. The gating point must not exceed the largest programmed audio word length or data is truncated.\n\nValues:\n0x0 no gating (reset value of the default configuration);\n0x1 gate after 12 sclk cycles;\n0x2 gate after 16 sclk cycles;\n0x3 gate after 20 sclk cycles;\n0x4 gate after 24 sclk cycles;\n0x5 gate after 32 sclk cycles.\n\nUnit: sclk cycles.\n\nLimits: 0x6 and 0x7 are reserved."
+        }
+      ]
+    },
+    {
+      "name": "i2s_rxffr",
+      "offset": "0x18",
+      "description": "I2S receiver block FIFO reset register. Flushes all receive FIFOs at once.",
+      "fields": [
+        {
+          "name": "rxffr",
+          "bits": "[0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Receiver FIFO flush. Writing 1 empties every RX FIFO and resets its pointers; the bit clears itself when the flush is done and always reads as 0.\n\nUsage: Disable the receiver block (i2s_irer.rxen = 0) before writing 1; writing while it is enabled is not supported.\n\nValues:\n0x0 no action (reset value);\n0x1 flush all RX FIFOs.\n\nUnit: none.\n\nLimits: none."
+        }
+      ]
+    },
+    {
+      "name": "i2s_txffr",
+      "offset": "0x1C",
+      "description": "I2S transmitter block FIFO reset register. Flushes all transmit FIFOs at once.",
+      "fields": [
+        {
+          "name": "txffr",
+          "bits": "[0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Transmitter FIFO flush. Writing 1 empties every TX FIFO and resets its pointers; the bit clears itself when the flush is done and always reads as 0.\n\nUsage: Disable the transmitter block (i2s_iter.txen = 0) before writing 1; writing while it is enabled is not supported.\n\nValues:\n0x0 no action (reset value);\n0x1 flush all TX FIFOs.\n\nUnit: none.\n\nLimits: none."
+        }
+      ]
+    },
+    {
+      "name": "i2s_sr",
+      "offset": "0x20",
+      "description": "I2S status register. Reports whether the transmit FIFOs are completely empty.",
+      "fields": [
+        {
+          "name": "tfe",
+          "bits": "[0]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Transmit FIFO empty. Set when the transmit FIFOs of all enabled channels or slots hold no data; cleared as soon as any of them holds an entry. It does not raise an interrupt.\n\nUsage: Poll it before disabling the interface at the end of a stream. The last frame is popped together with its right sample or last slot, so wait one word-select length or one 32-clock slot after it sets.\n\nValues:\n0x0 at least one TX FIFO holds data;\n0x1 all TX FIFOs are empty (reset value).\n\nUnit: none.\n\nLimits: present only when the transmitter block is configured with TDM."
+        }
+      ]
+    },
+    {
+      "name": "i2s_lrbr",
+      "offset": "0x24",
+      "description": "Left receive buffer register. Returns the left audio sample at the head of the RX FIFO of one channel.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Left received audio sample of the channel selected by the register index. The sample was shifted in on the sd line while ws was low.\n\nUsage: Read after the data-available interrupt, always followed by one read of i2s_rrbr of the same channel to keep the pair in step; a read pops the left FIFO bank.\n\nValues:\n0x00000000 to 0xFFFFFFFF left sample taken from the left RX FIFO bank; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rrbr",
+      "offset": "0x28",
+      "description": "Right receive buffer register. Returns the right audio sample at the head of the RX FIFO of one channel.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Right received audio sample of the channel selected by the register index. The sample was shifted in on the sd line while ws was high.\n\nUsage: Read only after the matching i2s_lrbr read; a read pops the right FIFO bank.\n\nValues:\n0x00000000 to 0xFFFFFFFF right sample taken from the right RX FIFO bank; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rer",
+      "offset": "0x2C",
+      "description": "Receive enable register. Enables one receive channel, or the slots of the TDM frame.",
+      "fields": [
+        {
+          "name": "rxslot15_en",
+          "bits": "[23]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 15 enable. Enables or disables slot 15 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 15 disabled;\n0x1 slot 15 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot14_en",
+          "bits": "[22]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 14 enable. Enables or disables slot 14 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 14 disabled;\n0x1 slot 14 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot13_en",
+          "bits": "[21]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 13 enable. Enables or disables slot 13 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 13 disabled;\n0x1 slot 13 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot12_en",
+          "bits": "[20]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 12 enable. Enables or disables slot 12 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 12 disabled;\n0x1 slot 12 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot11_en",
+          "bits": "[19]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 11 enable. Enables or disables slot 11 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 11 disabled;\n0x1 slot 11 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot10_en",
+          "bits": "[18]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 10 enable. Enables or disables slot 10 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 10 disabled;\n0x1 slot 10 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot9_en",
+          "bits": "[17]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 9 enable. Enables or disables slot 9 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 9 disabled;\n0x1 slot 9 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot8_en",
+          "bits": "[16]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 8 enable. Enables or disables slot 8 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 8 disabled;\n0x1 slot 8 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot7_en",
+          "bits": "[15]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 7 enable. Enables or disables slot 7 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 7 disabled;\n0x1 slot 7 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot6_en",
+          "bits": "[14]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 6 enable. Enables or disables slot 6 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 6 disabled;\n0x1 slot 6 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot5_en",
+          "bits": "[13]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 5 enable. Enables or disables slot 5 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 5 disabled;\n0x1 slot 5 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot4_en",
+          "bits": "[12]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 4 enable. Enables or disables slot 4 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 4 disabled;\n0x1 slot 4 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot3_en",
+          "bits": "[11]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 3 enable. Enables or disables slot 3 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 3 disabled;\n0x1 slot 3 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot2_en",
+          "bits": "[10]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 2 enable. Enables or disables slot 2 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 2 disabled;\n0x1 slot 2 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot1_en",
+          "bits": "[9]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 1 enable. Enables or disables slot 1 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 1 disabled;\n0x1 slot 1 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxslot0_en",
+          "bits": "[8]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive slot 0 enable. Enables or disables slot 0 of the TDM frame for the receiver.\n\nUsage: Program before enabling the receiver block. A disabled slot is skipped: no FIFO push for it.\n\nValues:\n0x0 slot 0 disabled;\n0x1 slot 0 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "rxchen",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Receive channel enable. Enables or disables one receive channel independently of the others. A global disable through i2s_ier.ien or i2s_irer.rxen overrides it.\n\nUsage: Clear before reprogramming the channel or flushing its FIFO; set again to resume at the next left cycle. In TDM mode the single channel is always enabled and the bit is read-only 1.\n\nValues:\n0x0 channel disabled;\n0x1 channel enabled (reset value).\n\nUnit: none.\n\nLimits: writable only in standard I2S mode."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_ter",
+      "offset": "0x30",
+      "description": "Transmit enable register. Enables one transmit channel, or the slots of the TDM frame.",
+      "fields": [
+        {
+          "name": "txslot15_en",
+          "bits": "[23]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 15 enable. Enables or disables slot 15 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 15 disabled;\n0x1 slot 15 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot14_en",
+          "bits": "[22]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 14 enable. Enables or disables slot 14 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 14 disabled;\n0x1 slot 14 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot13_en",
+          "bits": "[21]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 13 enable. Enables or disables slot 13 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 13 disabled;\n0x1 slot 13 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot12_en",
+          "bits": "[20]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 12 enable. Enables or disables slot 12 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 12 disabled;\n0x1 slot 12 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot11_en",
+          "bits": "[19]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 11 enable. Enables or disables slot 11 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 11 disabled;\n0x1 slot 11 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot10_en",
+          "bits": "[18]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 10 enable. Enables or disables slot 10 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 10 disabled;\n0x1 slot 10 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot9_en",
+          "bits": "[17]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 9 enable. Enables or disables slot 9 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 9 disabled;\n0x1 slot 9 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot8_en",
+          "bits": "[16]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 8 enable. Enables or disables slot 8 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 8 disabled;\n0x1 slot 8 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot7_en",
+          "bits": "[15]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 7 enable. Enables or disables slot 7 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 7 disabled;\n0x1 slot 7 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot6_en",
+          "bits": "[14]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 6 enable. Enables or disables slot 6 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 6 disabled;\n0x1 slot 6 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot5_en",
+          "bits": "[13]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 5 enable. Enables or disables slot 5 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 5 disabled;\n0x1 slot 5 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot4_en",
+          "bits": "[12]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 4 enable. Enables or disables slot 4 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 4 disabled;\n0x1 slot 4 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot3_en",
+          "bits": "[11]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 3 enable. Enables or disables slot 3 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 3 disabled;\n0x1 slot 3 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot2_en",
+          "bits": "[10]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 2 enable. Enables or disables slot 2 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 2 disabled;\n0x1 slot 2 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot1_en",
+          "bits": "[9]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 1 enable. Enables or disables slot 1 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 1 disabled;\n0x1 slot 1 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txslot0_en",
+          "bits": "[8]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit slot 0 enable. Enables or disables slot 0 of the TDM frame for the transmitter.\n\nUsage: Program before enabling the transmitter block. A disabled slot is skipped: no FIFO pop for it.\n\nValues:\n0x0 slot 0 disabled;\n0x1 slot 0 enabled (reset value).\n\nUnit: none.\n\nLimits: effective only in TDM mode and only for slots below the configured slot count."
+        },
+        {
+          "name": "txchen",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "Transmit channel enable. Enables or disables one transmit channel independently of the others. A global disable through i2s_ier.ien or i2s_iter.txen overrides it.\n\nUsage: Clear before reprogramming the channel or flushing its FIFO; set again to resume at the next left cycle. In TDM mode the single channel is always enabled and the bit is read-only 1.\n\nValues:\n0x0 channel disabled;\n0x1 channel enabled (reset value).\n\nUnit: none.\n\nLimits: writable only in standard I2S mode."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rcr",
+      "offset": "0x34",
+      "description": "Receive configuration register. Sets the audio word length of one receive channel.",
+      "fields": [
+        {
+          "name": "wlen",
+          "bits": "[2:0]",
+          "type": "rw",
+          "reset": "0x2",
+          "description": "Receive word length. Number of valid audio bits per left or right word that the receiver stores, LSB aligned in the data register.\n\nUsage: Write only while the channel (or, in TDM mode, the receiver block) is disabled. A value larger than the configured maximum resolution restores the configured maximum.\n\nValues:\n0x0 ignore the word length, use the configured maximum;\n0x1 12 bits;\n0x2 16 bits (reset value of the default configuration);\n0x3 20 bits;\n0x4 24 bits;\n0x5 32 bits.\n\nUnit: bits.\n\nLimits: 0x6 and 0x7 are reserved; not larger than PARA_I2S_RX_WORDSIZE_0 to 3 of the channel."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_tcr",
+      "offset": "0x38",
+      "description": "Transmit configuration register. Sets the audio word length of one transmit channel.",
+      "fields": [
+        {
+          "name": "wlen",
+          "bits": "[2:0]",
+          "type": "rw",
+          "reset": "0x2",
+          "description": "Transmit word length. Number of valid audio bits per left or right word that the transmitter shifts out, MSB first.\n\nUsage: Write only while the channel (or, in TDM mode, the transmitter block) is disabled. A value larger than the configured maximum resolution restores the configured maximum.\n\nValues:\n0x0 ignore the word length, use the configured maximum;\n0x1 12 bits;\n0x2 16 bits (reset value of the default configuration);\n0x3 20 bits;\n0x4 24 bits;\n0x5 32 bits.\n\nUnit: bits.\n\nLimits: 0x6 and 0x7 are reserved; not larger than PARA_I2S_TX_WORDSIZE_0 to 3 of the channel."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_isr",
+      "offset": "0x3C",
+      "description": "Interrupt status register. Shows the current, unmasked-independent state of the receive and transmit interrupt causes of one channel.",
+      "fields": [
+        {
+          "name": "rxda",
+          "bits": "[0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "RX data available status. High while the RX FIFO fill level has reached the trigger level programmed in i2s_rfcr.rxchdt.\n\nUsage: Poll it or use it as interrupt cause; it falls when the FIFO is read below the trigger level. It shows the state whether or not the interrupt is masked.\n\nValues:\n0x0 trigger level not reached (reset value);\n0x1 trigger level reached.\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "rxfo",
+          "bits": "[1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "RX overrun status. High after received data was dropped because the RX FIFO was full.\n\nUsage: Cleared by reading i2s_ror of the same channel.\n\nValues:\n0x0 no overrun (reset value);\n0x1 RX FIFO overrun occurred.\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "txfe",
+          "bits": "[4]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "TX FIFO empty status. High while the TX FIFO fill level is at or below the trigger level in i2s_tfcr.txchet.\n\nUsage: It falls when software writes data above the trigger level. Shows the state whether or not the interrupt is masked.\n\nValues:\n0x0 trigger level not reached;\n0x1 TX FIFO at or below trigger level (reset value).\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "txfo",
+          "bits": "[5]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "TX overrun status. High after a write to a full TX FIFO was dropped.\n\nUsage: Cleared by reading i2s_ticr of the same channel.\n\nValues:\n0x0 no overrun (reset value);\n0x1 TX FIFO overrun occurred.\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "txfu",
+          "bits": "[6]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "TX underrun status. High after a frame started while the TX FIFO was empty and zeros were sent instead of data.\n\nUsage: Cleared by reading i2s_ticr of the same channel.\n\nValues:\n0x0 no underrun (reset value);\n0x1 TX FIFO underrun occurred.\n\nUnit: none.\n\nLimits: none."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_imr",
+      "offset": "0x40",
+      "description": "Interrupt mask register. Masks the receive and transmit interrupt outputs of one channel.",
+      "fields": [
+        {
+          "name": "rxdam",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "RX data available mask. Blocks the data-available cause from driving the interrupt output.\n\nUsage: Clear to enable the interrupt after the channel is configured. The status bit in i2s_isr is unaffected.\n\nValues:\n0x0 interrupt unmasked;\n0x1 interrupt masked (reset value).\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "rxfom",
+          "bits": "[1]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "RX overrun mask. Blocks the RX overrun cause from driving the interrupt output.\n\nUsage: Clear to enable the interrupt. The status bit in i2s_isr is unaffected.\n\nValues:\n0x0 interrupt unmasked;\n0x1 interrupt masked (reset value).\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "txfem",
+          "bits": "[4]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "TX FIFO empty mask. Blocks the TX empty cause from driving the interrupt output.\n\nUsage: Clear to enable the interrupt. The status bit in i2s_isr is unaffected.\n\nValues:\n0x0 interrupt unmasked;\n0x1 interrupt masked (reset value).\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "txfom",
+          "bits": "[5]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "TX overrun mask. Blocks the TX overrun cause from driving the interrupt output.\n\nUsage: Clear to enable the interrupt. The status bit in i2s_isr is unaffected.\n\nValues:\n0x0 interrupt unmasked;\n0x1 interrupt masked (reset value).\n\nUnit: none.\n\nLimits: none."
+        },
+        {
+          "name": "txfum",
+          "bits": "[6]",
+          "type": "rw",
+          "reset": "0x1",
+          "description": "TX underrun mask. Blocks the TX underrun cause from driving the interrupt output.\n\nUsage: Clear to enable the interrupt. The status bit in i2s_isr is unaffected.\n\nValues:\n0x0 interrupt unmasked;\n0x1 interrupt masked (reset value).\n\nUnit: none.\n\nLimits: none."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_ror",
+      "offset": "0x44",
+      "description": "Receive overrun register. Reading it reports and clears the RX FIFO overrun of one channel.",
+      "fields": [
+        {
+          "name": "rxcho",
+          "bits": "[0]",
+          "type": "r2c",
+          "reset": "0x0",
+          "description": "Receive channel overrun. Set by hardware when received data is lost because the RX FIFO is full; the read returns the value and then clears it, which also clears the interrupt.\n\nUsage: Read it in the overrun interrupt service routine. Reading while no overrun is pending returns 0.\n\nValues:\n0x0 no overrun (reset value);\n0x1 an overrun occurred since the last read.\n\nUnit: none.\n\nLimits: none."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_ticr",
+      "offset": "0x48",
+      "description": "Transmit interrupt clear register. Reading it reports and clears the TX overrun and underrun of one channel.",
+      "fields": [
+        {
+          "name": "txchou",
+          "bits": "[0]",
+          "type": "r2c",
+          "reset": "0x0",
+          "description": "Transmit channel overrun or underrun. Set by hardware when a write hit a full TX FIFO or a frame started with an empty FIFO; the read returns the value and then clears it and both interrupt causes.\n\nUsage: Read it in the TX error interrupt service routine; i2s_isr tells which cause occurred before the read.\n\nValues:\n0x0 no overrun or underrun (reset value);\n0x1 overrun or underrun occurred since the last read.\n\nUnit: none.\n\nLimits: none."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rfcr",
+      "offset": "0x4C",
+      "description": "Receive FIFO configuration register. Sets the data-available trigger level of one RX FIFO.",
+      "fields": [
+        {
+          "name": "rxchdt",
+          "bits": "[7:0]",
+          "type": "rw",
+          "reset": "0x3",
+          "description": "Receive channel data trigger. Trigger level minus one at which the RX FIFO raises the data-available interrupt and the DMA request.\n\nUsage: Write only while the channel (or, in TDM mode, the receiver block) is disabled. A value above the last legal one saturates to FIFO depth minus one.\n\nValues:\n0x00 to 0xFF trigger level equals value plus one entries; reset value 0x03 gives 4 entries.\n\nUnit: FIFO entries minus one.\n\nLimits: 0 to FIFO depth minus one; the field is 4 bits wide when the depth is 16 or less."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_tfcr",
+      "offset": "0x50",
+      "description": "Transmit FIFO configuration register. Sets the empty trigger level of one TX FIFO.",
+      "fields": [
+        {
+          "name": "txchet",
+          "bits": "[7:0]",
+          "type": "rw",
+          "reset": "0x3",
+          "description": "Transmit channel empty trigger. Fill level at or below which the TX FIFO raises the empty interrupt and the DMA request.\n\nUsage: Write only while the channel (or, in TDM mode, the transmitter block) is disabled. A value above the last legal one saturates to FIFO depth minus one.\n\nValues:\n0x00 to 0xFF trigger level equals the value in entries; reset value 0x03.\n\nUnit: FIFO entries.\n\nLimits: 0 to FIFO depth minus one; the field is 4 bits wide when the depth is 16 or less."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rff",
+      "offset": "0x54",
+      "description": "Receive FIFO flush register. Flushes the RX FIFO of one channel.",
+      "fields": [
+        {
+          "name": "rxchfr",
+          "bits": "[0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Receive channel FIFO flush. Writing 1 empties the RX FIFO of the selected channel (all slot FIFOs in TDM mode); the bit clears itself and reads as 0.\n\nUsage: Disable the channel or the receiver block first. Use it to resynchronize a left/right pair that got out of step.\n\nValues:\n0x0 no action (reset value);\n0x1 flush the RX FIFO.\n\nUnit: none.\n\nLimits: none."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_tff",
+      "offset": "0x58",
+      "description": "Transmit FIFO flush register. Flushes the TX FIFO of one channel.",
+      "fields": [
+        {
+          "name": "txchfr",
+          "bits": "[0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Transmit channel FIFO flush. Writing 1 empties the TX FIFO of the selected channel (all slot FIFOs in TDM mode); the bit clears itself and reads as 0.\n\nUsage: Disable the channel or the transmitter block first. Use it to resynchronize a left/right pair that got out of step.\n\nValues:\n0x0 no action (reset value);\n0x1 flush the TX FIFO.\n\nUnit: none.\n\nLimits: none."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_lthr",
+      "offset": "0x5C",
+      "description": "Left transmit holding register. Accepts the left audio sample of a stereo pair for one transmit channel.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Left audio sample to transmit on the channel selected by the register index. It is read back as 0.\n\nUsage: Write the left sample first and the right sample to i2s_rthr second; write only while the FIFO is not full, because a write to a full FIFO is lost and flags an overrun.\n\nValues:\n0x00000000 to 0xFFFFFFFF left sample pushed to the left TX FIFO bank; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rthr",
+      "offset": "0x60",
+      "description": "Right transmit holding register. Accepts the right audio sample of a stereo pair for one transmit channel.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Right audio sample to transmit on the channel selected by the register index. It is read back as 0.\n\nUsage: Write only after the matching i2s_lthr write; a write to a full FIFO is lost and flags an overrun.\n\nValues:\n0x00000000 to 0xFFFFFFFF right sample pushed to the right TX FIFO bank; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x40",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rxdma",
+      "offset": "0x1C4",
+      "description": "Receiver block DMA register. Cyclic read port that returns the next sample of the enabled receive channels or slots.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Receiver block DMA data. Each read returns the left, then the right sample of the lowest enabled channel, then of the next enabled channel and so on; in TDM mode each read returns one enabled slot.\n\nUsage: Read it instead of i2s_lrbr and i2s_rrbr when combined DMA handshake is used. Do not disable a channel between the left and right read of a pair.\n\nValues:\n0x00000000 to 0xFFFFFFFF next sample in the cyclic channel order; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ]
+    },
+    {
+      "name": "i2s_rrxdma",
+      "offset": "0x1C8",
+      "description": "Reset receiver block DMA register. Rewinds the cyclic read pointer of i2s_rxdma to the lowest enabled channel or slot.",
+      "fields": [
+        {
+          "name": "rrxdma",
+          "bits": "[0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Reset receiver DMA pointer. Writing 1 moves the cyclic read pointer back to the lowest enabled channel or slot; it clears itself and reads as 0.\n\nUsage: Use it to resynchronize after an error. It has no effect between the left and the right read of a stereo pair.\n\nValues:\n0x0 no action (reset value);\n0x1 reset the pointer.\n\nUnit: none.\n\nLimits: present only with more than one channel or slot."
+        }
+      ]
+    },
+    {
+      "name": "i2s_txdma",
+      "offset": "0x1CC",
+      "description": "Transmitter block DMA register. Cyclic write port that stores the next sample of the enabled transmit channels or slots.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Transmitter block DMA data. Each write stores the left, then the right sample of the lowest enabled channel, then of the next enabled channel and so on; in TDM mode each write stores one enabled slot.\n\nUsage: Write it instead of i2s_lthr and i2s_rthr when combined DMA handshake is used. Do not disable a channel between the left and right write of a pair.\n\nValues:\n0x00000000 to 0xFFFFFFFF next sample in the cyclic channel order; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ]
+    },
+    {
+      "name": "i2s_rtxdma",
+      "offset": "0x1D0",
+      "description": "Reset transmitter block DMA register. Rewinds the cyclic write pointer of i2s_txdma to the lowest enabled channel or slot.",
+      "fields": [
+        {
+          "name": "rtxdma",
+          "bits": "[0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Reset transmitter DMA pointer. Writing 1 moves the cyclic write pointer back to the lowest enabled channel or slot; it clears itself and reads as 0.\n\nUsage: Use it to resynchronize after an error. It has no effect between the left and the right write of a stereo pair.\n\nValues:\n0x0 no action (reset value);\n0x1 reset the pointer.\n\nUnit: none.\n\nLimits: present only with more than one channel or slot."
+        }
+      ]
+    },
+    {
+      "name": "i2s_cparam2",
+      "offset": "0x1F4",
+      "description": "Component parameter register 2. Reports the maximum receive audio resolution of each channel.",
+      "fields": [
+        {
+          "name": "rx_wsize_3",
+          "bits": "[12:10]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Receive channel 3 maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "rx_wsize_2",
+          "bits": "[9:7]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Receive channel 2 maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "rx_wsize_1",
+          "bits": "[5:3]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Receive channel 1 maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "rx_wsize_0",
+          "bits": "[2:0]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Receive channel 0 and TDM slots maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        }
+      ]
+    },
+    {
+      "name": "i2s_cparam1",
+      "offset": "0x1F8",
+      "description": "Component parameter register 1. Reports the build configuration of the controller.",
+      "fields": [
+        {
+          "name": "op_mode_en",
+          "bits": "[29:28]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Programmable mode support. Reports the build option for the controller/target role.\n\nUsage: Read by the driver to learn whether i2s_ier.i2s_op_mode is writable.\n\nValues:\n0x0 to 0x3 the value of PARA_I2S_MODE_EN; reset value 0x0 means target only.\n\nUnit: none.\n\nLimits: present only when PARA_I2S_MODE_EN is 2."
+        },
+        {
+          "name": "tx_wsize_3",
+          "bits": "[27:25]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Transmit channel 3 maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "tx_wsize_2",
+          "bits": "[24:22]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Transmit channel 2 maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "tx_wsize_1",
+          "bits": "[21:19]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Transmit channel 1 maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "tx_wsize_0",
+          "bits": "[18:16]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Transmit channel 0 and TDM slots maximum audio resolution encoding. Reports the configured maximum audio word length of that channel.\n\nUsage: Read by the driver to learn the build configuration; software never writes it.\n\nValues:\n0x0 to 0x4 12, 16, 20, 24 or 32 bit; reset value is the delivered default configuration, 0x1.\n\nUnit: encoded bit width.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "fdepth_hi",
+          "bits": "[13:11]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "FIFO depth encoding for large depths. Reports the FIFO depth of all channels when it is larger than 16 entries.\n\nUsage: Read together with fdepth_lo to learn the FIFO depth.\n\nValues:\n0x0 to 0x7 2, 4, 8, 16, 32, 64, 128 or 256 entries; reset value 0x0 because the default depth is 8.\n\nUnit: encoded depth.\n\nLimits: valid only when the depth is above 16."
+        },
+        {
+          "name": "tx_chs",
+          "bits": "[10:9]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Transmit channel count minus one. Reports the number of configured transmit channels.\n\nUsage: Read by the driver to size its channel loops.\n\nValues:\n0x0 to 0x3 1 to 4 transmit channels; reset value 0x0 is one channel.\n\nUnit: channels minus one.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "rx_chs",
+          "bits": "[8:7]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Receive channel count minus one. Reports the number of configured receive channels.\n\nUsage: Read by the driver to size its channel loops.\n\nValues:\n0x0 to 0x3 1 to 4 receive channels; reset value 0x0 is one channel.\n\nUnit: channels minus one.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "rx_blk",
+          "bits": "[6]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Receiver block present. Reports whether the receiver block is built.\n\nUsage: Read by the driver before using receive registers.\n\nValues:\n0x0 receiver block absent;\n0x1 receiver block present (reset value).\n\nUnit: none.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "tx_blk",
+          "bits": "[5]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Transmitter block present. Reports whether the transmitter block is built.\n\nUsage: Read by the driver before using transmit registers.\n\nValues:\n0x0 transmitter block absent;\n0x1 transmitter block present (reset value).\n\nUnit: none.\n\nLimits: fixed by the build parameter."
+        },
+        {
+          "name": "mode_en",
+          "bits": "[4]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Controller mode build option. Reports whether the fixed controller mode is built.\n\nUsage: Read by the driver to learn whether the clock generation registers exist.\n\nValues:\n0x0 target (reset value);\n0x1 controller.\n\nUnit: none.\n\nLimits: present only when PARA_I2S_MODE_EN is 0 or 1."
+        },
+        {
+          "name": "fdepth_lo",
+          "bits": "[3:2]",
+          "type": "ro",
+          "reset": "0x2",
+          "description": "FIFO depth encoding for small depths. Reports the FIFO depth of all channels when it is 16 entries or less.\n\nUsage: Read by the driver to size DMA bursts and trigger levels.\n\nValues:\n0x0 2 entries;\n0x1 4 entries;\n0x2 8 entries (reset value);\n0x3 16 entries.\n\nUnit: entries.\n\nLimits: valid only when the depth is 16 or less."
+        },
+        {
+          "name": "apb_width",
+          "bits": "[1:0]",
+          "type": "ro",
+          "reset": "0x2",
+          "description": "APB data width encoding. Reports the configured APB data width of the build.\n\nUsage: Read by the driver to learn how many bus accesses a register needs.\n\nValues:\n0x0 8 bit;\n0x1 16 bit;\n0x2 32 bit (reset value).\n\nUnit: bits.\n\nLimits: this specification supports only 32 bit."
+        }
+      ]
+    },
+    {
+      "name": "i2s_comp_ver",
+      "offset": "0x1FC",
+      "description": "Component version register. Reports the vendor-compatible component version code.",
+      "fields": [
+        {
+          "name": "comp_ver",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x3131342A",
+          "description": "Component version code. A fixed code that lets existing drivers recognize the component release; it is separate from i2s_version.\n\nUsage: Read by a driver that checks the code.\n\nValues:\n0x3131342A ASCII code of the component release 1.14a (reset value).\n\nUnit: none.\n\nLimits: fixed by the IP release."
+        }
+      ]
+    },
+    {
+      "name": "i2s_comp_type",
+      "offset": "0x200",
+      "description": "Component type register. Reports the fixed component type identifier.",
+      "fields": [
+        {
+          "name": "comp_type",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x445701A0",
+          "description": "Component type identifier. A fixed code made of the two ASCII letters DW followed by a 16-bit number; existing drivers read it to recognize the I2S component.\n\nUsage: Read by a driver that checks the identifier.\n\nValues:\n0x445701A0 I2S component type (reset value).\n\nUnit: none.\n\nLimits: fixed by the IP release."
+        }
+      ]
+    },
+    {
+      "name": "i2s_dmacr",
+      "offset": "0x204",
+      "description": "DMA control register. Enables the DMA handshake of each receive or transmit channel or block.",
+      "fields": [
+        {
+          "name": "dmaen_txblock",
+          "bits": "[17]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for the transmitter block. Enables the dma_tx handshake of the combined interface for all transmit channels or slots.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: combined DMA handshake build only."
+        },
+        {
+          "name": "dmaen_rxblock",
+          "bits": "[16]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for the receiver block. Enables the dma_rx handshake of the combined interface for all receive channels or slots.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: combined DMA handshake build only."
+        },
+        {
+          "name": "dmaen_txch_3",
+          "bits": "[11]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for transmit channel 3. Enables the dedicated dma_tx_req_3 handshake of channel 3.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 3 present."
+        },
+        {
+          "name": "dmaen_txch_2",
+          "bits": "[10]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for transmit channel 2. Enables the dedicated dma_tx_req_2 handshake of channel 2.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 2 present."
+        },
+        {
+          "name": "dmaen_txch_1",
+          "bits": "[9]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for transmit channel 1. Enables the dedicated dma_tx_req_1 handshake of channel 1.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 1 present."
+        },
+        {
+          "name": "dmaen_txch_0",
+          "bits": "[8]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for transmit channel 0. Enables the dedicated dma_tx_req_0 handshake of channel 0.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 0 present."
+        },
+        {
+          "name": "dmaen_rxch_3",
+          "bits": "[3]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for receive channel 3. Enables the dedicated dma_rx_req_3 handshake of channel 3.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 3 present."
+        },
+        {
+          "name": "dmaen_rxch_2",
+          "bits": "[2]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for receive channel 2. Enables the dedicated dma_rx_req_2 handshake of channel 2.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 2 present."
+        },
+        {
+          "name": "dmaen_rxch_1",
+          "bits": "[1]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for receive channel 1. Enables the dedicated dma_rx_req_1 handshake of channel 1.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 1 present."
+        },
+        {
+          "name": "dmaen_rxch_0",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "DMA enable for receive channel 0. Enables the dedicated dma_rx_req_0 handshake of channel 0.\n\nUsage: Write after the matching block or channel is enabled and the FIFO trigger levels are programmed. The bit is effective only with the DMA handshake interface built.\n\nValues:\n0x0 DMA handshake disabled (reset value);\n0x1 DMA handshake enabled.\n\nUnit: none.\n\nLimits: dedicated DMA handshake build and channel 0 present."
+        }
+      ]
+    },
+    {
+      "name": "i2s_rxdma_ch",
+      "offset": "0x208",
+      "description": "Receive channel DMA register. Read port of one receive channel for a dedicated DMA handshake.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Receive channel DMA data. Each read returns the next left or right sample of the channel selected by the register index.\n\nUsage: Read by the DMA controller after dma_rx_req_x; with the dedicated handshake the cyclic i2s_rxdma register is not used.\n\nValues:\n0x00000000 to 0xFFFFFFFF next sample of the channel in left, right order; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x4",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_txdma_ch",
+      "offset": "0x218",
+      "description": "Transmit channel DMA register. Write port of one transmit channel for a dedicated DMA handshake.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Transmit channel DMA data. Each write stores the next left or right sample of the channel selected by the register index.\n\nUsage: Written by the DMA controller after dma_tx_req_x; with the dedicated handshake the cyclic i2s_txdma register is not used.\n\nValues:\n0x00000000 to 0xFFFFFFFF next sample of the channel in left, right order; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 1,
+        "stride": "0x4",
+        "max": 4
+      }
+    },
+    {
+      "name": "i2s_rslot",
+      "offset": "0x228",
+      "description": "Receive slot register. Read port of one received TDM slot.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Receive slot data. Returns the oldest received sample of the slot selected by the register index.\n\nUsage: Read after the data-available interrupt. A read pops the slot FIFO; reads of a slot that is disabled return 0.\n\nValues:\n0x00000000 to 0xFFFFFFFF slot sample taken from the slot RX FIFO; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 4,
+        "stride": "0x4",
+        "max": 16
+      }
+    },
+    {
+      "name": "i2s_tslot",
+      "offset": "0x268",
+      "description": "Transmit slot register. Write port of one TDM slot.",
+      "fields": [
+        {
+          "name": "data",
+          "bits": "[31:0]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "Transmit slot data. Stores the sample sent in the slot selected by the register index in the next frame.\n\nUsage: Write only while the slot FIFO is not full; a write to a full FIFO is lost and flags an overrun.\n\nValues:\n0x00000000 to 0xFFFFFFFF slot sample pushed to the slot TX FIFO; unused upper bits read as 0.\n\nUnit: audio sample, LSB aligned.\n\nLimits: valid width is the programmed word length of the channel, at most 32 bits."
+        }
+      ],
+      "repeat": {
+        "mode": "PARAMETERIZED",
+        "count": 4,
+        "stride": "0x4",
+        "max": 16
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p..............."
+  },
+  {
+   "name": "i_ws_slv",
+   "wave": "11000000111111000",
+   "phase": 0.5
+  },
+  {
+   "name": "w_tx_pop_pair",
+   "wave": "0001000000000000"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "000====00====000",
+   "data": [
+    "L3",
+    "L2",
+    "L1",
+    "L0",
+    "R3",
+    "R2",
+    "R1",
+    "R0"
+   ],
+   "phase": 0.5
+  }
+ ],
+ "head": {
+  "text": "WF-003 OP-003 I2S transmit frame, target mode (success)"
+ },
+ "foot": {
+  "text": "Reduced scale: 4-bit words, 6-cycle half frame. The pair is popped at R(0); the MSB appears one sclk cycle after the word-select edge; zeros fill the rest of the half frame."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

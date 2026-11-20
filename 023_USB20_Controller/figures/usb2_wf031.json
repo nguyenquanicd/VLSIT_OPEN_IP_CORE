@@ -1,0 +1,95 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p................................."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0.1....0.....1..0.1....0......"
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0.1....0.....1..0.1....0......"
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x.=====x.....===x.=====x......",
+    "data": [
+     "OUT",
+     "ADDR",
+     "EP,C5",
+     "DATA0",
+     "D0",
+     "D1",
+     "CRCL",
+     "CRCH",
+     "OUT",
+     "ADDR",
+     "EP,C5",
+     "DATA1",
+     "D0",
+     "D1",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0............10...............10.."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0............10...............10.."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x............=x...............=x..",
+    "data": [
+     "ACK",
+     "ACK"
+    ]
+   }
+  ],
+  [
+   "Buffers of the endpoint region",
+   {
+    "name": "w_buf_a",
+    "wave": "=.....=.....=.......=.............",
+    "data": [
+     "free",
+     "bus fills",
+     "DMA drains",
+     "free"
+    ]
+   },
+   {
+    "name": "w_buf_b",
+    "wave": "=.....................=.....=.....",
+    "data": [
+     "free",
+     "bus fills",
+     "DMA drains"
+    ]
+   },
+   {
+    "name": "u2_epo_ctrl.buf_cur",
+    "wave": "0...........1...............0....."
+   }
+  ]
+ ],
+ "head": {
+  "text": "WF-031: double-buffered bulk OUT endpoint, two packets (OP-016, success)"
+ },
+ "foot": {
+  "text": "Packet 1 goes to buffer A; while the DMA drains A, packet 2 is received into buffer B. buf_cur toggles at the end of each packet."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

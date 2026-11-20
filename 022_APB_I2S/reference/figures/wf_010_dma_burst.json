@@ -1,0 +1,33 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p............."
+  },
+  {
+   "name": "w_level_cond",
+   "wave": "01111111111111"
+  },
+  {
+   "name": "o_dma_tx_req_0",
+   "wave": "00111100001111"
+  },
+  {
+   "name": "i_dma_tx_ack_0",
+   "wave": "00000111100000"
+  },
+  {
+   "name": "o_dma_tx_single_0",
+   "wave": "01111000011111"
+  }
+ ],
+ "head": {
+  "text": "WF-010 OP-011 DMA burst handshake (success)"
+ },
+ "foot": {
+  "text": "Four-phase handshake on the APB clock: request, acknowledge, request low, acknowledge low, request again while the level condition still holds."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

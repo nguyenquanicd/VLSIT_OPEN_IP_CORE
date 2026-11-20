@@ -1,0 +1,31 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p................."
+  },
+  {
+   "name": "o_ws_out",
+   "wave": "000000001111111100",
+   "phase": 0.5
+  },
+  {
+   "name": "o_sclk_gate",
+   "wave": "000001110000011100",
+   "phase": 0.5
+  },
+  {
+   "name": "gated_sclk",
+   "wave": "0ppppp000ppppp000p"
+  }
+ ],
+ "head": {
+  "text": "WF-012 OP-007 Serial clock gating (success)"
+ },
+ "foot": {
+  "text": "Word select size 8, gating after 5 clock cycles. gated_sclk is shown only for illustration: it equals sclk AND NOT o_sclk_gate and is made outside the IP."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

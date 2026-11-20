@@ -1,0 +1,57 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p................."
+  },
+  {
+   "name": "i_ulpi_dir",
+   "wave": "0.....1......0...."
+  },
+  {
+   "name": "i_ulpi_nxt",
+   "wave": "0.1...0.1...0....."
+  },
+  {
+   "name": "o_ulpi_stp",
+   "wave": "0................."
+  },
+  {
+   "name": "o_ulpi_data_oe",
+   "wave": "01....0..........."
+  },
+  {
+   "name": "o_ulpi_data",
+   "wave": "x=====x...........",
+   "data": [
+    "TXCMD",
+    "D0",
+    "D1",
+    "D2",
+    "D3"
+   ]
+  },
+  {
+   "name": "i_ulpi_data",
+   "wave": "x......===x.......",
+   "data": [
+    "RXCMD",
+    "R0",
+    "R1"
+   ]
+  },
+  {
+   "name": "w_tx_retry",
+   "wave": "0............10..."
+  }
+ ],
+ "head": {
+  "text": "WF-030: ULPI direction change in the middle of a transmit packet (IF-002, corner)"
+ },
+ "foot": {
+  "text": "The PHY raises dir during the packet (cycle 6): the link releases the data bus at once and does not drive stp. After the receive ends (dir low) the link repeats the packet."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

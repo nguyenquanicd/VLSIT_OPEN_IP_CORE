@@ -1,0 +1,53 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p..|.....|...."
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "==.|=.===|====",
+   "data": [
+    "J",
+    "J",
+    "J",
+    "K",
+    "K",
+    "J",
+    "K",
+    "K",
+    "J",
+    "J"
+   ]
+  },
+  {
+   "name": "o_utmi_suspend_n",
+   "wave": "1.0|..1..|...."
+  },
+  {
+   "name": "u2_dctrl.rmt_wake",
+   "wave": "0..|.1...|0..."
+  },
+  {
+   "name": "u2_dsts.susp_det",
+   "wave": "0.1|.....|.0.."
+  },
+  {
+   "name": "u2_irq_raw.suspend",
+   "wave": "0.1|.....|...."
+  },
+  {
+   "name": "u2_irq_raw.resume",
+   "wave": "0..|.....|..1."
+  }
+ ],
+ "head": {
+  "text": "WF-014: device suspend and remote wakeup (OP-009, success)"
+ },
+ "foot": {
+  "text": "Not to scale. 3 ms idle, suspend; after 5 ms idle software sets rmt_wake, the device drives K for 1 to 15 ms; hardware clears rmt_wake."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

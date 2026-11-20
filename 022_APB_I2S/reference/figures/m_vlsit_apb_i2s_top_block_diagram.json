@@ -1,0 +1,576 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_apb_i2s_top_block_diagram.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 100,
+    "gap_v": 90,
+    "margin": 40,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "TOP",
+      "(m_vlsit_apb_i2s_top)"
+    ],
+    "block_label": [
+      "TOP",
+      "(m_vlsit_apb_i2s_top)"
+    ],
+    "block_row": [
+      "TOP (m_vlsit_apb_i2s_top)",
+      "Structural top of the APB I2S controller.",
+      "Section 14.2"
+    ]
+  },
+  "frame_row": [
+    "TOP (m_vlsit_apb_i2s_top) frame",
+    "Structural top of the APB I2S controller. It holds no logic: it instantiates the register block, the FIFOs, the serial engines and the support blocks. The APB domain is on the left, the serial domain on the right.",
+    "Section 14.2"
+  ],
+  "frame_interfaces": [
+    "APB",
+    "CFGIN",
+    "INT",
+    "DMA",
+    "CRAPB",
+    "MODE",
+    "CLKO",
+    "WSIN",
+    "SDO",
+    "SDI",
+    "CRSCK"
+  ],
+  "blocks": [
+    {
+      "key": "csr",
+      "label": [
+        "u_csr_i2s",
+        "(m_vlsit_csr_i2s)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_csr_i2s (m_vlsit_csr_i2s)",
+      "function": "Generated register block of the APB completer. It decodes addresses, answers the bus with one wait state, holds every software-visible field and reports register read and write events.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "regctl",
+      "label": [
+        "u_regctl",
+        "(m_vlsit_i2s_regctl)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_regctl (m_vlsit_i2s_regctl)",
+      "function": "Register control. It turns register read and write events into FIFO push, pop and flush actions, keeps the cyclic DMA pointers, and holds the sticky overrun and underrun causes that a read clears.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "intr",
+      "label": [
+        "u_intr",
+        "(m_vlsit_i2s_intr)"
+      ],
+      "width": 240,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_intr (m_vlsit_i2s_intr)",
+      "function": "Interrupt generator. It combines the cause flags and the FIFO levels with the mask bits and drives the per-channel or combined interrupt outputs.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "dmahs",
+      "label": [
+        "u_dmahs",
+        "(m_vlsit_i2s_dmahs)"
+      ],
+      "width": 260,
+      "row": 3,
+      "col": 0,
+      "row_name": "u_dmahs (m_vlsit_i2s_dmahs)",
+      "function": "DMA handshake. For each channel or block it raises the request from the FIFO fill level, holds it until the acknowledge, and drives the single transfer indication.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rsta",
+      "label": [
+        "u_rstsync_apb",
+        "(m_vlsit_i2s_rstsync)"
+      ],
+      "width": 280,
+      "row": 4,
+      "col": 0,
+      "row_name": "u_rstsync_apb (m_vlsit_i2s_rstsync)",
+      "function": "Reset synchronizer of the APB domain. It asserts the local reset asynchronously and releases it synchronously to the APB clock.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "cfg",
+      "label": [
+        "u_cfgsync",
+        "(m_vlsit_i2s_cfgsync)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_cfgsync (m_vlsit_i2s_cfgsync)",
+      "function": "Configuration and event crossing. It carries enables, mode, word length and clock-generation settings from the APB domain to the serial domain, and flags and flush acknowledgements back.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "txf",
+      "label": [
+        "u_txfifo",
+        "(m_vlsit_i2s_txfifo)"
+      ],
+      "width": 260,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_txfifo (m_vlsit_i2s_txfifo)",
+      "function": "Transmit FIFO. One left and one right bank per channel (one bank per slot in TDM), written from the APB side and read from the serial side across the clock boundary.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rxf",
+      "label": [
+        "u_rxfifo",
+        "(m_vlsit_i2s_rxfifo)"
+      ],
+      "width": 260,
+      "row": 3,
+      "col": 1,
+      "row_name": "u_rxfifo (m_vlsit_i2s_rxfifo)",
+      "function": "Receive FIFO. One left and one right bank per channel (one bank per slot in TDM), written from the serial side and read from the APB side across the clock boundary.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "clk",
+      "label": [
+        "u_clkgen",
+        "(m_vlsit_i2s_clkgen)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_clkgen (m_vlsit_i2s_clkgen)",
+      "function": "Controller-mode clock generation. It produces the word select, the clock enable and the clock gating from counters, for the standard frame and for the TDM frame.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "frm",
+      "label": [
+        "u_frame",
+        "(m_vlsit_i2s_frame)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_frame (m_vlsit_i2s_frame)",
+      "function": "Frame sequencer. It follows the internal or external word select, tracks left and right halves or TDM slots, and issues the pop, push and underrun events of the frame.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "txs",
+      "label": [
+        "u_txser",
+        "(m_vlsit_i2s_txser)"
+      ],
+      "width": 260,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_txser (m_vlsit_i2s_txser)",
+      "function": "Transmit serializer. It loads the stereo pair or slot word at the frame start, shifts it out most significant bit first, fills the rest of the half frame with zeros and drives the output enable.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rxd",
+      "label": [
+        "u_rxdes",
+        "(m_vlsit_i2s_rxdes)"
+      ],
+      "width": 260,
+      "row": 3,
+      "col": 2,
+      "row_name": "u_rxdes (m_vlsit_i2s_rxdes)",
+      "function": "Receive deserializer. It samples the serial input, assembles the word, aligns it at the least significant end and pushes it at the end of the half frame or slot.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rsts",
+      "label": [
+        "u_rstsync_sclk",
+        "(m_vlsit_i2s_rstsync)"
+      ],
+      "width": 280,
+      "row": 4,
+      "col": 2,
+      "row_name": "u_rstsync_sclk (m_vlsit_i2s_rstsync)",
+      "function": "Reset synchronizer of the serial domain. It asserts the local reset asynchronously and releases it synchronously to the serial clock.",
+      "source": "Section 14.2, 5.1"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "REGS",
+      "src": "csr",
+      "src_side": "B",
+      "dst": "regctl",
+      "dst_side": "T"
+    },
+    {
+      "id": "CTRL",
+      "src": "csr",
+      "src_side": "R",
+      "dst": "cfg",
+      "dst_side": "L"
+    },
+    {
+      "id": "CFGS",
+      "src": "cfg",
+      "src_side": "R",
+      "dst": "clk",
+      "dst_side": "L"
+    },
+    {
+      "id": "WORD",
+      "src": "clk",
+      "src_side": "B",
+      "dst": "frm",
+      "dst_side": "T"
+    },
+    {
+      "id": "PUSH",
+      "src": "regctl",
+      "src_side": "R",
+      "dst": "txf",
+      "dst_side": "L"
+    },
+    {
+      "id": "POP",
+      "src": "regctl",
+      "src_side": "R",
+      "dst": "rxf",
+      "dst_side": "L"
+    },
+    {
+      "id": "TXD",
+      "src": "txf",
+      "src_side": "R",
+      "dst": "txs",
+      "dst_side": "L"
+    },
+    {
+      "id": "RXD",
+      "src": "rxd",
+      "src_side": "L",
+      "dst": "rxf",
+      "dst_side": "R"
+    },
+    {
+      "id": "FRTX",
+      "src": "frm",
+      "src_side": "B",
+      "dst": "txs",
+      "dst_side": "T"
+    },
+    {
+      "id": "LVLT",
+      "src": "txf",
+      "src_side": "L",
+      "dst": "intr",
+      "dst_side": "R"
+    },
+    {
+      "id": "LVLR",
+      "src": "rxf",
+      "src_side": "L",
+      "dst": "dmahs",
+      "dst_side": "R"
+    }
+  ],
+  "externals": [
+    {
+      "id": "APB",
+      "block": "csr",
+      "side": "L",
+      "dir": "in",
+      "pos": -20,
+      "text": [
+        "APB",
+        "APB4 slave"
+      ]
+    },
+    {
+      "id": "CFGIN",
+      "block": "csr",
+      "side": "L",
+      "dir": "in",
+      "pos": 20,
+      "text": [
+        "CFGIN",
+        "static options"
+      ]
+    },
+    {
+      "id": "INT",
+      "block": "intr",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "INT",
+        "interrupts"
+      ]
+    },
+    {
+      "id": "DMA",
+      "block": "dmahs",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "DMA",
+        "DMA handshake"
+      ]
+    },
+    {
+      "id": "CRAPB",
+      "block": "rsta",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CRAPB",
+        "APB clock, reset"
+      ]
+    },
+    {
+      "id": "MODE",
+      "block": "cfg",
+      "side": "T",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MODE",
+        "mode status"
+      ]
+    },
+    {
+      "id": "CLKO",
+      "block": "clk",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "CLKO",
+        "controller clocks"
+      ]
+    },
+    {
+      "id": "WSIN",
+      "block": "frm",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "WSIN",
+        "word select in"
+      ]
+    },
+    {
+      "id": "SDO",
+      "block": "txs",
+      "side": "R",
+      "dir": "out",
+      "pos": -10,
+      "text": [
+        "SDO",
+        "serial out"
+      ]
+    },
+    {
+      "id": "SDI",
+      "block": "rxd",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "SDI",
+        "serial in"
+      ]
+    },
+    {
+      "id": "CRSCK",
+      "block": "rsts",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CRSCK",
+        "sclk clocks, reset"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "APB",
+      "name": "APB4 completer interface (CLK-APB)",
+      "category": "standard protocol (AMBA APB4)",
+      "active": "external requester -> IP",
+      "signals": "external requester -> IP: i_apb_psel, i_apb_penable, i_apb_pwrite, i_apb_paddr, i_apb_pwdata, i_apb_pstrb, i_apb_pprot; IP -> external requester: o_apb_pready, o_apb_pslverr, o_apb_prdata"
+    },
+    {
+      "id": "CFGIN",
+      "name": "Static CSR option inputs (CLK-APB)",
+      "category": "custom",
+      "active": "SoC -> IP",
+      "signals": "SoC -> IP: i_protect_en, i_slverr_en"
+    },
+    {
+      "id": "INT",
+      "name": "Interrupt outputs (CLK-APB)",
+      "category": "custom",
+      "active": "IP -> interrupt controller",
+      "signals": "IP -> interrupt controller: o_int_rx_da_0 to o_int_rx_da_3, o_int_rx_or_0 to o_int_rx_or_3, o_int_tx_emp_0 to o_int_tx_emp_3, o_int_tx_or_0 to o_int_tx_or_3, o_int_tx_ur_0 to o_int_tx_ur_3, o_int_i2s"
+    },
+    {
+      "id": "DMA",
+      "name": "DMA handshake (CLK-APB)",
+      "category": "custom (request, single, acknowledge)",
+      "active": "IP -> DMA controller (request, single); DMA controller -> IP (acknowledge)",
+      "signals": "IP -> DMA controller: o_dma_tx_req, o_dma_tx_single, o_dma_rx_req, o_dma_rx_single, o_dma_tx_req_0 to o_dma_tx_req_3, o_dma_tx_single_0 to o_dma_tx_single_3, o_dma_rx_req_0 to o_dma_rx_req_3, o_dma_rx_single_0 to o_dma_rx_single_3; DMA controller -> IP: i_dma_tx_ack, i_dma_rx_ack, i_dma_tx_ack_0 to i_dma_tx_ack_3, i_dma_rx_ack_0 to i_dma_rx_ack_3"
+    },
+    {
+      "id": "CRAPB",
+      "name": "Clock and reset of the APB domain",
+      "category": "custom",
+      "active": "SoC clock and reset controller -> IP",
+      "signals": "i_clk_apb, i_rst_n_apb (reset: level, active-low)"
+    },
+    {
+      "id": "MODE",
+      "name": "Mode status outputs (CLK-SCLK)",
+      "category": "custom",
+      "active": "IP -> SoC",
+      "signals": "IP -> SoC: o_audio_intf_type, o_i2s_op_mode"
+    },
+    {
+      "id": "CLKO",
+      "name": "Controller-mode clock outputs",
+      "category": "custom (I2S word select, clock enable, clock gate)",
+      "active": "IP -> external audio device or clock gate",
+      "signals": "IP -> external: o_ws_out, o_sclk_en, o_sclk_gate"
+    },
+    {
+      "id": "WSIN",
+      "name": "Word select input in target mode (CLK-SCLK)",
+      "category": "custom (I2S word select)",
+      "active": "external controller -> IP",
+      "signals": "external controller -> IP: i_ws_slv"
+    },
+    {
+      "id": "SDO",
+      "name": "Serial data outputs (CLK-SCLKN)",
+      "category": "custom (I2S serial data)",
+      "active": "IP -> external audio device",
+      "signals": "IP -> external: o_sdo_0 to o_sdo_3, o_sdo_oe_n"
+    },
+    {
+      "id": "SDI",
+      "name": "Serial data inputs (CLK-SCLK)",
+      "category": "custom (I2S serial data)",
+      "active": "external audio device -> IP",
+      "signals": "external -> IP: i_sdi_0 to i_sdi_3"
+    },
+    {
+      "id": "CRSCK",
+      "name": "Clock and reset of the serial domain",
+      "category": "custom",
+      "active": "SoC clock and reset controller -> IP",
+      "signals": "i_clk_sclk, i_clk_sclk_n, i_rst_n_sclk (reset: level, active-low)"
+    },
+    {
+      "id": "REGS",
+      "name": "Register fields, status and events between the CSR and the control block",
+      "category": "custom",
+      "active": "u_csr_i2s <-> u_regctl",
+      "signals": "Field ports of the generated block; o_reg_rd_en, o_reg_rd_addr, o_reg_wr_en, o_reg_wr_addr"
+    },
+    {
+      "id": "CTRL",
+      "name": "Control fields to the configuration crossing",
+      "category": "custom",
+      "active": "u_csr_i2s -> u_cfgsync",
+      "signals": "Enables, mode, word length, word select size, gating value, slot count"
+    },
+    {
+      "id": "CFGS",
+      "name": "Synchronized configuration and flags",
+      "category": "custom",
+      "active": "u_cfgsync <-> u_clkgen, u_frame, u_txser, u_rxdes",
+      "signals": "Synchronized enables and settings; underrun and frame events back"
+    },
+    {
+      "id": "WORD",
+      "name": "Internal word select and frame timing",
+      "category": "custom",
+      "active": "u_clkgen -> u_frame",
+      "signals": "Internal word select, slot start, frame start"
+    },
+    {
+      "id": "PUSH",
+      "name": "Transmit FIFO push",
+      "category": "custom",
+      "active": "u_regctl -> u_txfifo",
+      "signals": "Push strobe, left or right bank select, push data, flush"
+    },
+    {
+      "id": "POP",
+      "name": "Receive FIFO pop",
+      "category": "custom",
+      "active": "u_regctl -> u_rxfifo",
+      "signals": "Pop strobe, left or right bank select, flush; head data back"
+    },
+    {
+      "id": "TXD",
+      "name": "Transmit FIFO read",
+      "category": "custom",
+      "active": "u_txser -> u_txfifo",
+      "signals": "Pop strobe, bank data"
+    },
+    {
+      "id": "RXD",
+      "name": "Receive FIFO write",
+      "category": "custom",
+      "active": "u_rxdes -> u_rxfifo",
+      "signals": "Push strobe, word data"
+    },
+    {
+      "id": "FRTX",
+      "name": "Frame events to the serializer",
+      "category": "custom",
+      "active": "u_frame -> u_txser",
+      "signals": "Pair load, slot load, half-frame boundary"
+    },
+    {
+      "id": "LVLT",
+      "name": "Transmit FIFO levels to the interrupt block",
+      "category": "custom",
+      "active": "u_txfifo -> u_intr",
+      "signals": "Empty flag, fill level"
+    },
+    {
+      "id": "LVLR",
+      "name": "Receive FIFO levels to the DMA block",
+      "category": "custom",
+      "active": "u_rxfifo -> u_dmahs",
+      "signals": "Data-available flag, fill level"
+    }
+  ],
+  "legend_note": "The enclosing frame is the top module; blocks inside are its instances. The left column is the APB clock domain, the right column is the serial clock domain, the middle column crosses the boundary.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

@@ -1,0 +1,45 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p..................."
+  },
+  {
+   "name": "i_ws_slv",
+   "wave": "001000000000000000",
+   "phase": 0.5
+  },
+  {
+   "name": "i_sdi_0",
+   "wave": "00======00======0000",
+   "data": [
+    "a5",
+    "a4",
+    "a3",
+    "a2",
+    "a1",
+    "a0",
+    "b5",
+    "b4",
+    "b3",
+    "b2",
+    "b1",
+    "b0"
+   ],
+   "phase": 0.5
+  },
+  {
+   "name": "w_slot_push",
+   "wave": "00000000000100000001"
+  }
+ ],
+ "head": {
+  "text": "WF-008 OP-009 TDM receive, frame offset 0 (success)"
+ },
+ "foot": {
+  "text": "Reduced scale: 6-bit words, 8-cycle slots, 2 slots. Data is aligned with the word-select pulse; each slot is pushed at its end."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

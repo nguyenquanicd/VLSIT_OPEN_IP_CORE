@@ -1,0 +1,45 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p....................."
+  },
+  {
+   "name": "i_ws_slv",
+   "wave": "1100000011111100000011",
+   "phase": 0.5
+  },
+  {
+   "name": "w_apb_wr_pair",
+   "wave": "0000010000000000000000"
+  },
+  {
+   "name": "w_tx_fifo_empty",
+   "wave": "1111111000000001111111"
+  },
+  {
+   "name": "w_underrun_s",
+   "wave": "0001000000000000000000"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "000000000000000====000",
+   "data": [
+    "L3",
+    "L2",
+    "L1",
+    "L0"
+   ],
+   "phase": 0.5
+  }
+ ],
+ "head": {
+  "text": "WF-015 OP-003 TX data written after the frame start (corner)"
+ },
+ "foot": {
+  "text": "The pair is written after the left cycle began: the current frame is zeros and an underrun cause, the pair goes out in the next frame."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

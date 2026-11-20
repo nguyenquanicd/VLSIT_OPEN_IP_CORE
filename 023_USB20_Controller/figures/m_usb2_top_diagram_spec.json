@@ -1,0 +1,467 @@
+{
+ "page_name": "BLOCK_DIAGRAM",
+ "out_name": "m_usb2_top_block_diagram.drawio",
+ "table_suffix": "",
+ "layout": {
+  "gap_h": 120,
+  "gap_v": 110,
+  "margin": 40,
+  "block_h": 60
+ },
+ "top": {
+  "frame_label": [
+   "TOP",
+   "(m_usb2_core)"
+  ],
+  "block_label": [
+   "TOP",
+   "(m_usb2_core)"
+  ],
+  "block_row": [
+   "TOP (m_usb2_core)",
+   "Structural top of the USB 2.0 controller.",
+   "Section 14.2"
+  ]
+ },
+ "frame_row": [
+  "TOP (m_usb2_core) frame",
+  "Structural top of the USB 2.0 controller. It instantiates the blocks below and holds no logic of its own. The four wrappers add the fixed port profile of the PHY and data interfaces.",
+  "Section 14.2"
+ ],
+ "frame_interfaces": [
+  "PHY",
+  "AXI",
+  "APB",
+  "INT",
+  "CKPHY",
+  "CKBUS"
+ ],
+ "blocks": [
+  {
+   "key": "phyif",
+   "label": [
+    "u_phyif",
+    "(m_usb2_phyif_*)"
+   ],
+   "width": 160,
+   "row": 0,
+   "col": 0,
+   "row_name": "u_phyif (m_usb2_phyif_*)",
+   "function": "PHY interface. Adapts the UTMI+ or ULPI pins of the PHY to one internal byte stream and mode control.",
+   "source": "Section 14.2, 5.1"
+  },
+  {
+   "key": "lnk",
+   "label": [
+    "u_lnk",
+    "(m_usb2_lnk)"
+   ],
+   "width": 180,
+   "row": 0,
+   "col": 1,
+   "row_name": "u_lnk (m_usb2_lnk)",
+   "function": "USB link. Assembles and disassembles packets, checks PID and CRC, and times the bus turn-around.",
+   "source": "Section 14.2, 5.1"
+  },
+  {
+   "key": "dev",
+   "label": [
+    "u_dev",
+    "(m_usb2_dev)"
+   ],
+   "width": 180,
+   "row": 0,
+   "col": 2,
+   "row_name": "u_dev (m_usb2_dev)",
+   "function": "Device engine. Matches address and endpoint, keeps the data toggle and chooses the handshake.",
+   "source": "Section 14.2, 5.1"
+  },
+  {
+   "key": "fifo",
+   "label": [
+    "u_fifo",
+    "(m_usb2_fifo)"
+   ],
+   "width": 180,
+   "row": 0,
+   "col": 3,
+   "row_name": "u_fifo (m_usb2_fifo)",
+   "function": "FIFO manager. Owns the shared RAM, divides it into regions and arbitrates the packet and bus ports.",
+   "source": "Section 14.2, 5.1"
+  },
+  {
+   "key": "spd",
+   "label": [
+    "u_spd",
+    "(m_usb2_spd)"
+   ],
+   "width": 160,
+   "row": 1,
+   "col": 0,
+   "row_name": "u_spd (m_usb2_spd)",
+   "function": "Speed and power controller. Runs reset, chirp, suspend, resume, link power management, test modes and the role choice.",
+   "source": "Section 14.2, 5.1"
+  },
+  {
+   "key": "host",
+   "label": [
+    "u_host",
+    "(m_usb2_host)"
+   ],
+   "width": 180,
+   "row": 1,
+   "col": 1,
+   "row_name": "u_host (m_usb2_host)",
+   "function": "Host engine. Schedules channels, sends frame markers and runs the host transactions and split phases.",
+   "source": "Section 14.2, 5.1"
+  },
+  {
+   "key": "cdc",
+   "label": [
+    "u_cdc",
+    "(m_usb2_cdc_*)"
+   ],
+   "width": 180,
+   "row": 1,
+   "col": 3,
+   "row_name": "u_cdc (m_usb2_cdc_*)",
+   "function": "Clock crossing. Moves levels, event pulses and the FIFO bus port between the two clock domains.",
+   "source": "Section 14.2, 7.2"
+  },
+  {
+   "key": "rst",
+   "label": [
+    "u_rst",
+    "(m_usb2_rst)"
+   ],
+   "width": 160,
+   "row": 2,
+   "col": 0,
+   "row_name": "u_rst (m_usb2_rst)",
+   "function": "Reset controller. Synchronizes the release of both resets and runs the soft-reset sequence.",
+   "source": "Section 14.2, 7.3"
+  },
+  {
+   "key": "csr",
+   "label": [
+    "u_csr",
+    "(m_vlsit_csr_usb2)"
+   ],
+   "width": 180,
+   "row": 2,
+   "col": 1,
+   "row_name": "u_csr (m_vlsit_csr_usb2)",
+   "function": "Register block. Generated bus-accessible control and status registers.",
+   "source": "Section 14.2, 11"
+  },
+  {
+   "key": "irq",
+   "label": [
+    "u_irq",
+    "(m_usb2_irq)"
+   ],
+   "width": 180,
+   "row": 2,
+   "col": 2,
+   "row_name": "u_irq (m_usb2_irq)",
+   "function": "Interrupt block. Collects event flags and drives the interrupt output.",
+   "source": "Section 14.2, 6.4"
+  },
+  {
+   "key": "dma",
+   "label": [
+    "u_dma",
+    "(m_usb2_dma)"
+   ],
+   "width": 180,
+   "row": 2,
+   "col": 3,
+   "row_name": "u_dma (m_usb2_dma)",
+   "function": "Data mover. Moves payload between memory and the FIFO regions, or serves window accesses and DMA requests.",
+   "source": "Section 14.2, 5.1"
+  }
+ ],
+ "connectors": [
+  {
+   "id": "BYTE",
+   "src": "phyif",
+   "src_side": "R",
+   "dst": "lnk",
+   "dst_side": "L"
+  },
+  {
+   "id": "DEVP",
+   "src": "lnk",
+   "src_side": "R",
+   "dst": "dev",
+   "dst_side": "L"
+  },
+  {
+   "id": "FPKT",
+   "src": "dev",
+   "src_side": "R",
+   "dst": "fifo",
+   "dst_side": "L"
+  },
+  {
+   "id": "HOSTP",
+   "src": "lnk",
+   "src_side": "B",
+   "dst": "host",
+   "dst_side": "T"
+  },
+  {
+   "id": "MODE",
+   "src": "spd",
+   "src_side": "T",
+   "dst": "phyif",
+   "dst_side": "B"
+  },
+  {
+   "id": "FBUS",
+   "src": "fifo",
+   "src_side": "B",
+   "dst": "cdc",
+   "dst_side": "T"
+  },
+  {
+   "id": "XDMA",
+   "src": "cdc",
+   "src_side": "B",
+   "dst": "dma",
+   "dst_side": "T"
+  },
+  {
+   "id": "RCTL",
+   "src": "rst",
+   "src_side": "R",
+   "dst": "csr",
+   "dst_side": "L"
+  },
+  {
+   "id": "EVT",
+   "src": "irq",
+   "src_side": "L",
+   "dst": "csr",
+   "dst_side": "R"
+  }
+ ],
+ "externals": [
+  {
+   "id": "PHY",
+   "block": "phyif",
+   "side": "L",
+   "dir": "in",
+   "pos": 0,
+   "text": [
+    "PHY",
+    "UTMI+ or ULPI"
+   ]
+  },
+  {
+   "id": "AXI",
+   "block": "dma",
+   "side": "R",
+   "dir": "out",
+   "pos": 0,
+   "text": [
+    "AXI",
+    "AXI4, DMA req"
+   ]
+  },
+  {
+   "id": "APB",
+   "block": "csr",
+   "side": "B",
+   "dir": "in",
+   "pos": -50,
+   "text": [
+    "APB",
+    "APB4 slave"
+   ]
+  },
+  {
+   "id": "INT",
+   "block": "irq",
+   "side": "B",
+   "dir": "out",
+   "pos": 0,
+   "text": [
+    "INT",
+    "o_int_usb"
+   ]
+  },
+  {
+   "id": "CKPHY",
+   "block": "lnk",
+   "side": "T",
+   "dir": "in",
+   "pos": 0,
+   "text": [
+    "CKPHY",
+    "i_clk_phy, i_rst_n_phy"
+   ]
+  },
+  {
+   "id": "CKBUS",
+   "block": "rst",
+   "side": "B",
+   "dir": "in",
+   "pos": 0,
+   "text": [
+    "CKBUS",
+    "i_clk_bus, i_rst_n_bus"
+   ]
+  }
+ ],
+ "nets": [
+  {
+   "entry": "CKPHY",
+   "sinks": [
+    {
+     "id": "CP1",
+     "block": "phyif",
+     "side": "T",
+     "pos": 0
+    },
+    {
+     "id": "CP2",
+     "block": "dev",
+     "side": "T",
+     "pos": 0
+    },
+    {
+     "id": "CP3",
+     "block": "fifo",
+     "side": "R",
+     "pos": 0
+    }
+   ]
+  },
+  {
+   "entry": "CKBUS",
+   "sinks": [
+    {
+     "id": "CB1",
+     "block": "csr",
+     "side": "B",
+     "pos": 50
+    },
+    {
+     "id": "CB2",
+     "block": "dma",
+     "side": "B",
+     "pos": 0
+    }
+   ]
+  }
+ ],
+ "interfaces": [
+  {
+   "id": "PHY",
+   "name": "PHY interface (UTMI+ or ULPI) and VBUS switch pins",
+   "category": "standard protocol (UTMI+ 1.0 or ULPI 1.1)",
+   "active": "PHY <-> TOP",
+   "signals": "TOP -> PHY: o_phy_rst_n, o_vbus_pwr_en, o_utmi_dataout, o_utmi_txvalid, o_utmi_txvalidh, o_utmi_opmode, o_utmi_xcvrsel, o_utmi_termsel, o_utmi_suspend_n, o_utmi_databus16_8, o_utmi_bitstuff_en, o_utmi_bitstuff_en_h, o_utmi_dppulldown, o_utmi_dmpulldown, o_utmi_drvvbus, o_utmi_chrgvbus, o_utmi_dischrgvbus, o_utmi_idpullup, o_ulpi_stp, o_ulpi_data, o_ulpi_data_oe; PHY -> TOP: i_ovrcur_n, i_utmi_datain, i_utmi_txready, i_utmi_rxvalid, i_utmi_rxvalidh, i_utmi_rxactive, i_utmi_rxerror, i_utmi_linestate, i_utmi_hostdisc, i_utmi_iddig, i_utmi_avalid, i_utmi_bvalid, i_utmi_vbusvalid, i_utmi_sessend, i_ulpi_dir, i_ulpi_nxt, i_ulpi_data"
+  },
+  {
+   "id": "AXI",
+   "name": "Data interface (CLK-BUS)",
+   "category": "standard protocol (AXI4 profile) and custom DMA handshake",
+   "active": "TOP <-> SoC",
+   "signals": "TOP -> SoC: o_axim_awid, o_axim_awaddr, o_axim_awlen, o_axim_awsize, o_axim_awburst, o_axim_awcache, o_axim_awprot, o_axim_awvalid, o_axim_wdata, o_axim_wstrb, o_axim_wlast, o_axim_wvalid, o_axim_bready, o_axim_arid, o_axim_araddr, o_axim_arlen, o_axim_arsize, o_axim_arburst, o_axim_arcache, o_axim_arprot, o_axim_arvalid, o_axim_rready, o_axis_awready, o_axis_wready, o_axis_bid, o_axis_bresp, o_axis_bvalid, o_axis_arready, o_axis_rid, o_axis_rdata, o_axis_rresp, o_axis_rlast, o_axis_rvalid, o_dma_req; SoC -> TOP: i_axim_awready, i_axim_wready, i_axim_bid, i_axim_bresp, i_axim_bvalid, i_axim_arready, i_axim_rid, i_axim_rdata, i_axim_rresp, i_axim_rlast, i_axim_rvalid, i_axis_awid, i_axis_awaddr, i_axis_awlen, i_axis_awsize, i_axis_awburst, i_axis_awvalid, i_axis_wdata, i_axis_wstrb, i_axis_wlast, i_axis_wvalid, i_axis_bready, i_axis_arid, i_axis_araddr, i_axis_arlen, i_axis_arsize, i_axis_arburst, i_axis_arvalid, i_axis_rready, i_dma_ack"
+  },
+  {
+   "id": "APB",
+   "name": "Register interface (CLK-BUS)",
+   "category": "standard protocol (APB4)",
+   "active": "SoC -> TOP",
+   "signals": "SoC -> TOP: i_apb_paddr, i_apb_pwdata, i_apb_pwrite, i_apb_penable, i_apb_psel, i_apb_pstrb, i_apb_pprot, i_protect_en, i_slverr_en; TOP -> SoC: o_apb_pready, o_apb_pslverr, o_apb_prdata"
+  },
+  {
+   "id": "INT",
+   "name": "Interrupt output",
+   "category": "custom level",
+   "active": "TOP -> SoC",
+   "signals": "TOP -> SoC: o_int_usb"
+  },
+  {
+   "id": "CKPHY",
+   "name": "Clock and reset of the PHY domain",
+   "category": "custom",
+   "active": "PHY or SoC -> TOP",
+   "signals": "i_clk_phy, i_rst_n_phy"
+  },
+  {
+   "id": "CKBUS",
+   "name": "Clock and reset of the bus domain",
+   "category": "custom",
+   "active": "SoC -> TOP",
+   "signals": "i_clk_bus, i_rst_n_bus"
+  },
+  {
+   "id": "BYTE",
+   "name": "Byte stream and line state",
+   "category": "custom",
+   "active": "u_phyif <-> u_lnk",
+   "signals": "byte data, valid, ready, line state"
+  },
+  {
+   "id": "DEVP",
+   "name": "Device packet interface",
+   "category": "custom",
+   "active": "u_lnk <-> u_dev",
+   "signals": "packet type, fields, data bytes, handshake request"
+  },
+  {
+   "id": "FPKT",
+   "name": "FIFO packet port",
+   "category": "custom",
+   "active": "u_dev <-> u_fifo",
+   "signals": "word address, data, read and write strobes, status"
+  },
+  {
+   "id": "HOSTP",
+   "name": "Host packet interface",
+   "category": "custom",
+   "active": "u_lnk <-> u_host",
+   "signals": "packet type, fields, data bytes, handshake request"
+  },
+  {
+   "id": "MODE",
+   "name": "Mode and speed control",
+   "category": "custom",
+   "active": "u_spd -> u_phyif",
+   "signals": "OpMode, XcvrSelect, TermSelect, suspend, chirp"
+  },
+  {
+   "id": "FBUS",
+   "name": "FIFO bus port",
+   "category": "custom",
+   "active": "u_fifo <-> u_cdc",
+   "signals": "request, address, write data, read data"
+  },
+  {
+   "id": "XDMA",
+   "name": "DMA or window port",
+   "category": "custom",
+   "active": "u_cdc <-> u_dma",
+   "signals": "request, address, data in the bus clock"
+  },
+  {
+   "id": "RCTL",
+   "name": "Reset control",
+   "category": "custom",
+   "active": "u_rst -> u_csr",
+   "signals": "soft-reset request and completion"
+  },
+  {
+   "id": "EVT",
+   "name": "Interrupt status",
+   "category": "custom",
+   "active": "u_irq <-> u_csr",
+   "signals": "event flags, masks, injection"
+  }
+ ],
+ "legend_note": "The enclosing frame is the top module; blocks inside are its instances."
+}

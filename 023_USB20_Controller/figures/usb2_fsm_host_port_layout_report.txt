@@ -1,0 +1,11 @@
+FSM: host_port
+STATES: 11, TRANSITIONS: 22
+LAYOUT: flow-tb-snake-3-g180
+CROSSINGS: 9
+LABEL CONFLICTS: 0
+BENDS: 11
+MINIMUM GAP: 140.0 px (minimum 140 px)
+TEXT FIT: PASS (worst fill ratio 0.57)
+DISTRIBUTION: PASS (9 x-centers, 3 y-centers)
+PAGE: 1970 x 460 px
+RESULT: PASS

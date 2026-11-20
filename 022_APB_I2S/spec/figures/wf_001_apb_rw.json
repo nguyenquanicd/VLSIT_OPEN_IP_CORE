@@ -1,0 +1,74 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p......."
+  },
+  {
+   "name": "i_apb_psel",
+   "wave": "01.....0"
+  },
+  {
+   "name": "i_apb_penable",
+   "wave": "001.01.0"
+  },
+  {
+   "name": "i_apb_pwrite",
+   "wave": "01..0..."
+  },
+  {
+   "name": "i_apb_paddr",
+   "wave": "x=..=..x",
+   "data": [
+    "tx_ctrl",
+    "irq_sts"
+   ]
+  },
+  {
+   "name": "i_apb_pwdata",
+   "wave": "x=..x...",
+   "data": [
+    "en=1"
+   ]
+  },
+  {
+   "name": "i_apb_pstrb",
+   "wave": "x=..x...",
+   "data": [
+    "1111"
+   ]
+  },
+  {
+   "name": "o_apb_pready",
+   "wave": "00010010"
+  },
+  {
+   "name": "o_apb_prdata",
+   "wave": "x.....=x",
+   "data": [
+    "sts"
+   ]
+  },
+  {
+   "name": "o_apb_pslverr",
+   "wave": "0......."
+  },
+  {
+   "name": "o_reg_wr_en",
+   "wave": "00010000"
+  },
+  {
+   "name": "o_reg_rd_en",
+   "wave": "00000010"
+  }
+ ],
+ "head": {
+  "text": "WF-001 OP-016 APB write and read of a register (success)"
+ },
+ "foot": {
+  "text": "One wait state per access. A write of i2s_tx_ctrl.en is followed by a read of i2s_irq_sts; this is also the register side of the data register access (OP-011)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,83 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p...............||..............."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0.........10||.1..0.......10."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0.........10||.1..0.......10."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x.........=x||.===x.......=x.",
+    "data": [
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "ACK",
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "ACK"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0.....1....0....||......1..0....."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0.....1....0....||......1..0....."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x.....=====x....||......===x.....",
+    "data": [
+     "DATA1",
+     "D0",
+     "D511",
+     "CRCL",
+     "CRCH",
+     "DATA0",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  {
+   "name": "u2_epi_xfer.xsize",
+   "wave": "=..............=||...............",
+   "data": [
+    "512",
+    "0"
+   ]
+  },
+  {
+   "name": "w_zlp_pending",
+   "wave": "0..............1||.............0."
+  },
+  {
+   "name": "u2_epi_int.done",
+   "wave": "0...............||.............1."
+  }
+ ],
+ "head": {
+  "text": "WF-032: automatic zero-length packet after a full packet, zlp_en = 1 (OP-017, success)"
+ },
+ "foot": {
+  "text": "Not to scale. xsize = 512 equals one maximum packet: after the first packet is ACKed the hardware answers the next IN token with a zero-length packet, then sets done."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

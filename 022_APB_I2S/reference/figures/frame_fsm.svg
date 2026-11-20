@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="687.437" height="527.437" viewBox="10 10 687.437 527.437" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="687.437" height="527.437" fill="#FFFFFF"/>
+<ellipse cx="353.718" cy="70" rx="105" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="353.718" y="77" text-anchor="middle">ENUM_ST_IDLE</text>
+<ellipse cx="557.437" cy="273.718" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="557.437" y="280.718" text-anchor="middle">ENUM_ST_START</text>
+<ellipse cx="353.718" cy="477.437" rx="105" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="353.718" y="484.437" text-anchor="middle">ENUM_ST_LEFT</text>
+<ellipse cx="150" cy="273.718" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="150" y="280.718" text-anchor="middle">ENUM_ST_RIGHT</text>
+<path d="M 382.564 98.8457 L 445.629 181.71 L 528.494 244.775" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="528.494,244.775 515.311,242.282 522.579,232.733" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="403.862" y="202.243" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="487.062" y="220.243" text-anchor="middle">enable &amp; ws high</text>
+<path d="M 528.494 302.661 L 382.564 448.591" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="382.564,448.591 386.807,435.863 395.292,444.348" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="411.929" y="364.626" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="455.529" y="382.626" text-anchor="middle">ws falls</text>
+<path d="M 324.873 448.591 L 261.807 365.727 L 178.943 302.661" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="178.943,302.661 192.126,305.154 184.858,314.703" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="249.74" y="396.159" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="293.34" y="414.159" text-anchor="middle">ws rises</text>
+<path d="M 178.943 302.661 L 242.008 385.526 L 324.873 448.591" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="324.873,448.591 311.69,446.098 318.958,436.549" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="112.425" y="333.094" width="196.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="210.476" y="351.094" text-anchor="middle">ws falls: pair done</text>
+<path d="M 528.494 244.775 L 465.428 161.911 L 382.564 98.8457" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="382.564,98.8457 395.747,101.339 388.479,110.888" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="458.311" y="192.343" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="496.961" y="210.343" text-anchor="middle">!enable</text>
+<path d="M 353.718 447.437 L 353.718 100" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="353.718,100 359.718,112 347.718,112" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="315.068" y="262.719" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="353.718" y="280.719" text-anchor="middle">!enable</text>
+<path d="M 178.943 244.775 L 324.873 98.8457" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="324.873,98.8457 320.63,111.574 312.145,103.088" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="213.258" y="160.81" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="251.908" y="178.81" text-anchor="middle">!enable</text>
+</svg>

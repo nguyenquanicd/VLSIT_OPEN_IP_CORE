@@ -1,0 +1,58 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p..|..|...|..."
+  },
+  {
+   "name": "u2_hport.port_rst",
+   "wave": "01.|..|...|..0"
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "===|==|===|===",
+   "data": [
+    "J",
+    "SE0",
+    "SE0",
+    "K",
+    "K",
+    "K",
+    "J",
+    "K",
+    "J",
+    "SE0",
+    "SE0"
+   ]
+  },
+  {
+   "name": "o_utmi_txvalid",
+   "wave": "0..|..|1..|.0."
+  },
+  {
+   "name": "o_utmi_xcvrsel",
+   "wave": "=..|..|...|..=",
+   "data": [
+    "FS",
+    "HS"
+   ]
+  },
+  {
+   "name": "u2_hsts.port_en",
+   "wave": "0..|..|...|..1"
+  },
+  {
+   "name": "u2_irq_raw.enum",
+   "wave": "0..|..|...|..1"
+  }
+ ],
+ "head": {
+  "text": "WF-009: host port reset and chirp handshake (OP-005, success)"
+ },
+ "foot": {
+  "text": "Not to scale. Host drives SE0 for at least 50 ms; device Chirp K is seen (cycles 4 and 5); the host sends alternating K and J chirps (cycles 7 to 11), then the port is enabled at high-speed."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

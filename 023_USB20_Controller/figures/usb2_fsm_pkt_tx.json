@@ -1,0 +1,72 @@
+{
+ "page_name": "FSM_PKT_TX",
+ "out_name": "usb2_fsm_pkt_tx.drawio",
+ "function": "pkt_tx",
+ "initial": "ENUM_ST_PT_IDLE",
+ "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+ "states": [
+  {
+   "name": "ENUM_ST_PT_IDLE"
+  },
+  {
+   "name": "ENUM_ST_PT_IPD"
+  },
+  {
+   "name": "ENUM_ST_PT_PID"
+  },
+  {
+   "name": "ENUM_ST_PT_DATA"
+  },
+  {
+   "name": "ENUM_ST_PT_CRC"
+  },
+  {
+   "name": "ENUM_ST_PT_END"
+  }
+ ],
+ "transitions": [
+  {
+   "src": "ENUM_ST_PT_IDLE",
+   "dst": "ENUM_ST_PT_IPD",
+   "label": "tx request"
+  },
+  {
+   "src": "ENUM_ST_PT_IPD",
+   "dst": "ENUM_ST_PT_PID",
+   "label": "turn-around time elapsed"
+  },
+  {
+   "src": "ENUM_ST_PT_PID",
+   "dst": "ENUM_ST_PT_DATA",
+   "label": "data packet"
+  },
+  {
+   "src": "ENUM_ST_PT_PID",
+   "dst": "ENUM_ST_PT_CRC",
+   "label": "token packet"
+  },
+  {
+   "src": "ENUM_ST_PT_PID",
+   "dst": "ENUM_ST_PT_END",
+   "label": "handshake packet"
+  },
+  {
+   "src": "ENUM_ST_PT_DATA",
+   "dst": "ENUM_ST_PT_CRC",
+   "label": "last data byte accepted"
+  },
+  {
+   "src": "ENUM_ST_PT_CRC",
+   "dst": "ENUM_ST_PT_END",
+   "label": "CRC bytes accepted"
+  },
+  {
+   "src": "ENUM_ST_PT_END",
+   "dst": "ENUM_ST_PT_IDLE",
+   "label": "tx idle"
+  }
+ ],
+ "layout": {
+  "margin": 40
+ }
+}

@@ -1,0 +1,11 @@
+FSM: tdmfrm
+STATES: 3, TRANSITIONS: 6
+LAYOUT: flow-tb-snake-2-g100
+CROSSINGS: 0
+LABEL CONFLICTS: 0
+BENDS: 6
+MINIMUM GAP: 100.0 px (minimum 100 px)
+TEXT FIT: PASS (worst fill ratio 0.51)
+DISTRIBUTION: PASS (3 x-centers, 2 y-centers)
+PAGE: 520 x 260 px
+RESULT: PASS

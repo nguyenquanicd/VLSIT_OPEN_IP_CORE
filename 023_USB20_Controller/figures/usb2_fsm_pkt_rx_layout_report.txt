@@ -1,0 +1,11 @@
+FSM: pkt_rx
+STATES: 7, TRANSITIONS: 12
+LAYOUT: flow-tb-snake-4-g60
+CROSSINGS: 2
+LABEL CONFLICTS: 0
+BENDS: 3
+MINIMUM GAP: 60.0 px (minimum 60 px)
+TEXT FIT: PASS (worst fill ratio 0.55)
+DISTRIBUTION: PASS (5 x-centers, 4 y-centers)
+PAGE: 1170 x 660 px
+RESULT: PASS

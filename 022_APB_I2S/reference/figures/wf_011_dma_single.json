@@ -1,0 +1,39 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p................."
+  },
+  {
+   "name": "w_rx_count",
+   "wave": "=....=.....=.....=",
+   "data": [
+    "3",
+    "2",
+    "1",
+    "0"
+   ]
+  },
+  {
+   "name": "o_dma_rx_req_0",
+   "wave": "000000000000000000"
+  },
+  {
+   "name": "o_dma_rx_single_0",
+   "wave": "110001110001110000"
+  },
+  {
+   "name": "i_dma_rx_ack_0",
+   "wave": "001110001110001110"
+  }
+ ],
+ "head": {
+  "text": "WF-011 OP-012 DMA single transactions (success)"
+ },
+ "foot": {
+  "text": "Block size not a multiple of the burst length: three single transfers. The single signal clears while the acknowledge is high and returns while entries remain."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,21 @@
+{
+  "status": "FAIL",
+  "reasons": [
+    "1 unwaived Critical finding(s): F-001"
+  ],
+  "warnings": [],
+  "counts": {
+    "Critical": 1,
+    "High": 12,
+    "Medium": 16,
+    "Low": 5
+  },
+  "findings": 34,
+  "waived": 0,
+  "fixed": 32,
+  "waiver_budget": 10,
+  "waiver_usage": "0/10",
+  "open_critical": 1,
+  "sampling": 0.324,
+  "closure_rate": 1.0
+}

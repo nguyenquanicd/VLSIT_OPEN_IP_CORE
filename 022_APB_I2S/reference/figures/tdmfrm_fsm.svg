@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="722.573" height="320" viewBox="10 10 722.573 320" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="722.573" height="320" fill="#FFFFFF"/>
+<ellipse cx="300" cy="70" rx="105" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="300" y="77" text-anchor="middle">ENUM_ST_IDLE</text>
+<ellipse cx="145" cy="270" rx="105" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="145" y="277" text-anchor="middle">ENUM_ST_OFFS</text>
+<ellipse cx="455" cy="270" rx="105" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="455" y="277" text-anchor="middle">ENUM_ST_SLOT</text>
+<path d="M 277.3 99.2905 L 167.7 240.709" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="167.7,240.709 170.308,227.549 179.793,234.899" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="149.2" y="159" width="146.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="222.5" y="177" text-anchor="middle">pulse &amp; offset</text>
+<path d="M 322.7 99.2905 L 366.434 178.576 L 432.3 240.709" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="432.3,240.709 419.454,236.839 427.688,228.11" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="266.317" y="127.933" width="156.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="344.567" y="145.933" text-anchor="middle">pulse &amp; !offset</text>
+<path d="M 250 270 L 300 284 L 350 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="350,270 340.062,279.013 336.827,267.458" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="241.3" y="266" width="67.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="275" y="284" text-anchor="middle">1 sclk</text>
+<path d="M 529.246 248.787 L 660 240 L 660 300 L 529.246 291.213" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="529.246,291.213 541.621,286.031 540.817,298.004" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="486.673" y="233.394" width="215.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="594.623" y="251.394" text-anchor="middle">slot end &amp; more slots</text>
+<path d="M 350 270 L 300 256 L 250 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="250,270 259.938,260.987 263.173,272.542" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="192.3" y="252" width="265.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="325" y="270" text-anchor="middle">last slot &amp; pulse &amp; offset</text>
+<path d="M 432.3 240.709 L 388.566 161.424 L 322.7 99.2905" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="322.7,99.2905 335.546,103.16 327.312,111.889" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="252.633" y="119.357" width="206" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="355.633" y="137.357" text-anchor="middle">last slot &amp; no pulse</text>
+</svg>

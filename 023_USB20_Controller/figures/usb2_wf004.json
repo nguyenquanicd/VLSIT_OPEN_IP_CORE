@@ -1,0 +1,62 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p..............."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0.1....0...."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0.1....0...."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x.=====x....",
+    "data": [
+     "OUT",
+     "ADDR",
+     "EP,C5",
+     "DATA0",
+     "D0",
+     "D1",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0..............."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0..............."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x...............",
+    "data": []
+   }
+  ],
+  {
+   "name": "u2_irq_raw.crc_err",
+   "wave": "0...........1..."
+  }
+ ],
+ "head": {
+  "text": "WF-004: device OUT data with CRC error, no handshake (OP-002, error)"
+ },
+ "foot": {
+  "text": "The CRC16 residual does not match: the packet is ignored, no handshake is sent, and the crc_err flag is set (REQ-ERR-001)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

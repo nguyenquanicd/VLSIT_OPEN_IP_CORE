@@ -1,0 +1,72 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p....|||.........||.....|.........."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "0....|||.......10||.....|.1...0...."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "0....|||.......10||.....|.1...0...."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x....|||.......=x||.....|.====x....",
+    "data": [
+     "ACK",
+     "DATA1",
+     "D0",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "01..0|||1....0...||.1..0|.......10."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "01..0|||1....0...||.1..0|.......10."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x===x|||=====x...||.===x|.......=x.",
+    "data": [
+     "OUT",
+     "ADDR",
+     "EP,C5",
+     "DATA0",
+     "D0",
+     "D1",
+     "CRCL",
+     "CRCH",
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "ACK"
+    ]
+   }
+  ],
+  {
+   "name": "u2_hc_int.done",
+   "wave": "0....|||.........||.....|.........1"
+  }
+ ],
+ "head": {
+  "text": "WF-011: host OUT transaction then IN transaction (OP-007, success)"
+ },
+ "foot": {
+  "text": "Not to scale. OUT token, at least 88 bit times (gap), data, device ACK; then IN token, device data, host ACK."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

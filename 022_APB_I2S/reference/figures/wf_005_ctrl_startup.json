@@ -1,0 +1,41 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p.............."
+  },
+  {
+   "name": "w_clken_s",
+   "wave": "001............"
+  },
+  {
+   "name": "w_fsm_clkgen_state",
+   "wave": "=.==...=...=...",
+   "data": [
+    "IDLE",
+    "FIRST",
+    "RIGHT",
+    "LEFT",
+    "RIGHT"
+   ]
+  },
+  {
+   "name": "o_sclk_en",
+   "wave": "001............"
+  },
+  {
+   "name": "o_ws_out",
+   "wave": "000111100001111",
+   "phase": 0.5
+  }
+ ],
+ "head": {
+  "text": "WF-005 OP-006 Controller start-up of the word select (N = 4)"
+ },
+ "foot": {
+  "text": "The first left cycle lasts one sclk cycle, then the word select goes high (0-to-1), so a target does not see a 1-to-0 edge at start."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

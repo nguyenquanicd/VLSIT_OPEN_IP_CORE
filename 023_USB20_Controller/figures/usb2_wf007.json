@@ -1,0 +1,59 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p........"
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0...."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0...."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x....",
+    "data": [
+     "IN",
+     "ADDR",
+     "EP,C5"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0....10.."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0....10.."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x....=x..",
+    "data": [
+     "NAK"
+    ]
+   }
+  ],
+  {
+   "name": "u2_epi_int.nak",
+   "wave": "0......1."
+  }
+ ],
+ "head": {
+  "text": "WF-007: device IN with no data ready, NAK (OP-003, error)"
+ },
+ "foot": {
+  "text": "The IN endpoint FIFO is empty or the endpoint is not armed, so the device answers NAK and the nak flag is set."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,47 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_mclk",
+   "wave": "p..........................................."
+  },
+  {
+   "name": "o_bclk_tx",
+   "wave": "00110011001100110011001100110011001100110011"
+  },
+  {
+   "name": "o_ws_tx",
+   "wave": "11110000000000000000111111111111111100000000"
+  },
+  {
+   "name": "w_pop_word",
+   "wave": "00000001000000000000000100000000000000000000"
+  },
+  {
+   "name": "o_sdo_oe",
+   "wave": "11111111111111111111111111111111111111111111"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "00000000=...=...=...=...=...=...=...=...0000",
+   "data": [
+    "L3",
+    "L2",
+    "L1",
+    "L0",
+    "R3",
+    "R2",
+    "R1",
+    "R0"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-003 OP-003 I2S transmit frame, master (success)"
+ },
+ "foot": {
+  "text": "Reduced scale: divider 2 (4 master clock cycles per bit), two 4-bit slots. The frame sync falls one bit before the MSB; data and frame sync change at the launch edge (bit clock falling); the word is popped one cycle before its slot."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

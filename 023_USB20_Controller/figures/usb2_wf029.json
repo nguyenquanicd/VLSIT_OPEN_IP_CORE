@@ -1,0 +1,41 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p........."
+  },
+  {
+   "name": "o_axim_arvalid",
+   "wave": "01.0.1.0.."
+  },
+  {
+   "name": "i_axim_arready",
+   "wave": "0.10..10.."
+  },
+  {
+   "name": "o_axim_araddr",
+   "wave": "x=.x.=.x..",
+   "data": [
+    "0xFE0",
+    "0x1000"
+   ]
+  },
+  {
+   "name": "o_axim_arlen",
+   "wave": "x=.x.=.x..",
+   "data": [
+    "7",
+    "7"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-029: AXI master burst split at the 4 KB boundary (OP-012, corner)"
+ },
+ "foot": {
+  "text": "A 16-beat transfer that starts at 0xFE0 is split: eight beats up to 0xFFF, then eight beats from 0x1000, so no burst crosses a 4 KB boundary (REQ-IF-006)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

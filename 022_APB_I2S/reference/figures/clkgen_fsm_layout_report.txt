@@ -1,0 +1,11 @@
+FSM: clkgen
+STATES: 4, TRANSITIONS: 7
+LAYOUT: ring
+CROSSINGS: 0
+LABEL CONFLICTS: 0
+BENDS: 4
+MINIMUM GAP: 143.7 px (minimum 60 px)
+TEXT FIT: PASS (worst fill ratio 0.53)
+DISTRIBUTION: PASS (3 x-centers, 3 y-centers)
+PAGE: 622 x 467 px
+RESULT: PASS

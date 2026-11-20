@@ -1,0 +1,1892 @@
+{
+  "spec": "VLSIT_USB20_CONTROLLER_HDS.md",
+  "front_matter": {
+    "document_type": "asic_ip_design_specification",
+    "document_id": "USB-2-0-CONTROLLER-SPEC",
+    "title": "USB 2.0 Controller Design Specification",
+    "ip_name": "USB 2.0 Controller",
+    "version": "0.1",
+    "status": "Draft",
+    "language": "SystemVerilog IEEE 1800-2017",
+    "rtl_rules": "VLSIT_RTL_Design_Rule.md",
+    "csr_spec": "VLSIT_CSR_Specification_Template.xlsx"
+  },
+  "sections": [
+    {
+      "level": 2,
+      "title": "Document map",
+      "chars": 1573,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "1. Purpose, scope, and product context",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.1 Purpose and scope",
+      "chars": 2362,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.2 Deployment assumptions",
+      "chars": 1290,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "125 us"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "1.3 Feature summary",
+      "chars": 2996,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-001",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-FUNC-013",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-019",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-FUNC-024",
+        "REQ-FUNC-026",
+        "REQ-FUNC-027",
+        "REQ-FUNC-028",
+        "REQ-FUNC-029",
+        "REQ-FUNC-030",
+        "REQ-FUNC-031",
+        "REQ-FUNC-032",
+        "REQ-FUNC-033",
+        "REQ-FUNC-034",
+        "REQ-FUNC-035",
+        "REQ-FUNC-036",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PERF-001",
+        "REQ-REG-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.4 Real-world applications of the features",
+      "chars": 10609,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-001",
+        "REQ-FUNC-001",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-013",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-FUNC-024",
+        "REQ-FUNC-026",
+        "REQ-FUNC-027",
+        "REQ-FUNC-028",
+        "REQ-FUNC-029",
+        "REQ-FUNC-030",
+        "REQ-FUNC-031",
+        "REQ-FUNC-032",
+        "REQ-FUNC-033",
+        "REQ-FUNC-034",
+        "REQ-FUNC-035",
+        "REQ-FUNC-036",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PERF-001",
+        "REQ-REG-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1024 bytes",
+        "125 us",
+        "192 bit",
+        "2.6 us",
+        "30 MHz",
+        "4 bytes",
+        "50 us",
+        "512 bytes",
+        "60 MHz",
+        "64 bytes",
+        "75 us",
+        "8.5 us"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "2. Normative references and precedence",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.1 Normative references",
+      "chars": 2594,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.2 Source-of-truth and conflict handling",
+      "chars": 1531,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.3 Compliance declaration",
+      "chars": 1078,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "60 MHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "3. Requirements and traceability",
+      "chars": 16417,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-CLK-002",
+        "REQ-DFT-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-FUNC-013",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-019",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-FUNC-024",
+        "REQ-FUNC-025",
+        "REQ-FUNC-026",
+        "REQ-FUNC-027",
+        "REQ-FUNC-028",
+        "REQ-FUNC-029",
+        "REQ-FUNC-030",
+        "REQ-FUNC-031",
+        "REQ-FUNC-032",
+        "REQ-FUNC-033",
+        "REQ-FUNC-034",
+        "REQ-FUNC-035",
+        "REQ-FUNC-036",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-RTL-001",
+        "REQ-VER-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "0.0625 us",
+        "100 MHz",
+        "100 us",
+        "1024 bytes",
+        "125 us",
+        "16 bits",
+        "192 bit",
+        "2 bit",
+        "2.5 us",
+        "30 MHz",
+        "500 us",
+        "6.5 bit",
+        "60 MHz",
+        "60 us",
+        "7.5 bit",
+        "8 bit",
+        "8 bytes",
+        "875 us",
+        "88 bit"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "4. Features and configurations",
+      "chars": 1682,
+      "tables": 1,
+      "req_ids": [
+        "REQ-PARAM-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "5. Architecture",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.1 Overview and block responsibilities",
+      "chars": 3546,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.2 Block diagram",
+      "chars": 12719,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.3 Transaction and dataflow",
+      "chars": 851,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.4 Invariants",
+      "chars": 508,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "6. External interfaces and ports",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.1 Interface inventory",
+      "chars": 1070,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bit"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "6.2 Complete port list",
+      "chars": 21234,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1 cycle",
+        "2 cycles"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "6.3 Protocol behavior",
+      "chars": 2089,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-001",
+        "REQ-FUNC-034",
+        "REQ-IF-001",
+        "REQ-IF-003",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-009",
+        "REQ-IF-010"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 cycles"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "6.4 Interrupts and events",
+      "chars": 1222,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "7. Clock, reset, and power",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.1 Clock domains",
+      "chars": 609,
+      "tables": 1,
+      "req_ids": [
+        "REQ-PERF-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "100 MHz",
+        "30 MHz",
+        "60 MHz"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "7.2 CDC and RDC",
+      "chars": 1293,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.3 Reset domains and sequencing",
+      "chars": 1066,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.4 Power intent (if applicable)",
+      "chars": 339,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "8. Parameters and elaboration configurations",
+      "chars": 3186,
+      "tables": 2,
+      "req_ids": [
+        "REQ-PARAM-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "9. Data representation and arithmetic",
+      "chars": 3606,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-002"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1024 bytes",
+        "125 us",
+        "50 us",
+        "524287 bytes",
+        "75 us",
+        "8 bytes",
+        "8192 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "10. Detailed functional behavior",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.1 Modes and state transitions",
+      "chars": 35438,
+      "tables": 8,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "125 us",
+        "2 bit",
+        "2.5 us",
+        "500 us",
+        "60 us",
+        "8 bit",
+        "88 bit"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.2 Operations",
+      "chars": 4666,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-012",
+        "REQ-FUNC-013"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "0.0625 us",
+        "125 us",
+        "192 bit"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.3 Cycle-level behavior",
+      "chars": 53587,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-001",
+        "REQ-IF-006"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "0.0625 us",
+        "125 us",
+        "2 cycles",
+        "32 bits",
+        "88 bit"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.4 Arbitration, buffering, and throughput",
+      "chars": 1836,
+      "tables": 0,
+      "req_ids": [
+        "REQ-PERF-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "100 MHz",
+        "192 bit",
+        "24 cycles",
+        "4 cycles",
+        "512 bytes",
+        "60 MHz",
+        "8.5 us"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.5 Memories and storage",
+      "chars": 1425,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1 cycle",
+        "8 bytes"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "11. Register and programming model",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.1 CSR specification source",
+      "chars": 2286,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.2 Software sequences",
+      "chars": 6613,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-018",
+        "REQ-FUNC-021"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.3 CSR connection to the design",
+      "chars": 4119,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.4 APB access behavior of the CSR",
+      "chars": 812,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "12. Error handling and recovery",
+      "chars": 2557,
+      "tables": 1,
+      "req_ids": [
+        "REQ-PARAM-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "13. Performance, power, and area",
+      "chars": 1460,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "100 MHz",
+        "16.667 ns",
+        "192 bit",
+        "20 cycles",
+        "200 MHz",
+        "60 MHz",
+        "8 cycles"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "14. RTL implementation contract",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.1 Required coding baseline",
+      "chars": 2057,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.2 RTL hierarchy",
+      "chars": 2589,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.3 Synthesis assumptions",
+      "chars": 536,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "15. Verification specification",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.1 Scope and strategy",
+      "chars": 569,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.2 Requirement-based test plan",
+      "chars": 7175,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-CLK-002",
+        "REQ-DFT-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-FUNC-013",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-019",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-FUNC-024",
+        "REQ-FUNC-025",
+        "REQ-FUNC-026",
+        "REQ-FUNC-027",
+        "REQ-FUNC-028",
+        "REQ-FUNC-029",
+        "REQ-FUNC-030",
+        "REQ-FUNC-031",
+        "REQ-FUNC-032",
+        "REQ-FUNC-033",
+        "REQ-FUNC-034",
+        "REQ-FUNC-035",
+        "REQ-FUNC-036",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-RTL-001",
+        "REQ-VER-001"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024",
+        "TEST-025",
+        "TEST-026",
+        "TEST-027",
+        "TEST-028",
+        "TEST-029"
+      ],
+      "properties": [],
+      "quantified": [
+        "1024 bytes",
+        "16 cycles",
+        "2 cycles",
+        "8 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "15.3 Assertions and coverage",
+      "chars": 2340,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-006",
+        "REQ-FUNC-010",
+        "REQ-FUNC-014",
+        "REQ-FUNC-023",
+        "REQ-FUNC-027",
+        "REQ-FUNC-029",
+        "REQ-FUNC-034",
+        "REQ-FUNC-036",
+        "REQ-IF-001",
+        "REQ-IF-003",
+        "REQ-IF-005",
+        "REQ-IF-006"
+      ],
+      "tests": [],
+      "properties": [
+        "COV-001",
+        "COV-002",
+        "COV-003",
+        "COV-004",
+        "SVA-001",
+        "SVA-002",
+        "SVA-003",
+        "SVA-004",
+        "SVA-005",
+        "SVA-006",
+        "SVA-007",
+        "SVA-008",
+        "SVA-009",
+        "SVA-010",
+        "SVA-011"
+      ],
+      "quantified": [
+        "192 bit",
+        "8 bit"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "15.4 Formal, CDC, and RDC",
+      "chars": 496,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "16. DFT and testability",
+      "chars": 1190,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "17. Physical design and timing integration",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.1 Timing constraints and budgets",
+      "chars": 3905,
+      "tables": 3,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16.667 ns",
+        "200 MHz",
+        "30 MHz",
+        "33.333 ns",
+        "5.000 ns",
+        "60 MHz"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "17.2 Physical assumptions",
+      "chars": 725,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "18. Security, safety, and reliability",
+      "chars": 1296,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-034"
+      ],
+      "tests": [],
+      "properties": [
+        "SVA-004"
+      ],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "19. Requirement-to-verification traceability",
+      "chars": 9833,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-CLK-002",
+        "REQ-DFT-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-FUNC-013",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-019",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-FUNC-024",
+        "REQ-FUNC-025",
+        "REQ-FUNC-026",
+        "REQ-FUNC-027",
+        "REQ-FUNC-028",
+        "REQ-FUNC-029",
+        "REQ-FUNC-030",
+        "REQ-FUNC-031",
+        "REQ-FUNC-032",
+        "REQ-FUNC-033",
+        "REQ-FUNC-034",
+        "REQ-FUNC-035",
+        "REQ-FUNC-036",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-RTL-001",
+        "REQ-VER-001"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024",
+        "TEST-025",
+        "TEST-026",
+        "TEST-027",
+        "TEST-028",
+        "TEST-029"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "20. Assumptions, dependencies, and decisions",
+      "chars": 9672,
+      "tables": 1,
+      "req_ids": [
+        "REQ-IF-009"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "100 MHz",
+        "16 bit",
+        "30 MHz",
+        "60 MHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "21. Glossary",
+      "chars": 1774,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "125 us",
+        "2.08 ns",
+        "666.7 ns",
+        "83.3 ns"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "22. References used to shape this template",
+      "chars": 1601,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    }
+  ],
+  "requirements": {
+    "REQ-FUNC-001": {
+      "statement": "The device shall reset its function address to 0, shall hold a 7-bit programmable address, and shall ignore any token whose address or endpoint field does not match an initialized endpoint.",
+      "source": "REF-001 section 8.3.2",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-002": {
+      "statement": "The controller shall decode the full PID field and shall ignore every packet whose PID check bits are not the one's complement of the PID bits or whose PID is undefined; a device shall not respond to a valid PID for a transaction type or direction it does not support.",
+      "source": "REF-001 section 8.3.1",
+      "verification": "Simulation, assertion"
+    },
+    "REQ-FUNC-003": {
+      "statement": "The controller shall compute CRC5 (polynomial X^5+X^2+1, residual 01100B) over token ADDR and ENDP or SOF frame number and CRC16 (polynomial X^16+X^15+X^2+1, residual 1000000000001101B) over the data field, seeded with all ones, before bit stuffing and after bit unstuffing, and shall ignore the protected fields of a packet with a failed CRC.",
+      "source": "REF-001 section 8.3.5",
+      "verification": "Simulation, directed vectors"
+    },
+    "REQ-FUNC-004": {
+      "statement": "The controller shall keep data-toggle sequence bits per endpoint and direction, shall accept the DATA0 data stage of a SETUP transaction, return ACK and set its sequence bit so that host and device sequence bits are equal at the end of the SETUP, and shall retry with the same toggle when no handshake is received.",
+      "source": "REF-001 section 8.6",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-005": {
+      "statement": "A high-speed device bulk or control OUT endpoint shall answer PING with ACK or NAK and shall answer OUT data with NYET when it accepts the data but cannot accept another maximum packet.",
+      "source": "REF-001 section 8.5.1, Table 8-1",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-006": {
+      "statement": "A device shall wait at least 8 bit times in high-speed (2 bit times in full-speed) after a received packet and shall start its response within 192 bit times (6.5 bit times full-speed, detachable cable).",
+      "source": "REF-001 section 7.1.18",
+      "verification": "Simulation with timing checker"
+    },
+    "REQ-FUNC-007": {
+      "statement": "Endpoint 0 shall always be present as a control endpoint, and the build parameter shall select the number of additional endpoints.",
+      "source": "REF-001 section 5.3.1.1",
+      "verification": "Elaboration, simulation"
+    },
+    "REQ-FUNC-008": {
+      "statement": "The data field shall be 0 to 1024 bytes in integral bytes; in low-speed the data payload shall not exceed 8 bytes.",
+      "source": "REF-001 section 8.3.4, 8.4.4",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-009": {
+      "statement": "The controller shall support up to three transactions per microframe for high-bandwidth isochronous endpoints using the DATA2, DATA1, DATA0 and MDATA PIDs.",
+      "source": "REF-001 section 5.9.2, Table 8-1",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-010": {
+      "statement": "The host shall transmit an SOF packet every 1.00 ms +/- 0.0005 ms in full-speed and every 125 us +/- 0.0625 us in high-speed, with an 11-bit frame number that rolls over after 7FFH and repeats eight times in high-speed.",
+      "source": "REF-001 section 8.3.3, 8.4.3",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-011": {
+      "statement": "The host root port shall drive reset for at least 50 ms in total, with each SE0 assertion at least 10 ms and gaps shorter than 3 ms, and shall allow 10 ms reset recovery before the first request.",
+      "source": "REF-001 section 7.1.7.5",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-012": {
+      "statement": "The host shall run the high-speed detection handshake: detect the device Chirp K for at least 2.5 us, start the alternating Chirp K and Chirp J within 100 us of the end of the device chirp, hold each chirp 40 to 60 us, and end the sequence 100 to 500 us before reset end.",
+      "source": "REF-001 section 7.1.7.5",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-013": {
+      "statement": "A high-speed capable device shall send Chirp K for 1.0 to 7.0 ms starting from reset time T0, shall move to the high-speed Default state within 500 us of detecting K-J-K-J-K-J, and shall return to full-speed Default if the sequence is not seen 1.0 to 2.5 ms after its own chirp.",
+      "source": "REF-001 section 7.1.7.5",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-014": {
+      "statement": "After receiving a packet the host shall wait at least 8 bit times in high-speed before transmitting, shall keep at least 88 bit times between its own back-to-back packets and at most 192 bit times for a response; in full-speed and low-speed the host shall provide at least 2 bit times of J and at most 7.5 bit times for a response.",
+      "source": "REF-001 section 7.1.18",
+      "verification": "Simulation with timing checker"
+    },
+    "REQ-FUNC-015": {
+      "statement": "The host shall schedule the periodic (isochronous and interrupt) channels of a (micro)frame before the non-periodic channels and shall not start a transaction that cannot finish before the next SOF.",
+      "source": "ASM-014",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-016": {
+      "statement": "The host shall detect disconnect and connect in full-speed and low-speed by SE0 or non-SE0 for 2.5 us and in high-speed by the PHY HostDisconnect indication evaluated at each SOF, and shall switch to full-speed on a high-speed disconnect.",
+      "source": "REF-006 section 2.2.1.10, REF-001 section 7.1.7.3",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-017": {
+      "statement": "When PARA_USB2_SPLIT_EN = 1 the host shall issue start-split and complete-split transactions with the SPLIT token (PID 1000B), shall accept NYET and the ERR handshake from the hub, and shall use the UTMI+ level 3 preamble path for low-speed devices behind a hub.",
+      "source": "REF-001 section 8.4.2, 11.17 to 11.21; REF-006 section 2",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-018": {
+      "statement": "A device shall enter suspend after more than 3.0 ms of constant idle and shall draw suspend current within 10 ms of bus inactivity; a high-speed device shall revert to full-speed no later than 3.125 ms after the start of idle and sample the line 100 to 875 us after reversion.",
+      "source": "REF-001 section 7.1.7.6",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-019": {
+      "statement": "A device with remote wakeup enabled shall wait until the bus has been idle for 5 ms before driving resume and shall drive resume for 1 to 15 ms.",
+      "source": "REF-001 section 7.1.7.7",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-020": {
+      "statement": "The host shall drive resume for at least 20 ms, end it with a low-speed EOP when the port was in low-speed or full-speed or with a transition to high-speed idle when it was in high-speed, and shall send SOF within 3 ms afterward.",
+      "source": "REF-001 section 7.1.7.7",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-021": {
+      "statement": "When PARA_USB2_LPM_EN = 1 the controller shall decode the EXT token (PID 0000B) followed by the LPM token (SubPID 0011B) with bmAttributes bLinkState, HIRD and bRemoteWake, and shall answer with a handshake; as host it shall issue the LPM transaction.",
+      "source": "REF-008 sections 2.1, 2.2, 4.1",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-022": {
+      "statement": "The controller shall support Test_SE0_NAK, Test_J, Test_K and Test_Packet on command, shall transmit the test packet of REF-001 section 7.1.20 repeatedly until the exit action, and in Test_SE0_NAK shall answer IN tokens with a valid CRC with NAK.",
+      "source": "REF-001 section 7.1.20",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-023": {
+      "statement": "In dual-role builds the controller shall act as host when the ID indication is mini-A, as device when it is mini-B, shall change role only after session end and detach, and shall let a CSR field override the PHY indication.",
+      "source": "REF-002; REF-006 section 2.2.1; user answer 2026-11-20",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-024": {
+      "statement": "A device shall come out of reset in high-speed only when the chirp handshake succeeds and otherwise in full-speed.",
+      "source": "REF-001 section 7.1.7.5",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-025": {
+      "statement": "The controller shall treat the loss of an expected response as a transaction error after the bus turn-around time and shall wait the full turn-around time before the next token when it signals an error by timeout.",
+      "source": "REF-001 section 8.7.2",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-026": {
+      "statement": "The FIFO RAM shall be one memory that software divides into receive, transmit and host-channel regions through the CSR.",
+      "source": "User answer 2026-11-20",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-027": {
+      "statement": "The FIFO manager shall never let the packet engine read data that was not written or overwrite unread data, and shall answer NAK (device) or defer the channel (host) when no space or data exists.",
+      "source": "REF-001 section 8.4.6",
+      "verification": "Assertion, simulation"
+    },
+    "REQ-FUNC-028": {
+      "statement": "The number of device endpoints and host channels shall follow PARA_USB2_NUM_EP and PARA_USB2_NUM_HC, and unused logic shall be absent.",
+      "source": "User answer 2026-11-20",
+      "verification": "Elaboration, lint"
+    },
+    "REQ-FUNC-029": {
+      "statement": "When PARA_USB2_DBUF_EN = 1 and the dbuf field of an endpoint or channel is 1, the FIFO manager shall split its region into two packet buffers, shall fill or drain one while the bus side uses the other, shall swap them at the end of each packet, and shall report the buffer in use in buf_cur.",
+      "source": "User answer 2026-11-20",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-030": {
+      "statement": "With zlp_en = 1 an IN endpoint or OUT channel shall send one zero-length packet after the last full packet when the transfer size is a non-zero multiple of the maximum packet size.",
+      "source": "REF-001 section 5.8.3",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-031": {
+      "statement": "With short_end = 1 an OUT endpoint or IN channel shall end the transfer at the first packet whose payload is shorter than the maximum packet size or is zero length, set the done flag, and leave the number of bytes not received in xsize.",
+      "source": "REF-001 section 5.8.3",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-032": {
+      "statement": "With poll_en = 1 a host channel shall issue its transaction once every interval microframes (high-speed) or frames (full-speed and low-speed), shall retry a NAK or NYET in the next interval, shall re-arm itself after a completed transfer when poll_rep = 1, and shall set poll_miss when the previous packet was not consumed at the next interval.",
+      "source": "ASM-021",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-033": {
+      "statement": "The controller shall set iso_inc in the endpoint or channel interrupt register and in the global interrupt register when an isochronous IN token finds no data ready, when a received isochronous packet has an error, or when a host isochronous transfer is not done in its scheduled microframe; no retry shall be made.",
+      "source": "REF-001 section 5.6",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-034": {
+      "statement": "With oc_en = 1 the controller shall drop o_vbus_pwr_en and o_utmi_drvvbus within 2 CLK-BUS cycles after i_ovrcur_n has been low for 16 consecutive CLK-BUS cycles, shall set ocur and oc_act, shall leave the port in the power-off state, and shall restore power only after software clears ocur and writes vbus_drv again.",
+      "source": "REF-001 section 7.2.1.2.1, ASM-022",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-035": {
+      "statement": "With lpbk = 1 the link shall feed its transmitted bytes into its own receiver, isolate the PHY pins in the idle state of section 6.2, and count good and bad packets in u2_lpbk_sts.",
+      "source": "ASM-023",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-036": {
+      "statement": "When PARA_USB2_SG_EN = 1 and sg_mode = 1 the AXI4 master DMA shall treat the address register of an endpoint or channel as the head of a descriptor list, shall process the 8-byte descriptors of section 9 in order until the last descriptor, shall write back the status and the number of bytes not transferred, and shall raise an interrupt only when ioc is set or the list ends or an error occurs.",
+      "source": "ASM-020",
+      "verification": "Simulation"
+    },
+    "REQ-IF-001": {
+      "statement": "The UTMI+ wrapper shall implement the link side of UTMI+ Revision 1.0 at the level the role needs: level 0 for device, level 1 for host high-speed and full-speed, level 2 for low-speed, level 3 for split.",
+      "source": "REF-006 section 2",
+      "verification": "Protocol checker"
+    },
+    "REQ-IF-002": {
+      "statement": "The UTMI+ data width shall follow PARA_USB2_UTMI_W (8 or 16 bits) with CLK-PHY of 60 MHz or 30 MHz, and the link shall use LineState only after the PHY filtering of Table 1.",
+      "source": "REF-006 section 2.1.1",
+      "verification": "Simulation"
+    },
+    "REQ-IF-003": {
+      "statement": "The ULPI wrapper shall implement the link side of ULPI Revision 1.1 in 8-bit synchronous mode: TX CMD and RX CMD bytes, dir, nxt and stp handshake, register read and write commands, and the PHY-supplied 60 MHz clock.",
+      "source": "REF-007 sections 3, 4",
+      "verification": "Protocol checker"
+    },
+    "REQ-IF-004": {
+      "statement": "The ULPI wrapper shall convert ULPI to the internal UTMI+-style stream so that the response time limits of REQ-FUNC-006 and REQ-FUNC-014 hold including the PHY pipeline delay.",
+      "source": "REF-007 Tables 8 to 10",
+      "verification": "Simulation with timing checker"
+    },
+    "REQ-IF-005": {
+      "statement": "The CSR shall be an APB4 completer with the behavior of section 11.4.",
+      "source": "REF-009",
+      "verification": "Protocol checker"
+    },
+    "REQ-IF-006": {
+      "statement": "The AXI4 master DMA shall issue only INCR bursts of at most 16 beats that do not cross a 4 KB boundary, shall use only full-width aligned beats, and shall report BRESP and RRESP errors in the interrupt status.",
+      "source": "REF-010",
+      "verification": "Protocol checker"
+    },
+    "REQ-IF-007": {
+      "statement": "The AXI4 slave port shall give access to the FIFO region windows with FIXED and INCR bursts of at most 16 beats and shall respond SLVERR to an access outside the windows.",
+      "source": "REF-010",
+      "verification": "Protocol checker"
+    },
+    "REQ-IF-008": {
+      "statement": "`o_int_usb` shall be a level output that is high while any enabled interrupt status bit is set and shall be registered in CLK-BUS.",
+      "source": "Product decision ASM-013",
+      "verification": "Simulation"
+    },
+    "REQ-IF-009": {
+      "statement": "For each DMA channel `o_dma_req` shall rise when the mapped FIFO crosses its threshold, shall stay high until the DMA controller finishes the burst, and `i_dma_ack` shall be a one-cycle pulse per burst.",
+      "source": "User answer 2026-11-20",
+      "verification": "Simulation"
+    },
+    "REQ-IF-010": {
+      "statement": "`i_ovrcur_n` shall be an asynchronous active-low input synchronized and filtered in CLK-BUS (CDC-006), and `o_vbus_pwr_en` shall be a registered output of CLK-BUS that is 0 whenever the port power is off.",
+      "source": "REF-001 section 7.2.1.2.1",
+      "verification": "Simulation, CDC analysis"
+    },
+    "REQ-CLK-001": {
+      "statement": "CLK-PHY shall be supplied by the PHY at 60 MHz (8-bit UTMI+ or ULPI) or 30 MHz (16-bit UTMI+) and the controller shall stay functional while CLK-BUS is asynchronous to it.",
+      "source": "REF-006 Table 1, REF-007",
+      "verification": "Simulation, CDC"
+    },
+    "REQ-CLK-002": {
+      "statement": "Every crossing between CLK-PHY and CLK-BUS shall use a structure listed in section 7.2.",
+      "source": "REF-003",
+      "verification": "CDC analysis"
+    },
+    "REQ-RESET-001": {
+      "statement": "Each domain shall assert reset asynchronously and release it synchronously, and a CSR software reset shall return all protocol state to its reset value.",
+      "source": "REF-003",
+      "verification": "Reset test"
+    },
+    "REQ-RESET-002": {
+      "statement": "A bus reset (SE0 for more than 2.5 us in full-speed) shall wake the device from suspend and return it to the Default state.",
+      "source": "REF-001 section 7.1.7.5",
+      "verification": "Simulation"
+    },
+    "REQ-PARAM-001": {
+      "statement": "Parameter values outside section 8 are configuration errors; the configuration check script and the verification wrapper shall report them, and the RTL behavior for them is undefined.",
+      "source": "ASM-011",
+      "verification": "Lint, elaboration"
+    },
+    "REQ-PARAM-002": {
+      "statement": "Host logic shall be absent when PARA_USB2_ROLE = 0, device logic shall be absent when PARA_USB2_ROLE = 1, and LPM, split, double-buffer and scatter-gather logic shall be absent when their enable is 0.",
+      "source": "User answer 2026-11-20",
+      "verification": "Synthesis area report"
+    },
+    "REQ-REG-001": {
+      "statement": "Software-visible registers shall exist only in the CSR workbook REF-005, with the version register at offset 0x0.",
+      "source": "R-016, R-067",
+      "verification": "CSR validation"
+    },
+    "REQ-ERR-001": {
+      "statement": "The controller shall report in the interrupt status the events: PID error, CRC error, bit-stuff error, response timeout, babble, FIFO overflow or underflow, AXI error and DMA error.",
+      "source": "REF-001 section 8.7",
+      "verification": "Simulation"
+    },
+    "REQ-ERR-002": {
+      "statement": "A host shall detect high-speed babble as data lines unsquelched at the end of a microframe and full-speed babble as bus activity past the end of a frame, shall stop its own transmission, and shall report the condition.",
+      "source": "REF-001 section 8.7.4",
+      "verification": "Simulation"
+    },
+    "REQ-PERF-001": {
+      "statement": "With CLK-BUS at 100 MHz or faster the AXI4 master DMA shall sustain 24.576 MB/s of isochronous IN traffic without FIFO overflow (goal).",
+      "source": "ASM-008",
+      "verification": "Simulation"
+    },
+    "REQ-RTL-001": {
+      "statement": "RTL shall comply with REF-003.",
+      "source": "REF-003",
+      "verification": "Lint, rule check"
+    },
+    "REQ-VER-001": {
+      "statement": "Verification shall include a protocol checker per interface and a USB bus functional model for each role.",
+      "source": "R-024 plan",
+      "verification": "Review"
+    },
+    "REQ-DFT-001": {
+      "statement": "All flip-flops of both domains shall be scannable with a test-enable on every clock gate, and test mode shall override reset sources in the reset controller only.",
+      "source": "REF-003",
+      "verification": "DFT checks"
+    }
+  },
+  "traceability": {
+    "REQ-FUNC-001": {
+      "module": "m_usb2_dev",
+      "test": "TEST-001",
+      "method": "Directed"
+    },
+    "REQ-FUNC-002": {
+      "module": "m_usb2_lnk",
+      "test": "TEST-001",
+      "method": "Directed"
+    },
+    "REQ-FUNC-003": {
+      "module": "m_usb2_lnk (m_usb2_crc5, m_usb2_crc16)",
+      "test": "TEST-002",
+      "method": "Directed, formal equivalence to a model"
+    },
+    "REQ-FUNC-004": {
+      "module": "m_usb2_dev, m_usb2_host",
+      "test": "TEST-003",
+      "method": "Directed with bus model"
+    },
+    "REQ-FUNC-005": {
+      "module": "m_usb2_dev",
+      "test": "TEST-003",
+      "method": "Directed with bus model"
+    },
+    "REQ-FUNC-006": {
+      "module": "m_usb2_lnk, m_usb2_dev",
+      "test": "TEST-004",
+      "method": "Directed with timing checker"
+    },
+    "REQ-FUNC-007": {
+      "module": "m_usb2_dev",
+      "test": "TEST-001",
+      "method": "Directed"
+    },
+    "REQ-FUNC-008": {
+      "module": "m_usb2_lnk",
+      "test": "TEST-005",
+      "method": "Directed"
+    },
+    "REQ-FUNC-009": {
+      "module": "m_usb2_dev, m_usb2_host",
+      "test": "TEST-005",
+      "method": "Directed"
+    },
+    "REQ-FUNC-010": {
+      "module": "m_usb2_host",
+      "test": "TEST-006",
+      "method": "Directed with timing checker"
+    },
+    "REQ-FUNC-011": {
+      "module": "m_usb2_spd",
+      "test": "TEST-007",
+      "method": "Directed back-to-back"
+    },
+    "REQ-FUNC-012": {
+      "module": "m_usb2_spd",
+      "test": "TEST-007",
+      "method": "Directed back-to-back"
+    },
+    "REQ-FUNC-013": {
+      "module": "m_usb2_spd",
+      "test": "TEST-007",
+      "method": "Directed back-to-back"
+    },
+    "REQ-FUNC-014": {
+      "module": "m_usb2_lnk, m_usb2_host",
+      "test": "TEST-004",
+      "method": "Directed with timing checker"
+    },
+    "REQ-FUNC-015": {
+      "module": "m_usb2_host",
+      "test": "TEST-006",
+      "method": "Directed with timing checker"
+    },
+    "REQ-FUNC-016": {
+      "module": "m_usb2_spd",
+      "test": "TEST-006",
+      "method": "Directed with timing checker"
+    },
+    "REQ-FUNC-017": {
+      "module": "m_usb2_host",
+      "test": "TEST-008",
+      "method": "Directed"
+    },
+    "REQ-FUNC-018": {
+      "module": "m_usb2_spd",
+      "test": "TEST-009",
+      "method": "Directed"
+    },
+    "REQ-FUNC-019": {
+      "module": "m_usb2_spd",
+      "test": "TEST-009",
+      "method": "Directed"
+    },
+    "REQ-FUNC-020": {
+      "module": "m_usb2_spd",
+      "test": "TEST-009",
+      "method": "Directed"
+    },
+    "REQ-FUNC-021": {
+      "module": "m_usb2_spd, m_usb2_dev, m_usb2_host",
+      "test": "TEST-010",
+      "method": "Directed"
+    },
+    "REQ-FUNC-022": {
+      "module": "m_usb2_spd",
+      "test": "TEST-011",
+      "method": "Directed"
+    },
+    "REQ-FUNC-023": {
+      "module": "m_usb2_spd",
+      "test": "TEST-012",
+      "method": "Directed"
+    },
+    "REQ-FUNC-024": {
+      "module": "m_usb2_spd",
+      "test": "TEST-007",
+      "method": "Directed back-to-back"
+    },
+    "REQ-FUNC-025": {
+      "module": "m_usb2_lnk",
+      "test": "TEST-003",
+      "method": "Directed with bus model"
+    },
+    "REQ-FUNC-026": {
+      "module": "m_usb2_fifo",
+      "test": "TEST-013",
+      "method": "Directed, random, synthesis report"
+    },
+    "REQ-FUNC-027": {
+      "module": "m_usb2_fifo",
+      "test": "TEST-013",
+      "method": "Directed, random, synthesis report"
+    },
+    "REQ-FUNC-028": {
+      "module": "m_usb2_core",
+      "test": "TEST-013",
+      "method": "Directed, random, synthesis report"
+    },
+    "REQ-FUNC-029": {
+      "module": "m_usb2_fifo",
+      "test": "TEST-023",
+      "method": "Directed, formal"
+    },
+    "REQ-FUNC-030": {
+      "module": "m_usb2_fifo, m_usb2_dev, m_usb2_host",
+      "test": "TEST-024",
+      "method": "Directed"
+    },
+    "REQ-FUNC-031": {
+      "module": "m_usb2_fifo, m_usb2_dev, m_usb2_host",
+      "test": "TEST-024",
+      "method": "Directed"
+    },
+    "REQ-FUNC-032": {
+      "module": "m_usb2_host (m_usb2_poll)",
+      "test": "TEST-025",
+      "method": "Directed with timing checker"
+    },
+    "REQ-FUNC-033": {
+      "module": "m_usb2_dev, m_usb2_host, m_usb2_irq",
+      "test": "TEST-026",
+      "method": "Directed"
+    },
+    "REQ-FUNC-034": {
+      "module": "m_usb2_ocp, m_usb2_spd",
+      "test": "TEST-027",
+      "method": "Directed, CDC analysis"
+    },
+    "REQ-FUNC-035": {
+      "module": "m_usb2_lnk (m_usb2_lpbk)",
+      "test": "TEST-029",
+      "method": "Directed"
+    },
+    "REQ-FUNC-036": {
+      "module": "m_usb2_dma",
+      "test": "TEST-028",
+      "method": "Directed, protocol checker"
+    },
+    "REQ-IF-001": {
+      "module": "m_usb2_phyif_utmi",
+      "test": "TEST-014",
+      "method": "Protocol checker, directed"
+    },
+    "REQ-IF-002": {
+      "module": "m_usb2_phyif_utmi",
+      "test": "TEST-014",
+      "method": "Protocol checker, directed"
+    },
+    "REQ-IF-003": {
+      "module": "m_usb2_phyif_ulpi",
+      "test": "TEST-015",
+      "method": "Protocol checker, directed"
+    },
+    "REQ-IF-004": {
+      "module": "m_usb2_phyif_ulpi",
+      "test": "TEST-004",
+      "method": "Directed with timing checker"
+    },
+    "REQ-IF-005": {
+      "module": "m_vlsit_csr_usb2",
+      "test": "TEST-016",
+      "method": "Directed, protocol checker, CSR validation"
+    },
+    "REQ-IF-006": {
+      "module": "m_usb2_dma",
+      "test": "TEST-017",
+      "method": "Protocol checker, directed"
+    },
+    "REQ-IF-007": {
+      "module": "m_usb2_axs",
+      "test": "TEST-018",
+      "method": "Protocol checker, directed"
+    },
+    "REQ-IF-008": {
+      "module": "m_usb2_irq",
+      "test": "TEST-016",
+      "method": "Directed, protocol checker, CSR validation"
+    },
+    "REQ-IF-009": {
+      "module": "m_usb2_axs",
+      "test": "TEST-018",
+      "method": "Protocol checker, directed"
+    },
+    "REQ-IF-010": {
+      "module": "m_usb2_ocp",
+      "test": "TEST-027",
+      "method": "Directed, CDC analysis"
+    },
+    "REQ-CLK-001": {
+      "module": "m_usb2_top_*",
+      "test": "TEST-019",
+      "method": "Random, CDC and reset analysis"
+    },
+    "REQ-CLK-002": {
+      "module": "m_usb2_cdc_*",
+      "test": "TEST-019",
+      "method": "Random, CDC and reset analysis"
+    },
+    "REQ-RESET-001": {
+      "module": "m_usb2_rst",
+      "test": "TEST-019",
+      "method": "Random, CDC and reset analysis"
+    },
+    "REQ-RESET-002": {
+      "module": "m_usb2_spd",
+      "test": "TEST-009",
+      "method": "Directed"
+    },
+    "REQ-PARAM-001": {
+      "module": "m_usb2_core (configuration check)",
+      "test": "TEST-020",
+      "method": "Lint, script"
+    },
+    "REQ-PARAM-002": {
+      "module": "m_usb2_core",
+      "test": "TEST-013",
+      "method": "Directed, random, synthesis report"
+    },
+    "REQ-REG-001": {
+      "module": "m_vlsit_csr_usb2",
+      "test": "TEST-016",
+      "method": "Directed, protocol checker, CSR validation"
+    },
+    "REQ-ERR-001": {
+      "module": "m_usb2_irq",
+      "test": "TEST-021",
+      "method": "Directed"
+    },
+    "REQ-ERR-002": {
+      "module": "m_usb2_host",
+      "test": "TEST-021",
+      "method": "Directed"
+    },
+    "REQ-PERF-001": {
+      "module": "m_usb2_dma",
+      "test": "TEST-017",
+      "method": "Protocol checker, directed"
+    },
+    "REQ-RTL-001": {
+      "module": "all modules",
+      "test": "TEST-022",
+      "method": "Lint, review, DFT flow"
+    },
+    "REQ-VER-001": {
+      "module": "verification environment",
+      "test": "TEST-022",
+      "method": "Lint, review, DFT flow"
+    },
+    "REQ-DFT-001": {
+      "module": "all modules",
+      "test": "TEST-022",
+      "method": "Lint, review, DFT flow"
+    }
+  },
+  "requirement_areas": {
+    "FUNC": 36,
+    "IF": 10,
+    "CLK": 2,
+    "RESET": 2,
+    "PARAM": 2,
+    "REG": 1,
+    "ERR": 2,
+    "PERF": 1,
+    "RTL": 1,
+    "VER": 1,
+    "DFT": 1
+  },
+  "open_items": [
+    "ASM-001",
+    "ASM-002",
+    "ASM-003",
+    "ASM-004",
+    "ASM-005",
+    "ASM-006",
+    "ASM-007",
+    "ASM-008",
+    "ASM-009",
+    "ASM-010",
+    "ASM-011",
+    "ASM-012",
+    "ASM-013",
+    "ASM-014",
+    "ASM-015",
+    "ASM-016",
+    "ASM-017",
+    "ASM-018",
+    "ASM-019",
+    "ASM-020",
+    "ASM-021",
+    "ASM-022",
+    "ASM-023",
+    "ASM-024",
+    "DEP-001",
+    "DEP-002",
+    "DEP-003",
+    "DEP-004",
+    "DEP-005",
+    "TBD-001",
+    "TBD-002",
+    "TBD-003",
+    "TBD-004",
+    "TBD-005",
+    "TBD-006",
+    "TBD-007",
+    "TBD-008",
+    "TBD-009",
+    "TBD-010",
+    "TBD-011",
+    "TBD-012"
+  ],
+  "decisions": [],
+  "tests": [
+    "TEST-001",
+    "TEST-002",
+    "TEST-003",
+    "TEST-004",
+    "TEST-005",
+    "TEST-006",
+    "TEST-007",
+    "TEST-008",
+    "TEST-009",
+    "TEST-010",
+    "TEST-011",
+    "TEST-012",
+    "TEST-013",
+    "TEST-014",
+    "TEST-015",
+    "TEST-016",
+    "TEST-017",
+    "TEST-018",
+    "TEST-019",
+    "TEST-020",
+    "TEST-021",
+    "TEST-022",
+    "TEST-023",
+    "TEST-024",
+    "TEST-025",
+    "TEST-026",
+    "TEST-027",
+    "TEST-028",
+    "TEST-029"
+  ],
+  "properties": [
+    "COV-001",
+    "COV-002",
+    "COV-003",
+    "COV-004",
+    "SVA-001",
+    "SVA-002",
+    "SVA-003",
+    "SVA-004",
+    "SVA-005",
+    "SVA-006",
+    "SVA-007",
+    "SVA-008",
+    "SVA-009",
+    "SVA-010",
+    "SVA-011"
+  ],
+  "quantified_claims": [
+    "0.0625 us",
+    "1 cycle",
+    "10.3 Cycle",
+    "100 MHz",
+    "100 us",
+    "1024 bytes",
+    "125 us",
+    "16 bit",
+    "16 bits",
+    "16 cycles",
+    "16.667 ns",
+    "192 bit",
+    "2 bit",
+    "2 cycles",
+    "2.08 ns",
+    "2.5 us",
+    "2.6 us",
+    "20 cycles",
+    "200 MHz",
+    "24 cycles",
+    "30 MHz",
+    "32 bits",
+    "33.333 ns",
+    "4 bytes",
+    "4 cycles",
+    "5.000 ns",
+    "50 us",
+    "500 us",
+    "512 bytes",
+    "524287 bytes",
+    "6.5 bit",
+    "60 MHz",
+    "60 us",
+    "64 bytes",
+    "666.7 ns",
+    "7.5 bit",
+    "75 us",
+    "8 bit",
+    "8 bytes",
+    "8 cycles",
+    "8.5 us",
+    "8192 bits",
+    "83.3 ns",
+    "875 us",
+    "88 bit"
+  ],
+  "coverage": {
+    "requirements": 59,
+    "tests": 29,
+    "properties": 15,
+    "requirements_without_test": [],
+    "requirements_without_verification": []
+  },
+  "counts": {
+    "sections": 60,
+    "tables": 49,
+    "open_items": 41,
+    "decisions": 0
+  }
+}

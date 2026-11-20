@@ -1,0 +1,11 @@
+FSM: dev_xact
+STATES: 6, TRANSITIONS: 10
+LAYOUT: flow-tb-snake-3-g100
+CROSSINGS: 0
+LABEL CONFLICTS: 0
+BENDS: 8
+MINIMUM GAP: 100.0 px (minimum 100 px)
+TEXT FIT: PASS (worst fill ratio 0.57)
+DISTRIBUTION: PASS (6 x-centers, 3 y-centers)
+PAGE: 1110 x 380 px
+RESULT: PASS

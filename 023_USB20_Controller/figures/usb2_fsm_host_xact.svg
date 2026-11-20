@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1610" height="680" viewBox="10 10 1610 680" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="1610" height="680" fill="#FFFFFF"/>
+<ellipse cx="165" cy="350" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="165" y="357" text-anchor="middle">ENUM_ST_HX_IDLE</text>
+<ellipse cx="560" cy="350" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="560" y="357" text-anchor="middle">ENUM_ST_HX_TOKEN</text>
+<ellipse cx="990" cy="70" rx="150" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="990" y="77" text-anchor="middle">ENUM_ST_HX_OUT_DATA</text>
+<ellipse cx="1440" cy="70" rx="145" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1440" y="77" text-anchor="middle">ENUM_ST_HX_WAIT_HS</text>
+<ellipse cx="990" cy="630" rx="160" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="990" y="637" text-anchor="middle">ENUM_ST_HX_WAIT_DATA</text>
+<ellipse cx="1440" cy="630" rx="150" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1440" y="637" text-anchor="middle">ENUM_ST_HX_SEND_ACK</text>
+<ellipse cx="990" cy="350" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="990" y="357" text-anchor="middle">ENUM_ST_HX_SPLIT</text>
+<ellipse cx="1440" cy="350" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1440" y="357" text-anchor="middle">ENUM_ST_HX_DONE</text>
+<path d="M 290 350 L 430 350" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="430,350 418,356 418,344" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="281.75" y="339" width="156.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="360" y="357" text-anchor="middle">channel granted</text>
+<path d="M 603.425 321.723 L 945.959 98.6778" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="945.959,98.6778 939.177,110.254 932.629,100.198" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="656.842" y="199.2" width="235.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="774.692" y="217.2" text-anchor="middle">OUT or SETUP token sent</text>
+<path d="M 603.425 378.277 L 945.727 601.171" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="945.727,601.171 932.397,599.651 938.945,589.595" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="706.226" y="478.724" width="136.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="774.576" y="496.724" text-anchor="middle">IN token sent</text>
+<path d="M 690 350 L 860 350" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="860,350 848,356 848,344" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="691.8" y="339" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="775" y="357" text-anchor="middle">split token sent</text>
+<path d="M 1140 70 L 1295 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1295,70 1283,76 1283,64" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1134.3" y="59" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1217.5" y="77" text-anchor="middle">data packet sent</text>
+<path d="M 1035.9 98.5609 L 1395.02 322.01" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1395.02,322.01 1381.66,320.765 1388,310.576" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1087.71" y="199.285" width="255.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1215.46" y="217.285" text-anchor="middle">isochronous, no handshake</text>
+<path d="M 1440 100 L 1440 320" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1440,320 1434,308 1446,308" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1332.05" y="199" width="215.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1440" y="217" text-anchor="middle">handshake or time-out</text>
+<path d="M 1150 630 L 1290 630" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1290,630 1278,636 1278,624" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1136.8" y="619" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1220" y="637" text-anchor="middle">good data packet</text>
+<path d="M 1036.16 601.276 L 1395.02 377.99" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1395.02,377.99 1388,389.424 1381.66,379.235" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1068.04" y="478.633" width="295.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1215.59" y="496.633" text-anchor="middle">NAK, STALL, error or time-out</text>
+<path d="M 1440 600 L 1440 380" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1440,380 1446,392 1434,392" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1396.4" y="479" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1440" y="497" text-anchor="middle">ACK sent</text>
+<path d="M 1035.21 321.872 L 1394.25 98.4675" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1394.25,98.4675 1387.23,109.901 1380.89,99.7128" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1106.78" y="199.17" width="215.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1214.73" y="217.17" text-anchor="middle">start-split data sent</text>
+<path d="M 990 380 L 990 600" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="990,600 984,588 996,588" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="847.4" y="479" width="285.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="990" y="497" text-anchor="middle">complete-split IN token sent</text>
+<path d="M 1440 320 L 1440 180 L 165 180 L 165 320" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="165,320 159,308 171,308" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="724.25" y="169" width="156.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="802.5" y="187" text-anchor="middle">status reported</text>
+</svg>

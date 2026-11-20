@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1230" height="720" viewBox="10 10 1230 720" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="1230" height="720" fill="#FFFFFF"/>
+<ellipse cx="625" cy="70" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="625" y="77" text-anchor="middle">ENUM_ST_PR_IDLE</text>
+<ellipse cx="625" cy="270" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="625" y="277" text-anchor="middle">ENUM_ST_PR_PID</text>
+<ellipse cx="770" cy="470" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="770" y="477" text-anchor="middle">ENUM_ST_PR_TOKEN</text>
+<ellipse cx="1085" cy="470" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1085" y="477" text-anchor="middle">ENUM_ST_PR_DATA</text>
+<ellipse cx="625" cy="670" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="625" y="677" text-anchor="middle">ENUM_ST_PR_CRC</text>
+<ellipse cx="165" cy="470" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="165" y="477" text-anchor="middle">ENUM_ST_PR_DONE</text>
+<ellipse cx="465" cy="470" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="465" y="477" text-anchor="middle">ENUM_ST_PR_ERR</text>
+<path d="M 625 100 L 625 240" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="625,240 619,228 631,228" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="576.45" y="159" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="625" y="177" text-anchor="middle">rx active</text>
+<path d="M 646.371 299.477 L 748.548 440.411" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="748.548,440.411 736.647,434.217 746.362,427.174" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="589.509" y="358.944" width="215.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="697.459" y="376.944" text-anchor="middle">PID ok &amp; token or SOF</text>
+<path d="M 684.167 295.725 L 1024.59 443.736" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1024.59,443.736 1011.19,444.454 1015.98,433.449" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="786.029" y="358.731" width="136.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="854.379" y="376.731" text-anchor="middle">PID ok &amp; data</text>
+<path d="M 565.833 295.725 L 225.408 443.736" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="225.408,443.736 234.02,433.449 238.805,444.454" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="302.52" y="358.731" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="395.62" y="376.731" text-anchor="middle">PID ok &amp; handshake</text>
+<path d="M 601.506 299.367 L 488.494 440.633" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="488.494,440.633 491.305,427.514 500.676,435.011" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="471.7" y="359" width="146.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="545" y="377" text-anchor="middle">PID check fail</text>
+<path d="M 748.548 499.589 L 646.371 640.523" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="646.371,640.523 648.557,627.286 658.272,634.329" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="629.109" y="559.056" width="136.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="697.459" y="577.056" text-anchor="middle">2 token bytes</text>
+<path d="M 1024.59 496.264 L 684.167 644.275" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="684.167,644.275 692.779,633.988 697.564,644.993" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="820.678" y="559.269" width="67.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="854.379" y="577.269" text-anchor="middle">rx end</text>
+<path d="M 1085 440 L 1085 380 L 465 380 L 465 440" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="465,440 459,428 471,428" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="672" y="369" width="206" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="775" y="387" text-anchor="middle">rx error or overflow</text>
+<path d="M 565.833 644.275 L 225.408 496.264" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="225.408,496.264 238.805,495.546 234.02,506.551" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="317.37" y="559.269" width="156.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="395.62" y="577.269" text-anchor="middle">CRC residual ok</text>
+<path d="M 601.506 640.633 L 488.494 499.367" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="488.494,499.367 500.676,504.989 491.305,512.486" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="501.4" y="559" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="545" y="577" text-anchor="middle">CRC fail</text>
+<path d="M 198.257 441.081 L 591.743 98.9188" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="591.743,98.9188 586.625,111.321 578.751,102.265" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="316.75" y="259" width="156.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="395" y="277" text-anchor="middle">result reported</text>
+<path d="M 465 440 L 465 70 L 500 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="500,70 488,76 488,64" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="426.35" y="244" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="465" y="262" text-anchor="middle">rx idle</text>
+</svg>

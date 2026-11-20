@@ -1,0 +1,50 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_mclk",
+   "wave": "p......................................."
+  },
+  {
+   "name": "w_en",
+   "wave": "0011111111111111111111111111111111111111"
+  },
+  {
+   "name": "w_cfg_snap",
+   "wave": "0000000010000000000000000000000000000000"
+  },
+  {
+   "name": "w_fsm_frame_state",
+   "wave": "=.......=...=...........................",
+   "data": [
+    "OFF",
+    "ARM",
+    "RUN"
+   ]
+  },
+  {
+   "name": "i2s_sts.tx_busy",
+   "wave": "0000000011111111111111111111111111111111"
+  },
+  {
+   "name": "o_bclk_tx_oe",
+   "wave": "0000000011111111111111111111111111111111"
+  },
+  {
+   "name": "o_bclk_tx",
+   "wave": "0000000000110011001100110011001100110011"
+  },
+  {
+   "name": "o_ws_tx",
+   "wave": "0000000011110000000000000000111111111111"
+  }
+ ],
+ "head": {
+  "text": "WF-008 OP-001 Unit start: snapshot and first frame (success)"
+ },
+ "foot": {
+  "text": "Cell = one master clock cycle. The rising edge of the enable bit sends one snapshot to the master domain; the engine goes to ARM when it arrives, the master starts driving, and the first frame begins at the frame boundary."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

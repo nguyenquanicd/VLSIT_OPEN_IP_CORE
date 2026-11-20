@@ -1,0 +1,457 @@
+{
+ "ip": "USB 2.0 Controller",
+ "reviewed_spec": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\023_USB20_Controller\\VLSIT_USB20_CONTROLLER_HDS.md",
+ "date": "2026-11-20",
+ "areas": [
+  {
+   "id": "application_fit",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Named product, 23 features each with an application row, explicit excluded list; values are proposals (F-034)."
+  },
+  {
+   "id": "features",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Each feature maps to requirements and a test; some requirements rest on open assumptions (F-027)."
+  },
+  {
+   "id": "functions",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Two Major gaps (ULPI low power F-004, split F-008) and four Minor gaps in the cycle detail."
+  },
+  {
+   "id": "interfaces",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Three Major findings: UTMI+ encodings (F-005), AXI4 profile against AXI3 text (F-006), unofficial sources (F-007)."
+  },
+  {
+   "id": "clock_reset_cdc",
+   "weight": 1.5,
+   "score": 1,
+   "justification": "A Blocker: no safe crossing structure for the multi-bit endpoint and channel registers (F-001)."
+  },
+  {
+   "id": "parameters",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Parameter table complete with ranges and dependencies; only Minor gaps in checking (F-020, F-021)."
+  },
+  {
+   "id": "data_representation",
+   "weight": 0.5,
+   "score": 4,
+   "justification": "Quantity table, PID values, descriptor format are defined; no finding."
+  },
+  {
+   "id": "asic_feasibility",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "No critical-path statement and the RAM bandwidth limit (F-029, F-003); the clocking itself is synthesizable in principle."
+  },
+  {
+   "id": "sdc_timing",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Two Major findings: interface timing numbers missing (F-010) and the named SDC files absent (F-011)."
+  },
+  {
+   "id": "area_power",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Major: no area or power number; a flip-flop proxy is given in this review (F-012)."
+  },
+  {
+   "id": "performance",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Two Major findings: RAM bandwidth with 16-bit UTMI+ (F-003) and the underived 24-cycle budget (F-009)."
+  },
+  {
+   "id": "software_ease",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Major: custom register model with no driver plan (F-013); the register set, flows and interrupt hierarchy are otherwise workable."
+  },
+  {
+   "id": "dft",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Scan, MBIST and clock-gate test enable are addressed; ports deferred (F-031)."
+  },
+  {
+   "id": "security_ras",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Stance is explicit; only Minor findings on RAM soft error and DMA windows (F-017, F-018)."
+  },
+  {
+   "id": "verification_quality",
+   "weight": 1.5,
+   "score": 4,
+   "justification": "Full requirement to test trace; Minor gaps in interoperability and time scaling (F-026, F-028)."
+  },
+  {
+   "id": "documentation",
+   "weight": 0.5,
+   "score": 3,
+   "justification": "Major: unofficial and unverified protocol sources (F-007); open items lack owner and date (F-027)."
+  },
+  {
+   "id": "integration_effort",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Wrappers, tie-offs and macros are described; no single checklist (F-030)."
+  },
+  {
+   "id": "market_position",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Feature set is close to the references, but no area or power evidence to compare (F-032, F-012)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "F-001",
+   "area": "clock_reset_cdc",
+   "severity": "Blocker",
+   "label": "FACT",
+   "locator": "section 7.2 CDC-001, CDC-003, section 11.3 (u2_epi_*, u2_epo_*, u2_hc_* banks), section 11.2 S13 and S15",
+   "title": "No approved crossing structure for the multi-bit endpoint and channel registers",
+   "detail": "FACT: CDC-001 says the bundled values change only while the core is disabled, but S13, S15 and S17 of section 11.2 write ep_en, ch_en, set_nak, set_d0, stall and port_rst while core_en = 1, and section 11.3 routes the whole u2_epi_*, u2_epo_* and u2_hc_* banks (about 3 800 control flip-flops at the default counts, proxy from regs_usb2.json) through CDC-001 and CDC-003, which are a level synchronizer and a pulse synchronizer. No structure carries a 32-bit field such as u2_epi_dma.addr safely from CLK-BUS to CLK-PHY.",
+   "action": "Define a request and acknowledge handshake per bank entry (data held stable while the toggle crosses), or keep the endpoint and channel registers in CLK-PHY and write them from CLK-BUS through an asynchronous FIFO; update CDC-001 and CDC-003 and the CDC verification."
+  },
+  {
+   "id": "F-002",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "section 7.2 CDC-002, section 11.3 (xsize, pkt_cnt, addr are rwi), section 10.2 OP-007",
+   "title": "Hardware-updated counters are read across CLK-PHY to CLK-BUS as levels",
+   "detail": "FACT: xsize, pkt_cnt and the DMA address are counted down or advanced by hardware (section 11.3, rwi), and CDC-002 transfers status as synchronized levels. INFERENCE: a software read of a 19-bit counter that changes at packet rate can return a mixed value, and the rule that a software write wins over a hardware load can drop one decrement.",
+   "action": "Snapshot the counters in CLK-PHY and cross them with the same handshake as F-001, and state how a lost load is repeated."
+  },
+  {
+   "id": "F-003",
+   "area": "performance",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "section 10.4 (bandwidth check), section 7.1 (CLK-PHY 30 MHz), section 10.5 MEM-001",
+   "title": "The single-port FIFO RAM has no bandwidth margin in the 16-bit UTMI+ configuration",
+   "detail": "INFERENCE: section 10.4 shows 50 % use of 240 MB/s (32 bits at 60 MHz). With PARA_USB2_UTMI_W = 16 the RAM is in CLK-PHY at 30 MHz (section 7.1), so one port gives 120 MB/s while the packet engine needs 60 MB/s and the bus side up to 60 MB/s, which is 100 % use with no margin for arbitration or double buffering.",
+   "action": "Add a bandwidth table per configuration, and either widen the RAM word to 64 bits when UTMI+ is 16 bits, run the RAM on a faster clock, or limit the 16-bit configuration to full-speed traffic."
+  },
+  {
+   "id": "F-004",
+   "area": "functions",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "TBD-005, section 7.4, section 10.1.7 (ulpi_if FSM), section 6.3 (ULPI register access)",
+   "title": "ULPI low power mode, clock restart and resume are not specified",
+   "detail": "FACT: TBD-005 leaves the ULPI low power mode open, section 7.4 says the PHY clock stops in suspend, and the ulpi_if FSM has no low-power, wake or reset state. INFERENCE: without them the link cannot enter suspend or L1 in a ULPI build, nor detect resume while CLK-PHY is stopped.",
+   "action": "Read the low power sections of REF-007 (Figures 46 to 49, Table 15), add the states ENUM_ST_UL_LP and ENUM_ST_UL_WAKE and requirements for the stp and dir sequences and the clock restart wait."
+  },
+  {
+   "id": "F-005",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "section 6.2 (o_utmi_opmode, o_utmi_xcvrsel, o_utmi_termsel), REQ-IF-001, REF-006 section 2.1.1",
+   "title": "The UTMI+ mode signals have no value table per bus state",
+   "detail": "FACT: section 6.2 names OpMode, XcvrSelect and TermSelect but gives no table of the values for high-speed, full-speed, low-speed, preamble, chirp and suspend, and REF-006 section 2.1.1.4 requires TXReady during chirp data. The chirp, level 3 preamble and suspend sequences depend on these values.",
+   "action": "Add a table from REF-006 and REF-007 that maps each state of the speed FSMs to XcvrSelect, TermSelect, OpMode, DpPulldown and DmPulldown."
+  },
+  {
+   "id": "F-006",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "ASM-007, REQ-IF-006, REQ-IF-007, REF-010, section 2.3",
+   "title": "The AXI4 profile is specified against AXI3 text",
+   "detail": "FACT: the only AXI text in md_doc is AXI v1.0 (AXI3 era); ASM-007 limits the profile to INCR bursts of at most 16 beats with no lock, QoS, region or user. INFERENCE: AXI4 behavior (for example awlen of 8 bits and the 4 KB rule wording) cannot be checked against a source.",
+   "action": "Add the AXI4 standard (IHI 0022 Issue H.c) to md_doc and recheck REQ-IF-006 and REQ-IF-007, or state the profile as AXI3-compatible only."
+  },
+  {
+   "id": "F-007",
+   "area": "documentation",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "ASM-001, REF-006, REF-007, REF-001 conversion CHECK",
+   "title": "UTMI+ and ULPI statements rest on unofficial copies and unverified conversions",
+   "detail": "FACT: ASM-001 records that UTMI+ 1.0 (nxp.com mirror, 26 pages) and ULPI 1.1 (sparkfun.com mirror) are third-party copies, and the conversion check reported CHECK for every converted document with 114 pages of USB 2.0 differing by more than 5 %. The protocol statements of REQ-IF-001 to REQ-IF-004 and many REQ-FUNC lines cite them.",
+   "action": "Replace the copies by the official documents, inspect the pages that differ by more than 5 %, and record the result in section 2.1."
+  },
+  {
+   "id": "F-008",
+   "area": "functions",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "REQ-FUNC-017, section 10.1.6 (host_xact), section 10.3 WF-013, REF-001 sections 11.17 to 11.21",
+   "title": "Split transactions have a token format but no timing or retry rules",
+   "detail": "FACT: REQ-FUNC-017 gives the SPLIT PID and the NYET and ERR handshakes only. It has no rule for the earliest and latest complete-split microframe, no retry count, no handling of isochronous MDATA, and the host_xact FSM has one ENUM_ST_HX_SPLIT state; WF-013 is not to scale.",
+   "action": "Derive requirements from REF-001 sections 11.17 to 11.21 for the start-split and complete-split scheduling, the TT buffering responses and the retry limit, and split ENUM_ST_HX_SPLIT into start and complete states."
+  },
+  {
+   "id": "F-009",
+   "area": "performance",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "PERF-002, section 6.3 (ULPI), REF-007 Tables 8 to 10, REQ-FUNC-006, REQ-FUNC-014",
+   "title": "The 192 bit-time turnaround budget is stated but not derived",
+   "detail": "FACT: PERF-002 gives an internal budget of 20 CLK-PHY cycles for a handshake start within 192 bit times (24 cycles) including the ULPI pipeline. INFERENCE: REF-007 Tables 8 to 10 (PHY pipeline delays, link decision times) are not applied, and the path token decode to first RAM byte to TXValid has no cycle count, so the figure is a claim.",
+   "action": "Add a cycle budget table per response path for UTMI+ 8-bit, UTMI+ 16-bit and ULPI, using the pipeline delays of REF-006 and REF-007."
+  },
+  {
+   "id": "F-010",
+   "area": "sdc_timing",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "section 17.1.2, TBD-007",
+   "title": "The UTMI+ and ULPI interface timing budgets have no numbers",
+   "detail": "FACT: the rows of section 17.1.2 for the UTMI+ and ULPI pins say TBD-007 and name REF-007 Table 5 as the source to apply. Interface timing is the first path that fails at 60 MHz.",
+   "action": "Transcribe the input and output delay and clock jitter values of REF-007 Table 5 and the UTMI+ timing into the table, and derive the set_input_delay and set_output_delay values."
+  },
+  {
+   "id": "F-011",
+   "area": "sdc_timing",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "section 17.1.1 (sdc/usb2_clocks.sdc), section 17.1.2 (sdc/usb2_io.sdc), folder inventory",
+   "title": "The SDC files named by the specification do not exist",
+   "detail": "FACT: sections 17.1.1 and 17.1.2 name sdc/usb2_clocks.sdc and sdc/usb2_io.sdc as constraint sources, and the folder 023_USB20_Controller has no sdc or constraints directory (folder inventory, appendix).",
+   "action": "Deliver the two SDC files with the specification, or change the text to say that they are produced with the RTL."
+  },
+  {
+   "id": "F-012",
+   "area": "area_power",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "PPA-002, PPA-003, PPA-004, section 13",
+   "title": "Area and power have no number and no activity assumption",
+   "detail": "FACT: PPA-003 and PPA-004 are goals with no number, and area is deferred to synthesis. proxy: the CSR holds 3 802 control flip-flops at the default counts (9 endpoint, 8 channel, 4 DMA entries) and 6 868 at the maximum counts (regs_usb2.json, rw, rwi and w1c bits) plus a 4 KB RAM; the host channel registers duplicate the device endpoint registers, whereas REF-011 table 3-4 reuses the device registers as host registers to save area.",
+   "action": "Record the proxy table (flip-flops, RAM bits, wide muxes) per configuration with its assumptions, state a power activity assumption, and evaluate sharing the device and host register banks."
+  },
+  {
+   "id": "F-013",
+   "area": "software_ease",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "section 11.1, REF-011, section 11.2",
+   "title": "The register model is custom, so no existing USB driver runs on it",
+   "detail": "FACT: the CSR is a new 44-register map (REF-005); REF-011 is only a design reference. INFERENCE: Linux gadget and host stacks, TinyUSB and vendor HALs expect a known controller register model, so the firmware team must write and verify a driver, which the specification does not budget or describe.",
+   "action": "Add a software integration section: driver scope, a register-level state-machine reference for EP0, a statement of compatibility, and an option to provide a compatibility view of a known controller."
+  },
+  {
+   "id": "F-014",
+   "area": "software_ease",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "section 11.3 closing paragraph",
+   "title": "The rule for a lost rwi load is stated but not defined per field",
+   "detail": "FACT: section 11.3 says the IP repeats a lost load, 'a count-down update is re-applied in the next cycle'. INFERENCE: the repeated value depends on whether software wrote xsize or the hardware had counted, and the text does not say which wins.",
+   "action": "Define per rwi field who wins and how the hardware reapplies, and add an assertion."
+  },
+  {
+   "id": "F-015",
+   "area": "functions",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-FUNC-034, section 7.2 CDC-001, section 10.3 WF-035",
+   "title": "The over-current requirement gives one latency for two outputs in different clock domains",
+   "detail": "FACT: REQ-FUNC-034 says o_vbus_pwr_en and o_utmi_drvvbus drop within 2 CLK-BUS cycles, but o_utmi_drvvbus is a CLK-PHY output reached through CDC-001 (WF-035 shows it later) and CLK-PHY can be stopped in suspend. ULPI has no DrvVbus pin.",
+   "action": "Split the requirement: o_vbus_pwr_en within 2 CLK-BUS cycles, o_utmi_drvvbus within a stated number of CLK-PHY cycles or at the next clock restart, and a ULPI OTG control register write for ULPI builds."
+  },
+  {
+   "id": "F-016",
+   "area": "interfaces",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "REQ-FUNC-023, section 11.2 S05, section 6.2 ULPI ports",
+   "title": "The ID source of the dual-role port is not stated for ULPI builds",
+   "detail": "INFERENCE: the ULPI port list has no ID pin and the UTMI+ port list has i_utmi_iddig, so in a ULPI build the ID indication must come from the PHY status byte and the ID pull-up from a PHY register write; REQ-FUNC-023 and S05 do not say which register or bit.",
+   "action": "State the ULPI register and RX CMD field for ID, and add the PHY register writes to the initialization flow."
+  },
+  {
+   "id": "F-017",
+   "area": "security_ras",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "section 18 (ECC/parity row), TBD-010",
+   "title": "The soft-error statement for the FIFO RAM is not correct",
+   "detail": "INFERENCE: section 18 says a RAM soft error is detected by the CRC of the next packet on the wire side. The CRC16 is generated over the bytes read from the RAM at transmit time, so a flipped bit produces a valid CRC and is not detected; a receive-side flip happens after the CRC check.",
+   "action": "Correct the statement and decide TBD-010: add one parity bit per RAM word with an error flag and a fail-safe response for the drone product, or document the residual risk."
+  },
+  {
+   "id": "F-018",
+   "area": "security_ras",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "section 11.4, u2_dma_cfg.axi_prot, u2_dma_hi, section 18",
+   "title": "DMA addresses are unrestricted software values",
+   "detail": "FACT: the DMA address registers and u2_dma_hi are plain read-write fields and the only access protection of the CSR is PPROT[1] with i_protect_en (section 11.4). INFERENCE: any APB master that can write the CSR can point the DMA at any address of the AXI fabric.",
+   "action": "Add an optional address window check (base and limit registers) that raises dma_err on a violation, or state that the SoC firewall owns it."
+  },
+  {
+   "id": "F-019",
+   "area": "clock_reset_cdc",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "section 7.3, section 11.2 S18, CDC-005, u2_sts.phy_clk_ok",
+   "title": "Reset behavior with a stopped CLK-PHY is not stated",
+   "detail": "FACT: section 7.3 gives reset sequencing for running clocks, but the PHY may stop CLK-PHY in ULPI low power mode (section 7.1) and the soft-reset pulse crosses through CDC-005 into CLK-PHY. INFERENCE: with the clock stopped a soft reset never completes, and S18 does not check phy_clk_ok.",
+   "action": "State the stopped-clock behavior of i_rst_n_phy and the soft reset, require phy_clk_ok = 1 in S18, and add a timeout flag."
+  },
+  {
+   "id": "F-020",
+   "area": "parameters",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-PARAM-001, ASM-011, section 11.1 (repeated register groups)",
+   "title": "Illegal parameters are undefined and the CSR bank counts are 19 separate parameters",
+   "detail": "FACT: REQ-PARAM-001 and ASM-011 leave illegal values undefined, and section 11.1 requires the integrator to tie each generated PARA_U2_xx_COUNT (19 banks) to PARA_USB2_NUM_EP, NUM_HC or NUM_DMA_CH. INFERENCE: a mismatch between a bank count and the engines produces silent address or endpoint errors.",
+   "action": "Derive all bank counts inside the core from three parameters and add a synthesizable-neutral elaboration check module reported by lint."
+  },
+  {
+   "id": "F-021",
+   "area": "parameters",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "section 4 (illegal combinations), section 8 PARA_USB2_FIFO_DEPTH, ASM-005, CFG-MIN",
+   "title": "The minimum FIFO depth rule does not cover high-bandwidth and double buffering",
+   "detail": "INFERENCE: the rule requires only one maximum packet (256 words), while high-bandwidth isochronous is always present (ASM-005) with up to three 1 024-byte transactions per microframe (768 words) and dbuf doubles each region; CFG-MIN uses 256 words.",
+   "action": "Define the minimum region size as a function of endpoint type, mult and dbuf, and make the check part of REQ-PARAM-001."
+  },
+  {
+   "id": "F-022",
+   "area": "functions",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-FUNC-015, ASM-014, REF-001 section 5.7.4",
+   "title": "Host scheduling cites an open assumption and omits the periodic bandwidth limits",
+   "detail": "FACT: REQ-FUNC-015 has ASM-014 (open) as its source; REF-001 section 5.7.4 limits periodic transfers to 80 % of a high-speed microframe and 90 % of a full-speed or low-speed frame. The requirement does not state the limits or an admission check.",
+   "action": "Add the limits as requirements, with a software-visible refusal or flag when a channel set exceeds them, and close ASM-014."
+  },
+  {
+   "id": "F-023",
+   "area": "functions",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-FUNC-025, REF-001 section 8.7.2",
+   "title": "The time-out requirement has no number",
+   "detail": "FACT: REQ-FUNC-025 refers to the bus turn-around time and gives no value in bit times, while REF-001 section 8.7.2 defines the timer start and stop events.",
+   "action": "Add the worst-case turn-around values per speed from REF-001 sections 7.1.18 and 7.1.19."
+  },
+  {
+   "id": "F-024",
+   "area": "functions",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-FUNC-022 (section 3), ASM-017 (section 20), USB package file 'ECN for Core Spec TEST_MODE selector values.pdf'",
+   "title": "Test mode entry and exit commands are not specified",
+   "detail": "FACT: REQ-FUNC-022 lists the four test modes and the pattern; ASM-017 leaves the entry through SetFeature(TEST_MODE) open. FACT: the user's USB package contains an ECN on the TEST_MODE selector values that the specification does not cite.",
+   "action": "Convert the ECN, add the selector values and the exit action to REQ-FUNC-022, and close ASM-017."
+  },
+  {
+   "id": "F-025",
+   "area": "documentation",
+   "severity": "Observation",
+   "label": "INFERENCE",
+   "locator": "section 2.1 (references), USB package ECN list",
+   "title": "Other ECNs of the USB 2.0 package are not cited",
+   "detail": "INFERENCE: the package lists ECNs on double isochronous IN, phase-locked SOFs, suspend current and DCR that may affect the high-bandwidth isochronous and suspend requirements; only the LPM ECN is referenced.",
+   "action": "Read the ECNs and record each as applicable or not applicable."
+  },
+  {
+   "id": "F-026",
+   "area": "verification_quality",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "section 15.1, section 2.3, TEST-001 to TEST-029",
+   "title": "The plan has no interoperability or compliance test with real stacks",
+   "detail": "FACT: section 15.1 lists an FPGA prototype after the RTL and section 2.3 states that certification is not claimed; TEST-001 to TEST-029 use a bus model. INFERENCE: no test runs a real host or device stack (for example Linux gadget or TinyUSB) or the USB-IF device test sequence.",
+   "action": "Add interoperability tests (CDC-ACM, UVC, mass storage with a real stack) and a compliance pre-check plan, with entry and exit criteria."
+  },
+  {
+   "id": "F-027",
+   "area": "documentation",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-FUNC-015, REQ-FUNC-032, REQ-FUNC-034 to REQ-FUNC-036, section 20",
+   "title": "Several requirements take their source from open assumptions, and the open items have no owner or date",
+   "detail": "FACT: REQ-FUNC-015, 032, 034, 035 and 036 cite ASM-014, 021, 022, 023 and 020 as their source and those are open; section 20 has 41 open items in a table without owner or date columns.",
+   "action": "Add owner and date columns, resolve or label each requirement 'proposed' until its assumption closes."
+  },
+  {
+   "id": "F-028",
+   "area": "verification_quality",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "section 15.2 (TEST-007, TEST-009), REQ-FUNC-011, REQ-FUNC-018",
+   "title": "Millisecond timings have no simulation time scaling",
+   "detail": "INFERENCE: REQ-FUNC-011 (50 ms reset, 3 160 000 CLK-PHY cycles at 60 MHz), REQ-FUNC-018 (3 ms idle) and REQ-FUNC-019 (5 ms) are exercised by TEST-007 and TEST-009, and the specification has no timer scaling or test-time register to keep regression time short.",
+   "action": "Add a verification-only timer scale (parameter or CSR field in test mode) and require that the scaled and unscaled timings are both tested at least once."
+  },
+  {
+   "id": "F-029",
+   "area": "asic_feasibility",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "section 14.3, section 13, section 10.4",
+   "title": "No critical-path statement for the 60 MHz domain",
+   "detail": "FACT: section 14.3 leaves the frontend, libraries and corners to the RTL stage, and section 13 gives the CLK-PHY target of 60 MHz without naming a path. INFERENCE: the CRC16 update per byte, the RAM arbitration with the 20-cycle budget and the token decode are the likely critical paths and no pipeline split is stated.",
+   "action": "List the expected critical paths with a pipeline stage count each, and require a synthesis run of one reference configuration before RTL sign-off."
+  },
+  {
+   "id": "F-030",
+   "area": "integration_effort",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "section 6.2 (pad wrapper note), section 7.3, section 14.2",
+   "title": "The specification has no integration checklist",
+   "detail": "FACT: the tie-offs (i_ovrcur_n, i_protect_en, i_slverr_en), the pad wrapper for the bidirectional ULPI bus, the four wrappers and the RAM macro wrapper are described in separate sections. INFERENCE: the integrator has to assemble the bring-up order (clock, reset, PHY reset, phy_clk_ok, soft reset) from sections 7 and 11.2.",
+   "action": "Add one integration table: tie-offs, clock and reset sequence, macro and pad wrappers, and the checks at power-up."
+  },
+  {
+   "id": "F-031",
+   "area": "dft",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "section 16, TBD-009",
+   "title": "DFT ports and RAM test position are deferred to the SoC flow",
+   "detail": "FACT: section 16 defers the scan ports to TBD-009 and the RAM bypass and MBIST to the SoC memory flow, with CLK-PHY stopped by the PHY replaced by the scan clock.",
+   "action": "Name the scan clock mux ownership and the RAM bypass wrapper requirement before RTL."
+  },
+  {
+   "id": "F-032",
+   "area": "market_position",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "section 1.3, REF-011 chapter 3, TI AM335x TRM section 16.0.4, ESP32-S3 TRM section 32.2, RP2040 datasheet section 4.1.1.1",
+   "title": "Feature set is close to the DWC_otg and the reference SoCs, with deliberate omissions",
+   "detail": "FACT: compared with the sources of chapter 19, the specification adds an optional LPM and split, scatter-gather and double buffering, and omits HNP, SRP, ADP, battery charging detection, HSIC, a dedicated FIFO per IN endpoint and per-endpoint interrupts. These omissions follow user answers of 2026-11-20 and are recorded in section 20.",
+   "action": "None: keep the omissions recorded."
+  },
+  {
+   "id": "F-033",
+   "area": "verification_quality",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "section 19, inventory summary",
+   "title": "Every requirement has a test",
+   "detail": "FACT: the inventory reports 59 requirements, 29 tests, 15 properties and 0 requirements without a test; section 19 maps each requirement to a module, a test, a method and a configuration.",
+   "action": "None."
+  },
+  {
+   "id": "F-034",
+   "area": "application_fit",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "section 1.4, section 1.2, ASM-006",
+   "title": "The application numbers are the author's proposals",
+   "detail": "FACT: section 1.4 gives a measurable need per feature, and ASM-006 records that the drone values (MAVLink 921 600 baud, 6 endpoints, MJPEG 720p30) are proposals that the user has not confirmed.",
+   "action": "Confirm the values with the product owner and mark them 'confirmed' with a date."
+  }
+ ]
+}

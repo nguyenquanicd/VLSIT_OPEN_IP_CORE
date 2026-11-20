@@ -1,0 +1,89 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p................................."
+  },
+  [
+   "Microframes and polling",
+   {
+    "name": "w_uframe_tick",
+    "wave": "010......10......10......10......."
+   },
+   {
+    "name": "u2_hc_cfg.interval",
+    "wave": "=.................................",
+    "data": [
+     "2"
+    ]
+   },
+   {
+    "name": "w_poll_due",
+    "wave": "010..............10..............."
+   }
+  ],
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "0......10..............1...0......"
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "0......10..............1...0......"
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x......=x..............====x......",
+    "data": [
+     "NAK",
+     "DATA0",
+     "D0",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0.1..0............1..0.......10..."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0.1..0............1..0.......10..."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x.===x............===x.......=x...",
+    "data": [
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "ACK"
+    ]
+   }
+  ],
+  {
+   "name": "u2_hc_int.nak",
+   "wave": "0........1........................"
+  },
+  {
+   "name": "u2_hc_int.done",
+   "wave": "0..............................1.."
+  }
+ ],
+ "head": {
+  "text": "WF-033: host interval polling, NAK then retry at the next interval (OP-018, success)"
+ },
+ "foot": {
+  "text": "interval = 2 microframes. The first poll is answered with NAK; the hardware retries at the next interval (two microframes later), receives the data and ACKs it."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

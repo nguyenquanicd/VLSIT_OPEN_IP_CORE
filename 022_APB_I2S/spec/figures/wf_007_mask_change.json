@@ -1,0 +1,55 @@
+{
+ "signal": [
+  {
+   "name": "i_bclk_rx",
+   "wave": "p................................."
+  },
+  {
+   "name": "i_ws_rx",
+   "wave": "1000000000000000100000000000000010"
+  },
+  {
+   "name": "i_sdi_0",
+   "wave": "0=...=...=...=...=...=...=...=...0",
+   "data": [
+    "s0",
+    "s1",
+    "s2",
+    "s3",
+    "s0",
+    "s1",
+    "s2",
+    "s3"
+   ]
+  },
+  {
+   "name": "w_mask_apb",
+   "wave": "=........=........................",
+   "data": [
+    "1111",
+    "1101"
+   ]
+  },
+  {
+   "name": "w_mask_act",
+   "wave": "=...............=.................",
+   "data": [
+    "1111",
+    "1101"
+   ]
+  },
+  {
+   "name": "w_rx_push",
+   "wave": "0000100010001000100010000000100010"
+  }
+ ],
+ "head": {
+  "text": "WF-007 OP-006 Slot mask change at a frame boundary (corner)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock, four 4-bit slots. The mask written during frame 1 applies at the start of frame 2: slot 1 is then skipped and no word is pushed for it."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

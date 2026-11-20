@@ -1,0 +1,53 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p...||............"
+  },
+  {
+   "name": "i_ovrcur_n",
+   "wave": "1.0.||............"
+  },
+  {
+   "name": "w_oc_filter_cnt",
+   "wave": "=.==||===.........",
+   "data": [
+    "0",
+    "1",
+    "2",
+    "15",
+    "16",
+    "0"
+   ]
+  },
+  {
+   "name": "o_vbus_pwr_en",
+   "wave": "1...||...0.....1.."
+  },
+  {
+   "name": "o_utmi_drvvbus",
+   "wave": "1...||....0.....1."
+  },
+  {
+   "name": "u2_hsts.oc_act",
+   "wave": "0...||..1........."
+  },
+  {
+   "name": "u2_irq_raw.ocur",
+   "wave": "0...||..1..0......"
+  },
+  {
+   "name": "u2_hport.vbus_drv",
+   "wave": "1...||......0.1..."
+  }
+ ],
+ "head": {
+  "text": "WF-035: port over-current: filter, power off, flag, restore (OP-020, error)"
+ },
+ "foot": {
+  "text": "Not to scale. i_ovrcur_n low for 16 CLK-BUS cycles (gap) sets ocur and oc_act; o_vbus_pwr_en falls within 2 cycles and o_utmi_drvvbus follows through CDC-001. Power returns only after software clears ocur and rewrites vbus_drv (0 then 1)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

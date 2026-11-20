@@ -1,0 +1,79 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p..........|..........|..........."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0......|1..0......|1..0......."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0......|1..0......|1..0......."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x......|===x......|===x.......",
+    "data": [
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "IN",
+     "ADDR",
+     "EP,C5"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0.....1...0|.....1...0|.....1...0."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0.....1...0|.....1...0|.....1...0."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x.....====x|.....====x|.....====x.",
+    "data": [
+     "DATA2",
+     "D0",
+     "CRCL",
+     "CRCH",
+     "DATA1",
+     "D0",
+     "CRCL",
+     "CRCH",
+     "DATA0",
+     "D0",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  {
+   "name": "u2_epi_ctrl.mult",
+   "wave": "=.................................",
+   "data": [
+    "2"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-028: high-bandwidth isochronous IN, three transactions in one microframe (OP-003, corner)"
+ },
+ "foot": {
+  "text": "Not to scale. mult = 2: DATA2, DATA1 and DATA0 PIDs follow in the three IN transactions of the microframe; isochronous has no handshake."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

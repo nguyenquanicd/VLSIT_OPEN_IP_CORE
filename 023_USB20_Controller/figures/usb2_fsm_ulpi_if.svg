@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1710" height="520" viewBox="10 10 1710 520" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="1710" height="520" fill="#FFFFFF"/>
+<ellipse cx="655" cy="70" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="655" y="77" text-anchor="middle">ENUM_ST_UL_IDLE</text>
+<ellipse cx="1105" cy="270" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1105" y="277" text-anchor="middle">ENUM_ST_UL_TXCMD</text>
+<ellipse cx="1130" cy="470" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1130" y="477" text-anchor="middle">ENUM_ST_UL_TXDATA</text>
+<ellipse cx="1550" cy="70" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1550" y="77" text-anchor="middle">ENUM_ST_UL_TXSTOP</text>
+<ellipse cx="185" cy="270" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="185" y="277" text-anchor="middle">ENUM_ST_UL_RX</text>
+<ellipse cx="635" cy="270" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="635" y="277" text-anchor="middle">ENUM_ST_UL_REGCMD</text>
+<ellipse cx="185" cy="470" rx="145" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="185" y="477" text-anchor="middle">ENUM_ST_UL_REGDATA</text>
+<ellipse cx="660" cy="470" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="660" y="477" text-anchor="middle">ENUM_ST_UL_REGRD</text>
+<path d="M 714.394 96.3972 L 1045.09 243.375" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1045.09,243.375 1031.69,243.984 1036.56,233.018" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="776.742" y="158.886" width="206" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="879.742" y="176.886" text-anchor="middle">tx request &amp; dir low</text>
+<path d="M 1108.75 299.988 L 1126.25 440.011" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1126.25,440.011 1118.81,428.848 1130.72,427.36" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1073.9" y="359" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1117.5" y="377" text-anchor="middle">nxt high</text>
+<path d="M 1160.73 440.732 L 1519.27 99.2683" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1519.27,99.2683 1514.72,111.889 1506.44,103.199" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1246.9" y="259" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1340" y="277" text-anchor="middle">last byte accepted</text>
+<path d="M 1410 70 L 780 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="780,70 792,64 792,76" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="992" y="59" width="206" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1095" y="77" text-anchor="middle">stp driven one cycle</text>
+<path d="M 593.593 96.1305 L 413.493 157.554 L 244.356 244.742" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="244.356,244.742 252.273,233.911 257.771,244.577" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="285.324" y="190.148" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="328.924" y="208.148" text-anchor="middle">dir high</text>
+<path d="M 244.356 244.742 L 424.456 183.319 L 593.593 96.1305" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="593.593,96.1305 585.676,106.962 580.178,96.2957" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="470.375" y="128.725" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="509.024" y="146.725" text-anchor="middle">dir low</text>
+<path d="M 975 270 L 635 180 L 295 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="295,270 305.065,261.129 308.136,272.73" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="721.8" y="214" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="805" y="232" text-anchor="middle">dir high (abort)</text>
+<path d="M 1030.39 448.919 L 271.903 288.392" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="271.903,288.392 284.885,285.007 282.401,296.747" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="567.947" y="357.655" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="651.147" y="375.655" text-anchor="middle">dir high (abort)</text>
+<path d="M 652.001 99.9914 L 637.999 240.007" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="637.999,240.007 633.223,227.47 645.163,228.664" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="522.2" y="158.999" width="245.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="645" y="176.999" text-anchor="middle">phy_acc start &amp; bus idle</text>
+<path d="M 574.198 297.023 L 246.194 442.803" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="246.194,442.803 254.723,432.446 259.597,443.412" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="331.946" y="358.913" width="156.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="410.196" y="376.913" text-anchor="middle">write, nxt high</text>
+<path d="M 638.749 299.989 L 656.252 440.012" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="656.252,440.012 648.81,428.849 660.717,427.36" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="574.2" y="359" width="146.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="647.5" y="377" text-anchor="middle">read, dir high</text>
+<path d="M 219.252 440.849 L 621.073 98.8739" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="621.073,98.8739 615.823,111.221 608.046,102.082" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="366.663" y="258.861" width="107" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="420.163" y="276.861" text-anchor="middle">stp driven</text>
+<path d="M 790 470 L 920 470 L 920 70 L 780 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="780,70 792,64 792,76" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="826.9" y="259" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="920" y="277" text-anchor="middle">data byte captured</text>
+<path d="M 495 270 L 295 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="295,270 307,264 307,276" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="311.8" y="259" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="395" y="277" text-anchor="middle">dir high (abort)</text>
+</svg>

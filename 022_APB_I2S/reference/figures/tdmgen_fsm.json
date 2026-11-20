@@ -1,0 +1,61 @@
+{
+  "page_name": "FSM_TDMGEN",
+  "out_name": "tdmgen_fsm.drawio",
+  "function": "tdmgen",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_WAIT"
+    },
+    {
+      "name": "ENUM_ST_PULSE"
+    },
+    {
+      "name": "ENUM_ST_FRAME"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_WAIT",
+      "label": "enable & TDM"
+    },
+    {
+      "src": "ENUM_ST_WAIT",
+      "dst": "ENUM_ST_PULSE",
+      "label": "frame time"
+    },
+    {
+      "src": "ENUM_ST_PULSE",
+      "dst": "ENUM_ST_FRAME",
+      "label": "1 sclk"
+    },
+    {
+      "src": "ENUM_ST_FRAME",
+      "dst": "ENUM_ST_PULSE",
+      "label": "frame time"
+    },
+    {
+      "src": "ENUM_ST_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "!enable"
+    },
+    {
+      "src": "ENUM_ST_PULSE",
+      "dst": "ENUM_ST_IDLE",
+      "label": "!enable"
+    },
+    {
+      "src": "ENUM_ST_FRAME",
+      "dst": "ENUM_ST_IDLE",
+      "label": "!enable"
+    }
+  ],
+  "layout": {
+    "margin": 40
+  }
+}

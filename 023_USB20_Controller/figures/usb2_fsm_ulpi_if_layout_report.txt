@@ -1,0 +1,11 @@
+FSM: ulpi_if
+STATES: 8, TRANSITIONS: 14
+LAYOUT: flow-tb-3-g200
+CROSSINGS: 8
+LABEL CONFLICTS: 0
+BENDS: 5
+MINIMUM GAP: 140.0 px (minimum 140 px)
+TEXT FIT: PASS (worst fill ratio 0.55)
+DISTRIBUTION: PASS (7 x-centers, 3 y-centers)
+PAGE: 1650 x 460 px
+RESULT: PASS

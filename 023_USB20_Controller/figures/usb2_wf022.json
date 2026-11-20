@@ -1,0 +1,69 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p......................."
+  },
+  {
+   "name": "u2_phy_acc.start",
+   "wave": "01......01..........0..."
+  },
+  {
+   "name": "u2_phy_acc.busy",
+   "wave": "0.1.....0.1..........0.."
+  },
+  {
+   "name": "i_ulpi_dir",
+   "wave": "0..............1..0....."
+  },
+  {
+   "name": "i_ulpi_nxt",
+   "wave": "0..1..0.....1.0........."
+  },
+  {
+   "name": "o_ulpi_stp",
+   "wave": "0.....10................"
+  },
+  {
+   "name": "o_ulpi_data_oe",
+   "wave": "0.1....0...1...0........"
+  },
+  {
+   "name": "o_ulpi_data",
+   "wave": "x.==x.xx...=x...........",
+   "data": [
+    "REGW",
+    "WDATA",
+    "REGR"
+   ]
+  },
+  {
+   "name": "i_ulpi_data",
+   "wave": "x...............=x......",
+   "data": [
+    "RDATA"
+   ]
+  },
+  {
+   "name": "u2_phy_acc.rdata",
+   "wave": "=..................=....",
+   "data": [
+    "old",
+    "RDATA"
+   ]
+  },
+  {
+   "name": "u2_irq_raw.phy_done",
+   "wave": "0.......1..............."
+  }
+ ],
+ "head": {
+  "text": "WF-022: ULPI PHY register write then read (OP-014, success)"
+ },
+ "foot": {
+  "text": "Register write: command, address in the command, data byte, stp. Register read: command, turnaround (dir high), data byte, dir low. rdata is valid when busy falls."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

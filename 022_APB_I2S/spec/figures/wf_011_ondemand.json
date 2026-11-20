@@ -1,0 +1,72 @@
+{
+ "signal": [
+  {
+   "name": "o_bclk_tx",
+   "wave": "p............................"
+  },
+  {
+   "name": "w_tx_level",
+   "wave": "==...=...........=..=...=....",
+   "data": [
+    "2",
+    "1",
+    "0",
+    "2",
+    "1",
+    "0"
+   ]
+  },
+  {
+   "name": "w_apb_wr_frame",
+   "wave": "00000000000000001000000000000"
+  },
+  {
+   "name": "w_ready",
+   "wave": "00000000000000000111000000000"
+  },
+  {
+   "name": "w_fsm_frame_state",
+   "wave": "=........=.........=.........",
+   "data": [
+    "RUN",
+    "ARM",
+    "RUN"
+   ]
+  },
+  {
+   "name": "o_ws_tx",
+   "wave": "00001111111111111110000111100"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "0========00000000000========0",
+   "data": [
+    "L3",
+    "L2",
+    "L1",
+    "L0",
+    "R3",
+    "R2",
+    "R1",
+    "R0",
+    "N3",
+    "N2",
+    "N1",
+    "N0",
+    "M3",
+    "M2",
+    "M1",
+    "M0"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-011 OP-009 On-demand frame start (corner)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock, master with on-demand. After frame 1 the FIFO is empty, so the frame sync stays inactive and no frame starts until two words are written; then frame 2 starts at the next bit."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

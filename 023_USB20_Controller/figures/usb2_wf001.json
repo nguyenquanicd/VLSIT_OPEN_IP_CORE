@@ -1,0 +1,53 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p.|.|......."
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "==|=|=======",
+   "data": [
+    "J",
+    "SE0",
+    "K",
+    "K",
+    "J",
+    "K",
+    "J",
+    "K",
+    "J",
+    "SE0"
+   ]
+  },
+  {
+   "name": "o_utmi_txvalid",
+   "wave": "0.|1|0......"
+  },
+  {
+   "name": "o_utmi_xcvrsel",
+   "wave": "=.|.|......=",
+   "data": [
+    "FS",
+    "HS"
+   ]
+  },
+  {
+   "name": "o_utmi_termsel",
+   "wave": "1.|.|......0"
+  },
+  {
+   "name": "u2_irq_raw.enum",
+   "wave": "0.|.|......1"
+  }
+ ],
+ "head": {
+  "text": "WF-001: device reset and chirp to high-speed (OP-001, success)"
+ },
+ "foot": {
+  "text": "Not to scale. Cycle 1: bus reset starts (T0). Cycle 3: device Chirp K (1 to 7 ms). Cycles 5 to 10: hub K-J-K-J-K-J. Cycle 11: high-speed termination on, enum flag set."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

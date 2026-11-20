@@ -1,0 +1,72 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p....|||........|||.....|.....|......"
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "0....|||......10|||.....|.....|1...0."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "0....|||......10|||.....|.....|1...0."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x....|||......=x|||.....|.....|====x.",
+    "data": [
+     "ACK",
+     "DATA0",
+     "D0",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "01..0|||.1..0...|||.1..0|.1..0|......"
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "01..0|||.1..0...|||.1..0|.1..0|......"
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x===x|||.===x...|||.===x|.===x|......",
+    "data": [
+     "SPLIT",
+     "HUB,SC0",
+     "PORT",
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "SPLIT",
+     "HUB,SC1",
+     "PORT",
+     "IN",
+     "ADDR",
+     "EP,C5"
+    ]
+   }
+  ],
+  {
+   "name": "u2_hc_int.done",
+   "wave": "0....|||........|||.....|.....|.....1"
+  }
+ ],
+ "head": {
+  "text": "WF-013: start-split and complete-split bulk IN through a hub (OP-008, success)"
+ },
+ "foot": {
+  "text": "Not to scale. Start-split: SPLIT token then IN token, hub ACK. Later complete-split: SPLIT token then IN token, and the hub returns the data."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

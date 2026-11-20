@@ -1,0 +1,50 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p............."
+  },
+  {
+   "name": "u2_dctrl.test_mode",
+   "wave": "==............",
+   "data": [
+    "0",
+    "4"
+   ]
+  },
+  {
+   "name": "o_utmi_txvalid",
+   "wave": "0..1.........."
+  },
+  {
+   "name": "i_utmi_txready",
+   "wave": "0..1.........."
+  },
+  {
+   "name": "o_utmi_dataout",
+   "wave": "x..===========",
+   "data": [
+    "00",
+    "00",
+    "00",
+    "C3",
+    "00",
+    "AA",
+    "AA",
+    "EE",
+    "EE",
+    "FE",
+    "7F"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-016: Test_Packet transmitted repeatedly (OP-011, success)"
+ },
+ "foot": {
+  "text": "Test pattern of REF-001 section 7.1.20 (not to scale, first bytes shown); the pattern repeats until reset."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

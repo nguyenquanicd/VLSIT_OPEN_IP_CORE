@@ -1,0 +1,46 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_mclk",
+   "wave": "p..................."
+  },
+  {
+   "name": "w_en",
+   "wave": "11110000000000000000"
+  },
+  {
+   "name": "w_fsm_frame_state",
+   "wave": "=....=......=.......",
+   "data": [
+    "RUN",
+    "STOP",
+    "OFF"
+   ]
+  },
+  {
+   "name": "i2s_sts.tx_busy",
+   "wave": "11111111111100000000"
+  },
+  {
+   "name": "w_flush",
+   "wave": "00000000000000100000"
+  },
+  {
+   "name": "w_tx_level",
+   "wave": "=..............=....",
+   "data": [
+    "6",
+    "0"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-016 OP-002 and OP-015 Unit stop, busy and flush (corner)"
+ },
+ "foot": {
+  "text": "Cell = one master clock cycle. Clearing the enable finishes the running frame (STOP), busy falls at its end, and a flush empties the FIFO."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

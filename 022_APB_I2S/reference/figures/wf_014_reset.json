@@ -1,0 +1,46 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p............."
+  },
+  {
+   "name": "i_rst_n_apb",
+   "wave": "00011111101111"
+  },
+  {
+   "name": "w_rst_apb_sync",
+   "wave": "00000111100011"
+  },
+  {
+   "name": "i_clk_sclk",
+   "wave": "p......",
+   "period": 2
+  },
+  {
+   "name": "i_rst_n_sclk",
+   "wave": "00011111101111"
+  },
+  {
+   "name": "w_rst_sclk_sync",
+   "wave": "00000001100000"
+  },
+  {
+   "name": "o_ws_out",
+   "wave": "00000000000000"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "00000000000000"
+  }
+ ],
+ "head": {
+  "text": "WF-014 OP-016 Reset assertion and release on both domains (corner)"
+ },
+ "foot": {
+  "text": "Assertion is asynchronous; the internal reset releases on the second clock edge of its domain. Outputs are low while the reset is active."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

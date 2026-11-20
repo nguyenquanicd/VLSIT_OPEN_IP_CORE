@@ -1,0 +1,40 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p............."
+  },
+  {
+   "name": "i_ws_slv",
+   "wave": "11000000111111",
+   "phase": 0.5
+  },
+  {
+   "name": "w_tx_fifo_empty",
+   "wave": "11111111111111"
+  },
+  {
+   "name": "w_underrun_s",
+   "wave": "00010000000000"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "00000000000000",
+   "phase": 0.5
+  },
+  {
+   "name": "o_int_tx_ur_0",
+   "wave": "00001..........",
+   "phase": 0.5
+  }
+ ],
+ "head": {
+  "text": "WF-006 OP-003 TX FIFO underrun (error)"
+ },
+ "foot": {
+  "text": "The FIFO is empty when the word select falls: zeros are sent for the whole frame, the cause is set at R(0) and the interrupt follows after synchronization."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

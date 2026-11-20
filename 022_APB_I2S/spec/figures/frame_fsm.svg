@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="600" viewBox="10 10 520 600" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="520" height="600" fill="#FFFFFF"/>
+<ellipse cx="270" cy="70" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="270" y="77" text-anchor="middle">ENUM_ST_OFF</text>
+<ellipse cx="270" cy="230" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="270" y="237" text-anchor="middle">ENUM_ST_ARM</text>
+<ellipse cx="270" cy="390" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="270" y="397" text-anchor="middle">ENUM_ST_RUN</text>
+<ellipse cx="135" cy="550" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="135" y="557" text-anchor="middle">ENUM_ST_ERR</text>
+<ellipse cx="395" cy="550" rx="105" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="395" y="557" text-anchor="middle">ENUM_ST_STOP</text>
+<path d="M 270 100 L 256 150 L 270 200" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="270,200 260.987,190.062 272.542,186.827" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="194.65" y="114" width="136.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="263" y="132" text-anchor="middle">en &amp; snapshot</text>
+<path d="M 270 260 L 256 310 L 270 360" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="270,360 260.987,350.062 272.542,346.827" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="204.55" y="274" width="116.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="263" y="292" text-anchor="middle">frame start</text>
+<path d="M 270 360 L 284 310 L 270 260" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="270,260 279.013,269.938 267.458,273.173" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="154.2" y="324" width="245.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="277" y="342" text-anchor="middle">frame end | error &amp; auto</text>
+<path d="M 245.541 418.989 L 159.459 521.011" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="159.459,521.011 162.612,507.97 171.783,515.709" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="134.15" y="459" width="136.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="202.5" y="477" text-anchor="middle">error &amp; !auto</text>
+<path d="M 292.755 419.127 L 372.125 520.721" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="372.125,520.721 360.009,514.959 369.465,507.571" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="313.59" y="458.924" width="37.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="332.44" y="476.924" text-anchor="middle">!en</text>
+<path d="M 270 200 L 284 150 L 270 100" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="270,100 279.013,109.938 267.458,113.173" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="258.15" y="164" width="37.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="277" y="182" text-anchor="middle">!en</text>
+<path d="M 147.545 520.263 L 156.432 370.565 L 257.455 259.737" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="257.455,259.737 253.805,272.647 244.937,264.564" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="178.193" y="304.151" width="57.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="206.943" y="322.151" text-anchor="middle">flush</text>
+<path d="M 135 520 L 135 70 L 175 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="175,70 163,76 163,64" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="116.15" y="284" width="37.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="135" y="302" text-anchor="middle">!en</text>
+<path d="M 395 520 L 395 70 L 365 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="365,70 377,64 377,76" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="346.45" y="284" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="395" y="302" text-anchor="middle">frame end</text>
+</svg>

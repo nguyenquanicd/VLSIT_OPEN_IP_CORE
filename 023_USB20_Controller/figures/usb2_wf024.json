@@ -1,0 +1,45 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p..|....|....."
+  },
+  {
+   "name": "i_utmi_vbusvalid",
+   "wave": "1..|.0..|.1..."
+  },
+  {
+   "name": "i_utmi_iddig",
+   "wave": "1..|0...|....."
+  },
+  {
+   "name": "o_utmi_dppulldown",
+   "wave": "0..|....|1...."
+  },
+  {
+   "name": "o_utmi_dmpulldown",
+   "wave": "0..|....|1...."
+  },
+  {
+   "name": "o_utmi_drvvbus",
+   "wave": "0..|....|.1..."
+  },
+  {
+   "name": "u2_sts.role",
+   "wave": "0..|....|..1.."
+  },
+  {
+   "name": "u2_irq_raw.role_chg",
+   "wave": "0..|....|..1.."
+  }
+ ],
+ "head": {
+  "text": "WF-024: dual-role port changes from device to host on an A-plug (OP-015, success)"
+ },
+ "foot": {
+  "text": "Not to scale. The B-plug cable is removed (VBUS lost), a micro-A plug is attached (ID low, 50 ms sampling), the core releases the device pull-up, enables the pull-downs and drives VBUS: the role becomes host."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

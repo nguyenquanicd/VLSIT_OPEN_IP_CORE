@@ -1,0 +1,42 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p......................."
+  },
+  {
+   "name": "o_ws_out",
+   "wave": "100000000000000000000000",
+   "phase": 0.5
+  },
+  {
+   "name": "o_sdo_oe_n",
+   "wave": "000000111111111111000000",
+   "phase": 0.5
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "====00zzzzzzzzzzzz====00",
+   "data": [
+    "a3",
+    "a2",
+    "a1",
+    "a0",
+    "d3",
+    "d2",
+    "d1",
+    "d0"
+   ],
+   "phase": 0.5
+  }
+ ],
+ "head": {
+  "text": "WF-013 OP-015 Serial output enable with disabled slots (corner)"
+ },
+ "foot": {
+  "text": "Reduced scale: 6-cycle slots, 4 slots; slots 1 and 2 are disabled, the data line is released (high impedance) and o_sdo_oe_n is high."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

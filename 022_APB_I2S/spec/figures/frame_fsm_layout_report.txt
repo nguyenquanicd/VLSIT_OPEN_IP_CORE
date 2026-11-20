@@ -1,0 +1,11 @@
+FSM: frame
+STATES: 5, TRANSITIONS: 9
+LAYOUT: flow-tb-snake-4-g60
+CROSSINGS: 0
+LABEL CONFLICTS: 0
+BENDS: 7
+MINIMUM GAP: 60.0 px (minimum 60 px)
+TEXT FIT: PASS (worst fill ratio 0.52)
+DISTRIBUTION: PASS (3 x-centers, 4 y-centers)
+PAGE: 460 x 540 px
+RESULT: PASS

@@ -1,0 +1,53 @@
+{
+  "page_name": "FSM_TDMFRM",
+  "out_name": "tdmfrm_fsm.drawio",
+  "function": "tdmfrm",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_OFFS"
+    },
+    {
+      "name": "ENUM_ST_SLOT"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_OFFS",
+      "label": "pulse & offset"
+    },
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_SLOT",
+      "label": "pulse & !offset"
+    },
+    {
+      "src": "ENUM_ST_OFFS",
+      "dst": "ENUM_ST_SLOT",
+      "label": "1 sclk"
+    },
+    {
+      "src": "ENUM_ST_SLOT",
+      "dst": "ENUM_ST_SLOT",
+      "label": "slot end & more slots"
+    },
+    {
+      "src": "ENUM_ST_SLOT",
+      "dst": "ENUM_ST_OFFS",
+      "label": "last slot & pulse & offset"
+    },
+    {
+      "src": "ENUM_ST_SLOT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "last slot & no pulse"
+    }
+  ],
+  "layout": {
+    "margin": 40
+  }
+}

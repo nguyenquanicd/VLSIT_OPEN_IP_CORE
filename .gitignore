@@ -14,6 +14,7 @@
 # --- whole-IP exclusions (deliberately not versioned) ----------------------
 /016_CAN_Controller/
 /018_MKV_Block_Cipher/
+/FTEL/
 
 # --- simulation waveforms & sim data --------------------------------------
 *.vcd

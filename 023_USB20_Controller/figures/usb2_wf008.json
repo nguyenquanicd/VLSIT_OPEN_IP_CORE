@@ -1,0 +1,65 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p................"
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0.1.....0...."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0.1.....0...."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x.======x....",
+    "data": [
+     "SETUP",
+     "ADDR",
+     "EP,C5",
+     "DATA0",
+     "B0",
+     "B1",
+     "B7",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0.............10."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0.............10."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x.............=x.",
+    "data": [
+     "ACK"
+    ]
+   }
+  ],
+  {
+   "name": "u2_epo_int.setup",
+   "wave": "0..............1."
+  }
+ ],
+ "head": {
+  "text": "WF-008: control SETUP transaction (OP-002, success)"
+ },
+ "foot": {
+  "text": "SETUP data stage is always DATA0 and is ACKed; the sequence bits of host and device are equal afterwards."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="970" height="600" viewBox="10 10 970 600" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="970" height="600" fill="#FFFFFF"/>
+<ellipse cx="495" cy="70" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="495" y="77" text-anchor="middle">ENUM_ST_PT_IDLE</text>
+<ellipse cx="495" cy="230" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="495" y="237" text-anchor="middle">ENUM_ST_PT_IPD</text>
+<ellipse cx="495" cy="390" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="495" y="397" text-anchor="middle">ENUM_ST_PT_PID</text>
+<ellipse cx="165" cy="550" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="165" y="557" text-anchor="middle">ENUM_ST_PT_DATA</text>
+<ellipse cx="505" cy="550" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="505" y="557" text-anchor="middle">ENUM_ST_PT_CRC</text>
+<ellipse cx="835" cy="550" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="835" y="557" text-anchor="middle">ENUM_ST_PT_END</text>
+<path d="M 495 100 L 495 200" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="495,200 489,188 501,188" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="441.5" y="139" width="107" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="495" y="157" text-anchor="middle">tx request</text>
+<path d="M 495 260 L 495 360" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="495,360 489,348 501,348" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="372.2" y="299" width="245.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="495" y="317" text-anchor="middle">turn-around time elapsed</text>
+<path d="M 440.511 416.419 L 220.453 523.114" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="220.453,523.114 228.633,512.48 233.868,523.278" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="272.032" y="458.767" width="116.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="330.482" y="476.767" text-anchor="middle">data packet</text>
+<path d="M 496.875 419.996 L 503.125 520.004" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="503.125,520.004 496.388,508.402 508.365,507.653" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="436.6" y="459" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="500" y="477" text-anchor="middle">token packet</text>
+<path d="M 550.756 416.238 L 779.244 523.762" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="779.244,523.762 765.831,524.081 770.941,513.224" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="581.8" y="459" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="665" y="477" text-anchor="middle">handshake packet</text>
+<path d="M 290 550 L 390 550" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="390,550 378,556 378,544" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="222.15" y="539" width="235.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="340" y="557" text-anchor="middle">last data byte accepted</text>
+<path d="M 620 550 L 720 550" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="720,550 708,556 708,544" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="576.9" y="539" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="670" y="557" text-anchor="middle">CRC bytes accepted</text>
+<path d="M 814.104 520.499 L 722.148 269.576 L 515.949 99.5757" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="515.949,99.5757 529.025,102.58 521.391,111.839" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="729.476" y="384.038" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="768.126" y="402.038" text-anchor="middle">tx idle</text>
+</svg>

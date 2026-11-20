@@ -1,0 +1,57 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p......."
+  },
+  {
+   "name": "i_apb_psel",
+   "wave": "01101100"
+  },
+  {
+   "name": "i_apb_penable",
+   "wave": "00100100"
+  },
+  {
+   "name": "i_apb_pwrite",
+   "wave": "01100000"
+  },
+  {
+   "name": "i_apb_paddr",
+   "wave": "x=.x=.xx",
+   "data": [
+    "tx_ctrl",
+    "0x5"
+   ]
+  },
+  {
+   "name": "i_apb_pstrb",
+   "wave": "x=.x=.xx",
+   "data": [
+    "0011",
+    "0000"
+   ]
+  },
+  {
+   "name": "o_apb_pready",
+   "wave": "00100100"
+  },
+  {
+   "name": "o_apb_pslverr",
+   "wave": "00100100"
+  },
+  {
+   "name": "o_reg_wr_en",
+   "wave": "00000000"
+  }
+ ],
+ "head": {
+  "text": "WF-002 OP-016 APB error responses (PSLVERR)"
+ },
+ "foot": {
+  "text": "i_slverr_en = 1. A partial-strobe write and a misaligned read answer in the first access cycle with no wait state and no register change."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,61 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p............."
+  },
+  {
+   "name": "i_apb_psel",
+   "wave": "01........01.0"
+  },
+  {
+   "name": "i_apb_penable",
+   "wave": "0.1.01.01.0..."
+  },
+  {
+   "name": "i_apb_pwrite",
+   "wave": "x1..0..1..x..."
+  },
+  {
+   "name": "i_apb_paddr",
+   "wave": "x=..=..=..x...",
+   "data": [
+    "irq_en",
+    "irq_raw",
+    "irq_raw"
+   ]
+  },
+  {
+   "name": "i_apb_pwdata",
+   "wave": "x=..x..=..x...",
+   "data": [
+    "0x3",
+    "0x1"
+   ]
+  },
+  {
+   "name": "o_apb_pready",
+   "wave": "0..10.10.10..."
+  },
+  {
+   "name": "o_apb_prdata",
+   "wave": "x.....=x......",
+   "data": [
+    "0x1"
+   ]
+  },
+  {
+   "name": "u2_irq_raw.sof",
+   "wave": "1........0...."
+  }
+ ],
+ "head": {
+  "text": "WF-023: APB4 write, read and w1c clear of an interrupt flag (IF-003, success)"
+ },
+ "foot": {
+  "text": "Each access has one wait state: PREADY rises one cycle after PENABLE. The write of 1 to a w1c bit clears it (a new event in the same cycle would be kept)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,82 @@
+{
+ "page_name": "FSM_DEV_XACT",
+ "out_name": "usb2_fsm_dev_xact.drawio",
+ "function": "dev_xact",
+ "initial": "ENUM_ST_DX_IDLE",
+ "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+ "states": [
+  {
+   "name": "ENUM_ST_DX_IDLE"
+  },
+  {
+   "name": "ENUM_ST_DX_OUT_DATA"
+  },
+  {
+   "name": "ENUM_ST_DX_OUT_RESP"
+  },
+  {
+   "name": "ENUM_ST_DX_IN_DATA"
+  },
+  {
+   "name": "ENUM_ST_DX_IN_ACK"
+  },
+  {
+   "name": "ENUM_ST_DX_PING_RESP"
+  }
+ ],
+ "transitions": [
+  {
+   "src": "ENUM_ST_DX_IDLE",
+   "dst": "ENUM_ST_DX_OUT_DATA",
+   "label": "OUT or SETUP token matched"
+  },
+  {
+   "src": "ENUM_ST_DX_IDLE",
+   "dst": "ENUM_ST_DX_IN_DATA",
+   "label": "IN token matched"
+  },
+  {
+   "src": "ENUM_ST_DX_IDLE",
+   "dst": "ENUM_ST_DX_PING_RESP",
+   "label": "PING token matched"
+  },
+  {
+   "src": "ENUM_ST_DX_OUT_DATA",
+   "dst": "ENUM_ST_DX_OUT_RESP",
+   "label": "data packet received"
+  },
+  {
+   "src": "ENUM_ST_DX_OUT_DATA",
+   "dst": "ENUM_ST_DX_IDLE",
+   "label": "time-out or bad CRC"
+  },
+  {
+   "src": "ENUM_ST_DX_OUT_RESP",
+   "dst": "ENUM_ST_DX_IDLE",
+   "label": "ACK, NAK or NYET sent"
+  },
+  {
+   "src": "ENUM_ST_DX_IN_DATA",
+   "dst": "ENUM_ST_DX_IN_ACK",
+   "label": "data packet sent"
+  },
+  {
+   "src": "ENUM_ST_DX_IN_DATA",
+   "dst": "ENUM_ST_DX_IDLE",
+   "label": "NAK or STALL sent"
+  },
+  {
+   "src": "ENUM_ST_DX_IN_ACK",
+   "dst": "ENUM_ST_DX_IDLE",
+   "label": "ACK received or time-out"
+  },
+  {
+   "src": "ENUM_ST_DX_PING_RESP",
+   "dst": "ENUM_ST_DX_IDLE",
+   "label": "ACK or NAK sent"
+  }
+ ],
+ "layout": {
+  "margin": 40
+ }
+}

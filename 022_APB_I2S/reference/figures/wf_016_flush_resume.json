@@ -1,0 +1,46 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p....................."
+  },
+  {
+   "name": "i_ws_slv",
+   "wave": "1100000011111100000011",
+   "phase": 0.5
+  },
+  {
+   "name": "w_txen_s",
+   "wave": "1111000000111111111111"
+  },
+  {
+   "name": "w_flush_s",
+   "wave": "0000001000000000000000"
+  },
+  {
+   "name": "w_tx_fifo_empty",
+   "wave": "0000000110000001111111"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "000=00000000000====000",
+   "data": [
+    "L3",
+    "N3",
+    "N2",
+    "N1",
+    "N0"
+   ],
+   "phase": 0.5
+  }
+ ],
+ "head": {
+  "text": "WF-016 OP-008 Disable, flush and resume (corner)"
+ },
+ "foot": {
+  "text": "The block is disabled mid-frame (output held low), the FIFO is flushed and refilled, and transmission resumes at the next left cycle."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

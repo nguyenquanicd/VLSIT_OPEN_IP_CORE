@@ -1,0 +1,68 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p..............."
+  },
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "01.....0........"
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "01..01.0........"
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x======x........",
+    "data": [
+     "PID",
+     "B0",
+     "B1",
+     "B2",
+     "B2",
+     "B3"
+    ]
+   }
+  ],
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "0........1....0."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "0........1...0.."
+   },
+   {
+    "name": "i_utmi_rxerror",
+    "wave": "0...........1.0."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x........===x...",
+    "data": [
+     "PID",
+     "B0",
+     "B1"
+    ]
+   }
+  ],
+  {
+   "name": "u2_irq_raw.stuf_err",
+   "wave": "0.............1."
+  }
+ ],
+ "head": {
+  "text": "WF-020: UTMI+ transmit wait and receive error (IF-001, error)"
+ },
+ "foot": {
+  "text": "While i_utmi_txready is low (cycle 4) the byte B2 is held. A receive packet ends with i_utmi_rxerror: the packet is dropped and the stuf_err flag is set."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

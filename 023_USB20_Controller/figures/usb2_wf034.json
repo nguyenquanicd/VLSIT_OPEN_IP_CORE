@@ -1,0 +1,65 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p............."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0........."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0........."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x.........",
+    "data": [
+     "IN",
+     "ADDR",
+     "EP,C5"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0.....1..0...."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0.....1..0...."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x.....===x....",
+    "data": [
+     "DATA0",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  {
+   "name": "u2_epi_int.iso_inc",
+   "wave": "0........1...."
+  },
+  {
+   "name": "u2_irq_raw.iso_inc",
+   "wave": "0..........1.."
+  }
+ ],
+ "head": {
+  "text": "WF-034: isochronous IN token with no data ready, incomplete flag (OP-019, error)"
+ },
+ "foot": {
+  "text": "The isochronous endpoint has no packet ready: the device sends a zero-length packet, nothing is retried, and the iso_inc flags are set (endpoint flag first, then the global flag after the clock crossing)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1790" height="520" viewBox="10 10 1790 520" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="1790" height="520" fill="#FFFFFF"/>
+<ellipse cx="425" cy="70" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="425" y="77" text-anchor="middle">ENUM_ST_DL_DETACH</text>
+<ellipse cx="425" cy="270" rx="145" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="425" y="277" text-anchor="middle">ENUM_ST_DL_FS_IDLE</text>
+<ellipse cx="665" cy="470" rx="145" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="665" y="477" text-anchor="middle">ENUM_ST_DL_CHIRP_K</text>
+<ellipse cx="1605" cy="70" rx="165" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1605" y="77" text-anchor="middle">ENUM_ST_DL_CHIRP_WAIT</text>
+<ellipse cx="1600" cy="270" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1600" y="277" text-anchor="middle">ENUM_ST_DL_HS_ACT</text>
+<ellipse cx="180" cy="470" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="180" y="477" text-anchor="middle">ENUM_ST_DL_FS_ACT</text>
+<ellipse cx="1095" cy="70" rx="145" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1095" y="77" text-anchor="middle">ENUM_ST_DL_SUSPEND</text>
+<ellipse cx="1120" cy="270" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="277" text-anchor="middle">ENUM_ST_DL_RESUME</text>
+<path d="M 425 100 L 425 240" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="425,240 419,228 431,228" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="312.1" y="159" width="225.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="425" y="177" text-anchor="middle">vbus valid &amp; soft_conn</text>
+<path d="M 459.939 299.116 L 630.061 440.884" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="630.061,440.884 617.001,437.811 624.683,428.592" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="417.25" y="359" width="255.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="545" y="377" text-anchor="middle">SE0 &gt; 2.5 us &amp; hs allowed</text>
+<path d="M 389.376 299.081 L 215.546 440.983" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="215.546,440.983 221.048,428.747 228.636,438.042" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="169.761" y="359.032" width="265.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="302.461" y="377.032" text-anchor="middle">SE0 &gt; 2.5 us &amp; hs disabled</text>
+<path d="M 810 470 L 1300 470 L 1300 70 L 1440 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1440,70 1428,76 1428,64" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="932.2" y="459" width="245.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1055" y="477" text-anchor="middle">chirp K done (1 to 7 ms)</text>
+<path d="M 1604.25 99.9997 L 1600.75 240" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1600.75,240 1595.05,227.854 1607.05,228.154" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1519.3" y="159" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1602.5" y="177" text-anchor="middle">K-J-K-J-K-J seen</text>
+<path d="M 1515.3 95.1794 L 865.801 184.016 L 264.951 446.154" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="264.951,446.154 273.551,435.856 278.349,446.855" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1077.65" y="128.598" width="225.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1190.55" y="146.598" text-anchor="middle">no hub chirp in 2.5 ms</text>
+<path d="M 1533.38 243.615 L 1162.14 96.5902" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1162.14,96.5902 1175.51,95.4303 1171.09,106.587" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1215.06" y="159.103" width="265.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1347.76" y="177.103" text-anchor="middle">idle 3 ms &amp; J after revert</text>
+<path d="M 241.62 443.062 L 673.346 352.554 L 1032.97 97.1164" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1032.97,97.1164 1026.66,108.957 1019.71,99.1737" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="399.033" y="386.808" width="116.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="457.483" y="404.808" text-anchor="middle">idle &gt; 3 ms</text>
+<path d="M 1500.92 291.194 L 765.809 448.437" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="765.809,448.437 776.289,440.06 778.799,451.794" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1084.81" y="358.816" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1133.36" y="376.816" text-anchor="middle">bus reset</text>
+<path d="M 320 470 L 520 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="520,470 508,476 508,464" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="307.1" y="459" width="225.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="420" y="477" text-anchor="middle">bus reset &amp; hs allowed</text>
+<path d="M 1098.75 99.99 L 1116.25 240.011" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1116.25,240.011 1108.81,228.848 1120.72,227.36" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1014.4" y="159" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1107.5" y="177" text-anchor="middle">K seen or rmt_wake</text>
+<path d="M 1063.52 99.2844 L 696.481 440.716" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="696.481,440.716 701.181,428.15 709.354,436.936" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="767.101" y="259" width="225.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="880" y="277" text-anchor="middle">SE0 reset &amp; hs allowed</text>
+<path d="M 1260 270 L 1294 270 A 6 6 0 0 1 1306 270 L 1460 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1460,270 1448,276 1448,264" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1266.9" y="259" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1360" y="277" text-anchor="middle">resume end, was HS</text>
+<path d="M 1020.65 291.138 L 279.347 448.862" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="279.347,448.862 289.836,440.496 292.333,452.233" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="556.898" y="359" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="649.998" y="377" text-anchor="middle">resume end, was FS</text>
+<path d="M 198.219 440.255 L 225.752 222.992 L 406.781 99.7449" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="406.781,99.7449 400.238,111.458 393.485,101.538" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="267.716" y="150.368" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="316.267" y="168.368" text-anchor="middle">vbus lost</text>
+</svg>

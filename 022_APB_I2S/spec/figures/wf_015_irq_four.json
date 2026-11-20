@@ -1,0 +1,45 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p......................."
+  },
+  {
+   "name": "w_event",
+   "wave": "001000000000000000000000"
+  },
+  {
+   "name": "i2s_irq_raw.tx_und",
+   "wave": "000111111110000111110000"
+  },
+  {
+   "name": "i2s_irq_en.tx_und",
+   "wave": "000000111111111111111111"
+  },
+  {
+   "name": "i2s_irq_inj.tx_und",
+   "wave": "000000000000001111000000"
+  },
+  {
+   "name": "i2s_irq_sts.tx_und",
+   "wave": "000000111110000111110000"
+  },
+  {
+   "name": "o_int_i2s",
+   "wave": "000000011111000011111000"
+  },
+  {
+   "name": "w_apb_clr",
+   "wave": "000000000010000000010000"
+  }
+ ],
+ "head": {
+  "text": "WF-015 OP-014 Interrupt cause through raw, enable, injection and masked status (success)"
+ },
+ "foot": {
+  "text": "APB clock, cause tx_und. A cause is set while masked; enabling it raises the output; a write of 1 clears the raw bit; an injection sets it again; the clear after the injection removes it."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

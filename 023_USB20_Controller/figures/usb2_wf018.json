@@ -1,0 +1,56 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p............."
+  },
+  {
+   "name": "o_axim_awvalid",
+   "wave": "01.0.........."
+  },
+  {
+   "name": "i_axim_awready",
+   "wave": "0.10.........."
+  },
+  {
+   "name": "o_axim_wvalid",
+   "wave": "0..1...0......"
+  },
+  {
+   "name": "i_axim_wready",
+   "wave": "0..1...0......"
+  },
+  {
+   "name": "o_axim_wlast",
+   "wave": "0.....10......"
+  },
+  {
+   "name": "i_axim_bvalid",
+   "wave": "0.......10...."
+  },
+  {
+   "name": "i_axim_bresp",
+   "wave": "x.......=x....",
+   "data": [
+    "SLVERR"
+   ]
+  },
+  {
+   "name": "u2_irq_raw.axi_err",
+   "wave": "0.........1..."
+  },
+  {
+   "name": "u2_irq_raw.dma_err",
+   "wave": "0.........1..."
+  }
+ ],
+ "head": {
+  "text": "WF-018: AXI master write burst with error response (OP-012, error)"
+ },
+ "foot": {
+  "text": "BRESP = SLVERR: the DMA stops the endpoint (ahb_err_stop = 1), and axi_err and dma_err are set."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

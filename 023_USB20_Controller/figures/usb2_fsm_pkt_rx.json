@@ -1,0 +1,95 @@
+{
+ "page_name": "FSM_PKT_RX",
+ "out_name": "usb2_fsm_pkt_rx.drawio",
+ "function": "pkt_rx",
+ "initial": "ENUM_ST_PR_IDLE",
+ "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+ "states": [
+  {
+   "name": "ENUM_ST_PR_IDLE"
+  },
+  {
+   "name": "ENUM_ST_PR_PID"
+  },
+  {
+   "name": "ENUM_ST_PR_TOKEN"
+  },
+  {
+   "name": "ENUM_ST_PR_DATA"
+  },
+  {
+   "name": "ENUM_ST_PR_CRC"
+  },
+  {
+   "name": "ENUM_ST_PR_DONE"
+  },
+  {
+   "name": "ENUM_ST_PR_ERR"
+  }
+ ],
+ "transitions": [
+  {
+   "src": "ENUM_ST_PR_IDLE",
+   "dst": "ENUM_ST_PR_PID",
+   "label": "rx active"
+  },
+  {
+   "src": "ENUM_ST_PR_PID",
+   "dst": "ENUM_ST_PR_TOKEN",
+   "label": "PID ok & token or SOF"
+  },
+  {
+   "src": "ENUM_ST_PR_PID",
+   "dst": "ENUM_ST_PR_DATA",
+   "label": "PID ok & data"
+  },
+  {
+   "src": "ENUM_ST_PR_PID",
+   "dst": "ENUM_ST_PR_DONE",
+   "label": "PID ok & handshake"
+  },
+  {
+   "src": "ENUM_ST_PR_PID",
+   "dst": "ENUM_ST_PR_ERR",
+   "label": "PID check fail"
+  },
+  {
+   "src": "ENUM_ST_PR_TOKEN",
+   "dst": "ENUM_ST_PR_CRC",
+   "label": "2 token bytes"
+  },
+  {
+   "src": "ENUM_ST_PR_DATA",
+   "dst": "ENUM_ST_PR_CRC",
+   "label": "rx end"
+  },
+  {
+   "src": "ENUM_ST_PR_DATA",
+   "dst": "ENUM_ST_PR_ERR",
+   "label": "rx error or overflow"
+  },
+  {
+   "src": "ENUM_ST_PR_CRC",
+   "dst": "ENUM_ST_PR_DONE",
+   "label": "CRC residual ok"
+  },
+  {
+   "src": "ENUM_ST_PR_CRC",
+   "dst": "ENUM_ST_PR_ERR",
+   "label": "CRC fail"
+  },
+  {
+   "src": "ENUM_ST_PR_DONE",
+   "dst": "ENUM_ST_PR_IDLE",
+   "label": "result reported"
+  },
+  {
+   "src": "ENUM_ST_PR_ERR",
+   "dst": "ENUM_ST_PR_IDLE",
+   "label": "rx idle"
+  }
+ ],
+ "layout": {
+  "margin": 40
+ }
+}

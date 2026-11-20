@@ -1,0 +1,61 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p............"
+  },
+  {
+   "name": "o_axim_arvalid",
+   "wave": "01.0........."
+  },
+  {
+   "name": "i_axim_arready",
+   "wave": "0.10........."
+  },
+  {
+   "name": "o_axim_araddr",
+   "wave": "x=.x.........",
+   "data": [
+    "A0"
+   ]
+  },
+  {
+   "name": "o_axim_arlen",
+   "wave": "x=.x.........",
+   "data": [
+    "3"
+   ]
+  },
+  {
+   "name": "i_axim_rvalid",
+   "wave": "0....1...0..."
+  },
+  {
+   "name": "o_axim_rready",
+   "wave": "0...1.....0.."
+  },
+  {
+   "name": "i_axim_rdata",
+   "wave": "x....====x...",
+   "data": [
+    "R0",
+    "R1",
+    "R2",
+    "R3"
+   ]
+  },
+  {
+   "name": "i_axim_rlast",
+   "wave": "0.......10..."
+  }
+ ],
+ "head": {
+  "text": "WF-017: AXI master read burst into the FIFO (OP-012, success)"
+ },
+ "foot": {
+  "text": "INCR burst of four beats of 32 bits (awlen = 3). The data goes to the FIFO region of the endpoint."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

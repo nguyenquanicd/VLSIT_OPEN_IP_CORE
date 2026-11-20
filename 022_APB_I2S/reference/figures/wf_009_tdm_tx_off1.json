@@ -1,0 +1,45 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_sclk",
+   "wave": "p..................."
+  },
+  {
+   "name": "o_ws_out",
+   "wave": "00100000000000000000",
+   "phase": 0.5
+  },
+  {
+   "name": "w_slot_pop",
+   "wave": "00010000000100000000"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "000======00======000",
+   "data": [
+    "a5",
+    "a4",
+    "a3",
+    "a2",
+    "a1",
+    "a0",
+    "b5",
+    "b4",
+    "b3",
+    "b2",
+    "b1",
+    "b0"
+   ],
+   "phase": 0.5
+  }
+ ],
+ "head": {
+  "text": "WF-009 OP-010 TDM transmit, frame offset 1 (success)"
+ },
+ "foot": {
+  "text": "Reduced scale: 6-bit words, 8-cycle slots. The first bit appears one sclk cycle after the word-select pulse; the slot is popped at its start."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

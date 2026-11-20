@@ -1,0 +1,10 @@
+{
+ "dev_link": "Device link state: attach, chirp, speed, suspend, resume.",
+ "host_port": "Host root port state: attach, reset, chirp, enabled speed, suspend, resume.",
+ "pkt_rx": "Link packet receiver.",
+ "pkt_tx": "Link packet transmitter.",
+ "dev_xact": "Device endpoint transaction.",
+ "host_xact": "Host channel transaction.",
+ "ulpi_if": "ULPI link interface.",
+ "dma_axi": "AXI4 master DMA burst engine."
+}

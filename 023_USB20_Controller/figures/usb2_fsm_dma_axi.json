@@ -1,0 +1,126 @@
+{
+  "page_name": "FSM_DMA_AXI",
+  "out_name": "usb2_fsm_dma_axi.drawio",
+  "function": "dma_axi",
+  "initial": "ENUM_ST_DM_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_DM_IDLE"
+    },
+    {
+      "name": "ENUM_ST_DM_AR"
+    },
+    {
+      "name": "ENUM_ST_DM_RDATA"
+    },
+    {
+      "name": "ENUM_ST_DM_AW"
+    },
+    {
+      "name": "ENUM_ST_DM_WDATA"
+    },
+    {
+      "name": "ENUM_ST_DM_BRESP"
+    },
+    {
+      "name": "ENUM_ST_DM_ERR"
+    },
+    {
+      "name": "ENUM_ST_DM_DESC_RD"
+    },
+    {
+      "name": "ENUM_ST_DM_DESC_WB"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_DM_IDLE",
+      "dst": "ENUM_ST_DM_AR",
+      "label": "IN data, FIFO has space"
+    },
+    {
+      "src": "ENUM_ST_DM_AR",
+      "dst": "ENUM_ST_DM_RDATA",
+      "label": "arready"
+    },
+    {
+      "src": "ENUM_ST_DM_RDATA",
+      "dst": "ENUM_ST_DM_IDLE",
+      "label": "rlast & buffer mode"
+    },
+    {
+      "src": "ENUM_ST_DM_IDLE",
+      "dst": "ENUM_ST_DM_AW",
+      "label": "OUT data, FIFO has data"
+    },
+    {
+      "src": "ENUM_ST_DM_AW",
+      "dst": "ENUM_ST_DM_WDATA",
+      "label": "awready"
+    },
+    {
+      "src": "ENUM_ST_DM_WDATA",
+      "dst": "ENUM_ST_DM_BRESP",
+      "label": "wlast accepted"
+    },
+    {
+      "src": "ENUM_ST_DM_BRESP",
+      "dst": "ENUM_ST_DM_IDLE",
+      "label": "bresp okay & buffer mode"
+    },
+    {
+      "src": "ENUM_ST_DM_RDATA",
+      "dst": "ENUM_ST_DM_ERR",
+      "label": "rresp error"
+    },
+    {
+      "src": "ENUM_ST_DM_BRESP",
+      "dst": "ENUM_ST_DM_ERR",
+      "label": "bresp error"
+    },
+    {
+      "src": "ENUM_ST_DM_ERR",
+      "dst": "ENUM_ST_DM_IDLE",
+      "label": "error status set"
+    },
+    {
+      "src": "ENUM_ST_DM_IDLE",
+      "dst": "ENUM_ST_DM_DESC_RD",
+      "label": "sg_mode & list armed"
+    },
+    {
+      "src": "ENUM_ST_DM_DESC_RD",
+      "dst": "ENUM_ST_DM_AR",
+      "label": "IN descriptor read"
+    },
+    {
+      "src": "ENUM_ST_DM_DESC_RD",
+      "dst": "ENUM_ST_DM_AW",
+      "label": "OUT descriptor read"
+    },
+    {
+      "src": "ENUM_ST_DM_DESC_RD",
+      "dst": "ENUM_ST_DM_ERR",
+      "label": "rresp error"
+    },
+    {
+      "src": "ENUM_ST_DM_RDATA",
+      "dst": "ENUM_ST_DM_DESC_WB",
+      "label": "rlast & sg_mode"
+    },
+    {
+      "src": "ENUM_ST_DM_BRESP",
+      "dst": "ENUM_ST_DM_DESC_WB",
+      "label": "bresp okay & sg_mode"
+    },
+    {
+      "src": "ENUM_ST_DM_DESC_WB",
+      "dst": "ENUM_ST_DM_IDLE",
+      "label": "status written"
+    }
+  ],
+  "layout": {
+    "margin": 40
+  }
+}

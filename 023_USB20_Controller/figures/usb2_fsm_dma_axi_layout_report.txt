@@ -1,0 +1,11 @@
+FSM: dma_axi
+STATES: 9, TRANSITIONS: 17
+LAYOUT: flow-tb-snake-4-g200
+CROSSINGS: 11
+LABEL CONFLICTS: 0
+BENDS: 6
+MINIMUM GAP: 100.0 px (minimum 100 px)
+TEXT FIT: PASS (worst fill ratio 0.55)
+DISTRIBUTION: PASS (9 x-centers, 4 y-centers)
+PAGE: 1150 x 540 px
+RESULT: PASS

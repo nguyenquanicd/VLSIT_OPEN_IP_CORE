@@ -1,0 +1,113 @@
+{
+ "page_name": "FSM_DEV_LINK",
+ "out_name": "usb2_fsm_dev_link.drawio",
+ "function": "dev_link",
+ "initial": "ENUM_ST_DL_DETACH",
+ "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+ "states": [
+  {
+   "name": "ENUM_ST_DL_DETACH"
+  },
+  {
+   "name": "ENUM_ST_DL_FS_IDLE"
+  },
+  {
+   "name": "ENUM_ST_DL_CHIRP_K"
+  },
+  {
+   "name": "ENUM_ST_DL_CHIRP_WAIT"
+  },
+  {
+   "name": "ENUM_ST_DL_HS_ACT"
+  },
+  {
+   "name": "ENUM_ST_DL_FS_ACT"
+  },
+  {
+   "name": "ENUM_ST_DL_SUSPEND"
+  },
+  {
+   "name": "ENUM_ST_DL_RESUME"
+  }
+ ],
+ "transitions": [
+  {
+   "src": "ENUM_ST_DL_DETACH",
+   "dst": "ENUM_ST_DL_FS_IDLE",
+   "label": "vbus valid & soft_conn"
+  },
+  {
+   "src": "ENUM_ST_DL_FS_IDLE",
+   "dst": "ENUM_ST_DL_CHIRP_K",
+   "label": "SE0 > 2.5 us & hs allowed"
+  },
+  {
+   "src": "ENUM_ST_DL_FS_IDLE",
+   "dst": "ENUM_ST_DL_FS_ACT",
+   "label": "SE0 > 2.5 us & hs disabled"
+  },
+  {
+   "src": "ENUM_ST_DL_CHIRP_K",
+   "dst": "ENUM_ST_DL_CHIRP_WAIT",
+   "label": "chirp K done (1 to 7 ms)"
+  },
+  {
+   "src": "ENUM_ST_DL_CHIRP_WAIT",
+   "dst": "ENUM_ST_DL_HS_ACT",
+   "label": "K-J-K-J-K-J seen"
+  },
+  {
+   "src": "ENUM_ST_DL_CHIRP_WAIT",
+   "dst": "ENUM_ST_DL_FS_ACT",
+   "label": "no hub chirp in 2.5 ms"
+  },
+  {
+   "src": "ENUM_ST_DL_HS_ACT",
+   "dst": "ENUM_ST_DL_SUSPEND",
+   "label": "idle 3 ms & J after revert"
+  },
+  {
+   "src": "ENUM_ST_DL_FS_ACT",
+   "dst": "ENUM_ST_DL_SUSPEND",
+   "label": "idle > 3 ms"
+  },
+  {
+   "src": "ENUM_ST_DL_HS_ACT",
+   "dst": "ENUM_ST_DL_CHIRP_K",
+   "label": "bus reset"
+  },
+  {
+   "src": "ENUM_ST_DL_FS_ACT",
+   "dst": "ENUM_ST_DL_CHIRP_K",
+   "label": "bus reset & hs allowed"
+  },
+  {
+   "src": "ENUM_ST_DL_SUSPEND",
+   "dst": "ENUM_ST_DL_RESUME",
+   "label": "K seen or rmt_wake"
+  },
+  {
+   "src": "ENUM_ST_DL_SUSPEND",
+   "dst": "ENUM_ST_DL_CHIRP_K",
+   "label": "SE0 reset & hs allowed"
+  },
+  {
+   "src": "ENUM_ST_DL_RESUME",
+   "dst": "ENUM_ST_DL_HS_ACT",
+   "label": "resume end, was HS"
+  },
+  {
+   "src": "ENUM_ST_DL_RESUME",
+   "dst": "ENUM_ST_DL_FS_ACT",
+   "label": "resume end, was FS"
+  },
+  {
+   "src": "ENUM_ST_DL_FS_ACT",
+   "dst": "ENUM_ST_DL_DETACH",
+   "label": "vbus lost"
+  }
+ ],
+ "layout": {
+  "margin": 40
+ }
+}

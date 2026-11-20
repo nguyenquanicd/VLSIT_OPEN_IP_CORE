@@ -1,0 +1,557 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_apb_i2s_top_block_diagram.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 100,
+    "gap_v": 90,
+    "margin": 40,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "TOP",
+      "(m_vlsit_apb_i2s_top)"
+    ],
+    "block_label": [
+      "TOP",
+      "(m_vlsit_apb_i2s_top)"
+    ],
+    "block_row": [
+      "TOP (m_vlsit_apb_i2s_top)",
+      "Structural top of the APB I2S controller.",
+      "Section 14.2"
+    ]
+  },
+  "frame_row": [
+    "TOP (m_vlsit_apb_i2s_top) frame",
+    "Structural top of the APB I2S controller. It holds no logic: it instantiates the register block, the FIFOs, the frame engines and the support blocks. The APB domain is on the left, the master clock domain on the right.",
+    "Section 14.2"
+  ],
+  "frame_interfaces": [
+    "APB",
+    "CFGIN",
+    "INT",
+    "DMA",
+    "CRAPB",
+    "TXCK",
+    "TXSD",
+    "RXSD",
+    "RXCK",
+    "CRMCK"
+  ],
+  "blocks": [
+    {
+      "key": "csr",
+      "label": [
+        "u_csr_i2s",
+        "(m_vlsit_csr_i2s)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_csr_i2s (m_vlsit_csr_i2s)",
+      "function": "Generated register block of the APB completer. It decodes addresses, answers the bus with one wait state, holds every software-visible field and reports register read and write events.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "regctl",
+      "label": [
+        "u_regctl",
+        "(m_vlsit_i2s_regctl)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_regctl (m_vlsit_i2s_regctl)",
+      "function": "Register control. It turns data register events into FIFO push and pop actions in the fixed line order, runs the flush and reset requests, and builds the status and level fields.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "irq",
+      "label": [
+        "u_irq",
+        "(m_vlsit_i2s_irq)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_irq (m_vlsit_i2s_irq)",
+      "function": "Interrupt logic. It sets the raw causes from events and levels, applies the injection and the enable, builds the masked status and drives the single interrupt output.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "dma",
+      "label": [
+        "u_dmahs_tx, u_dmahs_rx",
+        "(m_vlsit_i2s_dmahs)"
+      ],
+      "width": 260,
+      "row": 3,
+      "col": 0,
+      "row_name": "u_dmahs_tx, u_dmahs_rx (m_vlsit_i2s_dmahs)",
+      "function": "DMA handshake. For each direction it raises the request from the watermark condition, holds it until the acknowledge, and drives the single indication.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rsta",
+      "label": [
+        "u_rstsync_apb",
+        "(m_vlsit_rst_sync)"
+      ],
+      "width": 240,
+      "row": 4,
+      "col": 0,
+      "row_name": "u_rstsync_apb (m_vlsit_rst_sync)",
+      "function": "Reset synchronizer of the APB domain. It asserts the local reset asynchronously and releases it synchronously to the APB clock.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "cfg",
+      "label": [
+        "u_cfgsync_tx, u_cfgsync_rx",
+        "(m_vlsit_i2s_cfgsync)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_cfgsync_tx, u_cfgsync_rx (m_vlsit_i2s_cfgsync)",
+      "function": "Configuration and event crossing. It carries the configuration snapshot, the slot mask and the flush and reset requests to the master clock domain, and the events and flags back.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "txf",
+      "label": [
+        "u_txfifo",
+        "(m_vlsit_i2s_txfifo)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_txfifo (m_vlsit_i2s_txfifo)",
+      "function": "Transmit FIFO. One FIFO per data line, written from the APB side and read from the serial side across the clock boundary.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rxf",
+      "label": [
+        "u_rxfifo",
+        "(m_vlsit_i2s_rxfifo)"
+      ],
+      "width": 260,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_rxfifo (m_vlsit_i2s_rxfifo)",
+      "function": "Receive FIFO. One FIFO per data line, written from the serial side and read from the APB side across the clock boundary.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "frm0",
+      "label": [
+        "u_frame_0",
+        "(m_vlsit_i2s_frame)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_frame_0 (m_vlsit_i2s_frame)",
+      "function": "Frame engine of the transmit unit. It makes or follows the bit clock and the frame sync, counts bits and slots, runs the unit state machine and detects errors and timeouts.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "txs",
+      "label": [
+        "u_txser",
+        "(m_vlsit_i2s_txser)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_txser (m_vlsit_i2s_txser)",
+      "function": "Transmit serializer. It loads one word per line at each enabled slot, shifts it out most significant bit first, pads and masks the slot, and drives the data lines and their output enable.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rxd",
+      "label": [
+        "u_rxdes",
+        "(m_vlsit_i2s_rxdes)"
+      ],
+      "width": 260,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_rxdes (m_vlsit_i2s_rxdes)",
+      "function": "Receive deserializer. It samples each data line, assembles the word, aligns or packs it and pushes it at the end of each enabled slot.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "frm1",
+      "label": [
+        "u_frame_1",
+        "(m_vlsit_i2s_frame)"
+      ],
+      "width": 260,
+      "row": 3,
+      "col": 2,
+      "row_name": "u_frame_1 (m_vlsit_i2s_frame)",
+      "function": "Frame engine of the receive unit. It makes or follows the bit clock and the frame sync, counts bits and slots, runs the unit state machine and detects errors and timeouts.",
+      "source": "Section 14.2, 5.1"
+    },
+    {
+      "key": "rstm",
+      "label": [
+        "u_rstsync_mclk",
+        "(m_vlsit_rst_sync)"
+      ],
+      "width": 240,
+      "row": 4,
+      "col": 2,
+      "row_name": "u_rstsync_mclk (m_vlsit_rst_sync)",
+      "function": "Reset synchronizer of the master clock domain. It asserts the local reset asynchronously and releases it synchronously to the master clock.",
+      "source": "Section 14.2, 5.1"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "REGS",
+      "src": "csr",
+      "src_side": "B",
+      "dst": "regctl",
+      "dst_side": "T"
+    },
+    {
+      "id": "CTRL",
+      "src": "csr",
+      "src_side": "R",
+      "dst": "cfg",
+      "dst_side": "L"
+    },
+    {
+      "id": "CFGT",
+      "src": "cfg",
+      "src_side": "R",
+      "dst": "frm0",
+      "dst_side": "L"
+    },
+    {
+      "id": "PUSH",
+      "src": "regctl",
+      "src_side": "R",
+      "dst": "txf",
+      "dst_side": "L"
+    },
+    {
+      "id": "POP",
+      "src": "regctl",
+      "src_side": "R",
+      "dst": "rxf",
+      "dst_side": "L"
+    },
+    {
+      "id": "CAUSE",
+      "src": "regctl",
+      "src_side": "B",
+      "dst": "irq",
+      "dst_side": "T"
+    },
+    {
+      "id": "TXD",
+      "src": "txf",
+      "src_side": "R",
+      "dst": "txs",
+      "dst_side": "L"
+    },
+    {
+      "id": "RXD",
+      "src": "rxd",
+      "src_side": "L",
+      "dst": "rxf",
+      "dst_side": "R"
+    },
+    {
+      "id": "FRTX",
+      "src": "frm0",
+      "src_side": "B",
+      "dst": "txs",
+      "dst_side": "T"
+    },
+    {
+      "id": "FRRX",
+      "src": "frm1",
+      "src_side": "T",
+      "dst": "rxd",
+      "dst_side": "B"
+    },
+    {
+      "id": "LVLD",
+      "src": "rxf",
+      "src_side": "L",
+      "dst": "dma",
+      "dst_side": "R"
+    }
+  ],
+  "externals": [
+    {
+      "id": "APB",
+      "block": "csr",
+      "side": "L",
+      "dir": "in",
+      "pos": -20,
+      "text": [
+        "APB",
+        "APB4 slave"
+      ]
+    },
+    {
+      "id": "CFGIN",
+      "block": "csr",
+      "side": "L",
+      "dir": "in",
+      "pos": 20,
+      "text": [
+        "CFGIN",
+        "static options"
+      ]
+    },
+    {
+      "id": "INT",
+      "block": "irq",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "INT",
+        "interrupt"
+      ]
+    },
+    {
+      "id": "DMA",
+      "block": "dma",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "DMA",
+        "DMA handshake"
+      ]
+    },
+    {
+      "id": "CRAPB",
+      "block": "rsta",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CRAPB",
+        "APB clock, reset"
+      ]
+    },
+    {
+      "id": "TXCK",
+      "block": "frm0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "TXCK",
+        "tx clock pins"
+      ]
+    },
+    {
+      "id": "TXSD",
+      "block": "txs",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "TXSD",
+        "tx data"
+      ]
+    },
+    {
+      "id": "RXSD",
+      "block": "rxd",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "RXSD",
+        "rx data"
+      ]
+    },
+    {
+      "id": "RXCK",
+      "block": "frm1",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "RXCK",
+        "rx clock pins"
+      ]
+    },
+    {
+      "id": "CRMCK",
+      "block": "rstm",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CRMCK",
+        "mclk, reset"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "APB",
+      "name": "APB4 completer interface (CLK-APB)",
+      "category": "standard protocol (AMBA APB4)",
+      "active": "external requester -> IP",
+      "signals": "external requester -> IP: i_apb_psel, i_apb_penable, i_apb_pwrite, i_apb_paddr, i_apb_pwdata, i_apb_pstrb, i_apb_pprot; IP -> external requester: o_apb_pready, o_apb_pslverr, o_apb_prdata"
+    },
+    {
+      "id": "CFGIN",
+      "name": "Static CSR option inputs (CLK-APB)",
+      "category": "custom",
+      "active": "SoC -> IP",
+      "signals": "SoC -> IP: i_protect_en, i_slverr_en"
+    },
+    {
+      "id": "INT",
+      "name": "Interrupt output (CLK-APB)",
+      "category": "custom",
+      "active": "IP -> interrupt controller",
+      "signals": "IP -> interrupt controller: o_int_i2s"
+    },
+    {
+      "id": "DMA",
+      "name": "DMA handshake (CLK-APB)",
+      "category": "custom (request, single, acknowledge)",
+      "active": "IP -> DMA controller (request, single); DMA controller -> IP (acknowledge)",
+      "signals": "IP -> DMA controller: o_dma_tx_req, o_dma_tx_single, o_dma_rx_req, o_dma_rx_single; DMA controller -> IP: i_dma_tx_ack, i_dma_rx_ack"
+    },
+    {
+      "id": "CRAPB",
+      "name": "Clock and reset of the APB domain",
+      "category": "custom",
+      "active": "SoC -> IP",
+      "signals": "i_clk_apb, i_rst_n_apb (reset: level, active-low)"
+    },
+    {
+      "id": "TXCK",
+      "name": "Transmit bit clock and frame sync pins (CLK-MCLK)",
+      "category": "custom (serial audio)",
+      "active": "IP <-> external audio device",
+      "signals": "IP -> external: o_bclk_tx, o_bclk_tx_oe, o_ws_tx, o_ws_tx_oe; external -> IP: i_bclk_tx, i_ws_tx"
+    },
+    {
+      "id": "TXSD",
+      "name": "Transmit data lines (CLK-MCLK)",
+      "category": "custom (serial audio)",
+      "active": "IP -> external audio device",
+      "signals": "IP -> external: o_sdo_0 to o_sdo_3, o_sdo_oe"
+    },
+    {
+      "id": "RXSD",
+      "name": "Receive data lines (CLK-MCLK)",
+      "category": "custom (serial audio)",
+      "active": "external audio device -> IP",
+      "signals": "external -> IP: i_sdi_0 to i_sdi_3"
+    },
+    {
+      "id": "RXCK",
+      "name": "Receive bit clock and frame sync pins (CLK-MCLK)",
+      "category": "custom (serial audio)",
+      "active": "IP <-> external audio device",
+      "signals": "IP -> external: o_bclk_rx, o_bclk_rx_oe, o_ws_rx, o_ws_rx_oe; external -> IP: i_bclk_rx, i_ws_rx"
+    },
+    {
+      "id": "CRMCK",
+      "name": "Clock and reset of the master clock domain",
+      "category": "custom",
+      "active": "SoC -> IP",
+      "signals": "i_clk_mclk, i_rst_n_mclk (reset: level, active-low)"
+    },
+    {
+      "id": "REGS",
+      "name": "Register fields, status and events",
+      "category": "custom",
+      "active": "u_csr_i2s <-> u_regctl",
+      "signals": "Field ports of the generated block; o_reg_rd_en, o_reg_rd_addr, o_reg_wr_en, o_reg_wr_addr"
+    },
+    {
+      "id": "CTRL",
+      "name": "Control fields to the crossing",
+      "category": "custom",
+      "active": "u_csr_i2s -> u_cfgsync_tx, u_cfgsync_rx",
+      "signals": "Configuration, mask, enable, flush and reset fields"
+    },
+    {
+      "id": "CFGT",
+      "name": "Synchronized configuration and events",
+      "category": "custom",
+      "active": "u_cfgsync_tx, u_cfgsync_rx <-> u_frame_0 and u_frame_1",
+      "signals": "Snapshot, mask, requests; flags and events back"
+    },
+    {
+      "id": "PUSH",
+      "name": "Transmit FIFO push",
+      "category": "custom",
+      "active": "u_regctl -> u_txfifo",
+      "signals": "Push strobe, line select, data, flush"
+    },
+    {
+      "id": "POP",
+      "name": "Receive FIFO pop",
+      "category": "custom",
+      "active": "u_regctl -> u_rxfifo",
+      "signals": "Pop strobe, line select, flush; head data back"
+    },
+    {
+      "id": "CAUSE",
+      "name": "Cause information",
+      "category": "custom",
+      "active": "u_regctl -> u_irq",
+      "signals": "Levels, flags and events used for the causes"
+    },
+    {
+      "id": "TXD",
+      "name": "Transmit FIFO read",
+      "category": "custom",
+      "active": "u_txser -> u_txfifo",
+      "signals": "Pop strobe, line words"
+    },
+    {
+      "id": "RXD",
+      "name": "Receive FIFO write",
+      "category": "custom",
+      "active": "u_rxdes -> u_rxfifo",
+      "signals": "Push strobe, line words"
+    },
+    {
+      "id": "FRTX",
+      "name": "Frame events to the transmit serializer",
+      "category": "custom",
+      "active": "u_frame_0 -> u_txser",
+      "signals": "Slot start, bit position, mask, padding"
+    },
+    {
+      "id": "FRRX",
+      "name": "Frame events to the receive deserializer",
+      "category": "custom",
+      "active": "u_frame_1 -> u_rxdes",
+      "signals": "Slot start, bit sample, mask"
+    },
+    {
+      "id": "LVLD",
+      "name": "FIFO levels to the DMA handshake",
+      "category": "custom",
+      "active": "u_rxfifo -> u_dmahs_tx, u_dmahs_rx",
+      "signals": "Level and flags"
+    }
+  ],
+  "legend_note": "The enclosing frame is the top module; blocks inside are its instances. The left column is the APB clock domain, the right column the master clock domain, the middle column crosses the boundary.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

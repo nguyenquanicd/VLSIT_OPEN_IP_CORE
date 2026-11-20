@@ -1,0 +1,37 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p.....|....."
+  },
+  {
+   "name": "w_fifo_level_ge_thr",
+   "wave": "01....|..0.."
+  },
+  {
+   "name": "o_dma_req",
+   "wave": "0.1...|.0..."
+  },
+  {
+   "name": "i_axis_arvalid",
+   "wave": "0..1.0|....."
+  },
+  {
+   "name": "o_axis_rvalid",
+   "wave": "0...1.|0...."
+  },
+  {
+   "name": "i_dma_ack",
+   "wave": "0.....|10..."
+  }
+ ],
+ "head": {
+  "text": "WF-019: external DMA request and acknowledge (OP-013, success)"
+ },
+ "foot": {
+  "text": "o_dma_req rises when the mapped FIFO reaches req_thr and stays high until the burst is read; the DMA controller pulses i_dma_ack once."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

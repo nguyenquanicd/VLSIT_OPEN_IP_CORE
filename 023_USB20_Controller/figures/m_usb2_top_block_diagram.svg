@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800" viewBox="350 280 1600 800" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="350" y="280" width="1600" height="800" fill="#FFFFFF"/>
+<rect x="580" y="410" width="1140" height="540" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="900" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="990" y="876" text-anchor="middle">u_csr</text>
+<text x="990" y="898" text-anchor="middle">(m_vlsit_csr_usb2)</text>
+<rect x="1200" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1290" y="876" text-anchor="middle">u_irq</text>
+<text x="1290" y="898" text-anchor="middle">(m_usb2_irq)</text>
+<rect x="1500" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1590" y="876" text-anchor="middle">u_dma</text>
+<text x="1590" y="898" text-anchor="middle">(m_usb2_dma)</text>
+<rect x="620" y="510" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_phyif</text>
+<text x="700" y="558" text-anchor="middle">(m_usb2_phyif_*)</text>
+<rect x="900" y="510" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="990" y="536" text-anchor="middle">u_lnk</text>
+<text x="990" y="558" text-anchor="middle">(m_usb2_lnk)</text>
+<rect x="1200" y="510" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1290" y="536" text-anchor="middle">u_dev</text>
+<text x="1290" y="558" text-anchor="middle">(m_usb2_dev)</text>
+<rect x="1500" y="510" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1590" y="536" text-anchor="middle">u_fifo</text>
+<text x="1590" y="558" text-anchor="middle">(m_usb2_fifo)</text>
+<rect x="620" y="680" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">u_spd</text>
+<text x="700" y="728" text-anchor="middle">(m_usb2_spd)</text>
+<rect x="900" y="680" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="990" y="706" text-anchor="middle">u_host</text>
+<text x="990" y="728" text-anchor="middle">(m_usb2_host)</text>
+<rect x="1500" y="680" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1590" y="706" text-anchor="middle">u_cdc</text>
+<text x="1590" y="728" text-anchor="middle">(m_usb2_cdc_*)</text>
+<rect x="620" y="850" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">u_rst</text>
+<text x="700" y="898" text-anchor="middle">(m_usb2_rst)</text>
+<text x="950" y="1021" text-anchor="middle">APB</text>
+<text x="950" y="1043" text-anchor="middle">APB4 slave</text>
+<text x="1845" y="876" text-anchor="middle">AXI</text>
+<text x="1845" y="898" text-anchor="middle">AXI4, DMA req</text>
+<text x="1290" y="1021" text-anchor="middle">INT</text>
+<text x="1290" y="1043" text-anchor="middle">o_int_usb</text>
+<text x="990" y="331" text-anchor="middle">CKPHY</text>
+<text x="990" y="353" text-anchor="middle">i_clk_phy, i_rst_n_phy</text>
+<text x="455" y="536" text-anchor="middle">PHY</text>
+<text x="455" y="558" text-anchor="middle">UTMI+ or ULPI</text>
+<text x="700" y="1021" text-anchor="middle">CKBUS</text>
+<text x="700" y="1043" text-anchor="middle">i_clk_bus, i_rst_n_bus</text>
+<text x="1698" y="451" text-anchor="end">TOP</text>
+<text x="1698" y="473" text-anchor="end">(m_usb2_core)</text>
+<text x="820" y="526" text-anchor="middle">BYTE</text>
+<text x="1120" y="526" text-anchor="middle">DEVP</text>
+<text x="1420" y="526" text-anchor="middle">FPKT</text>
+<text x="1033" y="602" text-anchor="middle">HOSTP</text>
+<text x="738" y="602" text-anchor="middle">MODE</text>
+<text x="1628" y="602" text-anchor="middle">FBUS</text>
+<text x="1628" y="772" text-anchor="middle">XDMA</text>
+<text x="820" y="866" text-anchor="middle">RCTL</text>
+<text x="1105" y="866" text-anchor="middle">EVT</text>
+<path d="M 950 1000 L 950 910" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="950,910 956,922 944,922" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1680 880 L 1770 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1770,880 1758,886 1758,874" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1290 910 L 1290 1000" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1290,1000 1284,988 1296,988" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 990 360 L 990 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="990,510 984,498 996,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 530 540 L 620 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="620,540 608,546 608,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 1000 L 700 910" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,910 706,922 694,922" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 990 422 L 700 422 L 700 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,510 694,498 706,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 990 422 L 1290 422 L 1290 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1290,510 1284,498 1296,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 990 422 L 1708 422 L 1708 540 L 1680 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1680,540 1692,534 1692,546" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 422 L 592 422 L 592 534 A 6 6 0 0 0 592 546 L 592 938 L 694 938 A 6 6 0 0 1 706 938 L 944 938 A 6 6 0 0 1 956 938 L 1040 938 L 1040 910" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1040,910 1046,922 1034,922" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 422 L 592 422 L 592 534 A 6 6 0 0 0 592 546 L 592 938 L 694 938 A 6 6 0 0 1 706 938 L 944 938 A 6 6 0 0 1 956 938 L 1284 938 A 6 6 0 0 1 1296 938 L 1590 938 L 1590 910" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1590,910 1596,922 1584,922" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 780 540 L 900 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="900,540 888,546 888,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1080 540 L 1200 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1200,540 1188,546 1188,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1380 540 L 1500 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1500,540 1488,546 1488,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 990 570 L 990 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="990,680 984,668 996,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 680 L 700 570" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,570 706,582 694,582" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1590 570 L 1590 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1590,680 1584,668 1596,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1590 740 L 1590 850" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1590,850 1584,838 1596,838" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 780 880 L 900 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="900,880 888,886 888,874" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1200 880 L 1080 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1080,880 1092,874 1092,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

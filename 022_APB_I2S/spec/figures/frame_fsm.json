@@ -1,0 +1,74 @@
+{
+  "page_name": "FSM_FRAME",
+  "out_name": "frame_fsm.drawio",
+  "function": "frame",
+  "initial": "ENUM_ST_OFF",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_OFF"
+    },
+    {
+      "name": "ENUM_ST_ARM"
+    },
+    {
+      "name": "ENUM_ST_RUN"
+    },
+    {
+      "name": "ENUM_ST_ERR"
+    },
+    {
+      "name": "ENUM_ST_STOP"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_OFF",
+      "dst": "ENUM_ST_ARM",
+      "label": "en & snapshot"
+    },
+    {
+      "src": "ENUM_ST_ARM",
+      "dst": "ENUM_ST_RUN",
+      "label": "frame start"
+    },
+    {
+      "src": "ENUM_ST_RUN",
+      "dst": "ENUM_ST_ARM",
+      "label": "frame end | error & auto"
+    },
+    {
+      "src": "ENUM_ST_RUN",
+      "dst": "ENUM_ST_ERR",
+      "label": "error & !auto"
+    },
+    {
+      "src": "ENUM_ST_RUN",
+      "dst": "ENUM_ST_STOP",
+      "label": "!en"
+    },
+    {
+      "src": "ENUM_ST_ARM",
+      "dst": "ENUM_ST_OFF",
+      "label": "!en"
+    },
+    {
+      "src": "ENUM_ST_ERR",
+      "dst": "ENUM_ST_ARM",
+      "label": "flush"
+    },
+    {
+      "src": "ENUM_ST_ERR",
+      "dst": "ENUM_ST_OFF",
+      "label": "!en"
+    },
+    {
+      "src": "ENUM_ST_STOP",
+      "dst": "ENUM_ST_OFF",
+      "label": "frame end"
+    }
+  ],
+  "layout": {
+    "margin": 40
+  }
+}

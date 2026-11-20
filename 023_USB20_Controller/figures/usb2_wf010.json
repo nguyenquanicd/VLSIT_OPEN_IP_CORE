@@ -1,0 +1,41 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p....||||||....."
+  },
+  {
+   "name": "o_utmi_txvalid",
+   "wave": "01..0||||||1..0."
+  },
+  {
+   "name": "i_utmi_txready",
+   "wave": "01..0||||||1..0."
+  },
+  {
+   "name": "o_utmi_dataout",
+   "wave": "x===x||||||===x.",
+   "data": [
+    "SOF",
+    "FN,FN",
+    "FN,C5",
+    "SOF",
+    "FN",
+    "FN,C5"
+   ]
+  },
+  {
+   "name": "u2_irq_raw.sof",
+   "wave": "0.1..||||||....."
+  }
+ ],
+ "head": {
+  "text": "WF-010: host start-of-frame every microframe (OP-006, success)"
+ },
+ "foot": {
+  "text": "Not to scale. SOF every 125 us (+/- 0.0625 us) with the same frame number eight times, then the next frame number."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

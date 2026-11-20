@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1170" height="440" viewBox="10 10 1170 440" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="1170" height="440" fill="#FFFFFF"/>
+<ellipse cx="595" cy="70" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="595" y="77" text-anchor="middle">ENUM_ST_DX_IDLE</text>
+<ellipse cx="1000" cy="230" rx="150" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="237" text-anchor="middle">ENUM_ST_DX_OUT_DATA</text>
+<ellipse cx="785" cy="390" rx="150" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="785" y="397" text-anchor="middle">ENUM_ST_DX_OUT_RESP</text>
+<ellipse cx="185" cy="230" rx="145" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="185" y="237" text-anchor="middle">ENUM_ST_DX_IN_DATA</text>
+<ellipse cx="395" cy="390" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="395" y="397" text-anchor="middle">ENUM_ST_DX_IN_ACK</text>
+<ellipse cx="590" cy="230" rx="160" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="590" y="237" text-anchor="middle">ENUM_ST_DX_PING_RESP</text>
+<path d="M 720 70 L 786.634 146.328 L 850 230" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="850,230 837.972,224.056 847.538,216.811" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="685.617" y="177.164" width="265.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="818.317" y="195.164" text-anchor="middle">OUT or SETUP token matched</text>
+<path d="M 529.518 95.5541 L 386.129 136.482 L 252.92 203.495" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="252.92,203.495 260.944,192.742 266.336,203.462" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="374.624" y="105.018" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="457.824" y="123.018" text-anchor="middle">IN token matched</text>
+<path d="M 594.063 99.9992 L 578.507 149.563 L 590.937 200.001" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="590.937,200.001 582.24,189.785 593.891,186.914" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="493.185" y="113.781" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="586.285" y="131.781" text-anchor="middle">PING token matched</text>
+<path d="M 961.069 258.972 L 823.931 361.028" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="823.931,361.028 829.976,349.05 837.14,358.677" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="789.5" y="299" width="206" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="892.5" y="317" text-anchor="middle">data packet received</text>
+<path d="M 850 230 L 808.366 128.672 L 720 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="720,70 733.316,71.6392 726.678,81.6362" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="731.133" y="168.336" width="196.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="829.183" y="186.336" text-anchor="middle">time-out or bad CRC</text>
+<path d="M 785 360 L 785 70 L 720 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="720,70 732,64 732,76" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="677.05" y="204" width="215.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="785" y="222" text-anchor="middle">ACK, NAK or NYET sent</text>
+<path d="M 222.999 258.952 L 357.096 361.12" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="357.096,361.12 343.915,358.62 351.187,349.075" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="206.848" y="299.036" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="290.048" y="317.036" text-anchor="middle">data packet sent</text>
+<path d="M 252.92 203.495 L 396.308 162.567 L 529.518 95.5541" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="529.518,95.5541 521.494,106.307 516.102,95.5869" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="374.763" y="118.061" width="176.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="462.913" y="136.061" text-anchor="middle">NAK or STALL sent</text>
+<path d="M 395 360 L 395 70 L 470 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="470,70 458,76 458,64" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="272.2" y="204" width="245.6" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="395" y="222" text-anchor="middle">ACK received or time-out</text>
+<path d="M 590.937 200.001 L 606.493 150.437 L 594.063 99.9992" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="594.063,99.9992 602.76,110.215 591.109,113.086" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="520.465" y="164.219" width="156.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="598.715" y="182.219" text-anchor="middle">ACK or NAK sent</text>
+</svg>

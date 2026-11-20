@@ -1,0 +1,48 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p.|..|...."
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "==|==|==..",
+   "data": [
+    "J",
+    "SE0",
+    "K",
+    "SE0",
+    "SE0",
+    "J"
+   ]
+  },
+  {
+   "name": "o_utmi_txvalid",
+   "wave": "0.|10|...."
+  },
+  {
+   "name": "o_utmi_xcvrsel",
+   "wave": "=.|..|....",
+   "data": [
+    "FS"
+   ]
+  },
+  {
+   "name": "o_utmi_termsel",
+   "wave": "1.|..|...."
+  },
+  {
+   "name": "u2_irq_raw.enum",
+   "wave": "0.|..|.1.."
+  }
+ ],
+ "head": {
+  "text": "WF-002: no hub chirp, device falls back to full-speed (OP-001, corner)"
+ },
+ "foot": {
+  "text": "Not to scale. The device sends Chirp K (cycle 3), sees no K-J-K-J-K-J within 1.0 to 2.5 ms (gap), and stays full-speed with the pull-up on."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,0 +1,61 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p....|||...."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "0....|||...."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "0....|||...."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x....|||....",
+    "data": []
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "01..0|||...."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "01..0|||...."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x===x|||....",
+    "data": [
+     "IN",
+     "ADDR",
+     "EP,C5"
+    ]
+   }
+  ],
+  {
+   "name": "w_turnaround_expired",
+   "wave": "0....|||10.."
+  },
+  {
+   "name": "u2_hc_int.timeout",
+   "wave": "0....|||.1.."
+  }
+ ],
+ "head": {
+  "text": "WF-012: host IN token with no response, time-out (OP-007, error)"
+ },
+ "foot": {
+  "text": "Not to scale. The device does not answer within the bus turn-around time; the channel sets the timeout flag and software decides the retry."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

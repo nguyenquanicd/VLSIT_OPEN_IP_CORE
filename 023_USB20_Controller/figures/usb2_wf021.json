@@ -1,0 +1,54 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p....................."
+  },
+  {
+   "name": "i_ulpi_dir",
+   "wave": "0.......1....0...1...."
+  },
+  {
+   "name": "i_ulpi_nxt",
+   "wave": "0.1..0....1.0........."
+  },
+  {
+   "name": "o_ulpi_stp",
+   "wave": "0....10..............."
+  },
+  {
+   "name": "o_ulpi_data_oe",
+   "wave": "01....0........1.0...."
+  },
+  {
+   "name": "o_ulpi_data",
+   "wave": "x====x.........=.x....",
+   "data": [
+    "TXCMD",
+    "D0",
+    "D1",
+    "D2",
+    "TXCMD"
+   ]
+  },
+  {
+   "name": "i_ulpi_data",
+   "wave": "x........====x........",
+   "data": [
+    "RXCMD",
+    "D0",
+    "D1",
+    "D2"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-021: ULPI transmit and receive turnaround, TX CMD aborted by dir (IF-002, success and error)"
+ },
+ "foot": {
+  "text": "TX CMD with PID, data on nxt, stp one cycle. dir rises (cycle 8): the PHY drives RX CMD and data. A second TX CMD (cycle 15) is aborted when dir rises (cycle 17): the link releases the bus at once."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

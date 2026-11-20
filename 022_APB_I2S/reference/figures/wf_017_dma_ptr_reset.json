@@ -1,0 +1,38 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p................."
+  },
+  {
+   "name": "o_reg_rd_en",
+   "wave": "010010010001000100"
+  },
+  {
+   "name": "o_reg_wr_en",
+   "wave": "000000000100010000"
+  },
+  {
+   "name": "w_rxdma_ptr",
+   "wave": "=.=..=..=...=.=.=.",
+   "data": [
+    "0L",
+    "0R",
+    "2L",
+    "2R",
+    "3L",
+    "0L",
+    "0R"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-017 OP-013 Cyclic DMA read pointer, disabled channel and pointer reset (corner)"
+ },
+ "foot": {
+  "text": "Channels 0, 2 and 3 enabled, channel 1 disabled. A pointer reset in the middle of a pair has no effect; at a pair boundary it returns to channel 0."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

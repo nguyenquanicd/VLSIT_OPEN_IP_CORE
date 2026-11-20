@@ -1,0 +1,64 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_phy",
+   "wave": "p..............."
+  },
+  [
+   "PHY to link",
+   {
+    "name": "i_utmi_rxactive",
+    "wave": "01..0........10."
+   },
+   {
+    "name": "i_utmi_rxvalid",
+    "wave": "01..0........10."
+   },
+   {
+    "name": "i_utmi_datain",
+    "wave": "x===x........=x.",
+    "data": [
+     "IN",
+     "ADDR",
+     "EP,C5",
+     "ACK"
+    ]
+   }
+  ],
+  [
+   "Link to PHY",
+   {
+    "name": "o_utmi_txvalid",
+    "wave": "0....1....0....."
+   },
+   {
+    "name": "i_utmi_txready",
+    "wave": "0....1....0....."
+   },
+   {
+    "name": "o_utmi_dataout",
+    "wave": "x....=====x.....",
+    "data": [
+     "DATA1",
+     "D0",
+     "D1",
+     "CRCL",
+     "CRCH"
+    ]
+   }
+  ],
+  {
+   "name": "u2_epi_int.done",
+   "wave": "0..............1"
+  }
+ ],
+ "head": {
+  "text": "WF-006: device IN data packet, host ACK (OP-003, success)"
+ },
+ "foot": {
+  "text": "Token, data packet with the DATA1 toggle PID, host ACK; the toggle then changes."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

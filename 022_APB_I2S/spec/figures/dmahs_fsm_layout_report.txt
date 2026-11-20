@@ -1,0 +1,11 @@
+FSM: dmahs
+STATES: 3, TRANSITIONS: 4
+LAYOUT: flow-lr-snake-2-g140
+CROSSINGS: 0
+LABEL CONFLICTS: 0
+BENDS: 2
+MINIMUM GAP: 110.0 px (minimum 100 px)
+TEXT FIT: PASS (worst fill ratio 0.52)
+DISTRIBUTION: PASS (2 x-centers, 2 y-centers)
+PAGE: 520 x 260 px
+RESULT: PASS

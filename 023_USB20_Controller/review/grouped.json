@@ -1,0 +1,330 @@
+{
+  "schema": "vlsit-gate-groups/1",
+  "groups": [
+    {
+      "id": "G-01",
+      "root_cause": "Application evidence",
+      "members": [
+        "F-034"
+      ],
+      "severities": [
+        "Low"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-02",
+      "root_cause": "Area and power not quantified",
+      "members": [
+        "F-012"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-03",
+      "root_cause": "CSR multi-bit CDC structure",
+      "members": [
+        "F-001",
+        "F-002",
+        "F-014"
+      ],
+      "severities": [
+        "Critical",
+        "High",
+        "Medium"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-04",
+      "root_cause": "Critical path statement",
+      "members": [
+        "F-029"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-05",
+      "root_cause": "DFT detail",
+      "members": [
+        "F-031"
+      ],
+      "severities": [
+        "Low"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-06",
+      "root_cause": "DMA access protection",
+      "members": [
+        "F-018"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-07",
+      "root_cause": "FIFO RAM bandwidth",
+      "members": [
+        "F-003"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-08",
+      "root_cause": "FIFO sizing rule",
+      "members": [
+        "F-021"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-09",
+      "root_cause": "Host scheduling rules",
+      "members": [
+        "F-022"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-10",
+      "root_cause": "Integration guide",
+      "members": [
+        "F-030"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-11",
+      "root_cause": "Market comparison",
+      "members": [
+        "F-032"
+      ],
+      "severities": [
+        "Low"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-12",
+      "root_cause": "Open items",
+      "members": [
+        "F-027"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-13",
+      "root_cause": "Over-current timing",
+      "members": [
+        "F-015"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-14",
+      "root_cause": "Parameter checking",
+      "members": [
+        "F-020"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-15",
+      "root_cause": "Protocol source evidence",
+      "members": [
+        "F-006",
+        "F-007",
+        "F-025"
+      ],
+      "severities": [
+        "High",
+        "Low"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-16",
+      "root_cause": "RAM soft error",
+      "members": [
+        "F-017"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-17",
+      "root_cause": "Software stack compatibility",
+      "members": [
+        "F-013"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-18",
+      "root_cause": "Split transaction detail",
+      "members": [
+        "F-008"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-19",
+      "root_cause": "Test mode entry",
+      "members": [
+        "F-024"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-20",
+      "root_cause": "Timing numbers missing",
+      "members": [
+        "F-010",
+        "F-011"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 2,
+      "merged": true
+    },
+    {
+      "id": "G-21",
+      "root_cause": "Traceability",
+      "members": [
+        "F-033"
+      ],
+      "severities": [
+        "Low"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-22",
+      "root_cause": "Turnaround latency budget",
+      "members": [
+        "F-009"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-23",
+      "root_cause": "ULPI low power and clock stop",
+      "members": [
+        "F-004",
+        "F-016",
+        "F-019"
+      ],
+      "severities": [
+        "High",
+        "Medium"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-24",
+      "root_cause": "UTMI+ control encodings",
+      "members": [
+        "F-005"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-25",
+      "root_cause": "Unquantified timing",
+      "members": [
+        "F-023"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-26",
+      "root_cause": "Verification coverage",
+      "members": [
+        "F-026",
+        "F-028"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 2,
+      "merged": true
+    }
+  ],
+  "count": 26
+}
