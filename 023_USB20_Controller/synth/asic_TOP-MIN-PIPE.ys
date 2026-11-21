@@ -1,0 +1,8 @@
+plugin -i slang
+read_slang -f ../synth/fl_utmi_axis.f --top m_usb2_top_utmi_axis -G PARA_USB2_ROLE=0 -G PARA_USB2_NUM_EP=2 -G PARA_USB2_NUM_HC=1 -G PARA_USB2_FIFO_DEPTH=256 -G PARA_USB2_NUM_DMA_CH=2 -G PARA_USB2_PIPE_PHY_IN=1 -G PARA_USB2_PIPE_RX=1 -G PARA_USB2_PIPE_CRC=1 -G PARA_USB2_PIPE_XREG=1 -G PARA_USB2_PIPE_MODE=1 -G PARA_USB2_PIPE_AXS=1 -D VLSIT_SYNTHESIS
+hierarchy -top m_usb2_top_utmi_axis
+synth -top m_usb2_top_utmi_axis -flatten
+dfflibmap -liberty ../synth/pdk_freepdk45/gscl45nm.lib
+abc -liberty ../synth/pdk_freepdk45/gscl45nm.lib -D 6667 -script +strash;&get,-n;&fraig,-x;&put;scorr;dc2;strash;&get,-n;&dch,-f;&nf,{D};&put;buffer;upsize,{D};dnsize,{D};topo;stime,-p
+opt_clean
+tee -o ../synth/asic_TOP-MIN-PIPE_stat.txt stat -liberty ../synth/pdk_freepdk45/gscl45nm.lib

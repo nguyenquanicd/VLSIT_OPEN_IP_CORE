@@ -50,7 +50,7 @@ reg("ctrl", "0x4", "USB 2.0 controller global control register. Enables the core
     flag("core_en", 0, "Core enable. Lets the protocol engines, the FIFO manager and the PHY interface run.",
          "Set after the FIFO regions, the endpoint or channel registers and the DMA registers are programmed; clear before changing PARA-independent role or FIFO settings.",
          "0x0 core disabled, the bus side is idle (reset value)", "0x1 core enabled"),
-    fld("soft_rst", "[1]", "rwi", "0x0", "Core soft reset. Returns all protocol state of the CLK-PHY domain to its reset value while the registers keep their values.",
+    fld("swrst", "[1]", "rwi", "0x0", "Core soft reset. Returns all protocol state of the CLK-PHY domain to its reset value while the registers keep their values.",
         "Software writes 1; hardware clears the bit when the reset has finished in both clock domains; poll it before reprogramming.",
         ["0x0 no reset pending (reset value)", "0x1 reset requested or in progress"]),
     flag("phy_rst", 2, "PHY reset output. Drives o_phy_rst_n to the PHY.",
@@ -90,11 +90,14 @@ reg("sts", "0x8", "USB 2.0 controller status register. Reports the live role, sp
          "Read before enabling the device role pull-up or the host VBUS drive.", "0x0 VBUS below threshold (reset value)", "0x1 VBUS valid", "ro"),
     flag("id_a_plug", 8, "ID indication. Shows the plug type that the PHY reports.",
          "Read in dual-role builds; the value is meaningful after the PHY ID sampling time of 50 ms.", "0x0 B plug, device (reset value)", "0x1 A plug, host", "ro"),
-    flag("rst_busy", 9, "Reset busy. Shows that a soft reset or a bus reset sequence is running.",
-         "Poll after writing soft_rst or after a port reset.", "0x0 idle (reset value)", "0x1 busy", "ro"),
-    flag("phy_clk_ok", 10, "PHY clock present. Shows that CLK-PHY toggles.",
+    flag("rstbusy", 9, "Reset busy. Shows that a soft reset or a bus reset sequence is running.",
+         "Poll after writing swrst or after a port reset.", "0x0 idle (reset value)", "0x1 busy", "ro"),
+    flag("phyclk_ok", 10, "PHY clock present. Shows that CLK-PHY toggles.",
          "Poll after releasing phy_rst; the CSR stays accessible without the PHY clock.", "0x0 PHY clock absent (reset value)", "0x1 PHY clock present", "ro"),
-    rsv("[31:11]")])
+    fld("xq_free", "[16:11]", "ro", "0x8", "Free command entries. The number of free entries of the register command FIFO that carries CSR writes to the CLK-PHY domain.",
+        "Read before a burst of writes to endpoint, channel, FIFO, role or enable fields; issue at most this many writes before reading it again.",
+        ["0x0 FIFO full: further writes to crossing fields are dropped and xq_ovf is set", "0x1 to 0x8 free entries (reset value 0x8)", "0x9 to 0x3F reserved"], "entry", "0 to 8"),
+    rsv("[31:17]")])
 
 # ---------------------------------------------------------------- build
 reg("build", "0xC", "USB 2.0 controller build configuration register. Reports the elaboration parameters of this build.", [
@@ -104,7 +107,7 @@ reg("build", "0xC", "USB 2.0 controller build configuration register. Reports th
     flag("utmi_16", 3, "UTMI+ width parameter. Reports whether the UTMI+ interface is 16 bits wide.", "Read at probe time; it fixes the CLK-PHY frequency at 30 MHz.", "0x0 8-bit (reset value)", "0x1 16-bit", "ro"),
     flag("axi_slave", 4, "Data interface parameter. Reports whether the build uses the AXI4 slave port with DMA request and acknowledge.", "Read at probe time.", "0x0 AXI4 master DMA (reset value)", "0x1 AXI4 slave with DMA handshake", "ro"),
     flag("lpm_cfg", 5, "LPM parameter. Reports whether PARA_USB2_LPM_EN is 1.", "Read at probe time; LPM fields do nothing when 0.", "0x0 no LPM (reset value)", "0x1 LPM present", "ro"),
-    flag("split_cfg", 6, "Split parameter. Reports whether PARA_USB2_SPLIT_EN is 1.", "Read at probe time; hc_split fields do nothing when 0.", "0x0 no split (reset value)", "0x1 split present", "ro"),
+    flag("split_cfg", 6, "Split parameter. Reports whether PARA_USB2_SPLIT_EN is 1.", "Read at probe time; hc_spl fields do nothing when 0.", "0x0 no split (reset value)", "0x1 split present", "ro"),
     fld("num_ep", "[11:7]", "ro", "0x8", "Endpoint count parameter. Reports PARA_USB2_NUM_EP, the endpoints besides EP0.", "Read at probe time.",
         ["0x1 to 0xF endpoints besides EP0 (reset value 0x8)"], "count", "1 to 15"),
     fld("num_hc", "[16:12]", "ro", "0x8", "Host channel count parameter. Reports PARA_USB2_NUM_HC.", "Read at probe time.",
@@ -113,12 +116,13 @@ reg("build", "0xC", "USB 2.0 controller build configuration register. Reports th
         ["0x8 to 0xF depth of 2 to the power of the value words (reset value 0xA, 1024 words)", "0x0 to 0x7 reserved"], "none", "0x8 to 0xF, depth 256 to 32768 words"),
     flag("sg_cfg", 21, "Scatter-gather parameter. Reports whether PARA_USB2_SG_EN is 1.", "Read at probe time; sg_mode has no effect when 0.", "0x0 no scatter-gather DMA (reset value)", "0x1 scatter-gather DMA present", "ro"),
     fld("dbuf_cfg", "[22]", "ro", "0x1", "Double-buffer parameter. Reports whether PARA_USB2_DBUF_EN is 1.", "Read at probe time; dbuf fields have no effect when 0.", ["0x0 no double buffering", "0x1 double buffering present (reset value)"]),
-    rsv("[31:23]"),
+    fld("par_cfg", "[23]", "ro", "0x1", "RAM parity parameter. Reports whether PARA_USB2_RAM_PAR_EN is 1.", "Read at probe time; the ram_par interrupt exists only when 1.", ["0x0 no RAM parity", "0x1 RAM parity present (reset value)"]),
+    rsv("[31:24]"),
     ])
 
 # ---------------------------------------------------------------- interrupt set
 IRQ = [
-    ("sof", "start-of-frame packet sent or received"), ("rst", "USB bus reset detected or completed"),
+    ("sof", "start-of-frame packet sent or received"), ("busrst", "USB bus reset detected or completed"),
     ("suspend", "bus suspend or L1 sleep entered"), ("resume", "bus resume detected or completed"),
     ("conn", "device connection detected"), ("disc", "device disconnection detected"),
     ("role_chg", "role of the dual-role port changed"), ("enum", "speed enumeration finished"),
@@ -131,6 +135,7 @@ IRQ = [
     ("hc_xfer", "a host channel event, read the channel summary register"),
     ("phy_done", "PHY register access finished"),
     ("iso_inc", "an isochronous transfer was incomplete or missed"), ("ocur", "port over-current detected"),
+    ("ram_par", "FIFO RAM parity error"), ("xq_ovf", "register command FIFO overflow"),
 ]
 
 
@@ -197,7 +202,7 @@ reg("dsts", "0x24", "USB 2.0 device status register. Reports the device speed, f
 
 # ---------------------------------------------------------------- host control and status
 reg("hport", "0x28", "USB 2.0 host port control register. Controls reset, suspend, resume, VBUS and test mode of the root port.", [
-    fld("port_rst", "[0]", "rwi", "0x0", "Port reset. Drives bus reset on the root port.",
+    fld("prst", "[0]", "rwi", "0x0", "Port reset. Drives bus reset on the root port.",
         "Write 1 to start the reset after attach debounce; hardware holds reset for the programmed time and clears the bit; the reset is at least 50 ms.",
         ["0x0 no reset (reset value)", "0x1 reset requested or in progress"]),
     fld("port_susp", "[1]", "rwi", "0x0", "Port suspend. Puts the root port into suspend.",
@@ -212,7 +217,7 @@ reg("hport", "0x28", "USB 2.0 host port control register. Controls reset, suspen
          "Set after the port is enabled and clear before suspend.", "0x0 no SOF (reset value)", "0x1 SOF every (micro)frame"),
     fld("test_mode", "[7:5]", "rw", "0x0", "Port test mode. Starts a USB 2.0 test mode on the host port.",
         "Write while the port is enabled; leave the mode by soft reset.",
-        ["0x0 test mode off (reset value)", "0x1 Test_J", "0x2 Test_K", "0x3 Test_SE0_NAK", "0x4 Test_Packet", "0x5 to 0x7 reserved"]),
+        ["0x0 test mode off (reset value)", "0x1 Test_J", "0x2 Test_K", "0x3 Test_SE0_NAK", "0x4 Test_Packet", "0x5 Test_Force_Enable (host only)", "0x6 to 0x7 reserved"]),
     fld("lpm_req", "[8]", "rwi", "0x0", "LPM request. Sends an LPM extended transaction to the device on the next frame.",
         "Write 1 after the hird and rwake fields and the device address are set; hardware clears the bit when the device answered.",
         ["0x0 no request (reset value)", "0x1 request pending"]),
@@ -221,7 +226,7 @@ reg("hport", "0x28", "USB 2.0 host port control register. Controls reset, suspen
     flag("lpm_rwake", 13, "LPM remote-wake attribute sent in the LPM token.", "Write before lpm_req.", "0x0 remote wake not allowed (reset value)", "0x1 remote wake allowed"),
     fld("lpm_addr", "[20:14]", "rw", "0x0", "Address of the device that receives the LPM token.", "Write before lpm_req.", ["0x0 to 0x7F device address (reset value 0x0)"], "none", "7-bit value"),
     flag("hs_dis", 21, "Host high-speed disable. Skips the chirp handshake and keeps the port in full-speed.",
-         "Write before port_rst.", "0x0 high-speed allowed (reset value)", "0x1 full-speed only"),
+         "Write before prst.", "0x0 high-speed allowed (reset value)", "0x1 full-speed only"),
     flag("oc_en", 22, "Over-current protection enable. Lets the over-current input switch the port power off.",
          "Set before vbus_drv in host role; clear when no power switch with an over-current flag is fitted.", "0x0 over-current input ignored (reset value)", "0x1 over-current protection on"),
     rsv("[31:23]")])
@@ -236,7 +241,9 @@ reg("hsts", "0x2C", "USB 2.0 host port status register. Reports the connect stat
     flag("oc_act", 19, "Over-current active. Shows that the over-current input is active.", "Read after the ocur interrupt; power stays off until software clears the flag and writes vbus_drv again.", "0x0 no over-current (reset value)", "0x1 over-current", "ro"),
     flag("sg_mode", 20, "Scatter-gather mode. Makes each endpoint or channel DMA address register point to a descriptor list.",
          "Set before dma_en in builds with scatter-gather; descriptors are 8-byte entries described in section 9 of the specification.", "0x0 buffer address mode (reset value)", "0x1 descriptor list mode"),
-    rsv("[31:21]")])
+    flag("win_en", 21, "DMA window enable. Restricts every DMA address to the window of u2_dma_wbase and u2_dma_wlim.",
+         "Set before dma_en; a descriptor or buffer outside the window is not transferred and dma_err is set.", "0x0 any address is accepted (reset value)", "0x1 addresses must lie inside the window"),
+    rsv("[31:22]")])
 
 # ---------------------------------------------------------------- SOF configuration
 reg("sof_cfg", "0x30", "USB 2.0 SOF timing configuration register. Sets the microframe length of the host in PHY clock cycles.", [
@@ -299,11 +306,11 @@ reg("lpm_cfg", "0x60", "USB 2.0 LPM configuration register. Selects the device a
     fld("resp", "[1:0]", "rw", "0x0", "LPM answer. The handshake the device returns to an accepted LPM token.",
         "Write before soft_conn; the fields have no effect when the build has no LPM.",
         ["0x0 ACK (reset value)", "0x1 NYET", "0x2 STALL", "0x3 no response"]),
-    flag("lpm_en_rt", 2, "LPM runtime enable. Lets the device or host process LPM transactions.", "Write before soft_conn or port_rst.", "0x0 LPM ignored (reset value)", "0x1 LPM enabled"),
+    flag("lpm_en_rt", 2, "LPM runtime enable. Lets the device or host process LPM transactions.", "Write before soft_conn or prst.", "0x0 LPM ignored (reset value)", "0x1 LPM enabled"),
     rsv("[31:3]")])
 
 # ---------------------------------------------------------------- DMA channel map (AXI slave)
-reg("dmach_map", "0x100", "USB 2.0 DMA channel map register. Maps one DMA handshake channel to a FIFO region.", [
+reg("dma_map", "0x100", "USB 2.0 DMA channel map register. Maps one DMA handshake channel to a FIFO region.", [
     fld("region", "[4:0]", "rw", "0x0", "Mapped region. The FIFO region that the DMA channel serves.", "Write before dma_en; one region per channel.",
         ["0x0 to 0xF device endpoint number (reset value 0x0)", "0x10 to 0x1F host channel number plus 0x10"]),
     flag("dir_in", 5, "Channel direction. Selects whether the DMA reads from or writes to the mapped region.", "Write before dma_en.", "0x0 DMA writes the region (OUT data, reset value)", "0x1 DMA reads the region (IN data)"),
@@ -324,7 +331,7 @@ def ep_regs(d, base_off, indir):
     int_off = "0x%X" % (base_off + (0x100 if indir else 0xC0))
     ien_off = "0x%X" % (base_off + (0x140 if indir else 0x100))
     fifo_off = None
-    reg(p + "_ctrl", ctrl_off, "USB 2.0 %s control register. Configures and controls one %s." % (n, n), [
+    reg(p + "_ctl", ctrl_off, "USB 2.0 %s control register. Configures and controls one %s." % (n, n), [
         fld("mps", "[10:0]", "rw", "0x0", "Maximum packet size. The largest data packet of the endpoint in bytes.", "Write before ep_en; 64 for a high-speed control endpoint, 512 for high-speed bulk.",
             ["0x0 to 0x400 bytes (reset value 0x0)"], "byte", "at most 1024"),
         fld("type", "[12:11]", "rw", "0x0", "Endpoint type. The USB transfer type of the endpoint.", "Write before ep_en.",
@@ -345,19 +352,19 @@ def ep_regs(d, base_off, indir):
         ZLPFIELD,
         flag("buf_cur", 27, "Current buffer. Shows which of the two buffers the bus side uses next.", "Read for debug when dbuf is 1.", "0x0 buffer A (reset value)", "0x1 buffer B", "ro"),
         rsv("[31:28]")], bank(9, 16))
-    reg(p + "_xfer", xf_off, "USB 2.0 %s transfer register. Holds the size and the packet count of the transfer." % n, [
+    reg(p + "_xfr", xf_off, "USB 2.0 %s transfer register. Holds the size and the packet count of the transfer." % n, [
         fld("xsize", "[18:0]", "rwi", "0x0", "Transfer size. The number of bytes still to move; hardware counts it down.", "Write before ep_en; read the remainder after the transfer.", ["0x0 to 0x7FFFF bytes (reset value 0x0)"], "byte", "at most 524287"),
         fld("pkt_cnt", "[28:19]", "rwi", "0x0", "Packet count. The number of packets still to move; hardware counts it down.", "Write before ep_en; for an OUT endpoint it limits the accepted packets.", ["0x0 to 0x3FF packets (reset value 0x0)"], "packet", "at most 1023"),
         rsv("[31:29]")], bank(9, 16))
     reg(p + "_dma", dma_off, "USB 2.0 %s DMA address register. Holds the low buffer address of the transfer." % n, [
         fld("addr", "[31:0]", "rwi", "0x0", "DMA buffer address, low word. Hardware advances it as data moves.", "Write before ep_en in AXI master builds; ignored in AXI slave builds.", ["0x0 to 0xFFFFFFFF buffer address (reset value 0x0)"], "byte", "aligned to the AXI data width")], bank(9, 16))
     if indir:
-        reg(p + "_fifo", "0x%X" % (base_off + 0xC0), "USB 2.0 IN endpoint FIFO register. Sets the transmit region of one device IN endpoint.", [
+        reg(p + "_buf", "0x%X" % (base_off + 0xC0), "USB 2.0 IN endpoint FIFO register. Sets the transmit region of one device IN endpoint.", [
             fld("start", "[15:0]", "rw", "0x0", "Region start. The first 32-bit word address of the endpoint transmit region.", "Write before core_en; regions must not overlap.", ["0x0 to 0x7FFF word address (reset value 0x0)"], "32-bit word", "below PARA_USB2_FIFO_DEPTH"),
             fld("size", "[31:16]", "rw", "0x80", "Region size. The number of 32-bit words of the endpoint transmit region.", "Write before core_en; at least one maximum packet.", ["0x10 to 0x8000 words (reset value 0x80)"], "32-bit word", "at least 0x10")], bank(9, 16))
     ev = [("done", "transfer complete"), ("ep_dis", "endpoint disabled"), ("timeout", "time-out"), ("nak", "NAK sent"), ("nyet", "NYET sent"),
           ("stall", "STALL sent"), ("ovf", "FIFO overflow"), ("unf", "FIFO underflow"), ("setup", "SETUP packet received (OUT endpoints)"), ("iso_inc", "isochronous transfer incomplete")]
-    for kind, off, rn in (("int", int_off, "interrupt"), ("int_en", ien_off, "interrupt enable")):
+    for kind, off, rn in (("int", int_off, "interrupt"), ("ien", ien_off, "interrupt enable")):
         fl = []
         for i, (n2, t) in enumerate(ev):
             up = t[0].upper() + t[1:]
@@ -388,7 +395,7 @@ reg("hc_ctrl", "0x600", "USB 2.0 host channel control register. Configures and s
     flag("odd_frm", 29, "Odd frame. Starts a periodic transaction in an odd (micro)frame.", "Write before ch_en for periodic channels.", "0x0 even frame (reset value)", "0x1 odd frame"),
     fld("ch_dis", "[30]", "rwi", "0x0", "Channel disable. Halts the channel after the current packet.", "Write 1 to stop a transfer; hardware clears the bit and raises ch_halt.", ["0x0 no request (reset value)", "0x1 halt requested"]),
     fld("ch_en", "[31]", "rwi", "0x0", "Channel enable. Starts the programmed transfer on the channel.", "Write 1 after the xfer, dma and split registers are written; hardware clears the bit when the channel halts.", ["0x0 idle (reset value)", "0x1 transfer armed"])], bank(8, 16))
-reg("hc_split", "0x640", "USB 2.0 host channel split register. Holds the hub address and port for split transactions.", [
+reg("hc_spl", "0x640", "USB 2.0 host channel split register. Holds the hub address and port for split transactions.", [
     fld("hub_addr", "[6:0]", "rw", "0x0", "Hub address. The USB address of the hub with the transaction translator.", "Write before ch_en when split_en is 1.", ["0x0 to 0x7F hub address (reset value 0x0)"], "none", "7-bit value"),
     fld("port_addr", "[13:7]", "rw", "0x0", "Hub port address. The downstream port of the hub where the target device sits.", "Write before ch_en when split_en is 1.", ["0x0 to 0x7F port number (reset value 0x0)"], "none", "7-bit value"),
     fld("xact_pos", "[15:14]", "rw", "0x0", "Transaction position. The position of the payload in a split isochronous OUT transaction.", "Write before ch_en for split isochronous OUT.", ["0x0 middle (reset value)", "0x1 end", "0x2 begin", "0x3 all"]),
@@ -404,7 +411,7 @@ reg("hc_dma", "0x6C0", "USB 2.0 host channel DMA address register. Holds the low
     fld("addr", "[31:0]", "rwi", "0x0", "DMA buffer address, low word. Hardware advances it as data moves.", "Write before ch_en in AXI master builds.", ["0x0 to 0xFFFFFFFF buffer address (reset value 0x0)"], "byte", "aligned to the AXI data width")], bank(8, 16))
 HCEV = [("done", "transfer complete"), ("ch_halt", "channel halted"), ("timeout", "response time-out"), ("nak", "NAK received"), ("nyet", "NYET received"),
         ("stall", "STALL received"), ("ack", "ACK received"), ("xact_err", "transaction error"), ("babble", "babble error"), ("tog_err", "data toggle error"), ("frm_ovr", "frame overrun"), ("poll_miss", "polled data not consumed in time"), ("iso_inc", "isochronous transfer incomplete")]
-for kind, off, rn in (("int", "0x700", "interrupt"), ("int_en", "0x740", "interrupt enable")):
+for kind, off, rn in (("int", "0x700", "interrupt"), ("ien", "0x740", "interrupt enable")):
     fl = []
     for i, (n2, t) in enumerate(HCEV):
         up = t[0].upper() + t[1:]
@@ -420,6 +427,14 @@ reg("lpbk_sts", "0x64", "USB2 link loopback status register. Counts the packets 
     fld("pkt_err", "[23:12]", "ro", "0x0", "Bad loopback packets. Counts packets with a PID or CRC error in link loopback.", "Read after a loopback test; clear with clr.", ["0x0 to 0xFFF count (reset value 0x0)"], "packet", "saturates at 4095"),
     fld("clr", "[24]", "rwi", "0x0", "Clear counters. Sets both counters to zero.", "Write 1 before a test; hardware clears the bit when done.", ["0x0 idle (reset value)", "0x1 clear requested"]),
     rsv("[31:25]")])
+
+reg("dma_wbase", "0x68", "USB2 DMA window base register. Holds the lowest address that the DMA may access when the window is enabled.", [
+    fld("addr", "[31:0]", "rw", "0x0", "Window base. The lowest byte address that a DMA buffer or descriptor may use when win_en is 1.", "Write before dma_en together with u2_dma_wlim; the high word is taken from u2_dma_hi.",
+        ["0x0 to 0xFFFFFFFF base address (reset value 0x0)"], "byte", "not above u2_dma_wlim.addr")])
+
+reg("dma_wlim", "0x6C", "USB2 DMA window limit register. Holds the highest address that the DMA may access when the window is enabled.", [
+    fld("addr", "[31:0]", "rw", "0xFFFFFFFF", "Window limit. The highest byte address that a DMA buffer or descriptor may use when win_en is 1.", "Write before dma_en together with u2_dma_wbase; the high word is taken from u2_dma_hi.",
+        ["0x0 to 0xFFFFFFFF limit address (reset value 0xFFFFFFFF)"], "byte", "not below u2_dma_wbase.addr")])
 
 reg("hc_cfg", "0x780", "USB2 host channel extension register. Selects double buffering, packet termination and interval polling of one channel.", [
     flag("dbuf", 0, "Double buffering. Splits the channel region into two packet buffers used alternately.", "Set before ch_en; has effect only when PARA_USB2_DBUF_EN is 1.", "0x0 single buffer (reset value)", "0x1 double buffer"),

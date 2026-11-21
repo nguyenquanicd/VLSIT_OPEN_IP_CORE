@@ -1,2570 +1,1423 @@
-    {
+{
     "Project": "VLSIT APB I2S Controller",
     "Module": "JSON debug file",
     "Function": "Used to check the configuration after generation",
     "Author": "Nguyen Hung Quan (user)",
     "Generator": "PC",
-    "Generator version": "3.5",
+    "Generator version": "3.6",
     "Page": "VLSI Technology",
     "Table - Configuration": [
-    {
-        "Module Name": "m_vlsit_csr_i2s",
-        "Address Width": "16",
-        "Data Width": "32",
-        "Protocol": "APB4",
-        "Asynchronous": "0",
-        "Strobe Mode": "HONOR",
-        "AXI Outstanding Mode": "SINGLE",
-        "AXI Read Depth": "2",
-        "AXI Write Depth": "2",
-        "AHB Endian": "LITTLE",
-        "Register Event Sideband": "1"
-    }
+        {
+            "Module Name": "m_vlsit_csr_i2s",
+            "Address Width": "16",
+            "Data Width": "32",
+            "Protocol": "APB4",
+            "Asynchronous": "0",
+            "Strobe Mode": "HONOR",
+            "AXI Outstanding Mode": "SINGLE",
+            "AXI Read Depth": "2",
+            "AXI Write Depth": "2",
+            "AHB Endian": "LITTLE",
+            "Register Event Sideband": "1"
+        }
     ],
     "Table - Register Definition": [
         {
-        "Register Name": "i2s_version",
-        "Offset": "0x0000",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00010000",
-        "Descriprtion": "Audio interface version register. Reports the major and minor release numbers of this IP.",
-        "Bits": [
-            {
-                "Bit Name": "major",
-                "Bit Type": "ro",
-                "Bit Field": "[31:16]",
-                "Reset Value": "0x1",
-                "Description": "Major version number. A change marks an incompatible register or behavior change.
-
-Usage: Read once after reset so that the driver selects the matching programming model; software never writes it.
-
-Values:
-0x0001 major version 1 (reset value).
-
-Unit: none.
-
-Limits: fixed by the IP release."
-            },
-            {
-                "Bit Name": "minor",
-                "Bit Type": "ro",
-                "Bit Field": "[15:0]",
-                "Reset Value": "0x0",
-                "Description": "Minor version number. A change marks a compatible addition.
-
-Usage: Read once after reset for diagnostics; software never writes it.
-
-Values:
-0x0000 minor version 0 (reset value).
-
-Unit: none.
-
-Limits: fixed by the IP release."
-            }
-          ]
+            "Register Name": "i2s_version",
+            "Offset": "0x0000",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00010000",
+            "Description": "Audio interface version register. Reports the major and minor release numbers of this IP.",
+            "Bits": [
+                {
+                    "Bit Name": "major",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:16]",
+                    "Reset Value": "0x1",
+                    "Description": "Major version number. A change marks an incompatible register or behavior change.\n\nUsage: Read once after reset so that the driver selects the matching programming model; software never writes it.\n\nValues:\n0x0001 major version 1 (reset value).\n\nUnit: none.\n\nLimits: fixed by the IP release."
+                },
+                {
+                    "Bit Name": "minor",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Minor version number. A change marks a compatible addition.\n\nUsage: Read once after reset for diagnostics; software never writes it.\n\nValues:\n0x0000 minor version 0 (reset value).\n\nUnit: none.\n\nLimits: fixed by the IP release."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_cap",
-        "Offset": "0x0004",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x7F204113",
-        "Descriprtion": "Audio interface capability register. Reports which units, lines and options this build contains.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "fmt_ext",
-                "Bit Type": "ro",
-                "Bit Field": "[30]",
-                "Reset Value": "0x1",
-                "Description": "Extended formats present. Tells whether formats other than the Philips frame and slot counts above 2 are built.
-
-Usage: Read at probe time before choosing fmt or nslot.
-
-Values:
-0x0 Philips frame, 2 slots only;
-0x1 all formats (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "dma",
-                "Bit Type": "ro",
-                "Bit Field": "[29]",
-                "Reset Value": "0x1",
-                "Description": "DMA handshake present. Tells whether the request and acknowledge pins exist.
-
-Usage: Read at probe time before setting dma in a control register.
-
-Values:
-0x0 not present;
-0x1 present (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "hung",
-                "Bit Type": "ro",
-                "Bit Field": "[28]",
-                "Reset Value": "0x1",
-                "Description": "Timeout detector present. Tells whether the hung-clock timer exists.
-
-Usage: Read at probe time before programming a timeout.
-
-Values:
-0x0 not present;
-0x1 present (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tri",
-                "Bit Type": "ro",
-                "Bit Field": "[27]",
-                "Reset Value": "0x1",
-                "Description": "Slot tri-state present. Tells whether masked transmit slots can release the data lines.
-
-Usage: Read at probe time before setting tri.
-
-Values:
-0x0 not present;
-0x1 present (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "ondem",
-                "Bit Type": "ro",
-                "Bit Field": "[26]",
-                "Reset Value": "0x1",
-                "Description": "On-demand frame start present. Tells whether a master can wait for FIFO data or space before starting a frame.
-
-Usage: Read at probe time before setting ondem.
-
-Values:
-0x0 not present;
-0x1 present (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "div",
-                "Bit Type": "ro",
-                "Bit Field": "[25]",
-                "Reset Value": "0x1",
-                "Description": "Bit clock divider present. Tells whether the unit can act as master with an internal bit clock.
-
-Usage: Read at probe time before setting role to master.
-
-Values:
-0x0 slave only;
-0x1 master and slave (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "pack",
-                "Bit Type": "ro",
-                "Bit Field": "[24]",
-                "Reset Value": "0x1",
-                "Description": "Packing present. Tells whether two 16-bit samples can share one FIFO word.
-
-Usage: Read at probe time before setting pack in a frame register.
-
-Values:
-0x0 no packing;
-0x1 packing present (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[23:22]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "max_slot",
-                "Bit Type": "ro",
-                "Bit Field": "[21:16]",
-                "Reset Value": "0x20",
-                "Description": "Largest frame length. The number of slots per frame cannot exceed this value.
-
-Usage: Read at probe time; program nslot of each unit not above it.
-
-Values:
-0x02 to 0x20 maximum number of slots (reset value 0x20).
-
-Unit: slots.
-
-Limits: 2 or more."
-            },
-            {
-                "Bit Name": "depth_l2",
-                "Bit Type": "ro",
-                "Bit Field": "[15:12]",
-                "Reset Value": "0x4",
-                "Description": "FIFO depth as a power of two. The depth of the FIFO of every data line is two to this power.
-
-Usage: Read at probe time; the logical FIFO of a unit holds depth times the line count words.
-
-Values:
-0x1 to 0x8 depth 2, 4, ..., 256 words (reset value 0x4, depth 16).
-
-Unit: log2 of words.
-
-Limits: fixed by the build."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[11]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "rx_lines",
-                "Bit Type": "ro",
-                "Bit Field": "[10:8]",
-                "Reset Value": "0x1",
-                "Description": "Number of receive data lines. Each line carries the whole frame in parallel.
-
-Usage: Read at probe time to size the data order of the receive data register.
-
-Values:
-0x0 to 0x4 0 to 4 lines (reset value 0x1).
-
-Unit: lines.
-
-Limits: 0 when the receiver is absent."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[7]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "tx_lines",
-                "Bit Type": "ro",
-                "Bit Field": "[6:4]",
-                "Reset Value": "0x1",
-                "Description": "Number of transmit data lines. Each line carries the whole frame in parallel.
-
-Usage: Read at probe time to size the data order of the transmit data register.
-
-Values:
-0x0 to 0x4 0 to 4 lines (reset value 0x1).
-
-Unit: lines.
-
-Limits: 0 when the transmitter is absent."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[3:2]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "rx_pres",
-                "Bit Type": "ro",
-                "Bit Field": "[1]",
-                "Reset Value": "0x1",
-                "Description": "Receiver present. Tells whether the receive unit exists in this build.
-
-Usage: Read at probe time; when 0 every register of the receive block is inactive.
-
-Values:
-0x0 no receiver;
-0x1 receiver present (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_pres",
-                "Bit Type": "ro",
-                "Bit Field": "[0]",
-                "Reset Value": "0x1",
-                "Description": "Transmitter present. Tells whether the transmit unit exists in this build.
-
-Usage: Read at probe time; when 0 every register of the transmit block reads 0 and ignores writes in effect.
-
-Values:
-0x0 no transmitter;
-0x1 transmitter present (reset value).
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_cap",
+            "Offset": "0x0004",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x7F204113",
+            "Description": "Audio interface capability register. Reports which units, lines and options this build contains.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "fmt_ext",
+                    "Bit Type": "ro",
+                    "Bit Field": "[30]",
+                    "Reset Value": "0x1",
+                    "Description": "Extended formats present. Tells whether formats other than the Philips frame and slot counts above 2 are built.\n\nUsage: Read at probe time before choosing fmt or nslot.\n\nValues:\n0x0 Philips frame, 2 slots only;\n0x1 all formats (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "dma",
+                    "Bit Type": "ro",
+                    "Bit Field": "[29]",
+                    "Reset Value": "0x1",
+                    "Description": "DMA handshake present. Tells whether the request and acknowledge pins exist.\n\nUsage: Read at probe time before setting dma in a control register.\n\nValues:\n0x0 not present;\n0x1 present (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "hung",
+                    "Bit Type": "ro",
+                    "Bit Field": "[28]",
+                    "Reset Value": "0x1",
+                    "Description": "Timeout detector present. Tells whether the hung-clock timer exists.\n\nUsage: Read at probe time before programming a timeout.\n\nValues:\n0x0 not present;\n0x1 present (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tri",
+                    "Bit Type": "ro",
+                    "Bit Field": "[27]",
+                    "Reset Value": "0x1",
+                    "Description": "Slot tri-state present. Tells whether masked transmit slots can release the data lines.\n\nUsage: Read at probe time before setting tri.\n\nValues:\n0x0 not present;\n0x1 present (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "ondem",
+                    "Bit Type": "ro",
+                    "Bit Field": "[26]",
+                    "Reset Value": "0x1",
+                    "Description": "On-demand frame start present. Tells whether a master can wait for FIFO data or space before starting a frame.\n\nUsage: Read at probe time before setting ondem.\n\nValues:\n0x0 not present;\n0x1 present (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "div",
+                    "Bit Type": "ro",
+                    "Bit Field": "[25]",
+                    "Reset Value": "0x1",
+                    "Description": "Bit clock divider present. Tells whether the unit can act as master with an internal bit clock.\n\nUsage: Read at probe time before setting role to master.\n\nValues:\n0x0 slave only;\n0x1 master and slave (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "pack",
+                    "Bit Type": "ro",
+                    "Bit Field": "[24]",
+                    "Reset Value": "0x1",
+                    "Description": "Packing present. Tells whether two 16-bit samples can share one FIFO word.\n\nUsage: Read at probe time before setting pack in a frame register.\n\nValues:\n0x0 no packing;\n0x1 packing present (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[23:22]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "max_slot",
+                    "Bit Type": "ro",
+                    "Bit Field": "[21:16]",
+                    "Reset Value": "0x20",
+                    "Description": "Largest frame length. The number of slots per frame cannot exceed this value.\n\nUsage: Read at probe time; program nslot of each unit not above it.\n\nValues:\n0x02 to 0x20 maximum number of slots (reset value 0x20).\n\nUnit: slots.\n\nLimits: 2 or more."
+                },
+                {
+                    "Bit Name": "depth_l2",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:12]",
+                    "Reset Value": "0x4",
+                    "Description": "FIFO depth as a power of two. The depth of the FIFO of every data line is two to this power.\n\nUsage: Read at probe time; the logical FIFO of a unit holds depth times the line count words.\n\nValues:\n0x1 to 0x8 depth 2, 4, ..., 256 words (reset value 0x4, depth 16).\n\nUnit: log2 of words.\n\nLimits: fixed by the build."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[11]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "rx_lines",
+                    "Bit Type": "ro",
+                    "Bit Field": "[10:8]",
+                    "Reset Value": "0x1",
+                    "Description": "Number of receive data lines. Each line carries the whole frame in parallel.\n\nUsage: Read at probe time to size the data order of the receive data register.\n\nValues:\n0x0 to 0x4 0 to 4 lines (reset value 0x1).\n\nUnit: lines.\n\nLimits: 0 when the receiver is absent."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[7]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "tx_lines",
+                    "Bit Type": "ro",
+                    "Bit Field": "[6:4]",
+                    "Reset Value": "0x1",
+                    "Description": "Number of transmit data lines. Each line carries the whole frame in parallel.\n\nUsage: Read at probe time to size the data order of the transmit data register.\n\nValues:\n0x0 to 0x4 0 to 4 lines (reset value 0x1).\n\nUnit: lines.\n\nLimits: 0 when the transmitter is absent."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3:2]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "rx_pres",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x1",
+                    "Description": "Receiver present. Tells whether the receive unit exists in this build.\n\nUsage: Read at probe time; when 0 every register of the receive block is inactive.\n\nValues:\n0x0 no receiver;\n0x1 receiver present (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_pres",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x1",
+                    "Description": "Transmitter present. Tells whether the transmit unit exists in this build.\n\nUsage: Read at probe time; when 0 every register of the transmit block reads 0 and ignores writes in effect.\n\nValues:\n0x0 no transmitter;\n0x1 transmitter present (reset value).\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_ctrl",
-        "Offset": "0x0008",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Audio interface global control register. Resets both units and selects the frame-done source.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:5]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "frm_sel",
-                "Bit Type": "rw",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Frame-done source. Chooses which unit raises the frame-done interrupt at the end of each frame.
-
-Usage: Write before enabling the frame-done interrupt.
-
-Values:
-0x0 transmitter (reset value);
-0x1 receiver.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[3:1]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "srst",
-                "Bit Type": "wo",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Global soft reset. Writing 1 resets both units, their FIFOs and their status; the configuration registers keep their values and the bit clears itself.
-
-Usage: Write 1 to recover from a fault; disable both units first when a clean stream stop is wanted. Reads return 0.
-
-Values:
-0x0 no action (reset value);
-0x1 reset both units.
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_ctrl",
+            "Offset": "0x0008",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Audio interface global control register. Resets both units and selects the frame-done source.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:5]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "frm_sel",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Frame-done source. Chooses which unit raises the frame-done interrupt at the end of each frame.\n\nUsage: Write before enabling the frame-done interrupt.\n\nValues:\n0x0 transmitter (reset value);\n0x1 receiver.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3:1]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "srst",
+                    "Bit Type": "wo",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Global soft reset. Writing 1 resets both units, their FIFOs and their status; the configuration registers keep their values and the bit clears itself.\n\nUsage: Write 1 to recover from a fault; disable both units first when a clean stream stop is wanted. Reads return 0.\n\nValues:\n0x0 no action (reset value);\n0x1 reset both units.\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_sts",
-        "Offset": "0x000c",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Audio interface global status register. Summarizes the state of both units and of the interrupt.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:5]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "irq",
-                "Bit Type": "ro",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Interrupt pending. High while at least one unmasked interrupt cause is set.
-
-Usage: Read in an interrupt handler as a quick check.
-
-Values:
-0x0 no unmasked cause (reset value);
-0x1 at least one unmasked cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[3:2]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "rx_busy",
-                "Bit Type": "ro",
-                "Bit Field": "[1]",
-                "Reset Value": "0x0",
-                "Description": "Receiver busy. High from the enable of the receiver until it has finished its last frame after a disable.
-
-Usage: Poll it after clearing the enable to know when the unit has really stopped.
-
-Values:
-0x0 idle (reset value);
-0x1 busy.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_busy",
-                "Bit Type": "ro",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Transmitter busy. High from the enable of the transmitter until it has finished its last frame after a disable.
-
-Usage: Poll it after clearing the enable to know when the unit has really stopped.
-
-Values:
-0x0 idle (reset value);
-0x1 busy.
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_sts",
+            "Offset": "0x000c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Audio interface global status register. Summarizes the state of both units and of the interrupt.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:5]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "irq",
+                    "Bit Type": "ro",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Interrupt pending. High while at least one unmasked interrupt cause is set.\n\nUsage: Read in an interrupt handler as a quick check.\n\nValues:\n0x0 no unmasked cause (reset value);\n0x1 at least one unmasked cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3:2]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "rx_busy",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Receiver busy. High from the enable of the receiver until it has finished its last frame after a disable.\n\nUsage: Poll it after clearing the enable to know when the unit has really stopped.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_busy",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmitter busy. High from the enable of the transmitter until it has finished its last frame after a disable.\n\nUsage: Poll it after clearing the enable to know when the unit has really stopped.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_irq_raw",
-        "Offset": "0x0010",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Audio interrupt raw status register. Holds the sticky interrupt causes before masking.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:8]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "frm",
-                "Bit Type": "w1c",
-                "Bit Field": "[7]",
-                "Reset Value": "0x0",
-                "Description": "Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Clear after counting the frame.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            },
-            {
-                "Bit Name": "hung",
-                "Bit Type": "w1c",
-                "Bit Field": "[6]",
-                "Reset Value": "0x0",
-                "Description": "Hung clock. No bit clock or frame sync arrived within the programmed timeout. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Read i2s_tx_sts and i2s_rx_sts to find the unit, clear both flags.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            },
-            {
-                "Bit Name": "sync",
-                "Bit Type": "w1c",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Frame sync error. An external frame sync arrived while the unit was still running the previous frame. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Read i2s_tx_sts and i2s_rx_sts to find the unit, clear both flags.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            },
-            {
-                "Bit Name": "rx_ovr",
-                "Bit Type": "w1c",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Receive overrun. A received word found the receive FIFO full and was dropped. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Drain, flush and clear when auto restart is off.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            },
-            {
-                "Bit Name": "rx_wm",
-                "Bit Type": "w1c",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Drain the receive FIFO, then clear.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            },
-            {
-                "Bit Name": "tx_ovr",
-                "Bit Type": "w1c",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "Transmit overrun. A write to the transmit data register found the FIFO full and was dropped. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Clear after reducing the write burst.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            },
-            {
-                "Bit Name": "tx_und",
-                "Bit Type": "w1c",
-                "Bit Field": "[1]",
-                "Reset Value": "0x0",
-                "Description": "Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Read i2s_tx_sts, flush and clear when auto restart is off.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            },
-            {
-                "Bit Name": "tx_wm",
-                "Bit Type": "w1c",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds. Set by hardware.
-
-Usage: Read to see the cause; write 1 to clear. Refill the transmit FIFO, then clear.
-
-Values:
-0x0 no cause (reset value);
-0x1 cause set.
-
-Unit: none.
-
-Limits: a level cause is set again at once while its condition holds."
-            }
-          ]
+            "Register Name": "i2s_irq_raw",
+            "Offset": "0x0010",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Audio interrupt raw status register. Holds the sticky interrupt causes before masking.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:8]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "frm",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[7]",
+                    "Reset Value": "0x0",
+                    "Description": "Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Clear after counting the frame.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                },
+                {
+                    "Bit Name": "hung",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[6]",
+                    "Reset Value": "0x0",
+                    "Description": "Hung clock. No bit clock or frame sync arrived within the programmed timeout. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Read i2s_tx_sts and i2s_rx_sts to find the unit, clear both flags.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                },
+                {
+                    "Bit Name": "sync",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Frame sync error. An external frame sync arrived while the unit was still running the previous frame. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Read i2s_tx_sts and i2s_rx_sts to find the unit, clear both flags.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                },
+                {
+                    "Bit Name": "rx_ovr",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Receive overrun. A received word found the receive FIFO full and was dropped. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Drain, flush and clear when auto restart is off.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                },
+                {
+                    "Bit Name": "rx_wm",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Drain the receive FIFO, then clear.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                },
+                {
+                    "Bit Name": "tx_ovr",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit overrun. A write to the transmit data register found the FIFO full and was dropped. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Clear after reducing the write burst.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                },
+                {
+                    "Bit Name": "tx_und",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Read i2s_tx_sts, flush and clear when auto restart is off.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                },
+                {
+                    "Bit Name": "tx_wm",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds. Set by hardware.\n\nUsage: Read to see the cause; write 1 to clear. Refill the transmit FIFO, then clear.\n\nValues:\n0x0 no cause (reset value);\n0x1 cause set.\n\nUnit: none.\n\nLimits: a level cause is set again at once while its condition holds."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_irq_en",
-        "Offset": "0x0014",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Audio interrupt enable register. Selects which raw causes drive the interrupt output.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:8]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "frm",
-                "Bit Type": "rw",
-                "Bit Field": "[7]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "hung",
-                "Bit Type": "rw",
-                "Bit Field": "[6]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Hung clock. No bit clock or frame sync arrived within the programmed timeout.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "sync",
-                "Bit Type": "rw",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Frame sync error. An external frame sync arrived while the unit was still running the previous frame.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "rx_ovr",
-                "Bit Type": "rw",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Receive overrun. A received word found the receive FIFO full and was dropped.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "rx_wm",
-                "Bit Type": "rw",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_ovr",
-                "Bit Type": "rw",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Transmit overrun. A write to the transmit data register found the FIFO full and was dropped.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_und",
-                "Bit Type": "rw",
-                "Bit Field": "[1]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_wm",
-                "Bit Type": "rw",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Enable of the cause: Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds.
-
-Usage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.
-
-Values:
-0x0 masked (reset value);
-0x1 enabled.
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_irq_en",
+            "Offset": "0x0014",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Audio interrupt enable register. Selects which raw causes drive the interrupt output.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:8]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "frm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[7]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "hung",
+                    "Bit Type": "rw",
+                    "Bit Field": "[6]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Hung clock. No bit clock or frame sync arrived within the programmed timeout.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "sync",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Frame sync error. An external frame sync arrived while the unit was still running the previous frame.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "rx_ovr",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Receive overrun. A received word found the receive FIFO full and was dropped.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "rx_wm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_ovr",
+                    "Bit Type": "rw",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Transmit overrun. A write to the transmit data register found the FIFO full and was dropped.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_und",
+                    "Bit Type": "rw",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_wm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Enable of the cause: Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds.\n\nUsage: Set the bit to let the raw cause drive the interrupt output; clear it to mask the cause.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_irq_inj",
-        "Offset": "0x0018",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Audio interrupt injection register. Raises raw causes by software for tests.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:8]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "frm",
-                "Bit Type": "rw",
-                "Bit Field": "[7]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "hung",
-                "Bit Type": "rw",
-                "Bit Field": "[6]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Hung clock. No bit clock or frame sync arrived within the programmed timeout.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "sync",
-                "Bit Type": "rw",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Frame sync error. An external frame sync arrived while the unit was still running the previous frame.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "rx_ovr",
-                "Bit Type": "rw",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Receive overrun. A received word found the receive FIFO full and was dropped.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "rx_wm",
-                "Bit Type": "rw",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_ovr",
-                "Bit Type": "rw",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Transmit overrun. A write to the transmit data register found the FIFO full and was dropped.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_und",
-                "Bit Type": "rw",
-                "Bit Field": "[1]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_wm",
-                "Bit Type": "rw",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Injection of the cause: Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds.
-
-Usage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.
-
-Values:
-0x0 no injection (reset value);
-0x1 inject the cause.
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_irq_inj",
+            "Offset": "0x0018",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Audio interrupt injection register. Raises raw causes by software for tests.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:8]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "frm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[7]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "hung",
+                    "Bit Type": "rw",
+                    "Bit Field": "[6]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Hung clock. No bit clock or frame sync arrived within the programmed timeout.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "sync",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Frame sync error. An external frame sync arrived while the unit was still running the previous frame.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "rx_ovr",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Receive overrun. A received word found the receive FIFO full and was dropped.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "rx_wm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_ovr",
+                    "Bit Type": "rw",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Transmit overrun. A write to the transmit data register found the FIFO full and was dropped.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_und",
+                    "Bit Type": "rw",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_wm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Injection of the cause: Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds.\n\nUsage: Write 0 then 1 to raise the raw cause by software for a test; the raw cause is set on the rising edge of this bit. Leave 0 in normal operation.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the cause.\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_irq_sts",
-        "Offset": "0x001c",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Audio interrupt status register. Shows the raw causes that are enabled.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:8]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "frm",
-                "Bit Type": "ro",
-                "Bit Field": "[7]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "hung",
-                "Bit Type": "ro",
-                "Bit Field": "[6]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Hung clock. No bit clock or frame sync arrived within the programmed timeout.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "sync",
-                "Bit Type": "ro",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Frame sync error. An external frame sync arrived while the unit was still running the previous frame.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "rx_ovr",
-                "Bit Type": "ro",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Receive overrun. A received word found the receive FIFO full and was dropped.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "rx_wm",
-                "Bit Type": "ro",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_ovr",
-                "Bit Type": "ro",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Transmit overrun. A write to the transmit data register found the FIFO full and was dropped.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_und",
-                "Bit Type": "ro",
-                "Bit Field": "[1]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tx_wm",
-                "Bit Type": "ro",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Masked status of the cause: Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds.
-
-Usage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.
-
-Values:
-0x0 cause not pending (reset value);
-0x1 cause pending and enabled.
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_irq_sts",
+            "Offset": "0x001c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Audio interrupt status register. Shows the raw causes that are enabled.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:8]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "frm",
+                    "Bit Type": "ro",
+                    "Bit Field": "[7]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Frame done. One frame of the unit selected by i2s_ctrl.frm_sel has completed.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "hung",
+                    "Bit Type": "ro",
+                    "Bit Field": "[6]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Hung clock. No bit clock or frame sync arrived within the programmed timeout.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "sync",
+                    "Bit Type": "ro",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Frame sync error. An external frame sync arrived while the unit was still running the previous frame.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "rx_ovr",
+                    "Bit Type": "ro",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Receive overrun. A received word found the receive FIFO full and was dropped.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "rx_wm",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Receive FIFO at or above its watermark. Level cause: it stays set while the condition holds.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_ovr",
+                    "Bit Type": "ro",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Transmit overrun. A write to the transmit data register found the FIFO full and was dropped.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_und",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Transmit underrun. A slot needed a word and the transmit FIFO was empty; the slot sent zeros.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tx_wm",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Masked status of the cause: Transmit FIFO at or below its watermark. Level cause: it stays set while the condition holds.\n\nUsage: Read in the interrupt handler: it is the raw cause AND the enable bit, and it drives the interrupt output.\n\nValues:\n0x0 cause not pending (reset value);\n0x1 cause pending and enabled.\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_ctrl",
-        "Offset": "0x0100",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Transmit control register. Starts and stops the transmit unit and selects its role and options.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:10]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "dma",
-                "Bit Type": "rw",
-                "Bit Field": "[9]",
-                "Reset Value": "0x0",
-                "Description": "DMA request enable. Connects the watermark condition of the FIFO to the DMA request output.
-
-Usage: Set it when a DMA controller serves the data register; keep the watermark interrupt masked in that case.
-
-Values:
-0x0 no DMA request (reset value);
-0x1 DMA request enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tri",
-                "Bit Type": "rw",
-                "Bit Field": "[8]",
-                "Reset Value": "0x0",
-                "Description": "Release masked slots. Masked slots release the data lines (high impedance) instead of driving zeros; used on shared TDM lines.
-
-Usage: Set it when several devices share one data line.
-
-Values:
-0x0 masked slots drive zero (reset value);
-0x1 masked slots release the line.
-
-Unit: none.
-
-Limits: transmitter only."
-            },
-            {
-                "Bit Name": "auto",
-                "Bit Type": "rw",
-                "Bit Field": "[7]",
-                "Reset Value": "0x0",
-                "Description": "Auto restart. After an underrun or overrun the unit resumes by itself at the start of the first frame for which the FIFO is ready; otherwise it stays in the error state until a flush.
-
-Usage: Set it for streaming that must recover without software; clear the error flag after a recovery.
-
-Values:
-0x0 stay in error until flush (reset value);
-0x1 restart at a frame boundary.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "ondem",
-                "Bit Type": "rw",
-                "Bit Field": "[6]",
-                "Reset Value": "0x0",
-                "Description": "On-demand frame start. A master starts a frame only when the FIFO holds a whole frame of data (transmit) or has room for it (receive).
-
-Usage: Set it to stall instead of underrun or overrun when the processor or DMA is slow; the frame sync waits.
-
-Values:
-0x0 frames run continuously (reset value);
-0x1 frames wait for data or room.
-
-Unit: none.
-
-Limits: effective in master mode only."
-            },
-            {
-                "Bit Name": "shr",
-                "Bit Type": "rw",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Share clock. The unit uses the bit clock and frame sync of the other unit instead of its own.
-
-Usage: Set it for full duplex codecs that use one clock pair; do not set it in both units.
-
-Values:
-0x0 own clock and sync (reset value);
-0x1 use the other unit's clock and sync.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "role",
-                "Bit Type": "rw",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Transmit role. Master generates the bit clock and frame sync from the master clock; slave follows the external ones.
-
-Usage: Write while the unit is stopped. Master needs the divider feature in the build.
-
-Values:
-0x0 slave (reset value);
-0x1 master.
-
-Unit: none.
-
-Limits: slave mode needs a master clock at least 8 times the bit clock."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "flush",
-                "Bit Type": "wo",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "Transmit FIFO flush. Writing 1 empties the FIFO of the unit and clears its error latch; the bit clears itself.
-
-Usage: Write while the unit is stopped, or after an underrun or overrun when auto restart is off. Reads return 0.
-
-Values:
-0x0 no action (reset value);
-0x1 flush the FIFO.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "srst",
-                "Bit Type": "wo",
-                "Bit Field": "[1]",
-                "Reset Value": "0x0",
-                "Description": "Transmit soft reset. Writing 1 resets the unit, its FIFO and its status; the configuration keeps its values and the bit clears itself.
-
-Usage: Use it to recover after an error; stop the unit first for a clean stop. Reads return 0.
-
-Values:
-0x0 no action (reset value);
-0x1 reset the unit.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "en",
-                "Bit Type": "rw",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Transmit enable. Starts the unit with the configuration latched at the rising edge of this bit; clearing it stops the unit at the end of the running frame.
-
-Usage: Program every other register of the block first, fill the FIFO for the transmitter, then set the bit; clear it and poll the busy flag to stop.
-
-Values:
-0x0 unit stopped (reset value);
-0x1 unit running.
-
-Unit: none.
-
-Limits: configuration written while the bit is 1 is not used until the next start."
-            }
-          ]
+            "Register Name": "i2s_tx_ctrl",
+            "Offset": "0x0100",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Transmit control register. Starts and stops the transmit unit and selects its role and options.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:10]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "dma",
+                    "Bit Type": "rw",
+                    "Bit Field": "[9]",
+                    "Reset Value": "0x0",
+                    "Description": "DMA request enable. Connects the watermark condition of the FIFO to the DMA request output.\n\nUsage: Set it when a DMA controller serves the data register; keep the watermark interrupt masked in that case.\n\nValues:\n0x0 no DMA request (reset value);\n0x1 DMA request enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tri",
+                    "Bit Type": "rw",
+                    "Bit Field": "[8]",
+                    "Reset Value": "0x0",
+                    "Description": "Release masked slots. Masked slots release the data lines (high impedance) instead of driving zeros; used on shared TDM lines.\n\nUsage: Set it when several devices share one data line.\n\nValues:\n0x0 masked slots drive zero (reset value);\n0x1 masked slots release the line.\n\nUnit: none.\n\nLimits: transmitter only."
+                },
+                {
+                    "Bit Name": "auto",
+                    "Bit Type": "rw",
+                    "Bit Field": "[7]",
+                    "Reset Value": "0x0",
+                    "Description": "Auto restart. After an underrun or overrun the unit resumes by itself at the start of the first frame for which the FIFO is ready; otherwise it stays in the error state until a flush.\n\nUsage: Set it for streaming that must recover without software; clear the error flag after a recovery.\n\nValues:\n0x0 stay in error until flush (reset value);\n0x1 restart at a frame boundary.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "ondem",
+                    "Bit Type": "rw",
+                    "Bit Field": "[6]",
+                    "Reset Value": "0x0",
+                    "Description": "On-demand frame start. A master starts a frame only when the FIFO holds a whole frame of data (transmit) or has room for it (receive).\n\nUsage: Set it to stall instead of underrun or overrun when the processor or DMA is slow; the frame sync waits.\n\nValues:\n0x0 frames run continuously (reset value);\n0x1 frames wait for data or room.\n\nUnit: none.\n\nLimits: effective in master mode only."
+                },
+                {
+                    "Bit Name": "shr",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Share clock. The unit uses the bit clock and frame sync of the other unit instead of its own.\n\nUsage: Set it for full duplex codecs that use one clock pair; do not set it in both units.\n\nValues:\n0x0 own clock and sync (reset value);\n0x1 use the other unit's clock and sync.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "role",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit role. Master generates the bit clock and frame sync from the master clock; slave follows the external ones.\n\nUsage: Write while the unit is stopped. Master needs the divider feature in the build.\n\nValues:\n0x0 slave (reset value);\n0x1 master.\n\nUnit: none.\n\nLimits: slave mode needs a master clock at least 8 times the bit clock."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "flush",
+                    "Bit Type": "wo",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit FIFO flush. Writing 1 empties the FIFO of the unit and clears its error latch; the bit clears itself.\n\nUsage: Write while the unit is stopped, or after an underrun or overrun when auto restart is off. Reads return 0.\n\nValues:\n0x0 no action (reset value);\n0x1 flush the FIFO.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "srst",
+                    "Bit Type": "wo",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit soft reset. Writing 1 resets the unit, its FIFO and its status; the configuration keeps its values and the bit clears itself.\n\nUsage: Use it to recover after an error; stop the unit first for a clean stop. Reads return 0.\n\nValues:\n0x0 no action (reset value);\n0x1 reset the unit.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "en",
+                    "Bit Type": "rw",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit enable. Starts the unit with the configuration latched at the rising edge of this bit; clearing it stops the unit at the end of the running frame.\n\nUsage: Program every other register of the block first, fill the FIFO for the transmitter, then set the bit; clear it and poll the busy flag to stop.\n\nValues:\n0x0 unit stopped (reset value);\n0x1 unit running.\n\nUnit: none.\n\nLimits: configuration written while the bit is 1 is not used until the next start."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_frame",
-        "Offset": "0x0104",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x20200201",
-        "Descriprtion": "Transmit frame register. Selects the frame format, the number of slots, and the slot and data widths.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:30]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "data_w",
-                "Bit Type": "rw",
-                "Bit Field": "[29:24]",
-                "Reset Value": "0x20",
-                "Description": "Data width. Number of valid sample bits at the start of a slot, most significant bit first; the rest of the slot is zero (transmit) or ignored (receive).
-
-Usage: Write the real width of the sample.
-
-Values:
-0x08 to 0x20 8 to 32 bits (reset value 0x20).
-
-Unit: bits.
-
-Limits: not larger than slot_w."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[23:22]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "slot_w",
-                "Bit Type": "rw",
-                "Bit Field": "[21:16]",
-                "Reset Value": "0x20",
-                "Description": "Slot width. Number of bit clocks of one slot.
-
-Usage: Write the real width; it must be at least the data width.
-
-Values:
-0x08 to 0x20 8 to 32 bits (reset value 0x20).
-
-Unit: bit clocks.
-
-Limits: not smaller than data_w."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[15:14]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "nslot",
-                "Bit Type": "rw",
-                "Bit Field": "[13:8]",
-                "Reset Value": "0x2",
-                "Description": "Slots per frame. Number of time slots in one frame; a stereo I2S frame has 2.
-
-Usage: Write the real number of slots, not a minus-one code; the slot mask refers to slots from 0.
-
-Values:
-0x01 to 0x20 1 to 32 slots (reset value 0x02).
-
-Unit: slots.
-
-Limits: not above the build maximum of i2s_cap.max_slot."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[7:5]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "pack",
-                "Bit Type": "rw",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Packing. Puts two 16-bit samples in one FIFO word, first sample in the low half.
-
-Usage: Set it for voice paths to halve the DMA traffic; data_w must be 16 or less.
-
-Values:
-0x0 one sample per word (reset value);
-0x1 two samples per word.
-
-Unit: none.
-
-Limits: needs the packing feature."
-            },
-            {
-                "Bit Name": "align",
-                "Bit Type": "rw",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "Sample alignment in the FIFO word. Chooses whether a sample sits in the low or the high bits of the 32-bit word.
-
-Usage: Choose the alignment that matches the software data layout.
-
-Values:
-0x0 right aligned: sample in the low bits (reset value);
-0x1 left aligned: sample in the high bits.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "fmt",
-                "Bit Type": "rw",
-                "Bit Field": "[2:0]",
-                "Reset Value": "0x1",
-                "Description": "Frame format. Selects one of the ready-made frame formats; custom uses the sync register.
-
-Usage: Write while the unit is stopped. The preset formats derive the frame sync from nslot and slot_w.
-
-Values:
-0x0 custom: the sync fields of the sync register are used;
-0x1 Philips I2S (reset value);
-0x2 left-justified;
-0x3 PCM short frame;
-0x4 PCM long frame;
-0x5 TDM with early sync.
-
-Unit: none.
-
-Limits: 0x6 and 0x7 are reserved."
-            }
-          ]
+            "Register Name": "i2s_tx_frame",
+            "Offset": "0x0104",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x20200201",
+            "Description": "Transmit frame register. Selects the frame format, the number of slots, and the slot and data widths.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:30]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "data_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[29:24]",
+                    "Reset Value": "0x20",
+                    "Description": "Data width. Number of valid sample bits at the start of a slot, most significant bit first; the rest of the slot is zero (transmit) or ignored (receive).\n\nUsage: Write the real width of the sample.\n\nValues:\n0x08 to 0x20 8 to 32 bits (reset value 0x20).\n\nUnit: bits.\n\nLimits: not larger than slot_w."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[23:22]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "slot_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[21:16]",
+                    "Reset Value": "0x20",
+                    "Description": "Slot width. Number of bit clocks of one slot.\n\nUsage: Write the real width; it must be at least the data width.\n\nValues:\n0x08 to 0x20 8 to 32 bits (reset value 0x20).\n\nUnit: bit clocks.\n\nLimits: not smaller than data_w."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:14]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "nslot",
+                    "Bit Type": "rw",
+                    "Bit Field": "[13:8]",
+                    "Reset Value": "0x2",
+                    "Description": "Slots per frame. Number of time slots in one frame; a stereo I2S frame has 2.\n\nUsage: Write the real number of slots, not a minus-one code; the slot mask refers to slots from 0.\n\nValues:\n0x01 to 0x20 1 to 32 slots (reset value 0x02).\n\nUnit: slots.\n\nLimits: not above the build maximum of i2s_cap.max_slot."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[7:5]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "pack",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Packing. Puts two 16-bit samples in one FIFO word, first sample in the low half.\n\nUsage: Set it for voice paths to halve the DMA traffic; data_w must be 16 or less.\n\nValues:\n0x0 one sample per word (reset value);\n0x1 two samples per word.\n\nUnit: none.\n\nLimits: needs the packing feature."
+                },
+                {
+                    "Bit Name": "align",
+                    "Bit Type": "rw",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Sample alignment in the FIFO word. Chooses whether a sample sits in the low or the high bits of the 32-bit word.\n\nUsage: Choose the alignment that matches the software data layout.\n\nValues:\n0x0 right aligned: sample in the low bits (reset value);\n0x1 left aligned: sample in the high bits.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "fmt",
+                    "Bit Type": "rw",
+                    "Bit Field": "[2:0]",
+                    "Reset Value": "0x1",
+                    "Description": "Frame format. Selects one of the ready-made frame formats; custom uses the sync register.\n\nUsage: Write while the unit is stopped. The preset formats derive the frame sync from nslot and slot_w.\n\nValues:\n0x0 custom: the sync fields of the sync register are used;\n0x1 Philips I2S (reset value);\n0x2 left-justified;\n0x3 PCM short frame;\n0x4 PCM long frame;\n0x5 TDM with early sync.\n\nUnit: none.\n\nLimits: 0x6 and 0x7 are reserved."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_sync",
-        "Offset": "0x0108",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000201",
-        "Descriprtion": "Transmit frame sync register. Defines the frame sync shape for the custom format and the bit clock polarity.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:13]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "bpol",
-                "Bit Type": "rw",
-                "Bit Field": "[12]",
-                "Reset Value": "0x0",
-                "Description": "Bit clock polarity. Selects the clock edge that launches data and the edge that samples it.
-
-Usage: Write while the unit is stopped; the standard I2S edges are the default.
-
-Values:
-0x0 launch on the falling edge, sample on the rising edge (reset value);
-0x1 launch on the rising edge, sample on the falling edge.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[11:10]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "fse",
-                "Bit Type": "rw",
-                "Bit Field": "[9]",
-                "Reset Value": "0x1",
-                "Description": "Frame sync early. Chooses whether the frame sync starts one bit clock before the first bit or together with it.
-
-Usage: Used only with fmt custom.
-
-Values:
-0x0 with the first bit;
-0x1 one bit clock early (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "fsp",
-                "Bit Type": "rw",
-                "Bit Field": "[8]",
-                "Reset Value": "0x0",
-                "Description": "Frame sync polarity. Selects the active level of the frame sync.
-
-Usage: Used only with fmt custom.
-
-Values:
-0x0 active high (reset value);
-0x1 active low.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[7:6]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "sync_w",
-                "Bit Type": "rw",
-                "Bit Field": "[5:0]",
-                "Reset Value": "0x1",
-                "Description": "Frame sync width. Number of bit clocks the frame sync is active at the start of a frame.
-
-Usage: Used only with fmt custom; the preset formats set it themselves.
-
-Values:
-0x01 to 0x20 1 to 32 bit clocks (reset value 0x01).
-
-Unit: bit clocks.
-
-Limits: not longer than slot_w."
-            }
-          ]
+            "Register Name": "i2s_tx_sync",
+            "Offset": "0x0108",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000201",
+            "Description": "Transmit frame sync register. Defines the frame sync shape for the custom format and the bit clock polarity.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:13]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "bpol",
+                    "Bit Type": "rw",
+                    "Bit Field": "[12]",
+                    "Reset Value": "0x0",
+                    "Description": "Bit clock polarity. Selects the clock edge that launches data and the edge that samples it.\n\nUsage: Write while the unit is stopped; the standard I2S edges are the default.\n\nValues:\n0x0 launch on the falling edge, sample on the rising edge (reset value);\n0x1 launch on the rising edge, sample on the falling edge.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[11:10]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "fse",
+                    "Bit Type": "rw",
+                    "Bit Field": "[9]",
+                    "Reset Value": "0x1",
+                    "Description": "Frame sync early. Chooses whether the frame sync starts one bit clock before the first bit or together with it.\n\nUsage: Used only with fmt custom.\n\nValues:\n0x0 with the first bit;\n0x1 one bit clock early (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "fsp",
+                    "Bit Type": "rw",
+                    "Bit Field": "[8]",
+                    "Reset Value": "0x0",
+                    "Description": "Frame sync polarity. Selects the active level of the frame sync.\n\nUsage: Used only with fmt custom.\n\nValues:\n0x0 active high (reset value);\n0x1 active low.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[7:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "sync_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5:0]",
+                    "Reset Value": "0x1",
+                    "Description": "Frame sync width. Number of bit clocks the frame sync is active at the start of a frame.\n\nUsage: Used only with fmt custom; the preset formats set it themselves.\n\nValues:\n0x01 to 0x20 1 to 32 bit clocks (reset value 0x01).\n\nUnit: bit clocks.\n\nLimits: not longer than slot_w."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_clk",
-        "Offset": "0x010c",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000002",
-        "Descriprtion": "Transmit clock register. Sets the bit clock divider of the master.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:16]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "div",
-                "Bit Type": "rw",
-                "Bit Field": "[15:0]",
-                "Reset Value": "0x2",
-                "Description": "Bit clock divider. Number of master clock cycles in each half period of the bit clock, so the bit clock is the master clock divided by twice this value.
-
-Usage: Write while the unit is stopped; used only in master mode. Example: master clock 12.288 MHz and divider 2 give a 3.072 MHz bit clock.
-
-Values:
-0x0001 to 0xFFFF half period in master clock cycles (reset value 0x0002).
-
-Unit: master clock cycles.
-
-Limits: 1 or more in master mode."
-            }
-          ]
+            "Register Name": "i2s_tx_clk",
+            "Offset": "0x010c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000002",
+            "Description": "Transmit clock register. Sets the bit clock divider of the master.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:16]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "div",
+                    "Bit Type": "rw",
+                    "Bit Field": "[15:0]",
+                    "Reset Value": "0x2",
+                    "Description": "Bit clock divider. Number of master clock cycles in each half period of the bit clock, so the bit clock is the master clock divided by twice this value.\n\nUsage: Write while the unit is stopped; used only in master mode. Example: master clock 12.288 MHz and divider 2 give a 3.072 MHz bit clock.\n\nValues:\n0x0001 to 0xFFFF half period in master clock cycles (reset value 0x0002).\n\nUnit: master clock cycles.\n\nLimits: 1 or more in master mode."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_mask",
-        "Offset": "0x0110",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0xFFFFFFFF",
-        "Descriprtion": "Transmit slot mask register. Enables the slots of the frame one by one.",
-        "Bits": [
-            {
-                "Bit Name": "mask",
-                "Bit Type": "rw",
-                "Bit Field": "[31:0]",
-                "Reset Value": "0xFFFFFFFF",
-                "Description": "Slot mask. Bit n enables slot n; a masked slot is skipped: no word is taken from or put into the FIFO, and a transmit slot sends zero or releases the line.
-
-Usage: May be written while the unit runs; the new value applies at the start of the next frame, so a frame is never changed in the middle.
-
-Values:
-0x00000000 to 0xFFFFFFFF one bit per slot (reset value 0xFFFFFFFF, all slots enabled).
-
-Unit: none.
-
-Limits: bits above nslot are ignored."
-            }
-          ]
+            "Register Name": "i2s_tx_mask",
+            "Offset": "0x0110",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0xFFFFFFFF",
+            "Description": "Transmit slot mask register. Enables the slots of the frame one by one.",
+            "Bits": [
+                {
+                    "Bit Name": "mask",
+                    "Bit Type": "rw",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0xFFFFFFFF",
+                    "Description": "Slot mask. Bit n enables slot n; a masked slot is skipped: no word is taken from or put into the FIFO, and a transmit slot sends zero or releases the line.\n\nUsage: May be written while the unit runs; the new value applies at the start of the next frame, so a frame is never changed in the middle.\n\nValues:\n0x00000000 to 0xFFFFFFFF one bit per slot (reset value 0xFFFFFFFF, all slots enabled).\n\nUnit: none.\n\nLimits: bits above nslot are ignored."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_fifo",
-        "Offset": "0x0114",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000004",
-        "Descriprtion": "Transmit FIFO register. Sets the watermark of the logical FIFO.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:12]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "wm",
-                "Bit Type": "rw",
-                "Bit Field": "[11:0]",
-                "Reset Value": "0x4",
-                "Description": "Watermark. The watermark cause and the DMA request are active while the number of words in the FIFO is at or below this value.
-
-Usage: Choose it from the service latency: see the sizing rule of the specification.
-
-Values:
-0x000 to 0x400 words (reset value 0x004).
-
-Unit: words.
-
-Limits: not above the FIFO capacity."
-            }
-          ]
+            "Register Name": "i2s_tx_fifo",
+            "Offset": "0x0114",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000004",
+            "Description": "Transmit FIFO register. Sets the watermark of the logical FIFO.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:12]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "wm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[11:0]",
+                    "Reset Value": "0x4",
+                    "Description": "Watermark. The watermark cause and the DMA request are active while the number of words in the FIFO is at or below this value.\n\nUsage: Choose it from the service latency: see the sizing rule of the specification.\n\nValues:\n0x000 to 0x400 words (reset value 0x004).\n\nUnit: words.\n\nLimits: not above the FIFO capacity."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_sts",
-        "Offset": "0x0118",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000002",
-        "Descriprtion": "Transmit status register. Shows the state of the unit and the FIFO.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:28]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "level",
-                "Bit Type": "ro",
-                "Bit Field": "[27:16]",
-                "Reset Value": "0x0",
-                "Description": "FIFO level. Number of words in the logical FIFO of all lines.
-
-Usage: Read to size a burst: the free space is the capacity minus the level.
-
-Values:
-0x000 to 0x400 words in the FIFO (reset value 0x000).
-
-Unit: words.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[15:6]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "hung",
-                "Bit Type": "w1c",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Hung clock of this unit. No bit clock or frame sync arrived within the timeout.
-
-Usage: Write 1 to clear after reading i2s_irq_raw.hung.
-
-Values:
-0x0 no timeout (reset value);
-0x1 timeout occurred.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "sync",
-                "Bit Type": "w1c",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Frame sync error of this unit. An external frame sync arrived while a frame was running.
-
-Usage: Write 1 to clear after reading i2s_irq_raw.sync.
-
-Values:
-0x0 no error (reset value);
-0x1 error occurred.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "full",
-                "Bit Type": "ro",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "FIFO full flag. High when the logical FIFO of the unit has no room for another word.
-
-Usage: Check it before writing a burst.
-
-Values:
-0x0 room available (reset value);
-0x1 full.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "empty",
-                "Bit Type": "ro",
-                "Bit Field": "[1]",
-                "Reset Value": "0x1",
-                "Description": "FIFO empty flag. High when the logical FIFO of the unit holds no word at all.
-
-Usage: Poll it to know that a transmit stream has been sent out of the FIFO.
-
-Values:
-0x0 words present;
-0x1 empty (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "busy",
-                "Bit Type": "ro",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Unit busy. High while the unit is running or finishing a frame.
-
-Usage: Poll it after clearing en.
-
-Values:
-0x0 idle (reset value);
-0x1 busy.
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_tx_sts",
+            "Offset": "0x0118",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000002",
+            "Description": "Transmit status register. Shows the state of the unit and the FIFO.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:28]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "level",
+                    "Bit Type": "ro",
+                    "Bit Field": "[27:16]",
+                    "Reset Value": "0x0",
+                    "Description": "FIFO level. Number of words in the logical FIFO of all lines.\n\nUsage: Read to size a burst: the free space is the capacity minus the level.\n\nValues:\n0x000 to 0x400 words in the FIFO (reset value 0x000).\n\nUnit: words.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "hung",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Hung clock of this unit. No bit clock or frame sync arrived within the timeout.\n\nUsage: Write 1 to clear after reading i2s_irq_raw.hung.\n\nValues:\n0x0 no timeout (reset value);\n0x1 timeout occurred.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "sync",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Frame sync error of this unit. An external frame sync arrived while a frame was running.\n\nUsage: Write 1 to clear after reading i2s_irq_raw.sync.\n\nValues:\n0x0 no error (reset value);\n0x1 error occurred.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "full",
+                    "Bit Type": "ro",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "FIFO full flag. High when the logical FIFO of the unit has no room for another word.\n\nUsage: Check it before writing a burst.\n\nValues:\n0x0 room available (reset value);\n0x1 full.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "empty",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x1",
+                    "Description": "FIFO empty flag. High when the logical FIFO of the unit holds no word at all.\n\nUsage: Poll it to know that a transmit stream has been sent out of the FIFO.\n\nValues:\n0x0 words present;\n0x1 empty (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "busy",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Unit busy. High while the unit is running or finishing a frame.\n\nUsage: Poll it after clearing en.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_data",
-        "Offset": "0x011c",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Transmit data register. Write port of the transmit FIFO; software writes the samples of the frame in order.",
-        "Bits": [
-            {
-                "Bit Name": "data",
-                "Bit Type": "wo",
-                "Bit Field": "[31:0]",
-                "Reset Value": "0x0",
-                "Description": "Transmit data. Each write pushes one word. The order is slot by slot over the enabled slots, and inside a slot line 0 first and then the other lines.
-
-Usage: Write whole frames; with DMA point the DMA destination to this one address without incrementing. A write to a full FIFO is dropped and sets i2s_irq_raw.tx_ovr. Reads return 0.
-
-Values:
-0x00000000 to 0xFFFFFFFF sample word; with pack the low half is the first sample.
-
-Unit: sample.
-
-Limits: valid bits follow data_w and align."
-            }
-          ]
+            "Register Name": "i2s_tx_data",
+            "Offset": "0x011c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Transmit data register. Write port of the transmit FIFO; software writes the samples of the frame in order.",
+            "Bits": [
+                {
+                    "Bit Name": "data",
+                    "Bit Type": "wo",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Transmit data. Each write pushes one word. The order is slot by slot over the enabled slots, and inside a slot line 0 first and then the other lines.\n\nUsage: Write whole frames; with DMA point the DMA destination to this one address without incrementing. A write to a full FIFO is dropped and sets i2s_irq_raw.tx_ovr. Reads return 0.\n\nValues:\n0x00000000 to 0xFFFFFFFF sample word; with pack the low half is the first sample.\n\nUnit: sample.\n\nLimits: valid bits follow data_w and align."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_tx_tmo",
-        "Offset": "0x0120",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Transmit timeout register. Sets the hung-clock timeout of the unit.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:16]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "tmo",
-                "Bit Type": "rw",
-                "Bit Field": "[15:0]",
-                "Reset Value": "0x0",
-                "Description": "Timeout. When the unit is running and no bit clock edge or frame sync arrives for this time, the hung cause is raised.
-
-Usage: Set it in slave mode to detect a lost clock; 0 turns the detector off.
-
-Values:
-0x0000 detector off (reset value);
-0x0001 to 0xFFFF timeout in units of 256 master clock cycles.
-
-Unit: 256 master clock cycles.
-
-Limits: needs the timeout feature."
-            }
-          ]
+            "Register Name": "i2s_tx_tmo",
+            "Offset": "0x0120",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Transmit timeout register. Sets the hung-clock timeout of the unit.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:16]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "tmo",
+                    "Bit Type": "rw",
+                    "Bit Field": "[15:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Timeout. When the unit is running and no bit clock edge or frame sync arrives for this time, the hung cause is raised.\n\nUsage: Set it in slave mode to detect a lost clock; 0 turns the detector off.\n\nValues:\n0x0000 detector off (reset value);\n0x0001 to 0xFFFF timeout in units of 256 master clock cycles.\n\nUnit: 256 master clock cycles.\n\nLimits: needs the timeout feature."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_ctrl",
-        "Offset": "0x0200",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Receive control register. Starts and stops the receive unit and selects its role and options.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:10]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "dma",
-                "Bit Type": "rw",
-                "Bit Field": "[9]",
-                "Reset Value": "0x0",
-                "Description": "DMA request enable. Connects the watermark condition of the FIFO to the DMA request output.
-
-Usage: Set it when a DMA controller serves the data register; keep the watermark interrupt masked in that case.
-
-Values:
-0x0 no DMA request (reset value);
-0x1 DMA request enabled.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "tri",
-                "Bit Type": "rw",
-                "Bit Field": "[8]",
-                "Reset Value": "0x0",
-                "Description": "Release masked slots. Present for a uniform layout; it has no effect in the receiver.
-
-Usage: Set it when several devices share one data line.
-
-Values:
-0x0 masked slots drive zero (reset value);
-0x1 masked slots release the line.
-
-Unit: none.
-
-Limits: transmitter only."
-            },
-            {
-                "Bit Name": "auto",
-                "Bit Type": "rw",
-                "Bit Field": "[7]",
-                "Reset Value": "0x0",
-                "Description": "Auto restart. After an underrun or overrun the unit resumes by itself at the start of the first frame for which the FIFO is ready; otherwise it stays in the error state until a flush.
-
-Usage: Set it for streaming that must recover without software; clear the error flag after a recovery.
-
-Values:
-0x0 stay in error until flush (reset value);
-0x1 restart at a frame boundary.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "ondem",
-                "Bit Type": "rw",
-                "Bit Field": "[6]",
-                "Reset Value": "0x0",
-                "Description": "On-demand frame start. A master starts a frame only when the FIFO holds a whole frame of data (transmit) or has room for it (receive).
-
-Usage: Set it to stall instead of underrun or overrun when the processor or DMA is slow; the frame sync waits.
-
-Values:
-0x0 frames run continuously (reset value);
-0x1 frames wait for data or room.
-
-Unit: none.
-
-Limits: effective in master mode only."
-            },
-            {
-                "Bit Name": "shr",
-                "Bit Type": "rw",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Share clock. The unit uses the bit clock and frame sync of the other unit instead of its own.
-
-Usage: Set it for full duplex codecs that use one clock pair; do not set it in both units.
-
-Values:
-0x0 own clock and sync (reset value);
-0x1 use the other unit's clock and sync.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "role",
-                "Bit Type": "rw",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Receive role. Master generates the bit clock and frame sync from the master clock; slave follows the external ones.
-
-Usage: Write while the unit is stopped. Master needs the divider feature in the build.
-
-Values:
-0x0 slave (reset value);
-0x1 master.
-
-Unit: none.
-
-Limits: slave mode needs a master clock at least 8 times the bit clock."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "flush",
-                "Bit Type": "wo",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "Receive FIFO flush. Writing 1 empties the FIFO of the unit and clears its error latch; the bit clears itself.
-
-Usage: Write while the unit is stopped, or after an underrun or overrun when auto restart is off. Reads return 0.
-
-Values:
-0x0 no action (reset value);
-0x1 flush the FIFO.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "srst",
-                "Bit Type": "wo",
-                "Bit Field": "[1]",
-                "Reset Value": "0x0",
-                "Description": "Receive soft reset. Writing 1 resets the unit, its FIFO and its status; the configuration keeps its values and the bit clears itself.
-
-Usage: Use it to recover after an error; stop the unit first for a clean stop. Reads return 0.
-
-Values:
-0x0 no action (reset value);
-0x1 reset the unit.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "en",
-                "Bit Type": "rw",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Receive enable. Starts the unit with the configuration latched at the rising edge of this bit; clearing it stops the unit at the end of the running frame.
-
-Usage: Program every other register of the block first, fill the FIFO for the transmitter, then set the bit; clear it and poll the busy flag to stop.
-
-Values:
-0x0 unit stopped (reset value);
-0x1 unit running.
-
-Unit: none.
-
-Limits: configuration written while the bit is 1 is not used until the next start."
-            }
-          ]
+            "Register Name": "i2s_rx_ctrl",
+            "Offset": "0x0200",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Receive control register. Starts and stops the receive unit and selects its role and options.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:10]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "dma",
+                    "Bit Type": "rw",
+                    "Bit Field": "[9]",
+                    "Reset Value": "0x0",
+                    "Description": "DMA request enable. Connects the watermark condition of the FIFO to the DMA request output.\n\nUsage: Set it when a DMA controller serves the data register; keep the watermark interrupt masked in that case.\n\nValues:\n0x0 no DMA request (reset value);\n0x1 DMA request enabled.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "tri",
+                    "Bit Type": "rw",
+                    "Bit Field": "[8]",
+                    "Reset Value": "0x0",
+                    "Description": "Release masked slots. Present for a uniform layout; it has no effect in the receiver.\n\nUsage: Set it when several devices share one data line.\n\nValues:\n0x0 masked slots drive zero (reset value);\n0x1 masked slots release the line.\n\nUnit: none.\n\nLimits: transmitter only."
+                },
+                {
+                    "Bit Name": "auto",
+                    "Bit Type": "rw",
+                    "Bit Field": "[7]",
+                    "Reset Value": "0x0",
+                    "Description": "Auto restart. After an underrun or overrun the unit resumes by itself at the start of the first frame for which the FIFO is ready; otherwise it stays in the error state until a flush.\n\nUsage: Set it for streaming that must recover without software; clear the error flag after a recovery.\n\nValues:\n0x0 stay in error until flush (reset value);\n0x1 restart at a frame boundary.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "ondem",
+                    "Bit Type": "rw",
+                    "Bit Field": "[6]",
+                    "Reset Value": "0x0",
+                    "Description": "On-demand frame start. A master starts a frame only when the FIFO holds a whole frame of data (transmit) or has room for it (receive).\n\nUsage: Set it to stall instead of underrun or overrun when the processor or DMA is slow; the frame sync waits.\n\nValues:\n0x0 frames run continuously (reset value);\n0x1 frames wait for data or room.\n\nUnit: none.\n\nLimits: effective in master mode only."
+                },
+                {
+                    "Bit Name": "shr",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Share clock. The unit uses the bit clock and frame sync of the other unit instead of its own.\n\nUsage: Set it for full duplex codecs that use one clock pair; do not set it in both units.\n\nValues:\n0x0 own clock and sync (reset value);\n0x1 use the other unit's clock and sync.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "role",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Receive role. Master generates the bit clock and frame sync from the master clock; slave follows the external ones.\n\nUsage: Write while the unit is stopped. Master needs the divider feature in the build.\n\nValues:\n0x0 slave (reset value);\n0x1 master.\n\nUnit: none.\n\nLimits: slave mode needs a master clock at least 8 times the bit clock."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "flush",
+                    "Bit Type": "wo",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Receive FIFO flush. Writing 1 empties the FIFO of the unit and clears its error latch; the bit clears itself.\n\nUsage: Write while the unit is stopped, or after an underrun or overrun when auto restart is off. Reads return 0.\n\nValues:\n0x0 no action (reset value);\n0x1 flush the FIFO.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "srst",
+                    "Bit Type": "wo",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Receive soft reset. Writing 1 resets the unit, its FIFO and its status; the configuration keeps its values and the bit clears itself.\n\nUsage: Use it to recover after an error; stop the unit first for a clean stop. Reads return 0.\n\nValues:\n0x0 no action (reset value);\n0x1 reset the unit.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "en",
+                    "Bit Type": "rw",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Receive enable. Starts the unit with the configuration latched at the rising edge of this bit; clearing it stops the unit at the end of the running frame.\n\nUsage: Program every other register of the block first, fill the FIFO for the transmitter, then set the bit; clear it and poll the busy flag to stop.\n\nValues:\n0x0 unit stopped (reset value);\n0x1 unit running.\n\nUnit: none.\n\nLimits: configuration written while the bit is 1 is not used until the next start."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_frame",
-        "Offset": "0x0204",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x20200201",
-        "Descriprtion": "Receive frame register. Selects the frame format, the number of slots, and the slot and data widths.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:30]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "data_w",
-                "Bit Type": "rw",
-                "Bit Field": "[29:24]",
-                "Reset Value": "0x20",
-                "Description": "Data width. Number of valid sample bits at the start of a slot, most significant bit first; the rest of the slot is zero (transmit) or ignored (receive).
-
-Usage: Write the real width of the sample.
-
-Values:
-0x08 to 0x20 8 to 32 bits (reset value 0x20).
-
-Unit: bits.
-
-Limits: not larger than slot_w."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[23:22]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "slot_w",
-                "Bit Type": "rw",
-                "Bit Field": "[21:16]",
-                "Reset Value": "0x20",
-                "Description": "Slot width. Number of bit clocks of one slot.
-
-Usage: Write the real width; it must be at least the data width.
-
-Values:
-0x08 to 0x20 8 to 32 bits (reset value 0x20).
-
-Unit: bit clocks.
-
-Limits: not smaller than data_w."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[15:14]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "nslot",
-                "Bit Type": "rw",
-                "Bit Field": "[13:8]",
-                "Reset Value": "0x2",
-                "Description": "Slots per frame. Number of time slots in one frame; a stereo I2S frame has 2.
-
-Usage: Write the real number of slots, not a minus-one code; the slot mask refers to slots from 0.
-
-Values:
-0x01 to 0x20 1 to 32 slots (reset value 0x02).
-
-Unit: slots.
-
-Limits: not above the build maximum of i2s_cap.max_slot."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[7:5]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "pack",
-                "Bit Type": "rw",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Packing. Puts two 16-bit samples in one FIFO word, first sample in the low half.
-
-Usage: Set it for voice paths to halve the DMA traffic; data_w must be 16 or less.
-
-Values:
-0x0 one sample per word (reset value);
-0x1 two samples per word.
-
-Unit: none.
-
-Limits: needs the packing feature."
-            },
-            {
-                "Bit Name": "align",
-                "Bit Type": "rw",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "Sample alignment in the FIFO word. Chooses whether a sample sits in the low or the high bits of the 32-bit word.
-
-Usage: Choose the alignment that matches the software data layout.
-
-Values:
-0x0 right aligned: sample in the low bits (reset value);
-0x1 left aligned: sample in the high bits.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "fmt",
-                "Bit Type": "rw",
-                "Bit Field": "[2:0]",
-                "Reset Value": "0x1",
-                "Description": "Frame format. Selects one of the ready-made frame formats; custom uses the sync register.
-
-Usage: Write while the unit is stopped. The preset formats derive the frame sync from nslot and slot_w.
-
-Values:
-0x0 custom: the sync fields of the sync register are used;
-0x1 Philips I2S (reset value);
-0x2 left-justified;
-0x3 PCM short frame;
-0x4 PCM long frame;
-0x5 TDM with early sync.
-
-Unit: none.
-
-Limits: 0x6 and 0x7 are reserved."
-            }
-          ]
+            "Register Name": "i2s_rx_frame",
+            "Offset": "0x0204",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x20200201",
+            "Description": "Receive frame register. Selects the frame format, the number of slots, and the slot and data widths.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:30]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "data_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[29:24]",
+                    "Reset Value": "0x20",
+                    "Description": "Data width. Number of valid sample bits at the start of a slot, most significant bit first; the rest of the slot is zero (transmit) or ignored (receive).\n\nUsage: Write the real width of the sample.\n\nValues:\n0x08 to 0x20 8 to 32 bits (reset value 0x20).\n\nUnit: bits.\n\nLimits: not larger than slot_w."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[23:22]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "slot_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[21:16]",
+                    "Reset Value": "0x20",
+                    "Description": "Slot width. Number of bit clocks of one slot.\n\nUsage: Write the real width; it must be at least the data width.\n\nValues:\n0x08 to 0x20 8 to 32 bits (reset value 0x20).\n\nUnit: bit clocks.\n\nLimits: not smaller than data_w."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:14]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "nslot",
+                    "Bit Type": "rw",
+                    "Bit Field": "[13:8]",
+                    "Reset Value": "0x2",
+                    "Description": "Slots per frame. Number of time slots in one frame; a stereo I2S frame has 2.\n\nUsage: Write the real number of slots, not a minus-one code; the slot mask refers to slots from 0.\n\nValues:\n0x01 to 0x20 1 to 32 slots (reset value 0x02).\n\nUnit: slots.\n\nLimits: not above the build maximum of i2s_cap.max_slot."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[7:5]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "pack",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Packing. Puts two 16-bit samples in one FIFO word, first sample in the low half.\n\nUsage: Set it for voice paths to halve the DMA traffic; data_w must be 16 or less.\n\nValues:\n0x0 one sample per word (reset value);\n0x1 two samples per word.\n\nUnit: none.\n\nLimits: needs the packing feature."
+                },
+                {
+                    "Bit Name": "align",
+                    "Bit Type": "rw",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Sample alignment in the FIFO word. Chooses whether a sample sits in the low or the high bits of the 32-bit word.\n\nUsage: Choose the alignment that matches the software data layout.\n\nValues:\n0x0 right aligned: sample in the low bits (reset value);\n0x1 left aligned: sample in the high bits.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "fmt",
+                    "Bit Type": "rw",
+                    "Bit Field": "[2:0]",
+                    "Reset Value": "0x1",
+                    "Description": "Frame format. Selects one of the ready-made frame formats; custom uses the sync register.\n\nUsage: Write while the unit is stopped. The preset formats derive the frame sync from nslot and slot_w.\n\nValues:\n0x0 custom: the sync fields of the sync register are used;\n0x1 Philips I2S (reset value);\n0x2 left-justified;\n0x3 PCM short frame;\n0x4 PCM long frame;\n0x5 TDM with early sync.\n\nUnit: none.\n\nLimits: 0x6 and 0x7 are reserved."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_sync",
-        "Offset": "0x0208",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000201",
-        "Descriprtion": "Receive frame sync register. Defines the frame sync shape for the custom format and the bit clock polarity.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:13]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "bpol",
-                "Bit Type": "rw",
-                "Bit Field": "[12]",
-                "Reset Value": "0x0",
-                "Description": "Bit clock polarity. Selects the clock edge that launches data and the edge that samples it.
-
-Usage: Write while the unit is stopped; the standard I2S edges are the default.
-
-Values:
-0x0 launch on the falling edge, sample on the rising edge (reset value);
-0x1 launch on the rising edge, sample on the falling edge.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[11:10]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "fse",
-                "Bit Type": "rw",
-                "Bit Field": "[9]",
-                "Reset Value": "0x1",
-                "Description": "Frame sync early. Chooses whether the frame sync starts one bit clock before the first bit or together with it.
-
-Usage: Used only with fmt custom.
-
-Values:
-0x0 with the first bit;
-0x1 one bit clock early (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "fsp",
-                "Bit Type": "rw",
-                "Bit Field": "[8]",
-                "Reset Value": "0x0",
-                "Description": "Frame sync polarity. Selects the active level of the frame sync.
-
-Usage: Used only with fmt custom.
-
-Values:
-0x0 active high (reset value);
-0x1 active low.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[7:6]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "sync_w",
-                "Bit Type": "rw",
-                "Bit Field": "[5:0]",
-                "Reset Value": "0x1",
-                "Description": "Frame sync width. Number of bit clocks the frame sync is active at the start of a frame.
-
-Usage: Used only with fmt custom; the preset formats set it themselves.
-
-Values:
-0x01 to 0x20 1 to 32 bit clocks (reset value 0x01).
-
-Unit: bit clocks.
-
-Limits: not longer than slot_w."
-            }
-          ]
+            "Register Name": "i2s_rx_sync",
+            "Offset": "0x0208",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000201",
+            "Description": "Receive frame sync register. Defines the frame sync shape for the custom format and the bit clock polarity.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:13]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "bpol",
+                    "Bit Type": "rw",
+                    "Bit Field": "[12]",
+                    "Reset Value": "0x0",
+                    "Description": "Bit clock polarity. Selects the clock edge that launches data and the edge that samples it.\n\nUsage: Write while the unit is stopped; the standard I2S edges are the default.\n\nValues:\n0x0 launch on the falling edge, sample on the rising edge (reset value);\n0x1 launch on the rising edge, sample on the falling edge.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[11:10]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "fse",
+                    "Bit Type": "rw",
+                    "Bit Field": "[9]",
+                    "Reset Value": "0x1",
+                    "Description": "Frame sync early. Chooses whether the frame sync starts one bit clock before the first bit or together with it.\n\nUsage: Used only with fmt custom.\n\nValues:\n0x0 with the first bit;\n0x1 one bit clock early (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "fsp",
+                    "Bit Type": "rw",
+                    "Bit Field": "[8]",
+                    "Reset Value": "0x0",
+                    "Description": "Frame sync polarity. Selects the active level of the frame sync.\n\nUsage: Used only with fmt custom.\n\nValues:\n0x0 active high (reset value);\n0x1 active low.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[7:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "sync_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5:0]",
+                    "Reset Value": "0x1",
+                    "Description": "Frame sync width. Number of bit clocks the frame sync is active at the start of a frame.\n\nUsage: Used only with fmt custom; the preset formats set it themselves.\n\nValues:\n0x01 to 0x20 1 to 32 bit clocks (reset value 0x01).\n\nUnit: bit clocks.\n\nLimits: not longer than slot_w."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_clk",
-        "Offset": "0x020c",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000002",
-        "Descriprtion": "Receive clock register. Sets the bit clock divider of the master.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:16]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "div",
-                "Bit Type": "rw",
-                "Bit Field": "[15:0]",
-                "Reset Value": "0x2",
-                "Description": "Bit clock divider. Number of master clock cycles in each half period of the bit clock, so the bit clock is the master clock divided by twice this value.
-
-Usage: Write while the unit is stopped; used only in master mode. Example: master clock 12.288 MHz and divider 2 give a 3.072 MHz bit clock.
-
-Values:
-0x0001 to 0xFFFF half period in master clock cycles (reset value 0x0002).
-
-Unit: master clock cycles.
-
-Limits: 1 or more in master mode."
-            }
-          ]
+            "Register Name": "i2s_rx_clk",
+            "Offset": "0x020c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000002",
+            "Description": "Receive clock register. Sets the bit clock divider of the master.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:16]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "div",
+                    "Bit Type": "rw",
+                    "Bit Field": "[15:0]",
+                    "Reset Value": "0x2",
+                    "Description": "Bit clock divider. Number of master clock cycles in each half period of the bit clock, so the bit clock is the master clock divided by twice this value.\n\nUsage: Write while the unit is stopped; used only in master mode. Example: master clock 12.288 MHz and divider 2 give a 3.072 MHz bit clock.\n\nValues:\n0x0001 to 0xFFFF half period in master clock cycles (reset value 0x0002).\n\nUnit: master clock cycles.\n\nLimits: 1 or more in master mode."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_mask",
-        "Offset": "0x0210",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0xFFFFFFFF",
-        "Descriprtion": "Receive slot mask register. Enables the slots of the frame one by one.",
-        "Bits": [
-            {
-                "Bit Name": "mask",
-                "Bit Type": "rw",
-                "Bit Field": "[31:0]",
-                "Reset Value": "0xFFFFFFFF",
-                "Description": "Slot mask. Bit n enables slot n; a masked slot is skipped: no word is taken from or put into the FIFO, and a transmit slot sends zero or releases the line.
-
-Usage: May be written while the unit runs; the new value applies at the start of the next frame, so a frame is never changed in the middle.
-
-Values:
-0x00000000 to 0xFFFFFFFF one bit per slot (reset value 0xFFFFFFFF, all slots enabled).
-
-Unit: none.
-
-Limits: bits above nslot are ignored."
-            }
-          ]
+            "Register Name": "i2s_rx_mask",
+            "Offset": "0x0210",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0xFFFFFFFF",
+            "Description": "Receive slot mask register. Enables the slots of the frame one by one.",
+            "Bits": [
+                {
+                    "Bit Name": "mask",
+                    "Bit Type": "rw",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0xFFFFFFFF",
+                    "Description": "Slot mask. Bit n enables slot n; a masked slot is skipped: no word is taken from or put into the FIFO, and a transmit slot sends zero or releases the line.\n\nUsage: May be written while the unit runs; the new value applies at the start of the next frame, so a frame is never changed in the middle.\n\nValues:\n0x00000000 to 0xFFFFFFFF one bit per slot (reset value 0xFFFFFFFF, all slots enabled).\n\nUnit: none.\n\nLimits: bits above nslot are ignored."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_fifo",
-        "Offset": "0x0214",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000004",
-        "Descriprtion": "Receive FIFO register. Sets the watermark of the logical FIFO.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:12]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "wm",
-                "Bit Type": "rw",
-                "Bit Field": "[11:0]",
-                "Reset Value": "0x4",
-                "Description": "Watermark. The watermark cause and the DMA request are active while the number of words in the FIFO is at or above this value.
-
-Usage: Choose it from the service latency: see the sizing rule of the specification.
-
-Values:
-0x000 to 0x400 words (reset value 0x004).
-
-Unit: words.
-
-Limits: not above the FIFO capacity."
-            }
-          ]
+            "Register Name": "i2s_rx_fifo",
+            "Offset": "0x0214",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000004",
+            "Description": "Receive FIFO register. Sets the watermark of the logical FIFO.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:12]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "wm",
+                    "Bit Type": "rw",
+                    "Bit Field": "[11:0]",
+                    "Reset Value": "0x4",
+                    "Description": "Watermark. The watermark cause and the DMA request are active while the number of words in the FIFO is at or above this value.\n\nUsage: Choose it from the service latency: see the sizing rule of the specification.\n\nValues:\n0x000 to 0x400 words (reset value 0x004).\n\nUnit: words.\n\nLimits: not above the FIFO capacity."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_sts",
-        "Offset": "0x0218",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000002",
-        "Descriprtion": "Receive status register. Shows the state of the unit and the FIFO.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:28]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "level",
-                "Bit Type": "ro",
-                "Bit Field": "[27:16]",
-                "Reset Value": "0x0",
-                "Description": "FIFO level. Number of words in the logical FIFO of all lines.
-
-Usage: Read to size a burst: the free space is the capacity minus the level.
-
-Values:
-0x000 to 0x400 words in the FIFO (reset value 0x000).
-
-Unit: words.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[15:6]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "hung",
-                "Bit Type": "w1c",
-                "Bit Field": "[5]",
-                "Reset Value": "0x0",
-                "Description": "Hung clock of this unit. No bit clock or frame sync arrived within the timeout.
-
-Usage: Write 1 to clear after reading i2s_irq_raw.hung.
-
-Values:
-0x0 no timeout (reset value);
-0x1 timeout occurred.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "sync",
-                "Bit Type": "w1c",
-                "Bit Field": "[4]",
-                "Reset Value": "0x0",
-                "Description": "Frame sync error of this unit. An external frame sync arrived while a frame was running.
-
-Usage: Write 1 to clear after reading i2s_irq_raw.sync.
-
-Values:
-0x0 no error (reset value);
-0x1 error occurred.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[3]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "full",
-                "Bit Type": "ro",
-                "Bit Field": "[2]",
-                "Reset Value": "0x0",
-                "Description": "FIFO full flag. High when the logical FIFO of the unit has no room for another word.
-
-Usage: Check it before writing a burst.
-
-Values:
-0x0 room available (reset value);
-0x1 full.
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "empty",
-                "Bit Type": "ro",
-                "Bit Field": "[1]",
-                "Reset Value": "0x1",
-                "Description": "FIFO empty flag. High when the logical FIFO of the unit holds no word at all.
-
-Usage: Poll it to know that a transmit stream has been sent out of the FIFO.
-
-Values:
-0x0 words present;
-0x1 empty (reset value).
-
-Unit: none.
-
-Limits: none."
-            },
-            {
-                "Bit Name": "busy",
-                "Bit Type": "ro",
-                "Bit Field": "[0]",
-                "Reset Value": "0x0",
-                "Description": "Unit busy. High while the unit is running or finishing a frame.
-
-Usage: Poll it after clearing en.
-
-Values:
-0x0 idle (reset value);
-0x1 busy.
-
-Unit: none.
-
-Limits: none."
-            }
-          ]
+            "Register Name": "i2s_rx_sts",
+            "Offset": "0x0218",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000002",
+            "Description": "Receive status register. Shows the state of the unit and the FIFO.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:28]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "level",
+                    "Bit Type": "ro",
+                    "Bit Field": "[27:16]",
+                    "Reset Value": "0x0",
+                    "Description": "FIFO level. Number of words in the logical FIFO of all lines.\n\nUsage: Read to size a burst: the free space is the capacity minus the level.\n\nValues:\n0x000 to 0x400 words in the FIFO (reset value 0x000).\n\nUnit: words.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "hung",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Hung clock of this unit. No bit clock or frame sync arrived within the timeout.\n\nUsage: Write 1 to clear after reading i2s_irq_raw.hung.\n\nValues:\n0x0 no timeout (reset value);\n0x1 timeout occurred.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "sync",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Frame sync error of this unit. An external frame sync arrived while a frame was running.\n\nUsage: Write 1 to clear after reading i2s_irq_raw.sync.\n\nValues:\n0x0 no error (reset value);\n0x1 error occurred.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "full",
+                    "Bit Type": "ro",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "FIFO full flag. High when the logical FIFO of the unit has no room for another word.\n\nUsage: Check it before writing a burst.\n\nValues:\n0x0 room available (reset value);\n0x1 full.\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "empty",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x1",
+                    "Description": "FIFO empty flag. High when the logical FIFO of the unit holds no word at all.\n\nUsage: Poll it to know that a transmit stream has been sent out of the FIFO.\n\nValues:\n0x0 words present;\n0x1 empty (reset value).\n\nUnit: none.\n\nLimits: none."
+                },
+                {
+                    "Bit Name": "busy",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Unit busy. High while the unit is running or finishing a frame.\n\nUsage: Poll it after clearing en.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: none."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_data",
-        "Offset": "0x021c",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Receive data register. Read port of the receive FIFO; software reads the samples of the frame in order.",
-        "Bits": [
-            {
-                "Bit Name": "data",
-                "Bit Type": "ro",
-                "Bit Field": "[31:0]",
-                "Reset Value": "0x0",
-                "Description": "Receive data. Each read pops one word. The order is slot by slot over the enabled slots, and inside a slot line 0 first and then the other lines.
-
-Usage: Read whole frames; with DMA point the DMA source to this one address without incrementing. A read of an empty FIFO returns 0.
-
-Values:
-0x00000000 to 0xFFFFFFFF sample word; with pack the low half is the first sample.
-
-Unit: sample.
-
-Limits: valid bits follow data_w and align."
-            }
-          ]
+            "Register Name": "i2s_rx_data",
+            "Offset": "0x021c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Receive data register. Read port of the receive FIFO; software reads the samples of the frame in order.",
+            "Bits": [
+                {
+                    "Bit Name": "data",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Receive data. Each read pops one word. The order is slot by slot over the enabled slots, and inside a slot line 0 first and then the other lines.\n\nUsage: Read whole frames; with DMA point the DMA source to this one address without incrementing. A read of an empty FIFO returns 0.\n\nValues:\n0x00000000 to 0xFFFFFFFF sample word; with pack the low half is the first sample.\n\nUnit: sample.\n\nLimits: valid bits follow data_w and align."
+                }
+            ]
         },
         {
-        "Register Name": "i2s_rx_tmo",
-        "Offset": "0x0220",
-        "Repeat Mode": "NONE",
-        "Count or Default": "1",
-        "Offset Stride": "4",
-        "Maximum Count": "1",
-        "Reset Value": "0x00000000",
-        "Descriprtion": "Receive timeout register. Sets the hung-clock timeout of the unit.",
-        "Bits": [
-            {
-                "Bit Name": "reserved",
-                "Bit Type": "ro",
-                "Bit Field": "[31:16]",
-                "Reset Value": "0x0",
-                "Description": "This field is unused.
-Read-as-zero and write-ignored."
-            },
-            {
-                "Bit Name": "tmo",
-                "Bit Type": "rw",
-                "Bit Field": "[15:0]",
-                "Reset Value": "0x0",
-                "Description": "Timeout. When the unit is running and no bit clock edge or frame sync arrives for this time, the hung cause is raised.
-
-Usage: Set it in slave mode to detect a lost clock; 0 turns the detector off.
-
-Values:
-0x0000 detector off (reset value);
-0x0001 to 0xFFFF timeout in units of 256 master clock cycles.
-
-Unit: 256 master clock cycles.
-
-Limits: needs the timeout feature."
-            }
-          ]
+            "Register Name": "i2s_rx_tmo",
+            "Offset": "0x0220",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "Receive timeout register. Sets the hung-clock timeout of the unit.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:16]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "tmo",
+                    "Bit Type": "rw",
+                    "Bit Field": "[15:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Timeout. When the unit is running and no bit clock edge or frame sync arrives for this time, the hung cause is raised.\n\nUsage: Set it in slave mode to detect a lost clock; 0 turns the detector off.\n\nValues:\n0x0000 detector off (reset value);\n0x0001 to 0xFFFF timeout in units of 256 master clock cycles.\n\nUnit: 256 master clock cycles.\n\nLimits: needs the timeout feature."
+                }
+            ]
         }
     ]
 }

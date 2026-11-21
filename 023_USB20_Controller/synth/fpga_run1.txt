@@ -1,0 +1,2 @@
+MIN-P0: top=m_usb2_top_utmi_axis LUT4=11623 FF=4863 fmax(MHz, last report)={'$glbnet$i_clk_phy$TRELLIS_IO_IN': '95.52', '$glbnet$i_clk_bus$TRELLIS_IO_IN': '99.71'}
+FINISHED

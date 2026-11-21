@@ -23,6 +23,7 @@
 *.wlf
 *.vpd
 *.dat
+*.zip
 
 # --- logs & reports --------------------------------------------------------
 *.log
@@ -74,3 +75,20 @@ sanity_v2/
 work/
 sim/
 tmp/
+
+# --- synthesis directories: keep run scripts and README guides ------------
+**/synthesis/**
+**/synthesis/**/*.txt
+**/synthesis/**/*.pdk
+!**/synthesis/**/
+!**/synthesis/**/README
+!**/synthesis/**/README.*
+!**/synthesis/**/*.ys
+!**/synthesis/**/*.tcl
+!**/synthesis/**/*.py
+!**/synthesis/**/*.sh
+!**/synthesis/**/*.ps1
+!**/synthesis/**/*.bat
+!**/synthesis/**/*.cmd
+!**/synthesis/**/*.mk
+!**/synthesis/**/Makefile

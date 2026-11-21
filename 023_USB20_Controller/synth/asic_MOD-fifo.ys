@@ -1,0 +1,8 @@
+plugin -i slang
+read_slang -f ../synth/fl_nosram.f --top m_usb2_fifo  -D VLSIT_SYNTHESIS
+hierarchy -top m_usb2_fifo
+synth -top m_usb2_fifo -flatten
+dfflibmap -liberty ../synth/pdk_freepdk45/gscl45nm.lib
+abc -liberty ../synth/pdk_freepdk45/gscl45nm.lib -D 8333 -script +strash;&get,-n;&fraig,-x;&put;scorr;dc2;strash;&get,-n;&dch,-f;&nf,{D};&put;buffer;upsize,{D};dnsize,{D};topo;stime,-p
+opt_clean
+tee -o ../synth/asic_MOD-fifo_stat.txt stat -liberty ../synth/pdk_freepdk45/gscl45nm.lib

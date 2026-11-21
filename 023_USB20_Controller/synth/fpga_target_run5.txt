@@ -1,0 +1,22 @@
+OPT0 seed=1 LUT4=10809 FF=4535 phy=114.7 MHz (target 120) bus=128.5 MHz (target 150)
+OPT0 seed=2 LUT4=10809 FF=4535 phy=112.5 MHz (target 120) bus=118.2 MHz (target 150)
+OPT0 seed=3 LUT4=10809 FF=4535 phy=119.4 MHz (target 120) bus=102.3 MHz (target 150)
+PIPE-ALL seed=1 LUT4=10680 FF=5179 phy=120.3 MHz (target 120) bus=125.2 MHz (target 150)
+Traceback (most recent call last):
+  File "C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\023_USB20_Controller\synth\fpga_target.py", line 57, in <module>
+    ph, bu, lut, ff = pnr(name, seed)
+                      ^^^^^^^^^^^^^^^
+  File "C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\023_USB20_Controller\synth\fpga_target.py", line 34, in pnr
+    subprocess.run(['nextpnr-ecp5', '--um5g-85k', '--package', 'CABGA381', '--speed', '8', '--json',
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1228, in communicate
+    sts = self.wait(timeout=self._remaining_time(endtime))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1593, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['nextpnr-ecp5', '--um5g-85k', '--package', 'CABGA381', '--speed', '8', '--json', '../synth/fpgat_PIPE-ALL.json', '--lpf', '../synth/fpgat_PIPE-ALL.lpf', '--lpf-allow-unconstrained', '--timing-allow-fail', '--placer-heap-critexp', '4', '--placer-heap-timingweight', '20', '--seed', '2', '-l', '../synth/fpgat_PIPE-ALL_s2.log']' timed out after -853.609999999986 seconds

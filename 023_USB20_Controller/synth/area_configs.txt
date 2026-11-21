@@ -1,0 +1,5 @@
+CFG-MIN        top=m_usb2_top_utmi_axis cells=29792 flops=5506 ltp_len=43
+CFG-FC-DEV     top=m_usb2_top_ulpi_axis cells=48849 flops=8294 ltp_len=44
+CFG-CAM-HOST   top=m_usb2_top_utmi_axim cells=50473 flops=8156 ltp_len=46
+CFG-CAM-HOST-SG top=m_usb2_top_utmi_axim cells=50771 flops=8170 ltp_len=46
+CFG-DUAL-FULL  top=m_usb2_top_utmi_axim cells=87651 flops=13010 ltp_len=50

@@ -1,103 +1,116 @@
 {
- "page_name": "FSM_HOST_XACT",
- "out_name": "usb2_fsm_host_xact.drawio",
- "function": "host_xact",
- "initial": "ENUM_ST_HX_IDLE",
- "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
- "states": [
-  {
-   "name": "ENUM_ST_HX_IDLE"
-  },
-  {
-   "name": "ENUM_ST_HX_TOKEN"
-  },
-  {
-   "name": "ENUM_ST_HX_OUT_DATA"
-  },
-  {
-   "name": "ENUM_ST_HX_WAIT_HS"
-  },
-  {
-   "name": "ENUM_ST_HX_WAIT_DATA"
-  },
-  {
-   "name": "ENUM_ST_HX_SEND_ACK"
-  },
-  {
-   "name": "ENUM_ST_HX_SPLIT"
-  },
-  {
-   "name": "ENUM_ST_HX_DONE"
+  "page_name": "FSM_HOST_XACT",
+  "out_name": "usb2_fsm_host_xact.drawio",
+  "function": "host_xact",
+  "initial": "ENUM_ST_HX_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_HX_IDLE"
+    },
+    {
+      "name": "ENUM_ST_HX_TOKEN"
+    },
+    {
+      "name": "ENUM_ST_HX_OUT_DATA"
+    },
+    {
+      "name": "ENUM_ST_HX_WAIT_HS"
+    },
+    {
+      "name": "ENUM_ST_HX_WAIT_DATA"
+    },
+    {
+      "name": "ENUM_ST_HX_SEND_ACK"
+    },
+    {
+      "name": "ENUM_ST_HX_SSPLIT"
+    },
+    {
+      "name": "ENUM_ST_HX_CSPLIT"
+    },
+    {
+      "name": "ENUM_ST_HX_DONE"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_HX_IDLE",
+      "dst": "ENUM_ST_HX_TOKEN",
+      "label": "channel granted"
+    },
+    {
+      "src": "ENUM_ST_HX_TOKEN",
+      "dst": "ENUM_ST_HX_OUT_DATA",
+      "label": "OUT or SETUP token sent"
+    },
+    {
+      "src": "ENUM_ST_HX_TOKEN",
+      "dst": "ENUM_ST_HX_WAIT_DATA",
+      "label": "IN token sent"
+    },
+    {
+      "src": "ENUM_ST_HX_TOKEN",
+      "dst": "ENUM_ST_HX_SSPLIT",
+      "label": "start-split token sent"
+    },
+    {
+      "src": "ENUM_ST_HX_TOKEN",
+      "dst": "ENUM_ST_HX_CSPLIT",
+      "label": "complete-split token sent"
+    },
+    {
+      "src": "ENUM_ST_HX_OUT_DATA",
+      "dst": "ENUM_ST_HX_WAIT_HS",
+      "label": "data packet sent"
+    },
+    {
+      "src": "ENUM_ST_HX_OUT_DATA",
+      "dst": "ENUM_ST_HX_DONE",
+      "label": "isochronous, no handshake"
+    },
+    {
+      "src": "ENUM_ST_HX_WAIT_HS",
+      "dst": "ENUM_ST_HX_DONE",
+      "label": "handshake or time-out"
+    },
+    {
+      "src": "ENUM_ST_HX_WAIT_DATA",
+      "dst": "ENUM_ST_HX_SEND_ACK",
+      "label": "good data packet"
+    },
+    {
+      "src": "ENUM_ST_HX_WAIT_DATA",
+      "dst": "ENUM_ST_HX_DONE",
+      "label": "NAK, STALL, error or time-out"
+    },
+    {
+      "src": "ENUM_ST_HX_SEND_ACK",
+      "dst": "ENUM_ST_HX_DONE",
+      "label": "ACK sent"
+    },
+    {
+      "src": "ENUM_ST_HX_SSPLIT",
+      "dst": "ENUM_ST_HX_WAIT_HS",
+      "label": "start-split data sent"
+    },
+    {
+      "src": "ENUM_ST_HX_CSPLIT",
+      "dst": "ENUM_ST_HX_WAIT_DATA",
+      "label": "complete-split IN token sent"
+    },
+    {
+      "src": "ENUM_ST_HX_WAIT_DATA",
+      "dst": "ENUM_ST_HX_CSPLIT",
+      "label": "NYET, retry complete-split"
+    },
+    {
+      "src": "ENUM_ST_HX_DONE",
+      "dst": "ENUM_ST_HX_IDLE",
+      "label": "status reported"
+    }
+  ],
+  "layout": {
+    "margin": 40
   }
- ],
- "transitions": [
-  {
-   "src": "ENUM_ST_HX_IDLE",
-   "dst": "ENUM_ST_HX_TOKEN",
-   "label": "channel granted"
-  },
-  {
-   "src": "ENUM_ST_HX_TOKEN",
-   "dst": "ENUM_ST_HX_OUT_DATA",
-   "label": "OUT or SETUP token sent"
-  },
-  {
-   "src": "ENUM_ST_HX_TOKEN",
-   "dst": "ENUM_ST_HX_WAIT_DATA",
-   "label": "IN token sent"
-  },
-  {
-   "src": "ENUM_ST_HX_TOKEN",
-   "dst": "ENUM_ST_HX_SPLIT",
-   "label": "split token sent"
-  },
-  {
-   "src": "ENUM_ST_HX_OUT_DATA",
-   "dst": "ENUM_ST_HX_WAIT_HS",
-   "label": "data packet sent"
-  },
-  {
-   "src": "ENUM_ST_HX_OUT_DATA",
-   "dst": "ENUM_ST_HX_DONE",
-   "label": "isochronous, no handshake"
-  },
-  {
-   "src": "ENUM_ST_HX_WAIT_HS",
-   "dst": "ENUM_ST_HX_DONE",
-   "label": "handshake or time-out"
-  },
-  {
-   "src": "ENUM_ST_HX_WAIT_DATA",
-   "dst": "ENUM_ST_HX_SEND_ACK",
-   "label": "good data packet"
-  },
-  {
-   "src": "ENUM_ST_HX_WAIT_DATA",
-   "dst": "ENUM_ST_HX_DONE",
-   "label": "NAK, STALL, error or time-out"
-  },
-  {
-   "src": "ENUM_ST_HX_SEND_ACK",
-   "dst": "ENUM_ST_HX_DONE",
-   "label": "ACK sent"
-  },
-  {
-   "src": "ENUM_ST_HX_SPLIT",
-   "dst": "ENUM_ST_HX_WAIT_HS",
-   "label": "start-split data sent"
-  },
-  {
-   "src": "ENUM_ST_HX_SPLIT",
-   "dst": "ENUM_ST_HX_WAIT_DATA",
-   "label": "complete-split IN token sent"
-  },
-  {
-   "src": "ENUM_ST_HX_DONE",
-   "dst": "ENUM_ST_HX_IDLE",
-   "label": "status reported"
-  }
- ],
- "layout": {
-  "margin": 40
- }
 }

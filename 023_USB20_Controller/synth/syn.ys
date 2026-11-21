@@ -1,0 +1,5 @@
+plugin -i slang
+read_slang -f filelist_utmi_axim.f --top m_usb2_top_utmi_axim -D VLSIT_SYNTHESIS --keep-hierarchy
+hierarchy -top m_usb2_top_utmi_axim
+synth -top m_usb2_top_utmi_axim -flatten
+stat

@@ -56,8 +56,8 @@
         <mxCell id="i21__2" value="PHY&lt;br&gt;UTMI+ or ULPI" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;spacing=2;" vertex="1" parent="1" vlsit_library_sha256="15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="i21">
           <mxGeometry x="380" y="515" width="150" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="i23__2" value="CKBUS&lt;br&gt;i_clk_bus, i_rst_n_bus" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;spacing=2;" vertex="1" parent="1" vlsit_library_sha256="15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="i23">
-          <mxGeometry x="580" y="1000" width="240" height="50" as="geometry" />
+        <mxCell id="i23__2" value="CKBUS&lt;br&gt;i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;spacing=2;" vertex="1" parent="1" vlsit_library_sha256="15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="i23">
+          <mxGeometry x="430" y="1060" width="540" height="50" as="geometry" />
         </mxCell>
         <mxCell id="i30__2" value="TOP&lt;br&gt;(m_usb2_core)" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;spacing=2;" vertex="1" parent="1" vlsit_library_sha256="15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="i30">
           <mxGeometry x="1552" y="430" width="150" height="50" as="geometry" />
@@ -121,7 +121,7 @@
         </mxCell>
         <mxCell id="i24__2" value="" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;jumpStyle=arc;jumpSize=12;exitX=0.5000;exitY=0.0000;exitPerimeter=0;entryX=0.5000;entryY=1.0000;entryPerimeter=0;" edge="1" parent="1" source="i23__2" target="i9__2" vlsit_library_sha256="15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="i24">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="700" y="1000" as="sourcePoint" />
+            <mxPoint x="700" y="1060" as="sourcePoint" />
             <mxPoint x="700" y="910" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -686,7 +686,7 @@
             <mxRectangle width="470" height="58" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="i2__r4__c4" value="i_clk_bus, i_rst_n_bus" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=none;strokeColor=#000000;strokeWidth=1;overflow=hidden;pointerEvents=1;align=left;verticalAlign=middle;spacing=4;fontSize=18;fontColor=#000000;" vertex="1" parent="i2__r4" vlsit_native_table="1">
+        <mxCell id="i2__r4__c4" value="i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;fillColor=none;strokeColor=#000000;strokeWidth=1;overflow=hidden;pointerEvents=1;align=left;verticalAlign=middle;spacing=4;fontSize=18;fontColor=#000000;" vertex="1" parent="i2__r4" vlsit_native_table="1">
           <mxGeometry x="970" width="1430" height="58" as="geometry">
             <mxRectangle width="1430" height="58" as="alternateBounds" />
           </mxGeometry>

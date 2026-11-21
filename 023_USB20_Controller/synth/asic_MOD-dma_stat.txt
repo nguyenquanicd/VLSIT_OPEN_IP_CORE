@@ -1,0 +1,34 @@
+
+7. Printing statistics.
+
+=== m_usb2_dma ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     8033        - wires
+    12288        - wire bits
+      150        - public wires
+     4405        - public wire bits
+       72        - ports
+     2714        - port bits
+     8754 2.87E+04 cells
+      385  903.402   AND2X1
+      656 1.85E+03   AOI21X1
+      516  1.7E+03   AOI22X1
+      404  947.986   BUFX2
+      744 7.68E+03   DFFSR
+      771 1.09E+03   INVX1
+      859  3225.03   MUX2X1
+     1756  3.3E+03   NAND2X1
+      530 1.24E+03   NAND3X1
+      183  429.409   NOR2X1
+      183  515.291   NOR3X1
+      802 2.26E+03   OAI21X1
+      391  917.481   OR2X1
+      327 1.53E+03   XNOR2X1
+      247 1.16E+03   XOR2X1
+
+   Chip area for module '\m_usb2_dma': 28739.932000
+     of which used for sequential elements: 7681.502400 (26.73%)
+

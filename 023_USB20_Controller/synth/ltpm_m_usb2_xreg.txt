@@ -1,0 +1,32 @@
+
+4. Executing LTP pass (find longest path).
+
+Longest topological path in m_usb2_xreg (length=26):
+    0: \reg_set_pend [2047]
+    1: $abc$52963$auto$simplemap.cc:148:simplemap_reduce$48233[15] (via $abc$53018$blif$53018$1746)
+    2: $abc$52963$new_n2467 (via $abc$52963$blif$52963$223)
+    3: $abc$52963$new_n2468 (via $abc$52963$blif$52963$224)
+    4: $abc$52963$new_n2469 (via $abc$52963$blif$52963$225)
+    5: $abc$52963$new_n2470 (via $abc$52963$blif$52963$226)
+    6: $abc$52963$new_n2471 (via $abc$52963$blif$52963$227)
+    7: $abc$52963$new_n2472 (via $abc$52963$blif$52963$228)
+    8: $abc$52963$new_n3382 (via $abc$52963$blif$52963$1138)
+    9: $abc$52963$new_n3384 (via $abc$52963$blif$52963$1140)
+   10: $abc$52963$new_n3385 (via $abc$52963$blif$52963$1141)
+   11: $abc$52963$new_n3393 (via $abc$52963$blif$52963$1149)
+   12: \w_sel_set (via $abc$52963$blif$52963$1150)
+   13: $abc$52963$new_n4482 (via $abc$52963$blif$52963$2238)
+   14: $abc$52963$new_n4514 (via $abc$52963$blif$52963$2270)
+   15: \w_hit (via $abc$52963$blif$52963$2271)
+   16: $abc$52950$new_n105 (via $abc$52950$blif$52950$0)
+   17: \u_upd_fifo.i_wr_en (via $abc$52950$blif$52950$1)
+   18: $abc$53018$new_n21690 (via $abc$53018$blif$53018$697)
+   19: \u_upd_fifo.u_vlsit_afifo_mem.i_wr_en (via $abc$53018$blif$53018$698)
+   20: $abc$53018$new_n23922 (via $abc$53018$blif$53018$2929)
+   21: $abc$53018$new_n23926 (via $abc$53018$blif$53018$2933)
+   22: $abc$53018$new_n23930 (via $abc$53018$blif$53018$2937)
+   23: $abc$53018$new_n23933 (via $abc$53018$blif$53018$2940)
+   24: \u_upd_fifo.u_vlsit_afifo_wr.w_wbin_nxt [2] (via $abc$53018$blif$53018$2941)
+   25: $abc$53018$new_n23955 (via $abc$53018$blif$53018$2962)
+   26: \u_upd_fifo.u_vlsit_afifo_wr.w_wgray_nxt [2] (via $abc$53018$blif$53018$2963)
+   ff: \u_upd_fifo.u_vlsit_afifo_wr.reg_wgray [2] (via $auto$ff.cc:337:slice$4336)

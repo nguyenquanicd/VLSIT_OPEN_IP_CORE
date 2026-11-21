@@ -41,7 +41,7 @@
      "description": "Core enable. Lets the protocol engines, the FIFO manager and the PHY interface run.\n\nUsage: Set after the FIFO regions, the endpoint or channel registers and the DMA registers are programmed; clear before changing PARA-independent role or FIFO settings.\n\nValues:\n0x0 core disabled, the bus side is idle (reset value);\n0x1 core enabled.\n\nUnit: none.\n\nLimits: none."
     },
     {
-     "name": "soft_rst",
+     "name": "swrst",
      "bits": "[1]",
      "type": "rwi",
      "reset": "0x0",
@@ -153,22 +153,29 @@
      "description": "ID indication. Shows the plug type that the PHY reports.\n\nUsage: Read in dual-role builds; the value is meaningful after the PHY ID sampling time of 50 ms.\n\nValues:\n0x0 B plug, device (reset value);\n0x1 A plug, host.\n\nUnit: none.\n\nLimits: none."
     },
     {
-     "name": "rst_busy",
+     "name": "rstbusy",
      "bits": "[9]",
      "type": "ro",
      "reset": "0x0",
-     "description": "Reset busy. Shows that a soft reset or a bus reset sequence is running.\n\nUsage: Poll after writing soft_rst or after a port reset.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: none."
+     "description": "Reset busy. Shows that a soft reset or a bus reset sequence is running.\n\nUsage: Poll after writing swrst or after a port reset.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: none."
     },
     {
-     "name": "phy_clk_ok",
+     "name": "phyclk_ok",
      "bits": "[10]",
      "type": "ro",
      "reset": "0x0",
      "description": "PHY clock present. Shows that CLK-PHY toggles.\n\nUsage: Poll after releasing phy_rst; the CSR stays accessible without the PHY clock.\n\nValues:\n0x0 PHY clock absent (reset value);\n0x1 PHY clock present.\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "xq_free",
+     "bits": "[16:11]",
+     "type": "ro",
+     "reset": "0x8",
+     "description": "Free command entries. The number of free entries of the register command FIFO that carries CSR writes to the CLK-PHY domain.\n\nUsage: Read before a burst of writes to endpoint, channel, FIFO, role or enable fields; issue at most this many writes before reading it again.\n\nValues:\n0x0 FIFO full: further writes to crossing fields are dropped and xq_ovf is set;\n0x1 to 0x8 free entries (reset value 0x8);\n0x9 to 0x3F reserved.\n\nUnit: entry.\n\nLimits: 0 to 8."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:11]",
+     "bits": "[31:17]",
      "type": "ro",
      "reset": "0x0",
      "description": ""
@@ -220,7 +227,7 @@
      "bits": "[6]",
      "type": "ro",
      "reset": "0x0",
-     "description": "Split parameter. Reports whether PARA_USB2_SPLIT_EN is 1.\n\nUsage: Read at probe time; hc_split fields do nothing when 0.\n\nValues:\n0x0 no split (reset value);\n0x1 split present.\n\nUnit: none.\n\nLimits: none."
+     "description": "Split parameter. Reports whether PARA_USB2_SPLIT_EN is 1.\n\nUsage: Read at probe time; hc_spl fields do nothing when 0.\n\nValues:\n0x0 no split (reset value);\n0x1 split present.\n\nUnit: none.\n\nLimits: none."
     },
     {
      "name": "num_ep",
@@ -258,8 +265,15 @@
      "description": "Double-buffer parameter. Reports whether PARA_USB2_DBUF_EN is 1.\n\nUsage: Read at probe time; dbuf fields have no effect when 0.\n\nValues:\n0x0 no double buffering;\n0x1 double buffering present (reset value).\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "par_cfg",
+     "bits": "[23]",
+     "type": "ro",
+     "reset": "0x1",
+     "description": "RAM parity parameter. Reports whether PARA_USB2_RAM_PAR_EN is 1.\n\nUsage: Read at probe time; the ram_par interrupt exists only when 1.\n\nValues:\n0x0 no RAM parity;\n0x1 RAM parity present (reset value).\n\nUnit: none.\n\nLimits: none."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:23]",
+     "bits": "[31:24]",
      "type": "ro",
      "reset": "0x0",
      "description": ""
@@ -279,7 +293,7 @@
      "description": "Start-of-frame packet sent or received. Raw event flag set by hardware when the cause occurs.\n\nUsage: Hardware sets it on the event; software writes 1 to clear it; a new event in the same cycle wins over the clear.\n\nValues:\n0x0 no event (reset value);\n0x1 event occurred.\n\nUnit: none.\n\nLimits: none."
     },
     {
-     "name": "rst",
+     "name": "busrst",
      "bits": "[1]",
      "type": "w1c",
      "reset": "0x0",
@@ -433,8 +447,22 @@
      "description": "Port over-current detected. Raw event flag set by hardware when the cause occurs.\n\nUsage: Hardware sets it on the event; software writes 1 to clear it; a new event in the same cycle wins over the clear.\n\nValues:\n0x0 no event (reset value);\n0x1 event occurred.\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "ram_par",
+     "bits": "[23]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "FIFO RAM parity error. Raw event flag set by hardware when the cause occurs.\n\nUsage: Hardware sets it on the event; software writes 1 to clear it; a new event in the same cycle wins over the clear.\n\nValues:\n0x0 no event (reset value);\n0x1 event occurred.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
+     "name": "xq_ovf",
+     "bits": "[24]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Register command FIFO overflow. Raw event flag set by hardware when the cause occurs.\n\nUsage: Hardware sets it on the event; software writes 1 to clear it; a new event in the same cycle wins over the clear.\n\nValues:\n0x0 no event (reset value);\n0x1 event occurred.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:23]",
+     "bits": "[31:25]",
      "type": "ro",
      "reset": "0x0",
      "description": ""
@@ -454,7 +482,7 @@
      "description": "Enable of the interrupt cause: start-of-frame packet sent or received. Lets the raw flag reach o_int_usb.\n\nUsage: Set after the driver handler is installed; clear to mask the cause.\n\nValues:\n0x0 cause masked (reset value);\n0x1 cause enabled.\n\nUnit: none.\n\nLimits: none."
     },
     {
-     "name": "rst",
+     "name": "busrst",
      "bits": "[1]",
      "type": "rw",
      "reset": "0x0",
@@ -608,8 +636,22 @@
      "description": "Enable of the interrupt cause: port over-current detected. Lets the raw flag reach o_int_usb.\n\nUsage: Set after the driver handler is installed; clear to mask the cause.\n\nValues:\n0x0 cause masked (reset value);\n0x1 cause enabled.\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "ram_par",
+     "bits": "[23]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Enable of the interrupt cause: FIFO RAM parity error. Lets the raw flag reach o_int_usb.\n\nUsage: Set after the driver handler is installed; clear to mask the cause.\n\nValues:\n0x0 cause masked (reset value);\n0x1 cause enabled.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
+     "name": "xq_ovf",
+     "bits": "[24]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Enable of the interrupt cause: register command FIFO overflow. Lets the raw flag reach o_int_usb.\n\nUsage: Set after the driver handler is installed; clear to mask the cause.\n\nValues:\n0x0 cause masked (reset value);\n0x1 cause enabled.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:23]",
+     "bits": "[31:25]",
      "type": "ro",
      "reset": "0x0",
      "description": ""
@@ -629,7 +671,7 @@
      "description": "Injection of the interrupt cause: start-of-frame packet sent or received. A rising edge raises the raw flag.\n\nUsage: Write 0 and then 1 to raise the raw flag for driver tests; hardware raises the event on the 0 to 1 edge.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event on the rising edge.\n\nUnit: none.\n\nLimits: none."
     },
     {
-     "name": "rst",
+     "name": "busrst",
      "bits": "[1]",
      "type": "rw",
      "reset": "0x0",
@@ -783,8 +825,22 @@
      "description": "Injection of the interrupt cause: port over-current detected. A rising edge raises the raw flag.\n\nUsage: Write 0 and then 1 to raise the raw flag for driver tests; hardware raises the event on the 0 to 1 edge.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event on the rising edge.\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "ram_par",
+     "bits": "[23]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Injection of the interrupt cause: FIFO RAM parity error. A rising edge raises the raw flag.\n\nUsage: Write 0 and then 1 to raise the raw flag for driver tests; hardware raises the event on the 0 to 1 edge.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event on the rising edge.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
+     "name": "xq_ovf",
+     "bits": "[24]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Injection of the interrupt cause: register command FIFO overflow. A rising edge raises the raw flag.\n\nUsage: Write 0 and then 1 to raise the raw flag for driver tests; hardware raises the event on the 0 to 1 edge.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event on the rising edge.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:23]",
+     "bits": "[31:25]",
      "type": "ro",
      "reset": "0x0",
      "description": ""
@@ -804,7 +860,7 @@
      "description": "Masked status of the interrupt cause: start-of-frame packet sent or received. Equals raw AND enable.\n\nUsage: Read in the interrupt handler to find the active causes.\n\nValues:\n0x0 cause inactive or masked (reset value);\n0x1 cause active and enabled.\n\nUnit: none.\n\nLimits: none."
     },
     {
-     "name": "rst",
+     "name": "busrst",
      "bits": "[1]",
      "type": "ro",
      "reset": "0x0",
@@ -958,8 +1014,22 @@
      "description": "Masked status of the interrupt cause: port over-current detected. Equals raw AND enable.\n\nUsage: Read in the interrupt handler to find the active causes.\n\nValues:\n0x0 cause inactive or masked (reset value);\n0x1 cause active and enabled.\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "ram_par",
+     "bits": "[23]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Masked status of the interrupt cause: FIFO RAM parity error. Equals raw AND enable.\n\nUsage: Read in the interrupt handler to find the active causes.\n\nValues:\n0x0 cause inactive or masked (reset value);\n0x1 cause active and enabled.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
+     "name": "xq_ovf",
+     "bits": "[24]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Masked status of the interrupt cause: register command FIFO overflow. Equals raw AND enable.\n\nUsage: Read in the interrupt handler to find the active causes.\n\nValues:\n0x0 cause inactive or masked (reset value);\n0x1 cause active and enabled.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:23]",
+     "bits": "[31:25]",
      "type": "ro",
      "reset": "0x0",
      "description": ""
@@ -1084,7 +1154,7 @@
    "description": "USB2 host port control register. Controls reset, suspend, resume, VBUS and test mode of the root port.",
    "fields": [
     {
-     "name": "port_rst",
+     "name": "prst",
      "bits": "[0]",
      "type": "rwi",
      "reset": "0x0",
@@ -1123,7 +1193,7 @@
      "bits": "[7:5]",
      "type": "rw",
      "reset": "0x0",
-     "description": "Port test mode. Starts a USB 2.0 test mode on the host port.\n\nUsage: Write while the port is enabled; leave the mode by soft reset.\n\nValues:\n0x0 test mode off (reset value);\n0x1 Test_J;\n0x2 Test_K;\n0x3 Test_SE0_NAK;\n0x4 Test_Packet;\n0x5 to 0x7 reserved.\n\nUnit: none.\n\nLimits: none."
+     "description": "Port test mode. Starts a USB 2.0 test mode on the host port.\n\nUsage: Write while the port is enabled; leave the mode by soft reset.\n\nValues:\n0x0 test mode off (reset value);\n0x1 Test_J;\n0x2 Test_K;\n0x3 Test_SE0_NAK;\n0x4 Test_Packet;\n0x5 Test_Force_Enable (host only);\n0x6 to 0x7 reserved.\n\nUnit: none.\n\nLimits: none."
     },
     {
      "name": "lpm_req",
@@ -1158,7 +1228,7 @@
      "bits": "[21]",
      "type": "rw",
      "reset": "0x0",
-     "description": "Host high-speed disable. Skips the chirp handshake and keeps the port in full-speed.\n\nUsage: Write before port_rst.\n\nValues:\n0x0 high-speed allowed (reset value);\n0x1 full-speed only.\n\nUnit: none.\n\nLimits: none."
+     "description": "Host high-speed disable. Skips the chirp handshake and keeps the port in full-speed.\n\nUsage: Write before prst.\n\nValues:\n0x0 high-speed allowed (reset value);\n0x1 full-speed only.\n\nUnit: none.\n\nLimits: none."
     },
     {
      "name": "oc_en",
@@ -1231,8 +1301,15 @@
      "description": "Scatter-gather mode. Makes each endpoint or channel DMA address register point to a descriptor list.\n\nUsage: Set before dma_en in builds with scatter-gather; descriptors are 8-byte entries described in section 9 of the specification.\n\nValues:\n0x0 buffer address mode (reset value);\n0x1 descriptor list mode.\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "win_en",
+     "bits": "[21]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "DMA window enable. Restricts every DMA address to the window of u2_dma_wbase and u2_dma_wlim.\n\nUsage: Set before dma_en; a descriptor or buffer outside the window is not transferred and dma_err is set.\n\nValues:\n0x0 any address is accepted (reset value);\n0x1 addresses must lie inside the window.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:21]",
+     "bits": "[31:22]",
      "type": "ro",
      "reset": "0x0",
      "description": ""
@@ -1550,7 +1627,7 @@
      "bits": "[2]",
      "type": "rw",
      "reset": "0x0",
-     "description": "LPM runtime enable. Lets the device or host process LPM transactions.\n\nUsage: Write before soft_conn or port_rst.\n\nValues:\n0x0 LPM ignored (reset value);\n0x1 LPM enabled.\n\nUnit: none.\n\nLimits: none."
+     "description": "LPM runtime enable. Lets the device or host process LPM transactions.\n\nUsage: Write before soft_conn or prst.\n\nValues:\n0x0 LPM ignored (reset value);\n0x1 LPM enabled.\n\nUnit: none.\n\nLimits: none."
     },
     {
      "name": "reserved",
@@ -1562,7 +1639,7 @@
    ]
   },
   {
-   "name": "u2_dmach_map",
+   "name": "u2_dma_map",
    "offset": "0x100",
    "description": "USB2 DMA channel map register. Maps one DMA handshake channel to a FIFO region.",
    "fields": [
@@ -1603,7 +1680,7 @@
    }
   },
   {
-   "name": "u2_epi_ctrl",
+   "name": "u2_epi_ctl",
    "offset": "0x200",
    "description": "USB2 device IN endpoint control register. Configures and controls one device IN endpoint.",
    "fields": [
@@ -1735,7 +1812,7 @@
    }
   },
   {
-   "name": "u2_epi_xfer",
+   "name": "u2_epi_xfr",
    "offset": "0x240",
    "description": "USB2 device IN endpoint transfer register. Holds the size and the packet count of the transfer.",
    "fields": [
@@ -1789,7 +1866,7 @@
    }
   },
   {
-   "name": "u2_epi_fifo",
+   "name": "u2_epi_buf",
    "offset": "0x2C0",
    "description": "USB2 IN endpoint FIFO register. Sets the transmit region of one device IN endpoint.",
    "fields": [
@@ -1906,7 +1983,7 @@
    }
   },
   {
-   "name": "u2_epi_int_en",
+   "name": "u2_epi_ien",
    "offset": "0x340",
    "description": "USB2 device IN endpoint interrupt enable register. Holds the enable flags of one device IN endpoint.",
    "fields": [
@@ -1996,7 +2073,7 @@
    }
   },
   {
-   "name": "u2_epo_ctrl",
+   "name": "u2_epo_ctl",
    "offset": "0x400",
    "description": "USB2 device OUT endpoint control register. Configures and controls one device OUT endpoint.",
    "fields": [
@@ -2128,7 +2205,7 @@
    }
   },
   {
-   "name": "u2_epo_xfer",
+   "name": "u2_epo_xfr",
    "offset": "0x440",
    "description": "USB2 device OUT endpoint transfer register. Holds the size and the packet count of the transfer.",
    "fields": [
@@ -2272,7 +2349,7 @@
    }
   },
   {
-   "name": "u2_epo_int_en",
+   "name": "u2_epo_ien",
    "offset": "0x500",
    "description": "USB2 device OUT endpoint interrupt enable register. Holds the enable flags of one device OUT endpoint.",
    "fields": [
@@ -2445,7 +2522,7 @@
    }
   },
   {
-   "name": "u2_hc_split",
+   "name": "u2_hc_spl",
    "offset": "0x640",
    "description": "USB2 host channel split register. Holds the hub address and port for split transactions.",
    "fields": [
@@ -2672,7 +2749,7 @@
    }
   },
   {
-   "name": "u2_hc_int_en",
+   "name": "u2_hc_ien",
    "offset": "0x740",
    "description": "USB2 host channel interrupt enable register. Holds the enable flags of one host channel.",
    "fields": [
@@ -2814,6 +2891,34 @@
      "type": "ro",
      "reset": "0x0",
      "description": ""
+    }
+   ]
+  },
+  {
+   "name": "u2_dma_wbase",
+   "offset": "0x68",
+   "description": "USB2 DMA window base register. Holds the lowest address that the DMA may access when the window is enabled.",
+   "fields": [
+    {
+     "name": "addr",
+     "bits": "[31:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Window base. The lowest byte address that a DMA buffer or descriptor may use when win_en is 1.\n\nUsage: Write before dma_en together with u2_dma_wlim; the high word is taken from u2_dma_hi.\n\nValues:\n0x0 to 0xFFFFFFFF base address (reset value 0x0).\n\nUnit: byte.\n\nLimits: not above u2_dma_wlim.addr."
+    }
+   ]
+  },
+  {
+   "name": "u2_dma_wlim",
+   "offset": "0x6C",
+   "description": "USB2 DMA window limit register. Holds the highest address that the DMA may access when the window is enabled.",
+   "fields": [
+    {
+     "name": "addr",
+     "bits": "[31:0]",
+     "type": "rw",
+     "reset": "0xFFFFFFFF",
+     "description": "Window limit. The highest byte address that a DMA buffer or descriptor may use when win_en is 1.\n\nUsage: Write before dma_en together with u2_dma_wbase; the high word is taken from u2_dma_hi.\n\nValues:\n0x0 to 0xFFFFFFFF limit address (reset value 0xFFFFFFFF).\n\nUnit: byte.\n\nLimits: not below u2_dma_wbase.addr."
     }
    ]
   },

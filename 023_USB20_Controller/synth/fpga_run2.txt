@@ -1,0 +1,3 @@
+MIN-ALLPIPE: top=m_usb2_top_utmi_axis LUT4=11693 FF=5421 fmax(MHz, last report)={'$glbnet$i_clk_phy$TRELLIS_IO_IN': '98.33', '$glbnet$i_clk_bus$TRELLIS_IO_IN': '122.17'}
+MIN-ALLPIPE-RAM1P: top=m_usb2_top_utmi_axis LUT4=11631 FF=5345 fmax(MHz, last report)={'$glbnet$i_clk_phy$TRELLIS_IO_IN': '93.43', '$glbnet$i_clk_bus$TRELLIS_IO_IN': '111.22'}
+FINISHED

@@ -1,0 +1,34 @@
+
+7. Printing statistics.
+
+=== m_usb2_spd ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1186        - wires
+     1521        - wire bits
+      105        - public wires
+      440        - public wire bits
+       58        - ports
+      206        - port bits
+     1306 4.61E+03 cells
+       70  164.255   AND2X1
+      103  290.027   AOI21X1
+       25   82.127   AOI22X1
+       24   56.316   BUFX2
+      187   1930.7   DFFSR
+      119   167.54   INVX1
+       22   82.597   MUX2X1
+      275   516.23   NAND2X1
+       92  215.878   NAND3X1
+       71  166.602   NOR2X1
+       54  152.053   NOR3X1
+      109  306.922   OAI21X1
+      107  251.075   OR2X1
+       28  131.404   XNOR2X1
+       20    93.86   XOR2X1
+
+   Chip area for module '\m_usb2_spd': 4607.587400
+     of which used for sequential elements: 1930.700200 (41.90%)
+

@@ -1,0 +1,23 @@
+
+4. Executing LTP pass (find longest path).
+
+Longest topological path in m_usb2_phyif_ulpi (length=17):
+    0: \i_suspend_n
+    1: $abc$2071$new_n27 (via $abc$2071$blif$2071$2)
+    2: $abc$2071$auto$simplemap.cc:148:simplemap_reduce$1308[3] (via $abc$2071$blif$2071$3)
+    3: $abc$2072$new_n100 (via $abc$2072$blif$2072$5)
+    4: $abc$2072$new_n103 (via $abc$2072$blif$2072$8)
+    5: $abc$2072$new_n104 (via $abc$2072$blif$2072$9)
+    6: \w_fc_pend (via $abc$2072$blif$2072$10)
+    7: $abc$2074$new_n169 (via $abc$2074$blif$2074$36)
+    8: $15y (via $abc$2074$blif$2074$37)
+    9: $abc$2072$new_n96 (via $abc$2072$blif$2072$1)
+   10: \w_op_start (via $abc$2072$blif$2072$4)
+   11: $abc$2074$new_n200 (via $abc$2074$blif$2074$67)
+   12: $abc$2073$auto$simplemap.cc:465:simplemap_pmux$1645 (via $abc$2074$blif$2074$68)
+   13: $abc$2074$new_n221 (via $abc$2074$blif$2074$88)
+   14: $abc$2073$auto$simplemap.cc:465:simplemap_pmux$1561 (via $abc$2074$blif$2074$90)
+   15: $abc$2073$new_n79 (via $abc$2073$blif$2073$22)
+   16: $abc$2073$new_n80 (via $abc$2073$blif$2073$23)
+   17: \w_data_nxt [1] (via $abc$2073$blif$2073$24)
+   ff: \reg_data [1] (via $auto$ff.cc:337:slice$1005)

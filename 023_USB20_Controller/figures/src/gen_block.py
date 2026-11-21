@@ -57,7 +57,7 @@ ext = [
  ("APB", "csr", "B", "in", -50, ["APB", "APB4 slave"]),
  ("INT", "irq", "B", "out", 0, ["INT", "o_int_usb"]),
  ("CKPHY", "lnk", "T", "in", 0, ["CKPHY", "i_clk_phy, i_rst_n_phy"]),
- ("CKBUS", "rst", "B", "in", 0, ["CKBUS", "i_clk_bus, i_rst_n_bus"]),
+ ("CKBUS", "rst", "B", "in", 0, ["CKBUS", "i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en"]),
 ]
 for i, b, s, d, p, t in ext:
     spec["externals"].append({"id": i, "block": b, "side": s, "dir": d, "pos": p, "text": t})
@@ -68,7 +68,7 @@ IF = {
  "APB": ("Register interface (CLK-BUS)", "standard protocol (APB4)", "SoC -> TOP", "SoC -> TOP: " + names(("i_apb_", "i_protect_en", "i_slverr_en"), "Input") + "; TOP -> SoC: " + names(("o_apb_",), "Output")),
  "INT": ("Interrupt output", "custom level", "TOP -> SoC", "TOP -> SoC: o_int_usb"),
  "CKPHY": ("Clock and reset of the PHY domain", "custom", "PHY or SoC -> TOP", "i_clk_phy, i_rst_n_phy"),
- "CKBUS": ("Clock and reset of the bus domain", "custom", "SoC -> TOP", "i_clk_bus, i_rst_n_bus"),
+ "CKBUS": ("Clock and reset of the bus domain", "custom", "SoC -> TOP", "i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en"),
  "BYTE": ("Byte stream and line state", "custom", "u_phyif <-> u_lnk", "byte data, valid, ready, line state"),
  "DEVP": ("Device packet interface", "custom", "u_lnk <-> u_dev", "packet type, fields, data bytes, handshake request"),
  "FPKT": ("FIFO packet port", "custom", "u_dev <-> u_fifo", "word address, data, read and write strobes, status"),

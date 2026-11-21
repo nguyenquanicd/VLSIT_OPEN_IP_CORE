@@ -159,6 +159,7 @@ Every row uses the product class chosen by the user on 2026-11-20 (audio SoC wit
 | REF-006 | I2S bus specification, Philips Semiconductors, February 1986, revised June 5, 1996, file `vlsit_i2s_philips_i2s_bus_spec_1996.md` | Sections 2.0, 3.0, 3.1, 3.2, 4.0 and Table 1 | Protocol authority for the I2S frame and its timing |
 | REF-007 | ESP32-S3 Technical Reference Manual v1.8, chapter 28, as summarized in `reference/SoC_I2S_Feature_Survey.md` | Sections 28.5, 28.6, 28.8 | Reference implementation for formats, clocking and timeouts; not a standard |
 | REF-008 | i.MX RT1170 Reference Manual Rev. 3, chapter 58, as summarized in `reference/SoC_I2S_Feature_Survey.md` | Sections 58.3.2 to 58.3.8 | Reference implementation for the generic frame, masks, FIFO and error recovery; not a standard |
+| REF-009 | APB-CSR-Generator specification `spec/CSR_Generator_Specification.md`, generator 3.6 | Error-response and byte-strobe requirements, deviation on partial writes, section B.12 | Behavior of the generated CSR block (error and byte-strobe handling); tool contract, not a standard |
 
 ### 2.2 Source-of-truth and conflict handling
 
@@ -219,7 +220,7 @@ State of each requirement: trigger, observable result, clock, configuration, sou
 | REQ-FUNC-031 | The transmitter and the receiver shall not influence each other, except through the shared-clock option. | DEC-006 | Both units | Simulation |
 | REQ-IF-001 | The APB port shall follow REF-002 (APB4): setup phase, access phase, completion when PREADY is high. | REF-002 §3.1, §3.3 | All | Protocol checker |
 | REQ-IF-002 | A normal register access shall complete with one wait state. | Generator behavior (section 11.4) | All | Simulation |
-| REQ-IF-003 | A write with any PSTRB bit low, an address with bits [1:0] not zero, or a non-secure access when `i_protect_en` is 1 shall complete with PSLVERR and no register change when `i_slverr_en` is 1. | REF-002 §3.2, §3.4, §3.5 | All | Protocol checker |
+| REQ-IF-003 | When `i_slverr_en` is 1, a write with any PSTRB bit low, an address with bits [1:0] not zero, or a non-secure access when `i_protect_en` is 1 shall complete with PSLVERR and no register change. When `i_slverr_en` is 0, no PSLVERR is given and PSTRB still selects the byte lanes written: only the lanes with PSTRB high are updated (reset `0xFFFFFFFF`, write `0x12345678`, PSTRB `0011` reads back `0xFFFF5678`), and PSLVERR keeps its previous value (DEC-021). | REF-002 §3.2, §3.4, §3.5; REF-009 error-response and byte-strobe requirements | All | Protocol checker |
 | REQ-IF-004 | A read or write of an aligned address that is not a register shall complete with OKAY; the read returns 0 and the write is ignored. | Section 11.4 | All | Simulation |
 | REQ-IF-005 | Reserved bits shall read 0 and ignore writes. | Section 11.4 | All | Simulation |
 | REQ-IF-006 | Registers shall be word aligned and little endian. | REF-002 | All | Inspection |
@@ -910,7 +911,7 @@ The table lists every port of the IP family. A structural wrapper (profile) cont
 | i_apb_pwrite | Input | 1 | APB write. High for a write, low for a read. | CLK-APB | level | n/a | Stable from setup to completion | All |
 | i_apb_paddr | Input | 16 | APB byte address. Bits [1:0] shall be zero; the register map uses the low 10 bits. | CLK-APB | data (valid while `i_apb_psel` is high) | n/a | Stable from setup to completion | All |
 | i_apb_pwdata | Input | 32 | APB write data. | CLK-APB | data (valid while `i_apb_psel`, `i_apb_penable` and `i_apb_pwrite` are high) | n/a | Stable until completion | All |
-| i_apb_pstrb | Input | 4 | APB write strobes. All four bits shall be high for a write. | CLK-APB | data (valid while `i_apb_psel` and `i_apb_pwrite` are high) | n/a | Stable until completion | All |
+| i_apb_pstrb | Input | 4 | APB write strobes; bit n qualifies `i_apb_pwdata[8n+7:8n]`. With `i_slverr_en` = 1 all four bits shall be high, otherwise the write is rejected; with 0 only the strobed byte lanes are updated. | CLK-APB | data (valid while `i_apb_psel` and `i_apb_pwrite` are high) | n/a | Stable until completion | All |
 | i_apb_pprot | Input | 3 | APB protection. Only bit 1 (non-secure) is used. | CLK-APB | data (valid while `i_apb_psel` is high) | n/a | Stable until completion | All |
 | o_apb_pready | Output | 1 | APB ready. Completes the transfer. | CLK-APB | level | 0 | Registered; one wait state in the normal case | All |
 | o_apb_pslverr | Output | 1 | APB error. High with ready for a rejected access. | CLK-APB | level | 0 | Valid when `o_apb_pready` is high | All |
@@ -953,7 +954,7 @@ The table lists every port of the IP family. A structural wrapper (profile) cont
 | Case | Legal behavior | Illegal / unsupported case | IP response | Requirement IDs |
 |---|---|---|---|---|
 | Read or write of a register at an aligned address | PSEL, then PENABLE; PREADY after one wait state | None | Data returned or stored | REQ-IF-001, REQ-IF-002 |
-| Write with a partial strobe | PSTRB all ones | PSTRB with a low bit | PSLVERR, no change when `i_slverr_en` is 1 | REQ-IF-003 |
+| Write with a partial strobe | PSTRB all ones | PSTRB with a low bit | PSLVERR and no change when `i_slverr_en` is 1; only the strobed byte lanes are updated, with no error, when it is 0 | REQ-IF-003 |
 | Address with bits [1:0] not zero | Word-aligned address | Misaligned address | PSLVERR when `i_slverr_en` is 1 | REQ-IF-003 |
 | Address that is not a register | Any aligned address | Reserved or absent register | OKAY, read returns 0, write ignored | REQ-IF-004 |
 | Non-secure access | PPROT[1] low | PPROT[1] high when `i_protect_en` is 1 | PSLVERR when `i_slverr_en` is 1 | REQ-IF-003, REQ-SEC-001 |
@@ -1689,7 +1690,7 @@ The CSR specification of this IP is defined only in the VLSIT CSR workbook (REF-
 | CSR workbook file | `I2S_CSR.xlsx` in this folder, with its JSON description `I2S_CSR.json` |
 | Sheet used for this IP | `CSR` |
 | Workbook revision / date | 2026-11-20 |
-| CSR generator | APB-CSR-Generator, canonical repository `https://github.com/nguyenquanicd/APB-CSR-Generator` version 3.3 or later (event sideband needs 3.0 or later; the commit is recorded when the RTL is generated, ASM-007) |
+| CSR generator | APB-CSR-Generator, canonical repository `https://github.com/nguyenquanicd/APB-CSR-Generator` version 3.6 or later (event sideband needs 3.0 or later; byte-strobe contract of section 11.4 is stated from 3.6; the commit is recorded when the RTL is generated, ASM-007) |
 | CSR module name | `m_vlsit_csr_i2s` |
 | Register prefix | `i2s` |
 | IP version | 1.0, workbook register `i2s_version` (rule R-067) |
@@ -1799,7 +1800,7 @@ The CSR block is generated by APB-CSR-Generator with `Asynchronous` = 0 and the 
 | Case | Behavior |
 |---|---|
 | Normal read or write | PREADY after 1 wait state; a read returns the value sampled in the second cycle; a write stores. |
-| Write with PSTRB not all ones | PSLVERR and no change when `i_slverr_en` = 1 (0 wait states); whole-word write when `i_slverr_en` = 0. |
+| Write with PSTRB not all ones | PSLVERR and no change when `i_slverr_en` = 1 (0 wait states); with 0 no error is given and only the byte lanes with PSTRB high are updated (DEC-021); PSLVERR keeps its previous value. |
 | Address not word aligned | PSLVERR when `i_slverr_en` = 1; with 0 no register matches. |
 | Aligned address that is not a register | OKAY, 1 wait state; read returns 0; write is ignored. |
 | Non-secure access (PPROT[1] = 1) | PSLVERR when `i_protect_en` = 1 and `i_slverr_en` = 1. |
@@ -1819,7 +1820,7 @@ Software must write full 32-bit words and wait for PREADY; 8-bit and 16-bit regi
 | ERR-003 | Received word finds the FIFO full | Word dropped; `i2s_irq_raw.rx_ovr` set; auto restart off: state ERR | `o_int_i2s` if enabled | Drain, flush when `auto` is 0, clear the raw bit | Cleared by reset |
 | ERR-004 | External frame sync arrives inside a frame | Sync ignored; `i2s_irq_raw.sync` and the unit flag set | `o_int_i2s` if enabled | Clear both flags | Cleared by reset |
 | ERR-005 | No bit clock edge or frame sync for the timeout | `i2s_irq_raw.hung` and the unit flag set; the unit keeps waiting | `o_int_i2s` if enabled | Clear both flags; restore the clock | Cleared by reset |
-| ERR-006 | APB write with a partial strobe, misaligned address, or non-secure access with protection on | PSLVERR, no register change | None | Retry with a full-word aligned secure access | None |
+| ERR-006 | With `i_slverr_en` = 1: APB write with a partial strobe, misaligned address, or non-secure access with protection on | PSLVERR, no register change | None | Retry with a full-word aligned secure access | None |
 | ERR-007 | Illegal configuration (data width above slot width, nslot above the build maximum, divider 0 in master mode, packing with data width above 16) | Behavior not specified | None | Correct the registers while the unit is stopped | Reset value |
 | ERR-008 | Configuration written while the unit runs | Ignored until the next start (except the slot mask) | None | Stop and start | None |
 | ERR-009 | Both units set to share the clock | The transmitter follows its own clock | None | Clear `shr` in one unit | Reset value |
@@ -2133,7 +2134,7 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 | ASM-004 | Assumption | The delivered default configuration CFG-FULL is: both units, one line each, FIFO depth 16, 32 slots, every optional feature on, Philips preset, 2 slots of 32 bits, divider 2. | Reset values of the workbook (DEC-010). | Decided by this specification; confirm. |
 | ASM-005 | Assumption | A write event of the transmit data register pushes one word and a read event of the receive data register pops one word. Checked on the generated CSR (2026-11-20): the write event comes one cycle before the CSR loads the data field, so the push is taken one cycle after the event; the read event comes in the cycle in which the CSR samples the read data, so the pop is taken in that cycle. | FIFO access, section 11.3. | Resolved by the check; the RTL follows it. |
 | ASM-006 | Assumption | Clock ranges: APB 10 to 200 MHz, master clock 2 to 100 MHz. No reference states a range. | Sections 7.1, 13 and 17. | Open: integrator to confirm. |
-| ASM-007 | Assumption | APB-CSR-Generator version 3.3 or later; the commit is recorded at CSR generation. | Port names of the clear and event signals. | Open until RTL generation. |
+| ASM-007 | Assumption | APB-CSR-Generator version 3.6 or later (the CSR was generated with 3.6, commit a8fb7d4); the commit is recorded at CSR generation. | Port names of the clear and event signals. | Open until RTL generation. |
 | ASM-008 | Assumption | A slave needs a master clock of at least 8 times the bit clock, taken from the requirement of the MCU reference (REF-007); the exact minimum of this IP follows from the synchronizer depth and is checked in TBD-001. | REQ-FUNC-018, CDC-008. | Open. |
 | ASM-009 | Assumption | The presets other than Philips I2S are defined by this specification from REF-007 and REF-008, because REF-006 defines only the Philips frame: left-justified as I2S without the early sync, PCM short as a one-bit active-high sync one bit early, PCM long as an active-high sync as wide as the first slot starting with the first bit, TDM as a one-bit active-high sync one bit early. | REQ-FUNC-005 to REQ-FUNC-007. | Open: confirm the exact shapes (DEP-001). |
 | ASM-010 | Assumption | A level cause (watermark) is loaded into the raw bit in every cycle in which its condition holds; the hardware load wins over a software clear, so the raw bit clears only after the condition has gone. | REQ-IF-010, section 11.3. | Decided. |
@@ -2173,6 +2174,7 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 | DEC-018 | Decision | `m_vlsit_i2s_cfgsync` is instantiated once for each unit and `m_vlsit_i2s_dmahs` once for each direction (`u_cfgsync_tx`, `u_cfgsync_rx`, `u_dmahs_tx`, `u_dmahs_rx`); each module describes one unit. | Section 14.2. | Author's choice; confirm. |
 | DEC-019 | Decision | Ports of an absent unit or feature stay in the interface of the top and are tied off, because a SystemVerilog parameter cannot remove ports; the capability register reports the build. | REQ-PARAM-002, section 4. | Author's choice; confirm. |
 | DEC-020 | Decision | Section 9 said that a watermark above the capacity never triggers the transmit cause; REQ-FUNC-016 (level at or below the watermark) gives the opposite, and the RTL follows REQ-FUNC-016. The sentence of section 9 was corrected. | Section 9, REQ-FUNC-016. | Corrected by the author; confirm. |
+| DEC-021 | Decision | Section 11.4, REQ-IF-003 and the strobe port row said that a write with `i_slverr_en` = 0 stores the whole word. APB-CSR-Generator 3.6 (REF-009) and the generated RTL (which was already so in 3.5) apply PSTRB as a byte-lane mask whatever `i_slverr_en` is: with 1 a partial write is rejected with PSLVERR, with 0 no error is given and only the strobed lanes are updated. The specification was corrected to follow the generator; the RTL is unchanged. | Section 11.4, REQ-IF-003, REF-009. | Corrected after the review of the generator, 2026-11-21; confirm. |
 | TBD-001 | Unresolved | TBD: minimum master clock to bit clock ratio for slaves and the latency budget of the crossings. | A low ratio can miss bit clock edges or delay flags; decision from the architect with the SoC clock plan. | Open. |
 | TBD-002 | Unresolved | TBD: frequency, area and power targets in the project library. | Sets the targets of section 13; decision from the project once the library is chosen. | Open. |
 | TBD-003 | Unresolved | TBD: setup and hold budgets of the serial and APB pins. | Needed for the I/O constraints of section 17; decision from the SoC integrator and the codec data sheet. | Open. |

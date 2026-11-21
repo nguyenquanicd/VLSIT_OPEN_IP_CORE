@@ -42,7 +42,7 @@
 <polyline points="682.0,81.0 734.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="734.0,81.0 734.0,63.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="734.0,63.0 786.0,63.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<text x="154" y="109" font-size="12" text-anchor="end">u2_ctrl.soft_rst</text>
+<text x="154" y="109" font-size="12" text-anchor="end">u2_ctrl.swrst</text>
 <polyline points="162.0,111.0 214.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="214.0,111.0 266.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="266.0,111.0 266.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
@@ -57,7 +57,7 @@
 <polyline points="630.0,111.0 682.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="682.0,111.0 734.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="734.0,111.0 786.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<text x="154" y="139" font-size="12" text-anchor="end">u2_sts.rst_busy</text>
+<text x="154" y="139" font-size="12" text-anchor="end">u2_sts.rstbusy</text>
 <polyline points="162.0,141.0 214.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="214.0,141.0 266.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="266.0,141.0 318.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
@@ -100,5 +100,5 @@
 <polyline points="630.0,201.0 682.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="682.0,201.0 734.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="734.0,201.0 786.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<text x="12" y="230" font-size="11" fill="#444">Software clears core_en, writes soft_rst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears soft_rst; registers keep their values.</text>
+<text x="12" y="230" font-size="11" fill="#444">Software clears core_en, writes swrst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears swrst; registers keep their values.</text>
 </svg>

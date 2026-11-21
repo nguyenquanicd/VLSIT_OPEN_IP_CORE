@@ -1,0 +1,13 @@
+TOP-MIN-OPT0 top=m_usb2_top_utmi_axis period=6667 ps delay=1560 ps slack=5107 ps fmax=640.9 MHz area=119262.739700 um2
+TOP-MIN-PIPE top=m_usb2_top_utmi_axis period=6667 ps delay=1528 ps slack=5139 ps fmax=654.5 MHz area=125723.592800 um2
+TOP-HOST-OPT0 top=m_usb2_top_utmi_axim period=6667 ps delay=1513 ps slack=5154 ps fmax=661.0 MHz area=186933.453200 um2
+TOP-DUAL-OPT0 top=m_usb2_top_utmi_axim period=6667 ps delay=1490 ps slack=5177 ps fmax=671.2 MHz area=315035.927700 um2
+TOP-DUAL-PIPE top=m_usb2_top_utmi_axim period=6667 ps delay=1632 ps slack=5035 ps fmax=612.8 MHz area=339760.059600 um2
+MOD-dev top=m_usb2_dev period=8333 ps delay=1010 ps slack=7323 ps fmax=990.3 MHz area=27347.518900 um2
+MOD-host top=m_usb2_host period=8333 ps delay=1549 ps slack=6784 ps fmax=645.7 MHz area=25614.394000 um2
+MOD-fifo top=m_usb2_fifo period=8333 ps delay=1328 ps slack=7005 ps fmax=752.9 MHz area=35158.078800 um2
+MOD-lnk top=m_usb2_lnk period=8333 ps delay=1146 ps slack=7187 ps fmax=872.5 MHz area=5848.416600 um2
+MOD-spd top=m_usb2_spd period=8333 ps delay=1518 ps slack=6815 ps fmax=658.9 MHz area=4607.587400 um2
+MOD-axs top=m_usb2_axs period=6667 ps delay=999 ps slack=5668 ps fmax=1001.2 MHz area=10368.714200 um2
+MOD-dma top=m_usb2_dma period=6667 ps delay=1287 ps slack=5380 ps fmax=776.7 MHz area=28739.932000 um2
+MOD-csr top=m_vlsit_csr_usb2 period=6667 ps delay=815 ps slack=5852 ps fmax=1226.3 MHz area=83098.481700 um2

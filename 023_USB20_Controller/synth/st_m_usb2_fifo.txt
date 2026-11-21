@@ -1,0 +1,30 @@
+
+4. Printing statistics.
+
+=== m_usb2_fifo ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     8336 wires
+    12231 wire bits
+      206 public wires
+     3018 public wire bits
+       38 ports
+      744 port bits
+    10001 cells
+      456   $_ANDNOT_
+     2220   $_AND_
+       32   $_DFFE_PN0N_
+      665   $_DFFE_PN0P_
+      246   $_DFF_PN0_
+        1   $_DFF_PN1_
+       45   $_DFF_P_
+     1014   $_MUX_
+     1986   $_NAND_
+      396   $_NOR_
+      219   $_NOT_
+      261   $_ORNOT_
+      820   $_OR_
+      924   $_XNOR_
+      716   $_XOR_
+

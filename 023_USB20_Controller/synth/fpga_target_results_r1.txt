@@ -1,0 +1,6 @@
+OPT0 seed=1 LUT4=10828 FF=4623 phy=104.1 MHz (target 120) bus=102.7 MHz (target 150)
+OPT0 seed=2 LUT4=10828 FF=4623 phy=103.6 MHz (target 120) bus=122.3 MHz (target 150)
+OPT0 seed=3 LUT4=10828 FF=4623 phy=100.4 MHz (target 120) bus=95.2 MHz (target 150)
+PIPE-ALL seed=1 LUT4=10808 FF=5228 phy=108.7 MHz (target 120) bus=97.8 MHz (target 150)
+PIPE-ALL seed=2 LUT4=10808 FF=5228 phy=103.6 MHz (target 120) bus=109.1 MHz (target 150)
+PIPE-ALL seed=3 LUT4=10808 FF=5228 phy=104.4 MHz (target 120) bus=92.8 MHz (target 150)

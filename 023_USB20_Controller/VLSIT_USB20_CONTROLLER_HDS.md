@@ -134,9 +134,21 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 | REF-007 | UTMI+ Low Pin Interface (ULPI) Specification, Revision 1.1, October 20 2004 (`vlsit_ulpi_spec_1_1.md`) | TX CMD, RX CMD, register set, low power mode | ULPI interface authority |
 | REF-008 | USB 2.0 Link Power Management Addendum ECN (`vlsit_usb_usb2_lpm_ecn.md`) | sections 1, 2, 4 | LPM extended transaction and L1 |
 | REF-009 | AMBA APB Protocol Specification, Arm IHI 0024 Issue D (`vlsit_apb_amba_apb_ihi0024d.md`) | APB4 | CSR bus authority |
-| REF-010 | AMBA AXI Protocol Specification v1.0 (AXI3 era, `vlsit_axi_amba_axi_ihi0022b_v1_0.md`) | burst rules, channel handshake | The only AXI text available; AXI4 profile limited by ASM-007 |
+| REF-010 | AMBA AXI Protocol Specification v1.0 (AXI3 era, `vlsit_axi_amba_axi_ihi0022b_v1_0.md`) | burst rules, channel handshake | The only AXI text available; the profile is limited to its behavior and uses no AXI4-only feature (ASM-007) |
 | REF-011 | DWC_otg USB 2.0 Hi-Speed OTG Databook 5.00b, Synopsys, July 2024 | chapter 3 Configuration Parameters | Design reference for configuration choices only; not copied and not normative |
 | REF-012 | TI AM335x Technical Reference Manual, spruh73q, chapter 16 USB; Espressif ESP32-S3 Technical Reference Manual v1.8, chapter 32; Raspberry Pi RP2040 Datasheet, section 4.1 | feature lists only | Reference SoC manuals read on 2026-11-20 for the features of FEAT-017 to FEAT-023; not copied, not normative, copyright holders restrict redistribution |
+
+### ECN applicability (USB 2.0 package, 2024-09-27)
+
+| ECN | Applies to this IP | Effect |
+|---|---|---|
+| TEST_MODE selector values | Yes | Selectors 0x06 and 0x07 reserved for OTG and EH compliance; the IP uses 0x01 to 0x05 (REQ-FUNC-022) |
+| Phase-locked SOFs | Yes (host) | REQ-FUNC-037 |
+| Link Power Management | Yes (optional) | REF-008, REQ-FUNC-021 |
+| Double Isochronous IN bandwidth | No | Only for directly connected inbox eUSB2 devices; the IP supports up to three transactions per microframe |
+| Suspend current limit | No | Concerns the supply current of devices, which is a board and PHY property |
+| Connect timing update | Partly | The soft-connect timing after attach is a software rule of the driver (S12 of section 11.2) |
+| Other ECNs of the package (connector, cable, HSIC, eUSB2 repeater, inter-chip) | No | Mechanical, electrical or other interfaces outside the scope |
 
 ### 2.2 Source-of-truth and conflict handling
 
@@ -157,9 +169,9 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 |---|---|---|---|---|
 | USB 2.0 | Revision 2.0 with ECNs | Device (HS, FS) and host (HS, FS, LS) | high-bandwidth isochronous, PING, optional LPM and split | None declared; certification is not claimed |
 | UTMI+ | Revision 1.0, levels 0 to 3 as needed by the role | Link side (SIE) | 8-bit and 16-bit interface; level 0 for device, level 1 for host HS/FS, level 2 for host LS, level 3 when PARA_USB2_SPLIT_EN = 1 | FsLsSerialMode not used |
-| ULPI | Revision 1.1, 8-bit SDR synchronous mode | Link side | PHY supplies the 60 MHz clock; register access; low power mode for suspend (TBD-005) | 4-bit, DDR, serial, carkit and link-supplied clock modes not used |
+| ULPI | Revision 1.1, 8-bit SDR synchronous mode | Link side | PHY supplies the 60 MHz clock; register access; low power mode for suspend (REQ-IF-011) | 4-bit, DDR, serial, carkit and link-supplied clock modes not used |
 | AMBA APB | APB4 (Issue D) | Completer | PSTRB, PPROT, PSLVERR used | None |
-| AMBA AXI | AXI4 profile over the AXI3 text | Manager (DATA_IF = 0) or Subordinate (DATA_IF = 1) | INCR bursts of at most 16 beats; no lock, QoS, region or user | ASM-007 |
+| AMBA AXI | Behavior of the AXI3 text REF-010 (IHI 0022 v1.0) as a subset that is also legal in AXI4 | Manager (DATA_IF = 0) or Subordinate (DATA_IF = 1) | INCR bursts of at most 16 beats; no lock, QoS, region or user; no AXI4-only feature | ASM-007 |
 | LPM addendum | ECN of the usb_20_20240927 package | Device and host | L1 only | None |
 
 ## 3. Requirements and traceability
@@ -180,17 +192,17 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 | REQ-FUNC-012 | The host shall run the high-speed detection handshake: detect the device Chirp K for at least 2.5 us, start the alternating Chirp K and Chirp J within 100 us of the end of the device chirp, hold each chirp 40 to 60 us, and end the sequence 100 to 500 us before reset end. | REF-001 section 7.1.7.5 | Host roles | Simulation |
 | REQ-FUNC-013 | A high-speed capable device shall send Chirp K for 1.0 to 7.0 ms starting from reset time T0, shall move to the high-speed Default state within 500 us of detecting K-J-K-J-K-J, and shall return to full-speed Default if the sequence is not seen 1.0 to 2.5 ms after its own chirp. | REF-001 section 7.1.7.5 | Device roles | Simulation |
 | REQ-FUNC-014 | After receiving a packet the host shall wait at least 8 bit times in high-speed before transmitting, shall keep at least 88 bit times between its own back-to-back packets and at most 192 bit times for a response; in full-speed and low-speed the host shall provide at least 2 bit times of J and at most 7.5 bit times for a response. | REF-001 section 7.1.18 | Host roles | Simulation with timing checker |
-| REQ-FUNC-015 | The host shall schedule the periodic (isochronous and interrupt) channels of a (micro)frame before the non-periodic channels and shall not start a transaction that cannot finish before the next SOF. | ASM-014 | Host roles | Simulation |
+| REQ-FUNC-015 | The host shall schedule the periodic (isochronous and interrupt) channels of a (micro)frame before the non-periodic channels, shall not start a transaction that cannot finish before the next SOF, shall keep periodic transactions within 80 % of a high-speed microframe and 90 % of a full-speed or low-speed frame, and shall refuse to arm a periodic channel that would exceed the limit (ch_en is cleared and frm_ovr is set). | REF-001 section 5.7.4 | Host roles | Simulation |
 | REQ-FUNC-016 | The host shall detect disconnect and connect in full-speed and low-speed by SE0 or non-SE0 for 2.5 us and in high-speed by the PHY HostDisconnect indication evaluated at each SOF, and shall switch to full-speed on a high-speed disconnect. | REF-006 section 2.2.1.10, REF-001 section 7.1.7.3 | Host roles | Simulation |
 | REQ-FUNC-017 | When PARA_USB2_SPLIT_EN = 1 the host shall issue start-split and complete-split transactions with the SPLIT token (PID 1000B), shall accept NYET and the ERR handshake from the hub, and shall use the UTMI+ level 3 preamble path for low-speed devices behind a hub. | REF-001 section 8.4.2, 11.17 to 11.21; REF-006 section 2 | Host roles with split | Simulation |
 | REQ-FUNC-018 | A device shall enter suspend after more than 3.0 ms of constant idle and shall draw suspend current within 10 ms of bus inactivity; a high-speed device shall revert to full-speed no later than 3.125 ms after the start of idle and sample the line 100 to 875 us after reversion. | REF-001 section 7.1.7.6 | Device roles | Simulation |
 | REQ-FUNC-019 | A device with remote wakeup enabled shall wait until the bus has been idle for 5 ms before driving resume and shall drive resume for 1 to 15 ms. | REF-001 section 7.1.7.7 | Device roles | Simulation |
 | REQ-FUNC-020 | The host shall drive resume for at least 20 ms, end it with a low-speed EOP when the port was in low-speed or full-speed or with a transition to high-speed idle when it was in high-speed, and shall send SOF within 3 ms afterward. | REF-001 section 7.1.7.7 | Host roles | Simulation |
-| REQ-FUNC-021 | When PARA_USB2_LPM_EN = 1 the controller shall decode the EXT token (PID 0000B) followed by the LPM token (SubPID 0011B) with bmAttributes bLinkState, HIRD and bRemoteWake, and shall answer with a handshake; as host it shall issue the LPM transaction. | REF-008 sections 2.1, 2.2, 4.1 | LPM builds | Simulation |
-| REQ-FUNC-022 | The controller shall support Test_SE0_NAK, Test_J, Test_K and Test_Packet on command, shall transmit the test packet of REF-001 section 7.1.20 repeatedly until the exit action, and in Test_SE0_NAK shall answer IN tokens with a valid CRC with NAK. | REF-001 section 7.1.20 | All roles | Simulation |
+| REQ-FUNC-021 | When PARA_USB2_LPM_EN = 1 the controller shall decode the EXT token (PID 0000B) followed by the LPM token (SubPID 0011B) with bmAttributes bLinkState, HIRD and bRemoteWake, and shall answer with a handshake, shall begin L1 within 10 us after sending the ACK, and as host shall issue the LPM transaction and wait at least 10 us after the end of resume signaling before addressing the device (values as read from a partly garbled table of REF-008, ASM-001). | REF-008 sections 2.1, 2.2, 4.1 | LPM builds | Simulation |
+| REQ-FUNC-022 | The controller shall support the test selectors 0x01 Test_J, 0x02 Test_K, 0x03 Test_SE0_NAK, 0x04 Test_Packet and, for the host port only, 0x05 Test_Force_Enable; a device shall enter the selected mode no later than 3 ms after the status stage of SetFeature(TEST_MODE), shall answer an invalid selector with a request error, and shall leave the mode only by power cycle or reset of i_rst_n_phy; Test_Packet shall send the packet of REF-001 section 7.1.20 repeatedly and Test_SE0_NAK shall answer valid IN tokens with NAK. | REF-001 sections 7.1.20, 9.4.9; USB ECN TEST_MODE selector values | All roles | Simulation |
 | REQ-FUNC-023 | In dual-role builds the controller shall act as host when the ID indication is mini-A, as device when it is mini-B, shall change role only after session end and detach, and shall let a CSR field override the PHY indication. | REF-002; REF-006 section 2.2.1; user answer 2026-11-20 | PARA_USB2_ROLE = 2 | Simulation |
 | REQ-FUNC-024 | A device shall come out of reset in high-speed only when the chirp handshake succeeds and otherwise in full-speed. | REF-001 section 7.1.7.5 | Device roles | Simulation |
-| REQ-FUNC-025 | The controller shall treat the loss of an expected response as a transaction error after the bus turn-around time and shall wait the full turn-around time before the next token when it signals an error by timeout. | REF-001 section 8.7.2 | All roles | Simulation |
+| REQ-FUNC-025 | The controller shall treat the loss of an expected response as a transaction error: in high-speed a device or host shall not time out before 736 bit times and shall time out within 816 bit times after the end of the packet (92 to 102 cycles of a 60 MHz CLK-PHY, 46 to 51 cycles at 30 MHz); in full-speed and low-speed a device shall time out between 16 and 18 bit times and a host shall wait at least 18 bit times; a host that signals an error by timeout shall wait the full time before the next token. | REF-001 sections 7.1.19.1, 7.1.19.2, 8.7.2 | All roles | Simulation with timing checker |
 | REQ-FUNC-026 | The FIFO RAM shall be one memory that software divides into receive, transmit and host-channel regions through the CSR. | User answer 2026-11-20 | All roles | Simulation |
 | REQ-FUNC-027 | The FIFO manager shall never let the packet engine read data that was not written or overwrite unread data, and shall answer NAK (device) or defer the channel (host) when no space or data exists. | REF-001 section 8.4.6 | All roles | Assertion, simulation |
 | REQ-FUNC-028 | The number of device endpoints and host channels shall follow PARA_USB2_NUM_EP and PARA_USB2_NUM_HC, and unused logic shall be absent. | User answer 2026-11-20 | All roles | Elaboration, lint |
@@ -199,31 +211,47 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 | REQ-FUNC-031 | With short_end = 1 an OUT endpoint or IN channel shall end the transfer at the first packet whose payload is shorter than the maximum packet size or is zero length, set the done flag, and leave the number of bytes not received in xsize. | REF-001 section 5.8.3 | All roles | Simulation |
 | REQ-FUNC-032 | With poll_en = 1 a host channel shall issue its transaction once every interval microframes (high-speed) or frames (full-speed and low-speed), shall retry a NAK or NYET in the next interval, shall re-arm itself after a completed transfer when poll_rep = 1, and shall set poll_miss when the previous packet was not consumed at the next interval. | ASM-021 | Host roles | Simulation |
 | REQ-FUNC-033 | The controller shall set iso_inc in the endpoint or channel interrupt register and in the global interrupt register when an isochronous IN token finds no data ready, when a received isochronous packet has an error, or when a host isochronous transfer is not done in its scheduled microframe; no retry shall be made. | REF-001 section 5.6 | All roles | Simulation |
-| REQ-FUNC-034 | With oc_en = 1 the controller shall drop o_vbus_pwr_en and o_utmi_drvvbus within 2 CLK-BUS cycles after i_ovrcur_n has been low for 16 consecutive CLK-BUS cycles, shall set ocur and oc_act, shall leave the port in the power-off state, and shall restore power only after software clears ocur and writes vbus_drv again. | REF-001 section 7.2.1.2.1, ASM-022 | Host roles | Simulation |
+| REQ-FUNC-034 | With oc_en = 1 the controller shall drop o_vbus_pwr_en within 2 CLK-BUS cycles after i_ovrcur_n has been low for 16 consecutive CLK-BUS cycles, shall set ocur and oc_act, shall hold the port in the power-off state, and shall restore power only after software clears ocur and writes vbus_drv again. | REF-001 section 7.2.1.2.1, ASM-022 | Host roles | Simulation |
 | REQ-FUNC-035 | With lpbk = 1 the link shall feed its transmitted bytes into its own receiver, isolate the PHY pins in the idle state of section 6.2, and count good and bad packets in u2_lpbk_sts. | ASM-023 | All roles | Simulation |
-| REQ-FUNC-036 | When PARA_USB2_SG_EN = 1 and sg_mode = 1 the AXI4 master DMA shall treat the address register of an endpoint or channel as the head of a descriptor list, shall process the 8-byte descriptors of section 9 in order until the last descriptor, shall write back the status and the number of bytes not transferred, and shall raise an interrupt only when ioc is set or the list ends or an error occurs. | ASM-020 | AXI-master wrappers with SG | Simulation |
+| REQ-FUNC-036 | When PARA_USB2_SG_EN = 1 and sg_mode = 1 the AXI4 master DMA shall treat the address register of an endpoint or channel as the pointer to the current 8-byte descriptor of section 9, shall read one descriptor per packet, shall move the packet to or from the buffer of the descriptor, shall write back `done`, `err`, `short` and the number of bytes not transferred, shall add 8 to the pointer after each packet, and shall pulse `dma_err` for an OUT packet that does not fit the buffer. | ASM-020 | AXI-master wrappers with SG | Simulation |
+| REQ-FUNC-037 | After a selective suspend or an L1 state the host shall resume the SOF transmission phase-locked to the SOFs sent before it; the microframe timer shall keep counting through the suspend or L1 interval. | USB 2.0 Phase-locked SOFs ECN | Host roles | Simulation |
+| REQ-FUNC-038 | For interrupt and isochronous IN split transactions the host shall send one start-split in the microframe before the transaction is budgeted, and complete-splits in each following microframe as REF-001 section 11.18.4 states (two complete-splits for interrupt transactions plus a third unless the budget started in microframe Y6); it shall never send more than one complete-split in a microframe for the same transaction and never a complete-split for a full-speed isochronous OUT. | REF-001 section 11.18.4 | Host roles with split | Simulation |
+| REQ-FUNC-039 | For bulk and control split transactions the host shall retry the start-split on NAK or error until the error count reaches three, shall retry the complete-split on NYET or error, and shall retry a failed complete-split before other bulk or control split transactions. | REF-001 sections 11.17.1, 11.17.2, 11.17.3 | Host roles with split | Simulation |
+| REQ-FUNC-040 | When PARA_USB2_RAM_PAR_EN = 1 each FIFO RAM word shall carry one parity bit written with the data and checked on every read; a parity error shall set ram_par, abort the packet being read or received, and answer the host with no handshake (IN) or NAK (OUT). | Review F-017, ASM-025 | All roles with parity | Simulation, fault injection |
+| REQ-FUNC-041 | In UTMI+ builds o_utmi_drvvbus shall follow the power-off state of REQ-FUNC-034 within 4 CLK-PHY cycles after the command reaches CLK-PHY; in ULPI builds the link shall clear DrvVbus in the OTG Control register of the PHY by a register write as soon as the PHY clock runs, and until then o_vbus_pwr_en alone cuts the power. | REF-006 section 2.2.1.6, REF-007 section 4.2 | Host roles | Simulation |
 | REQ-IF-001 | The UTMI+ wrapper shall implement the link side of UTMI+ Revision 1.0 at the level the role needs: level 0 for device, level 1 for host high-speed and full-speed, level 2 for low-speed, level 3 for split. | REF-006 section 2 | UTMI+ wrappers | Protocol checker |
 | REQ-IF-002 | The UTMI+ data width shall follow PARA_USB2_UTMI_W (8 or 16 bits) with CLK-PHY of 60 MHz or 30 MHz, and the link shall use LineState only after the PHY filtering of Table 1. | REF-006 section 2.1.1 | UTMI+ wrappers | Simulation |
 | REQ-IF-003 | The ULPI wrapper shall implement the link side of ULPI Revision 1.1 in 8-bit synchronous mode: TX CMD and RX CMD bytes, dir, nxt and stp handshake, register read and write commands, and the PHY-supplied 60 MHz clock. | REF-007 sections 3, 4 | ULPI wrappers | Protocol checker |
 | REQ-IF-004 | The ULPI wrapper shall convert ULPI to the internal UTMI+-style stream so that the response time limits of REQ-FUNC-006 and REQ-FUNC-014 hold including the PHY pipeline delay. | REF-007 Tables 8 to 10 | ULPI wrappers | Simulation with timing checker |
 | REQ-IF-005 | The CSR shall be an APB4 completer with the behavior of section 11.4. | REF-009 | All wrappers | Protocol checker |
-| REQ-IF-006 | The AXI4 master DMA shall issue only INCR bursts of at most 16 beats that do not cross a 4 KB boundary, shall use only full-width aligned beats, and shall report BRESP and RRESP errors in the interrupt status. | REF-010 | AXI-master wrappers | Protocol checker |
-| REQ-IF-007 | The AXI4 slave port shall give access to the FIFO region windows with FIXED and INCR bursts of at most 16 beats and shall respond SLVERR to an access outside the windows. | REF-010 | AXI-slave wrappers | Protocol checker |
+| REQ-IF-006 | The AXI master DMA shall issue only INCR bursts of at most 16 beats that do not cross a 4 KB boundary, shall use only full-width aligned beats, and shall report BRESP and RRESP errors in the interrupt status; the profile is limited to the behavior of the AXI3 text REF-010 and uses no AXI4-only feature (ASM-007). | REF-010 | AXI-master wrappers | Protocol checker |
+| REQ-IF-007 | The AXI slave port shall give access to the FIFO region windows with FIXED and INCR bursts of at most 16 beats and shall respond SLVERR to an access outside the windows; the profile is limited to the behavior of the AXI3 text REF-010 (ASM-007). | REF-010 | AXI-slave wrappers | Protocol checker |
 | REQ-IF-008 | `o_int_usb` shall be a level output that is high while any enabled interrupt status bit is set and shall be registered in CLK-BUS. | Product decision ASM-013 | All wrappers | Simulation |
 | REQ-IF-009 | For each DMA channel `o_dma_req` shall rise when the mapped FIFO crosses its threshold, shall stay high until the DMA controller finishes the burst, and `i_dma_ack` shall be a one-cycle pulse per burst. | User answer 2026-11-20 | AXI-slave wrappers | Simulation |
 | REQ-IF-010 | `i_ovrcur_n` shall be an asynchronous active-low input synchronized and filtered in CLK-BUS (CDC-006), and `o_vbus_pwr_en` shall be a registered output of CLK-BUS that is 0 whenever the port power is off. | REF-001 section 7.2.1.2.1 | All wrappers | Simulation, CDC analysis |
+| REQ-IF-011 | In ULPI builds the link shall enter low power mode by writing SuspendM = 0 in the Function Control register, may stop CLK-PHY at least five cycles after the PHY accepted the write, and shall leave the mode by asserting stp asynchronously until the PHY has dropped dir after at least five clock cycles, then releasing stp in the cycle after dir falls; while the clock is stopped the wake detector of `m_usb2_ulpilp` in CLK-BUS shall watch LineState and the interrupt indication on data[3:0]. | REF-007 sections 3.9.1 to 3.9.3 | ULPI wrappers | Protocol checker, simulation |
+| REQ-IF-012 | The UTMI+ wrapper shall drive XcvrSelect, TermSelect, OpMode, DpPulldown and DmPulldown with the values of the table of section 6.3 for each bus state, and shall change them only while the bus is idle. | REF-006 sections 2.2.1.11, 2.3.1, 2.4.1, 3.1 | UTMI+ wrappers | Protocol checker |
+| REQ-IF-013 | In ULPI builds the role controller shall take the ID indication from bit 6 of the RX CMD byte, valid 50 ms after IdPullup is set in the OTG Control register of the PHY, and the initialization flow shall write IdPullup, DpPulldown and DmPulldown there for the selected role. | REF-007 sections 3.8.1, 4.2 | ULPI wrappers, dual-role | Simulation |
+| REQ-IF-014 | With win_en = 1 the DMA shall transfer only buffers and descriptors whose addresses lie between u2_dma_wbase and u2_dma_wlim; a violation shall stop the transfer before any AXI access to the address, set dma_err and mark the descriptor err. | Review F-018 | AXI-master wrappers | Simulation |
 | REQ-CLK-001 | CLK-PHY shall be supplied by the PHY at 60 MHz (8-bit UTMI+ or ULPI) or 30 MHz (16-bit UTMI+) and the controller shall stay functional while CLK-BUS is asynchronous to it. | REF-006 Table 1, REF-007 | All wrappers | Simulation, CDC |
 | REQ-CLK-002 | Every crossing between CLK-PHY and CLK-BUS shall use a structure listed in section 7.2. | REF-003 | All wrappers | CDC analysis |
+| REQ-CLK-003 | Every CSR field that CLK-PHY consumes or produces shall cross through the register command FIFO (CLK-BUS to CLK-PHY) or the register update FIFO (CLK-PHY to CLK-BUS) of section 7.2; a multi-bit value shall never cross as unqualified levels, and each register shall be delivered as one whole 32-bit word. | REF-003 | All wrappers | CDC analysis, simulation |
 | REQ-RESET-001 | Each domain shall assert reset asynchronously and release it synchronously, and a CSR software reset shall return all protocol state to its reset value. | REF-003 | All wrappers | Reset test |
 | REQ-RESET-002 | A bus reset (SE0 for more than 2.5 us in full-speed) shall wake the device from suspend and return it to the Default state. | REF-001 section 7.1.7.5 | Device roles | Simulation |
-| REQ-PARAM-001 | Parameter values outside section 8 are configuration errors; the configuration check script and the verification wrapper shall report them, and the RTL behavior for them is undefined. | ASM-011 | All wrappers | Lint, elaboration |
+| REQ-PARAM-001 | Parameter values outside section 8 are configuration errors; the elaboration check module `m_usb2_cfgchk` shall report them (REQ-PARAM-003, REQ-PARAM-004) and the RTL behavior for them is undefined. | ASM-011 | All wrappers | Lint, elaboration |
 | REQ-PARAM-002 | Host logic shall be absent when PARA_USB2_ROLE = 0, device logic shall be absent when PARA_USB2_ROLE = 1, and LPM, split, double-buffer and scatter-gather logic shall be absent when their enable is 0. | User answer 2026-11-20 | All wrappers | Synthesis area report |
+| REQ-PARAM-003 | The core shall derive every CSR bank count (`u2_epi_*`, `u2_epo_*`, `u2_hc_*`, `u2_dma_map`) from PARA_USB2_NUM_EP, PARA_USB2_NUM_HC and PARA_USB2_NUM_DMA_CH, so that the integrator ties no bank count by hand. | Review F-020 | All wrappers | Elaboration, lint |
+| REQ-PARAM-004 | PARA_USB2_FIFO_DEPTH shall be at least the sum of the minimum regions of the configuration: for each endpoint or channel the maximum packet size times (1 + dbuf) times mult, rounded up to words, and 256 words for the receive region. | Review F-021 | All wrappers | Elaboration, lint |
 | REQ-REG-001 | Software-visible registers shall exist only in the CSR workbook REF-005, with the version register at offset 0x0. | R-016, R-067 | All wrappers | CSR validation |
+| REQ-REG-002 | u2_sts.xq_free shall report the free entries (0 to 8) of the register command FIFO; a CSR write to a crossing field while xq_free = 0 shall be dropped and shall set xq_ovf. | Review F-001 | All wrappers | Simulation |
+| REQ-REG-003 | A hardware update shall be applied to a CSR field only when its generation tag equals the CSR-side tag of that register; a software write to the register increments the tag, so a stale update is dropped and the software value is sent to CLK-PHY. | Review F-014 | All wrappers | Simulation, assertion |
 | REQ-ERR-001 | The controller shall report in the interrupt status the events: PID error, CRC error, bit-stuff error, response timeout, babble, FIFO overflow or underflow, AXI error and DMA error. | REF-001 section 8.7 | All roles | Simulation |
 | REQ-ERR-002 | A host shall detect high-speed babble as data lines unsquelched at the end of a microframe and full-speed babble as bus activity past the end of a frame, shall stop its own transmission, and shall report the condition. | REF-001 section 8.7.4 | Host roles | Simulation |
 | REQ-PERF-001 | With CLK-BUS at 100 MHz or faster the AXI4 master DMA shall sustain 24.576 MB/s of isochronous IN traffic without FIFO overflow (goal). | ASM-008 | AXI-master wrappers | Simulation |
 | REQ-RTL-001 | RTL shall comply with REF-003. | REF-003 | All wrappers | Lint, rule check |
 | REQ-VER-001 | Verification shall include a protocol checker per interface and a USB bus functional model for each role. | R-024 plan | All wrappers | Review |
+| REQ-VER-002 | PARA_USB2_TSCALE shall divide every millisecond-scale timer of the speed and power controller by its value in simulation, shall be 1 in every delivered netlist, and each timing requirement shall be tested at least once with TSCALE = 1. | Review F-028 | All wrappers | Simulation |
+| REQ-VER-003 | The verification plan shall include interoperability tests of the device role with a real host stack (CDC-ACM, mass storage) and of the host role with a real device stack (UVC, CDC-ACM), and a compliance pre-check list. | Review F-026 | All wrappers | Review, FPGA prototype |
 | REQ-DFT-001 | All flip-flops of both domains shall be scannable with a test-enable on every clock gate, and test mode shall override reset sources in the reset controller only. | REF-003 | All wrappers | DFT checks |
 
 ## 4. Features and configurations
@@ -235,7 +263,7 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 | CFG-DUAL-FULL | FEAT-001 to FEAT-003, FEAT-005, FEAT-007, FEAT-010, FEAT-011, FEAT-017 | none | ULPI 8-bit, AXI4 master 64-bit | Micro-AB port that is host or device | Role switch, all protocol tests |
 | CFG-MIN | FEAT-001, FEAT-004, FEAT-008 with 2 endpoints | host, LPM, split | UTMI+ 8-bit, AXI4 slave 32-bit | Smallest device (area check) | Elaboration and area report |
 
-For each optional feature: a feature whose enable parameter is 0 is absent from the netlist, and the ports of its interface remain in the fixed wrapper port list and are tied (inputs ignored, outputs 0). The wrapper selects the PHY interface and the data interface, because a wrapper port list is static. Illegal combinations: PARA_USB2_ROLE = 0 with PARA_USB2_SPLIT_EN = 1; PARA_USB2_PHY_IF = 1 with PARA_USB2_UTMI_W = 16; PARA_USB2_DATA_IF = 1 with PARA_USB2_NUM_DMA_CH = 0; PARA_USB2_SG_EN = 1 with PARA_USB2_DATA_IF = 1; PARA_USB2_FIFO_DEPTH smaller than the largest maximum packet of the configuration (REQ-PARAM-001).
+For each optional feature: a feature whose enable parameter is 0 is absent from the netlist, and the ports of its interface remain in the fixed wrapper port list and are tied (inputs ignored, outputs 0). The wrapper selects the PHY interface and the data interface, because a wrapper port list is static. Illegal combinations: PARA_USB2_ROLE = 0 with PARA_USB2_SPLIT_EN = 1; PARA_USB2_PHY_IF = 1 with PARA_USB2_UTMI_W = 16; PARA_USB2_DATA_IF = 1 with PARA_USB2_NUM_DMA_CH = 0; PARA_USB2_SG_EN = 1 with PARA_USB2_DATA_IF = 1; PARA_USB2_TSCALE other than 1 in a delivered netlist; PARA_USB2_FIFO_DEPTH smaller than the largest maximum packet of the configuration (REQ-PARAM-001).
 
 ## 5. Architecture
 
@@ -576,7 +604,7 @@ Additions of 2026-11-20: `m_usb2_fifo` also implements the two-buffer ping-pong 
       "pos": 0,
       "text": [
         "CKBUS",
-        "i_clk_bus, i_rst_n_bus"
+        "i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en"
       ]
     }
   ],
@@ -663,7 +691,7 @@ Additions of 2026-11-20: `m_usb2_fifo` also implements the two-buffer ping-pong 
       "name": "Clock and reset of the bus domain",
       "category": "custom",
       "active": "SoC -> TOP",
-      "signals": "i_clk_bus, i_rst_n_bus"
+      "signals": "i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en"
     },
     {
       "id": "BYTE",
@@ -779,7 +807,7 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | `i_apb_pwrite` | Input | 1 | APB direction, 1 = write | CLK-BUS | level | 0 | sampled in the SETUP phase | All wrappers |
 | `i_apb_penable` | Input | 1 | APB enable, marks the ACCESS phase | CLK-BUS | level | 0 | sampled each CLK-BUS edge | All wrappers |
 | `i_apb_psel` | Input | 1 | APB select of this slave | CLK-BUS | level | 0 | sampled each CLK-BUS edge | All wrappers |
-| `i_apb_pstrb` | Input | 4 | APB write byte strobes; all four must be 1 | CLK-BUS | data (valid with i_apb_pwrite) | don't care | sampled in the ACCESS phase | All wrappers |
+| `i_apb_pstrb` | Input | 4 | APB write byte strobes; all four 1 for a full-word write; a partial strobe is an error when `i_slverr_en` = 1 and a byte-lane mask otherwise | CLK-BUS | data (valid with i_apb_pwrite) | don't care | sampled in the ACCESS phase | All wrappers |
 | `i_apb_pprot` | Input | 3 | APB protection attributes; only bit 1 is used | CLK-BUS | data (valid while i_apb_psel is 1) | don't care | sampled in the SETUP phase | All wrappers |
 | `o_apb_pready` | Output | 1 | APB ready of this slave | CLK-BUS | level | 0 | registered output of the CSR | All wrappers |
 | `o_apb_pslverr` | Output | 1 | APB slave error, see section 11.4 | CLK-BUS | level | 0 | registered output of the CSR | All wrappers |
@@ -788,6 +816,8 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | `i_slverr_en` | Input | 1 | Enables PSLVERR responses of the CSR | static | static | constant after reset | tie-off or integration constant | All wrappers |
 | `i_ovrcur_n` | Input | 1 | Active-low over-current flag from the external VBUS power switch; filtered for 16 CLK-BUS cycles and synchronized inside the IP | asynchronous (synchronized to CLK-BUS) | level | 1 (no over-current) | sampled by the synchronizer of CDC-006; tie to 1 when no switch flag exists | All wrappers |
 | `o_vbus_pwr_en` | Output | 1 | Enable of the external VBUS power switch; 1 when u2_hport.vbus_drv is 1 and no over-current is latched | CLK-BUS | level | 0 (power off) | changes on rising i_clk_bus; goes low within 2 cycles after the filtered over-current | All wrappers |
+| `i_dft_test_en` | Input | 1 | Test mode enable: overrides the resets in `m_usb2_rst` and bypasses the FIFO RAM macro | static | static | 0 | constant during test mode | All wrappers |
+| `i_dft_scan_en` | Input | 1 | Scan shift enable, also the test enable of every clock gate | static | level | 0 | asserted by the scan controller during shift | All wrappers |
 | `o_int_usb` | Output | 1 | Interrupt request, high while an enabled and unmasked interrupt status bit is set | CLK-BUS | level | 0 | registered in CLK-BUS; cleared by software via the CSR | All wrappers |
 | `o_utmi_dataout` | Output | 16 | Transmit data from the link to the PHY (DataOut); bits [15:8] are used only when PARA_USB2_UTMI_W = 16 | CLK-PHY | data (valid while o_utmi_txvalid is 1) | 0 | launched on rising i_clk_phy | UTMI+ wrappers |
 | `i_utmi_datain` | Input | 16 | Receive data from the PHY (DataIn); bits [15:8] are used only when PARA_USB2_UTMI_W = 16 | CLK-PHY | data (valid while i_utmi_rxvalid is 1) | don't care | sampled on rising i_clk_phy | UTMI+ wrappers |
@@ -820,7 +850,7 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | `i_utmi_sessend` | Input | 1 | VBUS below the B-device session end threshold (SessEnd) | CLK-PHY | level | 1 | sampled on rising i_clk_phy | UTMI+ wrappers |
 | `i_ulpi_dir` | Input | 1 | Data bus direction from the PHY: high while the PHY drives i_ulpi_data | CLK-PHY | level | 1 | sampled on rising i_clk_phy | ULPI wrappers |
 | `i_ulpi_nxt` | Input | 1 | PHY next-byte indication for transmit and receive data | CLK-PHY | level | 0 | sampled on rising i_clk_phy | ULPI wrappers |
-| `o_ulpi_stp` | Output | 1 | Link stop of the transmit packet or register write | CLK-PHY | pulse (1 cycle) | 1 until the first TX CMD | launched on rising i_clk_phy | ULPI wrappers |
+| `o_ulpi_stp` | Output | 1 | Link stop of the transmit packet or register write; in ULPI low power mode it is driven by the always-on `m_usb2_ulpilp` and is asserted asynchronously to wake the PHY (REF-007 section 3.9.3) | CLK-PHY (CLK-BUS in low power mode) | pulse (1 cycle); level in low power mode | 1 until the first TX CMD | launched on rising i_clk_phy; asynchronous release in low power mode | ULPI wrappers |
 | `i_ulpi_data` | Input | 8 | ULPI data bus value driven by the PHY (RX CMD and receive data) | CLK-PHY | data (valid while i_ulpi_dir is 1) | don't care | sampled on rising i_clk_phy | ULPI wrappers |
 | `o_ulpi_data` | Output | 8 | ULPI data bus value driven by the link (TX CMD and transmit data) | CLK-PHY | data (valid while o_ulpi_data_oe is 1) | 0 | launched on rising i_clk_phy | ULPI wrappers |
 | `o_ulpi_data_oe` | Output | 1 | Output enable of o_ulpi_data; 0 whenever i_ulpi_dir is 1 | CLK-PHY | level | 0 | pad wrapper drives io_ulpi_data from it | ULPI wrappers |
@@ -896,12 +926,30 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | UTMI+ transmit | `o_utmi_txvalid` stays high until `i_utmi_txready` has accepted every byte; the link never changes `o_utmi_opmode` or `o_utmi_xcvrsel` while transmitting | PHY drops TXReady mid-packet | Hold data, count a timeout, report PHY error | REQ-IF-001, REQ-ERR-001 |
 | UTMI+ receive | Packet bytes while `i_utmi_rxvalid` is 1 and `i_utmi_rxactive` is 1; `i_utmi_rxerror` ends the packet as errored | RXValid without RXActive | Ignore bytes, count PID or bit-stuff error | REQ-IF-001, REQ-ERR-001 |
 | ULPI transmit and receive | TX CMD byte, then data with `i_ulpi_nxt`, then `o_ulpi_stp`; RX CMD when `i_ulpi_dir` rises with `i_ulpi_nxt` low | Link drives while dir is high | Link releases the bus (`o_ulpi_data_oe` low) at once and aborts the TX CMD | REQ-IF-003 |
-| ULPI register access | Immediate register read or write command, extended command with an address byte; aborted when a receive starts | Register access while a packet is on the bus | Retry after the receive (TBD-005 for details) | REQ-IF-003 |
-| APB4 access | See section 11.4 | Unaligned or partial-strobe write | PSLVERR when `i_slverr_en` = 1 | REQ-IF-005 |
+| ULPI register access | Immediate register read or write command, extended command with an address byte; aborted when a receive starts | Register access while a packet is on the bus | Retry after the receive (REQ-IF-011) | REQ-IF-003 |
+| APB4 access | See section 11.4 | Unaligned or partial-strobe write | PSLVERR when `i_slverr_en` = 1; byte-lane write when 0 | REQ-IF-005 |
 | AXI4 master burst | INCR burst of at most 16 beats, address aligned to the beat size, no 4 KB crossing | Error response | Stop the channel, set DMA error status, raise interrupt | REQ-IF-006 |
 | AXI4 slave access | FIXED or INCR burst of at most 16 beats into a region window | Access outside any window or FIFO empty or full | SLVERR response, error status | REQ-IF-007 |
 | DMA handshake | `o_dma_req` high until the burst is acknowledged by a one-cycle `i_dma_ack` | Acknowledge without request | Ignore the pulse and count a DMA error | REQ-IF-009 |
 | Over-current input | `i_ovrcur_n` high in normal operation; low for 16 CLK-BUS cycles means over-current | Glitch shorter than 16 cycles; flag low while `oc_en` = 0 | Ignore the glitch; ignore the flag when disabled; otherwise power off and set `ocur` | REQ-FUNC-034, REQ-IF-010 |
+| ULPI low power mode | Link writes SuspendM = 0; the PHY asserts dir with nxt low and drives data[3:0]; the link wakes the PHY with stp | Data driven by the link while the PHY is in low power mode; stp released before dir falls | Link releases the bus, wake detector in CLK-BUS asserts stp asynchronously until dir falls | REQ-IF-011 |
+
+**UTMI+ control values (REQ-IF-012).** Source: REF-006 sections 2.2.1.11, 2.3.1, 2.4.1 and 3.1 (unofficial copy, ASM-001). XcvrSelect: 00b high-speed, 01b full-speed, 10b low-speed, 11b low-speed packet on a full-speed bus (level 3 preamble). OpMode: 00b normal with SYNC and EOP appended, 01b non-driving, 10b disable bit stuffing and NRZI (chirp and resume), 11b normal without automatic SYNC and EOP (valid only with XcvrSelect = 00b). The encoding of chirp K and chirp J on DataOut during OpMode = 10b is fixed by REF-006 section 3.1 and shall be transcribed from the official copy.
+
+| Bus state | XcvrSelect | TermSelect | OpMode | DpPulldown, DmPulldown | Note |
+|---|---|---|---|---|---|
+| Device attached, full-speed idle | 01b | 1 (FS) | 00b | 0, 0 | pull-up on D+ |
+| Device chirp and wait for the hub chirps | 00b | 1 | 10b | 0, 0 | high-speed transceiver with the full-speed termination kept until K-J-K-J-K-J is seen (UTMI 1.05 high-speed detection handshake, T1 to T7); TXReady must be answered for chirp data (REF-006 2.1.1.4) |
+| Device high-speed active | 00b | 0 (HS) | 00b | 0, 0 | after K-J-K-J-K-J |
+| Device suspend | 01b | 1 | 00b | 0, 0 | SuspendM low; TermSelect stays FS so the pull-up stays powered |
+| Device resume signaling | 01b | 1 | 10b | 0, 0 | OpMode returns to 00b only after the TX end delay |
+| Host reset (SE0) and chirp | 01b | 1 | 10b during chirp | 1, 1 | host sends alternating chirp K and J |
+| Host high-speed | 00b | 0 | 00b | 1, 1 | |
+| Host full-speed | 01b | 1 | 00b | 1, 1 | |
+| Host low-speed direct | 10b | 1 | 00b | 1, 1 | UTMI+ level 2 |
+| Host low-speed behind a hub | 11b | 1 | 00b | 1, 1 | UTMI+ level 3, preamble at full-speed |
+| Test mode Test_J, Test_K, Test_SE0_NAK | 00b | 0 | 00b | per role | the PHY holds the state |
+| Link loopback (lpbk = 1) | 01b | 1 | 01b | per role | PHY pins idle (non-driving) |
 
 ### 6.4 Interrupts and events
 
@@ -912,7 +960,7 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | Cause: SOF, reset, suspend, resume, connect, disconnect, role change, test-mode done | Event | Bus event of the roles | Software clear | Enable | CLK-PHY to CLK-BUS | 0 |
 | Cause: endpoint or channel transfer complete, FIFO overflow or underflow | Event | Packet end or FIFO condition | Software clear | Enable | CLK-PHY to CLK-BUS | 0 |
 | Cause: AXI error, DMA error, LPM event | Event | Bus-side error or LPM transaction | Software clear | Enable | CLK-BUS or crossing | 0 |
-| Cause: iso_inc, ocur | Event | Isochronous incomplete or missed transfer; port over-current detected | Software clear | Enable | CLK-PHY to CLK-BUS; CLK-BUS (ocur) | 0 |
+| Cause: iso_inc, ocur, ram_par, xq_ovf | Event | Isochronous incomplete or missed transfer; port over-current; FIFO RAM parity error; register command FIFO overflow | Software clear | Enable | CLK-PHY to CLK-BUS; CLK-BUS (ocur, xq_ovf) | 0 |
 
 ## 7. Clock, reset, and power
 
@@ -927,12 +975,13 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 
 | Crossing ID | From → to | Signals | Structure | Reset handling | Constraints / verification |
 |---|---|---|---|---|---|
-| CDC-001 | CLK-BUS → CLK-PHY | Control and mode levels of the CSR (role, speed mask, enable, test mode, address) | Two-flop synchronizer from library `m_usb2_cdc_level`; bundled values change only while the core is disabled | Both domains reset | set_clock_groups asynchronous, CDC tool |
-| CDC-002 | CLK-PHY → CLK-BUS | Status levels (line state, speed, port state) | Two-flop synchronizer; values read by software only | Both domains reset | CDC tool |
+| CDC-001 | CLK-BUS → CLK-PHY | Register command stream: every CSR write to a field that CLK-PHY uses (role, enables, test mode, address, endpoint and channel fields, FIFO region pointers, flush and start requests) | Register command FIFO in `m_usb2_xreg`: asynchronous Gray-pointer FIFO of 8 entries of 48 bits {register id 8, entry index 4, value 32, generation tag 4}, filled by the CSR write strobes in CLK-BUS and drained in CLK-PHY into shadow registers that hold the value for the engines; order of writes preserved | Both FIFO sides reset in their domains; entries in flight at a soft reset are discarded | Gray-pointer constraint (EXC-002), CDC tool; software reads u2_sts.xq_free (REQ-REG-002) |
+| CDC-002 | CLK-PHY → CLK-BUS | Register update stream: values that hardware changes (xsize, pkt_cnt, DMA address, buf_cur, link and port status, speed, line state) | Register update FIFO in `m_usb2_xreg`: same format, written by the engines in CLK-PHY when a value changes and drained into the `i_hw_wdata_*` and `i_hw_we_*` ports of the CSR in CLK-BUS; an entry is applied only if its generation tag equals the CSR-side tag of the register (REQ-REG-003), otherwise it is dropped | Both sides reset in their domains | Gray-pointer constraint (EXC-002), CDC tool |
 | CDC-003 | CLK-PHY → CLK-BUS | Event pulses (interrupt causes) | Pulse stretch and toggle synchronizer `m_usb2_cdc_pulse` | Both domains reset | CDC tool |
 | CDC-004 | CLK-BUS ↔ CLK-PHY | FIFO bus-port requests, write data and read data | Asynchronous FIFO with Gray pointers (library 001_AsyncGrayFIFO) per direction | Reset of each FIFO side in its domain | Gray-code constraint, CDC tool |
 | CDC-005 | CLK-BUS → CLK-PHY | Soft-reset request | Pulse synchronizer inside `m_usb2_rst` | Reset controller | CDC tool |
 | CDC-006 | asynchronous → CLK-BUS | `i_ovrcur_n` | Two-flop synchronizer followed by a 16-cycle filter counter in `m_usb2_ocp` | Reset in CLK-BUS | set_false_path to the synchronizer, CDC tool |
+| CDC-007 | asynchronous → CLK-BUS and CLK-BUS → pin | ULPI `i_ulpi_dir`, `i_ulpi_data[3:0]` in low power mode; `o_ulpi_stp` wake request | Two-flop synchronizers on the inputs inside `m_usb2_ulpilp`; the wake request drives `o_ulpi_stp` through a glitch-free hand-off from the CLK-PHY driver | Always-on logic in CLK-BUS, reset by i_rst_n_bus | set_false_path on the inputs, CDC tool; the hand-off is held by assertion SVA-014 |
 
 ### 7.3 Reset domains and sequencing
 
@@ -941,11 +990,11 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | RST-PHY | `i_rst_n_phy` | Active-low | Async assertion / synchronized release | Protocol engines, FIFO manager, PHY block | Released synchronously to CLK-PHY by `m_usb2_rst` | All state in IDLE or detached |
 | RST-BUS | `i_rst_n_bus` | Active-low | Async assertion / synchronized release | CSR, DMA, AXI blocks, interrupt block | Released synchronously to CLK-BUS | Registers at their workbook values |
 
-Sources: pin resets, and a CSR soft-reset field that resets the CLK-PHY domain through CDC-005 while the CSR keeps its values. The two domains must not run with one domain reset while the other is active without the soft-reset sequence in section 11.2. The FIFO RAM content is not reset; region pointers are reset and the data is valid only between the write and read pointers. A bus reset on the USB wire is handled by the speed controller and does not reset the domains. In test mode the reset override is inside `m_usb2_rst` only.
+Sources: pin resets, and a CSR soft-reset field that resets the CLK-PHY domain through CDC-005 while the CSR keeps its values. The two domains must not run with one domain reset while the other is active without the soft-reset sequence in section 11.2. The FIFO RAM content is not reset; region pointers are reset and the data is valid only between the write and read pointers. A bus reset on the USB wire is handled by the speed controller and does not reset the domains. Stopped-clock rule (F-019): when CLK-PHY is stopped by the PHY, asserting i_rst_n_phy resets the state asynchronously, its release waits for the first rising edges of the restarted clock, and the soft reset of the CSR completes only after CLK-PHY runs; software shall check u2_sts.phyclk_ok = 1 before writing swrst and a soft reset that does not finish within 1 ms of CLK-BUS time shall be treated as an error by software. In test mode the reset override is inside `m_usb2_rst` only.
 
 ### 7.4 Power intent (if applicable)
 
-N/A: no power domain is defined inside the IP, so no isolation or retention applies; whole-IP power gating is an SoC decision (ASM-016). The IP supports USB suspend and LPM L1 states that stop the PHY clock; the clock-stop and restart sequence uses UTMI+ SuspendM (REF-006) or ULPI low power mode (TBD-005). The CSR domain stays clocked.
+N/A: no power domain is defined inside the IP, so no isolation or retention applies; whole-IP power gating is an SoC decision (ASM-016). The IP supports USB suspend and LPM L1 states that stop the PHY clock; the clock-stop and restart sequence uses UTMI+ SuspendM (REF-006) or ULPI low power mode (REQ-IF-011). The CSR domain stays clocked.
 
 ## 8. Parameters and elaboration configurations
 
@@ -968,6 +1017,9 @@ Parameters are declared on `m_usb2_core`; each wrapper fixes PARA_USB2_PHY_IF an
 | PARA_USB2_NUM_DMA_CH | External DMA handshake channels | 4 | 1 to 16 | DATA_IF = 1 | `o_dma_req`, `i_dma_ack` widths |
 | PARA_USB2_DBUF_EN | Double-buffered endpoints and channels | 1 | 0, 1 | none | Two-buffer logic in `m_usb2_fifo`; regions must hold two packets when `dbuf` is set |
 | PARA_USB2_SG_EN | Descriptor-based scatter-gather DMA | 0 | 0, 1 | Needs PARA_USB2_DATA_IF = 0 | Descriptor engine in `m_usb2_dma` |
+| PARA_USB2_RAM_PAR_EN | One parity bit per FIFO RAM word | 1 | 0, 1 | none | RAM word of 33 or 65 bits; ram_par flag |
+| PARA_USB2_TSCALE | Verification-only divider of the millisecond timers | 1 | 1, 16, 256, 4096 | must be 1 in every delivered netlist (REQ-VER-002) | Timer reload values |
+| LPARA_USB2_RAM_W | RAM word width in data bits, derived: 64 when PARA_USB2_UTMI_W = 16, else 32 | 32 | 32, 64 | follows PARA_USB2_UTMI_W | RAM width and bandwidth (section 10.4) |
 
 | Configuration | Parameter overrides | Features/interfaces | Expected hierarchy | Elaboration/lint/synthesis target |
 |---|---|---|---|---|
@@ -1000,7 +1052,7 @@ PID values (most-significant bit first, the check field is the complement of the
 | HIRD code | 4 | 0000B = 50 us, each step adds 75 us (REF-008 section 4.1) | none | Reserved values are passed through unchanged |
 | Microframe length | 16 | CLK-PHY cycles per 125 us | none | 0 is illegal and keeps the reset value |
 
-Scatter-gather descriptor (PARA_USB2_SG_EN = 1, sg_mode = 1): each descriptor is two 32-bit words in system memory, aligned to 8 bytes, little-endian. The list head address is the endpoint or channel DMA address register. Word 0 is the buffer address bits [31:0]; bits [63:32] come from `u2_dma_hi`. Word 1 holds `len` in bits [15:0] (bytes to move, 0 to 65535), `last` in bit 16 (last descriptor of the list), `ioc` in bit 17 (interrupt on completion of this descriptor), reserved bits [23:18], and the status written back by hardware in bits [31:24]: bit 24 `done`, bit 25 `err`, bit 26 `short` (packet shorter than the maximum packet size ended the descriptor), other status bits 0. After the descriptor completes, hardware rewrites `len` with the number of bytes not transferred (ASM-020).
+Scatter-gather descriptor (PARA_USB2_SG_EN = 1, sg_mode = 1; DEC-013): each descriptor is two 32-bit words in system memory, aligned to 8 bytes, little-endian, and describes the buffer of one USB packet. The DMA address register of the endpoint or channel (`u2_epi_dma`, `u2_epo_dma`, `u2_hc_dma`) holds the address of the current descriptor and hardware adds 8 to it after each packet. Word 0 is the buffer address bits [31:0]; bits [63:32] come from `u2_dma_hi`. Word 1 holds `len` in bits [15:0] (size of the buffer in bytes, 0 to 65535), the software bits `last` (bit 16), `ioc` (bit 17) and [23:18], which hardware keeps as written, and the status written back by hardware in bits [31:24]: bit 24 `done`, bit 25 `err` (the packet did not fit the buffer), bit 26 `short` (bytes of the buffer were left over), other bits 0. After the packet hardware rewrites `len` with the number of bytes not transferred. An IN (transmit) descriptor sends min(`len`, maximum packet size, bytes left of the transfer) bytes, so software gives `len` not larger than the maximum packet size; a transmit descriptor with `len` = 0 ends the transfer. An OUT (receive) packet longer than `len` is not stored: the descriptor gets `err` and `done`, `len` stays unchanged and the DMA pulses `dma_err`. The interrupts are those of the endpoint or channel; `last` and `ioc` are not interpreted by hardware (ASM-020, DEC-013).
 
 Reserved, undefined and illegal values: the controller never produces a reserved encoding on the bus, ignores a packet with an undefined PID, and a reserved CSR value is treated as the reset value of its field. Don't-care values are used only for data that is not valid (section 6.2).
 
@@ -1206,7 +1258,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
     {
       "src": "ENUM_ST_HP_DEBNC",
       "dst": "ENUM_ST_HP_RESET",
-      "label": "stable & port_rst"
+      "label": "stable & prst"
     },
     {
       "src": "ENUM_ST_HP_RESET",
@@ -1316,8 +1368,8 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | Mode/state | Entry condition | Behavior | Exit condition | Outputs / side effects |
 |---|---|---|---|---|
 | `ENUM_ST_HP_NODEV` | reset; SE0 again (DEBNC); disconnect (EN_HS); SE0 > 2.5 us (EN_FS); SE0 > 2.5 us (EN_LS); flag cleared & vbus_drv written (OC) | No device attached: pull-downs on, watches D+ and D- | non-SE0 on D+ or D- (to DEBNC) | host_sts.port_conn = 0 |
-| `ENUM_ST_HP_DEBNC` | non-SE0 on D+ or D- (NODEV) | Attach debounce: waits for stable connect | SE0 again (to NODEV); stable & port_rst (to RESET) | conn interrupt after debounce |
-| `ENUM_ST_HP_RESET` | stable & port_rst (DEBNC) | Drives SE0 reset: reset of at least 50 ms in total | SE0 driven & not LS & hs allowed (to CHIRP_DET); LS device & reset >= 50 ms (to EN_LS) | bus reset on root port, rst_busy |
+| `ENUM_ST_HP_DEBNC` | non-SE0 on D+ or D- (NODEV) | Attach debounce: waits for stable connect | SE0 again (to NODEV); stable & prst (to RESET) | conn interrupt after debounce |
+| `ENUM_ST_HP_RESET` | stable & prst (DEBNC) | Drives SE0 reset: reset of at least 50 ms in total | SE0 driven & not LS & hs allowed (to CHIRP_DET); LS device & reset >= 50 ms (to EN_LS) | bus reset on root port, rstbusy |
 | `ENUM_ST_HP_CHIRP_DET` | SE0 driven & not LS & hs allowed (RESET) | Watches for the device Chirp K: timer for K of at least 2.5 us | device K >= 2.5 us (to CHIRP_TX); no chirp & reset >= 50 ms (to EN_FS) | hs termination off |
 | `ENUM_ST_HP_CHIRP_TX` | device K >= 2.5 us (CHIRP_DET) | Sends alternating Chirp K and J: each chirp 40 to 60 us, ends 100 to 500 us before reset end | K/J chirps done, reset end (to EN_HS) | OpMode = chirp |
 | `ENUM_ST_HP_EN_HS` | K/J chirps done, reset end (CHIRP_TX); resume >= 20 ms, was HS (RESUME) | Port enabled at high-speed: SOF every 125 us, channels scheduled | port_susp (to SUSP); disconnect (to NODEV); over-current (to OC) | enum_done, port_speed = HS |
@@ -1669,7 +1721,10 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
       "name": "ENUM_ST_HX_SEND_ACK"
     },
     {
-      "name": "ENUM_ST_HX_SPLIT"
+      "name": "ENUM_ST_HX_SSPLIT"
+    },
+    {
+      "name": "ENUM_ST_HX_CSPLIT"
     },
     {
       "name": "ENUM_ST_HX_DONE"
@@ -1693,8 +1748,13 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
     },
     {
       "src": "ENUM_ST_HX_TOKEN",
-      "dst": "ENUM_ST_HX_SPLIT",
-      "label": "split token sent"
+      "dst": "ENUM_ST_HX_SSPLIT",
+      "label": "start-split token sent"
+    },
+    {
+      "src": "ENUM_ST_HX_TOKEN",
+      "dst": "ENUM_ST_HX_CSPLIT",
+      "label": "complete-split token sent"
     },
     {
       "src": "ENUM_ST_HX_OUT_DATA",
@@ -1727,14 +1787,19 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
       "label": "ACK sent"
     },
     {
-      "src": "ENUM_ST_HX_SPLIT",
+      "src": "ENUM_ST_HX_SSPLIT",
       "dst": "ENUM_ST_HX_WAIT_HS",
       "label": "start-split data sent"
     },
     {
-      "src": "ENUM_ST_HX_SPLIT",
+      "src": "ENUM_ST_HX_CSPLIT",
       "dst": "ENUM_ST_HX_WAIT_DATA",
       "label": "complete-split IN token sent"
+    },
+    {
+      "src": "ENUM_ST_HX_WAIT_DATA",
+      "dst": "ENUM_ST_HX_CSPLIT",
+      "label": "NYET, retry complete-split"
     },
     {
       "src": "ENUM_ST_HX_DONE",
@@ -1754,12 +1819,13 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | Mode/state | Entry condition | Behavior | Exit condition | Outputs / side effects |
 |---|---|---|---|---|
 | `ENUM_ST_HX_IDLE` | reset; status reported (DONE) | Waits for a granted channel: scheduler grants one channel | channel granted (to TOKEN) | none |
-| `ENUM_ST_HX_TOKEN` | channel granted (IDLE) | Sends the token: OUT, IN, SETUP or SPLIT token with CRC5 | OUT or SETUP token sent (to OUT_DATA); IN token sent (to WAIT_DATA); split token sent (to SPLIT) | token request to the transmitter |
+| `ENUM_ST_HX_TOKEN` | channel granted (IDLE) | Sends the token: OUT, IN, SETUP or SPLIT token with CRC5 | OUT or SETUP token sent (to OUT_DATA); IN token sent (to WAIT_DATA); start-split token sent (to SSPLIT); complete-split token sent (to CSPLIT) | token request to the transmitter |
 | `ENUM_ST_HX_OUT_DATA` | OUT or SETUP token sent (TOKEN) | Sends the data packet: 88 bit times minimum after the token in HS | data packet sent (to WAIT_HS); isochronous, no handshake (to DONE) | FIFO read |
-| `ENUM_ST_HX_WAIT_HS` | data packet sent (OUT_DATA); start-split data sent (SPLIT) | Waits for the device handshake: turn-around timer running | handshake or time-out (to DONE) | toggle update on ACK |
-| `ENUM_ST_HX_WAIT_DATA` | IN token sent (TOKEN); complete-split IN token sent (SPLIT) | Waits for the device data packet: turn-around timer running | good data packet (to SEND_ACK); NAK, STALL, error or time-out (to DONE) | FIFO write |
+| `ENUM_ST_HX_WAIT_HS` | data packet sent (OUT_DATA); start-split data sent (SSPLIT) | Waits for the device handshake: turn-around timer running | handshake or time-out (to DONE) | toggle update on ACK |
+| `ENUM_ST_HX_WAIT_DATA` | IN token sent (TOKEN); complete-split IN token sent (CSPLIT) | Waits for the device data packet: turn-around timer running | good data packet (to SEND_ACK); NAK, STALL, error or time-out (to DONE); NYET, retry complete-split (to CSPLIT) | FIFO write |
 | `ENUM_ST_HX_SEND_ACK` | good data packet (WAIT_DATA) | Sends ACK for received data: handshake after good CRC | ACK sent (to DONE) | handshake request |
-| `ENUM_ST_HX_SPLIT` | split token sent (TOKEN) | Runs a start-split or complete-split phase: SPLIT token fields from hc_split | start-split data sent (to WAIT_HS); complete-split IN token sent (to WAIT_DATA) | split state to the channel |
+| `ENUM_ST_HX_SSPLIT` | start-split token sent (TOKEN) | Start-split phase: SPLIT token with SC = 0, then the full-speed or low-speed token and data; at most three attempts | start-split data sent (to WAIT_HS) | split state to the channel |
+| `ENUM_ST_HX_CSPLIT` | complete-split token sent (TOKEN); NYET, retry complete-split (WAIT_DATA) | Complete-split phase: SPLIT token with SC = 1 in the scheduled microframes; retry on NYET or error | complete-split IN token sent (to WAIT_DATA) | split state to the channel |
 | `ENUM_ST_HX_DONE` | isochronous, no handshake (OUT_DATA); handshake or time-out (WAIT_HS); NAK, STALL, error or time-out (WAIT_DATA); ACK sent (SEND_ACK) | Reports the transaction result: writes the interrupt flags of the channel | status reported (to IDLE) | hc_int flags, channel summary |
 
 #### 10.1.7 ULPI link interface (`m_usb2_phyif_ulpi`, state register `reg_fsm_ulpi_if_current_state`)
@@ -1798,6 +1864,12 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
     },
     {
       "name": "ENUM_ST_UL_REGRD"
+    },
+    {
+      "name": "ENUM_ST_UL_LP"
+    },
+    {
+      "name": "ENUM_ST_UL_WAKE"
     }
   ],
   "transitions": [
@@ -1870,6 +1942,21 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
       "src": "ENUM_ST_UL_REGCMD",
       "dst": "ENUM_ST_UL_RX",
       "label": "dir high (abort)"
+    },
+    {
+      "src": "ENUM_ST_UL_REGDATA",
+      "dst": "ENUM_ST_UL_LP",
+      "label": "SuspendM = 0 written"
+    },
+    {
+      "src": "ENUM_ST_UL_LP",
+      "dst": "ENUM_ST_UL_WAKE",
+      "label": "wake request"
+    },
+    {
+      "src": "ENUM_ST_UL_WAKE",
+      "dst": "ENUM_ST_UL_IDLE",
+      "label": "dir low, stp released"
     }
   ],
   "layout": {
@@ -1883,14 +1970,16 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 
 | Mode/state | Entry condition | Behavior | Exit condition | Outputs / side effects |
 |---|---|---|---|---|
-| `ENUM_ST_UL_IDLE` | reset; stp driven one cycle (TXSTOP); dir low (RX); stp driven (REGDATA); data byte captured (REGRD) | Idles with the bus released or sending idle: stp low, data bus per dir | tx request & dir low (to TXCMD); dir high (to RX); phy_acc start & bus idle (to REGCMD) | none |
+| `ENUM_ST_UL_IDLE` | reset; stp driven one cycle (TXSTOP); dir low (RX); stp driven (REGDATA); data byte captured (REGRD); dir low, stp released (WAKE) | Idles with the bus released or sending idle: stp low, data bus per dir | tx request & dir low (to TXCMD); dir high (to RX); phy_acc start & bus idle (to REGCMD) | none |
 | `ENUM_ST_UL_TXCMD` | tx request & dir low (IDLE) | Sends the TX CMD byte: TX CMD with PID or NOPID | nxt high (to TXDATA); dir high (abort) (to RX) | o_ulpi_data_oe high |
 | `ENUM_ST_UL_TXDATA` | nxt high (TXCMD) | Sends data bytes on nxt: byte changes when nxt is high | last byte accepted (to TXSTOP); dir high (abort) (to RX) | o_ulpi_data_oe high |
 | `ENUM_ST_UL_TXSTOP` | last byte accepted (TXDATA) | Ends the packet: stp high for one cycle | stp driven one cycle (to IDLE) | o_ulpi_stp pulse |
 | `ENUM_ST_UL_RX` | dir high (IDLE); dir high (abort) (TXCMD); dir high (abort) (TXDATA); dir high (abort) (REGCMD) | Receives RX CMD and data: dir high, nxt marks data bytes | dir low (to IDLE) | o_ulpi_data_oe low, stream to the link |
 | `ENUM_ST_UL_REGCMD` | phy_acc start & bus idle (IDLE) | Sends a PHY register command: immediate or extended register read or write | write, nxt high (to REGDATA); read, dir high (to REGRD); dir high (abort) (to RX) | o_ulpi_data_oe high |
-| `ENUM_ST_UL_REGDATA` | write, nxt high (REGCMD) | Sends the register write data: data on nxt then stop | stp driven (to IDLE) | o_ulpi_stp pulse |
+| `ENUM_ST_UL_REGDATA` | write, nxt high (REGCMD) | Sends the register write data: data on nxt then stop | stp driven (to IDLE); SuspendM = 0 written (to LP) | o_ulpi_stp pulse |
 | `ENUM_ST_UL_REGRD` | read, dir high (REGCMD) | Captures the register read data: turnaround then data byte | data byte captured (to IDLE) | phy_acc.rdata updated |
+| `ENUM_ST_UL_LP` | SuspendM = 0 written (REGDATA) | ULPI low power mode, PHY clock may be stopped: dir high, nxt low, data[3:0] carry the low power signals (LineState, int) | wake request (to WAKE) | o_ulpi_data_oe low, wake detector of `m_usb2_ulpilp` active |
+| `ENUM_ST_UL_WAKE` | wake request (LP) | Wakes the PHY: stp driven asynchronously until the PHY drops dir after at least 5 clock cycles | dir low, stp released (to IDLE) | o_ulpi_stp high, released in the cycle after dir falls |
 
 #### 10.1.8 AXI4 master DMA burst engine (`m_usb2_dma`, state register `reg_fsm_dma_axi_current_state`)
 
@@ -2039,7 +2128,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | `ENUM_ST_DM_BRESP` | wlast accepted (WDATA) | Waits for the write response: checks bresp | bresp okay & buffer mode (to IDLE); bresp error (to ERR); bresp okay & sg_mode (to DESC_WB) | o_axim_bready |
 | `ENUM_ST_DM_ERR` | rresp error (RDATA); bresp error (BRESP); rresp error (DESC_RD) | Handles an AXI error: stops the transfer if ahb_err_stop is 1 | error status set (to IDLE) | axi_err and dma_err raw flags |
 | `ENUM_ST_DM_DESC_RD` | sg_mode & list armed (IDLE) | Reads a descriptor (scatter-gather): AXI read burst of two beats from the list address | IN descriptor read (to AR); OUT descriptor read (to AW); rresp error (to ERR) | o_axim_arvalid |
-| `ENUM_ST_DM_DESC_WB` | rlast & sg_mode (RDATA); bresp okay & sg_mode (BRESP) | Writes back the descriptor status (scatter-gather): rewrites word 1 with done, err, short and bytes not transferred; advances to the next descriptor or ends | status written (to IDLE) | o_axim_awvalid, interrupt when ioc, last or error |
+| `ENUM_ST_DM_DESC_WB` | rlast & sg_mode (RDATA); bresp okay & sg_mode (BRESP) | Writes back the descriptor status (scatter-gather): rewrites word 1 with done, err, short and bytes not transferred; adds 8 to the descriptor pointer | status written (to IDLE) | o_axim_awvalid, dma_err on an overflow |
 
 
 ### 10.2 Operations
@@ -2050,10 +2139,10 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | OP-002 | Device role; endpoint armed (`ep_en` = 1) and FIFO space; OUT or SETUP token matched | Receive data packet, check CRC16 and toggle, store in FIFO, answer ACK, NAK, NYET or STALL | `done` flag of the endpoint, `ep_xfer` interrupt | Handshake within 192 bit times (HS) |
 | OP-003 | Device role; IN token matched; FIFO holds a packet | Send data packet with the toggle or high-bandwidth PID, wait for ACK | `done` flag, toggle updated | Data within 192 bit times of the token |
 | OP-004 | High-speed device bulk or control OUT endpoint; PING token | Answer ACK when space for a maximum packet exists, else NAK; answer NYET after accepting data when no further space | PING and NYET counted in endpoint flags | Handshake within the response limit |
-| OP-005 | Host role; port debounced; `u2_hport.port_rst` = 1 | Drive reset at least 50 ms, run the chirp handshake of REQ-FUNC-012 | `u2_hsts.port_en` = 1, `enum` interrupt | Reset 50 ms, recovery 10 ms |
+| OP-005 | Host role; port debounced; `u2_hport.prst` = 1 | Drive reset at least 50 ms, run the chirp handshake of REQ-FUNC-012 | `u2_hsts.port_en` = 1, `enum` interrupt | Reset 50 ms, recovery 10 ms |
 | OP-006 | Host role; `u2_hport.sof_en` = 1 | Send SOF each (micro)frame with the frame number | `sof` interrupt | 125 us +/- 0.0625 us (HS), 1 ms +/- 0.0005 ms (FS) |
 | OP-007 | Host role; channel programmed and `ch_en` = 1 | Send token, data and handshake for OUT, SETUP and IN, retry per toggle rules | `done` and result flags in `u2_hc_int` | Periodic before non-periodic |
-| OP-008 | Host role with split; `u2_hc_split.split_en` = 1 | Start-split then complete-split transactions to the hub | Result flags, NYET and ERR handled | Complete-split after the hub delay |
+| OP-008 | Host role with split; `u2_hc_spl.split_en` = 1 | Start-split then complete-split transactions to the hub | Result flags, NYET and ERR handled | Complete-split after the hub delay |
 | OP-009 | Either role; bus idle 3 ms | Enter suspend; resume by bus K, remote wakeup or port resume | `suspend` and `resume` interrupts | Timings of REF-001 7.1.7.6 and 7.1.7.7 |
 | OP-010 | LPM build; LPM token received or `u2_hport.lpm_req` = 1 | Enter L1, answer ACK, NYET or STALL, resume after HIRD or remote wake | `lpm_evt` interrupt | Per REF-008 |
 | OP-011 | `u2_dctrl.test_mode` or `u2_hport.test_mode` not 0 | Enter the test mode and stay until reset | Bus pattern of REF-001 7.1.20 | Immediately after the request |
@@ -2066,7 +2155,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | OP-018 | Host channel with `poll_en` = 1 and `interval` set | Issue the transaction every interval; retry NAK or NYET in the next interval; re-arm when `poll_rep` = 1 | `done` or `poll_miss` flag | Interval in microframes or frames |
 | OP-019 | Isochronous endpoint or channel | Detect IN token with no data, isochronous packet error, or a transfer not done in its microframe | `iso_inc` flags | No retry |
 | OP-020 | Host role; `oc_en` = 1; `i_ovrcur_n` low for 16 CLK-BUS cycles | Cut port power and enter the power-off state | `ocur` flag, `oc_act` = 1 | Power off within 2 CLK-BUS cycles after the filter |
-| OP-021 | AXI master build with PARA_USB2_SG_EN = 1; `sg_mode` = 1 | Fetch a descriptor, run its data transfer, write back the status, follow the list to the last descriptor | `done` flags, interrupt on `ioc`, last or error | One descriptor after another |
+| OP-021 | AXI master build with PARA_USB2_SG_EN = 1; `sg_mode` = 1 | Fetch a descriptor, run its data transfer, write back the status, follow the list to the last descriptor | `done`, `err`, `short` flags and the bytes not transferred; pointer moved by 8 | One descriptor per packet |
 | OP-022 | `lpbk` = 1 before `core_en` | Loop the transmitted bytes into the receiver, count good and bad packets | `u2_lpbk_sts` counters | Same as normal packet timing |
 
 ### 10.3 Cycle-level behavior
@@ -2083,7 +2172,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | WF-006 | OP-003 device IN data packet with host ACK | success | UTMI+ receive and transmit, epi done flag | figures/usb2_wf006.svg | 2026-11-20 |
 | WF-007 | OP-003 device IN with no data, NAK | error | UTMI+ receive and transmit, nak flag | figures/usb2_wf007.svg | 2026-11-20 |
 | WF-008 | OP-002 control SETUP transaction | success | UTMI+ receive and transmit, setup flag | figures/usb2_wf008.svg | 2026-11-20 |
-| WF-009 | OP-005 host port reset and chirp handshake | success | port_rst, linestate, txvalid, port_en, enum | figures/usb2_wf009.svg | 2026-11-20 |
+| WF-009 | OP-005 host port reset and chirp handshake | success | prst, linestate, txvalid, port_en, enum | figures/usb2_wf009.svg | 2026-11-20 |
 | WF-010 | OP-006 host start-of-frame | success | UTMI+ transmit, sof flag | figures/usb2_wf010.svg | 2026-11-20 |
 | WF-011 | OP-007 host OUT then IN transaction | success | UTMI+ transmit and receive, hc done flag | figures/usb2_wf011.svg | 2026-11-20 |
 | WF-012 | OP-007 host IN with no response | error | UTMI+ transmit, turn-around, timeout flag | figures/usb2_wf012.svg | 2026-11-20 |
@@ -2099,7 +2188,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | WF-022 | OP-014 ULPI PHY register write and read | success | phy_acc fields, ULPI pins | figures/usb2_wf022.svg | 2026-11-20 |
 | WF-023 | APB4 write, read and w1c clear (IF-003) | success | APB4 signals, irq_raw flag | figures/usb2_wf023.svg | 2026-11-20 |
 | WF-024 | OP-015 role change on an A-plug | success | iddig, vbusvalid, pulldowns, drvvbus, role | figures/usb2_wf024.svg | 2026-11-20 |
-| WF-025 | Soft reset of the protocol engines (IF-008) | success | core_en, soft_rst, rst_busy, domain reset | figures/usb2_wf025.svg | 2026-11-20 |
+| WF-025 | Soft reset of the protocol engines (IF-008) | success | core_en, swrst, rstbusy, domain reset | figures/usb2_wf025.svg | 2026-11-20 |
 | WF-026 | OP-007 host back-to-back packets with 88 bit times | corner | UTMI+ transmit, inter-packet counter | figures/usb2_wf026.svg | 2026-11-20 |
 | WF-027 | OP-002 device OUT with the receive region full | corner | UTMI+ receive and transmit, region full, nak | figures/usb2_wf027.svg | 2026-11-20 |
 | WF-028 | OP-003 high-bandwidth isochronous IN | corner | UTMI+ receive and transmit, mult | figures/usb2_wf028.svg | 2026-11-20 |
@@ -2662,7 +2751,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
    "wave": "p..|..|...|..."
   },
   {
-   "name": "u2_hport.port_rst",
+   "name": "u2_hport.prst",
    "wave": "01.|..|...|..0"
   },
   {
@@ -3702,11 +3791,11 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
    "wave": "10.........1"
   },
   {
-   "name": "u2_ctrl.soft_rst",
+   "name": "u2_ctrl.swrst",
    "wave": "0.1.....0..."
   },
   {
-   "name": "u2_sts.rst_busy",
+   "name": "u2_sts.rstbusy",
    "wave": "0..1....0..."
   },
   {
@@ -3722,7 +3811,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
   "text": "WF-025: soft reset of the protocol engines (IF-008, success)"
  },
  "foot": {
-  "text": "Software clears core_en, writes soft_rst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears soft_rst; registers keep their values."
+  "text": "Software clears core_en, writes swrst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears swrst; registers keep their values."
  },
  "config": {
   "hscale": 1
@@ -3924,7 +4013,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
    }
   ],
   {
-   "name": "u2_epi_ctrl.mult",
+   "name": "u2_epi_ctl.mult",
    "wave": "=.................................",
    "data": [
     "2"
@@ -4140,7 +4229,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
     ]
    },
    {
-    "name": "u2_epo_ctrl.buf_cur",
+    "name": "u2_epo_ctl.buf_cur",
     "wave": "0...........1...............0....."
    }
   ]
@@ -4219,7 +4308,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
    }
   ],
   {
-   "name": "u2_epi_xfer.xsize",
+   "name": "u2_epi_xfr.xsize",
    "wave": "=..............=||...............",
    "data": [
     "512",
@@ -4664,8 +4753,15 @@ Timing rules that apply to every waveform of this IP: all signals of CLK-PHY cha
 
 ### 10.4 Arbitration, buffering, and throughput
 
-- **FIFO RAM port arbitration (m_usb2_fifo):** the packet engine has the highest priority because the bus turn-around times are fixed (192 bit times is 24 cycles of 60 MHz); the bus-side access port takes free cycles in round-robin order between the DMA or window requests of the channels. The RAM is a single-port 1RW memory (TBD-001 resolved by the user answer 2026-11-20): one 32-bit word per CLK-PHY cycle.
-- **Bandwidth check:** a high-speed packet stream is 60 MB/s, one word per 4 cycles at 60 MHz in the 8-bit mode, so the packet engine uses 25 % of the RAM cycles; the bus side may use up to 60 MB/s, another 25 %. The sum is 50 % of the 240 MB/s of the RAM port.
+- **FIFO RAM port arbitration (m_usb2_fifo):** the packet engine has the highest priority because the bus turn-around times are fixed (192 bit times is 24 cycles of 60 MHz); the bus-side access port takes free cycles in round-robin order between the DMA or window requests of the channels. The RAM is a single-port 1RW memory (decision of 2026-11-20): one 32-bit word per CLK-PHY cycle.
+- **Bandwidth check (review F-003):** the RAM has one port in CLK-PHY, so its capacity is the word width times CLK-PHY. The packet stream of high-speed is 60 MB/s and the bus side may use up to 60 MB/s. The RAM word is therefore 32 bits at 60 MHz and 64 bits at 30 MHz (LPARA_USB2_RAM_W).
+
+| Configuration | CLK-PHY | RAM word | RAM capacity | Packet engine | Bus side | Use |
+|---|---|---|---|---|---|---|
+| UTMI+ 8-bit | 60 MHz | 32 bits | 240 MB/s | 60 MB/s | 60 MB/s | 50 % |
+| UTMI+ 16-bit, 64-bit RAM word (chosen) | 30 MHz | 64 bits | 240 MB/s | 60 MB/s | 60 MB/s | 50 % |
+| UTMI+ 16-bit, 32-bit RAM word (rejected) | 30 MHz | 32 bits | 120 MB/s | 60 MB/s | 60 MB/s | 100 %, no margin |
+| ULPI 8-bit | 60 MHz | 32 bits | 240 MB/s | 60 MB/s | 60 MB/s | 50 % |
 - **Host channel arbitration:** periodic channels first (ASM-014), within each class the channel with the lowest index first, then rotate after a transaction to avoid starvation of high indexes.
 - **Backpressure:** a full receive region causes NAK (device) or channel deferral (host); an empty transmit region causes NAK on IN (device) or no token (host); the bus-side port stalls AXI `wready` or `rvalid`.
 - **Latency:** the bus-side access crosses CLK-PHY and CLK-BUS through the asynchronous FIFOs of CDC-004, adding about 4 cycles of the slower clock in each direction; the packet engine never waits for the bus side.
@@ -4676,7 +4772,7 @@ Timing rules that apply to every waveform of this IP: all signals of CLK-PHY cha
 
 | Storage ID | Kind | Depth x width | Ports | Read latency | Write mask | Reset/init | ECC/parity | Implementation |
 |---|---|---|---|---|---|---|---|---|
-| MEM-001 | FIFO RAM (shared regions) | PARA_USB2_FIFO_DEPTH x 32 | one read-write port in CLK-PHY | 1 cycle | byte lanes not needed; whole words | content not reset; pointers reset | none (section 18) | macro or memory-compiler instance wrapped as `u_dont_touch_sram` (DEP-004) |
+| MEM-001 | FIFO RAM (shared regions) | PARA_USB2_FIFO_DEPTH x LPARA_USB2_RAM_W (+1 parity bit when PARA_USB2_RAM_PAR_EN = 1) | one read-write port in CLK-PHY | 1 cycle | byte lanes not needed; whole words | content not reset; pointers reset | one parity bit per word (REQ-FUNC-040) | macro or memory-compiler instance wrapped as `u_dont_touch_sram` (DEP-004) |
 | MEM-002 | Bus-side crossing FIFOs | 8 x 36 per direction | one write and one read port in separate clocks | 1 cycle | none | pointers reset in each domain | none | library 001_AsyncGrayFIFO |
 | MEM-003 | Endpoint and channel state | per entry flip-flops | n/a | 0 | n/a | reset values of the workbook | none | flip-flops in the CSR and the engines |
 | MEM-004 | Descriptor lists (scatter-gather) | system memory, 8 bytes per descriptor | AXI4 master reads and writes | n/a | none | software initializes | none | outside the IP; the descriptor engine keeps only the current descriptor |
@@ -4701,7 +4797,7 @@ The CSR specification of this IP shall be defined only in the VLSIT CSR Specific
 | Asynchronous | 0 = one clock, `i_clk_apb` only |
 | APB clock and register clock | `i_clk_apb` and `i_clk_reg` are both driven by `i_clk_bus` (CLK-BUS); `i_rst_n_apb` and `i_rst_n_reg` by the synchronized `i_rst_n_bus` |
 | Source of `i_protect_en` and `i_slverr_en` | IP input ports, constant after reset |
-| Repeated register groups | PARAMETERIZED banks; each count parameter `PARA_U2_xx_COUNT` of the generator (xx is the upper-case register name) is tied to PARA_USB2_NUM_EP plus 1 (device endpoint banks `u2_epi_*`, `u2_epo_*`), to PARA_USB2_NUM_HC (host banks `u2_hc_*`), or to PARA_USB2_NUM_DMA_CH (`u2_dmach_map`) |
+| Repeated register groups | PARAMETERIZED banks; the core derives each generated count parameter `PARA_U2_xx_COUNT` (xx is the upper-case register name) from PARA_USB2_NUM_EP plus 1 (device endpoint banks `u2_epi_*`, `u2_epo_*`), PARA_USB2_NUM_HC (host banks `u2_hc_*`) or PARA_USB2_NUM_DMA_CH (`u2_dma_map`), so the integrator ties no count by hand (REQ-PARAM-003) |
 
 Workbook requirements:
 
@@ -4756,56 +4852,58 @@ flowchart TD
 |---|---|---|---|---|---|
 | S01 | Reset and clocks | M | System: release `i_rst_n_bus` and `i_rst_n_phy`; APB4 not used yet | N/A: no register is accessed before the reset is released | Brings both clock domains out of reset so that the CSR answers and the protocol engines start in their idle states |
 | S02 | Read version and build | M | APB4 read | `u2_version` (major and minor); `u2_build` (role_cfg, phy_ulpi, utmi_16, axi_slave, lpm_cfg, split_cfg, num_ep, num_hc, fifo_log2, sg_cfg, dbuf_cfg) | Lets the driver check compatibility and discover which features, widths and counts this build has |
-| S03 | Release the PHY and wait for its clock | M | APB4 write, then poll | write `u2_ctrl.phy_rst` = 0; poll `u2_sts.phy_clk_ok` = 1 | Keeps the PHY in reset until its supply is stable and proves that CLK-PHY runs before the protocol engines are used |
+| S03 | Release the PHY and wait for its clock | M | APB4 write, then poll | write `u2_ctrl.phy_rst` = 0; poll `u2_sts.phyclk_ok` = 1 | Keeps the PHY in reset until its supply is stable and proves that CLK-PHY runs before the protocol engines are used |
 | S04 | ULPI build? | O (condition: `u2_build.phy_ulpi` = 1) | APB4 read | read `u2_build.phy_ulpi` | Selects the optional PHY configuration path |
-| S05 | Configure the PHY registers | O (ULPI builds) | APB4 write and poll | write `u2_phy_acc.reg_addr`, `wdata`, `rd_wr` = 1, `start` = 1; poll `u2_phy_acc.busy` = 0 or wait for `u2_irq_raw.phy_done` | Writes PHY registers such as the function control register through the ULPI register commands |
-| S06 | Divide the FIFO | M | APB4 write | `u2_fifo_rx.start` and `size`; `u2_fifo_hnp`; `u2_fifo_hpt`; `u2_epi_fifo.start` and `size` per IN endpoint | Assigns RAM regions to receive, host transmit and device IN endpoints before any packet arrives, so that no region overlaps |
+| S05 | Configure the PHY registers | O (ULPI builds) | APB4 write and poll | write `u2_phy_acc.reg_addr`, `wdata`, `rd_wr` = 1, `start` = 1; poll `u2_phy_acc.busy` = 0 or wait for `u2_irq_raw.phy_done`; registers written at start-up: Function Control (XcvrSelect, TermSelect, OpMode), OTG Control (IdPullup, DpPulldown, DmPulldown for the role, DrvVbus in host role), USB Interrupt Enable Rising and Falling (all 1, needed in low power mode) | Writes the PHY registers through the ULPI register commands so that the PHY is in the mode of the role before the first packet |
+| S06 | Divide the FIFO | M | APB4 write | `u2_fifo_rx.start` and `size`; `u2_fifo_hnp`; `u2_fifo_hpt`; `u2_epi_buf.start` and `size` per IN endpoint | Assigns RAM regions to receive, host transmit and device IN endpoints before any packet arrives, so that no region overlaps |
 | S07 | DMA used? | O (condition: AXI master build or an external DMA controller) | APB4 read | read `u2_build.axi_slave` | Chooses between programming the DMA and moving data through the FIFO window |
-| S08 | Program the DMA | O (DMA path) | APB4 write | `u2_dma_cfg.burst_len`, `axi_cache`, `axi_prot`, `req_thr`, `sg_mode` (descriptor lists, scatter-gather builds); `u2_dma_hi.addr_hi`; `u2_dmach_map.region`, `dir_in`, `ch_en` (AXI slave builds); `u2_ctrl.dma_en` = 1 | Sets burst length, attributes and the channel map so the DMA can serve the FIFO regions |
-| S09 | Enable interrupts | M | APB4 write | `u2_irq_en` (all causes the driver handles); `u2_epi_int_en`, `u2_epo_int_en`, `u2_hc_int_en` | Lets the chosen causes reach `o_int_usb` |
+| S08 | Program the DMA | O (DMA path) | APB4 write | `u2_dma_cfg.burst_len`, `axi_cache`, `axi_prot`, `req_thr`, `sg_mode` (descriptor lists, scatter-gather builds); `u2_dma_hi.addr_hi`; `u2_dma_map.region`, `dir_in`, `ch_en` (AXI slave builds); `u2_ctrl.dma_en` = 1 | Sets burst length, attributes and the channel map so the DMA can serve the FIFO regions |
+| S09 | Enable interrupts | M | APB4 write | `u2_irq_en` (all causes the driver handles); `u2_epi_ien`, `u2_epo_ien`, `u2_hc_ien` | Lets the chosen causes reach `o_int_usb` |
 | S10 | Enable the core | M | APB4 write | `u2_ctrl.core_en` = 1 | Starts the engines after all configuration is in place |
 | S11 | Role | M | APB4 read | read `u2_sts.role` (dual-role builds read `u2_sts.id_a_plug`; write `u2_ctrl.role_ovr_en` and `role_ovr` to override) | Selects the device or the host path |
-| S12 | Device: connect | O (device role) | APB4 write | `u2_dctrl.soft_conn` = 1 after `u2_sts.vbus_valid` = 1; wait for `u2_irq_raw.rst` and `enum`, read `u2_sts.speed` | Connects the pull-up so the host sees the device and learns the negotiated speed |
-| S13 | Device: set address and arm endpoints | O (device role) | APB4 write | `u2_dctrl.dev_addr`; per endpoint `u2_epi_ctrl` or `u2_epo_ctrl` (`mps`, `type`, `ep_en`), `u2_epi_xfer` or `u2_epo_xfer` (`xsize`, `pkt_cnt`), `u2_epi_dma` or `u2_epo_dma` (`addr`); optional `dbuf` and `zlp_en` (IN) or `short_end` (OUT) in the control register | Matches the address of the host request and arms the transfers of the function |
-| S14 | Host: VBUS, reset and SOF | O (host role) | APB4 write | `u2_hport.oc_en` = 1 and `u2_hport.vbus_drv` = 1 (clear `u2_irq_raw.ocur` after an over-current); wait for `u2_hsts.port_conn`; `u2_hport.port_rst` = 1 and poll until clear; wait for `enum`; `u2_hport.sof_en` = 1 | Powers the port, resets and chirps the attached device, and starts the frame timing |
-| S15 | Host: run a channel | O (host role) | APB4 write | `u2_hc_ctrl` fields, `u2_hc_split` (split builds), `u2_hc_xfer`, `u2_hc_dma`, `u2_hc_cfg` (`dbuf`, `zlp_en`, `short_end`, `poll_en`, `poll_rep`, `interval`); `u2_hc_ctrl.ch_en` = 1; read `u2_hc_int` | Programs one device endpoint transfer and reads its result |
+| S12 | Device: connect | O (device role) | APB4 write | `u2_dctrl.soft_conn` = 1 after `u2_sts.vbus_valid` = 1; wait for `u2_irq_raw.busrst` and `enum`, read `u2_sts.speed` | Connects the pull-up so the host sees the device and learns the negotiated speed |
+| S13 | Device: set address and arm endpoints | O (device role) | APB4 write | `u2_dctrl.dev_addr`; per endpoint `u2_epi_ctl` or `u2_epo_ctl` (`mps`, `type`, `ep_en`), `u2_epi_xfr` or `u2_epo_xfr` (`xsize`, `pkt_cnt`), `u2_epi_dma` or `u2_epo_dma` (`addr`); optional `dbuf` and `zlp_en` (IN) or `short_end` (OUT) in the control register | Matches the address of the host request and arms the transfers of the function |
+| S14 | Host: VBUS, reset and SOF | O (host role) | APB4 write | `u2_hport.oc_en` = 1 and `u2_hport.vbus_drv` = 1 (clear `u2_irq_raw.ocur` after an over-current); wait for `u2_hsts.port_conn`; `u2_hport.prst` = 1 and poll until clear; wait for `enum`; `u2_hport.sof_en` = 1 | Powers the port, resets and chirps the attached device, and starts the frame timing |
+| S15 | Host: run a channel | O (host role) | APB4 write | `u2_hc_ctrl` fields, `u2_hc_spl` (split builds), `u2_hc_xfer`, `u2_hc_dma`, `u2_hc_cfg` (`dbuf`, `zlp_en`, `short_end`, `poll_en`, `poll_rep`, `interval`); `u2_hc_ctrl.ch_en` = 1; read `u2_hc_int` | Programs one device endpoint transfer and reads its result |
 | S16 | Service interrupts | M | APB4 read and write | read `u2_irq_sts`; read `u2_ep_sum_i`, `u2_ep_sum_o`, `u2_hc_sum`; clear flags with writes of 1 to `u2_irq_raw`, `u2_epi_int`, `u2_epo_int`, `u2_hc_int` | Finds the cause of `o_int_usb` and clears the sticky flags; a new event in the cycle of the clear is kept |
 | S17 | Suspend, resume or LPM | O (condition: bus idle, power policy) | APB4 write | host: `u2_hport.port_susp`, `port_res`, `lpm_req` with `lpm_hird`, `lpm_rwake`, `lpm_addr`; device: `u2_dctrl.rmt_wake`; `u2_lpm_cfg.resp` | Saves power and wakes the bus within the limits of REQ-FUNC-018 to REQ-FUNC-021 |
-| S18 | Soft reset | O (condition: error recovery) | APB4 write, then poll | `u2_ctrl.soft_rst` = 1; poll until 0; clear `u2_ctrl.core_en` first | Returns the protocol engines to idle without clearing the registers, then the sequence restarts at S02 |
+| S18 | Soft reset | O (condition: error recovery) | APB4 write, then poll | `u2_ctrl.swrst` = 1; poll until 0; clear `u2_ctrl.core_en` first | Returns the protocol engines to idle without clearing the registers, then the sequence restarts at S02 |
 | S19 | Link loopback self-test | O (condition: bring-up without a PHY) | APB4 write, then read | write `u2_ctrl.lpbk` = 1 and `u2_lpbk_sts.clr` = 1 before `u2_ctrl.core_en` = 1; run a channel or endpoint transfer; read `u2_lpbk_sts.pkt_ok` and `pkt_err`; clear `u2_ctrl.lpbk` afterward | Checks PID, CRC, FIFO and DMA paths of the link without a PHY before the real bus is used |
+
+**Register writes that cross to CLK-PHY.** Before a group of writes to endpoint, channel, FIFO, role or enable fields software reads `u2_sts.xq_free` and issues at most that many writes (REQ-REG-002); a write while `xq_free` is 0 is dropped and sets `xq_ovf`. A written value reaches the engines within 8 cycles of the slower clock after it enters the register command FIFO, so software starts a transfer with `ep_en` or `ch_en` as the last write of its group and waits for the flags of the endpoint or channel, never for an immediate effect.
 
 ### 11.3 CSR connection to the design
 
 | Workbook register.field | Direction at the CSR | Design signal | Clock domain of the signal | Behavior notes |
 |---|---|---|---|---|
 | `u2_ctrl` (`core_en`, `phy_rst`, `role_ovr_en`, `role_ovr`, `dma_en`, `ahb_err_stop`) | control out | enables, role override and DMA control | CLK-BUS, synchronized to CLK-PHY by CDC-001 | Changed only while `core_en` is 0 except `core_en` itself |
-| `u2_ctrl.soft_rst` | control out and hardware load (rwi) | soft-reset request and completion | CLK-BUS | Software write wins over a hardware clear in the same cycle; hardware clears it again after the reset ends |
+| `u2_ctrl.swrst` | control out and hardware load (rwi) | soft-reset request and completion | CLK-BUS | Software write wins over a hardware clear in the same cycle; hardware clears it again after the reset ends |
 | `u2_sts`, `u2_build` | status in | speed, role, line state, VBUS, ID, build parameters | CLK-PHY synchronized by CDC-002; constants | Values are read only; line state may change at any time |
 | `u2_irq_raw` | hardware load (w1c) | event pulses from both domains | CLK-BUS after CDC-003 | Hardware set wins over a software clear |
 | `u2_irq_en`, `u2_irq_inj`, `u2_irq_sts` | control out and status in | interrupt masks and injection | CLK-BUS | Injection raises the raw flag on the rising edge |
 | `u2_dctrl`, `u2_dsts` | control out and status in | device address, connect, remote wake, test mode, frame number, LPM state | CLK-PHY via CDC-001 and CDC-002 | `rmt_wake` is rwi: hardware clears it when the resume ends |
-| `u2_hport`, `u2_hsts` | control out, hardware load, status in | root port reset, suspend, resume, VBUS, SOF, LPM request, port status | CLK-PHY via CDC-001 and CDC-002 | `port_rst`, `port_susp`, `port_res`, `lpm_req` are rwi |
+| `u2_hport`, `u2_hsts` | control out, hardware load, status in | root port reset, suspend, resume, VBUS, SOF, LPM request, port status | CLK-PHY via CDC-001 and CDC-002 | `prst`, `port_susp`, `port_res`, `lpm_req` are rwi |
 | `u2_sof_cfg`, `u2_dma_cfg`, `u2_dma_hi` | control out | microframe length, DMA burst and attributes, high address | CLK-PHY (sof_cfg) and CLK-BUS (DMA) | Written before enable |
 | `u2_phy_acc` | control out, hardware load, status in | ULPI register access | CLK-PHY via CDC-001 and CDC-002 | `start` is rwi, cleared when the access ends |
-| `u2_fifo_rx`, `u2_fifo_hnp`, `u2_fifo_hpt`, `u2_fifo_ctl`, `u2_epi_fifo` | control out and hardware load | FIFO region pointers and flush requests | CLK-PHY via CDC-001 | Written before `core_en`; flush bits are rwi |
+| `u2_fifo_rx`, `u2_fifo_hnp`, `u2_fifo_hpt`, `u2_fifo_ctl`, `u2_epi_buf` | control out and hardware load | FIFO region pointers and flush requests | CLK-PHY via CDC-001 | Written before `core_en`; flush bits are rwi |
 | `u2_ep_sum_i`, `u2_ep_sum_o`, `u2_hc_sum` | status in | OR of the enabled flags per entry | CLK-BUS | Read only |
 | `u2_lpm_cfg` | control out | LPM answer and runtime enable | CLK-PHY via CDC-001 | Has effect only in LPM builds |
-| `u2_dmach_map` | control out | DMA channel to region map | CLK-BUS | Used in AXI slave builds |
-| `u2_epi_*`, `u2_epo_*` banks | control out, hardware load, status in | per-endpoint configuration, transfer, DMA address, interrupt flags | CLK-PHY via CDC-001 and CDC-003 | `ep_en` is rwi; `xsize`, `pkt_cnt` and `addr` are updated by hardware |
-| `u2_hc_*` banks | control out, hardware load, status in | per-channel configuration, transfer, split, interrupt flags | CLK-PHY via CDC-001 and CDC-003 | `ch_en`, `ch_dis` are rwi |
+| `u2_dma_map` | control out | DMA channel to region map | CLK-BUS | Used in AXI slave builds |
+| `u2_epi_*`, `u2_epo_*` banks | control out, hardware load, status in | per-endpoint configuration, transfer, DMA address, interrupt flags | CLK-PHY via CDC-001 and CDC-002 | `ep_en` is rwi; `xsize`, `pkt_cnt` and `addr` are updated by hardware |
+| `u2_hc_*` banks | control out, hardware load, status in | per-channel configuration, transfer, split, interrupt flags | CLK-PHY via CDC-001 and CDC-002 | `ch_en`, `ch_dis` are rwi |
 | `u2_hc_cfg` bank | control out and status in | double buffer, termination, polling and interval of each channel | CLK-PHY via CDC-001 | `buf_cur` is status; others written before `ch_en` |
 | `u2_lpbk_sts`, `u2_ctrl.lpbk` | control out, hardware load, status in | loopback mux and packet counters | CLK-PHY via CDC-001 and CDC-002 | `clr` is rwi, cleared by hardware |
 | `u2_hport.oc_en`, `u2_hsts.oc_act`, `u2_irq_raw.ocur` | control out and status in, hardware load | over-current enable, input state and event | CLK-BUS (`m_usb2_ocp`) | The flag is w1c and is held until software clears it |
 | `u2_dma_cfg.sg_mode`, `u2_build` extension fields | control out and status in | descriptor mode and build constants | CLK-BUS | Constants are tied from PARA_USB2_SG_EN, PARA_USB2_DBUF_EN and PARA_USB2_FIFO_DEPTH |
 
-A signal from a clock domain other than the register clock is synchronized by the IP, not by the CSR. In one cycle a software write to an `rwi` field wins over a hardware load of the same field, so the IP repeats a lost load: a completion clear is held until the CSR shows the bit as 0, and a count-down update is re-applied in the next cycle. A hardware load to a `w1c` field wins over a software clear, so a new event is kept.
+A signal from a clock domain other than the register clock is carried by the register command FIFO and the register update FIFO of section 7.2, not synchronized bit by bit by the CSR. Rule for a software write that meets a hardware update of the same `rwi` field (REQ-REG-003): every software write to the register increments the generation tag of that register in CLK-BUS and sends the written word to CLK-PHY; an update entry from CLK-PHY carries the tag it was produced under and is applied only if the tag still equals the CSR-side tag, otherwise it is dropped because a newer software value is in flight. A `count-down` field such as xsize therefore never loses the software value, and a stale count never overwrites it. A hardware load to a `w1c` field wins over a software clear, so a new event is kept.
 
 ### 11.4 APB access behavior of the CSR
 
 | Case | Behavior |
 |---|---|
 | Normal read or write | PREADY after 1 wait state because Asynchronous = 0 (single clock `i_clk_apb`) |
-| Write with PSTRB not all ones | PSLVERR and no change when `i_slverr_en` = 1; whole-word write when 0 |
+| Write with PSTRB not all ones | PSLVERR and no change when `i_slverr_en` = 1; when 0, no PSLVERR and only the byte lanes selected by PSTRB are updated (generator 3.6) |
 | Address not word aligned | PSLVERR when `i_slverr_en` = 1 |
 | Aligned address that is not a register | OKAY; read returns 0; write is ignored |
 | Non-secure access (PPROT[1] = 1) | PSLVERR when `i_protect_en` = 1 and `i_slverr_en` = 1 |
@@ -4813,6 +4911,20 @@ A signal from a clock domain other than the register clock is synchronized by th
 | Reset | Registers take the reset value of the workbook; asynchronous assert, release synchronous to `i_clk_apb` |
 
 These cases are the behavior of the APB-CSR-Generator listed in the generator reference of the skill; the exact generator version is pinned at RTL generation (DEP-002).
+
+### 11.5 Software integration and driver plan
+
+**Compatibility statement (review F-013).** The register model of REF-005 is new: it is not register-compatible with DWC_otg, Mentor MUSB or ChipIdea, so no existing Linux gadget or host controller driver, TinyUSB port or vendor HAL runs on it unchanged. A driver for this IP is a deliverable of the product plan, not of this specification.
+
+| Driver module | Scope | Registers used |
+|---|---|---|
+| Core and PHY | probe by `u2_version` and `u2_build`, reset and clock sequence S01 to S03, PHY register setup S05 | `u2_ctrl`, `u2_sts`, `u2_build`, `u2_phy_acc` |
+| FIFO and DMA | region division S06, DMA setup S08, descriptor lists, window check | `u2_fifo_*`, `u2_dma_*`, `u2_dma_map` |
+| Interrupt service | S16: read `u2_irq_sts`, summaries, per-entry flags, clear by w1c | `u2_irq_*`, `u2_ep_sum_*`, `u2_hc_sum`, `u2_epi_int`, `u2_epo_int`, `u2_hc_int` |
+| Device stack | enumeration, EP0 control state machine, endpoint arm and halt, remote wakeup, LPM answer | `u2_dctrl`, `u2_dsts`, `u2_epi_*`, `u2_epo_*`, `u2_lpm_cfg` |
+| Host stack | port reset and enumeration, channel scheduling, split, polling, over-current | `u2_hport`, `u2_hsts`, `u2_hc_*` |
+
+EP0 control transfer reference (device): arm EP0 OUT for the SETUP packet (`ep_en`), on the `setup` flag read the eight bytes from the receive region, arm the data stage with `xsize` and the direction, arm the status stage in the opposite direction with a zero-length packet, and on `ep_dis` or `stall` follow the halt rules of REF-001 section 8.5.3. A DWC_otg-compatible register view is an option that would cost registers and is recorded as TBD-013 for a product decision.
 
 ## 12. Error handling and recovery
 
@@ -4832,6 +4944,9 @@ These cases are the behavior of the APB-CSR-Generator listed in the generator re
 | ERR-012 | Descriptor error: AXI error while reading or writing a descriptor, or `len` larger than the buffer region | List stopped, `err` written back when possible | `dma_err`, `axi_err` | Write 1; software rebuilds the list | Cleared |
 | ERR-013 | Over-current: `i_ovrcur_n` low for 16 CLK-BUS cycles while `oc_en` = 1 | Power off, port in the over-current state | `ocur` | Clear the flag and write `vbus_drv` again | Flag cleared by reset; power off after reset |
 | ERR-014 | Poll miss: polled data not consumed at the next interval | Next transaction deferred | `poll_miss`, `hc_xfer` | Write 1; software drains the buffer | Cleared |
+| ERR-015 | FIFO RAM parity error on a read (PARA_USB2_RAM_PAR_EN = 1) | Packet aborted, no handshake (IN) or NAK (OUT) | `ram_par` | Write 1; software resets the endpoint | Cleared |
+| ERR-016 | Register command FIFO full | Write dropped | `xq_ovf` | Write 1; software reads `xq_free` before writing | Cleared |
+| ERR-017 | DMA address outside the window (win_en = 1) | Transfer stopped before the AXI access | `dma_err` | Write 1; software corrects the address | Cleared |
 
 Simultaneous errors set their own flags independently; there is no priority. A transmit-time error of the PHY aborts the packet and the flags of the packet type are set.
 
@@ -4844,8 +4959,29 @@ Simultaneous errors set their own flags independently; there is no priority. A t
 | PPA-003 | Area per configuration | To be measured | CFG-MIN, CFG-FC-DEV, CFG-CAM-HOST, CFG-DUAL-FULL after synthesis; the DWC_otg databook reports that host-only or device-only builds save 2 to 3K gates and LPM adds about 1.2K (REF-011, for scale only) | Synthesis area report | Goal after measurement |
 | PPA-004 | Power | Clock gating of idle engines, FIFO RAM enable only on access | Activity from simulation | Power analysis | Goal |
 | PERF-001 | Isochronous throughput | 24.576 MB/s sustained without overflow | CLK-BUS at 100 MHz or faster, AXI4 master, no wait states on the interconnect | Simulation | Goal |
-| PERF-002 | Device response time | Handshake start within 192 bit times of the packet end; internal pipeline budget 20 cycles of CLK-PHY including the ULPI pipeline | HS | Simulation with timing checker | Hard |
+| PERF-002 | Device response time (link decision time from the end of the received packet to TXValid or the TX CMD) | At most 14 CLK-PHY cycles at 60 MHz (UTMI+ 8-bit and ULPI, REF-006 and REF-007 Table 10) and at most 4 cycles at 30 MHz (UTMI+ 16-bit); within 24 cycles (192 bit times) at the connector | HS | Simulation with timing checker, cycle budget table below | Hard |
 | PERF-003 | Bus-side latency | At most 8 cycles of the slower clock for a window access through CDC-004 | Any ratio | Simulation | Goal |
+
+**Turnaround cycle budget (review F-009).** A device that answers a token must start its packet within 192 bit times (REF-001 section 7.1.18.2, 24 cycles at 60 MHz, 12 cycles at 30 MHz). The PHY consumes part of it: the Receive End Delay is 3 to 8 CLK at 60 MHz and 2 to 6 CLK at 30 MHz, and the TX Start Delay is 1 to 2 CLK (UTMI 1.05 section 6.4 and REF-006 section 2.1.1.5; ULPI Table 9). What remains for the link is the SIE decision time:
+
+| Interface | Limit at the connector | PHY Receive End Delay (max) | PHY TX Start Delay (max) | Link decision time allowed | Link path of this IP (stages) | Margin |
+|---|---|---|---|---|---|---|
+| UTMI+ 8-bit, 60 MHz | 24 CLK | 8 CLK | 2 CLK | 14 CLK (UTMI 1.05) | handshake 3, IN data 4 | 10 CLK |
+| UTMI+ 16-bit, 30 MHz | 12 CLK | 6 CLK | 2 CLK | 4 CLK | handshake 3, IN data 4 with prefetch | 0 CLK for IN data |
+| ULPI 8-bit, 60 MHz | 24 CLK | 8 CLK | 2 CLK | 14 CLK (ULPI Table 10, receive-transmit 1 to 14) | handshake 4, IN data 5 (TX CMD stage) | 9 CLK |
+
+Link path stages: (1) RXActive falling edge detected, (2) token CRC5 and endpoint match, (3) handshake or PID byte presented, (4) first data word available (the first word of every armed IN packet is prefetched into the engine before the IN token, so no RAM latency is on the path), (5) ULPI TX CMD driven. The 16-bit configuration has no margin for IN data, so it needs the prefetch and no extra pipeline stage. Host transmit-to-transmit spacing is 88 to 192 bit times (11 to 24 CLK at 60 MHz; ULPI Table 10: 15 to 24 clocks counted from stp).
+
+**Area proxy and power assumption (review F-012).** Label: proxy, not a mapped area (no library or corner).
+
+| Item | Default counts | Maximum counts | Basis |
+|---|---|---|---|
+| CSR control flip-flops (rw, rwi, w1c bits) | 3 873 | 6 939 | `csr/regs_usb2.json`; banks of 9 endpoint, 8 channel and 4 DMA entries (default) or 16 each (maximum) |
+| CSR status inputs (ro bits) | 300 | 364 | same source, not flip-flops |
+| FIFO RAM | 4 KB (1 024 x 32) | 128 KB (32 768 x 32) | PARA_USB2_FIFO_DEPTH default and maximum, plus one parity bit per word |
+| Crossing FIFOs | 2 x 8 x 48 + 8 x 36 bits | same | CDC-001, CDC-002, MEM-002 |
+
+Power assumption: activity of the CLK-PHY domain follows the traffic, the FIFO RAM is enabled only on an access, and an idle bus (suspend, L1) stops CLK-PHY through the PHY; a power number is produced only from simulation activity of TEST-006 and TEST-017 on the CFG-DUAL-FULL netlist. Evaluation of sharing the device and host register banks (the DWC_otg databook, REF-011 table 3-4, reuses the device registers as host registers because the roles are exclusive): the host banks hold 1 288 control flip-flops at 8 channels, about a third of the default total; sharing is not adopted in this release because it changes the software model (TBD-013).
 
 Timing closure is not claimed from RTL synthesis alone. The SDC and analysis flow are described in section 17.
 
@@ -4881,6 +5017,12 @@ Use statically bounded, zero-based generate loops and declare the genvar in the 
 | `m_usb2_poll` | Interval timers of the host channels (inside the host engine) | `u_poll` in `m_usb2_host` | CLK-PHY | frame and microframe counts, channel requests |
 | `m_usb2_ocp` | Over-current synchronizer, filter and power-off control | `u_ocp` | CLK-BUS | `i_ovrcur_n`, `o_vbus_pwr_en`, event |
 | `m_usb2_lpbk` | Loopback multiplexer and packet counters (inside the link) | `u_lpbk` in `m_usb2_lnk` | CLK-PHY | byte stream, counters |
+| `m_usb2_xreg` | Register command FIFO, register update FIFO, generation tags, shadow registers of CLK-PHY (CDC-001, CDC-002) | `u_xreg` | both | CSR write strobes and hardware loads, shadow registers, update stream |
+| `m_usb2_ulpilp` | ULPI low power wake detector and hand-off of `o_ulpi_stp` (always on, CDC-007) | `u_ulpilp` in `m_usb2_phyif_ulpi` | CLK-BUS | `i_ulpi_dir`, `i_ulpi_data[3:0]`, `o_ulpi_stp` request |
+| `m_usb2_cfgchk` | Elaboration check of the parameters and derivation of the bank counts (REQ-PARAM-003, REQ-PARAM-004) | `u_cfgchk` | none (elaboration) | parameters |
+| `m_usb2_regs` | Generated CSR integration: CSR instance, slot decode, hardware-load decode, `m_usb2_xreg` and `m_usb2_irq` instances (DEC-001, DEC-002) | `u_regs` | both | APB4, shadow words, published words, event sets, command clears |
+| `m_usb2_lnkrx`, `m_usb2_lnktx` | Packet receiver and packet transmitter of the link (DEC-005) | `u_rx`, `u_tx` in `m_usb2_lnk` | CLK-PHY | PHY byte lanes, packet events, payload stream |
+| `m_usb2_cdc_fifo` | Crossing of the FIFO bus port: request, response and event FIFOs (DEC-006) | `u_cdc_fifo` | both | bus operations, rows, packet and credit events |
 | `m_vlsit_csr_usb2` | Generated CSR | `u_csr` | CLK-BUS | APB4 |
 | `m_usb2_rst`, `m_usb2_cdc_level`, `m_usb2_cdc_pulse`, `m_usb2_cdc_fifo` | Reset synchronizers and crossings (library cells and common_rtl modules) | `u_rst`, `u_cdc_*` | both | resets, crossing signals |
 
@@ -4890,18 +5032,33 @@ The structural top holds only instances; the state of each function lives in the
 
 | Item | Value / source |
 |---|---|
-| Top / source file list | One of the four wrappers; `filelist.f` generated with the RTL (TBD-008) |
-| Frontend version and options | To be fixed at RTL generation |
+| Top / source file list | One of the four wrappers; `filelist.f` generated with the RTL (rtl/filelist.f) |
+| Frontend version and options | Verilator 5.053 lint (`--lint-only`), library `common_rtl` cells and FIFO; the file lists one `rtl/filelist_*.f` file for each wrapper and `rtl/filelist.f` (utmi_axim) hold the sources in compile order |
 | Parameters/configuration | One of CFG-FC-DEV, CFG-CAM-HOST, CFG-DUAL-FULL, CFG-MIN of section 8 |
 | Libraries/corners | To be fixed by the SoC flow |
 | Memory flow | FIFO RAM as `u_dont_touch_sram` wrapper around a memory-compiler macro (DEP-004) |
 | Lint rule configuration | VLSIT rule check and the lint flow of the RTL skill |
+| Expected critical paths | CRC16 update per byte in `m_usb2_crc16` (one byte per cycle at 60 MHz, a pipeline stage between byte capture and remainder); token decode and endpoint match (stage 2 of the turnaround path); RAM arbitration of `m_usb2_fifo`; address generation of the DMA at CLK-BUS; a synthesis run of CFG-DUAL-FULL is required before RTL sign-off |
+
+### 14.4 Integration checklist
+
+| Item | What the integrator provides or checks |
+|---|---|
+| Wrapper | choose one of `m_usb2_top_utmi_axim`, `_utmi_axis`, `_ulpi_axim`, `_ulpi_axis`; set the parameters of section 8 |
+| Clocks | `i_clk_phy` from the PHY (60 MHz or 30 MHz); `i_clk_bus` at 30 MHz or faster (100 MHz or faster for REQ-PERF-001); asynchronous groups of EXC-001 |
+| Resets | `i_rst_n_phy`, `i_rst_n_bus`; `o_phy_rst_n` to the PHY; release order in section 11.2 S01 to S03 |
+| Tie-offs | `i_protect_en`, `i_slverr_en` constants; `i_ovrcur_n` = 1 when no switch flag exists; `i_dft_test_en` = 0, `i_dft_scan_en` = 0 outside test; unused AXI or DMA ports of the other profile do not exist in the wrapper |
+| Pads | bidirectional `io_ulpi_data` pad wrapper driven by `o_ulpi_data_oe`, `o_ulpi_data`, `i_ulpi_data`; `o_ulpi_stp` must be a pin that the link can drive while CLK-PHY is stopped |
+| Macros | FIFO RAM macro of `LPARA_USB2_RAM_W` (+1 parity) bits and PARA_USB2_FIFO_DEPTH words, wrapped as `u_dont_touch_sram`; library synchronizer cells |
+| VBUS | `o_vbus_pwr_en` to the load switch and `i_ovrcur_n` from its flag; board filter (ASM-022) |
+| Interrupt and DMA | `o_int_usb` to the interrupt controller; DMA channel mapping for AXI-slave builds; address window of the SoC (u2_dma_wbase and wlim) |
+| Power-up checks | read `u2_version` and `u2_build`; wait for `u2_sts.phyclk_ok`; run the loopback self-test S19 if no PHY is wired yet |
 
 ## 15. Verification specification
 
 ### 15.1 Scope and strategy
 
-Levels: block simulation of the link, engines and PHY adapters; interface protocol checking for UTMI+, ULPI, APB4 and AXI4; integration simulation with a USB bus functional model for a host and a device and a PHY model; formal proof of the CRC modules and of the FIFO pointer invariants; CDC and RDC analysis; lint and synthesis checks; FPGA prototype with a USB PHY chip after RTL; no post-silicon plan in this release. Random tests use a recorded seed; a failing seed is reproducible. Configurations: the four of section 8 plus a minimum and maximum endpoint count.
+Levels: block simulation of the link, engines and PHY adapters; interface protocol checking for UTMI+, ULPI, APB4 and AXI4; integration simulation with a USB bus functional model for a host and a device and a PHY model; formal proof of the CRC modules and of the FIFO pointer invariants; CDC and RDC analysis; lint and synthesis checks; FPGA prototype with a USB PHY chip after RTL, with interoperability runs against real stacks (REQ-VER-003); simulation time scaling by PARA_USB2_TSCALE (REQ-VER-002); no post-silicon plan in this release. Random tests use a recorded seed; a failing seed is reproducible. Configurations: the four of section 8 plus a minimum and maximum endpoint count.
 
 ### 15.2 Requirement-based test plan
 
@@ -4934,8 +5091,16 @@ Levels: block simulation of the link, engines and PHY adapters; interface protoc
 | TEST-025 | REQ-FUNC-032 | Interrupt channels with interval 1, 3, 100 and a NAKing device; poll_rep with and without draining | Transactions at the right microframes, retry on NAK, poll_miss set | Directed with timing checker | CFG-CAM-HOST |
 | TEST-026 | REQ-FUNC-033 | Isochronous IN token with no data; isochronous OUT with a CRC error; host isochronous transfer that misses its microframe | iso_inc flags in the endpoint, channel and global registers; no retry | Directed | CFG-DUAL-FULL |
 | TEST-027 | REQ-FUNC-034, REQ-IF-010 | Glitch of 15 and 16 cycles on i_ovrcur_n, oc_en 0 and 1, restore of power | Power off within 2 cycles after 16 low cycles, restore only after the flag is cleared | Directed, CDC analysis | CFG-CAM-HOST |
-| TEST-028 | REQ-FUNC-036 | Descriptor lists of 1, 2 and 8 descriptors with ioc, last, a short packet, a bad length and an AXI error on a descriptor | Status written back once; interrupt only on ioc, list end or error | Directed, protocol checker | CFG-CAM-HOST |
+| TEST-028 | REQ-FUNC-036 | Descriptor lists of two OUT and two IN packets with the last and ioc bits set, an OUT packet longer than the buffer of its descriptor, and the pointer after each packet | Status written back once per packet with the software bits kept; pointer advanced by 8; `err` and `dma_err` for the long packet which is not stored; data of the OUT and IN packets match | Directed, protocol checker | CFG-CAM-HOST |
 | TEST-029 | REQ-FUNC-035 | lpbk = 1 with good and corrupted packets; counter clear and saturation | Counters match; PHY pins idle | Directed | all configurations |
+| TEST-030 | REQ-CLK-003, REQ-REG-002, REQ-REG-003 | Bursts of CSR writes longer than xq_free, hardware updates of xsize racing software writes, soft reset with entries in flight, random CLK-PHY and CLK-BUS ratios | Order preserved, overflow flagged by xq_ovf, stale updates dropped, no torn value read | Directed, random, formal, CDC analysis | all configurations |
+| TEST-031 | REQ-IF-011, REQ-IF-013, REQ-FUNC-041 | ULPI low power entry, clock stop, wake by stp, resume detection by the wake detector, ID bit and OTG Control writes, DrvVbus clear after over-current | Sequences of REF-007 3.9.2 and 3.9.3 hold; role follows the ID bit | Directed with PHY model | CFG-FC-DEV, CFG-DUAL-FULL |
+| TEST-032 | REQ-IF-012 | XcvrSelect, TermSelect, OpMode and pull-down values at every bus state of the table of section 6.3, including chirp and test modes | Values equal the table and change only while idle | Protocol checker, directed | CFG-CAM-HOST, CFG-MIN |
+| TEST-033 | REQ-FUNC-038, REQ-FUNC-039 | Split transactions with interrupt IN, isochronous IN and bulk OUT through a hub model with NYET, NAK, error and microframe Y6 cases | Start-split and complete-split microframes as in REF-001 11.18.4; three-strike retry | Directed | CFG-CAM-HOST |
+| TEST-034 | REQ-FUNC-037 | Host SOF stream across selective suspend and L1 with the timer kept running | SOF phase equal before and after | Directed with timing checker | CFG-DUAL-FULL |
+| TEST-035 | REQ-FUNC-040, REQ-IF-014 | Single-bit RAM faults injected on read of IN and OUT packets; DMA buffers and descriptors inside, on the edge of and outside the window | ram_par flag, packet aborted, no wrong data sent; transfers outside the window stopped before the AXI access | Fault injection, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
+| TEST-036 | REQ-PARAM-003, REQ-PARAM-004, REQ-VER-002 | Elaborate every configuration, derive the bank counts, reject too-small FIFO depths; run the reset and suspend tests with TSCALE = 256 and with TSCALE = 1 | Counts derived; illegal depth rejected; timings correct in both runs | Lint, elaboration, simulation | all configurations |
+| TEST-037 | REQ-VER-003 | Device role with a Linux host stack (CDC-ACM, mass storage) and host role with a Linux device (UVC, CDC-ACM) on an FPGA prototype with a USB PHY chip | Enumeration and data transfer pass | FPGA interoperability | CFG-DUAL-FULL |
 
 Cover reset and release, minimum and maximum parameters, backpressure, simultaneous events, ordering, errors, invalid inputs, boundaries and low-power transitions through the tests above.
 
@@ -4954,6 +5119,10 @@ Cover reset and release, minimum and maximum parameters, backpressure, simultane
 | SVA-009 | `o_vbus_pwr_en` is 0 within 2 CLK-BUS cycles after 16 consecutive low samples of `i_ovrcur_n` while `oc_en` = 1 | REQ-FUNC-034 | Simulation | Never fails |
 | SVA-010 | A descriptor status is written back exactly once and the list stops at `last` | REQ-FUNC-036 | Simulation | Never fails |
 | SVA-011 | With `dbuf` = 1 the two buffers of a region never overlap and are used alternately | REQ-FUNC-029 | Simulation, formal | Never fails |
+| SVA-012 | The register command FIFO never overflows silently: a write while xq_free = 0 is dropped and sets xq_ovf; the order of commands is preserved | REQ-CLK-003, REQ-REG-002 | Simulation, formal | Never fails |
+| SVA-013 | A hardware update whose generation tag differs from the CSR-side tag never changes the CSR field | REQ-REG-003 | Simulation, formal | Never fails |
+| SVA-014 | `o_ulpi_stp` has no glitch at the hand-off between CLK-PHY and the wake detector, and is released only in the cycle after `i_ulpi_dir` falls | REQ-IF-011 | Simulation | Never fails |
+| SVA-015 | A parity error aborts the packet and no wrong data is sent | REQ-FUNC-040 | Simulation, fault injection | Never fails |
 | COV-001 | Every PID type received and sent in each role | REQ-FUNC-002 | Functional coverage | 100 % |
 | COV-002 | Each FSM state and transition of section 10.1 | REQ-FUNC-001 | Code and functional coverage | 100 % of reachable |
 | COV-003 | Each speed and role combination, each endpoint type, each interrupt cause | REQ-FUNC-023 | Functional coverage | 100 % |
@@ -4973,10 +5142,10 @@ Verification-only code stays outside the synthesis RTL. The X policy: no X on an
 | Topic | Requirement / decision |
 |---|---|
 | Scan architecture and scan eligibility | All flip-flops of CLK-PHY and CLK-BUS are scannable; chains per domain; the PHY pads and analog macros are outside the IP |
-| Scan/test clocks, controls, reset behavior | Scan clock drives both domains in test mode through the SoC clock mux; `m_usb2_rst` overrides resets in test mode |
+| Scan/test clocks, controls, reset behavior | The SoC clock controller owns the scan clock mux and drives `i_clk_phy` and `i_clk_bus` with the scan clock in test mode; `i_dft_test_en` makes `m_usb2_rst` override the resets and `i_dft_scan_en` is the test enable of every clock gate |
 | Test-mode entry/exit and safe state | Test mode is controlled by the SoC; outputs to the PHY go to the idle states of section 6.2 |
 | MBIST, memory repair, LBIST | MBIST of the FIFO RAM macro by the SoC memory flow; no repair; no LBIST |
-| Test access, wrappers, test points | `i_dft_scan_en`, `i_dft_test_en`, `i_dft_scan_in_0`, `o_dft_scan_out_0` are SoC-level ports added by the scan insertion flow; none in the functional port list (TBD-009) |
+| Test access, wrappers, test points | Functional ports `i_dft_test_en` and `i_dft_scan_en` are in section 6.2; the scan chain ports `i_dft_scan_in_*` and `o_dft_scan_out_*` are added by the scan insertion flow; the FIFO RAM wrapper bypasses the macro when `i_dft_test_en` = 1 and MBIST is added by the SoC memory flow |
 | Clock-gating test enable | Any clock gate takes the scan test-enable |
 | ATPG constraints and exclusions | CLK-PHY stopped by the PHY is replaced by the scan clock; the FIFO RAM is bypassed or wrapped by the memory flow |
 | DFT insertion architecture and generated test artifacts | Scan chains, ATPG vectors and the DFT report are produced by the SoC DFT flow |
@@ -4991,7 +5160,7 @@ The IP owns the clock definitions of its two input clocks and the exceptions of 
 
 | Clock ID | Port / source object | Primary/generated and master | Period, waveform, phase / ratio | Latency / uncertainty / transition | Clock group / mode | Constraint source |
 |---|---|---|---|---|---|---|
-| CLK-PHY | `i_clk_phy` | Primary | 16.667 ns (60 MHz) or 33.333 ns (30 MHz, 16-bit UTMI+); 50 % duty | Set by the SoC; uncertainty by the SoC | Group A, asynchronous to group B | `sdc/usb2_clocks.sdc` (delivered with the RTL) |
+| CLK-PHY | `i_clk_phy` | Primary | 16.667 ns (60 MHz) or 33.333 ns (30 MHz, 16-bit UTMI+); 50 % duty | Set by the SoC; uncertainty by the SoC | Group A, asynchronous to group B | `sdc/usb2_clocks.sdc` (delivered in this folder) |
 | CLK-BUS | `i_clk_bus` | Primary | 5.000 ns goal (200 MHz) | Set by the SoC | Group B, asynchronous to group A | `sdc/usb2_clocks.sdc` |
 
 Corners and views: setup at the slow corner and hold at the fast corner of the target library, to be named by the SoC flow. Case analysis: none in the IP; modes are selected by static ports.
@@ -5000,9 +5169,9 @@ Corners and views: setup at the slow corner and hold at the fast corner of the t
 
 | Interface / port group | Direction | Reference clock | External min / max delay | Input transition / output load | IP timing budget | Mode / condition | Constraint source |
 |---|---|---|---|---|---|---|---|
-| UTMI+ inputs | Input | CLK-PHY | TBD-007 (from the PHY datasheet) | PHY output drive | Half period for setup | UTMI+ builds | `sdc/usb2_io.sdc` |
-| UTMI+ outputs | Output | CLK-PHY | TBD-007 | PHY input load | Half period | UTMI+ builds | `sdc/usb2_io.sdc` |
-| ULPI inputs and outputs | Input and output | CLK-PHY | ULPI interface timing of REF-007 Table 5 (to be applied, TBD-007) | PHY and pad | Per REF-007 | ULPI builds | `sdc/usb2_io.sdc` |
+| UTMI+ inputs | Input | CLK-PHY | assumed 50 % of the period (8.33 ns at 60 MHz) until the PHY macro datasheet gives numbers (ASM-027, TBD-007) | PHY output drive | Half period for setup | UTMI+ builds | `sdc/usb2_io.sdc` |
+| UTMI+ outputs | Output | CLK-PHY | assumed 50 % of the period (ASM-027, TBD-007) | PHY input load | Half period | UTMI+ builds | `sdc/usb2_io.sdc` |
+| ULPI inputs and outputs | Input and output | CLK-PHY | ULPI Table 5 as read, PHY output clock mode: input setup 6.0 ns, input hold 0.0 ns, output delay 9.0 ns maximum (the converted table is partly garbled; verify with the official copy, ASM-027) | PHY and pad | Per REF-007 Table 5 | ULPI builds | `sdc/usb2_io.sdc` |
 | APB4 and interrupt | Input and output | CLK-BUS | SoC bus budget | SoC | 40 % of the period each way | All | SoC |
 | AXI4 and DMA handshake | Input and output | CLK-BUS | SoC bus budget | SoC | 40 % of the period each way | AXI builds | SoC |
 | Static ports (`i_protect_en`, `i_slverr_en`) | Input | none | constant after reset | n/a | none | All | false path |
@@ -5047,10 +5216,10 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 | Topic | Requirement / rationale | Verification method / expected behavior |
 |---|---|---|
 | Security boundary and threat assumptions | Required: the USB bus and the bus master are untrusted for data content; the CSR is protected by the privilege check | Review |
-| Access control / privilege | Required: `i_protect_en` and PPROT[1] limit CSR access (section 11.4); the AXI master attributes come from `u2_dma_cfg.axi_prot` | CSR test |
+| Access control / privilege | Required: `i_protect_en` and PPROT[1] limit CSR access (section 11.4); an optional DMA address window (u2_dma_wbase, u2_dma_wlim, win_en) contains a faulty buffer or descriptor address (REQ-IF-014); the AXI master attributes come from `u2_dma_cfg.axi_prot` | CSR test, DMA window test |
 | Secure clearing / zeroization | N/A: the IP holds no key material; FIFO content is not cleared on reset | Review |
 | Information leakage / side channels | N/A: no secret data path; a stale FIFO word is never read because reads stay below the write pointer | Assertion SVA-004 |
-| ECC/parity and fault detection | N/A: this release has no ECC on the FIFO RAM; USB CRC protects every packet on the wire; a soft error in the RAM is detected by the CRC of the next packet only on the wire side (TBD-010) | Review |
+| ECC/parity and fault detection | Required: one parity bit per FIFO RAM word when PARA_USB2_RAM_PAR_EN = 1 (default), checked on every read before the CRC is generated, error flag `ram_par` (REQ-FUNC-040, ASM-025); the USB CRC protects the wire but not the RAM, because the CRC is generated from the bytes read from the RAM | Fault injection test |
 | Safety goal / integrity level | N/A: no safety integrity level is targeted; the drone flight-critical path is outside this IP | Review |
 | Diagnostics, fail-safe state, recovery | Required: soft reset, error flags, time-outs, flush, disable of the failing DMA channel, and power cut on over-current (section 12, REQ-FUNC-034) | Error tests |
 
@@ -5094,6 +5263,11 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 | REQ-FUNC-034 | m_usb2_ocp, m_usb2_spd | TEST-027 | Directed, CDC analysis | CFG-CAM-HOST |
 | REQ-FUNC-035 | m_usb2_lnk (m_usb2_lpbk) | TEST-029 | Directed | all configurations |
 | REQ-FUNC-036 | m_usb2_dma | TEST-028 | Directed, protocol checker | CFG-CAM-HOST |
+| REQ-FUNC-037 | m_usb2_host, m_usb2_spd | TEST-034 | Directed with timing checker | CFG-DUAL-FULL |
+| REQ-FUNC-038 | m_usb2_host | TEST-033 | Directed | CFG-CAM-HOST |
+| REQ-FUNC-039 | m_usb2_host | TEST-033 | Directed | CFG-CAM-HOST |
+| REQ-FUNC-040 | m_usb2_fifo | TEST-035 | Fault injection, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
+| REQ-FUNC-041 | m_usb2_ocp, m_usb2_phyif_ulpi | TEST-031 | Directed with PHY model | CFG-FC-DEV, CFG-DUAL-FULL |
 | REQ-IF-001 | m_usb2_phyif_utmi | TEST-014 | Protocol checker, directed | CFG-CAM-HOST, CFG-MIN |
 | REQ-IF-002 | m_usb2_phyif_utmi | TEST-014 | Protocol checker, directed | CFG-CAM-HOST, CFG-MIN |
 | REQ-IF-003 | m_usb2_phyif_ulpi | TEST-015 | Protocol checker, directed | CFG-FC-DEV, CFG-DUAL-FULL |
@@ -5104,68 +5278,29 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 | REQ-IF-008 | m_usb2_irq | TEST-016 | Directed, protocol checker, CSR validation | all configurations |
 | REQ-IF-009 | m_usb2_axs | TEST-018 | Protocol checker, directed | CFG-FC-DEV, CFG-MIN |
 | REQ-IF-010 | m_usb2_ocp | TEST-027 | Directed, CDC analysis | CFG-CAM-HOST |
+| REQ-IF-011 | m_usb2_phyif_ulpi (m_usb2_ulpilp) | TEST-031 | Directed with PHY model | CFG-FC-DEV, CFG-DUAL-FULL |
+| REQ-IF-012 | m_usb2_phyif_utmi, m_usb2_spd | TEST-032 | Protocol checker, directed | CFG-CAM-HOST, CFG-MIN |
+| REQ-IF-013 | m_usb2_phyif_ulpi, m_usb2_spd | TEST-031 | Directed with PHY model | CFG-FC-DEV, CFG-DUAL-FULL |
+| REQ-IF-014 | m_usb2_dma | TEST-035 | Fault injection, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
 | REQ-CLK-001 | m_usb2_top_* | TEST-019 | Random, CDC and reset analysis | all configurations |
 | REQ-CLK-002 | m_usb2_cdc_* | TEST-019 | Random, CDC and reset analysis | all configurations |
+| REQ-CLK-003 | m_usb2_xreg | TEST-030 | Directed, random, formal, CDC analysis | all configurations |
 | REQ-RESET-001 | m_usb2_rst | TEST-019 | Random, CDC and reset analysis | all configurations |
 | REQ-RESET-002 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
 | REQ-PARAM-001 | m_usb2_core (configuration check) | TEST-020 | Lint, script | all configurations |
 | REQ-PARAM-002 | m_usb2_core | TEST-013 | Directed, random, synthesis report | CFG-MIN, CFG-DUAL-FULL |
+| REQ-PARAM-003 | m_usb2_cfgchk | TEST-036 | Lint, elaboration, simulation | all configurations |
+| REQ-PARAM-004 | m_usb2_cfgchk | TEST-036 | Lint, elaboration, simulation | all configurations |
 | REQ-REG-001 | m_vlsit_csr_usb2 | TEST-016 | Directed, protocol checker, CSR validation | all configurations |
+| REQ-REG-002 | m_usb2_xreg, m_vlsit_csr_usb2 | TEST-030 | Directed, random, formal, CDC analysis | all configurations |
+| REQ-REG-003 | m_usb2_xreg | TEST-030 | Directed, random, formal, CDC analysis | all configurations |
 | REQ-ERR-001 | m_usb2_irq | TEST-021 | Directed | all configurations |
 | REQ-ERR-002 | m_usb2_host | TEST-021 | Directed | all configurations |
 | REQ-PERF-001 | m_usb2_dma | TEST-017 | Protocol checker, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
 | REQ-RTL-001 | all modules | TEST-022 | Lint, review, DFT flow | all configurations |
 | REQ-VER-001 | verification environment | TEST-022 | Lint, review, DFT flow | all configurations |
-| REQ-DFT-001 | all modules | TEST-022 | Lint, review, DFT flow | all configurations |
-| REQ-FUNC-001 | m_usb2_dev | TEST-001 | Directed | CFG-FC-DEV |
-| REQ-FUNC-002 | m_usb2_lnk | TEST-001 | Directed | CFG-FC-DEV |
-| REQ-FUNC-003 | m_usb2_lnk (m_usb2_crc5, m_usb2_crc16) | TEST-002 | Directed, formal equivalence to a model | CFG-FC-DEV, CFG-CAM-HOST |
-| REQ-FUNC-004 | m_usb2_dev, m_usb2_host | TEST-003 | Directed with bus model | CFG-FC-DEV |
-| REQ-FUNC-005 | m_usb2_dev | TEST-003 | Directed with bus model | CFG-FC-DEV |
-| REQ-FUNC-006 | m_usb2_lnk, m_usb2_dev | TEST-004 | Directed with timing checker | all configurations |
-| REQ-FUNC-007 | m_usb2_dev | TEST-001 | Directed | CFG-FC-DEV |
-| REQ-FUNC-008 | m_usb2_lnk | TEST-005 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-009 | m_usb2_dev, m_usb2_host | TEST-005 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-010 | m_usb2_host | TEST-006 | Directed with timing checker | CFG-CAM-HOST |
-| REQ-FUNC-011 | m_usb2_spd | TEST-007 | Directed back-to-back | CFG-DUAL-FULL |
-| REQ-FUNC-012 | m_usb2_spd | TEST-007 | Directed back-to-back | CFG-DUAL-FULL |
-| REQ-FUNC-013 | m_usb2_spd | TEST-007 | Directed back-to-back | CFG-DUAL-FULL |
-| REQ-FUNC-014 | m_usb2_lnk, m_usb2_host | TEST-004 | Directed with timing checker | all configurations |
-| REQ-FUNC-015 | m_usb2_host | TEST-006 | Directed with timing checker | CFG-CAM-HOST |
-| REQ-FUNC-016 | m_usb2_spd | TEST-006 | Directed with timing checker | CFG-CAM-HOST |
-| REQ-FUNC-017 | m_usb2_host | TEST-008 | Directed | CFG-CAM-HOST |
-| REQ-FUNC-018 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-019 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-020 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-021 | m_usb2_spd, m_usb2_dev, m_usb2_host | TEST-010 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-022 | m_usb2_spd | TEST-011 | Directed | all configurations |
-| REQ-FUNC-023 | m_usb2_spd | TEST-012 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-024 | m_usb2_spd | TEST-007 | Directed back-to-back | CFG-DUAL-FULL |
-| REQ-FUNC-025 | m_usb2_lnk | TEST-003 | Directed with bus model | CFG-FC-DEV |
-| REQ-FUNC-026 | m_usb2_fifo | TEST-013 | Directed, random, synthesis report | CFG-MIN, CFG-DUAL-FULL |
-| REQ-FUNC-027 | m_usb2_fifo | TEST-013 | Directed, random, synthesis report | CFG-MIN, CFG-DUAL-FULL |
-| REQ-FUNC-028 | m_usb2_core | TEST-013 | Directed, random, synthesis report | CFG-MIN, CFG-DUAL-FULL |
-| REQ-IF-001 | m_usb2_phyif_utmi | TEST-014 | Protocol checker, directed | CFG-CAM-HOST, CFG-MIN |
-| REQ-IF-002 | m_usb2_phyif_utmi | TEST-014 | Protocol checker, directed | CFG-CAM-HOST, CFG-MIN |
-| REQ-IF-003 | m_usb2_phyif_ulpi | TEST-015 | Protocol checker, directed | CFG-FC-DEV, CFG-DUAL-FULL |
-| REQ-IF-004 | m_usb2_phyif_ulpi | TEST-004 | Directed with timing checker | all configurations |
-| REQ-IF-005 | m_vlsit_csr_usb2 | TEST-016 | Directed, protocol checker, CSR validation | all configurations |
-| REQ-IF-006 | m_usb2_dma | TEST-017 | Protocol checker, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
-| REQ-IF-007 | m_usb2_axs | TEST-018 | Protocol checker, directed | CFG-FC-DEV, CFG-MIN |
-| REQ-IF-008 | m_usb2_irq | TEST-016 | Directed, protocol checker, CSR validation | all configurations |
-| REQ-IF-009 | m_usb2_axs | TEST-018 | Protocol checker, directed | CFG-FC-DEV, CFG-MIN |
-| REQ-CLK-001 | m_usb2_top_* | TEST-019 | Random, CDC and reset analysis | all configurations |
-| REQ-CLK-002 | m_usb2_cdc_* | TEST-019 | Random, CDC and reset analysis | all configurations |
-| REQ-RESET-001 | m_usb2_rst | TEST-019 | Random, CDC and reset analysis | all configurations |
-| REQ-RESET-002 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
-| REQ-PARAM-001 | m_usb2_core (configuration check) | TEST-020 | Lint, script | all configurations |
-| REQ-PARAM-002 | m_usb2_core | TEST-013 | Directed, random, synthesis report | CFG-MIN, CFG-DUAL-FULL |
-| REQ-REG-001 | m_vlsit_csr_usb2 | TEST-016 | Directed, protocol checker, CSR validation | all configurations |
-| REQ-ERR-001 | m_usb2_irq | TEST-021 | Directed | all configurations |
-| REQ-ERR-002 | m_usb2_host | TEST-021 | Directed | all configurations |
-| REQ-PERF-001 | m_usb2_dma | TEST-017 | Protocol checker, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
-| REQ-RTL-001 | all modules | TEST-022 | Lint, review, DFT flow | all configurations |
-| REQ-VER-001 | verification environment | TEST-022 | Lint, review, DFT flow | all configurations |
+| REQ-VER-002 | m_usb2_spd | TEST-036 | Lint, elaboration, simulation | all configurations |
+| REQ-VER-003 | verification environment | TEST-037 | FPGA interoperability | CFG-DUAL-FULL |
 | REQ-DFT-001 | all modules | TEST-022 | Lint, review, DFT flow | all configurations |
 
 ## 20. Assumptions, dependencies, and decisions
@@ -5173,49 +5308,92 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 This section lists the assumptions, dependencies and open decisions of the specification. Each item has an ID and states its effect on behavior, interface, timing, verification or integration.
 
 
-| ID | Type | Assumption / dependency / unresolved decision | Technical impact / version / configuration | Resolution / status |
-|---|---|---|---|---|
-| ASM-001 | Assumption | The UTMI+ 1.0, ULPI 1.1 and UTMI 1.05 texts in `reference/md_doc/` come from third-party mirrors (nxp.com, sparkfun.com) and the Intel site; their licences forbid redistribution or are unverified, so the converted files stay out of version control. The UTMI+ copy has 26 pages and the page-level `verify` check reports differences. | Protocol statements citing these files rest on copies whose completeness is unconfirmed | Open: the user may supply an authoritative copy |
-| ASM-002 | Assumption | The PHY interface and the data interface are chosen by the wrapper module (`m_usb2_top_utmi_axim` and three others), and the core carries PARA_USB2_PHY_IF and PARA_USB2_DATA_IF, because a wrapper port list is static (REF-003 PRT-03). | The user asked for a parameter; the choice is a parameter of the core and a module name of the top | User answer 2026-11-20: confirmed as proposed |
-| ASM-003 | Assumption | The UTMI+ data width (8 or 16 bit) is a build parameter PARA_USB2_UTMI_W, not a runtime choice. | One width per build; 16-bit halves CLK-PHY frequency | User answer 2026-11-20: confirmed as proposed |
-| ASM-004 | Assumption | Speeds are fixed: device HS and FS, host HS, FS and LS; a low-speed device role is not provided. | Removes speed parameters; host LS logic is present in every host build | User answer 2026-11-20 (fixed full set) |
-| ASM-005 | Assumption | High-bandwidth isochronous (up to three transactions per microframe) is always present in both roles. | DATA2 and MDATA PID handling and larger FIFO need in every build | User answer 2026-11-20: confirmed as proposed (always present) |
-| ASM-006 | Assumption | The drone application numbers of section 1.4 (MAVLink 921600 baud, 6 endpoints, 8 channels, MJPEG 720p30 a few MB/s) are typical values proposed by the author, not measured. | Sizing of endpoints, channels and FIFO | Open: confirm values |
-| ASM-007 | Assumption | The only AXI text in `md_doc` is AXI v1.0 (AXI3 era). The AXI4 profile is limited to INCR bursts of at most 16 beats, no lock, QoS, region or user, so every statement holds in AXI3 and AXI4. | AXI4 256-beat INCR bursts and the AXI4 protocol text are not used | Open: add the AXI4 standard to `md_doc` |
-| ASM-008 | Assumption | CLK-BUS is at least 30 MHz for high-speed 32-bit transfers and 100 MHz or faster for the 24.576 MB/s goal. | Bus clock requirement for the integrator | Open: verify by simulation |
-| ASM-009 | Assumption | The PHY supplies the interface clock (60 MHz or 30 MHz) in UTMI+ mode and a 60 MHz clock output in ULPI mode; the link-supplied clock mode is not used. | CLK-PHY is not generated inside the IP | Open: confirm |
-| ASM-010 | Assumption | The UTMI+ FsLsSerialMode and the ULPI 4-bit, DDR, serial and carkit modes are not supported. | Fewer pins and states | User answer 2026-11-20 (UTMI+ or ULPI per build) |
-| ASM-011 | Assumption | Illegal parameter values are configuration errors and not defined by the RTL; a configuration check script and a verification-only checker report them. | Integration must use legal values | Open: confirm |
-| ASM-012 | Assumption | DMA uses buffer addresses held in registers by default; scatter-gather descriptor lists are an option (PARA_USB2_SG_EN). | Software splits large transfers when SG is off | User answer 2026-11-20: scatter-gather added as an option |
-| ASM-013 | Assumption | One interrupt output; no per-endpoint interrupt pins. | Software reads status registers to find the cause | Open: confirm |
-| ASM-014 | Assumption | Host scheduling serves periodic channels before non-periodic channels within a (micro)frame. | Scheduler order and bandwidth | Open: check against REF-001 chapter 5 |
-| ASM-015 | Assumption | On-The-Go HNP, SRP and ADP are not provided; the role follows the ID indication and changes only after detach. | REF-002 dual-role handshakes are not implemented | User answer 2026-11-20 (no HNP/SRP) |
-| ASM-016 | Assumption | Whole-IP power gating, battery charging detection and HSIC are not part of the IP. | Out of scope | Out of scope for this release (author proposal, to be confirmed) |
-| ASM-017 | Assumption | A test mode is entered by the device through SetFeature(TEST_MODE) and by the host through a port test-mode CSR field. | CSR field and command decode | Open: check REF-001 section 9.4.9 |
-| ASM-018 | Assumption | A reference IP search (GitHub, 2026-11-20) found no IP that meets all evidence criteria for a USB 2.0 device or host core; ultraembedded/core_ulpi_wrapper (GPL-3.0, FPGA and testbench) qualified for the ULPI wrapper only and is not copied. | No borrowed code; log in `research/reference_ip_log.md` | Closed for this draft |
-| DEP-001 | Dependency | Library modules of `common_rtl`: asynchronous Gray FIFO (001), Gray synchronizer (013), handshake synchronizers (010, 011), and the VLSIT cell wrappers for synchronizers and SRAM. | Reused by instantiation | Open: confirm the library path |
-| DEP-002 | Dependency | APB-CSR-Generator builds `m_vlsit_csr_usb2` from the workbook. | CSR RTL is generated | Open until the workbook is filled |
-| DEP-003 | Dependency | A USB 2.0 PHY with UTMI+ or ULPI interface. | Integration | External |
-| DEP-004 | Dependency | A single-port RAM macro or memory-compiler instance for the FIFO RAM. | `u_dont_touch_sram` wrapper | External |
-| DEP-005 | Dependency | For AXI-slave wrappers, an external DMA controller that follows the request and acknowledge protocol of REQ-IF-009. | Integration | External |
-| TBD-001 | Decision | FIFO RAM organization: a single-port RAM with arbitration in CLK-PHY (assumed) versus a true dual-port RAM. Impact: area and bus-side throughput. Decision needed from the user. | Section 10.5 | Resolved 2026-11-20: single-port 1RW RAM with arbitration in CLK-PHY, as proposed |
-| TBD-002 | Decision | The DMA request threshold and burst size fields, and how a request maps to a FIFO region. Decision needed. | CSR fields, REQ-IF-009 | Proposed in the workbook: `u2_dma_cfg.req_thr` and `burst_len`, `u2_dmach_map.region`; confirm |
-| TBD-003 | Decision | The exact CSR map (endpoint and channel banks). | Section 11 | Resolved 2026-11-20: defined in the workbook; the prefix is `u2` (not `usb2`) because generated port names must stay within 30 characters (NAM-07); the user may change the prefix |
-| TBD-004 | Decision | Waveform plan of section 10.3 must be agreed with the user (rule R-024) before any waveform is drawn. | Section 10.3 | Open |
-| TBD-005 | Decision | ULPI low power mode use for suspend and register access abort details need the ULPI sections read in depth. | Section 6.3, 7.4 | Open |
-| TBD-006 | Decision | The block diagram of section 5.2 is not yet drawn. The eight FSM diagrams of section 10.1 are drawn. | Section 5.2 | Open |
-| TBD-007 | Decision | UTMI+ and ULPI input and output delays of section 17.1.2 need the PHY datasheet and REF-007 Table 5. | Section 17 | Open |
-| TBD-008 | Decision | The file list and the frontend options are fixed when the RTL is generated. | Section 14.3 | Open |
-| TBD-009 | Decision | DFT port names and scan architecture are those of the SoC DFT flow. | Section 16 | Open |
-| TBD-010 | Decision | Whether the FIFO RAM needs parity or ECC for the drone product. | Section 18 | Open |
-| ASM-019 | Assumption | The CSR holds the high address word `u2_dma_hi` shared by all buffers, so every DMA buffer lies in one 4 GB window; the microframe length `u2_sof_cfg.uf_len` is programmed by software for the 30 MHz case. | Software must follow the rules of section 11.2 | Open: confirm |
-| ASM-020 | Assumption | The scatter-gather descriptor is two 32-bit words (address, length and control with write-back status) as defined in section 9; the format is proposed by the author and is not the format of any reference SoC. | DMA engine and driver | Open: confirm |
-| ASM-021 | Assumption | Host interval polling counts microframes in high-speed and frames in full-speed and low-speed from a 16-bit `interval`, retries NAK or NYET at the next interval, and raises `poll_miss` when the packet is not consumed. | Host scheduler | Open: confirm |
-| ASM-022 | Assumption | The over-current input is active low, filtered for 16 CLK-BUS cycles, and the power-off state is held until software clears the flag and writes `vbus_drv` again; the 16-cycle filter must be checked against the load switch datasheet. | Port power control | Open: confirm (TBD-012) |
-| ASM-023 | Assumption | Link loopback feeds the transmit bytes of the packet transmitter into the packet receiver; the PHY pins are held idle; counters saturate at 4095. | Bring-up tests | Open: confirm |
-| ASM-024 | Assumption | The reference SoC manuals (TI AM335x TRM, ESP32-S3 TRM, RP2040 datasheet) were downloaded on 2026-11-20 to `C:\HQuan\007_Document\USB\soc_manuals`, only their feature lists were read, nothing was copied, and the files stay out of version control. | Source of the ideas of FEAT-017 to FEAT-023 | Closed |
-| TBD-011 | Decision | Confirm the waveform plan for OP-016 to OP-022 (proposed WF-031 to WF-037) before drawing (rule R-024). | Section 10.3 | Resolved 2026-11-20: user chose option A, seven waveforms WF-031 to WF-037 drawn |
-| TBD-012 | Decision | Over-current filter time and polarity against the load switch datasheet of the drone board. | Section 6.2 and 11 | Open |
+| ID | Type | Assumption / dependency / unresolved decision | Technical impact / version / configuration | Resolution / status | Owner | Opened |
+|---|---|---|---|---|---|---|
+| ASM-001 | Assumption | The UTMI+ 1.0, ULPI 1.1 and UTMI 1.05 texts in `reference/md_doc/` come from third-party mirrors (nxp.com, sparkfun.com) and the Intel site; their licences forbid redistribution or are unverified, so the converted files stay out of version control. The UTMI+ copy has 26 pages, the page-level `verify` check reports differences, and some tables (ULPI Table 5 and Table 24) are partly garbled; numbers read from them are marked 'as read'. | Protocol statements citing these files rest on copies whose completeness is unconfirmed (review F-007) | Open: the user supplies official copies and the pages that differ by more than 5 % are inspected | user | 2026-11-20 |
+|  ASM-002 | Assumption | The PHY interface and the data interface are chosen by the wrapper module (`m_usb2_top_utmi_axim` and three others), and the core carries PARA_USB2_PHY_IF and PARA_USB2_DATA_IF, because a wrapper port list is static (REF-003 PRT-03). | The user asked for a parameter; the choice is a parameter of the core and a module name of the top | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  ASM-003 | Assumption | The UTMI+ data width (8 or 16 bit) is a build parameter PARA_USB2_UTMI_W, not a runtime choice. | One width per build; 16-bit halves CLK-PHY frequency | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| ASM-004 | Assumption | Speeds are fixed: device HS and FS, host HS, FS and LS; a low-speed device role is not provided. | Removes speed parameters; host LS logic is present in every host build | User answer 2026-11-20 (fixed full set) | spec owner | 2026-11-20 |
+|  ASM-005 | Assumption | High-bandwidth isochronous (up to three transactions per microframe) is always present in both roles. | DATA2 and MDATA PID handling and larger FIFO need in every build | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  ASM-006 | Assumption | The drone application numbers of section 1.4 (MAVLink 921600 baud, 6 endpoints, 8 channels, MJPEG 720p30 a few MB/s) are typical values proposed by the author, not measured. | Sizing of endpoints, channels and FIFO | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| ASM-007 | Assumption | The only AXI text in `md_doc` is AXI v1.0 (AXI3 era). The profile is limited to the behavior of that text (INCR bursts of at most 16 beats, no lock, QoS, region or user), which is also legal in AXI4; no AXI4-only feature is used. | AXI4 256-beat INCR bursts and the AXI4 protocol text are not used | Applied to the text of REQ-IF-006, REQ-IF-007 and section 2.3 (review F-006); the AXI4 standard is still to be added to `md_doc` | spec owner | 2026-11-20 |
+|  ASM-008 | Assumption | CLK-BUS is at least 30 MHz for high-speed 32-bit transfers and 100 MHz or faster for the 24.576 MB/s goal. | Bus clock requirement for the integrator | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  ASM-009 | Assumption | The PHY supplies the interface clock (60 MHz or 30 MHz) in UTMI+ mode and a 60 MHz clock output in ULPI mode; the link-supplied clock mode is not used. | CLK-PHY is not generated inside the IP | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| ASM-010 | Assumption | The UTMI+ FsLsSerialMode and the ULPI 4-bit, DDR, serial and carkit modes are not supported. | Fewer pins and states | User answer 2026-11-20 (UTMI+ or ULPI per build) | spec owner | 2026-11-20 |
+|  ASM-011 | Assumption | Illegal parameter values are configuration errors and not defined by the RTL; a configuration check script and a verification-only checker report them. | Integration must use legal values | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| ASM-012 | Assumption | DMA uses buffer addresses held in registers by default; scatter-gather descriptor lists are an option (PARA_USB2_SG_EN). | Software splits large transfers when SG is off | User answer 2026-11-20: scatter-gather added as an option | spec owner | 2026-11-20 |
+|  ASM-013 | Assumption | One interrupt output; no per-endpoint interrupt pins. | Software reads status registers to find the cause | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  ASM-014 | Assumption | Host scheduling serves periodic channels before non-periodic channels within a (micro)frame. | Scheduler order and bandwidth | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| ASM-015 | Assumption | On-The-Go HNP, SRP and ADP are not provided; the role follows the ID indication and changes only after detach. | REF-002 dual-role handshakes are not implemented | User answer 2026-11-20 (no HNP/SRP) | spec owner | 2026-11-20 |
+|  ASM-016 | Assumption | Whole-IP power gating, battery charging detection and HSIC are not part of the IP. | Out of scope | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  ASM-017 | Assumption | A test mode is entered by the device through SetFeature(TEST_MODE) and by the host through a port test-mode CSR field. | CSR field and command decode | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| ASM-018 | Assumption | A reference IP search (GitHub, 2026-11-20) found no IP that meets all evidence criteria for a USB 2.0 device or host core; ultraembedded/core_ulpi_wrapper (GPL-3.0, FPGA and testbench) qualified for the ULPI wrapper only and is not copied. | No borrowed code; log in `research/reference_ip_log.md` | Closed for this draft | spec owner | 2026-11-20 |
+|  DEP-001 | Dependency | Library modules of `common_rtl`: asynchronous Gray FIFO (001), Gray synchronizer (013), handshake synchronizers (010, 011), and the VLSIT cell wrappers for synchronizers and SRAM. | Reused by instantiation | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  DEP-002 | Dependency | APB-CSR-Generator builds `m_vlsit_csr_usb2` from the workbook. | CSR RTL is generated | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| DEP-003 | Dependency | A USB 2.0 PHY with UTMI+ or ULPI interface. | Integration | External | integrator | 2026-11-20 |
+| DEP-004 | Dependency | A single-port RAM macro or memory-compiler instance for the FIFO RAM. | `u_dont_touch_sram` wrapper | External | integrator | 2026-11-20 |
+| DEP-005 | Dependency | For AXI-slave wrappers, an external DMA controller that follows the request and acknowledge protocol of REQ-IF-009. | Integration | External | integrator | 2026-11-20 |
+| TBD-001 | Decision | FIFO RAM organization: a single-port RAM with arbitration in CLK-PHY (assumed) versus a true dual-port RAM. Impact: area and bus-side throughput. Decision needed from the user. | Section 10.5 | Resolved 2026-11-20: single-port 1RW RAM with arbitration in CLK-PHY, as proposed | spec owner | 2026-11-20 |
+|  TBD-002 | Decision | The DMA request threshold and burst size fields, and how a request maps to a FIFO region. Decision needed. | CSR fields, REQ-IF-009 | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| TBD-003 | Decision | The exact CSR map (endpoint and channel banks). | Section 11 | Resolved 2026-11-20: defined in the workbook; the prefix is `u2` (not `usb2`) because generated port names must stay within 30 characters (NAM-07); the user may change the prefix | spec owner | 2026-11-20 |
+|  TBD-004 | Decision | Waveform plan of section 10.3 must be agreed with the user (rule R-024) before any waveform is drawn. | Section 10.3 | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| TBD-005 | Decision | ULPI low power mode and register access abort. | Section 6.3, 7.4 | Resolved 2026-11-20: REQ-IF-011, FSM ulpi_if states LP and WAKE, CDC-007 and `m_usb2_ulpilp` from REF-007 sections 3.9.1 to 3.9.3 | spec owner | 2026-11-20 |
+|  TBD-006 | Decision | The block diagram of section 5.2 is not yet drawn. The eight FSM diagrams of section 10.1 are drawn. | Section 5.2 | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| TBD-007 | Decision | UTMI+ input and output delays need the PHY macro datasheet; the ULPI numbers are 'as read' from a garbled table. | Section 17 | Resolved 2026-11-21 and confirmed by the user: no PHY is chosen yet, so the 50 % budget stays the contract (UTMI+ 1.0 gives no setup or hold numbers, checked in the converted text, so the 50 % budget is the design contract) as constraint variables: `sdc/usb2_io.sdc` holds each budget as a variable (UTMI+ 50 % of the period, ULPI numbers of REF-007 Table 5 as read, ASM-027), the integrator sets the numbers of the PHY macro datasheet | user | 2026-11-21 |
+|  TBD-008 | Decision | The file list and the frontend options are fixed when the RTL is generated. | Section 14.3 | Resolved 2026-11-21: `rtl/filelist.f` and one `rtl/filelist_*.f` file for each wrapper were generated with the RTL; lint ran with Verilator | spec owner | 2026-11-20  |
+| TBD-009 | Decision | DFT port names and scan architecture. | Section 16 | Resolved 2026-11-20: ports `i_dft_test_en` and `i_dft_scan_en` in section 6.2; chain ports by the insertion flow; scan clock mux owned by the SoC | spec owner | 2026-11-20 |
+| TBD-010 | Decision | FIFO RAM parity or ECC for the drone product. | Section 18 | Resolved 2026-11-20 as ASM-025: one parity bit per word, default on | user | 2026-11-20 |
+|  ASM-019 | Assumption | The CSR holds the high address word `u2_dma_hi` shared by all buffers, so every DMA buffer lies in one 4 GB window; the microframe length `u2_sof_cfg.uf_len` is programmed by software for the 30 MHz case. | Software must follow the rules of section 11.2 | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  ASM-020 | Assumption | The scatter-gather descriptor is two 32-bit words (address, length and control with write-back status) as defined in section 9 and describes one packet (DEC-013); the format is proposed by the author and is not the format of any reference SoC. | DMA engine and driver | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; revised 2026-11-21 to one descriptor per packet; the user may revise it Implemented and verified in simulation (`tb_dev_sg`, `tb_dev_sg64`, `tb_host_sg`). Decided by the author under the delegation of the project goal (the author proposes and writes the RTL); the user may still revise it. Confirmed by the user on 2026-11-21 (accepted as is). | spec owner | 2026-11-20  |
+|  ASM-021 | Assumption | Host interval polling counts microframes in high-speed and frames in full-speed and low-speed from a 16-bit `interval`, retries NAK or NYET at the next interval, and raises `poll_miss` when the packet is not consumed. | Host scheduler | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it Implemented and verified in simulation (`tb_host_iso`: one isochronous packet per interval; `tb_host_flags`: `babble`, `iso_inc`). Confirmed by the user on 2026-11-21 (accepted as is). | spec owner | 2026-11-20  |
+|  ASM-022 | Assumption | The over-current input is active low, filtered for 16 CLK-BUS cycles, and the power-off state is held until software clears the flag and writes `vbus_drv` again; the 16-cycle filter must be checked against the load switch datasheet. | Port power control | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it Implemented and verified in simulation (`tb_host_flags`: a 5-cycle pulse is filtered, a long pulse sets `oc_act` and switches the power off, the power stays off); the load-switch datasheet check stays in TBD-012. Confirmed by the user on 2026-11-21 (accepted as is). | spec owner | 2026-11-20  |
+|  ASM-023 | Assumption | Link loopback feeds the transmit bytes of the packet transmitter into the packet receiver; the PHY pins are held idle; counters saturate at 4095. | Bring-up tests | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it Implemented and verified in simulation (`tb_dev_feat`: loopback counters). Confirmed by the user on 2026-11-21 (accepted as is). | spec owner | 2026-11-20  |
+| ASM-024 | Assumption | The reference SoC manuals (TI AM335x TRM, ESP32-S3 TRM, RP2040 datasheet) were downloaded on 2026-11-20 to `C:\HQuan\007_Document\USB\soc_manuals`, only their feature lists were read, nothing was copied, and the files stay out of version control. | Source of the ideas of FEAT-017 to FEAT-023 | Closed | spec owner | 2026-11-20 |
+| TBD-011 | Decision | Confirm the waveform plan for OP-016 to OP-022 (proposed WF-031 to WF-037) before drawing (rule R-024). | Section 10.3 | Resolved 2026-11-20: user chose option A, seven waveforms WF-031 to WF-037 drawn | spec owner | 2026-11-20 |
+| TBD-012 | Decision | Over-current filter time and polarity against the load switch datasheet of the drone board. | Section 6.2 and 11 | Resolved 2026-11-21 as the parameter `PARA_USB2_OC_FILT` (default 16 CLK-BUS cycles, polarity active low, ASM-022; the filter and the power-off are verified in `tb_host_flags`); the load switch datasheet sets its value | spec owner | 2026-11-21 |
+|  ASM-025 | Assumption | A FIFO RAM soft error is detected by one parity bit per word (PARA_USB2_RAM_PAR_EN, default 1), not by ECC; the CRC does not protect the RAM because it is generated from the RAM output. | RAM width and `ram_par` flag | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  ASM-026 | Assumption | Millisecond timers can be divided by PARA_USB2_TSCALE in simulation only. | Verification time | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| ASM-027 | Assumption | The UTMI+ input and output delays are assumed to be 50 % of the CLK-PHY period and the ULPI delays are read from a partly garbled table. | `sdc/usb2_io.sdc` | Open until the PHY datasheet and the official ULPI text are available | user | 2026-11-20 |
+|  ASM-028 | Assumption | The first word of every armed IN packet is prefetched before the IN token so that the 16-bit UTMI+ turnaround budget of 4 cycles holds. | Engine and FIFO design | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  TBD-013 | Decision | Sharing the device and host register banks (about 1 288 flip-flops) and a DWC_otg-compatible register view. | Section 11, 13 | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+|  TBD-014 | Decision | L1 timing values (TL1 parameters) of the LPM ECN are not yet in REQ-FUNC-021. | Section 3 | Accepted 2026-11-20: author decision under the goal of finishing the specification and writing the RTL as proposed; the user may revise it | spec owner | 2026-11-20  |
+| DEC-001 | Decision | The CSR workbook sets `Register Event Sideband` = 1 (sheet CSR and ASYNC_CSR). The generated CSR then has `o_reg_wr_en` and `o_reg_wr_addr`: one pulse for each accepted write. | `m_usb2_csrif` captures the written register word one cycle after the pulse and pushes it into the command FIFO of `m_usb2_xreg` (CDC-001) | Decided 2026-11-20 during RTL generation; implemented in `rtl/csr`, `m_usb2_xreg` | spec owner | 2026-11-20 |
+| DEC-002 | Decision | The update FIFO (CDC-002) carries the entry {slot 8, kind 4, word 32, tag 4}. Kinds: 1 = event set mask, 2 = command clear mask, 3 = published register word. A scanner in CLK-PHY visits one slot per cycle (worst case about NS cycles, NS about 190) and pushes the pending kinds, so a pulse is never lost while the FIFO is full. The generation tag stays in the entry but is not used to drop an update: a clear is a per-bit mask. Pulses of the same bit that arrive twice before the push merge into one flag. | `u2_sts.xq_free` is the free count of the command FIFO seen through a Gray pop counter; `xq_ovf` is raised when a CSR write hits a full command FIFO and is dropped. Added module `m_usb2_csrif` (generated glue: CSR instance, slot decode, hardware load decode) | Decided 2026-11-20; implemented in `m_usb2_xreg` | spec owner | 2026-11-20 |
+| DEC-003 | Decision | Pipeline options: `PARA_USB2_PIPE_PHY_IN` (register the UTMI+ receive pins), `PARA_USB2_PIPE_RX` (register on the PHY inputs of the link), `PARA_USB2_PIPE_CRC` (register between byte extraction and the CRC16 and field processing), `PARA_USB2_PIPE_XREG` (register on the shadow words). Each option adds one cycle to the turn-around path; the default is 0 for all. The transmit path is not pipelined: the pins are driven straight from the flops of the link, so TXReady needs no extra stage. | Latency budget of section 10 (turn-around of 14 CLK at 60 MHz, 4 CLK at 30 MHz) must be re-checked when an option is set | Decided 2026-11-20; implemented in `m_usb2_phyif_utmi`, `m_usb2_lnkrx`, `m_usb2_xreg` | spec owner | 2026-11-20 |
+| DEC-004 | Decision | `m_usb2_ulpilp` watches `i_ulpi_dir` only. The ULPI interrupt on data[3] is not used and the low data bits are not routed to the always-on logic. | Interface of CDC-007 reduced to one pin | Decided 2026-11-20; implemented in `m_usb2_ulpilp` | spec owner | 2026-11-20 |
+| DEC-005 | Decision | `m_usb2_lnk` is split into `m_usb2_lnkrx` (lane extraction, PID check and class, token, split and handshake fields, data stream with the CRC16 bytes removed by a two-byte delay line) and `m_usb2_lnktx` (generator and byte packer for one or two lanes); loopback and its two 12-bit counters stay in `m_usb2_lnk`. An EXT token (PID 0000) makes the next packet the LPM extended token (REF-008). The PHY adapters hand over one stream: data lanes with two valid bits, `rx_active`, `rx_err` and, for transmit, a valid that stays high through the packet and a ready that accepts a word. | The two blocks are not in the hierarchy table of section 14.2 | Decided 2026-11-20; implemented in `m_usb2_lnk`, `m_usb2_lnkrx`, `m_usb2_lnktx`; scratch simulation of the loop with 8-bit and 16-bit lanes passes | spec owner | 2026-11-20 |
+| DEC-006 | Decision | FIFO manager (`m_usb2_fifo`): one RAM of rows of four chunks (32 bit for 8-bit UTMI+, 64 bit for 16-bit UTMI+, parity bit per row), queues as rings (queue 0 receive region with a packet length queue of 8, one transmit ring per device IN endpoint, then host non-periodic and periodic). Every packet starts on a row boundary, so the maximum packet size of an IN endpoint or host OUT channel must be a multiple of the row size (4 or 8 bytes) except for the last packet. The bus port is credit based: the bus side writes rows (OP_WR), commits a packet (OP_COMMIT), reads rows of the head packet (OP_RD) and releases it (OP_POP); the manager returns packet events (tag, length) and credit events (queue, rows). The RAM is the library 1W1R macro; `PARA_USB2_RAM_1P` = 1 serializes the accesses for a single-port macro. | Resolves TBD-001 (single port with arbitration is an option, default is two ports) and TBD-002 (request threshold: credit of the queue). RAM word width is derived as `LPARA_USB2_RAM_W`. | Decided 2026-11-21; implemented in `m_usb2_fifo`, `m_usb2_cdc_fifo`; scratch simulation 8-bit and 16-bit rows, two and one port | spec owner | 2026-11-21 |
+| DEC-007 | Decision | Device engine (`m_usb2_dev`): tokens SOF, SETUP, OUT, IN, PING and the LPM extended token are handled; an OUT or SETUP packet goes into the receive region only when the room for a maximum packet and a packet length entry exist; ACK, NAK, NYET (high-speed bulk or control when the room for another packet is missing) and STALL follow the rules of REF-001 8.5; a toggle mismatch is answered with ACK and the data are dropped; IN sends the packet only when the queue holds all its rows, waits for the host ACK (timeout 160 cycles) and commits on ACK; commands (`set_nak`, `clr_nak`, `set_d0`, `set_d1`, `ep_dis`, `ep_en`) act on the rising edge of the shadow bit and are cleared through the clear mask; `ep_en` clears the NAK status; the transfer ends when `pkt_cnt` reaches 1 (a value of 0 means no packet limit), when `xsize` is used up, or on a short OUT packet; `zlp_en` sends a zero-length packet after a full last packet. Isochronous endpoints use DATA0 only and the high-bandwidth PID sequences (DATA1, DATA2, MDATA) are not implemented; `buf_cur` only toggles after each packet (the double buffer is provided by the ring). Test_SE0_NAK is not implemented. | Deviations from REQ-FUNC for high-bandwidth isochronous and for the double-buffer behavior | Decided 2026-11-21; implemented in `m_usb2_dev`; scratch full-chip simulation (SETUP, OUT, IN, NAK, done flags) | spec owner | 2026-11-21 |
+| DEC-008 | Decision | Host engine (`m_usb2_host`): SOF every (micro)frame from `u2_sof_cfg.uf_len` (full-speed frame is eight times longer); periodic channels (isochronous, interrupt) are served before non-periodic channels, lowest index first; a transaction starts only when the (micro)frame has more time left than (length + 48 bytes) times the byte time; of the OUT channels that share one host queue only the lowest armed one is served (head of line) and the DMA fills them in the same order; NAK delays the channel to the next (micro)frame, NYET starts the PING flow (high-speed), STALL halts the channel, a missing answer is an error and the third error halts the channel; interval polling counts microframes (high-speed) or frames; split transactions send the SPLIT token (start, then complete in a later microframe) before the normal token. Not implemented: high-bandwidth multi-transaction (`mc`), `poll_miss`, `frm_ovr`, `babble` and `iso_inc` flags of `u2_hc_int`, host LPM request (`u2_hport.lpm_req`), the host side of the 80 % and 90 % periodic limits beyond the time check. | Software must arm OUT channels of one class in channel order | Decided 2026-11-21; implemented in `m_usb2_host`; scratch simulation of connect, reset, SOF, OUT and IN | spec owner | 2026-11-21 |
+| DEC-009 | Decision | Speed engine (`m_usb2_spd`): device attach as full-speed, 3 us SE0 reset detect, device chirp K of 1.6 ms, host chirp KJ pairs counted (six changes), fallback to full-speed after 2.5 ms, high-speed idle of 3 ms goes back to the full-speed check (reset or suspend); suspend at 3 ms of idle J; resume on a non-J line; remote wake drives K for 10 ms; host: connect debounce 100 ms, port reset SE0 for 3 ms, listen window 2.5 ms for the device chirp, host chirp units of 50 us, reset total 50 ms, resume K 20 ms; Test_J, Test_K and Test_Packet (53-byte payload of REF-001 7.1.20 sent through the link) are generated; all times are in microseconds, multiplied by the CLK-PHY frequency and divided by `PARA_USB2_TSCALE`. The chirp and resume streams are bytes of 0x00 (K) and 0xFF (J) with OpMode 2. The drive of SE0 for a host reset uses OpMode 3 (assumption, TBD-015). | The chirp timing of the high-speed handshake is not simulated; role changes only while detached | Decided 2026-11-21; implemented in `m_usb2_spd` | spec owner | 2026-11-21 |
+| DEC-010 | Decision | DMA (`m_usb2_dma`): one AXI beat is one RAM row, so the AXI data width equals four chunks of the UTMI+ width (32 bit for 8-bit UTMI+, 64 bit for 16-bit UTMI+; `m_usb2_cfgchk` flags other values); bursts are INCR, at most `burst_len` beats and never across 4 KB; the last beat of a received packet has write strobes; the buffer address moves forward by the padded size of the packet and is loaded into the `addr` field through the hardware load; buffer addresses must be aligned to the row size; the transmit fill reads packet by packet and waits for credit; scatter-gather descriptors (`PARA_USB2_SG_EN`, `sg_mode`) are not implemented and `PARA_USB2_SG_EN` must be 0. | Deviation from section 8, where the AXI data width was independent of the UTMI+ width | Decided 2026-11-21; implemented in `m_usb2_dma`; scratch simulation with 32-bit and 64-bit AXI | spec owner | 2026-11-21 |
+| DEC-011 | Decision | AXI slave windows (`m_usb2_axs`): channel c is the 4 KB window with address bits [15:12] = c; `u2_dma_map` selects direction and region (device IN endpoint number, 30 host non-periodic, 31 host periodic; for read channels the tag of the packets); a write channel writes one row per beat and commits at the last beat, a read channel reads the head packet of its region and releases it after the last row; `o_dma_req[c]` is high while the channel can move a packet and is withdrawn by `i_dma_ack[c]`; an access to a channel that is not enabled or has the wrong direction gets SLVERR. | Software and the external DMA controller must read exactly the rows of the packet | Decided 2026-11-21; implemented in `m_usb2_axs`; scratch simulation with a window read and a window write | spec owner | 2026-11-21 |
+| DEC-012 | Decision | Structure and options: `m_usb2_core` holds the parameter check, resets, over-current block, CSR integration, PHY adapter, link, speed engine, engines, FIFO manager, crossing and DMA or AXI slave; the four wrappers fix `PARA_USB2_PHY_IF` and `PARA_USB2_DATA_IF`. Pipeline and resource options (all default 0, one cycle each): `PARA_USB2_PIPE_PHY_IN`, `PARA_USB2_PIPE_RX`, `PARA_USB2_PIPE_CRC`, `PARA_USB2_PIPE_XREG`, `PARA_USB2_RAM_1P`; build options: `PARA_USB2_NUM_EP`, `PARA_USB2_NUM_HC`, `PARA_USB2_FIFO_DEPTH`, `PARA_USB2_RAM_PAR_EN`, `PARA_USB2_AXI_ADDR_W`, `PARA_USB2_AXI_ID_W`, `PARA_USB2_NUM_DMA_CH`. `m_usb2_regs` and the core are generated by `rtl_gen/gen_regs.py` and `rtl_gen/gen_core.py`; the CSR files in `rtl/csr` come from the workbook and are not edited. A crossing of single bits (over-current state to CLK-PHY, PHY alive flag to CLK-BUS) uses the library synchronizer; the PHY alive flag is the release of the CLK-PHY reset, not a clock monitor. | The generated CSR files still have the findings NAM-07 and NAM-TBL of the rule checker (long generated names, field names with rst and clk); they must be fixed in the workbook or the generator | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-013 | Decision | Scatter-gather (`m_usb2_dma`, `PARA_USB2_SG_EN` = 1 and `u2_hsts.sg_mode` = 1): one 8-byte descriptor per USB packet in both directions, because the receive drain serves the packet events of all endpoints in order and keeps no per-endpoint descriptor state. The receive drain reads the descriptor (AXI read, two beats on 32 bit and one beat on 64 bit), writes the packet to the buffer, then writes word 1 back (single beat, lane of word 1) and moves the pointer; the transmit fill does the same around the packet it reads. Both engines share the AXI channels only for the descriptors: an engine starts a packet only when the other holds neither channel, the transmit fill wins a tie, and a transmit write-back waits for the receive packet in progress. Bytes not transferred, `done`, `err` and `short` are written back; `last` and `ioc` are kept as written and not interpreted, so interrupts stay those of the endpoint or channel; `sg_mode` changes only while the DMA is idle. | Per-packet descriptors cost one extra AXI read and one write per packet; a list that spans many packets of one endpoint without software work needs the endpoint to be re-armed per transfer | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-014 | Decision | Command bits in the CLK-PHY shadow words (`m_usb2_xreg`): the bits that the engine consumes (the clear mask of the hardware-clear fields such as `ep_en`, `clr_nak`, `set_d0`, `ep_dis` and the port and channel commands) also leave the shadow word in CLK-PHY, so a second write of the same command gives a new edge for the engine; before this change the shadow kept the bit and a repeated command was not seen. A command written in the cycle of a clear wins. | Found with the scatter-gather test that re-arms an endpoint; every earlier test armed each endpoint once | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-015 | Decision | Host split transactions (`m_usb2_host`, `PARA_USB2_SPLIT_EN`): a channel with `split_en` sends a SPLIT token (hub address, port, SC, S, E, ET, CRC5) before its IN or OUT token. A start-split OUT carries the data and the ACK of the hub moves the channel to its complete phase; a start-split IN is answered by an ACK handshake; the complete phase of an OUT sends no data, reads nothing from the FIFO and needs no queue data to be scheduled; the complete phase of an IN receives the data. A NYET answer to a complete-split (OUT or IN) delays the retry to the next tick. | Verified in `tb_host_split` (start and complete split of an OUT and an IN transfer, token fields, NYET then ACK or DATA); the first version could not send a complete-split of an OUT and counted the ACK handshake of a start-split IN as an error | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-016 | Decision | Host LPM request (`u2_hport.lpm_req`): the rising edge of the request bit is kept as a pending flag until the host handler is idle and not sending a SOF; the handler then sends the EXT token and the LPM token (hird, remote-wake and address from the register) and waits for the answer. An ACK moves the port to the L1 suspend state (speed engine) and every answer, including NYET, STALL and a timeout, raises the `lpm` event; the bit is cleared by hardware when the transaction starts. | Verified in `tb_host_feat` and `tb_host16` (the pending flag was added because a request that arrived while the handler was busy was lost) | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-017 | Decision | High-bandwidth isochronous IN endpoints (`m_usb2_dev`): `u2_epi_ctl.mult` (1 to 3, 0 counts as 1) limits the packets per microframe; a counter per endpoint is cleared at every SOF and counts the committed packets; the PID of a data packet is DATA2 when three packets remain, DATA1 when two remain and DATA0 for the last one; an IN token beyond `mult` packets in the microframe is answered like an isochronous endpoint without data (zero-length DATA0 and the iso event). | Verified in `tb_dev_hbiso` | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-018 | Decision | Host polling flags (`m_usb2_host`): `poll_miss` is set when a periodic channel was due at the last tick and has not been served; `frm_ovr` when a due periodic channel did not fit into the time left of the microframe; `babble` when an IN data packet is longer than the maximum packet size (the transaction is an error and the channel halts); `iso_inc` for an error on an isochronous transaction. | all four flags are verified in `tb_host_flags` (`babble` with the channel halt, `iso_inc`, `poll_miss`, `frm_ovr`) | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-019 | Decision | Test_SE0_NAK (`m_usb2_spd`, `m_usb2_dev`): in test mode 3 the speed engine keeps the device active and `o_test_nak` makes the device answer NAK to every IN token. | Verified in `tb_dev_feat` (test mode 3 path) | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-020 | Decision | Transmitter watchdog (`m_usb2_lnktx`): when the payload source gives no byte for 15 cycles in the payload state the packet is aborted, so a source that disappears cannot hang the link. | Found in a simulation where the FIFO read was cancelled | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-021 | Decision | CSR names: fields and registers whose names carry a reset or clock token were renamed because the naming rules NAM-TBL and NAM-08 conflict (`swrst`, `prst`, `rstbusy`, `phyclk_ok`, `busrst`); the workbook, the generator input and the specification text use the new names. | The generated CSR files have no rule-check error after the change | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-022 | Decision | ULPI low-power wake request (`m_usb2_ulpilp`): the request is a level from the bus-side CSR (remote wake of a device: `u2_dctrl.rmt_wake` with `rmt_wake_en`; resume of a host port: `u2_hport.port_res`), because CLK-PHY may be stopped and the speed engine cannot run; one wake handshake is made for each low-power period, so a request that stays set until the speed engine clears it cannot start a second stp. Before this change the request was a CLK-PHY pulse of the speed engine, which cannot fire while the PHY clock is stopped and crossed into CLK-BUS without a synchronizer. | Verified for the host in `tb_host_ulpi` (SuspendM written to 0, clock stopped, stp held until dir rose and fell, port resumed, SuspendM written back to 1) and for the device in `tb_dev_ulpi_lp` (suspend, SuspendM = 0, clock stopped, remote wake request, stp held, wake handshake, `rmt_wake` cleared by hardware, resume flag) | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-023 | Decision | PHY register access (`u2_phy_acc`): the access direction is passed to the ULPI adapter as written in the register (`rd_wr` = 1 is a write); the first integration inverted it, so a CSR write ran a read command on the ULPI bus. | Found with the ULPI host test that writes a PHY scratch register, reads it back and reads the vendor ID | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-024 | Decision | ULPI register read data (`m_usb2_phyif_ulpi`): the data byte of a register read (dir high, nxt low, in the state that waits for it) is not decoded as an RX CMD; before this change the register value changed the line state, the VBUS state and RxActive of the link (a read of a register whose low bits are 00 looked like SE0 and disconnected the host port). | Found with the ULPI host test that reads PHY registers | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-025 | Decision | Timing round (FPGA place-and-route, `synth/fpga.py`): (1) the scanner of `m_usb2_xreg` decides a push of a published word from the registered dirty flag (one cycle old) instead of the 32-bit comparison, which was the head of the longest path of CLK-PHY; a changed value is still pushed with its current value and an extra push of an unchanged value is harmless; (2) new option `PARA_USB2_PIPE_MODE` registers the PHY mode outputs of `m_usb2_spd` (transceiver select, termination, operation mode, suspend, pull-downs) at the cost of one cycle on those outputs; (3) the OpMode that the host drives for the SE0 of a port reset is the parameter `PARA_USB2_RST_OPMODE` (default 3), so the PHY datasheet answer of TBD-015 is a build value and not a code change. | The measured effect is in `RTL_REPORT.md` | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-026 | Decision | NYET decision of the device (`m_usb2_dev`): the free rows reported by the FIFO manager already count the rows of the packet that just ended, so the high-speed bulk OUT answers NYET when the free rows are fewer than a maximum packet; the first version subtracted the packet rows a second time, the 17-bit result wrapped around and the device answered ACK with a full FIFO. | Found with `tb_dev_nyet` (NYET, PING answered NAK while the FIFO is full and ACK after the drain) | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-027 | Decision | Resource pass: the pointers and row counters of `m_usb2_fifo` and the credit counters of `m_usb2_dma` are as wide as the RAM needs (`clog2(rows)` bits for a pointer, one bit more for a count) and no longer 16 and 17 bits; the region base and size words of the CSR stay 16 bits wide. A region size larger than the RAM depth is a configuration error (it was undefined before). At the default depth of 1024 words and 8-bit UTMI+ `m_usb2_fifo` went from 13156 to 10001 generic cells (-24 %) and from 1307 to 989 flops. | Measured with `synth/area.py`; the regression passes unchanged | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-028 | Decision | Latency budget, measured in simulation (`tb_dev_utmi`, trace of `rxactive`, `dat_end`, the device transmit request and `txvalid`): the first transmitted byte follows the fall of `rxactive` after 4 CLK-PHY cycles for a data packet and for a token (one cycle to the end of packet event, one to the transmit request, two to `txvalid`). At 60 MHz one cycle is 8 high-speed bit times, so the answer starts after 32 bit times, above the minimum of 8 and well below the maximum of 192 bit times of REF-001; a shorter path would only add timing risk, so no cycle is removed. The testbench measure of 8 cycles (11 with all pipeline options) includes its own receive-end delay. | The pipeline options add one cycle each on the paths they register | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-029 | Decision | Timing options tuned against a target (`synth/fpga_target.py`: CLK-PHY 120 MHz, CLK-BUS 150 MHz, three seeds per configuration): `PARA_USB2_PIPE_XREG` now also registers the entry that `m_usb2_xreg` writes into the update FIFO (the status words that feed the scanner are long cones); a new entry is decided only when that stage is empty, so updates take one cycle more and the rate is at most one entry per two cycles. Every pipeline option is functionally transparent: the device tests are run with all options off and on (`PIPE` = 0 and 1) in the regression. | The target was not reached by any configuration (about 100 MHz on both clocks); see `RTL_REPORT.md` for the three-seed results | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-030 | Decision | CSR block regenerated with APB-CSR-Generator 3.6 (commit a8fb7d4, change "Support WSTRB") from the unchanged workbook (46 registers, 535 ports, same names and widths). Behavior change: PSTRB always masks the bytes written, and `i_slverr_en` = 0 only removes PSLVERR; the generator also adds a check of each `PARA_*_COUNT` value. That check was an `initial $error` outside a simulation branch and broke P2 and P14 (38 errors); the generator now wraps it in `` `ifndef VLSIT_SYNTHESIS `` (SCP-03), the fix is made at the generator source and the generated files are not edited (R-073, R-076). Rule check of the whole `rtl` folder: 0 errors; 31 simulation runs pass. | Generator change is local and uncommitted in the APB-CSR-Generator repository; its own regression (27 checks) passes | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-031 | Decision | Logic depth reduction by module, measured as the longest topological path of the generic-gate netlist (`ltp`): device 58 to 48 (registered per-endpoint data-available flag `reg_have_i`), host 65 to 49 (registered eligibility stage `reg_elig`, `reg_elig_p`, `reg_done_d2` in the scheduler), FIFO manager 52 to 39 (rows left to issue kept as a down counter with a registered `reg_rd_more` flag instead of a 17-bit comparator). Each change is functionally transparent; there is no new option and no latency change at the interface (DEC-028). | A few flip-flops more per module | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-032 | Decision | New timing option `PARA_USB2_PIPE_AXS` (default 0) for the AXI4 slave wrappers: a register slice on the read data channel of `m_usb2_axs`, so RID, RDATA, RRESP, RLAST and RVALID come from flip-flops and the FIFO read data no longer reaches the pins combinationally; a beat is taken from the FIFO when the output register is empty or is read in the same cycle, so the throughput stays one beat per cycle and the first beat is one CLK-BUS cycle later. Tested with `tb_dev_axis` at `PIPE` = 1 with a throttled RREADY. Measured: no visible CLK-BUS gain on the FPGA runs (the critical path is the request path to the bus port FIFO, 7 to 8 LUT levels, routing dominated); the option is kept for integrations where RDATA has a tight output budget. | One CLK-BUS cycle more on the first read beat | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-033 | Decision | Resource pass on `m_usb2_axs`: the credits and the row counters (`reg_credit`, `reg_r_left`, `reg_r_rq_left`, `reg_w_rows`) take their width from `PARA_USB2_FIFO_DEPTH` instead of a fixed 17 bits, as DEC-027 did for the FIFO manager and the DMA; the comparison of ARLEN with the rows of the head packet now uses the full row count instead of its low 8 bits. No behavior change for a packet that fits the FIFO. | Shorter carry chains in the CLK-BUS domain; the counters wrap if the CSR programs a region larger than the FIFO RAM (already illegal) | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-034 | Decision | Timing reference changed from the FPGA flow to a standard-cell library: the OSU FreePDK45 cells (`gscl45nm.lib`, typical corner, supplied by the user) with `synth/asic_sta.py` (Yosys mapping, ABC gate sizing and `stime`). Longest combinational delay, no wire load: 1.49 to 1.63 ns for the five top configurations and 0.82 to 1.55 ns per module, against periods of 6.67 ns (CLK-BUS 150 MHz) and 8.33 ns (CLK-PHY 120 MHz). With the clock-to-output delay (up to about 1.7 ns at the second load point of the only resettable flip-flop of this library) and its setup time (up to 0.6 ns) the path stays below 4 ns, so both targets are met before layout with the pipeline options off; the options remain as margin for wire delay, slower corners and FPGA targets. | Pre-layout estimate only: no wire load, no clock tree, typical corner, FIFO RAM macro and IO budgets excluded; sign-off STA in the target technology is still required | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-035 | Decision | The timing optimization round is closed. Status of the targets: CLK-PHY 120 MHz and CLK-BUS 150 MHz are met in the pre-layout estimate of DEC-034 and are not signed off. On the ECP5 flow (nextpnr) CLK-PHY reaches 120 MHz with all pipeline options on and CLK-BUS reaches at most 136 MHz. Sign-off STA (post-layout netlist, clock tree, extracted parasitics, several corners) is an integration task in the target technology. | The 150 MHz CLK-BUS figure must not be quoted as a guaranteed frequency | Accepted by the user on 2026-11-21 | spec owner | 2026-11-21 |
+| TBD-015 | Decision | Drive of SE0 for a host port reset and the PHY mode for it. | Section 10.1, DEC-009, DEC-025 | Resolved 2026-11-21 as a build parameter: `PARA_USB2_RST_OPMODE`, default 3 (author decision); a PHY datasheet that asks for another OpMode is a parameter value, not a design change | spec owner | 2026-11-21 |
+| TBD-016 | Decision | Limits that remain after the verification rounds: the AXI data width is fixed to four chunks of the UTMI+ width (DEC-010); the scatter-gather `last` and `ioc` bits are kept but not interpreted and every packet has its own descriptor (DEC-013); synthesis was run with generic gates and on one FPGA family, and no ASIC library, ASIC STA, CDC, RDC or formal tool was run (the SDC files in `sdc/` are untested). | Sections 3, 8 and 10; DEC-010, DEC-013, DEC-025 | Resolved 2026-11-21 as recorded limits; every feature of the specification is implemented and simulated | spec owner | 2026-11-21 |
 
 ## 21. Glossary
 
@@ -5247,6 +5425,10 @@ This section lists the assumptions, dependencies and open decisions of the speci
 | Over-current | Load current above the limit of the port power switch, reported by the switch |
 | Loopback | Test mode in which transmitted data returns to the receiver inside the IP |
 | Descriptor | Two-word memory structure that describes one DMA buffer |
+| Generation tag | 4-bit counter per register that marks which software write a hardware update belongs to |
+| Register command FIFO | Asynchronous FIFO that carries CSR writes from CLK-BUS to CLK-PHY |
+| Register update FIFO | Asynchronous FIFO that carries hardware-changed values from CLK-PHY to CLK-BUS |
+| SIE decision time | Time the link needs from the end of a received packet to the start of its response |
 
 ## 22. References used to shape this template
 

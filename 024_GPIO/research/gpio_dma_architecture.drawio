@@ -1,0 +1,81 @@
+<mxfile host="app.diagrams.net" modified="2026-11-21T00:00:00.000Z" agent="Claude" version="22.0.0" type="device">
+  <diagram id="gpio_dma_arch" name="GPIO with DMA: documented, inferred and unknown relations">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="GPIO with DMA: relations found in the 10 retained documents (research date 2026-11-21)" style="text;html=1;fontSize=16;fontStyle=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="900" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="mem" value="Memory (SRAM)&#xa;pattern table or capture buffer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="300" width="160" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="dma" value="DMA controller&#xa;(uDMA, GDMA, MSPM0 DMA, RP DMA)&#xa;request sources are per-family tables" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="300" y="290" width="220" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="gpio" value="GPIO block&#xa;DOUT register and DMAMASK (D8 p670)&#xa;per-pin DMAEN trigger enable (D7 p691)&#xa;event publisher/subscriber ports (D4, D6, D8)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="640" y="270" width="270" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="pads" value="Pads / pins&#xa;electrical characteristics: UNKNOWN in the pages read&#xa;(DMAE0: LVCMOS, DVCC, D9 p14)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="290" width="230" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="cpu" value="CPU&#xa;single-cycle I/O path to GPIO (D8 p19)&#xa;RP2040: fast GPIO block not on the system bus (D1 p28)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="640" y="90" width="270" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="evt" value="Event fabric / Event Task Matrix&#xa;(MSPM0G generic channel D8 p646-649,&#xa;ESP32-C6 D4 p137, p264; ESP32-P4 D6 p672, p1009)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="300" y="90" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="eng" value="DMA-fed pin engine&#xa;PIO FIFOs (D1 p99, p304; D2 p1016)&#xa;PARLIO on GDMA (D4 p131; D6 p661)&#xa;LCD_CAM on GDMA: pin role not confirmed (D5 p397)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="300" y="500" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="strobe" value="External strobe pin DMAE0 (D9 p21)&#xa;dedicated DMA trigger input" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="500" width="230" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="data (documented)" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="mem" target="dma">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="F1: DMA write to DOUT, per-bit mask (D8 p670; device-dependent p667)" style="endArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="dma" target="gpio">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="F2: pin edge triggers uDMA (D7 p691)" style="endArrow=classic;html=1;strokeWidth=2;exitX=0;exitY=0.75;entryX=1;entryY=0.75;" edge="1" parent="1" source="gpio" target="dma">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="GPIO event / task (documented in D4, D6)" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="gpio" target="evt">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="780" y="50"/><mxPoint x="430" y="50"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="F3: DMA start by ETM task (D4 p137-138; D6 p673)" style="endArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="evt" target="dma">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="F3 for MSPM0G: GPIO publisher to DMA subscriber (INFERENCE from D8 p540, p646, p648)" style="endArrow=classic;html=1;strokeWidth=1;dashed=1;" edge="1" parent="1" source="gpio" target="evt">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="700" y="200"/><mxPoint x="560" y="200"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="F4: DMA fills FIFO / descriptor (documented)" style="endArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="dma" target="eng">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" value="F4: pin pattern (logical)" style="endArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="eng" target="pads">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1125" y="550"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="pins (logical; electrical UNKNOWN)" style="endArrow=classic;html=1;strokeWidth=1;dashed=1;dashPattern=1 4;strokeColor=#808080;" edge="1" parent="1" source="gpio" target="pads">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" value="F2: pin to DMA (D9 p21)" style="endArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="strobe" target="dma">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1125" y="650"/><mxPoint x="410" y="650"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" value="CPU access (documented)" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;" edge="1" parent="1" source="cpu" target="gpio">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend" value="Legend&#xa;Solid line: documented in a retained source (locator in label)&#xa;Dashed line: inferred, not stated directly&#xa;Dotted grey line: unknown (electrical detail not read)&#xa;D1 RP2040, D2 RP2350, D4 ESP32-C6, D5 ESP32-S3, D6 ESP32-P4, D7 TM4C123, D8 MSPM0G, D9 MSP430FR5994. Page numbers are PDF page indices. Block names are generic; no signal-level detail is implied." style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=#ffffff;strokeColor=#999999;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="700" width="1200" height="90" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

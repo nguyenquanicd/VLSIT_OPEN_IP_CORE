@@ -310,7 +310,7 @@
       "pos": 0,
       "text": [
         "CKBUS",
-        "i_clk_bus, i_rst_n_bus"
+        "i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en"
       ]
     }
   ],
@@ -397,7 +397,7 @@
       "name": "Clock and reset of the bus domain",
       "category": "custom",
       "active": "SoC -> TOP",
-      "signals": "i_clk_bus, i_rst_n_bus"
+      "signals": "i_clk_bus, i_rst_n_bus, i_dft_test_en, i_dft_scan_en"
     },
     {
       "id": "BYTE",

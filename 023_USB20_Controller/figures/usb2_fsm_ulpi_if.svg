@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1710" height="520" viewBox="10 10 1710 520" font-family="Arial, Helvetica, sans-serif" font-size="18">
-<rect x="10" y="10" width="1710" height="520" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="2130" height="671" viewBox="10 10 2130 671" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="2130" height="671" fill="#FFFFFF"/>
 <ellipse cx="655" cy="70" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <text x="655" y="77" text-anchor="middle">ENUM_ST_UL_IDLE</text>
 <ellipse cx="1105" cy="270" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <text x="1105" y="277" text-anchor="middle">ENUM_ST_UL_TXCMD</text>
 <ellipse cx="1130" cy="470" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <text x="1130" y="477" text-anchor="middle">ENUM_ST_UL_TXDATA</text>
-<ellipse cx="1550" cy="70" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1550" y="77" text-anchor="middle">ENUM_ST_UL_TXSTOP</text>
+<ellipse cx="1970" cy="470" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1970" y="477" text-anchor="middle">ENUM_ST_UL_TXSTOP</text>
 <ellipse cx="185" cy="270" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <text x="185" y="277" text-anchor="middle">ENUM_ST_UL_RX</text>
 <ellipse cx="635" cy="270" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
@@ -16,6 +16,10 @@
 <text x="185" y="477" text-anchor="middle">ENUM_ST_UL_REGDATA</text>
 <ellipse cx="660" cy="470" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <text x="660" y="477" text-anchor="middle">ENUM_ST_UL_REGRD</text>
+<ellipse cx="1520" cy="470" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1520" y="477" text-anchor="middle">ENUM_ST_UL_LP</text>
+<ellipse cx="1760" cy="270" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1760" y="277" text-anchor="middle">ENUM_ST_UL_WAKE</text>
 <path d="M 714.394 96.3972 L 1045.09 243.375" fill="none" stroke="#000000" stroke-width="2.0"/>
 <polygon points="1045.09,243.375 1031.69,243.984 1036.56,233.018" fill="#000000" stroke="#000000" stroke-width="1"/>
 <rect x="776.742" y="158.886" width="206" height="22" fill="#FFFFFF" stroke="none"/>
@@ -24,14 +28,14 @@
 <polygon points="1126.25,440.011 1118.81,428.848 1130.72,427.36" fill="#000000" stroke="#000000" stroke-width="1"/>
 <rect x="1073.9" y="359" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
 <text x="1117.5" y="377" text-anchor="middle">nxt high</text>
-<path d="M 1160.73 440.732 L 1519.27 99.2683" fill="none" stroke="#000000" stroke-width="2.0"/>
-<polygon points="1519.27,99.2683 1514.72,111.889 1506.44,103.199" fill="#000000" stroke="#000000" stroke-width="1"/>
-<rect x="1246.9" y="259" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
-<text x="1340" y="277" text-anchor="middle">last byte accepted</text>
-<path d="M 1410 70 L 780 70" fill="none" stroke="#000000" stroke-width="2.0"/>
-<polygon points="780,70 792,64 792,76" fill="#000000" stroke="#000000" stroke-width="1"/>
-<rect x="992" y="59" width="206" height="22" fill="#FFFFFF" stroke="none"/>
-<text x="1095" y="77" text-anchor="middle">stp driven one cycle</text>
+<path d="M 1270 470 L 1550 560 L 1830 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1830,470 1820.41,479.384 1816.74,467.96" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1316.9" y="504" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1410" y="522" text-anchor="middle">last byte accepted</text>
+<path d="M 1889.37 445.475 L 1337.09 183.409 L 732.427 93.5519" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="732.427,93.5519 745.179,89.381 743.415,101.251" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1510.23" y="303.442" width="206" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1613.23" y="321.442" text-anchor="middle">stp driven one cycle</text>
 <path d="M 593.593 96.1305 L 413.493 157.554 L 244.356 244.742" fill="none" stroke="#000000" stroke-width="2.0"/>
 <polygon points="244.356,244.742 252.273,233.911 257.771,244.577" fill="#000000" stroke="#000000" stroke-width="1"/>
 <rect x="285.324" y="190.148" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
@@ -72,4 +76,16 @@
 <polygon points="295,270 307,264 307,276" fill="#000000" stroke="#000000" stroke-width="1"/>
 <rect x="311.8" y="259" width="166.4" height="22" fill="#FFFFFF" stroke="none"/>
 <text x="395" y="277" text-anchor="middle">dir high (abort)</text>
+<path d="M 185 500 L 185 640 L 1520 640 L 1520 500" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1520,500 1526,512 1514,512" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="749.5" y="629" width="206" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="852.5" y="647" text-anchor="middle">SuspendM = 0 written</text>
+<path d="M 1630 470 L 1640 470 L 1640 270 L 1635 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1635,270 1647,264 1647,276" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1576.6" y="359" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1640" y="377" text-anchor="middle">wake request</text>
+<path d="M 1660.2 251.936 L 754.801 88.0635" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="754.801,88.0635 767.678,84.2966 765.541,96.1048" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1099.55" y="159" width="215.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1207.5" y="177" text-anchor="middle">dir low, stp released</text>
 </svg>

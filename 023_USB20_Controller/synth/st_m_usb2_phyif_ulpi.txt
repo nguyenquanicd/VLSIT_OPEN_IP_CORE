@@ -1,0 +1,29 @@
+
+4. Printing statistics.
+
+=== m_usb2_phyif_ulpi ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      336 wires
+      533 wire bits
+       86 public wires
+      269 public wire bits
+       43 ports
+      113 port bits
+      407 cells
+       39   $_ANDNOT_
+       89   $_AND_
+       57   $_DFFE_PN0P_
+       17   $_DFFE_PN1P_
+       27   $_DFF_PN0_
+        2   $_DFF_PN1_
+       20   $_MUX_
+       51   $_NAND_
+       24   $_NOR_
+       16   $_NOT_
+       10   $_ORNOT_
+       40   $_OR_
+        2   $_XNOR_
+       13   $_XOR_
+

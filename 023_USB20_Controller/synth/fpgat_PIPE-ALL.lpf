@@ -1,0 +1,2 @@
+FREQUENCY PORT "i_clk_phy" 120 MHz;
+FREQUENCY PORT "i_clk_bus" 150 MHz;

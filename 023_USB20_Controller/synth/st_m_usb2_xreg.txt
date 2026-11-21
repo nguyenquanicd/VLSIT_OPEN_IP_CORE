@@ -1,0 +1,32 @@
+
+4. Printing statistics.
+
+=== m_usb2_xreg ===
+
+        +----------Local Count, excluding submodules.
+        | 
+    22667 wires
+    51642 wire bits
+      541 public wires
+    21471 public wire bits
+       18 ports
+    10337 port bits
+    39538 cells
+     2048   $_ALDFFE_PNP_
+      125   $_ANDNOT_
+    14334   $_AND_
+       12   $_DFFE_PN0N_
+     2052   $_DFFE_PN0P_
+      656   $_DFFE_PP_
+     4252   $_DFF_PN0_
+        2   $_DFF_PN1_
+       82   $_DFF_P_
+      580   $_MUX_
+     2832   $_NAND_
+     4162   $_NOR_
+       87   $_NOT_
+       23   $_ORNOT_
+     6189   $_OR_
+       26   $_XNOR_
+     2076   $_XOR_
+

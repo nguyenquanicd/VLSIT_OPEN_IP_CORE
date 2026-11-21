@@ -1,0 +1,5 @@
+
+4. Executing LTP pass (find longest path).
+
+Longest topological path in m_usb2_phyif_utmi (length=0):
+    0: \i_clk_phy

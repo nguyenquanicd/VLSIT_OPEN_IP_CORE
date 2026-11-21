@@ -1,0 +1,34 @@
+
+7. Printing statistics.
+
+=== m_usb2_host ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     7206        - wires
+    12016        - wire bits
+      183        - public wires
+     4993        - public wire bits
+       53        - ports
+     2586        - port bits
+     7838 2.56E+04 cells
+      520  1220.18   AND2X1
+      339  954.556   AOI21X1
+      315 1.03E+03   AOI22X1
+      200    469.3   BUFX2
+      662 6.83E+03   DFFSR
+      563  792.648   INVX1
+      884  3318.89   MUX2X1
+     1437  2.7E+03   NAND2X1
+      478 1.12E+03   NAND3X1
+      338  793.117   NOR2X1
+      241  678.608   NOR3X1
+      922  2.6E+03   OAI21X1
+      556  1.3E+03   OR2X1
+      293 1.38E+03   XNOR2X1
+       90   422.37   XOR2X1
+
+   Chip area for module '\m_usb2_host': 25614.394000
+     of which used for sequential elements: 6834.885200 (26.68%)
+

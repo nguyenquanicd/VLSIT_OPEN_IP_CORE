@@ -34,7 +34,7 @@
 <polyline points="734.0,51.0 734.0,33.0 760.0,33.0 760.0,51.0 786.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="786.0,51.0 786.0,33.0 812.0,33.0 812.0,51.0 838.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="838.0,51.0 838.0,33.0 864.0,33.0 864.0,51.0 890.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
-<text x="154" y="79" font-size="12" text-anchor="end">u2_hport.port_rst</text>
+<text x="154" y="79" font-size="12" text-anchor="end">u2_hport.prst</text>
 <polyline points="162.0,81.0 214.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="214.0,81.0 214.0,63.0" stroke="#000" stroke-width="1.4" fill="none"/>
 <polyline points="214.0,63.0 266.0,63.0" stroke="#000" stroke-width="1.4" fill="none"/>

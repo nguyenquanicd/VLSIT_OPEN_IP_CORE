@@ -1,0 +1,35 @@
+
+7. Printing statistics.
+
+=== m_usb2_top_utmi_axim ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    71337        - wires
+   218325        - wire bits
+     4124        - public wires
+   149123        - public wire bits
+       84        - ports
+      370        - port bits
+    85227  3.4E+05 cells
+     3081 7.23E+03   AND2X1
+     2480 6.98E+03   AOI21X1
+     7232 2.38E+04   AOI22X1
+     3892 9.13E+03   BUFX2
+     1314 1.05E+04   DFFPOSX1
+    14045 1.45E+05   DFFSR
+     9757 1.37E+04   INVX1
+    11164 4.19E+04   MUX2X1
+    12797  2.4E+04   NAND2X1
+     4322 1.01E+04   NAND3X1
+     1900  4458.35   NOR2X1
+     1443 4.06E+03   NOR3X1
+     6046  1.7E+04   OAI21X1
+     2216  5.2E+03   OR2X1
+     2207 1.04E+04   XNOR2X1
+     1331 6.25E+03   XOR2X1
+
+   Chip area for module '\m_usb2_top_utmi_axim': 339760.059600
+     of which used for sequential elements: 155492.230400 (45.77%)
+

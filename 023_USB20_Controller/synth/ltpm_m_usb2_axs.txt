@@ -1,0 +1,32 @@
+
+4. Executing LTP pass (find longest path).
+
+Longest topological path in m_usb2_axs (length=26):
+    0: \i_axis_wvalid
+    1: $171y (via $auto$simplemap.cc:106:simplemap_bitop$1587)
+    2: $173y (via $auto$simplemap.cc:106:simplemap_bitop$1588)
+    3: \w_sel_w (via $auto$simplemap.cc:106:simplemap_bitop$4285)
+    4: \w_grant_w (via $auto$simplemap.cc:106:simplemap_bitop$1614)
+    5: $63y (via $auto$simplemap.cc:106:simplemap_bitop$1437)
+    6: \o_axis_wready (via $auto$simplemap.cc:106:simplemap_bitop$1438)
+    7: $248y (via $auto$simplemap.cc:106:simplemap_bitop$2458)
+    8: $370y (via $auto$simplemap.cc:106:simplemap_bitop$2297)
+    9: $auto$maccmap.cc:114:fulladd$724.t1 [0] (via $auto$simplemap.cc:106:simplemap_bitop$2298)
+   10: $auto$maccmap.cc:114:fulladd$724.B [0] (via $auto$simplemap.cc:46:simplemap_not$4479)
+   11: $auto$maccmap.cc:114:fulladd$724.X [0] (via $auto$simplemap.cc:106:simplemap_bitop$6823)
+   12: $auto$maccmap.cc:240:synth$725.P [1] (via $auto$simplemap.cc:106:simplemap_bitop$9810)
+   13: $techmap$auto$maccmap.cc:240:synth$725.lcu.$and$C:\Tools\oss-cad-suite\bin\../share/yosys/techmap.v:240$5032_Y (via $auto$simplemap.cc:106:simplemap_bitop$9890)
+   14: $auto$maccmap.cc:240:synth$725.CO [1] (via $auto$simplemap.cc:106:simplemap_bitop$9889)
+   15: $techmap$auto$maccmap.cc:240:synth$725.lcu.$and$C:\Tools\oss-cad-suite\bin\../share/yosys/techmap.v:240$5056_Y (via $auto$simplemap.cc:106:simplemap_bitop$9866)
+   16: $auto$maccmap.cc:240:synth$725.CO [3] (via $auto$simplemap.cc:106:simplemap_bitop$9865)
+   17: $techmap$auto$maccmap.cc:240:synth$725.lcu.$and$C:\Tools\oss-cad-suite\bin\../share/yosys/techmap.v:240$5068_Y (via $auto$simplemap.cc:106:simplemap_bitop$9854)
+   18: $auto$maccmap.cc:240:synth$725.CO [7] (via $auto$simplemap.cc:106:simplemap_bitop$9853)
+   19: $techmap$auto$maccmap.cc:240:synth$725.lcu.$and$C:\Tools\oss-cad-suite\bin\../share/yosys/techmap.v:248$5077_Y (via $auto$simplemap.cc:106:simplemap_bitop$9845)
+   20: $auto$maccmap.cc:240:synth$725.CO [11] (via $auto$simplemap.cc:106:simplemap_bitop$9844)
+   21: $techmap$auto$maccmap.cc:240:synth$725.lcu.$and$C:\Tools\oss-cad-suite\bin\../share/yosys/techmap.v:248$5086_Y (via $auto$simplemap.cc:106:simplemap_bitop$9836)
+   22: $auto$maccmap.cc:240:synth$725.CO [13] (via $auto$simplemap.cc:106:simplemap_bitop$9835)
+   23: $techmap$auto$maccmap.cc:240:synth$725.lcu.$and$C:\Tools\oss-cad-suite\bin\../share/yosys/techmap.v:248$5107_Y (via $auto$simplemap.cc:106:simplemap_bitop$9840)
+   24: $auto$maccmap.cc:240:synth$725.CO [14] (via $auto$simplemap.cc:106:simplemap_bitop$9843)
+   25: $auto$maccmap.cc:240:synth$725.Y [15] (via $auto$simplemap.cc:106:simplemap_bitop$6923)
+   26: $procmux$162_Y [15] (via $auto$simplemap.cc:298:simplemap_mux$4126)
+   ff: \reg_credit [151] (via $auto$ff.cc:337:slice$2631)

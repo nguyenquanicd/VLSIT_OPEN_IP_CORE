@@ -1,0 +1,35 @@
+
+7. Printing statistics.
+
+=== m_usb2_fifo ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     9383        - wires
+    12179        - wire bits
+      160        - public wires
+     2941        - public wire bits
+       38        - ports
+      744        - port bits
+    10304 3.52E+04 cells
+      655 1.54E+03   AND2X1
+      665 1.87E+03   AOI21X1
+      345  1133.36   AOI22X1
+      326  764.959   BUFX2
+       45  359.014   DFFPOSX1
+      945 9.76E+03   DFFSR
+      558  785.608   INVX1
+      549 2.06E+03   MUX2X1
+     2459 4.62E+03   NAND2X1
+      378  886.977   NAND3X1
+      405  950.332   NOR2X1
+      158  444.896   NOR3X1
+     1051 2.96E+03   OAI21X1
+      534 1.25E+03   OR2X1
+      588 2.76E+03   XNOR2X1
+      643 3.02E+03   XOR2X1
+
+   Chip area for module '\m_usb2_fifo': 35158.078800
+     of which used for sequential elements: 10115.761500 (28.77%)
+

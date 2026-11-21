@@ -1,0 +1,18 @@
+
+4. Executing LTP pass (find longest path).
+
+Longest topological path in m_usb2_cdc_fifo (length=12):
+    0: \u_rq_fifo.u_vlsit_afifo_wr.u_sync_rd_gray.gen_bit_cell[0].u_vlsit_afifo_cell_sync.gen_sync2.gen_rn.u_dont_touch_sync2ff.reg_chain [1]
+    1: $abc$3801$new_n134 (via $abc$3801$blif$3801$36)
+    2: $abc$3801$new_n135 (via $abc$3801$blif$3801$37)
+    3: $abc$3801$new_n136 (via $abc$3801$blif$3801$38)
+    4: \o_rq_rdy (via $abc$3801$blif$3801$40)
+    5: \u_rq_fifo.u_vlsit_afifo_mem.i_wr_en (via $abc$3801$blif$3801$41)
+    6: $abc$3801$new_n187 (via $abc$3801$blif$3801$89)
+    7: $abc$3801$new_n191 (via $abc$3801$blif$3801$93)
+    8: $abc$3801$new_n195 (via $abc$3801$blif$3801$97)
+    9: $abc$3801$new_n198 (via $abc$3801$blif$3801$100)
+   10: \u_rq_fifo.u_vlsit_afifo_wr.w_wbin_nxt [2] (via $abc$3801$blif$3801$101)
+   11: $abc$3801$new_n210 (via $abc$3801$blif$3801$112)
+   12: \u_rq_fifo.u_vlsit_afifo_wr.w_wgray_nxt [2] (via $abc$3801$blif$3801$113)
+   ff: \u_rq_fifo.u_vlsit_afifo_wr.reg_wgray [2] (via $auto$ff.cc:337:slice$2026)

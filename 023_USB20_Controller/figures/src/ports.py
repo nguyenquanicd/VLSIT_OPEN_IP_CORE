@@ -37,6 +37,10 @@ add("i_slverr_en", "Input", "1", "Enables PSLVERR responses of the CSR", "static
 add("i_ovrcur_n", "Input", "1", "Active-low over-current flag from the external VBUS power switch; filtered for 16 CLK-BUS cycles and synchronized inside the IP", "asynchronous (synchronized to CLK-BUS)", "level", "1 (no over-current)", "sampled by the synchronizer of CDC-006; tie to 1 when no switch flag exists", ALL)
 add("o_vbus_pwr_en", "Output", "1", "Enable of the external VBUS power switch; 1 when u2_hport.vbus_drv is 1 and no over-current is latched", CB, "level", "0 (power off)", "changes on rising i_clk_bus; goes low within 2 cycles after the filtered over-current", ALL)
 
+# DFT
+add("i_dft_test_en", "Input", "1", "Test mode enable: overrides the resets in `m_usb2_rst` and bypasses the FIFO RAM macro", "static", "static", "0", "constant during test mode", ALL)
+add("i_dft_scan_en", "Input", "1", "Scan shift enable, also the test enable of every clock gate", "static", "level", "0", "asserted by the scan controller during shift", ALL)
+
 # interrupt
 add("o_int_usb", "Output", "1", "Interrupt request, high while an enabled and unmasked interrupt status bit is set", CB, "level", "0", "registered in CLK-BUS; cleared by software via the CSR", ALL)
 
@@ -76,7 +80,7 @@ add("i_utmi_sessend", "Input", "1", "VBUS below the B-device session end thresho
 l = UL
 add("i_ulpi_dir", "Input", "1", "Data bus direction from the PHY: high while the PHY drives i_ulpi_data", CP, "level", "1", "sampled on rising i_clk_phy", l)
 add("i_ulpi_nxt", "Input", "1", "PHY next-byte indication for transmit and receive data", CP, "level", "0", "sampled on rising i_clk_phy", l)
-add("o_ulpi_stp", "Output", "1", "Link stop of the transmit packet or register write", CP, "pulse (1 cycle)", "1 until the first TX CMD", "launched on rising i_clk_phy", l)
+add("o_ulpi_stp", "Output", "1", "Link stop of the transmit packet or register write; in ULPI low power mode it is driven by the always-on `m_usb2_ulpilp` and is asserted asynchronously to wake the PHY (REF-007 section 3.9.3)", "CLK-PHY (CLK-BUS in low power mode)", "pulse (1 cycle); level in low power mode", "1 until the first TX CMD", "launched on rising i_clk_phy; asynchronous release in low power mode", l)
 add("i_ulpi_data", "Input", "8", "ULPI data bus value driven by the PHY (RX CMD and receive data)", CP, "data (valid while i_ulpi_dir is 1)", "don't care", "sampled on rising i_clk_phy", l)
 add("o_ulpi_data", "Output", "8", "ULPI data bus value driven by the link (TX CMD and transmit data)", CP, "data (valid while o_ulpi_data_oe is 1)", "0", "launched on rising i_clk_phy", l)
 add("o_ulpi_data_oe", "Output", "1", "Output enable of o_ulpi_data; 0 whenever i_ulpi_dir is 1", CP, "level", "0", "pad wrapper drives io_ulpi_data from it", l)

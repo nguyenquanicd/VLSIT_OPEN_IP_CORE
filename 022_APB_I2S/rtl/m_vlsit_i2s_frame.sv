@@ -253,6 +253,7 @@ module m_vlsit_i2s_frame #(
   logic reg_act_win;
   logic reg_act_win_d;
   logic reg_act_seen;
+  logic reg_win_open_d;
   logic reg_start_d;
   logic w_win_open;
   logic w_nx_is_last;
@@ -487,8 +488,8 @@ module m_vlsit_i2s_frame #(
   assign w_win_open    = w_launch & w_run_like & (w_early ? w_nx_is_last : w_nx_is_first);
   assign w_seen_eff = reg_act_seen | w_ws_edge;
   assign w_miss     = ~w_master & w_launch & reg_act_win & ~w_seen_eff & w_run_like;
-  assign w_unexp    = ~w_master & reg_edge_q & ~reg_act_win_d & ~w_win_open & ~reg_start_d &
-                      w_run_like;
+  assign w_unexp    = ~w_master & reg_edge_q & ~reg_act_win_d & ~reg_win_open_d & ~w_win_open &
+                      ~reg_start_d & w_run_like;
 
   // Position and state: next-value logic of the frame FSM and the counters.
   always_comb begin : p_com_frame
@@ -730,10 +731,12 @@ module m_vlsit_i2s_frame #(
       reg_act_win_d <= 1'b0;
       reg_act_seen  <= 1'b0;
       reg_start_d   <= 1'b0;
+      reg_win_open_d <= 1'b0;
     end else begin
       reg_edge_q    <= w_ws_edge;
       reg_act_win_d <= reg_act_win;
       reg_start_d   <= w_started;
+      reg_win_open_d <= w_win_open;
       if (w_tick_l || (reg_fsm_frame_current_state != ENUM_ST_ARM))
         reg_ws_pend <= 1'b0;
       else if (w_ws_edge)
@@ -747,7 +750,7 @@ module m_vlsit_i2s_frame #(
       end else begin
         if (w_launch) begin
           reg_act_win  <= w_win_open;
-          reg_act_seen <= w_win_open & w_ws_edge;
+          reg_act_seen <= w_win_open & (w_ws_edge | reg_edge_q);
         end else if (w_ws_edge) begin
           reg_act_seen <= 1'b1;
         end

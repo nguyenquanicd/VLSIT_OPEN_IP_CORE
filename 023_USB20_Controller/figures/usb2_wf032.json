@@ -55,7 +55,7 @@
    }
   ],
   {
-   "name": "u2_epi_xfer.xsize",
+   "name": "u2_epi_xfr.xsize",
    "wave": "=..............=||...............",
    "data": [
     "512",

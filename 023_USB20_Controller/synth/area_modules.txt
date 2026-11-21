@@ -1,0 +1,9 @@
+m_usb2_fifo            cells=  13156 flops=  1307
+m_usb2_dev             cells=   7933 flops=   795
+m_usb2_host            cells=   9385 flops=   607
+m_usb2_dma             cells=   8298 flops=   656
+m_usb2_lnk             cells=   1382 flops=   248
+m_usb2_spd             cells=   1449 flops=   187
+m_usb2_cdc_fifo        cells=   1992 flops=   993
+m_usb2_axs             cells=   3623 flops=   419
+m_vlsit_csr_usb2       cells=  25543 flops=  3961

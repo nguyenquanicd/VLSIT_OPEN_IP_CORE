@@ -1,0 +1,34 @@
+
+7. Printing statistics.
+
+=== m_usb2_axs ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2710        - wires
+     4318        - wire bits
+       86        - public wires
+     1691        - public wire bits
+       53        - ports
+     1072        - port bits
+     3010 1.04E+04 cells
+      239  560.813   AND2X1
+      145  408.291   AOI21X1
+       47    154.4   AOI22X1
+       73  171.294   BUFX2
+      335 3.46E+03   DFFSR
+      265  373.093   INVX1
+      229  859.758   MUX2X1
+      641  1.2E+03   NAND2X1
+      124  290.966   NAND3X1
+       85  199.452   NOR2X1
+       76  214.001   NOR3X1
+      253  712.397   OAI21X1
+      245  574.892   OR2X1
+      169  793.117   XNOR2X1
+       84  394.212   XOR2X1
+
+   Chip area for module '\m_usb2_axs': 10368.714200
+     of which used for sequential elements: 3458.741000 (33.36%)
+

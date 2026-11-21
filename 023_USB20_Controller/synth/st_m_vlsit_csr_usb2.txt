@@ -1,0 +1,26 @@
+
+4. Printing statistics.
+
+=== m_vlsit_csr_usb2 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+    19113 wires
+    38402 wire bits
+      986 public wires
+    19090 public wire bits
+      535 ports
+     6879 port bits
+    25543 cells
+       83   $_ANDNOT_
+     9109   $_AND_
+     2160   $_DFFE_PN0P_
+       62   $_DFFE_PN1P_
+     1739   $_DFF_PN0_
+     2021   $_MUX_
+     5548   $_NAND_
+     2252   $_NOR_
+       47   $_NOT_
+      314   $_ORNOT_
+     2208   $_OR_
+

@@ -1,0 +1,3 @@
+plugin -i slang
+read_slang -f filelist_utmi_axis.f --top m_usb2_top_utmi_axis -G PARA_USB2_ROLE=0 -G PARA_USB2_NUM_EP=2 -G PARA_USB2_NUM_HC=1 -G PARA_USB2_FIFO_DEPTH=256 -G PARA_USB2_NUM_DMA_CH=2 -G PARA_USB2_PIPE_PHY_IN=1 -G PARA_USB2_PIPE_RX=1 -G PARA_USB2_PIPE_CRC=1 -G PARA_USB2_PIPE_XREG=1 -G PARA_USB2_PIPE_MODE=1 -G PARA_USB2_PIPE_AXS=1 -D VLSIT_SYNTHESIS
+synth_ecp5 -abc9 -top m_usb2_top_utmi_axis -json ../synth/fpgat_A9.json

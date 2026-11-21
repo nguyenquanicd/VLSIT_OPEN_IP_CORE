@@ -1,108 +1,129 @@
 {
- "page_name": "FSM_ULPI_IF",
- "out_name": "usb2_fsm_ulpi_if.drawio",
- "function": "ulpi_if",
- "initial": "ENUM_ST_UL_IDLE",
- "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
- "states": [
-  {
-   "name": "ENUM_ST_UL_IDLE"
-  },
-  {
-   "name": "ENUM_ST_UL_TXCMD"
-  },
-  {
-   "name": "ENUM_ST_UL_TXDATA"
-  },
-  {
-   "name": "ENUM_ST_UL_TXSTOP"
-  },
-  {
-   "name": "ENUM_ST_UL_RX"
-  },
-  {
-   "name": "ENUM_ST_UL_REGCMD"
-  },
-  {
-   "name": "ENUM_ST_UL_REGDATA"
-  },
-  {
-   "name": "ENUM_ST_UL_REGRD"
+  "page_name": "FSM_ULPI_IF",
+  "out_name": "usb2_fsm_ulpi_if.drawio",
+  "function": "ulpi_if",
+  "initial": "ENUM_ST_UL_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_UL_IDLE"
+    },
+    {
+      "name": "ENUM_ST_UL_TXCMD"
+    },
+    {
+      "name": "ENUM_ST_UL_TXDATA"
+    },
+    {
+      "name": "ENUM_ST_UL_TXSTOP"
+    },
+    {
+      "name": "ENUM_ST_UL_RX"
+    },
+    {
+      "name": "ENUM_ST_UL_REGCMD"
+    },
+    {
+      "name": "ENUM_ST_UL_REGDATA"
+    },
+    {
+      "name": "ENUM_ST_UL_REGRD"
+    },
+    {
+      "name": "ENUM_ST_UL_LP"
+    },
+    {
+      "name": "ENUM_ST_UL_WAKE"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_UL_IDLE",
+      "dst": "ENUM_ST_UL_TXCMD",
+      "label": "tx request & dir low"
+    },
+    {
+      "src": "ENUM_ST_UL_TXCMD",
+      "dst": "ENUM_ST_UL_TXDATA",
+      "label": "nxt high"
+    },
+    {
+      "src": "ENUM_ST_UL_TXDATA",
+      "dst": "ENUM_ST_UL_TXSTOP",
+      "label": "last byte accepted"
+    },
+    {
+      "src": "ENUM_ST_UL_TXSTOP",
+      "dst": "ENUM_ST_UL_IDLE",
+      "label": "stp driven one cycle"
+    },
+    {
+      "src": "ENUM_ST_UL_IDLE",
+      "dst": "ENUM_ST_UL_RX",
+      "label": "dir high"
+    },
+    {
+      "src": "ENUM_ST_UL_RX",
+      "dst": "ENUM_ST_UL_IDLE",
+      "label": "dir low"
+    },
+    {
+      "src": "ENUM_ST_UL_TXCMD",
+      "dst": "ENUM_ST_UL_RX",
+      "label": "dir high (abort)"
+    },
+    {
+      "src": "ENUM_ST_UL_TXDATA",
+      "dst": "ENUM_ST_UL_RX",
+      "label": "dir high (abort)"
+    },
+    {
+      "src": "ENUM_ST_UL_IDLE",
+      "dst": "ENUM_ST_UL_REGCMD",
+      "label": "phy_acc start & bus idle"
+    },
+    {
+      "src": "ENUM_ST_UL_REGCMD",
+      "dst": "ENUM_ST_UL_REGDATA",
+      "label": "write, nxt high"
+    },
+    {
+      "src": "ENUM_ST_UL_REGCMD",
+      "dst": "ENUM_ST_UL_REGRD",
+      "label": "read, dir high"
+    },
+    {
+      "src": "ENUM_ST_UL_REGDATA",
+      "dst": "ENUM_ST_UL_IDLE",
+      "label": "stp driven"
+    },
+    {
+      "src": "ENUM_ST_UL_REGRD",
+      "dst": "ENUM_ST_UL_IDLE",
+      "label": "data byte captured"
+    },
+    {
+      "src": "ENUM_ST_UL_REGCMD",
+      "dst": "ENUM_ST_UL_RX",
+      "label": "dir high (abort)"
+    },
+    {
+      "src": "ENUM_ST_UL_REGDATA",
+      "dst": "ENUM_ST_UL_LP",
+      "label": "SuspendM = 0 written"
+    },
+    {
+      "src": "ENUM_ST_UL_LP",
+      "dst": "ENUM_ST_UL_WAKE",
+      "label": "wake request"
+    },
+    {
+      "src": "ENUM_ST_UL_WAKE",
+      "dst": "ENUM_ST_UL_IDLE",
+      "label": "dir low, stp released"
+    }
+  ],
+  "layout": {
+    "margin": 40
   }
- ],
- "transitions": [
-  {
-   "src": "ENUM_ST_UL_IDLE",
-   "dst": "ENUM_ST_UL_TXCMD",
-   "label": "tx request & dir low"
-  },
-  {
-   "src": "ENUM_ST_UL_TXCMD",
-   "dst": "ENUM_ST_UL_TXDATA",
-   "label": "nxt high"
-  },
-  {
-   "src": "ENUM_ST_UL_TXDATA",
-   "dst": "ENUM_ST_UL_TXSTOP",
-   "label": "last byte accepted"
-  },
-  {
-   "src": "ENUM_ST_UL_TXSTOP",
-   "dst": "ENUM_ST_UL_IDLE",
-   "label": "stp driven one cycle"
-  },
-  {
-   "src": "ENUM_ST_UL_IDLE",
-   "dst": "ENUM_ST_UL_RX",
-   "label": "dir high"
-  },
-  {
-   "src": "ENUM_ST_UL_RX",
-   "dst": "ENUM_ST_UL_IDLE",
-   "label": "dir low"
-  },
-  {
-   "src": "ENUM_ST_UL_TXCMD",
-   "dst": "ENUM_ST_UL_RX",
-   "label": "dir high (abort)"
-  },
-  {
-   "src": "ENUM_ST_UL_TXDATA",
-   "dst": "ENUM_ST_UL_RX",
-   "label": "dir high (abort)"
-  },
-  {
-   "src": "ENUM_ST_UL_IDLE",
-   "dst": "ENUM_ST_UL_REGCMD",
-   "label": "phy_acc start & bus idle"
-  },
-  {
-   "src": "ENUM_ST_UL_REGCMD",
-   "dst": "ENUM_ST_UL_REGDATA",
-   "label": "write, nxt high"
-  },
-  {
-   "src": "ENUM_ST_UL_REGCMD",
-   "dst": "ENUM_ST_UL_REGRD",
-   "label": "read, dir high"
-  },
-  {
-   "src": "ENUM_ST_UL_REGDATA",
-   "dst": "ENUM_ST_UL_IDLE",
-   "label": "stp driven"
-  },
-  {
-   "src": "ENUM_ST_UL_REGRD",
-   "dst": "ENUM_ST_UL_IDLE",
-   "label": "data byte captured"
-  },
-  {
-   "src": "ENUM_ST_UL_REGCMD",
-   "dst": "ENUM_ST_UL_RX",
-   "label": "dir high (abort)"
-  }
- ],
- "layout": {
-  "margin": 40
- }
 }

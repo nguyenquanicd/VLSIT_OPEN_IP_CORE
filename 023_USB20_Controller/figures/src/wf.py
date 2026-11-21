@@ -124,7 +124,7 @@ add("WF-008", "control SETUP transaction (OP-002, success)", n,
 n, g = 14, (3, 6, 10)
 add("WF-009", "host port reset and chirp handshake (OP-005, success)", n, [
     clk("i_clk_phy", n, g),
-    row("u2_hport.port_rst", n, {0: "0", 1: "1", 13: "0"}, g),
+    row("u2_hport.prst", n, {0: "0", 1: "1", 13: "0"}, g),
     row("i_utmi_linestate", n, {0: "=", 1: "=", 2: "=", 4: "=", 5: "=", 7: "=", 8: "=", 9: "=", 11: "=", 12: "=", 13: "="}, g,
         ["J", "SE0", "SE0", "K", "K", "K", "J", "K", "J", "SE0", "SE0"]),
     row("o_utmi_txvalid", n, {0: "0", 7: "1", 12: "0"}, g),
@@ -315,11 +315,11 @@ n = 12
 add("WF-025", "soft reset of the protocol engines (IF-008, success)", n, [
     clk("i_clk_bus", n),
     row("u2_ctrl.core_en", n, {0: "1", 1: "0", 11: "1"}),
-    row("u2_ctrl.soft_rst", n, {0: "0", 2: "1", 8: "0"}),
-    row("u2_sts.rst_busy", n, {0: "0", 3: "1", 8: "0"}),
+    row("u2_ctrl.swrst", n, {0: "0", 2: "1", 8: "0"}),
+    row("u2_sts.rstbusy", n, {0: "0", 3: "1", 8: "0"}),
     row("w_rst_n_phy_core", n, {0: "1", 5: "0", 7: "1"}),
     row("o_utmi_txvalid", n, {0: "0"})],
-    "Software clears core_en, writes soft_rst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears soft_rst; registers keep their values.")
+    "Software clears core_en, writes swrst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears swrst; registers keep their values.")
 
 # WF-026 back to back tokens --------------------------------------------------------------------------
 n, g = 18, (5, 6, 7, 8, 9)
@@ -340,7 +340,7 @@ n, g = 34, (11, 22)
 rx = [(1, ["IN", "ADDR", "EP,C5"]), (12, ["IN", "ADDR", "EP,C5"]), (23, ["IN", "ADDR", "EP,C5"])]
 tx = [(6, ["DATA2", "D0", "CRCL", "CRCH"]), (17, ["DATA1", "D0", "CRCL", "CRCH"]), (28, ["DATA0", "D0", "CRCL", "CRCH"])]
 add("WF-028", "high-bandwidth isochronous IN, three transactions in one microframe (OP-003, corner)", n,
-    [clk("i_clk_phy", n, g)] + seg_rows("rx", "tx", n, rx, tx, g) + [row("u2_epi_ctrl.mult", n, {0: "="}, (), ["2"])],
+    [clk("i_clk_phy", n, g)] + seg_rows("rx", "tx", n, rx, tx, g) + [row("u2_epi_ctl.mult", n, {0: "="}, (), ["2"])],
     "Not to scale. mult = 2: DATA2, DATA1 and DATA0 PIDs follow in the three IN transactions of the microframe; isochronous has no handshake.", 1)
 
 # WF-029 AXI 4 KB boundary ---------------------------------------------------------------------------
@@ -373,7 +373,7 @@ add("WF-031", "double-buffered bulk OUT endpoint, two packets (OP-016, success)"
     [["Buffers of the endpoint region",
       row("w_buf_a", n, {0: "=", 6: "=", 12: "=", 20: "="}, (), ["free", "bus fills", "DMA drains", "free"]),
       row("w_buf_b", n, {0: "=", 22: "=", 28: "="}, (), ["free", "bus fills", "DMA drains"]),
-      row("u2_epo_ctrl.buf_cur", n, {0: "0", 12: "1", 28: "0"})]],
+      row("u2_epo_ctl.buf_cur", n, {0: "0", 12: "1", 28: "0"})]],
     "Packet 1 goes to buffer A; while the DMA drains A, packet 2 is received into buffer B. buf_cur toggles at the end of each packet.")
 
 # WF-032 automatic ZLP --------------------------------------------------------------------------------
@@ -381,7 +381,7 @@ n, g = 33, (16, 17)
 add("WF-032", "automatic zero-length packet after a full packet, zlp_en = 1 (OP-017, success)", n,
     [clk("i_clk_phy", n, g)] + seg_rows("rx", "tx", n, [(1, TOK("IN")), (14, ["ACK"]), (19, TOK("IN")), (30, ["ACK"])],
                                          [(6, ["DATA1", "D0", "D511", "CRCL", "CRCH"]), (24, ["DATA0", "CRCL", "CRCH"])], g) +
-    [row("u2_epi_xfer.xsize", n, {0: "=", 15: "="}, g, ["512", "0"]),
+    [row("u2_epi_xfr.xsize", n, {0: "=", 15: "="}, g, ["512", "0"]),
      row("w_zlp_pending", n, {0: "0", 15: "1", 31: "0"}, g),
      row("u2_epi_int.done", n, {0: "0", 31: "1"}, g)],
     "Not to scale. xsize = 512 equals one maximum packet: after the first packet is ACKed the hardware answers the next IN token with a zero-length packet, then sets done.")

@@ -9,11 +9,11 @@
    "wave": "10.........1"
   },
   {
-   "name": "u2_ctrl.soft_rst",
+   "name": "u2_ctrl.swrst",
    "wave": "0.1.....0..."
   },
   {
-   "name": "u2_sts.rst_busy",
+   "name": "u2_sts.rstbusy",
    "wave": "0..1....0..."
   },
   {
@@ -29,7 +29,7 @@
   "text": "WF-025: soft reset of the protocol engines (IF-008, success)"
  },
  "foot": {
-  "text": "Software clears core_en, writes soft_rst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears soft_rst; registers keep their values."
+  "text": "Software clears core_en, writes swrst = 1; the pulse crosses to CLK-PHY (CDC-005), the engines are reset, hardware clears swrst; registers keep their values."
  },
  "config": {
   "hscale": 1

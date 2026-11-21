@@ -1,0 +1,32 @@
+
+4. Printing statistics.
+
+=== m_usb2_top_utmi_axim ===
+
+        +----------Local Count, excluding submodules.
+        | 
+    66921 wires
+   224682 wire bits
+     4740 public wires
+   147087 public wire bits
+       84 ports
+      370 port bits
+    87651 cells
+     2647   $_ANDNOT_
+    24903   $_AND_
+       44   $_DFFE_PN0N_
+     7629   $_DFFE_PN0P_
+       89   $_DFFE_PN1P_
+     1128   $_DFFE_PP_
+     3870   $_DFF_PN0_
+       64   $_DFF_PN1_
+      186   $_DFF_P_
+     9020   $_MUX_
+    16364   $_NAND_
+     5719   $_NOR_
+     1656   $_NOT_
+     2129   $_ORNOT_
+     6840   $_OR_
+     1971   $_XNOR_
+     3392   $_XOR_
+
