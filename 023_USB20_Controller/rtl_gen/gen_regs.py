@@ -386,6 +386,8 @@ for lst, pref, vn in ((PUB, 'pub', 'w_pub_all'), (SET, 'set', 'w_set_all'), (CLR
 
 # write decode
 e('  // Write decode: the written address becomes the slot of the register in the crossing.')
+e('  // index is zero-extended before the compare with the full bank count, so a count of 16 accepts')
+e('  // indices 0 to 15 (review 2026-11-22: the compare used the count [3:0], which is 0 for 16).')
 e('  always_comb begin : p_com_dec')
 e("    w_dec_vld  = 1'b0;")
 e("    w_dec_slot = '0;")
@@ -397,7 +399,7 @@ for n in SLOTS:
     if r.banked:
         pat = format(r.offset >> 6, '010b') + '????'
         e(f"      14'b{pat}: begin")
-        e(f'        w_dec_vld  = (w_reg_wr_addr[5:2] < {r.cp}[3:0]);')
+        e(f"        w_dec_vld  = ({{28'd0, w_reg_wr_addr[5:2]}} < {r.cp});")
         e(f"        w_dec_slot = ({base(r)}[LPARA_SLOT_W-1:0] + {{4'd0, w_reg_wr_addr[5:2]}});")
         e('      end')
     else:

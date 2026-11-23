@@ -1,0 +1,172 @@
+{
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "Critical",
+      "verdict": "fix RTL",
+      "root_cause": "CSR update meaning",
+      "evidence": "rtl/m_usb2_xreg.sv:164,184-187,418-422, rtl/m_usb2_regs.sv:1407-1424",
+      "traced": true
+    },
+    {
+      "id": "F-002",
+      "severity": "Critical",
+      "verdict": "fix SDC",
+      "root_cause": "Timing exception binding",
+      "evidence": "sdc/usb2_clocks.sdc:12-32, ../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_rd.sv:80,205-213, rtl/m_usb2_phyif_ulpi.sv:200-203",
+      "traced": true
+    },
+    {
+      "id": "F-003",
+      "severity": "Critical",
+      "verdict": "fix HAS",
+      "root_cause": "Protocol profile",
+      "evidence": "rtl/m_usb2_top_utmi_axis.sv:170-190, VLSIT_USB20_CONTROLLER_HDS.md:131-137,166-175,922-955",
+      "traced": true
+    },
+    {
+      "id": "F-004",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Feature semantics",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:209,4769-4771,5090,5400",
+      "traced": true
+    },
+    {
+      "id": "F-005",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Timebase policy",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:217,996-998,5101, rtl/m_usb2_host.sv:282,548-577",
+      "traced": true
+    },
+    {
+      "id": "F-006",
+      "severity": "High",
+      "verdict": "fix RTL",
+      "root_cause": "DMA address policy",
+      "evidence": "rtl/m_usb2_dma.sv:343-344,405-419,441,703, VLSIT_USB20_CONTROLLER_HDS.md:235,1015",
+      "traced": true
+    },
+    {
+      "id": "F-007",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Configuration contract",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:1004-1030,4757-4781,5206,5366,5370",
+      "traced": true
+    },
+    {
+      "id": "F-008",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Service and latency budgets",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4954-4974,5084",
+      "traced": true
+    },
+    {
+      "id": "F-009",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Verification evidence",
+      "evidence": "sim/docs/verification_report.md:450-467,515-522,585-614",
+      "traced": true
+    },
+    {
+      "id": "F-010",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Software contract",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:120,1056,4924-4928,5373,5399,5402",
+      "traced": true
+    },
+    {
+      "id": "F-011",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Technology signoff",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4772-4781,5032-5043,5202-5213,5394-5395, RTL_REPORT.md:81-105",
+      "traced": true
+    },
+    {
+      "id": "F-012",
+      "severity": "Medium",
+      "verdict": "fix HAS",
+      "root_cause": "Power and storage evidence",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:4975-4987, RTL_REPORT.md:81-105",
+      "traced": true
+    },
+    {
+      "id": "F-013",
+      "severity": "Medium",
+      "verdict": "fix HAS",
+      "root_cause": "DFT handoff",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:5141-5152,5206",
+      "traced": true
+    },
+    {
+      "id": "F-014",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Product envelope",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:56-64,94-120,4962",
+      "traced": true
+    },
+    {
+      "id": "F-015",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "PHY integration handoff",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:922-955,987-998,5044-5057,5343,5385,5407",
+      "traced": true
+    },
+    {
+      "id": "F-016",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Release evidence provenance",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:1-12,5058-5140,5408, RTL_REPORT.md:81-105, sim/docs/verification_report.md:515-522,609-614",
+      "traced": true
+    },
+    {
+      "id": "F-017",
+      "severity": "High",
+      "verdict": "fix HAS",
+      "root_cause": "Configuration contract",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:1012-1025,1048-1056,4776",
+      "traced": true
+    },
+    {
+      "id": "F-018",
+      "severity": "Low",
+      "verdict": "not a defect",
+      "root_cause": "Commercial reference",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:66-120,136-139,4916-4928",
+      "traced": true
+    },
+    {
+      "id": "F-019",
+      "severity": "High",
+      "verdict": "fix RTL",
+      "root_cause": "Receive fault recovery",
+      "evidence": "rtl/m_usb2_host.sv:401,480-492,519-523, sim/docs/verification_report.md:438-440",
+      "traced": true
+    },
+    {
+      "id": "F-020",
+      "severity": "High",
+      "verdict": "fix RTL",
+      "root_cause": "Gray credit launch",
+      "evidence": "rtl/m_usb2_xreg.sv:217-226,243-266",
+      "traced": true
+    },
+    {
+      "id": "F-021",
+      "severity": "High",
+      "verdict": "fix RTL",
+      "root_cause": "DMA channel index width",
+      "evidence": "VLSIT_USB20_CONTROLLER_HDS.md:1018, rtl/m_usb2_axs.sv:180-181,222-228,306,395",
+      "traced": true
+    }
+  ]
+}

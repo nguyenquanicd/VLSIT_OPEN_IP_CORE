@@ -1,0 +1,315 @@
+{
+ "schema": "vlsit-spec-findings/1",
+ "findings": [
+  {
+   "id": "F-001",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-THROUGHPUT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:74",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-002",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-FRAME",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:426",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-003",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-COMPAT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2180",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-004",
+   "severity": "High",
+   "verdict": "fix RTL",
+   "root_cause": "RC-DMA",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:125",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-005",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-DMA",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:426",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-006",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-FRAME",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:432",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-007",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-APBWAIT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:126",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-008",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-DMAIF",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:387",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-009",
+   "severity": "High",
+   "verdict": "fix RTL",
+   "root_cause": "RC-RESET",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2210",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-010",
+   "severity": "High",
+   "verdict": "fix RTL",
+   "root_cause": "RC-GATED-SILENT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:1834",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-011",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-COMPILE-TIME",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:119",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-012",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-SW-SILENT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:495",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-013",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-THROUGHPUT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:133",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-014",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-DFT-CLK",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:476",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-015",
+   "severity": "High",
+   "verdict": "fix SDC",
+   "root_cause": "RC-SDC",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2100",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-016",
+   "severity": "High",
+   "verdict": "fix SDC",
+   "root_cause": "RC-SDC",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2118",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-017",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-AREA",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:1965",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-018",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-AREA",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:121",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-019",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-THROUGHPUT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:1961",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-020",
+   "severity": "High",
+   "verdict": "fix RTL",
+   "root_cause": "RC-FRAME",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:462",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-021",
+   "severity": "Medium",
+   "verdict": "fix RTL",
+   "root_cause": "RC-SW-SILENT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:129",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-022",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-DFT-CLK",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2081",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-023",
+   "severity": "Low",
+   "verdict": "waive",
+   "root_cause": "RC-SECURITY",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:62",
+   "owner": "SoC architect",
+   "invalidation": "The SoC places the IP behind an unprivileged APB requester or a product requires frame data to be secure-only; then enable i_protect_en with a PPROT rule for FIFO_DATA.",
+   "traced": true
+  },
+  {
+   "id": "F-024",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-SW-SILENT",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2143",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-025",
+   "severity": "High",
+   "verdict": "fix RTL",
+   "root_cause": "RC-VERIF",
+   "evidence": "verification/README.md:5",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-026",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-VERIF",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2056",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-027",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-DOC",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2232",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-028",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-DOC",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:6",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-029",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-SENSOR",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:2187",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-030",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "RC-SDC",
+   "evidence": "verification/static/hds_gaps.log:2",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  },
+  {
+   "id": "F-031",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "RC-FRAME",
+   "evidence": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md:66",
+   "owner": "",
+   "invalidation": "",
+   "traced": true
+  }
+ ]
+}

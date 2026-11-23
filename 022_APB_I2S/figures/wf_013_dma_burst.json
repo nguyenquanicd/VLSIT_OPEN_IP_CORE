@@ -1,0 +1,41 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p..............."
+  },
+  {
+   "name": "o_dma_tx_req",
+   "wave": "0011110000011100"
+  },
+  {
+   "name": "i_dma_tx_ack",
+   "wave": "0000011110000111"
+  },
+  {
+   "name": "o_dma_tx_single",
+   "wave": "0011110000111100"
+  },
+  {
+   "name": "w_fsm_dmahs_state",
+   "wave": "=.=...=...==..=.",
+   "data": [
+    "IDLE",
+    "REQ",
+    "WAIT",
+    "IDLE",
+    "REQ",
+    "WAIT"
+   ]
+  }
+ ],
+ "head": {
+  "text": "WF-013 OP-012 DMA burst handshake (success)"
+ },
+ "foot": {
+  "text": "Four-phase handshake on the APB clock: request, acknowledge, request low one cycle after the acknowledge rises, acknowledge low, request again two cycles after the acknowledge falls while the condition still holds."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

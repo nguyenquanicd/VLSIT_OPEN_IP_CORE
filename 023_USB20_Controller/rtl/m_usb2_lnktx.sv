@@ -52,6 +52,7 @@ module m_usb2_lnktx #(
 
   // Status
   output logic        o_tx_busy,
+  output logic        o_starve,
   output logic        o_tx_done,
   output logic        o_tx_fail,
 
@@ -389,6 +390,8 @@ module m_usb2_lnktx #(
   assign o_tx_data  = reg_o_data;
   assign o_tx_valid = reg_o_valid;
   assign o_tx_busy  = (reg_fsm_tx_current_state != ENUM_ST_IDLE) | reg_o_valid[0];
+  // The payload source stayed empty inside a packet until the packet was aborted: FIFO underflow.
+  assign o_starve   = (reg_fsm_tx_current_state == ENUM_ST_PAY) & ~i_src_vld & (reg_starve == 4'd15);
   assign o_tx_done  = reg_done;
   assign o_tx_fail  = reg_fail;
 

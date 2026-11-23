@@ -1,0 +1,33 @@
+{
+ "signal": [
+  {
+   "name": "o_bclk_tx",
+   "wave": "p............."
+  },
+  {
+   "name": "o_ws_tx [fmt=1 I2S]",
+   "wave": "01000000001111"
+  },
+  {
+   "name": "o_ws_tx [fmt=2 LJ]",
+   "wave": "00100000000111"
+  },
+  {
+   "name": "o_sdo_0 [fmt=1 I2S]",
+   "wave": "00011000011010"
+  },
+  {
+   "name": "o_sdo_0 [fmt=2 LJ]",
+   "wave": "00011000011010"
+  }
+ ],
+ "head": {
+  "text": "WF-005 OP-005 Frame sync of the Philips I2S and the left-justified preset (success)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock. The data (0xC3, MSB first) is the same; the I2S frame sync changes one bit before the MSB, the left-justified frame sync changes with the MSB (the two frame sync rows come from two runs and are aligned on the MSB). The data rows show the MSB position of each run."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

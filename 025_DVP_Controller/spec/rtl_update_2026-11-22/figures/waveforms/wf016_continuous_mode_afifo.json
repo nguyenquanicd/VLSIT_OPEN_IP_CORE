@@ -1,0 +1,64 @@
+{
+  "signal": [
+    {
+      "name": "PCLK_MODE",
+      "wave": "=...............",
+      "data": [
+        "0"
+      ]
+    },
+    {
+      "name": "CAPTURE_EN",
+      "wave": "1111111111111111"
+    },
+    {
+      "name": "PCLK continuous",
+      "wave": "pppppppppppppppp",
+      "period": 1.0
+    },
+    {
+      "name": "CLK-APB independent",
+      "wave": "pppppppppppppppp",
+      "period": 0.82,
+      "phase": 0.3
+    },
+    {
+      "name": "VSYNC active edge",
+      "wave": "0..10..........."
+    },
+    {
+      "name": "HREF",
+      "wave": "0....1..........0"
+    },
+    {
+      "name": "DVP data",
+      "wave": "x.....=..=..=...x",
+      "data": [
+        "P0",
+        "P1",
+        "P2"
+      ]
+    },
+    {
+      "name": "sample accepted",
+      "wave": "0.....1..1..1...."
+    },
+    {
+      "name": "AFIFO write",
+      "wave": "0.....1..1..1...."
+    },
+    {
+      "name": "AFIFO read/pop",
+      "wave": "0...........1.1.."
+    }
+  ],
+  "head": {
+    "text": "WF-016 \u2014 PCLK_MODE=0: continuous PCLK writes every qualified sample to AFIFO"
+  },
+  "foot": {
+    "text": "Illustrative; clocks not to scale. Each selected sample edge with HREF active after VSYNC frame start writes one entry. AFIFO supports unrelated PCLK/APB rates; no fixed frequency ratio applies."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

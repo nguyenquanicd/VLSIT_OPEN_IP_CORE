@@ -1,0 +1,33 @@
+{
+ "signal": [
+  {
+   "name": "o_bclk_tx",
+   "wave": "p...................."
+  },
+  {
+   "name": "o_ws_tx",
+   "wave": "100000000111111110000"
+  },
+  {
+   "name": "w_pop_slot",
+   "wave": "001000000010000000100"
+  },
+  {
+   "name": "o_sdo_oe",
+   "wave": "011111111111111111111"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "001100001101011010110"
+  }
+ ],
+ "head": {
+  "text": "WF-003 OP-003 I2S transmit frame, master (success)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock, divider 2, two 8-bit slots (legal minimum), words 0xC3 and 0x5A. The frame sync falls one bit before the MSB; data and frame sync change at the launch edge (bit clock falling); the word is popped (w_pop_slot) in the bit cell before its launch. Simulated, synthesis branch."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

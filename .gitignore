@@ -13,7 +13,10 @@
 
 # --- whole-IP exclusions (deliberately not versioned) ----------------------
 /016_CAN_Controller/
+/017_QSPI_Controller/
 /018_MKV_Block_Cipher/
+/024_GPIO/
+/026_I2C_Controller/
 /FTEL/
 
 # --- simulation waveforms & sim data --------------------------------------
@@ -92,3 +95,8 @@ tmp/
 !**/synthesis/**/*.cmd
 !**/synthesis/**/*.mk
 !**/synthesis/**/Makefile
+
+# Ignore the FTEL folder in any letter case (name given by the user)
+FTEL/
+ftel/
+Ftel/

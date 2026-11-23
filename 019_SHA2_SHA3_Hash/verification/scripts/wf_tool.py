@@ -16,7 +16,7 @@ import simlib as S
 import vec_lib as V
 
 VER = S.VER
-FIG = os.path.dirname(VER) + '/spec/figures'
+FIG = os.path.dirname(VER) + '/figures'
 EVD = VER + '/waveforms_sim'
 SVGTOOL = 'C:/Users/PC/.claude/skills/vlsit-asic-ip-microspec/scripts/vlsit_waveform_svg.py'
 

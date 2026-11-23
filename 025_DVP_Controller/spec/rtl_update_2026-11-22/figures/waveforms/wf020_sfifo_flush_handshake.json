@@ -1,0 +1,59 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p........."
+    },
+    {
+      "name": "i_capture_en",
+      "wave": "0........."
+    },
+    {
+      "name": "w_gate_quiescent",
+      "wave": "1........."
+    },
+    {
+      "name": "dvp_ctrl.fifo_flush",
+      "wave": "0.1......0"
+    },
+    {
+      "name": "i_sfifo_rst_n_sw",
+      "wave": "1..0.1...."
+    },
+    {
+      "name": "w_sfifo_busy",
+      "wave": "0...1.0..."
+    },
+    {
+      "name": "i_fifo_rd_en",
+      "wave": "0........."
+    },
+    {
+      "name": "o_fifo_occupancy",
+      "wave": "=.........",
+      "data": [
+        "5"
+      ]
+    },
+    {
+      "name": "o_flush_done",
+      "wave": "0.......1."
+    },
+    {
+      "name": "dvp_frame_count.count",
+      "wave": "=.........",
+      "data": [
+        "7"
+      ]
+    }
+  ],
+  "head": {
+    "text": "WF-020: gated-mode SFIFO flush and retained frame count"
+  },
+  "foot": {
+    "text": "The local software-reset handshake blocks reads. Occupancy is presented as zero while flush is pending; the FIFO reset clears stored samples, while the frame counter is retained."
+  },
+  "config": {
+    "hscale": 3
+  }
+}

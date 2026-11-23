@@ -37,6 +37,10 @@ module m_usb2_xreg #(
   localparam logic [31:0] LPARA_ENTRY_W   = 48,
   localparam logic [31:0] LPARA_FIFO_DEPTH = 8,
   localparam logic [31:0] LPARA_PTR_W     = 4,
+  // Cycles for which event sets and command clears wait after a new one was raised, so that a
+  // published word that the same hardware step changes one or two cycles later is dirty first
+  // (review 2026-11-22 F-001, BUG-044).
+  localparam logic [31:0] LPARA_EVT_HOLD  = 7,
   localparam logic [31:0] LPARA_CELL_2FF  = 2,
   localparam logic [31:0] LPARA_MEM_RTL   = 0,
   localparam logic [31:0] LPARA_KIND_SET  = 1,
@@ -80,6 +84,8 @@ module m_usb2_xreg #(
   logic [LPARA_ENTRY_W-1:0]                    w_cmd_wr_data;
   logic [LPARA_ENTRY_W-1:0]                    w_cmd_rd_data;
   logic                                        w_cmd_full;
+  logic                                        w_cmd_wr_ok;
+  logic [LPARA_FREE_W-1:0]                     w_free_cnt;
   logic                                        w_cmd_empty;
   logic                                        w_cmd_rd_en;
   logic [LPARA_ENTRY_W-1:0]                    w_upd_wr_data;
@@ -110,7 +116,12 @@ module m_usb2_xreg #(
   logic [LPARA_WORD_W-1:0]                     w_scan_clr;
   logic [LPARA_WORD_W-1:0]                     w_scan_val;
   logic [LPARA_KIND_W-1:0]                     w_scan_kind;
+  logic [LPARA_PTR_W-1:0]                      w_pop_bin_nxt;
+  logic [LPARA_PTR_W-1:0]                      reg_pop_gray_phy;
   logic                                        w_hit;
+  logic                                        reg_evt_in;
+  logic [2:0]                                  reg_evt_hold;
+  logic                                        w_evt_hold;
   logic                                        reg_wr_v;
   logic [LPARA_ENTRY_W-1:0]                    reg_wr_data;
   logic                                        w_fifo_wr_en;
@@ -140,7 +151,7 @@ module m_usb2_xreg #(
   ) u_cmd_fifo (
     .i_clk_wr      (i_clk_bus),
     .i_rst_n_wr    (i_rst_n_bus),
-    .i_wr_en       (i_wr_en),
+    .i_wr_en       (w_cmd_wr_ok),
     .i_wr_data     (w_cmd_wr_data),
     .i_full_thr    ('0),
     .o_full        (w_cmd_full),
@@ -211,8 +222,18 @@ module m_usb2_xreg #(
   );
 
   // Pop counter in CLK-PHY, sent to CLK-BUS as a Gray code (library synchronizer). The free
-  // count is pessimistic: it can be late to rise, never early.
-  assign w_pop_gray_phy = reg_pop_cnt_phy ^ (reg_pop_cnt_phy >> 1);
+  // count is pessimistic: it can be late to rise, never early. The Gray word is a register of
+  // CLK-PHY (from the next binary value), so the synchronizer never samples the output of the
+  // encoder gates (review 2026-11-22 F-020, BUG-045).
+  assign w_pop_bin_nxt  = reg_pop_cnt_phy + (w_cmd_rd_en ? LPARA_ONE[LPARA_PTR_W-1:0] : '0);
+  assign w_pop_gray_phy = reg_pop_gray_phy;
+
+  always_ff @(posedge i_clk_phy, negedge i_rst_n_phy) begin : p_ff_pop_gray
+    if (!i_rst_n_phy)
+      reg_pop_gray_phy <= '0;
+    else
+      reg_pop_gray_phy <= w_pop_bin_nxt ^ (w_pop_bin_nxt >> 1);
+  end
 
   m_vlsit_afifo_sync #(
     .PARA_AFIFO_SYNC_W       (LPARA_PTR_W),
@@ -236,17 +257,22 @@ module m_usb2_xreg #(
   // Used entries and the free count (8 minus used); the event is the accepted push.
   assign w_used    = reg_push_cnt - w_pop_bin_bus;
   // Free count: zero when all entries are used.
-  assign o_xq_free = (w_used >= LPARA_FIFO_DEPTH[LPARA_PTR_W-1:0]) ? 6'd0 :
-                     (LPARA_FIFO_DEPTH[LPARA_FREE_W-1:0] - {2'b00, w_used});
-  // Overflow event: a push while the command FIFO is full is dropped.
-  assign o_xq_ovf  = i_wr_en & w_cmd_full;
+  assign w_free_cnt = (w_used >= LPARA_FIFO_DEPTH[LPARA_PTR_W-1:0]) ? 6'd0 :
+                      (LPARA_FIFO_DEPTH[LPARA_FREE_W-1:0] - {2'b00, w_used});
+  // The reported free count is also 0 while the FIFO flag is full, and a write is accepted only
+  // when both views have room, so that a write is dropped exactly when o_xq_free is 0
+  // (REQ-REG-002, BUG-022: the two views could differ by one entry in either direction).
+  assign o_xq_free  = w_cmd_full ? 6'd0 : w_free_cnt;
+  assign w_cmd_wr_ok = i_wr_en & ~w_cmd_full & (w_free_cnt != 6'd0);
+  // Overflow event: a push while no entry is free is dropped.
+  assign o_xq_ovf   = i_wr_en & ~w_cmd_wr_ok;
 
   // Push counter and tag sequence of CLK-BUS; they move only on an accepted push.
   always_ff @(posedge i_clk_bus, negedge i_rst_n_bus) begin : p_ff_push
     if (!i_rst_n_bus) begin
       reg_push_cnt <= '0;
       reg_seq      <= '0;
-    end else if (i_wr_en & ~w_cmd_full) begin
+    end else if (w_cmd_wr_ok) begin
       reg_push_cnt <= reg_push_cnt + LPARA_ONE[LPARA_PTR_W-1:0];
       reg_seq      <= reg_seq + LPARA_ONE[LPARA_TAG_W-1:0];
     end
@@ -329,7 +355,25 @@ module m_usb2_xreg #(
   // Hit: events wait while any published word is dirty, so a published word always reaches the CSR
   // before an event that was raised together with it (DEC-002).
   assign w_pub_dirty = (reg_pdirty != '0);
-  assign w_hit       = ((w_sel_set | w_sel_clr) & ~w_pub_dirty) | w_sel_dirty;
+  // Events and clears also wait LPARA_EVT_HOLD cycles after the last new one: the engines change a
+  // published word (remaining length, active flag) one or two cycles after the event pulse, and
+  // reg_pdirty is one more cycle late. Without the wait, done reached the CSR before the final
+  // xsize, and the clear of ep_en before active (BUG-044, found by t_dev_xreg_race).
+  assign w_evt_hold  = reg_evt_in | (reg_evt_hold != 3'd0);
+  assign w_hit       = ((w_sel_set | w_sel_clr) & ~w_pub_dirty & ~w_evt_hold) | w_sel_dirty;
+
+  always_ff @(posedge i_clk_phy, negedge i_rst_n_phy) begin : p_ff_evthold
+    if (!i_rst_n_phy) begin
+      reg_evt_in   <= 1'b0;
+      reg_evt_hold <= 3'd0;
+    end else begin
+      reg_evt_in <= (i_set != '0) | (i_clr != '0);
+      if (reg_evt_in)
+        reg_evt_hold <= LPARA_EVT_HOLD[2:0];
+      else if (reg_evt_hold != 3'd0)
+        reg_evt_hold <= reg_evt_hold - 3'd1;
+    end
+  end
 
   // Value and kind of the entry pushed for the scan slot, by priority: published word, event set
   // mask, command clear mask.

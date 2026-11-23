@@ -1,0 +1,535 @@
+{
+  "spec": "025_DVP_Controller\\spec\\rtl_generation_2026-11-22\\VLSIT_DVP_CONTROLLER_HDS.md",
+  "rtl": "025_DVP_Controller\\review\\rtl_crosscheck_2026-11-22\\rtl_inventory.json",
+  "spec_ports": 18,
+  "rtl_ports": 29,
+  "spec_parameters": 4,
+  "rtl_parameters": 1,
+  "mismatches": [
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_clk_dvp",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_dma_ack",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_dvp_data",
+      "spec": {
+        "direction": "input",
+        "width": "PARA_DVP_DATA_W"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_dvp_href",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_dvp_vsync",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_paddr",
+      "spec": {
+        "direction": "input",
+        "width": "16"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_penable",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_pprot",
+      "spec": {
+        "direction": "input",
+        "width": "3"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_psel",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_pstrb",
+      "spec": {
+        "direction": "input",
+        "width": "4"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_pwdata",
+      "spec": {
+        "direction": "input",
+        "width": "32"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_pwrite",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "i_rst_n_sys",
+      "spec": {
+        "direction": "input",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "o_dma_req",
+      "spec": {
+        "direction": "output",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "o_prdata",
+      "spec": {
+        "direction": "output",
+        "width": "32"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "o_pready",
+      "spec": {
+        "direction": "output",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "missing_in_rtl",
+      "object": "o_pslverr",
+      "spec": {
+        "direction": "output",
+        "width": "1"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_apb_paddr",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "LPARA_ADDR_W-1 - 0 + 1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 43,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_apb_penable",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 41,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_apb_pprot",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "3",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 46,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_apb_psel",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 40,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_apb_pstrb",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "LPARA_STRB_W-1 - 0 + 1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 45,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_apb_pwdata",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "LPARA_DATA_W-1 - 0 + 1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 44,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_apb_pwrite",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 42,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_clk_reg",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 36,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_dvp_fifo_level_count",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "32",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 78,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_dvp_fifo_sts_active",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 75,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_dvp_fifo_sts_empty",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 74,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_dvp_fifo_sts_full",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 73,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_dvp_version_major",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "16",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 56,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_dvp_version_minor",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "16",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 57,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_hw_wdata_dvp_fifo_sts_ovf",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 71,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_hw_we_dvp_fifo_sts_ovf",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 72,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_protect_en",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 52,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_rst_n_apb",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 33,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_rst_n_reg",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 37,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "i_slverr_en",
+      "spec": null,
+      "rtl": {
+        "direction": "input",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 53,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_apb_prdata",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "LPARA_DATA_W-1 - 0 + 1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 49,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_apb_pready",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 47,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_apb_pslverr",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 48,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_dvp_ctrl_capture_en",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 61,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_dvp_ctrl_pclk_mode",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 60,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_dvp_fifo_sts_ovf",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 70,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_dvp_timeout_cycles",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "32",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 67,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "extra_in_rtl",
+      "object": "o_dvp_wmark_level",
+      "spec": null,
+      "rtl": {
+        "direction": "output",
+        "width": "32",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+        "line": 64,
+        "module": "m_vlsit_csr_dvp"
+      }
+    },
+    {
+      "kind": "parameter_missing_in_rtl",
+      "object": "PARA_AFIFO_MEM_USE_MACRO",
+      "spec": {
+        "default": "0 RTL array by default",
+        "range": "SRAM wrapper is not selected for this version"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "parameter_missing_in_rtl",
+      "object": "PARA_DVP_DATA_W",
+      "spec": {
+        "default": "8, 10, 12; default 8",
+        "range": "Sets DVP data and FIFO sample width"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "parameter_missing_in_rtl",
+      "object": "PARA_DVP_VSYNC_ACTIVE",
+      "spec": {
+        "default": "0=active-low, 1=active-high; default 1",
+        "range": "Compile-time sensor profile; gated mode synchronizes active level through 2-FF in CLK-APB"
+      },
+      "rtl": null
+    },
+    {
+      "kind": "parameter_missing_in_rtl",
+      "object": "PARA_FIFO_DEPTH",
+      "spec": {
+        "default": "Power of two, minimum 2; default 8",
+        "range": "Applies to both mode paths; integrator may override after Section 13 depth sizing"
+      },
+      "rtl": null
+    }
+  ]
+}

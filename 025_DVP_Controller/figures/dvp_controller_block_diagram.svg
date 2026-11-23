@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="640" viewBox="140 250 1360 640" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="140" y="250" width="1360" height="640" fill="#FFFFFF"/>
+<rect x="510" y="380" width="760" height="480" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="590" y="716" width="220" height="72" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="748" text-anchor="middle">u_dvp_capture</text>
+<text x="700" y="770" text-anchor="middle">(m_dvp_capture)</text>
+<rect x="960" y="716" width="240" height="72" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1080" y="748" text-anchor="middle">u_dvp_fifo</text>
+<text x="1080" y="770" text-anchor="middle">(m_vlsit_afifo_top)</text>
+<rect x="580" y="504" width="240" height="72" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_dvp_apb_service</text>
+<text x="700" y="558" text-anchor="middle">(m_dvp_apb_service)</text>
+<text x="315" y="746" text-anchor="middle">DVP</text>
+<text x="315" y="768" text-anchor="middle">clock/reset/data/frame/HREF</text>
+<text x="1248" y="421" text-anchor="end">DVP</text>
+<text x="1248" y="443" text-anchor="end">CONTROLLER</text>
+<text x="835" y="798" text-anchor="middle">SMP</text>
+<text x="885" y="598" text-anchor="middle">PIX</text>
+<text x="812" y="622" text-anchor="middle">EN</text>
+<text x="1355" y="471" text-anchor="middle">REQ</text>
+<text x="1355" y="493" text-anchor="middle">DMA request</text>
+<text x="1380" y="561" text-anchor="middle">APB</text>
+<text x="1380" y="583" text-anchor="middle">clock/reset/APB4</text>
+<text x="700" y="301" text-anchor="middle">ACK</text>
+<text x="700" y="323" text-anchor="middle">DMA acknowledge</text>
+<path d="M 820 510 L 1320 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1320,510 1308,516 1308,504" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1320 530 L 820 530" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="820,530 832,524 832,536" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 330 L 700 504" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,504 694,492 706,492" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 460 750 L 590 750" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="590,750 578,756 578,744" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 590 392 L 522 392 L 522 744 A 6 6 0 0 0 522 756 L 522 848 L 1080 848 L 1080 788" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1080,788 1086,800 1074,800" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 810 770 L 960 770" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="960,770 948,776 948,764" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 820 550 L 840 550 L 840 740 L 810 740" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="810,740 822,734 822,746" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 820 570 L 834 570 A 6 6 0 0 1 846 570 L 1080 570 L 1080 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1080,710 1074,698 1086,698" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

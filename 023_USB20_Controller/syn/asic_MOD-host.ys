@@ -1,0 +1,8 @@
+plugin -i slang
+read_slang -f ../syn/fl_nosram.f --top m_usb2_host  -D VLSIT_SYNTHESIS
+hierarchy -top m_usb2_host
+synth -top m_usb2_host -flatten
+dfflibmap -liberty ../syn/pdk_freepdk45/gscl45nm.lib
+abc -liberty ../syn/pdk_freepdk45/gscl45nm.lib -D 8333 -script +strash;&get,-n;&fraig,-x;&put;scorr;dc2;strash;&get,-n;&dch,-f;&nf,{D};&put;buffer;upsize,{D};dnsize,{D};topo;stime,-p
+opt_clean
+tee -o ../syn/asic_MOD-host_stat.txt stat -liberty ../syn/pdk_freepdk45/gscl45nm.lib

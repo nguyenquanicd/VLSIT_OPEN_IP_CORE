@@ -1,5 +1,76 @@
 # AHB-to-AXI4 Bridge / Cầu nối AHB sang AXI4
 
+## IP overview and status
+
+Bridge from Advanced High-performance Bus (AHB) transactions to AXI transactions.
+
+**Status:** Inventory: 4 RTL source file(s), 1 specification/reference artifact(s), and 64 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Standard directory structure
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
+
+## Tổng quan IP và trạng thái
+
+Bridge from Advanced High-performance Bus (AHB) transactions to AXI transactions.
+
+**Trạng thái:** Inventory: 4 RTL source file(s), 1 specification/reference artifact(s), and 64 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Cấu trúc thư mục chuẩn
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+
 ## English
 
 This folder contains the specification and RTL for a 32-bit Full AHB5 Subordinate to AXI4 Manager bridge. The design uses one clock (`i_clk_core`) and one active-low reset (`i_rst_n_core`). The SoC synchronizes reset deassertion before it reaches the IP; the RTL has no internal reset synchronizer. Clock frequency is TBD by SoC integration.
@@ -22,10 +93,10 @@ Rule check RTL đạt với 0 lỗi và 2 cảnh báo tham khảo: controller v�
 
 ## Files / Tệp
 
-- [`AHB2AXI_Bridge_Design_Specification.md`](AHB2AXI_Bridge_Design_Specification.md): complete bilingual specification / đặc tả song ngữ.
-- [`rtl/`](rtl/): generated RTL, filelist, [rule-check report](rtl/rule_check_report.md) and [final Verilator log](rtl/lint_verilator_final.log) / RTL đã sinh, filelist, báo cáo rule-check và log Verilator cuối.
-- [`verification/`](verification/): independent testbench, [single Makefile](verification/Makefile), simulation logs, waveforms, synthesis log and generic netlist / testbench độc lập, một Makefile, log mô phỏng, waveform, log tổng hợp và netlist generic.
-- [`figures/`](figures/): module diagram and WaveJSON/SVG waveforms / sơ đồ module và waveform WaveJSON/SVG.
+- [`spec/AHB2AXI_Bridge_Design_Specification.md`](spec/AHB2AXI_Bridge_Design_Specification.md): complete bilingual specification / đặc tả song ngữ.
+- [`rtl/`](rtl): generated RTL, filelist, [rule-check report](lint/rule_check_report.md) and [final Verilator log](lint/lint_verilator_final.log) / RTL đã sinh, filelist, báo cáo rule-check và log Verilator cuối.
+- [`verification/`](verification): independent testbench, [single Makefile](verification/Makefile), simulation logs, waveforms, synthesis log and generic netlist / testbench độc lập, một Makefile, log mô phỏng, waveform, log tổng hợp và netlist generic.
+- [`figures/`](figures): module diagram and WaveJSON/SVG waveforms / sơ đồ module và waveform WaveJSON/SVG.
 - [`research/vlsit_reference_ip_log.md`](research/vlsit_reference_ip_log.md): reference-IP evaluation / đánh giá IP tham chiếu.
 
 The licensed Arm protocol documents are kept outside this folder. Do not copy or redistribute them. / Tài liệu giao thức Arm có giấy phép được giữ ngoài thư mục này; không sao chép hoặc phân phối lại.

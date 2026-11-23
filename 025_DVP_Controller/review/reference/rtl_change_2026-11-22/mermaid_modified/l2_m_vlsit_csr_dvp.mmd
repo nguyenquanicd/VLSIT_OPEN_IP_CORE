@@ -1,0 +1,20 @@
+%%{init: {"theme": "base", "themeVariables": {"background": "#ffffff", "primaryColor": "#ffffff", "primaryTextColor": "#000000", "primaryBorderColor": "#000000", "lineColor": "#000000", "clusterBkg": "#ffffff", "clusterBorder": "#6a1b9a", "fontFamily": "Arial"}}}%%
+flowchart LR
+  subgraph TOPBOX["m_vlsit_csr_dvp (rtl/csr/m_vlsit_csr_dvp.sv)"]
+    direction LR
+    u_rd_ack_sync["u_rd_ack_sync<br/>m_vlsit_csr_sync"]
+    u_wr_ack_sync["u_wr_ack_sync<br/>m_vlsit_csr_sync"]
+    u_rd_req_sync["u_rd_req_sync<br/>m_vlsit_csr_sync"]
+    u_wr_req_sync["u_wr_req_sync<br/>m_vlsit_csr_sync"]
+  end
+  PIN(["inputs of m_vlsit_csr_dvp"])
+  POUT(["outputs of m_vlsit_csr_dvp"])
+  PIN -->|"i_clk_apb, i_rst_n_apb"| u_rd_ack_sync
+  PIN -->|"i_clk_reg, i_rst_n_reg"| u_rd_req_sync
+  PIN -->|"i_clk_apb, i_rst_n_apb"| u_wr_ack_sync
+  PIN -->|"i_clk_reg, i_rst_n_reg"| u_wr_req_sync
+  classDef inst fill:#ffffff,stroke:#000000,color:#000000;
+  classDef pin fill:#6a1b9a,stroke:#000000,color:#ffffff;
+  class u_rd_ack_sync,u_wr_ack_sync,u_rd_req_sync,u_wr_req_sync inst;
+  class PIN,POUT pin;
+  style TOPBOX fill:#ffffff,stroke:#6a1b9a,stroke-width:2px

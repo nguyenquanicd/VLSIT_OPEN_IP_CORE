@@ -1,0 +1,214 @@
+{
+  "folder": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "files": [
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_apb_data.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_apb_decode.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\000_Common\\rtl_lib\\m_vlsit_afifo_cell_sync.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\001_AsyncGrayFIFO\\rtl\\m_vlsit_afifo_sync.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_afifo_rd.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\000_Common\\rtl_cells\\VLSIT_CELL_SRAM_1W1R.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\000_Common\\rtl_lib\\m_vlsit_afifo_ram_macro.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\001_AsyncGrayFIFO\\rtl\\m_vlsit_afifo_mem.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\001_AsyncGrayFIFO\\rtl\\m_vlsit_afifo_wr.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\000_Common\\rtl_lib\\m_vlsit_tie.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_afifo.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_gate_bridge.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\000_Common\\rtl_lib\\m_vlsit_event_sync.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\000_Common\\rtl_lib\\m_vlsit_sfifo_ram_macro.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\002_SyncFIFO\\rtl\\m_vlsit_sfifo_mem.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\002_SyncFIFO\\rtl\\m_vlsit_sfifo_rd.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\002_SyncFIFO\\rtl\\m_vlsit_sfifo_wr.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\002_SyncFIFO\\rtl\\m_vlsit_sfifo_top.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_buffer.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_dma_req.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_sync.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\csr\\m_vlsit_csr_dvp.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_apb_service.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_capture.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\000_Common\\rtl_lib\\m_vlsit_rst_sync.sv",
+    "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_controller.sv"
+  ],
+  "modules": [
+    {
+      "name": "m_dvp_controller",
+      "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_controller.sv",
+      "line": 12,
+      "ports": [
+        {
+          "name": "i_clk_apb",
+          "direction": "input",
+          "width": "1",
+          "line": 47
+        },
+        {
+          "name": "i_rst_n_sys",
+          "direction": "input",
+          "width": "1",
+          "line": 48
+        },
+        {
+          "name": "i_clk_dvp",
+          "direction": "input",
+          "width": "1",
+          "line": 49
+        },
+        {
+          "name": "i_dvp_data",
+          "direction": "input",
+          "width": "PARA_DVP_DATA_W-1 - 0 + 1",
+          "line": 52
+        },
+        {
+          "name": "i_dvp_vsync",
+          "direction": "input",
+          "width": "1",
+          "line": 53
+        },
+        {
+          "name": "i_dvp_href",
+          "direction": "input",
+          "width": "1",
+          "line": 54
+        },
+        {
+          "name": "i_paddr",
+          "direction": "input",
+          "width": "16",
+          "line": 57
+        },
+        {
+          "name": "i_psel",
+          "direction": "input",
+          "width": "1",
+          "line": 58
+        },
+        {
+          "name": "i_penable",
+          "direction": "input",
+          "width": "1",
+          "line": 59
+        },
+        {
+          "name": "i_pwrite",
+          "direction": "input",
+          "width": "1",
+          "line": 60
+        },
+        {
+          "name": "i_pwdata",
+          "direction": "input",
+          "width": "32",
+          "line": 61
+        },
+        {
+          "name": "i_pstrb",
+          "direction": "input",
+          "width": "4",
+          "line": 62
+        },
+        {
+          "name": "i_pprot",
+          "direction": "input",
+          "width": "3",
+          "line": 63
+        },
+        {
+          "name": "o_pready",
+          "direction": "output",
+          "width": "1",
+          "line": 64
+        },
+        {
+          "name": "o_prdata",
+          "direction": "output",
+          "width": "32",
+          "line": 65
+        },
+        {
+          "name": "o_pslverr",
+          "direction": "output",
+          "width": "1",
+          "line": 66
+        },
+        {
+          "name": "i_dma_ack",
+          "direction": "input",
+          "width": "1",
+          "line": 69
+        },
+        {
+          "name": "o_dma_req",
+          "direction": "output",
+          "width": "1",
+          "line": 70
+        }
+      ],
+      "parameters": [
+        {
+          "name": "PARA_DVP_DATA_W",
+          "default": "32'd8",
+          "line": 16
+        },
+        {
+          "name": "PARA_DVP_SAMPLE_EDGE",
+          "default": "32'd0",
+          "line": 20
+        },
+        {
+          "name": "PARA_DVP_VSYNC_ACTIVE",
+          "default": "32'd1",
+          "line": 24
+        },
+        {
+          "name": "PARA_DVP_HREF_ACTIVE",
+          "default": "32'd1",
+          "line": 28
+        },
+        {
+          "name": "PARA_FIFO_DEPTH",
+          "default": "32'd8",
+          "line": 32
+        },
+        {
+          "name": "PARA_AFIFO_CELL_TYPE",
+          "default": "32'd2",
+          "line": 36
+        },
+        {
+          "name": "PARA_AFIFO_MEM_USE_MACRO",
+          "default": "32'd0",
+          "line": 40
+        },
+        {
+          "name": "PARA_FIFO_DATA_ADDR",
+          "default": "32'h0000_0100",
+          "line": 44
+        }
+      ],
+      "localparams": [],
+      "fsm_states": [],
+      "always_ff": [],
+      "instances": [
+        {
+          "type": "m_vlsit_rst_sync",
+          "name": "u_rst_sync_apb",
+          "line": 86
+        },
+        {
+          "type": "m_vlsit_rst_sync",
+          "name": "u_rst_sync_dvp",
+          "line": 93
+        }
+      ]
+    }
+  ],
+  "module_names": [
+    "m_dvp_controller"
+  ],
+  "counts": {
+    "files": 26,
+    "modules": 26,
+    "ports": 297,
+    "parameters": 72
+  }
+}

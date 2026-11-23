@@ -167,6 +167,8 @@ module m_usb2_fifo #(
   logic                                     w_wr_req_pkt;
   logic [LPARA_ADDR_W-1:0]                  w_wr_addr_pkt;
   logic                                     w_bus_wr_req;
+  logic                                     w_bus_wr_op;
+  logic                                     w_bus_q_full;
   logic                                     w_bus_rd_req;
   logic                                     w_bus_nram;
   logic [LPARA_ADDR_W-1:0]                  w_bus_wr_addr;
@@ -264,9 +266,13 @@ module m_usb2_fifo #(
   // Row write requests of the packet port (the row register) and of the bus port.
   assign w_wr_req_pkt  = reg_wrow_v;
   assign w_wr_addr_pkt = w_base[0][LPARA_ADDR_W-1:0] + reg_wrow_ptr[LPARA_ADDR_W-1:0];
-  assign w_bus_wr_req  = i_bp_vld & (i_bp_op == LPARA_OP_WR[2:0]);
+  // A bus row write waits while its transmit queue holds no free row: committed rows plus rows of
+  // the packet being written fill the region (REQ-FUNC-027: unread data is never overwritten).
+  assign w_bus_wr_op   = i_bp_vld & (i_bp_op == LPARA_OP_WR[2:0]);
+  assign w_bus_q_full  = ((reg_cnt[i_bp_q] + reg_wpend[i_bp_q]) >= {1'b0, w_size[i_bp_q]});
+  assign w_bus_wr_req  = w_bus_wr_op & ~w_bus_q_full;
   assign w_bus_rd_req  = i_bp_vld & (i_bp_op == LPARA_OP_RD[2:0]);
-  assign w_bus_nram    = i_bp_vld & ~w_bus_wr_req & ~w_bus_rd_req;
+  assign w_bus_nram    = i_bp_vld & ~w_bus_wr_op & ~w_bus_rd_req;
   assign w_bus_wr_addr = w_base[i_bp_q][LPARA_ADDR_W-1:0] + reg_wptr[i_bp_q][LPARA_ADDR_W-1:0];
   assign w_rd_wrap     = reg_rd_off;
   assign w_bus_rd_addr = w_base[0][LPARA_ADDR_W-1:0] + w_rd_wrap[LPARA_ADDR_W-1:0];

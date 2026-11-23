@@ -1,0 +1,178 @@
+{
+  "analyzer": "2.0",
+  "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\spec\\rtl_generation_2026-11-22\\VLSIT_DVP_CONTROLLER_CSR.xlsx",
+  "format": ".xlsx",
+  "analysis_backend": "openpyxl",
+  "conversion_note": null,
+  "size_bytes": 12446,
+  "zip_integrity": "ok",
+  "zip_entries": 11,
+  "macro_container": false,
+  "legacy_format_may_contain_macros": false,
+  "macro_code_analyzed": false,
+  "sheet_count": 3,
+  "sheet_names": [
+    "ASYNC_CSR",
+    "CSR",
+    "Register_Description"
+  ],
+  "defined_name_count": 0,
+  "defined_names": [],
+  "external_link_count": 0,
+  "formula_values_note": "Formula text is preserved; cached_value is reported separately. This script does not recalculate formulas.",
+  "report_mode": "workbook_summary",
+  "sheets": [
+    {
+      "name": "ASYNC_CSR",
+      "state": "visible",
+      "declared_range": "A1:G29",
+      "content_range": "A1:G29",
+      "nonempty_cells": 84,
+      "formulas": 0,
+      "formula_cache_cells": 0,
+      "cached_formula_errors": 0,
+      "formula_samples": [],
+      "error_cells": 0,
+      "error_samples": [],
+      "hyperlinks": {
+        "count": 0,
+        "samples": []
+      },
+      "comments": {
+        "count": 0,
+        "samples": []
+      },
+      "tables": [],
+      "autofilter": null,
+      "freeze_panes": null,
+      "merged_ranges": {
+        "count": 0,
+        "samples": []
+      },
+      "validations": 0,
+      "images": 0,
+      "charts": 0,
+      "hidden_rows": [],
+      "hidden_columns": [],
+      "column_widths": [],
+      "print_area": null,
+      "style_summary": {
+        "top_fonts": [
+          {
+            "style": "Arial 13.0 color=theme:1",
+            "cells": 74
+          },
+          {
+            "style": "Arial 13.0 bold color=theme:1",
+            "cells": 10
+          }
+        ]
+      },
+      "preview": []
+    },
+    {
+      "name": "CSR",
+      "state": "visible",
+      "declared_range": "A1:K34",
+      "content_range": "A1:G34",
+      "nonempty_cells": 119,
+      "formulas": 0,
+      "formula_cache_cells": 0,
+      "cached_formula_errors": 0,
+      "formula_samples": [],
+      "error_cells": 0,
+      "error_samples": [],
+      "hyperlinks": {
+        "count": 0,
+        "samples": []
+      },
+      "comments": {
+        "count": 0,
+        "samples": []
+      },
+      "tables": [],
+      "autofilter": null,
+      "freeze_panes": null,
+      "merged_ranges": {
+        "count": 7,
+        "samples": []
+      },
+      "validations": 0,
+      "images": 0,
+      "charts": 0,
+      "hidden_rows": [],
+      "hidden_columns": [],
+      "column_widths": [],
+      "print_area": null,
+      "style_summary": {
+        "top_fonts": [
+          {
+            "style": "Calibri 13.0 color=00000000",
+            "cells": 83
+          },
+          {
+            "style": "Calibri 13.0 bold color=00000000",
+            "cells": 24
+          },
+          {
+            "style": "Calibri 13.0 bold color=00FFFFFF",
+            "cells": 10
+          }
+        ]
+      },
+      "preview": []
+    },
+    {
+      "name": "Register_Description",
+      "state": "visible",
+      "declared_range": "A1:D14",
+      "content_range": "A1:D14",
+      "nonempty_cells": 40,
+      "formulas": 0,
+      "formula_cache_cells": 0,
+      "cached_formula_errors": 0,
+      "formula_samples": [],
+      "error_cells": 0,
+      "error_samples": [],
+      "hyperlinks": {
+        "count": 0,
+        "samples": []
+      },
+      "comments": {
+        "count": 0,
+        "samples": []
+      },
+      "tables": [],
+      "autofilter": null,
+      "freeze_panes": null,
+      "merged_ranges": {
+        "count": 0,
+        "samples": []
+      },
+      "validations": 0,
+      "images": 0,
+      "charts": 0,
+      "hidden_rows": [],
+      "hidden_columns": [],
+      "column_widths": [],
+      "print_area": null,
+      "style_summary": {
+        "top_fonts": [
+          {
+            "style": "Aptos Narrow 13.0 color=theme:1",
+            "cells": 33
+          },
+          {
+            "style": "Aptos Narrow 13.0 bold color=theme:1",
+            "cells": 4
+          },
+          {
+            "style": "Aptos Narrow 13.0 bold italic color=theme:1",
+            "cells": 3
+          }
+        ]
+      },
+      "preview": []
+    }
+  ]
+}

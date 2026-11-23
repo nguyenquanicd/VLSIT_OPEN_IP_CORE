@@ -1,0 +1,62 @@
+{
+  "spec": "025_DVP_Controller\\spec\\rtl_generation_2026-11-22\\VLSIT_DVP_CONTROLLER_HDS.md",
+  "rtl": "025_DVP_Controller\\review\\rtl_crosscheck_2026-11-22\\rtl_top_inventory.json",
+  "spec_ports": 18,
+  "rtl_ports": 18,
+  "spec_parameters": 4,
+  "rtl_parameters": 8,
+  "mismatches": [
+    {
+      "kind": "parameter_default",
+      "object": "PARA_AFIFO_MEM_USE_MACRO",
+      "spec": {
+        "default": "0 RTL array by default",
+        "range": "SRAM wrapper is not selected for this version"
+      },
+      "rtl": {
+        "default": "32'd0",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_controller.sv",
+        "line": 40
+      }
+    },
+    {
+      "kind": "parameter_default",
+      "object": "PARA_DVP_DATA_W",
+      "spec": {
+        "default": "8, 10, 12; default 8",
+        "range": "Sets DVP data and FIFO sample width"
+      },
+      "rtl": {
+        "default": "32'd8",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_controller.sv",
+        "line": 16
+      }
+    },
+    {
+      "kind": "parameter_default",
+      "object": "PARA_DVP_VSYNC_ACTIVE",
+      "spec": {
+        "default": "0=active-low, 1=active-high; default 1",
+        "range": "Compile-time sensor profile; gated mode synchronizes active level through 2-FF in CLK-APB"
+      },
+      "rtl": {
+        "default": "32'd1",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_controller.sv",
+        "line": 24
+      }
+    },
+    {
+      "kind": "parameter_default",
+      "object": "PARA_FIFO_DEPTH",
+      "spec": {
+        "default": "Power of two, minimum 2; default 8",
+        "range": "Applies to both mode paths; integrator may override after Section 13 depth sizing"
+      },
+      "rtl": {
+        "default": "32'd8",
+        "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl\\m_dvp_controller.sv",
+        "line": 32
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p......."
+    },
+    [
+      "APB4",
+      {
+        "name": "i_apb_psel",
+        "wave": "01111000"
+      },
+      {
+        "name": "i_apb_penable",
+        "wave": "00101000"
+      },
+      {
+        "name": "i_apb_pwrite",
+        "wave": "x000xxxx"
+      },
+      {
+        "name": "i_apb_paddr",
+        "wave": "x=x=xxxx",
+        "data": [
+          "DATA",
+          "DATA"
+        ]
+      },
+      {
+        "name": "o_apb_pready",
+        "wave": "00101000"
+      },
+      {
+        "name": "i_apb_pstrb",
+        "wave": "00000000"
+      },
+      {
+        "name": "o_apb_pslverr",
+        "wave": "00000000"
+      },
+      {
+        "name": "o_apb_prdata",
+        "wave": "xx=x=xx",
+        "data": [
+          "0x0123",
+          "0x0456"
+        ]
+      }
+    ],
+    [
+      "FIFO",
+      {
+        "name": "o_fifo_empty",
+        "wave": "00000000"
+      },
+      {
+        "name": "o_fifo_pop",
+        "wave": "00101000"
+      }
+    ]
+  ],
+  "head": {
+    "text": "WF-003: back-to-back FIFO-data reads"
+  },
+  "foot": {
+    "text": "Each successful APB completion returns and pops exactly one sample."
+  },
+  "config": {
+    "hscale": 3
+  }
+}

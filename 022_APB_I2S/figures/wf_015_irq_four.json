@@ -1,0 +1,41 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p........................................."
+  },
+  {
+   "name": "w_und",
+   "wave": "010000000000000000000000000000000000000000"
+  },
+  {
+   "name": "i2s_irq_raw.tx_und",
+   "wave": "000000111111111110000000111110000000000000"
+  },
+  {
+   "name": "i2s_irq_en.tx_und",
+   "wave": "000000000000111111111111111111111111111111"
+  },
+  {
+   "name": "i2s_irq_inj.tx_und",
+   "wave": "000000000000000000000001111111111000000000"
+  },
+  {
+   "name": "i2s_irq_sts.tx_und",
+   "wave": "000000000000111110000000111110000000000000"
+  },
+  {
+   "name": "o_int_i2s",
+   "wave": "000000000000011111000000011111000000000000"
+  }
+ ],
+ "head": {
+  "text": "WF-015 OP-014 Interrupt cause through raw, enable, injection and masked status (success)"
+ },
+ "foot": {
+  "text": "APB clock, cause tx_und from a real transmit underrun. The cause is set while masked; enabling it raises the output; a write of 1 clears the raw bit; an injection (its rising edge) sets it again; a clear while the injection bit is still high clears it and it stays clear."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

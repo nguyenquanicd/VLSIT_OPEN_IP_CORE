@@ -1,0 +1,137 @@
+[
+  {
+    "section": "1.2",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 59,
+    "text": "| Target SoC / product class | Smart camera / embedded vision (user confirmed 2026-11-21); exact SoC/product T",
+    "question": "'TBD' is open in section 1.2. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-001"
+  },
+  {
+    "section": "1.2",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 60,
+    "text": "| Technology / library assumptions | TBD; select the implementation platform and library before PPA targets an",
+    "question": "'TBD' is open in section 1.2. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-002"
+  },
+  {
+    "section": "1.2",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 63,
+    "text": "| External dependencies | Externally configured DVP camera sensor; system DMA acting as APB requester; APB int",
+    "question": "'TBD' is open in section 1.2. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-003"
+  },
+  {
+    "section": "16",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2117,
+    "text": "| Scan architecture and eligibility | Follow SoC DFT methodology; no dedicated scan port selected | Integratio",
+    "question": "'TBD' is open in section 16. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-004"
+  },
+  {
+    "section": "16",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2118,
+    "text": "| Test clocks and reset | Use SoC test/reset architecture; preserve both clock domains | Integration TBD |",
+    "question": "'TBD' is open in section 16. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-005"
+  },
+  {
+    "section": "16",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2123,
+    "text": "| ATPG constraints | Define with selected library and macro | TBD |",
+    "question": "'TBD' is open in section 16. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-006"
+  },
+  {
+    "section": "17.1.1",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2136,
+    "text": "| CLK-APB | i_clk_apb | Primary SoC clock | TBD from SoC | TBD | APB active | SoC SDC |",
+    "question": "'TBD' is open in section 17.1.1. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-007"
+  },
+  {
+    "section": "17.1.1",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2137,
+    "text": "| CLK-DVP | i_clk_dvp | Sensor source-synchronous clock | Sensor period/duty TBD | Sensor/board uncertainty TB",
+    "question": "'TBD' is open in section 17.1.1. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-008"
+  },
+  {
+    "section": "17.1.2",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2143,
+    "text": "| i_dvp_data, i_dvp_vsync, i_dvp_href | Input | i_clk_dvp / selected edge; gated-mode VSYNC also sampled in CL",
+    "question": "'TBD' is open in section 17.1.2. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-009"
+  },
+  {
+    "section": "17.1.2",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2144,
+    "text": "| APB4 inputs | Input | CLK-APB | SoC output delay/skew TBD | SoC budget | SoC SDC |",
+    "question": "'TBD' is open in section 17.1.2. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-010"
+  },
+  {
+    "section": "17.1.2",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2145,
+    "text": "| APB4 outputs | Output | CLK-APB | SoC input delay/load TBD | SoC budget | SoC SDC |",
+    "question": "'TBD' is open in section 17.1.2. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-011"
+  },
+  {
+    "section": "17.1.3",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2153,
+    "text": "| EXC-002 | Gray-pointer paths to first synchronizer stages | Preserve Gray-code CDC; constrain skew/max delay",
+    "question": "'TBD' is open in section 17.1.3. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-012"
+  },
+  {
+    "section": "17.2",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2168,
+    "text": "| Extraction / corners | Technology and sign-off corners TBD |",
+    "question": "'TBD' is open in section 17.2. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-013"
+  },
+  {
+    "section": "18",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2180,
+    "text": "| Safety goal / integrity level | No classification supplied | TBD before safety product use |",
+    "question": "'TBD' is open in section 18. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-014"
+  },
+  {
+    "section": "20",
+    "severity": "INFO",
+    "kind": "TBD",
+    "line": 2214,
+    "text": "Record assumptions, dependencies, and unresolved decisions below. Every TBD elsewhere in this draft maps to an",
+    "question": "'TBD' is open in section 20. What is the decision, and what is its technical impact (record it in section 20)?",
+    "id": "G-015"
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p........"
+    },
+    [
+      "APB4",
+      {
+        "name": "i_apb_psel",
+        "wave": "011111000"
+      },
+      {
+        "name": "i_apb_penable",
+        "wave": "001111000"
+      },
+      {
+        "name": "i_apb_pwrite",
+        "wave": "x000000xx"
+      },
+      {
+        "name": "i_apb_paddr",
+        "wave": "x=xxxxxxx",
+        "data": [
+          "DATA"
+        ]
+      },
+      {
+        "name": "o_apb_pready",
+        "wave": "000010000"
+      },
+      {
+        "name": "i_apb_pstrb",
+        "wave": "000000000"
+      },
+      {
+        "name": "o_apb_pslverr",
+        "wave": "000000000"
+      },
+      {
+        "name": "o_apb_prdata",
+        "wave": "xxxx=xxxx",
+        "data": [
+          "0x00A5"
+        ]
+      }
+    ],
+    [
+      "FIFO / timeout",
+      {
+        "name": "o_fifo_empty",
+        "wave": "111100000"
+      },
+      {
+        "name": "o_sample_valid",
+        "wave": "000010000"
+      },
+      {
+        "name": "o_fifo_pop",
+        "wave": "000010000"
+      },
+      {
+        "name": "timeout_count",
+        "wave": "xx===xxxx",
+        "data": [
+          "1",
+          "2",
+          "3"
+        ]
+      }
+    ]
+  ],
+  "head": {
+    "text": "WF-004: FIFO data arrives on the timeout decision cycle"
+  },
+  "foot": {
+    "text": "Data available at the terminal decision wins: PREADY completes successfully, PSLVERR stays low, and one pop occurs."
+  },
+  "config": {
+    "hscale": 2.5
+  }
+}

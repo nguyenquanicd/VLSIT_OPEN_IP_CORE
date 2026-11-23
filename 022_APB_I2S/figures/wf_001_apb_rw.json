@@ -1,0 +1,79 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p......."
+  },
+  {
+   "name": "i_apb_psel",
+   "wave": "01111110"
+  },
+  {
+   "name": "i_apb_penable",
+   "wave": "00110110"
+  },
+  {
+   "name": "i_apb_pwrite",
+   "wave": "01110000"
+  },
+  {
+   "name": "i_apb_paddr",
+   "wave": "==..=...",
+   "data": [
+    "0",
+    "114",
+    "1C"
+   ]
+  },
+  {
+   "name": "i_apb_pwdata",
+   "wave": "==..=...",
+   "data": [
+    "0",
+    "5",
+    "420A83B1"
+   ]
+  },
+  {
+   "name": "i_apb_pstrb",
+   "wave": "==..=...",
+   "data": [
+    "0",
+    "F",
+    "0"
+   ]
+  },
+  {
+   "name": "o_apb_pready",
+   "wave": "00010010"
+  },
+  {
+   "name": "o_apb_prdata",
+   "wave": "=.......",
+   "data": [
+    "0"
+   ]
+  },
+  {
+   "name": "o_apb_pslverr",
+   "wave": "00000000"
+  },
+  {
+   "name": "o_reg_wr_en",
+   "wave": "00100000"
+  },
+  {
+   "name": "o_reg_rd_en",
+   "wave": "00000100"
+  }
+ ],
+ "head": {
+  "text": "WF-001 OP-016 APB write and read of a register (success)"
+ },
+ "foot": {
+  "text": "One wait state per access, back to back. A write of i2s_tx_fifo is followed by a read of i2s_irq_sts. The register events o_reg_wr_en and o_reg_rd_en are given in the first access cycle, one cycle before PREADY (simulated, synthesis branch)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

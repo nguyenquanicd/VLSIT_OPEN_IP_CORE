@@ -1,0 +1,38 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "p......................."
+  },
+  {
+   "name": "w_rx_level",
+   "wave": "==...........=..........",
+   "data": [
+    "3",
+    "2",
+    "1"
+   ]
+  },
+  {
+   "name": "o_dma_rx_req",
+   "wave": "000000000000000000000000"
+  },
+  {
+   "name": "o_dma_rx_single",
+   "wave": "111000111111111000111111"
+  },
+  {
+   "name": "i_dma_rx_ack",
+   "wave": "001110000000001110000000"
+  }
+ ],
+ "head": {
+  "text": "WF-014 OP-013 DMA single transactions (success)"
+ },
+ "foot": {
+  "text": "Three words are in the receive FIFO, fewer than the burst length: only the single signal is high and the request stays low. The single falls one cycle after the acknowledge rises and returns after it falls while words remain."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

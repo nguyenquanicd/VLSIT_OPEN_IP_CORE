@@ -272,7 +272,7 @@ module m_usb2_core #(
   logic w_ocur_flag;
   logic w_oc_evt;
   logic w_oc_act;
-  logic w_oc_act_phy;
+  logic w_pwr_en_phy;
   logic w_phy_alive;
   logic reg_alive;
   logic w_axi_err;
@@ -357,6 +357,7 @@ module m_usb2_core #(
   logic [1:0] w_phy_tx_valid;
   logic w_phy_tx_ready;
   logic w_phy_tx_abort;
+  logic w_tx_starve;
   logic [15:0] w_lnk_tx_data;
   logic [1:0] w_lnk_tx_valid;
   logic w_hostdisc;
@@ -417,6 +418,7 @@ module m_usb2_core #(
   logic w_spd_lpm_rw;
   logic w_tok_vld;
   logic w_tok_ext;
+  logic [10:0] w_tok_efld;
   logic [3:0] w_tok_pid;
   logic [10:0] w_tok_fld;
   logic w_spl_vld;
@@ -505,6 +507,8 @@ module m_usb2_core #(
   logic [3:0] w_dev_lpm_hird;
   logic w_dev_lpm_rw;
   logic w_dev_evt_udf;
+  logic w_evt_tmo;
+  logic w_evt_iso;
   logic [13:0] w_host_frame;
   logic w_host_busy;
   logic w_host_lpm_evt;
@@ -514,6 +518,8 @@ module m_usb2_core #(
   logic [LPARA_NQ*16-1:0] w_q_size;
   logic w_flush_vld;
   logic [4:0] w_flush_q;
+  logic [4:0] w_txq_phy;
+  logic [4:0] w_txq_bus;
   logic w_rxw_sop;
   logic [4:0] w_rxw_tag;
   logic [1:0] w_rxw_n;
@@ -615,17 +621,17 @@ module m_usb2_core #(
     .o_oc_act    (w_oc_act)
   );
 
-  // Crossings of single status bits: the over-current state to CLK-PHY, the PHY clock alive flag
+  // Crossings of single status bits: the port power state to CLK-PHY, the PHY clock alive flag
   // (the reset of CLK-PHY is released) to CLK-BUS.
   m_vlsit_afifo_sync #(
     .PARA_AFIFO_SYNC_W       (1),
     .PARA_AFIFO_SYNC_RST_VAL (0),
     .PARA_AFIFO_CELL_TYPE    (LPARA_CELL_2FF)
-  ) u_sync_oc (
+  ) u_sync_pwr (
     .i_clk_dst   (i_clk_phy),
     .i_rst_n_dst (w_rst_n_phy),
-    .i_data      (w_oc_act),
-    .o_data      (w_oc_act_phy)
+    .i_data      (o_vbus_pwr_en),
+    .o_data      (w_pwr_en_phy)
   );
 
   m_vlsit_afifo_sync #(
@@ -938,6 +944,7 @@ module m_usb2_core #(
     .o_lpbk_err      (w_lpbk_err),
     .o_tok_vld (w_tok_vld),
     .o_tok_ext (w_tok_ext),
+    .o_tok_efld (w_tok_efld),
     .o_tok_pid (w_tok_pid),
     .o_tok_fld (w_tok_fld),
     .o_spl_vld (w_spl_vld),
@@ -966,6 +973,7 @@ module m_usb2_core #(
     .i_src_vld       (w_src_vld),
     .o_src_pop       (w_src_pop),
     .o_tx_busy       (w_tx_busy),
+    .o_tx_starve     (w_tx_starve),
     .o_tx_done       (w_tx_done),
     .o_tx_fail       (w_tx_fail),
     .o_link_idle     (w_link_idle)
@@ -1022,7 +1030,7 @@ module m_usb2_core #(
     .i_ctrl          (w_ph_ctrl),
     .i_dctrl         (w_ph_dctrl),
     .i_hport         (w_ph_hport),
-    .i_oc_act        (w_oc_act_phy),
+    .i_pwr_en        (w_pwr_en_phy),
     .i_bus_act       (w_rx_busy | w_tx_busy),
     .i_link_idle     (w_link_idle),
     .o_ch_data       (w_ch_data),
@@ -1087,6 +1095,7 @@ module m_usb2_core #(
         .i_test_nak      (w_test_nak),
         .i_tok_vld (w_tok_vld),
         .i_tok_ext (w_tok_ext),
+        .i_tok_efld (w_tok_efld),
         .i_tok_pid (w_tok_pid),
         .i_tok_fld (w_tok_fld),
         .i_hs_vld (w_hs_vld),
@@ -1139,6 +1148,7 @@ module m_usb2_core #(
         .o_uframe        (w_dev_uframe),
         .o_evt_sof       (w_dev_evt_sof),
         .o_evt_xfer      (w_dev_evt_xfer),
+        .i_tx_starve     (w_tx_starve),
         .o_evt_udf       (w_dev_evt_udf),
         .o_lpm_vld       (w_dev_lpm_vld),
         .o_lpm_hird      (w_dev_lpm_hird),
@@ -1309,7 +1319,12 @@ module m_usb2_core #(
   assign w_fl_rx      = w_ph_fifo_ctl[0] & ~reg_flc_seen[0];
   assign w_fl_tx      = w_ph_fifo_ctl[1] & ~reg_flc_seen[1];
   assign w_flush_vld  = w_fl_rx | w_fl_tx;
-  assign w_flush_q    = w_fl_rx ? 5'd0 : w_ph_fifo_ctl[6:2];
+  // u2_fifo_ctl.tx_sel names a device IN endpoint (0 to 15) or a host region (10h, 11h); the FIFO
+  // queues are numbered receive 0, IN endpoint n = n + 1, host non-periodic and periodic last
+  // (BUG-025).
+  assign w_txq_phy    = w_ph_fifo_ctl[6] ? (LPARA_NQ[4:0] - 5'd2 + {4'd0, w_ph_fifo_ctl[2]}) : ({1'b0, w_ph_fifo_ctl[5:2]} + 5'd1);
+  assign w_txq_bus    = w_bus_fifo_ctl[6] ? (LPARA_NQ[4:0] - 5'd2 + {4'd0, w_bus_fifo_ctl[2]}) : ({1'b0, w_bus_fifo_ctl[5:2]} + 5'd1);
+  assign w_flush_q    = w_fl_rx ? 5'd0 : w_txq_phy;
   assign w_lpclr_edge = w_ph_lpbk_sts[24] & ~reg_lpclr_seen;
   assign w_acc_edge   = w_ph_phy_acc[25] & ~reg_acc_seen;
   assign w_reg_start  = w_acc_edge;
@@ -1436,7 +1451,7 @@ module m_usb2_core #(
         .i_err_stop    (w_bus_ctrl[6]),
         .i_win_base    (w_bus_dma_wbase),
         .i_win_lim     (w_bus_dma_wlim),
-        .i_tx_sel      (w_bus_fifo_ctl[6:2]),
+        .i_tx_sel      (w_txq_bus),
         .i_dma_cfg     (w_bus_dma_cfg),
         .i_dma_hi      (w_bus_dma_hi),
         .i_fifo_hnp    (w_bus_fifo_hnp),
@@ -1525,9 +1540,11 @@ module m_usb2_core #(
         .PARA_USB2_PIPE_AXS   (PARA_USB2_PIPE_AXS)
       ) u_axs (
         .i_clk_bus     (i_clk_bus),
+        .o_err_evt     (w_axi_err),
         .i_rst_n_bus   (w_rst_n_bus),
         .i_core_en     (w_bus_ctrl[0]),
         .i_win_en      (w_bus_hsts[21]),
+        .i_req_thr     (w_bus_dma_cfg[19:12]),
         .i_fifo_hnp    (w_bus_fifo_hnp),
         .i_fifo_hpt    (w_bus_fifo_hpt),
         .i_epi_ctrl    (w_bus_epi_ctl),
@@ -1604,7 +1621,6 @@ module m_usb2_core #(
       assign w_ld_epi_we = '0;
       assign w_ld_epo_we = '0;
       assign w_ld_hc_we  = '0;
-      assign w_axi_err   = 1'b0;
       assign w_dma_err   = 1'b0;
     end
   endgenerate
@@ -1627,8 +1643,22 @@ module m_usb2_core #(
   assign w_pub_hc_cfg   = w_host_hc_cfg_pub;
 
   // Event sets: the interrupt causes of CLK-PHY in the bit positions of u2_irq_raw.
-  assign w_set_irq_raw = {7'd0, 1'b0, w_fifo_par, 1'b0, 1'b0, w_reg_done, w_host_evt_xfer, w_dev_evt_xfer,
-                          (w_dev_lpm_vld | w_host_lpm_evt), 1'b0, 1'b0, 1'b0, w_fifo_ovf, w_err_babble, 1'b0, w_err_stuf,
+  // Response time-out and isochronous-incomplete events of every endpoint and channel also reach
+  // the global flags (REQ-ERR-001, REQ-FUNC-033, BUG-011, BUG-012).
+  always_comb begin : p_com_evt_sum
+    w_evt_tmo = 1'b0;
+    w_evt_iso = 1'b0;
+    for (int idx = 0; idx < LPARA_NEP1; idx++) begin
+      w_evt_tmo = w_evt_tmo | w_dev_epi_int_set[idx][2];
+      w_evt_iso = w_evt_iso | w_dev_epi_int_set[idx][9] | w_dev_epo_int_set[idx][9];
+    end
+    for (int idx = 0; idx < PARA_USB2_NUM_HC; idx++) begin
+      w_evt_tmo = w_evt_tmo | w_host_hc_int_set[idx][2];
+      w_evt_iso = w_evt_iso | w_host_hc_int_set[idx][12];
+    end
+  end
+  assign w_set_irq_raw = {7'd0, 1'b0, w_fifo_par, 1'b0, w_evt_iso, w_reg_done, w_host_evt_xfer, w_dev_evt_xfer,
+                          (w_dev_lpm_vld | w_host_lpm_evt), 1'b0, 1'b0, w_dev_evt_udf, w_fifo_ovf, w_err_babble, w_evt_tmo, w_err_stuf,
                           w_err_crc, w_err_pid, w_evt_enum, w_evt_role, w_evt_disc, w_evt_conn,
                           w_evt_resume, w_evt_susp, w_evt_rst, (w_dev_evt_sof | w_host_evt_sof)};
   assign w_set_epi_int  = w_dev_epi_int_set;

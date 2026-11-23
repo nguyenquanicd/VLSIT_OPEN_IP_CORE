@@ -54,6 +54,13 @@ module m_usb2_spd #(
   localparam logic [31:0] LPARA_T_CHWAIT  = (32'd2500 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_IDLE    = (32'd3000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_RWAKE   = (32'd10000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
+  // Line sampling 100 to 875 us after the reversion to full-speed (REQ-FUNC-018, BUG-014) and the
+  // rest of the 5 ms of idle that a remote wakeup must wait for (REQ-FUNC-019, BUG-015).
+  localparam logic [31:0] LPARA_T_REVERT  = (32'd400 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
+  // L1 entry of a device: 5 us after the accepted LPM token, so that the ACK has left the bus and
+  // the limit of 10 us after the ACK holds (REQ-FUNC-021, BUG-016); not scaled by TSCALE.
+  localparam logic [31:0] LPARA_T_L1      = 32'd5 * PARA_USB2_CLK_MHZ,
+  localparam logic [31:0] LPARA_T_RWIDLE  = (32'd1800 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_HCHIRP  = (32'd50 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_HRSE0   = (32'd3000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_HRST    = (32'd50000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
@@ -81,7 +88,7 @@ module m_usb2_spd #(
   input  wire  [31:0] i_ctrl,
   input  wire  [31:0] i_dctrl,
   input  wire  [31:0] i_hport,
-  input  wire         i_oc_act,
+  input  wire         i_pwr_en,
 
   // Link activity and the transmit side (chirp and test streams, test packet request)
   input  wire         i_bus_act,
@@ -148,7 +155,8 @@ module m_usb2_spd #(
     ENUM_ST_DV_HS    = 4'd5,
     ENUM_ST_DV_FSCHK = 4'd6,
     ENUM_ST_DV_SUSP  = 4'd7,
-    ENUM_ST_DV_RWAKE = 4'd8
+    ENUM_ST_DV_RWAKE = 4'd8,
+    ENUM_ST_DV_RESM  = 4'd9
   } dev_state_type_def;
 
   // FSM states of the host side.
@@ -177,6 +185,11 @@ module m_usb2_spd #(
   logic [3:0]                  reg_cnt_kj;
   logic [1:0]                  reg_last_kj;
   logic [LPARA_TMR_W-1:0]      reg_flt;
+  logic                        reg_rw_pend;
+  logic                        reg_rev_wait;
+  logic                        reg_mode_rdy;
+  logic                        reg_l1_go;
+  logic                        reg_susp_j;
   logic                        reg_hs;
   logic                        reg_role_host;
   logic [1:0]                  reg_speed;
@@ -196,6 +209,8 @@ module m_usb2_spd #(
   logic                        reg_clr_pres;
   logic [15:0]                 w_ch_data;
   logic [1:0]                  w_ch_valid;
+  logic                        w_ch_act;
+  logic                        w_mode_rdy;
   logic                        reg_hchirp_j;
   logic                        reg_port_en;
   logic                        reg_tp_req;
@@ -232,7 +247,10 @@ module m_usb2_spd #(
 
   // Test mode of the active role: the device field of u2_dctrl or the port field of u2_hport.
   assign w_test_mode = reg_role_host ? i_hport[7:5] : i_dctrl[12:10];
-  assign w_test_on   = (w_test_mode != 3'd0) & i_ctrl[0];
+  // Reserved selector values (5 to 7 on a device, 6 and 7 on a host) leave normal operation
+  // (BUG-020).
+  assign w_test_on   = (w_test_mode != 3'd0) & i_ctrl[0] &
+                       (w_test_mode <= (reg_role_host ? 3'd5 : 3'd4));
   assign w_stream_on = w_test_on & ((w_test_mode == 3'd1) | (w_test_mode == 3'd2));
   assign w_stream_j  = (w_test_mode == 3'd1);
 
@@ -337,7 +355,7 @@ module m_usb2_spd #(
       case (reg_fsm_dv_current_state)
         ENUM_ST_DV_OFF: w_fsm_dv_nxt_state = ENUM_ST_DV_FS;
         ENUM_ST_DV_FS: begin
-          if (w_ls_se0 & w_se0_det)
+          if (w_ls_se0 & w_se0_det & ~reg_rev_wait)
             w_fsm_dv_nxt_state = ENUM_ST_DV_RST;
           else if (w_idle_end & w_ls_j)
             w_fsm_dv_nxt_state = ENUM_ST_DV_SUSP;
@@ -358,21 +376,36 @@ module m_usb2_spd #(
           else if (reg_dtmr == '0)
             w_fsm_dv_nxt_state = ENUM_ST_DV_FS;
         end
+        // A test mode holds the high-speed state: no suspend or reset check until the next reset or
+        // power cycle (REQ-FUNC-022, BUG-019).
         ENUM_ST_DV_HS: begin
-          if (w_idle_end)
-            w_fsm_dv_nxt_state = ENUM_ST_DV_FSCHK;
+          casez ({w_test_on, (reg_l1_go & (reg_htmr == '0)), w_idle_end})
+            3'b1??:  w_fsm_dv_nxt_state = ENUM_ST_DV_HS;
+            3'b01?:  w_fsm_dv_nxt_state = ENUM_ST_DV_SUSP;
+            3'b001:  w_fsm_dv_nxt_state = ENUM_ST_DV_FSCHK;
+            default: w_fsm_dv_nxt_state = ENUM_ST_DV_HS;
+          endcase
         end
         ENUM_ST_DV_FSCHK: begin
-          w_fsm_dv_nxt_state = w_ls_se0 ? ENUM_ST_DV_RST : ENUM_ST_DV_SUSP;
+          if (reg_dtmr == '0)
+            w_fsm_dv_nxt_state = w_ls_se0 ? ENUM_ST_DV_RST : ENUM_ST_DV_SUSP;
         end
+        // Suspend ends with a bus reset (SE0) or with resume signaling (K). The device stays in the
+        // resume state until the host ends the resume, then goes back to its speed (BUG-013).
         ENUM_ST_DV_SUSP: begin
-          if (w_edge_rwake & i_dctrl[9])
-            w_fsm_dv_nxt_state = ENUM_ST_DV_RWAKE;
-          else if (!w_ls_j & (reg_flt == '0))
-            w_fsm_dv_nxt_state = reg_hs ? ENUM_ST_DV_HS : ENUM_ST_DV_FS;
+          casez ({((w_edge_rwake | reg_rw_pend) & i_dctrl[9] & (reg_dtmr == '0)), (reg_flt == '0), w_ls_se0, w_ls_k})
+            4'b1???: w_fsm_dv_nxt_state = ENUM_ST_DV_RWAKE;
+            4'b011?: w_fsm_dv_nxt_state = reg_susp_j ? ENUM_ST_DV_RST : ENUM_ST_DV_SUSP;
+            4'b0101: w_fsm_dv_nxt_state = ENUM_ST_DV_RESM;
+            default: w_fsm_dv_nxt_state = ENUM_ST_DV_SUSP;
+          endcase
         end
         ENUM_ST_DV_RWAKE: begin
           if (reg_dtmr == '0)
+            w_fsm_dv_nxt_state = ENUM_ST_DV_RESM;
+        end
+        ENUM_ST_DV_RESM: begin
+          if (w_ls_se0)
             w_fsm_dv_nxt_state = reg_hs ? ENUM_ST_DV_HS : ENUM_ST_DV_FS;
         end
         default: w_fsm_dv_nxt_state = ENUM_ST_DV_OFF;
@@ -383,7 +416,7 @@ module m_usb2_spd #(
   // Part 2, combinational: next state of the host side.
   always_comb begin : p_com_hp_nxt
     w_fsm_hp_nxt_state = reg_fsm_hp_current_state;
-    if (!(reg_role_host & i_ctrl[0] & i_hport[3] & i_vbusvalid & ~i_oc_act)) begin
+    if (!(reg_role_host & i_ctrl[0] & i_hport[3] & i_vbusvalid & i_pwr_en)) begin
       w_fsm_hp_nxt_state = ENUM_ST_HP_OFF;
     end else begin
       case (reg_fsm_hp_current_state)
@@ -405,7 +438,8 @@ module m_usb2_spd #(
         end
         ENUM_ST_HP_SE0: begin
           if (reg_htmr == '0)
-            w_fsm_hp_nxt_state = i_hport[21] ? ENUM_ST_HP_RSTW : ENUM_ST_HP_LISTK;
+            // A low-speed device (K idle) never chirps: no listening (BUG-036).
+            w_fsm_hp_nxt_state = (i_hport[21] | (reg_speed == 2'd2)) ? ENUM_ST_HP_RSTW : ENUM_ST_HP_LISTK;
         end
         ENUM_ST_HP_LISTK: begin
           if (w_ls_k & (reg_flt == '0))
@@ -449,6 +483,10 @@ module m_usb2_spd #(
       reg_htmr     <= '0;
       reg_atmr     <= '0;
       reg_flt      <= '0;
+      reg_rw_pend  <= 1'b0;
+      reg_rev_wait <= 1'b0;
+      reg_l1_go    <= 1'b0;
+      reg_susp_j   <= 1'b0;
       reg_ls_d     <= 2'b01;
       reg_cnt_kj   <= 4'd0;
       reg_last_kj  <= 2'd0;
@@ -477,13 +515,45 @@ module m_usb2_spd #(
             reg_last_kj <= 2'd0;
           end
           ENUM_ST_DV_RWAKE: reg_dtmr <= LPARA_T_RWAKE[LPARA_TMR_W-1:0];
+          ENUM_ST_DV_FSCHK: reg_dtmr <= LPARA_T_REVERT[LPARA_TMR_W-1:0];
+          ENUM_ST_DV_SUSP:  reg_dtmr <= LPARA_T_RWIDLE[LPARA_TMR_W-1:0];
           ENUM_ST_DV_FS:    reg_dtmr <= LPARA_T_RSTDET[LPARA_TMR_W-1:0];
           default:       reg_dtmr <= reg_dtmr;
         endcase
         reg_atmr <= LPARA_T_IDLE[LPARA_TMR_W-1:0];
       end
-      if (i_bus_act | (!w_ls_j & (reg_fsm_dv_current_state == ENUM_ST_DV_FS)))
+      // The idle time is measured only in the full-speed and high-speed active states; it restarts
+      // in every other state so that it is full when the device becomes active again (BUG-013).
+      // The host uses the same timer in its reset states, so this rule is for the device role only
+      // (BUG-023: the first form of the BUG-013 fix reloaded the timer in host role as well).
+      if (~reg_role_host & (i_bus_act | (!w_ls_j & (reg_fsm_dv_current_state == ENUM_ST_DV_FS)) |
+          ((reg_fsm_dv_current_state != ENUM_ST_DV_FS) & (reg_fsm_dv_current_state != ENUM_ST_DV_HS))))
         reg_atmr <= LPARA_T_IDLE[LPARA_TMR_W-1:0];
+      // L1 entry request of a device: set by the accepted LPM token, timed with the host timer
+      // (unused in device role), cleared when the device leaves the active state.
+      if (i_lpm_vld & ~reg_role_host) begin
+        reg_l1_go <= 1'b1;
+        reg_htmr  <= LPARA_T_L1[LPARA_TMR_W-1:0];
+      end else if ((reg_fsm_dv_current_state != ENUM_ST_DV_HS) & (reg_fsm_dv_current_state != ENUM_ST_DV_FS)) begin
+        reg_l1_go <= 1'b0;
+      end
+      // A bus reset in suspend is SE0 after J: the flag waits for J so that the SE0 seen while the
+      // line settles after an L1 entry is not taken for a reset.
+      if (reg_fsm_dv_current_state != ENUM_ST_DV_SUSP)
+        reg_susp_j <= 1'b0;
+      else if (w_ls_j)
+        reg_susp_j <= 1'b1;
+      // After the revert to full-speed (no chirp sequence, REF-001 7.1.7.5 b) the device waits for
+      // the end of the reset: SE0 still on the bus does not start a new chirp (BUG-035).
+      if ((reg_fsm_dv_current_state == ENUM_ST_DV_CHJ) & (w_fsm_dv_nxt_state == ENUM_ST_DV_FS))
+        reg_rev_wait <= 1'b1;
+      else if (!w_ls_se0)
+        reg_rev_wait <= 1'b0;
+      // A remote wakeup request written before the bus has been idle for 5 ms waits in suspend.
+      if (reg_fsm_dv_current_state != ENUM_ST_DV_SUSP)
+        reg_rw_pend <= 1'b0;
+      else if (w_edge_rwake)
+        reg_rw_pend <= 1'b1;
       // Chirp pair counter: a change between K and J after the filter time counts one half pair.
       if ((reg_fsm_dv_current_state == ENUM_ST_DV_CHJ) & (reg_flt == '0)) begin
         if (w_ls_k & (reg_last_kj != 2'd1)) begin
@@ -603,7 +673,7 @@ module m_usb2_spd #(
             reg_speed <= 2'd0;
             if (reg_fsm_dv_current_state == ENUM_ST_DV_CHJ)
               reg_evt_enum <= 1'b1;
-            if (reg_fsm_dv_current_state == ENUM_ST_DV_SUSP) begin
+            if (reg_fsm_dv_current_state == ENUM_ST_DV_RESM) begin
               reg_evt_resume <= 1'b1;
               reg_l1         <= 1'b0;
             end
@@ -613,7 +683,7 @@ module m_usb2_spd #(
             reg_speed <= 2'd1;
             if (reg_fsm_dv_current_state == ENUM_ST_DV_OFF)
               reg_evt_conn <= 1'b1;
-            if (reg_fsm_dv_current_state == ENUM_ST_DV_SUSP | reg_fsm_dv_current_state == ENUM_ST_DV_RWAKE) begin
+            if (reg_fsm_dv_current_state == ENUM_ST_DV_RESM) begin
               reg_evt_resume <= 1'b1;
               reg_l1         <= 1'b0;
             end
@@ -673,31 +743,31 @@ module m_usb2_spd #(
 
   // Stream to the PHY for chirp, resume K and the test J and K: all bytes 0x00 (K) or 0xFF (J).
   always_comb begin : p_com_stream
-    o_ch_active = 1'b0;
+    w_ch_act = 1'b0;
     w_ch_data = 16'h0000;
     w_ch_valid = 2'b00;
     case (reg_fsm_dv_current_state)
       ENUM_ST_DV_CHK, ENUM_ST_DV_RWAKE: begin
-        o_ch_active  = 1'b1;
+        w_ch_act  = 1'b1;
         w_ch_data  = 16'h0000;
         w_ch_valid = 2'b11;
       end
       default: begin
-        o_ch_active = 1'b0;
+        w_ch_act = 1'b0;
       end
     endcase
     if (reg_fsm_hp_current_state == ENUM_ST_HP_CHIRP) begin
-      o_ch_active  = 1'b1;
+      w_ch_act  = 1'b1;
       w_ch_data  = reg_hchirp_j ? 16'hFFFF : 16'h0000;
       w_ch_valid = 2'b11;
     end
     if (reg_fsm_hp_current_state == ENUM_ST_HP_RESM) begin
-      o_ch_active  = 1'b1;
+      w_ch_act  = 1'b1;
       w_ch_data  = 16'h0000;
       w_ch_valid = 2'b11;
     end
     if (w_stream_on) begin
-      o_ch_active  = 1'b1;
+      w_ch_act  = 1'b1;
       w_ch_data  = w_stream_j ? 16'hFFFF : 16'h0000;
       w_ch_valid = 2'b11;
     end
@@ -714,7 +784,7 @@ module m_usb2_spd #(
     w_id_pullup    = (PARA_USB2_ROLE == 32'd2);
     if (!reg_role_host) begin
       case (reg_fsm_dv_current_state)
-        ENUM_ST_DV_FS, ENUM_ST_DV_RST, ENUM_ST_DV_FSCHK: begin
+        ENUM_ST_DV_FS, ENUM_ST_DV_RST, ENUM_ST_DV_FSCHK, ENUM_ST_DV_RESM: begin
           w_xcvr_sel = 2'b01;
           w_term_sel = 1'b1;
         end
@@ -785,6 +855,20 @@ module m_usb2_spd #(
     end
     if (w_stream_on)
       w_op_mode = 2'b10;
+    // Link loopback (u2_ctrl.lpbk, section 6.3): full-speed transceiver with non-driving OpMode.
+    if (i_ctrl[7]) begin
+      w_xcvr_sel = 2'b01;
+      w_term_sel = 1'b1;
+      w_op_mode  = 2'b01;
+    end
+  end
+
+  // The stream gate: OpMode was 10b on the pins in the previous cycle.
+  always_ff @(posedge i_clk_phy, negedge i_rst_n_core) begin : p_ff_mode_rdy
+    if (!i_rst_n_core)
+      reg_mode_rdy <= 1'b0;
+    else
+      reg_mode_rdy <= (o_op_mode == 2'b10);
   end
 
   // Optional register stage on the mode outputs (PARA_USB2_PIPE_MODE).
@@ -817,7 +901,9 @@ module m_usb2_spd #(
   assign o_id_pullup = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_id_pullup : w_id_pullup;
 
   // Outputs.
-  assign o_drv_vbus     = reg_role_host & i_hport[3] & ~i_oc_act;
+  // DrvVbus follows the port power state of the over-current block, including the latched
+  // power-off state after the input has returned (REQ-FUNC-041, BUG-024).
+  assign o_drv_vbus     = reg_role_host & i_hport[3] & i_pwr_en;
   assign o_chrg_vbus    = 1'b0;
   assign o_dischrg_vbus = ~(reg_role_host & i_hport[3]);
   assign o_role_host    = reg_role_host;
@@ -850,7 +936,12 @@ module m_usb2_spd #(
   assign o_lpm_hird     = reg_hird;
   assign o_lpm_rw       = reg_rw;
   assign o_ch_data      = w_ch_data;
-  assign o_ch_valid     = w_ch_valid;
+  // The chirp, resume and test streams start only when the OpMode pin has shown 10b for one cycle,
+  // so TXValid never leads the mode pins (BUG-021; BUG-034: without the mode register stage and,
+  // with it, the registered pin and TXValid used to rise in the same cycle).
+  assign w_mode_rdy  = reg_mode_rdy;
+  assign o_ch_valid  = w_mode_rdy ? w_ch_valid : 2'b00;
+  assign o_ch_active = w_ch_act & w_mode_rdy;
   assign o_tp_req       = reg_tp_req;
   assign o_tp_pid       = LPARA_PID_DATA0[3:0];
   assign o_tp_len       = LPARA_TP_LEN[11:0];

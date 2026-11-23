@@ -1,0 +1,427 @@
+{
+ "ip": "m_dvp_controller",
+ "reviewed_spec": "spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md",
+ "date": "2026-11-22",
+ "areas": [
+  {
+   "id": "application_fit",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "The application class is named and confirmed, but F-001 shows no workload budget and a throughput contract that cannot be shown to fit."
+  },
+  {
+   "id": "features",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "FEAT-001..004 each map to requirements; F-002 (no frame-done, counters or flush) is a Major gap and F-003 a Minor one."
+  },
+  {
+   "id": "functions",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Two Major findings (F-004, F-005) in the DMA request function; the other functions have cycle tables and waveforms."
+  },
+  {
+   "id": "interfaces",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "APB behaviour matches IHI 0024 Issue D in the clauses read, but there is no interrupt (F-006) and the empty-read wait can block the bus (F-007)."
+  },
+  {
+   "id": "clock_reset_cdc",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Crossings are tabulated with structures, but F-009 breaks the spec own reset rule and F-010 leaves the gated-mode failure silent."
+  },
+  {
+   "id": "parameters",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Every parameter has default, range and impact; F-011 (compile-time polarity and edge) is a Major limit and F-012 a Minor one."
+  },
+  {
+   "id": "data_representation",
+   "weight": 0.5,
+   "score": 4,
+   "justification": "Width, zero-extension and ordering are defined; only the Minor packing question (F-013) remains."
+  },
+  {
+   "id": "asic_feasibility",
+   "weight": 1.5,
+   "score": 4,
+   "justification": "Small synthesizable structure with local resets and synchronizers; only the clocking statement (F-014) is Minor. Timing and frequency could not be assessed (no library or period)."
+  },
+  {
+   "id": "sdc_timing",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "No SDC, all budgets TBD (F-015) and the key bundled-data exception has no value (F-016)."
+  },
+  {
+   "id": "area_power",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "No area or power basis (F-017 Major); proxy of about 320 flops derived here; storage doubling (F-018)."
+  },
+  {
+   "id": "performance",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "Formulas exist and are correct (the 512-entry example checks out) but carry no values (F-019 Major)."
+  },
+  {
+   "id": "software_ease",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Small register model (6 registers) and a documented sequence, but no flush or recovery path (F-020) and a silent mode refusal (F-021)."
+  },
+  {
+   "id": "dft",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Section 16 is all TBD while the design has stoppable clock, edge option and reset crossing (F-022)."
+  },
+  {
+   "id": "security_ras",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "The security stance is explicit and waived (F-023); the diagnostic thinness is Minor (F-024)."
+  },
+  {
+   "id": "verification_quality",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Full requirement trace, but no simulation (F-025) and no assertion IDs, formal or stall tests (F-026)."
+  },
+  {
+   "id": "documentation",
+   "weight": 0.5,
+   "score": 4,
+   "justification": "Stable IDs, a decision log and a gap scan; only template residue and version alignment (F-027, F-028) are Minor."
+  },
+  {
+   "id": "integration_effort",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "No sensor mode validated against mode 1 (F-029 Major); open items are inputs without a checklist (F-030)."
+  },
+  {
+   "id": "market_position",
+   "weight": 1.0,
+   "score": 2,
+   "justification": "Basic capture matches the compared parts but the frame-level services are missing (F-031), which changes the driver architecture."
+  }
+ ],
+ "findings": [
+  {
+   "id": "F-001",
+   "area": "application_fit",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§1.4 (line 74), §9 (line 497), §13 PERF-002 (line 1962), REQ-IF-001 (line 122)",
+   "title": "No workload is fixed, and the one-sample-per-APB-read contract cannot be shown to serve a camera",
+   "detail": "INFERENCE: the HDS makes no product workload claim (§1.4) and bounds the drain to f_APB/2 samples per second (§9), one sample per 32-bit read. For the OV7670 VGA frame timing supplied with this review (tLINE = 784 tp, 640 tp active, 510 lines, 480 active) in YUV mode at 24 MHz PCLK, the active line delivers 24 Msample/s, so a zero-wait APB needs at least 48 MHz and a DMA path of four cycles per beat needs about 96 MHz; the default FIFO of 8 entries holds only 8/24 MHz = 333 ns of pixels.",
+   "action": "Write the reference workload table and sizing result in §13"
+  },
+  {
+   "id": "F-002",
+   "area": "features",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§6.3 DMA re-arm row (line 426), §10.1 (line 560), CSR dvp_fifo_sts (workbook)",
+   "title": "No frame-done event, line or frame counter, flush, or snapshot mode",
+   "detail": "INFERENCE: §6.3 states \"no frame-end interrupt or implicit FIFO flush\", the CSR has no frame or line counter (6 registers: dvp_version, dvp_ctrl, dvp_wmark, dvp_timeout, dvp_fifo_sts, dvp_fifo_level), and the sample stream carries no frame or line marker, so firmware cannot learn from the IP where a frame ends or whether pixels were dropped.",
+   "action": "Add frame/line counters, frame_done and snapshot to the CSR workbook and §10"
+  },
+  {
+   "id": "F-003",
+   "area": "features",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§1.1 Excluded (line 54), ASM-001 (line 2180), research D03, D04, D07",
+   "title": "Sensor modes in the research corpus are outside the supported profile",
+   "detail": "INFERENCE: ASM-001 sets the goal of maximum compatibility, yet HSYNC-pulse output (OV3640 HSYNC mode, OV7725 HREF-to-HSYNC mode), the onsemi XOR-style LINE_VALID options, BT.656 embedded codes are excluded (§1.1, DEC-005), and widths above 12 bits are outside DEC-001. The research report states that a fixed reading of the valid signals \"can therefore be wrong for a selected mode\".",
+   "action": "Add the supported sensor-mode table to §1 and §8"
+  },
+  {
+   "id": "F-004",
+   "area": "functions",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "REQ-IF-004 (line 125), §10.1 FSM (lines 552-560), figure 10-1",
+   "title": "The DMA re-arm rule can leave the request low while the FIFO is above the watermark",
+   "detail": "INFERENCE: after ACK the FSM leaves ENUM_ST_SERVICE_ACTIVE only when occupancy falls below the watermark, and a new request needs occupancy to cross the watermark again. A DMA that reads a fixed burst of W samples while PCLK keeps writing can finish with occupancy still at or above W (for example 7 entries at ACK, 4 read, 2 new arrivals leaves 5 with W = 4); no further request is raised, the FIFO fills, and the newest samples are dropped.",
+   "action": "Change the DMA FSM to burst-counted service and update REQ-IF-004, DEC-008"
+  },
+  {
+   "id": "F-005",
+   "area": "functions",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§6.3 DMA re-arm row (line 426), §10.1 (line 560)",
+   "title": "Samples left after the last full batch never request service",
+   "detail": "FACT: §6.3 says the notification is \"watermark-only; no frame-end interrupt or implicit FIFO flush\" and §10.1 says a request \"may assert during a partial frame; frame boundaries do not defer a batch request\". When the sample count of a frame is not a multiple of the watermark, the remainder stays in the FIFO and is delivered together with the next frame.",
+   "action": "Define the end-of-frame flush request in §6.3 and §10.1"
+  },
+  {
+   "id": "F-006",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§6.4 (line 432), §1.1 (line 50)",
+   "title": "There is no interrupt output; DMA REQ is the only notification",
+   "detail": "FACT: §6.4 states \"No interrupt output is in scope\". Overflow (dvp_fifo_sts.ovf), read timeout and frame state can only be found by polling the CSR, and an APB read that waits on an empty FIFO also blocks the poll (F-007).",
+   "action": "Add the interrupt output and registers (spec, CSR workbook, RTL)"
+  },
+  {
+   "id": "F-007",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "REQ-IF-002 (line 123), REQ-IF-005 (line 126), CSR dvp_timeout.cycles [31:0], §11.4 (line 1937)",
+   "title": "A read of an empty FIFO_DATA can hold the shared APB for up to 2^32 cycles",
+   "detail": "INFERENCE: PREADY stays low while the FIFO is empty for the programmed cycles, the field is 32 bits wide with no stated maximum, and IHI 0024 Issue D 3.1 allows PREADY wait states without setting a limit in the sections read. A DMA read issued before capture_en is set, with a large timeout, blocks the APB bridge, so the CPU write that would enable capture waits behind it.",
+   "action": "Bound dvp_timeout, define PRDATA on error, add rd_to flag"
+  },
+  {
+   "id": "F-008",
+   "area": "interfaces",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "IF-003 (line 387), DEC-008 (line 2189), §6.2 (lines 411-412)",
+   "title": "The DMA handshake is a local scheme with no burst size or request-type stated",
+   "detail": "INFERENCE: the sideband is one level REQ and a one-cycle ACK in CLK-APB. The HDS does not say which DMA engine protocol it maps to, whether a single or a burst request is meant, or what happens if ACK arrives while REQ is low.",
+   "action": "Write the DMA contract table"
+  },
+  {
+   "id": "F-009",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§2.2 item 4 (line 99), §7.3 (lines 459-464), CDC-005 (line 452), DEC-029 (line 2210), REQ-RESET-001 (line 136)",
+   "title": "The gated-mode launch registers are clocked by PCLK but reset from the CLK-APB reset",
+   "detail": "FACT: DEC-029 resets the gated held-data and toggle registers from the APB-local synchronized reset, and §7.3 asks STA/RDC to \"check reset removal at the first selected PCLK edge\". §2.2 item 4 says REF-003 is the mandatory baseline and \"do not create a local RTL exception\", and §7.3 lists RST-DVP-LOCAL as the reset of the capture and FIFO write side.",
+   "action": "Re-implement DEC-029 without a cross-domain reset"
+  },
+  {
+   "id": "F-010",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§10.6 (line 1834), REQ-FUNC-007 (line 132), REQ-PERF-001 (line 135), CDC-003 and CDC-004 (lines 450-451)",
+   "title": "Violating the gated-mode spacing or VSYNC width gives silent pixel loss",
+   "detail": "FACT: §10.6 says that if the 4-APB-cycle spacing is violated \"the APB toggle synchronizer can miss an event or sample a newer value\", and the gated profile is then outside the no-pixel-loss contract. No status bit, counter or interrupt reports it, and FIFO overflow is a different event.",
+   "action": "Add the gated-mode overrun detector and flag"
+  },
+  {
+   "id": "F-011",
+   "area": "parameters",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§8 (lines 475-478), REQ-FUNC-002 (line 119), DEC-001 (line 2182)",
+   "title": "PCLK edge, VSYNC and HREF polarity are fixed at elaboration",
+   "detail": "INFERENCE: REQ-FUNC-002 forbids changing these settings at run time, so the polarity and edge are frozen in silicon. The research report notes that clock-to-data phase and polarity vary between sensors and between register-selected modes, and ST AN5020 (Rev 4, December 2024, web summary) describes the DCMI pixel clock edge as configurable.",
+   "action": "Decide runtime polarity and edge selection (HAS decision, then RTL)"
+  },
+  {
+   "id": "F-012",
+   "area": "parameters",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§9 (line 495), CSR dvp_wmark.level [31:0], dvp_timeout.cycles [31:0]",
+   "title": "Wide CSR fields allow values that silently disable service",
+   "detail": "INFERENCE: dvp_wmark.level has 32 bits while only 0..PARA_FIFO_DEPTH is meaningful, and \"values above depth are unreachable and leave REQ low\" (§9). A software error therefore stops the DMA without any indication, and the extra field bits cost flops.",
+   "action": "Bound the CSR field widths and add the range check"
+  },
+  {
+   "id": "F-013",
+   "area": "data_representation",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§9 (line 493), REQ-FUNC-008 (line 133), DEC-014 (line 2196)",
+   "title": "One sample per 32-bit word wastes 62.5 to 75 percent of the APB data bus, with no packed option",
+   "detail": "INFERENCE: REQ-FUNC-008 returns one zero-extended sample per read, so an 8-bit sample uses 25 percent of the word and a 12-bit sample 37.5 percent. ST AN5020 (web summary) describes the DCMI assembling a 32-bit word from four pixel clock cycles for 8-bit input, which cuts the bus operations by four.",
+   "action": "Specify the packed read mode and lane order"
+  },
+  {
+   "id": "F-014",
+   "area": "asic_feasibility",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§8 PARA_DVP_SAMPLE_EDGE (line 476), §10.6 (lines 1822-1824), §14.3 (lines 2018-2028)",
+   "title": "Falling-edge sampling and a stoppable PCLK domain need explicit clock and constraint handling",
+   "detail": "INFERENCE: the design is a small synthesizable RTL set with registered outputs, local resets and two-flop synchronizers, so synthesis, latch and loop risks are low. The structures to settle are the falling-edge sample (negedge flops or an inverted clock), the PCLK that stops in gated mode, and the bundled data crossing, none of which §14.3 addresses. No timing path or frequency could be assessed because no library, corner or clock period is given.",
+   "action": "Document the clocking structure in §14.3"
+  },
+  {
+   "id": "F-015",
+   "area": "sdc_timing",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§17.1 (lines 2094-2120), CLK-APB and CLK-DVP rows (lines 2100-2101)",
+   "title": "No SDC is delivered and the clock and I/O budgets are all TBD",
+   "detail": "FACT: §17.1.1 gives \"TBD\" for the period, latency and uncertainty of both clocks, §17.1.2 gives TBD for the sensor and APB delays, and no SDC file exists in the folder. The HDS correctly forbids a blanket false path, but names no command or value.",
+   "action": "Deliver the SDC template with parameterised clock and I/O budgets"
+  },
+  {
+   "id": "F-016",
+   "area": "sdc_timing",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "EXC-003 (line 2118), REQ-PERF-001 (line 135), §10.6 (lines 1830-1836)",
+   "title": "The bundled-data constraint has no value and the 4-cycle rule leaves one APB cycle of margin",
+   "detail": "INFERENCE: §10.6 says the write completes within three APB edges of the source sample in the worst phase and that four-cycle spacing leaves one cycle of margin \"in addition to\" setup, hold and uncertainty; EXC-003 asks to constrain the payload but gives no value. At f_APB = 100 MHz the one-cycle margin is 10 ns before setup, hold and clock uncertainty, and f_APB >= 4 x f_pixel is necessary but not sufficient.",
+   "action": "Quantify EXC-003 and the margin rule"
+  },
+  {
+   "id": "F-017",
+   "area": "area_power",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "PPA-002 and PPA-003 (lines 1965-1966), §13 (line 1969)",
+   "title": "No area or power basis is given, not even a structural proxy",
+   "detail": "FACT: PPA-002 and PPA-003 read \"No target supplied\" and no flop count, memory size or activity assumption appears. INFERENCE (proxy, not mapped): the default build (8-bit, depth 8) holds 2 x 8 x 8 = 128 storage bits, about 70 CSR and APB flops, a 32-bit empty-read counter, Gray pointers with synchronizers and the capture and bridge state, so roughly 320 flops (plus or minus 25 percent); the two 32-bit CSR fields and the 32-bit counter are about 30 percent of it.",
+   "action": "Add the area proxy and power statement to §13"
+  },
+  {
+   "id": "F-018",
+   "area": "area_power",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "REQ-PARAM-001 (line 121), §5.1 (lines 159-163), §13 (line 1969)",
+   "title": "Both mode FIFOs are always built, so storage is doubled while one mode is active",
+   "detail": "INFERENCE: REQ-PARAM-001 applies PARA_FIFO_DEPTH to both the AFIFO and the SFIFO, and §5.1 instantiates both. The HDS depth example (25 MHz x 10 us gives 512 entries) would then hold 2 x 512 x 12 = 12,288 storage bits for a 12-bit profile, twice the 6,144 bits one active FIFO needs, with the RTL array as the delivered memory (PARA_AFIFO_MEM_USE_MACRO = 0).",
+   "action": "Decide shared FIFO array or single-path build"
+  },
+  {
+   "id": "F-019",
+   "area": "performance",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "PERF-001..003 (lines 1961-1963), §13 sizing (line 1969), REQ-PERF-001 (line 135)",
+   "title": "The performance metrics are formulas with no values, and the derived demand is high",
+   "detail": "INFERENCE: PERF-001, PERF-002, PERF-003 and PPA-001 carry no number (\"pending\" or \"mode-specific contract\"); only PERF-004 (two APB cycles per read) and the 4 x f_pixel rule are quantified. Derived from the OV7670 figure: peak 24 Msample/s and average 24 x 0.768 = 18.4 Msample/s (active fraction 640 x 480 / 784 x 510 = 76.8 percent); continuous mode needs f_APB >= 48 MHz at zero wait and gated mode needs f_APB >= 96 MHz plus margin; a 720p30 YUV422 stream (55.3 Msample/s, assumed workload) needs 110.6 MHz and 221 MHz.",
+   "action": "Quantify PERF-001..003 and the supported workload range"
+  },
+  {
+   "id": "F-020",
+   "area": "software_ease",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§12 (line 1955), DEC-025 (line 2206), RST-SW (line 462), §7.3 (line 464)",
+   "title": "There is no flush, so recovery from overflow or a stall needs a full IP reset or a blind drain",
+   "detail": "INFERENCE: ERR-001 drops the newest sample and sets a sticky flag; §7.3 states \"No software FIFO flush is implemented\" and DEC-025 keeps the queued samples when capture stops. A dropped pixel shifts every later pixel of the frame and, because the stream has no frame marker (F-002), of later frames until the FIFO has been drained by reads of unknown count.",
+   "action": "Add fifo_clr and the overflow recovery sequence to §11.2"
+  },
+  {
+   "id": "F-021",
+   "area": "software_ease",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-FUNC-004 (line 129), DEC-018 (line 2199), §10.6 (line 1817), D28 (line 1828)",
+   "title": "A refused PCLK_MODE write completes with OKAY and no flag",
+   "detail": "FACT: the mode bit keeps its old value when capture is enabled, either FIFO is nonempty or the source is not quiescent, \"while the APB write completes with OKAY\" and software \"shall read back the field\". The other bits of the same word are written.",
+   "action": "Flag a refused mode write"
+  },
+  {
+   "id": "F-022",
+   "area": "dft",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§16 (lines 2079-2088), G-004..G-006 of the gap scan",
+   "title": "DFT is deferred to the SoC while the design has structures that decide scan eligibility",
+   "detail": "INFERENCE: §16 is a table of \"Integration TBD\" and \"TBD\" entries. The design has a PCLK that stops in mode 1 (a scan shift clock cannot depend on it), a falling-edge sample option, a reset crossing between domains (F-009) and a bundled-data crossing that scan capture can corrupt. None is analysed, and \"N/A\" is not argued.",
+   "action": "Write the DFT statement for both clocks and the reset"
+  },
+  {
+   "id": "F-023",
+   "area": "security_ras",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "§1.2 (line 62), §18 (lines 2139-2142)",
+   "title": "PPROT is ignored, protection is disabled, and pixel privacy is left to the SoC",
+   "detail": "FACT: i_protect_en is tied low, PPROT does not filter access, and §18 says camera pixels \"may be privacy-sensitive at SoC level\". This is a recorded decision (\"a claim of no security decision is a decision\"), so any APB requester that can reach FIFO_DATA can read the video.",
+   "action": "Record the waiver in the integration guide"
+  },
+  {
+   "id": "F-024",
+   "area": "security_ras",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§18 ECC and diagnostics rows (lines 2143-2145), ERR-001..006 (lines 1946-1953)",
+   "title": "No integrity scheme is decided and the diagnostics are one sticky flag",
+   "detail": "INFERENCE: ECC or parity for the FIFO storage is \"None selected\", the safety goal is \"TBD\", the only fault record is dvp_fifo_sts.ovf, and there is no drop counter, no timeout flag and no gated-overrun flag. A drone or vehicle camera use case may be safety related, which the HDS does not rule out.",
+   "action": "Add drop counter and diagnostic flags; record the safety stance"
+  },
+  {
+   "id": "F-025",
+   "area": "verification_quality",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "verification/README.md, RTL_GENERATION_REPORT.md (Verification boundary), §15.1 (line 2034)",
+   "title": "No behavioural simulation has been run; the evidence is lint and static checks",
+   "detail": "FACT: the generation report says \"No behavioral testbench or simulation regression was executed\", and verification/README.md lists rule check (12 files, 0 errors, 21 warnings), Verilator (26 files, 0 errors, 24 warnings), Slang (0 errors, 2 warnings), profile elaboration, and static structure checks only. TEST-001..015 are \"future stimuli\", which the HDS states itself.",
+   "action": "Run the directed and random simulation for TEST-001..015"
+  },
+  {
+   "id": "F-026",
+   "area": "verification_quality",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§15.3 (lines 2056-2067), §15.4 (lines 2069-2075), TEST-005 (line 2045)",
+   "title": "Assertions have no IDs, formal is pending, and the stall and silent-failure scenarios are not tested",
+   "detail": "INFERENCE: the inventory finds 0 property IDs; §15.3 lists intents in prose and §15.4 says \"Property set pending\". Traceability is complete (0 requirements without a test), but no test covers the DMA stall of F-004, the tail of F-005, a gated spacing violation (F-010), a long timeout blocking the APB (F-007) or a real sensor timing model (the OV7670 and onsemi corpus is not used as stimulus).",
+   "action": "Add SVA IDs, the missing tests and the formal property list"
+  },
+  {
+   "id": "F-027",
+   "area": "documentation",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "Purpose block (line 17), §22 (lines 2230-2243), link at line 2232",
+   "title": "Template text and a broken link remain in the normative document",
+   "detail": "FACT: line 17 still says \"Replace every angle-bracket placeholder\", §22 is titled \"References used to shape this template\" and lists Arm and Synopsys pages unrelated to the DVP design, and its link to #21-normative-references points to a section that does not exist (the normative references are §2.1, §21 is the glossary).",
+   "action": "Remove template residue from the HDS"
+  },
+  {
+   "id": "F-028",
+   "area": "documentation",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "Front matter (lines 1-11), IP README, §20 DEC order (lines 2188-2196), REF-003 (line 90)",
+   "title": "Version, status and the duplicate baseline are not aligned, and decision order and local paths are untidy",
+   "detail": "FACT: the front matter says version 0.2 and status Draft while the IP README calls this package the \"approved\" HDS, a baseline HDS of the same name remains in spec/ with different content, DEC-017 appears before DEC-014, and REF-003 and the naming rule cite C:\\Users\\PC\\.codex paths.",
+   "action": "Align front matter, archive the baseline, sort DEC"
+  },
+  {
+   "id": "F-029",
+   "area": "integration_effort",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "REF-006 (line 93), DEC-006 (line 2187), §2.3 (line 111), research D01 D04 D08",
+   "title": "No sensor mode is validated, so the gated-mode contract is not shown to be satisfiable",
+   "detail": "INFERENCE: REF-006 and DEC-006 leave the sensor revision and mode unselected and call it an external dependency. Mode 1 requires no PCLK edge during active VSYNC or an HREF-high gap, and a VSYNC pulse of at least four APB cycles. The research report documents free-running or gated PCLK as a register option for OV7670 and OV7725 and a continuous PIXCLK through blanking for MT9V024, but the HDS does not map either mode to a datasheet condition.",
+   "action": "Validate mode 0 and mode 1 against two real sensor modes"
+  },
+  {
+   "id": "F-030",
+   "area": "integration_effort",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "verification/static/hds_gaps.log (G-001..G-015), §20 ASM-001, ASM-002",
+   "title": "Fifteen integration items remain open and no integration guide exists",
+   "detail": "FACT: the gap scan reports 0 BLOCK gaps and 15 INFO items (SoC, library, clocks, DFT, STA/SDC, corners, safety class), all created on 2026-11-21 or 2026-11-22 (age one day). The folder holds no integration guide, no example hookup and no constraint file.",
+   "action": "Write the integration checklist"
+  },
+  {
+   "id": "F-031",
+   "area": "market_position",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§1.3 (lines 66-71), §6.4 (line 432), §9 (line 493); sources in section 19 of this report",
+   "title": "The IP lacks the frame-level automation of commercial camera interfaces",
+   "detail": "INFERENCE (sources dated 2026-11-22, summaries only): ST AN5020 Rev 4 describes a 32-bit packing of four 8-bit samples, a crop window, odd or even line decimation and a capture that ends at the frame end; NXP MCUXpresso documents an end-of-frame interrupt, RX and statistics FIFOs with a DMA request and a frame-buffer queue; Espressif documents GDMA end-of-frame on VSYNC or byte count. DVP_Controller matches the basic capture, gated PCLK and overflow flag, but has none of the frame-level services.",
+   "action": "Adopt the four priority features for release 1"
+  }
+ ]
+}

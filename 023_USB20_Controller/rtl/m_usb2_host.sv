@@ -74,6 +74,11 @@ module m_usb2_host #(
   localparam logic [31:0] LPARA_TMO_W     = 10,
   localparam logic [31:0] LPARA_UF_W      = 20,
   localparam logic [31:0] LPARA_ONE       = 1,
+  // Extra delay (CLK-PHY cycles) before a packet that follows an own packet in high-speed, so
+  // that the gap between two packets of the host is at least 88 bit times (REQ-FUNC-014,
+  // BUG-043): 8-bit UTMI+ (8 bits per cycle) and 16-bit UTMI+.
+  localparam logic [31:0] LPARA_B2B_W8    = 7,
+  localparam logic [31:0] LPARA_B2B_W16   = 2,
   localparam logic [31:0] LPARA_RES_NONE  = 0,
   localparam logic [31:0] LPARA_RES_ACK   = 1,
   localparam logic [31:0] LPARA_RES_NAK   = 2,
@@ -181,6 +186,7 @@ module m_usb2_host #(
   logic [PARA_USB2_NHC-1:0]                 reg_wait;
   logic [PARA_USB2_NHC-1:0][15:0]           reg_pcnt;
   logic [PARA_USB2_NHC-1:0]                 reg_csplit;
+  logic [PARA_USB2_NHC-1:0][1:0]            reg_cscnt;
   logic [PARA_USB2_NHC-1:0]                 reg_buf;
   logic [PARA_USB2_NHC-1:0][31:0]           reg_cmd_seen;
   logic [LPARA_UF_W-1:0]                    reg_uf_cnt;
@@ -202,6 +208,7 @@ module m_usb2_host #(
   logic                                     reg_ping_tok;
   logic                                     reg_to;
   logic                                     reg_bab;
+  logic                                     reg_rx_go;
   logic                                     reg_lpm_seen;
   logic                                     reg_lpm_pend;
   logic                                     w_lpm_start;
@@ -247,6 +254,9 @@ module m_usb2_host #(
   logic [PARA_USB2_NHC-1:0][16:0]           w_rows_c;
   logic [PARA_USB2_NHC-1:0][LPARA_UF_W-1:0] w_est;
   logic                                     w_hs_mode;
+  logic [3:0]                               w_b2b_cyc;
+  logic [3:0]                               reg_b2b;
+  logic                                     reg_tx_pnd;
   logic [LPARA_UF_W-1:0]                    w_uf_len_nxt;
   logic [LPARA_UF_W-1:0]                    w_uf_reload;
   logic                                     w_uf_end;
@@ -264,6 +274,7 @@ module m_usb2_host #(
   logic [2:0]                               w_bpr_sh;
   logic [PARA_USB2_NHC-1:0]                 w_upd_hit;
   logic [PARA_USB2_NHC-1:0]                 w_halt_hit;
+  logic [PARA_USB2_NHC-1:0]                 w_iso_err;
   logic [PARA_USB2_NHC-1:0]                 w_xfer_hit;
   logic                                     w_data_ok;
   logic                                     w_pid_ok;
@@ -278,6 +289,7 @@ module m_usb2_host #(
   // Bytes per RAM row (shift of 2 for 32-bit rows, 3 for 64-bit rows) and the port speed.
   assign w_bpr_sh = (PARA_USB2_UTMI_W == LPARA_W16) ? 3'd3 : 3'd2;
   assign w_hs_mode = (i_port_speed == 2'd0);
+  assign w_b2b_cyc = (PARA_USB2_UTMI_W == LPARA_W16) ? LPARA_B2B_W16[3:0] : LPARA_B2B_W8[3:0];
   assign w_sof_en  = i_host_act & i_hport[4];
 
   // (Micro)frame timer: the length is the CSR value (divided by TSCALE for simulation); a
@@ -396,12 +408,23 @@ module m_usb2_host #(
   assign w_nak_hs   = i_hs_vld & (i_hs_pid == LPARA_PID_NAK[3:0]);
   assign w_nyet_hs  = i_hs_vld & (i_hs_pid == LPARA_PID_NYET[3:0]);
   assign w_stall_hs = i_hs_vld & (i_hs_pid == LPARA_PID_STALL[3:0]);
-  assign w_wait_end = (reg_tmo == '0);
+  // The response time-out ends when the device starts its packet (BUG-039).
+  assign w_wait_end = (reg_tmo == '0) & ~reg_rx_go & ~i_dat_sop;
   assign w_exp_pid  = reg_dat_pid;
   assign w_pid_ok   = reg_iso ? 1'b1 : (i_dat_pid == w_exp_pid);
   assign w_data_ok  = i_dat_end & i_dat_ok & reg_rx_acc;
   assign w_lpm_start = reg_lpm_pend & i_host_act & ~reg_sof_pend;
   assign w_bab      = i_dat_end & (i_dat_len > {1'b0, reg_mps});
+
+  // The data packet of the device has started (cleared outside the wait for data).
+  always_ff @(posedge i_clk_phy, negedge i_rst_n_core) begin : p_ff_rx_go
+    if (!i_rst_n_core)
+      reg_rx_go <= 1'b0;
+    else if (reg_fsm_host_current_state != ENUM_ST_WAIT_IN)
+      reg_rx_go <= 1'b0;
+    else if (i_dat_sop)
+      reg_rx_go <= 1'b1;
+  end
 
   // Part 1, sequential: the current state of the host handler.
   always_ff @(posedge i_clk_phy, negedge i_rst_n_core) begin : p_ff_fsm_host
@@ -472,7 +495,7 @@ module m_usb2_host #(
       end
       ENUM_ST_WAIT_IN: begin
         casez ({i_dat_end, i_hs_vld, w_wait_end})
-          3'b1??:  w_fsm_host_nxt_state = (w_data_ok & w_pid_ok & ~reg_iso) ? ENUM_ST_RSP : ENUM_ST_DONE;
+          3'b1??:  w_fsm_host_nxt_state = (w_data_ok & w_pid_ok & ~reg_iso & ~w_bab) ? ENUM_ST_RSP : ENUM_ST_DONE;
           3'b01?:  w_fsm_host_nxt_state = ENUM_ST_DONE;
           3'b001:  w_fsm_host_nxt_state = ENUM_ST_DONE;
           default: w_fsm_host_nxt_state = ENUM_ST_WAIT_IN;
@@ -590,6 +613,8 @@ module m_usb2_host #(
       reg_prep      <= 4'd0;
       reg_rx_acc    <= 1'b0;
       reg_tx_req    <= 1'b0;
+      reg_tx_pnd    <= 1'b0;
+      reg_b2b       <= 4'd0;
       reg_tx_kind   <= 3'd0;
       reg_tx_pid    <= 4'h0;
       reg_tx_fld    <= 19'd0;
@@ -653,7 +678,8 @@ module m_usb2_host #(
         end
         ENUM_ST_LPM_EXT: begin
           if (i_tx_done) begin
-            reg_tx_req  <= 1'b1;
+            reg_tx_pnd  <= 1'b1;
+            reg_b2b     <= w_hs_mode ? w_b2b_cyc : 4'd0;
             reg_tx_kind <= LPARA_KIND_TOK[2:0];
             reg_tx_pid  <= 4'h3;
             reg_tx_fld  <= {10'd0, i_hport[13], i_hport[12:9], 4'd1};
@@ -680,7 +706,8 @@ module m_usb2_host #(
         end
         ENUM_ST_SPLIT: begin
           if (i_tx_done) begin
-            reg_tx_req  <= 1'b1;
+            reg_tx_pnd  <= 1'b1;
+            reg_b2b     <= w_hs_mode ? w_b2b_cyc : 4'd0;
             reg_tx_kind <= LPARA_KIND_TOK[2:0];
             reg_tx_pid  <= reg_tok_pid;
             reg_tx_fld  <= {8'd0, reg_tok_fld};
@@ -690,7 +717,8 @@ module m_usb2_host #(
         ENUM_ST_TOKEN: begin
           reg_tmo <= PARA_USB2_RSP_TMO[LPARA_TMO_W-1:0];
           if (i_tx_done & ~reg_dir_in & ~reg_ping_tok & ~reg_is_cs) begin
-            reg_tx_req  <= 1'b1;
+            reg_tx_pnd  <= 1'b1;
+            reg_b2b     <= w_hs_mode ? w_b2b_cyc : 4'd0;
             reg_tx_kind <= LPARA_KIND_DATA[2:0];
             reg_tx_pid  <= reg_dat_pid;
             reg_tx_len  <= reg_len;
@@ -700,10 +728,13 @@ module m_usb2_host #(
           reg_tmo <= PARA_USB2_RSP_TMO[LPARA_TMO_W-1:0];
         end
         ENUM_ST_WAIT_HS, ENUM_ST_WAIT_IN: begin
-          if (reg_tmo != '0)
+          if ((reg_tmo != '0) & ~reg_rx_go & ~i_dat_sop)
             reg_tmo <= reg_tmo - LPARA_ONE[LPARA_TMO_W-1:0];
           if (reg_fsm_host_current_state == ENUM_ST_WAIT_IN) begin
-            if (w_data_ok & w_pid_ok & ~reg_iso) begin
+            // Good data is acknowledged also when its data PID is not the expected one: the data is
+            // discarded and the device stops repeating it (USB 2.0 section 8.5, BUG-026).
+            // A packet longer than the channel maximum (babble) is not acknowledged (BUG-038).
+            if (w_data_ok & ~reg_iso & ~w_bab) begin
               reg_tx_req  <= 1'b1;
               reg_tx_kind <= LPARA_KIND_HS[2:0];
               reg_tx_pid  <= LPARA_PID_ACK[3:0];
@@ -732,6 +763,15 @@ module m_usb2_host #(
       if (reg_fsm_host_current_state == ENUM_ST_DATA) begin
         if (i_tx_done & reg_iso)
           reg_res <= LPARA_RES_ACK[2:0];
+      end
+      // The request that follows an own packet is issued after the gap counter ran out.
+      if (reg_tx_pnd & ~reg_tx_req) begin
+        if (reg_b2b == 4'd0) begin
+          reg_tx_req <= 1'b1;
+          reg_tx_pnd <= 1'b0;
+        end else begin
+          reg_b2b <= reg_b2b - 4'd1;
+        end
       end
       if ((reg_fsm_host_current_state == ENUM_ST_WAIT_IN) & i_dat_end) begin
         reg_res <= w_res_nxt;
@@ -772,13 +812,19 @@ module m_usb2_host #(
     w_start_ok = '0;
     w_upd_hit  = '0;
     w_halt_hit = '0;
+    w_iso_err  = '0;
     for (int idx = 0; idx < PARA_USB2_NHC; idx++) begin
       w_start_ok[idx] = reg_done_p & (reg_ch == idx[3:0]) & reg_use_split & ~reg_is_cs &
                         (reg_res == LPARA_RES_ACK[2:0]);
-      w_upd_hit[idx]  = reg_done_p & (reg_ch == idx[3:0]) & ~w_start_ok[idx] &
-                        ((reg_res == LPARA_RES_ACK[2:0]) | ((reg_res == LPARA_RES_NYET[2:0]) & ~reg_use_split));
+      // An isochronous transaction with an error is not repeated (USB 2.0 section 5.6,
+      // REQ-FUNC-033): the packet slot is used up, the transfer goes on with the next slot and
+      // iso_inc reports the loss (BUG-041).
+      w_iso_err[idx]  = reg_done_p & (reg_ch == idx[3:0]) & (reg_res == LPARA_RES_ERR[2:0]) & reg_iso & ~reg_bab;
+      w_upd_hit[idx]  = (reg_done_p & (reg_ch == idx[3:0]) & ~w_start_ok[idx] &
+                        ((reg_res == LPARA_RES_ACK[2:0]) | ((reg_res == LPARA_RES_NYET[2:0]) & ~reg_use_split))) | w_iso_err[idx];
       w_halt_hit[idx] = reg_done_p & (reg_ch == idx[3:0]) &
-                        ((reg_res == LPARA_RES_STALL[2:0]) | ((reg_res == LPARA_RES_ERR[2:0]) & ((reg_err[idx] == 2'd2) | reg_bab)));
+                        ((reg_res == LPARA_RES_STALL[2:0]) |
+                         ((reg_res == LPARA_RES_ERR[2:0]) & (((reg_err[idx] == 2'd2) & ~reg_iso) | reg_bab)));
     end
   end
 
@@ -799,8 +845,9 @@ module m_usb2_host #(
       assign w_xs_nxt  = (reg_xs[gen_ch] > {7'd0, reg_len}) ? (reg_xs[gen_ch] - {7'd0, reg_len}) : 19'd0;
       assign w_ival    = i_hc_cfg[gen_ch][20:5];
       assign w_last    = w_upd_hit[gen_ch] & ~reg_ping_tok &
-                         ((reg_pc[gen_ch] == 10'd1) | (w_xs_nxt == 19'd0) |
-                          (reg_dir_in & ({1'b0, reg_len} < {2'b00, w_cc[10:0]})));
+                         ((reg_pc[gen_ch] == 10'd1) |
+                          (~w_iso_err[gen_ch] & ((w_xs_nxt == 19'd0) |
+                                                 (reg_dir_in & ({1'b0, reg_len} < {2'b00, w_cc[10:0]})))));
 
       always_ff @(posedge i_clk_phy, negedge i_rst_n_core) begin : p_ff_cmd
         if (!i_rst_n_core)
@@ -821,6 +868,7 @@ module m_usb2_host #(
           reg_wait[gen_ch]   <= 1'b0;
           reg_pcnt[gen_ch]   <= 16'd0;
           reg_csplit[gen_ch] <= 1'b0;
+          reg_cscnt[gen_ch]  <= 2'd0;
           reg_buf[gen_ch]    <= 1'b0;
         end else begin
           if (reg_tick) begin
@@ -842,6 +890,7 @@ module m_usb2_host #(
             reg_csplit[gen_ch] <= 1'b0;
           end
           if (w_start_ok[gen_ch]) begin
+            reg_cscnt[gen_ch]  <= 2'd0;
             reg_csplit[gen_ch] <= 1'b1;
             reg_wait[gen_ch]   <= 1'b1;
             reg_err[gen_ch]    <= 2'd0;
@@ -852,10 +901,12 @@ module m_usb2_host #(
             if (reg_ping_tok) begin
               reg_ping[gen_ch] <= 1'b0;
             end else begin
-              reg_xs[gen_ch]  <= w_xs_nxt;
+              if (~w_iso_err[gen_ch]) begin
+                reg_xs[gen_ch]  <= w_xs_nxt;
+                reg_pid[gen_ch] <= (reg_pid[gen_ch] == 2'd0) ? 2'd1 : 2'd0;
+                reg_buf[gen_ch] <= ~reg_buf[gen_ch];
+              end
               reg_pc[gen_ch]  <= (reg_pc[gen_ch] != 10'd0) ? (reg_pc[gen_ch] - 10'd1) : 10'd0;
-              reg_pid[gen_ch] <= (reg_pid[gen_ch] == 2'd0) ? 2'd1 : 2'd0;
-              reg_buf[gen_ch] <= ~reg_buf[gen_ch];
               if (reg_res == LPARA_RES_NYET[2:0])
                 reg_ping[gen_ch] <= 1'b1;
               if (w_cc[17:16] == LPARA_TYPE_INT[1:0] | w_cc[17:16] == LPARA_TYPE_ISO[1:0])
@@ -867,6 +918,20 @@ module m_usb2_host #(
           if (reg_done_p & (reg_ch == gen_ch[3:0])) begin
             if (reg_res == LPARA_RES_NYET[2:0] & reg_use_split)
               reg_wait[gen_ch] <= 1'b1;
+            // Periodic split (interrupt, isochronous): at most three complete-splits, one per
+            // microframe; after the third one that was answered with NYET or an error the
+            // transaction starts again with a start-split in a later microframe (REQ-FUNC-038,
+            // USB 2.0 section 11.18.4, BUG-042).
+            if (reg_use_split & reg_is_cs & w_is_p[gen_ch] &
+                ((reg_res == LPARA_RES_NYET[2:0]) | (reg_res == LPARA_RES_ERR[2:0]))) begin
+              if (reg_cscnt[gen_ch] == 2'd2) begin
+                reg_cscnt[gen_ch]  <= 2'd0;
+                reg_csplit[gen_ch] <= 1'b0;
+                reg_wait[gen_ch]   <= 1'b1;
+              end else begin
+                reg_cscnt[gen_ch]  <= reg_cscnt[gen_ch] + 2'd1;
+              end
+            end
             if (reg_res == LPARA_RES_NAK[2:0]) begin
               reg_wait[gen_ch] <= 1'b1;
               if (w_is_p[gen_ch] & i_hc_cfg[gen_ch][3])

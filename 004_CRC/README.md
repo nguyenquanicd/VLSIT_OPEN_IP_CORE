@@ -1,8 +1,79 @@
 # CRC Implementations / Các cách triển khai CRC
 
+## IP overview and status
+
+Collection of independent cyclic redundancy check (CRC) engines with serial, parallel, and chunked datapath alternatives.
+
+**Status:** Inventory: 8 RTL source file(s), 3 specification/reference artifact(s), and 263 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Standard directory structure
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
+
+## Tổng quan IP và trạng thái
+
+Collection of independent cyclic redundancy check (CRC) engines with serial, parallel, and chunked datapath alternatives.
+
+**Trạng thái:** Inventory: 8 RTL source file(s), 3 specification/reference artifact(s), and 263 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Cấu trúc thư mục chuẩn
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+
 ## English
 
-This directory contains five synthesizable CRC implementations. They share an MSB-first CRC recurrence but differ in input width, work per cycle, latency, and optional CRC features. The RTL is under `rtl/`; self-checking testbenches and their plan are under `tests/`; sanity logs and reports are under `sanity/`.
+This directory contains five synthesizable CRC implementations. They share an MSB-first CRC recurrence but differ in input width, work per cycle, latency, and optional CRC features. The RTL is under `rtl/`; self-checking testbenches and their plan are under `verification/tests/`; sanity logs and reports are under `verification/tests/sanity/`.
 
 ### Implementation comparison
 
@@ -30,7 +101,7 @@ No MHz or ASIC gate-area numbers are reported: a target standard-cell library, P
 
 ### Verification
 
-Run `make verify` from this directory. It runs the five timed self-checking simulations and a mutation check. Results are saved in `sanity/logs/`; see [`tests/README.md`](tests/README.md) for test scope and [`sanity/reports/simulation_report.md`](sanity/reports/simulation_report.md) for the recorded run.
+Run `make verify` from this directory. It runs the five timed self-checking simulations and a mutation check. Results are saved in `verification/tests/sanity/logs/`; see [`verification/tests/README.md`](verification/tests/README.md) for test scope and [`verification/tests/sanity/verification_report.md`](verification/tests/sanity/verification_report.md) for the recorded run.
 
 The CRC bit order, polynomial convention, request/ready behavior, and reset behavior are described in the source project's [`crcCalculator README`](../../../crcCalculator/README.md).
 
@@ -38,7 +109,7 @@ The CRC bit order, polynomial convention, request/ready behavior, and reset beha
 
 ## Tiếng Việt
 
-Thư mục này có năm cách triển khai CRC có thể tổng hợp. Các module dùng chung phép cập nhật CRC MSB-first nhưng khác độ rộng đầu vào, số bit xử lý mỗi chu kỳ, độ trễ và các tùy chọn CRC. RTL nằm trong `rtl/`; testbench tự kiểm tra và kế hoạch test nằm trong `tests/`; log và báo cáo sanity nằm trong `sanity/`.
+Thư mục này có năm cách triển khai CRC có thể tổng hợp. Các module dùng chung phép cập nhật CRC MSB-first nhưng khác độ rộng đầu vào, số bit xử lý mỗi chu kỳ, độ trễ và các tùy chọn CRC. RTL nằm trong `rtl/`; testbench tự kiểm tra và kế hoạch test nằm trong `verification/tests/`; log và báo cáo sanity nằm trong `verification/tests/sanity/`.
 
 ### So sánh các cách triển khai
 
@@ -66,6 +137,6 @@ Không đưa số MHz hoặc diện tích cổng ASIC vì chưa có thư viện 
 
 ### Verification
 
-Chạy `make verify` tại thư mục này. Lệnh chạy năm mô phỏng timing tự kiểm tra và mutation check. Kết quả được lưu trong `sanity/logs/`; xem [`tests/README.md`](tests/README.md) để biết phạm vi test và [`sanity/reports/simulation_report.md`](sanity/reports/simulation_report.md) để xem kết quả đã ghi nhận.
+Chạy `make verify` tại thư mục này. Lệnh chạy năm mô phỏng timing tự kiểm tra và mutation check. Kết quả được lưu trong `verification/tests/sanity/logs/`; xem [`verification/tests/README.md`](verification/tests/README.md) để biết phạm vi test và [`verification/tests/sanity/verification_report.md`](verification/tests/sanity/verification_report.md) để xem kết quả đã ghi nhận.
 
 Thứ tự bit CRC, quy ước polynomial, request/ready và reset được mô tả trong [`README của dự án crcCalculator`](../../../crcCalculator/README.md).

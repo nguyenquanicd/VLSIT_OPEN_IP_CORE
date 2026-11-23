@@ -35,4 +35,4 @@ rule:
 	$(PY) $(SKILL)/vlsit_rtl_check.py check rtl
 
 verify:
-	$(PY) tests/run_flow.py all
+	$(PY) verification/tests/run_flow.py all

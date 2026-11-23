@@ -1,0 +1,31 @@
+{
+  "schema": "vlsit-gate-audit/1",
+  "ratio": 0.1,
+  "sample": [
+    {
+      "id": "F-009",
+      "severity": "High",
+      "root_cause": "Verification evidence",
+      "verdict": "fix HAS",
+      "result": "tp"
+    },
+    {
+      "id": "F-003",
+      "severity": "Critical",
+      "root_cause": "Protocol profile",
+      "verdict": "fix HAS",
+      "result": "tp"
+    },
+    {
+      "id": "F-010",
+      "severity": "High",
+      "root_cause": "Software contract",
+      "verdict": "fix HAS",
+      "result": "tp"
+    }
+  ],
+  "reviewer": "Same reviewer, second pass",
+  "sample_false_positive_rate": 0,
+  "false_negative_rate": null,
+  "false_negative_reason": "No independent ground-truth list"
+}

@@ -1,0 +1,29 @@
+{
+ "signal": [
+  {
+   "name": "o_bclk_tx",
+   "wave": "p....................................."
+  },
+  {
+   "name": "o_ws_tx",
+   "wave": "00100000000000000000000000000000001000"
+  },
+  {
+   "name": "o_sdo_oe",
+   "wave": "00111111111000000001111111111111111111"
+  },
+  {
+   "name": "o_sdo_0",
+   "wave": "00011000011000000000101101010010110110"
+  }
+ ],
+ "head": {
+  "text": "WF-006 OP-005 PCM short frame with four slots, one masked slot (success)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock, four 8-bit slots, slot mask 0xD (slot 1 masked), tri-state bit set, words 0xC3, 0x5A, 0x96 for slots 0, 2 and 3. Preset 3: frame sync of one bit, one bit before slot 0. In the masked slot the enable o_sdo_oe is low (the line is released) and o_sdo_0 stays 0."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

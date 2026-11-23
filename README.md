@@ -1,5 +1,79 @@
 # VLSIT Common RTL
 
+See the [reorganization report](REORGANIZATION_REPORT.md) for the scope, retained evidence, license note, and validation limits of the current directory layout.
+
+## Standard IP organization (current)
+
+Each numbered directory is one IP design. The directory README gives its overall description and an evidence-based inventory status. Status statements distinguish inventory from functional sign-off; this reorganization did not rerun regressions.
+
+~~~text
+<NNN_IP_NAME>/
+├── README.md
+├── LICENSE
+├── spec/                 Detailed specification and register definitions
+├── figures/              Specification figures
+├── rtl/                  Synthesizable RTL and filelists
+├── lint/                 Lint setup and evidence
+├── cdc/                  Clock-domain crossing material
+├── rdc/                  Reset-domain crossing material
+├── sdc/                  Synopsys Design Constraints
+├── syn/                  Synthesis setup and evidence
+├── verification/
+│   ├── plan/             Specification-derived test plan
+│   ├── tests/            Reusable testcases and generators
+│   ├── models/           Independent verification models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Supporting review evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Research notes and source references
+├── sim/                  Isolated run outputs, grouped by tool/config/run ID
+├── formal/               Optional standalone formal environment
+└── archive/              Optional historical/source packages
+~~~
+
+000_Common/ remains a special shared-library directory. Self-contained simulation workspaces whose scripts and retained evidence depend on internal relative paths are kept together under verification/sim/. A standalone formal/ folder is used only when its environment can be separated without breaking replay. Each per-IP LICENSE includes the full Apache-2.0 text, preserves the upstream source notices, and records the author's request to be contacted before tapeout at `nguyenquan.icd@gmail.com`. The contact request is not an additional Apache-2.0 condition; mandatory notification would require a separately reviewed custom license or agreement.
+
+### IP index
+
+| IP | Overall function |
+|---|---|
+| [001_AsyncGrayFIFO](001_AsyncGrayFIFO/README.md) | Asynchronous first-in, first-out (FIFO) buffer with Gray-pointer clock-domain crossing (CDC), coordinated reset, thresholds, and optional memory macro. |
+| [002_SyncFIFO](002_SyncFIFO/README.md) | Synchronous FIFO with configurable depth, status thresholds, optional pointer retiming, and memory-macro support. |
+| [003_AsyncAXI4Bridge](003_AsyncAXI4Bridge/README.md) | Asynchronous Advanced eXtensible Interface 4 (AXI4) bridge with independently buffered channels and configurable AXI profiles. |
+| [004_CRC](004_CRC/README.md) | Collection of independent cyclic redundancy check (CRC) engines with serial, parallel, and chunked datapath alternatives. |
+| [005_AsyncAPBBridge](005_AsyncAPBBridge/README.md) | Asynchronous Advanced Peripheral Bus (APB) bridge supporting two-phase or four-phase handshakes and multiple APB revisions. |
+| [006_AHB2AXI_Bridge](006_AHB2AXI_Bridge/README.md) | Bridge from Advanced High-performance Bus (AHB) transactions to AXI transactions. |
+| [007_AXI2APB_Bridge](007_AXI2APB_Bridge/README.md) | Bridge from an AXI4 subordinate interface to an APB4 manager interface. |
+| [008_AXI2TLUL_Bridge](008_AXI2TLUL_Bridge/README.md) | Bridge from AXI4 transactions to the TileLink-UL (TL-UL) protocol. |
+| [009_APB2TLUL_Bridge](009_APB2TLUL_Bridge/README.md) | Bridge from an APB4 completer interface to a TL-UL manager interface. |
+| [010_Async4PhaseHandshake](010_Async4PhaseHandshake/README.md) | Four-phase asynchronous request/acknowledge handshake for safe clock-domain crossings. |
+| [011_Async2PhaseHandshake](011_Async2PhaseHandshake/README.md) | Two-phase asynchronous request/acknowledge handshake for safe clock-domain crossings. |
+| [012_HyperRAM_Controller](012_HyperRAM_Controller/README.md) | HyperBus/HyperRAM controller with AXI4 access, configuration registers, and verification collateral. |
+| [013_AsyncGrayCodeSync](013_AsyncGrayCodeSync/README.md) | Gray-code synchronizer for transferring encoded counters across asynchronous clock domains. |
+| [014_AXI4_Upsizer](014_AXI4_Upsizer/README.md) | AXI3/AXI4 data-width upsizer supporting multiple bus-width profiles. |
+| [015_Timer](015_Timer/README.md) | Configurable timer IP with capture, compare, pulse-width modulation, one-pulse, APB, and direct-memory-access request/acknowledge functions. |
+| [016_CAN_Controller](016_CAN_Controller/README.md) | Controller for Controller Area Network (CAN) communications, including verification and model collateral. |
+| [017_QSPI_Controller](017_QSPI_Controller/README.md) | Quad Serial Peripheral Interface (QSPI) controller/target IP with design specification, register map, RTL, and historical source packages. |
+| [018_MKV_Block_Cipher](018_MKV_Block_Cipher/README.md) | Block-cipher IP supporting the repository's MKV design profiles and verification collateral. |
+| [019_SHA2_SHA3_Hash](019_SHA2_SHA3_Hash/README.md) | SHA-2/SHA-3 cryptographic hash engine with optional bus, register, and DMA interfaces. |
+| [020_WDT](020_WDT/README.md) | Watchdog timer RTL IP and design specification. |
+| [021_UART](021_UART/README.md) | Universal Asynchronous Receiver/Transmitter (UART) RTL IP with simulator-dependent verification collateral. |
+| [022_APB_I2S](022_APB_I2S/README.md) | APB-controlled Inter-IC Sound (I2S) audio interface IP with register, RTL, and simulation collateral. |
+| [023_USB20_Controller](023_USB20_Controller/README.md) | USB 2.0 controller supporting device/host profiles, PHY interfaces, bus integration, and a retained self-contained simulation workspace. |
+| [024_GPIO](024_GPIO/README.md) | General-purpose input/output (GPIO) IP with asynchronous capture, interrupts, DMA, simulation, and bounded formal collateral. |
+| [025_DVP_Controller](025_DVP_Controller/README.md) | Digital Video Port (DVP) capture controller with register, RTL, specification, and verification collateral. |
+| [026_I2C_Controller](026_I2C_Controller/README.md) | Inter-Integrated Circuit (I2C) controller with APB control, master/slave logic, DMA crossing, RTL, and verification collateral. |
+
+## Tổ chức chuẩn các IP (hiện tại)
+
+Xem [báo cáo tổ chức lại](REORGANIZATION_REPORT.md) để biết phạm vi, bằng chứng được giữ lại, lưu ý license và giới hạn xác nhận cấu trúc hiện tại.
+
+Mỗi thư mục đánh số là một thiết kế IP. README trong từng thư mục mô tả chức năng tổng quát và trạng thái dựa trên kiểm kê tệp. Trạng thái kiểm kê không đồng nghĩa với sign-off chức năng; đợt sắp xếp này không chạy lại regression.
+
+000_Common/ là thư mục thư viện dùng chung và không theo cây chuẩn của IP. Các môi trường mô phỏng tự chứa được giữ nguyên trong verification/sim/ nếu chuyển các tệp bên trong sẽ làm sai đường dẫn hoặc bằng chứng chạy lại. Thư mục formal/ riêng chỉ được dùng khi có thể tách môi trường formal mà không làm hỏng luồng replay. Mỗi LICENSE của IP chứa toàn văn Apache-2.0, giữ thông báo nguồn gốc và ghi đề nghị liên hệ tác giả trước tapeout qua `nguyenquan.icd@gmail.com`. Đây không phải điều kiện bổ sung của Apache-2.0; nếu cần bắt buộc thông báo thì phải có license hoặc thỏa thuận riêng được rà soát pháp lý.
+
+
 ## English
 
 This directory contains reusable ASIC RTL blocks, example cell models, and design collateral. The FIFO and CRC folders contain separate design alternatives; their modules are not combined into one system.
@@ -18,10 +92,10 @@ This directory contains reusable ASIC RTL blocks, example cell models, and desig
 | [`007_AXI2APB_Bridge`](007_AXI2APB_Bridge/README.md) | AXI4 Subordinate to APB4 Manager bridge; `rtl/` is the rule-compliant source set. The earlier `rtl/` baseline is retained for comparison. |
 | [`008_AXI2TLUL_Bridge`](008_AXI2TLUL_Bridge/spec/AXI2TLUL_Bridge_Design_Specification.md) | AXI4-to-TL-UL bridge: specification, reference-IP research, RTL, lint, constraints and verification. |
 | [`009_APB2TLUL_Bridge`](009_APB2TLUL_Bridge/README.md) | APB4 Completer to TL-UL Manager bridge specification, synthesizable RTL, and self-checking verification. |
-| [`010_Async4PhaseHandshake`](010_Async4PhaseHandshake/VLSIT_ASYNC_4_PHASE_HANDSHAKE_HDS.md) | Four-phase asynchronous request/acknowledge handshake CDC IP and RTL. |
-| [`011_Async2PhaseHandshake`](011_Async2PhaseHandshake/VLSIT_ASYNC_2_PHASE_HANDSHAKE_HDS.md) | Two-phase asynchronous request/acknowledge handshake CDC IP and RTL. |
+| [`010_Async4PhaseHandshake`](010_Async4PhaseHandshake/spec/VLSIT_ASYNC_4_PHASE_HANDSHAKE_HDS.md) | Four-phase asynchronous request/acknowledge handshake CDC IP and RTL. |
+| [`011_Async2PhaseHandshake`](011_Async2PhaseHandshake/spec/VLSIT_ASYNC_2_PHASE_HANDSHAKE_HDS.md) | Two-phase asynchronous request/acknowledge handshake CDC IP and RTL. |
 | [`012_HyperRAM_Controller`](012_HyperRAM_Controller/README.md) | AXI4 subordinate HyperRAM controller: specification, CSR workbook, controller RTL, and smoke/coverage tests. |
-| [`013_AsyncGrayCodeSync`](013_AsyncGrayCodeSync/VLSIT_ASYNC_GRAY_SYNC_HDS.md) | Gray-code synchronizer for asynchronous clock-domain crossings, with RTL and a self-checking testbench. |
+| [`013_AsyncGrayCodeSync`](013_AsyncGrayCodeSync/spec/VLSIT_ASYNC_GRAY_SYNC_HDS.md) | Gray-code synchronizer for asynchronous clock-domain crossings, with RTL and a self-checking testbench. |
 | [`014_AXI4_Upsizer`](014_AXI4_Upsizer/README.md) | AXI4/AXI3 data-width upsizer: design specification, RTL profiles, constraints, waveforms, and verification. |
 | [`015_Timer`](015_Timer/README.md) | Configurable Timer with capture, compare, PWM, one-pulse, APB and DMA request/ack functions. |
 | [`017_QSPI_Controller`](017_QSPI_Controller/README.md) | SPI controller/target and controller-only Dual/Quad/QPI IP: VLSIT HDS, CSR workbook, generated RTL, diagrams, waveforms, lint and research collateral. |
@@ -38,16 +112,16 @@ Use the filelist documented by each design README; versioned designs may provide
 From the repository root, use GNU make (MSYS2 or Git Bash on Windows):
 
 ```sh
-make lint        # lint each IP's default filelist/top
+make lint        # lint configured IPs 001–021 (not all 26 IPs)
 make regression  # run the available self-checking regressions
-make all         # run both targets
+make all         # run RTL rule checks, lint, and available regressions
 ```
 
-The root Makefile supplies the OSS CAD Suite and VLSIT RTL-rule script paths; override `PY`, `PYTHON`, `SKILL`, or `OSSCAD` when tools are installed elsewhere. Regressions are included only where a testbench or runner exists. The UART flow requires Synopsys VCS; the aggregate target reports a skip when VCS is unavailable.
+The root Makefile currently includes IPs 001–021; IPs 022–026 are organized in the repository but are not yet integrated into those aggregate targets. The Makefile supplies configurable OSS CAD Suite and VLSIT RTL-rule script paths; override `PY`, `PYTHON`, `SKILL`, or `OSSCAD` for local tool installations. Regressions are included only where a testbench or runner exists. The UART flow requires Synopsys VCS; the aggregate target reports a skip when VCS is unavailable.
 
-### Status by folder
+### Historical verification snapshot (2026-11-15)
 
-This table summarizes current collateral and identifies the available regression entry points. Use `make lint` and `make regression` from the repository root to run them; designs without an automated testbench are marked accordingly. Read each specification and folder README for open items.
+This table records the verification status reported on 2026-11-15, before the directory reorganization. Its path names describe the layout at that time and are retained as historical evidence; use the current IP index and per-IP README files above for today's directory locations. The results below have not been rerun as part of the reorganization.
 
 | Design | Specification and RTL | Lint and constraints | Verification |
 |---|---|---|---|
@@ -56,7 +130,7 @@ This table summarizes current collateral and identifies the available regression
 | `002_SyncFIFO` | specification, RTL, lint logs, waveforms | - | `verification/`: testbench and simulation sweep |
 | `003_AsyncAXI4Bridge` | specification, RTL in three profiles (18 modules), waveforms | lint logs in each profile folder | `verification/`: testbench, `simulation_report.md` |
 | `004_CRC` | specification, five RTL modules | - | `tests/`, `sanity/` |
-| `005_AsyncAPBBridge` | specification, RTL, waveforms | `lint/`; `constraints/` (SDC) | `verification/`, `sanity/` |
+| `005_AsyncAPBBridge` | specification, RTL, waveforms | `lint/`; `sdc/` (SDC) | `verification/`, `sanity/` |
 | `006_AHB2AXI_Bridge` | specification, RTL | - | `verification/` |
 | `007_AXI2APB_Bridge` | specification; active RTL `rtl/` passes the VLSIT rule checker; legacy `rtl/` has four R-036 findings | - | no verification folder |
 | `008_AXI2TLUL_Bridge` | specification, RTL | `lint/`; `sdc/` | `verification/` |
@@ -141,10 +215,10 @@ Thư mục này chứa các khối RTL ASIC dùng chung, mô hình cell ví dụ
 | [`007_AXI2APB_Bridge`](007_AXI2APB_Bridge/README.md) | Bridge AXI4 Subordinate sang APB4 Manager; `rtl/` là bộ RTL theo rule, `rtl/` cũ được giữ để đối chiếu. |
 | [`008_AXI2TLUL_Bridge`](008_AXI2TLUL_Bridge/spec/AXI2TLUL_Bridge_Design_Specification.md) | Bridge AXI4 sang TL-UL: đặc tả, nghiên cứu IP tham khảo, RTL, lint, constraint và verification. |
 | [`009_APB2TLUL_Bridge`](009_APB2TLUL_Bridge/README.md) | Đặc tả, RTL tổng hợp được và verification tự kiểm cho bridge APB4 Completer sang TL-UL Manager. |
-| [`010_Async4PhaseHandshake`](010_Async4PhaseHandshake/VLSIT_ASYNC_4_PHASE_HANDSHAKE_HDS.md) | IP CDC handshake bất đồng bộ request/acknowledge bốn pha và RTL. |
-| [`011_Async2PhaseHandshake`](011_Async2PhaseHandshake/VLSIT_ASYNC_2_PHASE_HANDSHAKE_HDS.md) | IP CDC handshake bất đồng bộ request/acknowledge hai pha và RTL. |
+| [`010_Async4PhaseHandshake`](010_Async4PhaseHandshake/spec/VLSIT_ASYNC_4_PHASE_HANDSHAKE_HDS.md) | IP CDC handshake bất đồng bộ request/acknowledge bốn pha và RTL. |
+| [`011_Async2PhaseHandshake`](011_Async2PhaseHandshake/spec/VLSIT_ASYNC_2_PHASE_HANDSHAKE_HDS.md) | IP CDC handshake bất đồng bộ request/acknowledge hai pha và RTL. |
 | [`012_HyperRAM_Controller`](012_HyperRAM_Controller/README.md) | Bộ điều khiển HyperRAM AXI4 subordinate: đặc tả, workbook CSR, RTL controller, smoke test và coverage. |
-| [`013_AsyncGrayCodeSync`](013_AsyncGrayCodeSync/VLSIT_ASYNC_GRAY_SYNC_HDS.md) | Bộ đồng bộ Gray-code cho CDC giữa các clock bất đồng bộ, có RTL và testbench tự kiểm. |
+| [`013_AsyncGrayCodeSync`](013_AsyncGrayCodeSync/spec/VLSIT_ASYNC_GRAY_SYNC_HDS.md) | Bộ đồng bộ Gray-code cho CDC giữa các clock bất đồng bộ, có RTL và testbench tự kiểm. |
 | [`014_AXI4_Upsizer`](014_AXI4_Upsizer/README.md) | Bộ tăng độ rộng dữ liệu AXI4/AXI3: đặc tả thiết kế, các profile RTL, constraint, waveform và verification. |
 | [`015_Timer`](015_Timer/README.md) | Timer hỗ trợ capture, compare, PWM, one-pulse, APB và DMA req/ack. |
 | [`017_QSPI_Controller`](017_QSPI_Controller/README.md) | IP SPI controller/target và Dual/Quad/QPI chỉ ở controller: HDS VLSIT, workbook CSR, RTL, sơ đồ, waveform, lint và tài liệu nghiên cứu. |
@@ -161,16 +235,16 @@ Dùng filelist được ghi trong README của từng thiết kế; thiết kế
 Từ thư mục gốc repository, dùng GNU make (MSYS2 hoặc Git Bash trên Windows):
 
 ```sh
-make lint        # lint filelist/top mặc định của từng IP
+make lint        # lint các IP 001–021 đã khai báo (không phải cả 26 IP)
 make regression  # chạy các regression tự kiểm hiện có
-make all         # chạy cả hai mục tiêu
+make all         # chạy kiểm tra rule RTL, lint và regression hiện có
 ```
 
-Makefile gốc khai báo đường dẫn OSS CAD Suite và script VLSIT RTL rule; có thể ghi đè `PY`, `PYTHON`, `SKILL` hoặc `OSSCAD` nếu cài tool ở vị trí khác. Regression chỉ gồm các thiết kế có testbench hoặc runner. Flow UART cần Synopsys VCS; mục tiêu tổng sẽ báo skip nếu không tìm thấy VCS.
+Makefile gốc hiện khai báo IP 001–021; các IP 022–026 đã có cấu trúc trong repository nhưng chưa được tích hợp vào các mục tiêu tổng này. Đường dẫn OSS CAD Suite và script VLSIT RTL rule có thể cấu hình qua `PY`, `PYTHON`, `SKILL` hoặc `OSSCAD`. Regression chỉ gồm thiết kế có testbench hoặc runner. Flow UART cần Synopsys VCS; mục tiêu tổng sẽ báo skip nếu không tìm thấy VCS.
 
-### Trạng thái theo thư mục
+### Ảnh chụp lịch sử trạng thái verification (2026-11-15)
 
-Bảng này tóm tắt tài liệu hiện có và lối chạy regression tương ứng. Dùng `make lint` và `make regression` tại thư mục gốc để chạy; thiết kế chưa có testbench tự động được ghi rõ. Xem đặc tả và README trong từng thư mục để biết các điểm còn mở.
+Bảng này ghi lại trạng thái verification đã báo cáo ngày 2026-11-15, trước khi tổ chức lại thư mục. Tên đường dẫn trong bảng phản ánh cấu trúc tại thời điểm đó và được giữ làm bằng chứng lịch sử; xem chỉ mục IP cùng README của từng IP phía trên để biết đường dẫn hiện tại. Các kết quả bên dưới chưa được chạy lại trong đợt tổ chức này.
 
 | Thiết kế | Đặc tả và RTL | Lint và constraint | Verification |
 |---|---|---|---|
@@ -179,7 +253,7 @@ Bảng này tóm tắt tài liệu hiện có và lối chạy regression tươn
 | `002_SyncFIFO` | đặc tả, RTL, log lint, waveform | - | `verification/`: testbench và bộ mô phỏng |
 | `003_AsyncAXI4Bridge` | đặc tả, RTL ba profile (18 module), waveform | log lint trong thư mục từng profile | `verification/`: testbench, `simulation_report.md` |
 | `004_CRC` | đặc tả, năm module RTL | - | `tests/`, `sanity/` |
-| `005_AsyncAPBBridge` | đặc tả, RTL, waveform | `lint/`; `constraints/` (SDC) | `verification/`, `sanity/` |
+| `005_AsyncAPBBridge` | đặc tả, RTL, waveform | `lint/`; `sdc/` (SDC) | `verification/`, `sanity/` |
 | `006_AHB2AXI_Bridge` | đặc tả, RTL | - | `verification/` |
 | `007_AXI2APB_Bridge` | đặc tả; RTL đang dùng `rtl/` PASS rule checker; `rtl/` cũ có 4 lỗi R-036 | - | không có thư mục verification |
 | `008_AXI2TLUL_Bridge` | đặc tả, RTL | `lint/`; `sdc/` | `verification/` |

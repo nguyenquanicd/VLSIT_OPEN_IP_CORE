@@ -1,5 +1,76 @@
 # AXI2APB Bridge / Cầu nối AXI4 sang APB4
 
+## IP overview and status
+
+Bridge from an AXI4 subordinate interface to an APB4 manager interface.
+
+**Status:** Inventory: 4 RTL source file(s), 2 specification/reference artifact(s), and 0 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Standard directory structure
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
+
+## Tổng quan IP và trạng thái
+
+Bridge from an AXI4 subordinate interface to an APB4 manager interface.
+
+**Trạng thái:** Inventory: 4 RTL source file(s), 2 specification/reference artifact(s), and 0 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Cấu trúc thư mục chuẩn
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+
 ## English
 
 This folder contains a microarchitecture specification and synthesizable RTL for a 32-bit AXI4 Subordinate to APB4 Manager bridge. It uses one shared clock, one APB port and one active AXI transaction. The bridge has no internal clock/reset synchronizer; the SoC supplies an active-low reset synchronous to the shared clock. The external APB fabric supplies address decoding and a default error Completer.
@@ -14,12 +85,12 @@ Thư mục này chứa đặc tả vi kiến trúc và RTL có thể tổng hợ
 
 ## Files / Tệp
 
-- [Design specification](AXI2APB_Bridge_Design_Specification.md) / Đặc tả thiết kế
+- [Design specification](spec/AXI2APB_Bridge_Design_Specification.md) / Đặc tả thiết kế
 - [RTL hierarchy block diagram (SVG)](figures/vlsit_block_diagram.svg) / Sơ đồ khối hierarchy RTL (SVG)
-- [Waveform index and sources](AXI2APB_Bridge_Design_Specification.md#103-cycle-level-behavior) / Danh sách waveform và file nguồn
+- [Waveform index and sources](spec/AXI2APB_Bridge_Design_Specification.md#103-cycle-level-behavior) / Danh sách waveform và file nguồn
 - [Active RTL source set and filelist](rtl/filelist.f) / Bộ RTL đang dùng và filelist
 - [Reference IP research](research/vlsit_reference_ip_log.md) / Nghiên cứu IP tham chiếu
-- [Decision and QA log](vlsit_qa_log.md) / Nhật ký quyết định và QA
+- [Decision and QA log](spec/vlsit_qa_log.md) / Nhật ký quyết định và QA
 
 Run the VLSIT rule checker and lint with `rtl/filelist.f` and top `m_axi2apb_bridge`. / Chạy VLSIT rule checker và lint với `rtl/filelist.f`, top `m_axi2apb_bridge`.
 

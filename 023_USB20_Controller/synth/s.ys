@@ -1,6 +1,0 @@
-plugin -i slang
-read_slang -f ../synth/fl_utmi_axim.f --top m_usb2_top_utmi_axim -G PARA_USB2_ROLE=2 -G PARA_USB2_NUM_EP=8 -G PARA_USB2_NUM_HC=8 -G PARA_USB2_LPM_EN=1 -G PARA_USB2_SPLIT_EN=1 -G PARA_USB2_FIFO_DEPTH=1024 -D VLSIT_SYNTHESIS
-hierarchy -top m_usb2_top_utmi_axim
-synth -top m_usb2_top_utmi_axim -flatten
-tee -o ../synth/st_CFG-DUAL-FULL.txt stat
-tee -o ../synth/ltp_CFG-DUAL-FULL.txt ltp -noff

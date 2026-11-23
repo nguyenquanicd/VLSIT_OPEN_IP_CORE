@@ -58,6 +58,7 @@ module m_usb2_rst #(
   logic                 reg_req_bus;
   logic                 reg_ack_phy;
   logic                 reg_ack_bus_d;
+  logic                 reg_soft_d;
   logic                 reg_core_rst_n;
   logic [LPARA_CNT_W-1:0] reg_soft_cnt;
   logic [LPARA_CNT_W-1:0] w_soft_cnt_nxt;
@@ -144,9 +145,13 @@ module m_usb2_rst #(
     if (!w_rst_bus_sync) begin
       reg_req_bus   <= 1'b0;
       reg_ack_bus_d <= 1'b0;
+      reg_soft_d    <= 1'b0;
     end else begin
       reg_ack_bus_d <= w_ack_bus;
-      if (i_soft_req)
+      reg_soft_d    <= i_soft_req;
+      // The request starts on the rising edge of the CSR bit and ends with the acknowledge; the
+      // CSR bit itself stays 1 until o_soft_clr clears it (BUG-018).
+      if (i_soft_req & ~reg_soft_d)
         reg_req_bus <= 1'b1;
       else if (w_ack_bus)
         reg_req_bus <= 1'b0;

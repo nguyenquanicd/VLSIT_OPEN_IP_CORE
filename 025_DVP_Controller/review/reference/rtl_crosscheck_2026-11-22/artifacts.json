@@ -1,0 +1,298 @@
+{
+  "folder": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller",
+  "newest_code": "2026-11-22T06:01:06",
+  "artefacts": [
+    {
+      "path": "review\\rtl_crosscheck_2026-11-22\\crosscheck.json",
+      "kind": "other",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T07:17:37",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "review\\rtl_crosscheck_2026-11-22\\inventory.json",
+      "kind": "timing",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T07:17:35",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "review\\rtl_crosscheck_2026-11-22\\rtl_inventory.json",
+      "kind": "other",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T07:17:36",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "rtl\\csr\\debug.json",
+      "kind": "timing",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T05:50:07",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "spec\\VLSIT_DVP_CONTROLLER_CSR.json",
+      "kind": "other",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-21",
+      "mtime": "2026-11-21T21:56:37",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "spec\\rtl_generation_2026-11-22\\VLSIT_DVP_CONTROLLER_CSR.json",
+      "kind": "other",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T04:30:36",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\slang_final.log",
+      "kind": "lint",
+      "tool": "slang",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:01:40",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\verilator_final.log",
+      "kind": "lint",
+      "tool": "verilator",
+      "version": "5.053",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:01:40",
+      "stale": false,
+      "counts": {
+        "errors": 1,
+        "warnings": 24,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\profiles\\w10_edge0.log",
+      "kind": "lint",
+      "tool": "verilator",
+      "version": "5.053",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:00:30",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\profiles\\w10_edge1.log",
+      "kind": "lint",
+      "tool": "verilator",
+      "version": "5.053",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:00:30",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\profiles\\w12_edge0.log",
+      "kind": "lint",
+      "tool": "verilator",
+      "version": "5.053",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:00:30",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\profiles\\w12_edge1.log",
+      "kind": "lint",
+      "tool": "verilator",
+      "version": "5.053",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:00:30",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\profiles\\w8_edge0.log",
+      "kind": "lint",
+      "tool": "verilator",
+      "version": "5.053",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:00:30",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\lint\\profiles\\w8_edge1.log",
+      "kind": "lint",
+      "tool": "verilator",
+      "version": "5.053",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:00:30",
+      "stale": true,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\static\\csr_check.log",
+      "kind": "other",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:05:02",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\static\\hds_check.log",
+      "kind": "other",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:05:02",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\static\\hds_gaps.log",
+      "kind": "cdc",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:05:02",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\static\\rtl_rule_check.log",
+      "kind": "lint",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:05:02",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 21,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\static\\wavedrom_assets.log",
+      "kind": "other",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:05:02",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    },
+    {
+      "path": "verification\\static\\wavejson_lint.log",
+      "kind": "lint",
+      "tool": "unknown",
+      "version": "unknown",
+      "date": "2026-11-22",
+      "mtime": "2026-11-22T06:05:04",
+      "stale": false,
+      "counts": {
+        "errors": 0,
+        "warnings": 0,
+        "violations": 0
+      }
+    }
+  ],
+  "kinds": {
+    "other": 7,
+    "timing": 2,
+    "lint": 10,
+    "cdc": 1
+  },
+  "missing": [
+    "rdc",
+    "sdc",
+    "synthesis",
+    "verification"
+  ]
+}

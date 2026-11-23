@@ -1,5 +1,76 @@
 # Configurable Multi-Channel Timer IP
 
+## IP overview and status
+
+Configurable timer IP with capture, compare, pulse-width modulation, one-pulse, APB, and direct-memory-access request/acknowledge functions.
+
+**Status:** Inventory: 12 RTL source file(s), 3 specification/reference artifact(s), and 28 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Standard directory structure
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
+
+## Tổng quan IP và trạng thái
+
+Configurable timer IP with capture, compare, pulse-width modulation, one-pulse, APB, and direct-memory-access request/acknowledge functions.
+
+**Trạng thái:** Inventory: 12 RTL source file(s), 3 specification/reference artifact(s), and 28 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Cấu trúc thư mục chuẩn
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+
 This folder contains the current Timer hardware design specification and its CSR source workbook. The Timer shares one counter across a statically selected 1–8 channel set (default 4), supports 32-bit or 64-bit timing values (default 32), and uses a fixed 16-bit prescaler. The 64-bit counter uses a coherent low-word-then-high-word read sequence. The design scope includes input capture, output compare, edge-aligned PWM, paired PWM-input measurement, one-pulse operation, capture timeout, APB4 programming, aggregated interrupts, and DMA-330 request/data-stream behavior.
 
 ## Files

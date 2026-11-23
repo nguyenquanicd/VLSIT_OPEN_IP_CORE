@@ -54,6 +54,9 @@ module m_usb2_axs #(
   localparam logic [31:0] LPARA_BYTES     = PARA_USB2_AXI_DATA_W / 32'd8,
   localparam logic [31:0] LPARA_BSH       = (PARA_USB2_AXI_DATA_W == 32'd64) ? 32'd3 : 32'd2,
   localparam logic [31:0] LPARA_SH        = (PARA_USB2_AXI_DATA_W == 32'd64) ? 32'd1 : 32'd0,
+  // Read requests that may be outstanding: the depth of the response FIFO of m_usb2_cdc_fifo
+  // (default 8), which has no back pressure (BUG-033).
+  localparam logic [31:0] LPARA_RS_DEPTH  = 8,
   localparam logic [31:0] LPARA_OP_WR     = 1,
   localparam logic [31:0] LPARA_OP_RD     = 2,
   localparam logic [31:0] LPARA_OP_POP    = 3,
@@ -73,11 +76,15 @@ module m_usb2_axs #(
   // Control from the CSR (bus domain)
   input  wire                                   i_core_en,
   input  wire                                   i_win_en,
+  input  wire  [7:0]                            i_req_thr,
   input  wire  [31:0]                           i_fifo_hnp,
   input  wire  [31:0]                           i_fifo_hpt,
   input  wire  [PARA_USB2_NEP1-1:0][31:0]       i_epi_ctrl,
   input  wire  [PARA_USB2_NEP1-1:0][31:0]       i_epi_fifo,
   input  wire  [PARA_USB2_NUM_DMA_CH-1:0][31:0] i_dmach_map,
+
+  // Event for the interrupt flag axi_err: one pulse for every refused access (SLVERR)
+  output logic                                  o_err_evt,
 
   // Handshake with the external DMA controller
   output logic [PARA_USB2_NUM_DMA_CH-1:0]       o_dma_req,
@@ -160,6 +167,7 @@ module m_usb2_axs #(
   logic [LPARA_EVQ_W:0]                       reg_evq_cnt;
   logic [LPARA_NQ-1:0][LPARA_CW-1:0]          reg_credit;
   logic [LPARA_NQ-1:0][LPARA_CW-1:0]          w_q_size;
+  logic [LPARA_CW-1:0]                        w_thr_rows;
   logic [PARA_USB2_AXI_ID_W-1:0]              reg_wid;
   logic [4:0]                                 reg_w_q;
   logic                                       reg_w_err;
@@ -176,6 +184,8 @@ module m_usb2_axs #(
   logic [4:0]                                 w_w_q;
   logic                                       w_w_ok;
   logic                                       w_r_ok;
+  logic                                       w_r_good;
+  logic                                       reg_err_evt;
   logic [LPARA_CW-1:0]                        w_head_rows;
   logic [11:0]                                w_head_len;
   logic [4:0]                                 w_head_tag;
@@ -187,6 +197,10 @@ module m_usb2_axs #(
   logic                                       w_grant_w;
   logic                                       w_grant_r;
   logic [PARA_USB2_NUM_DMA_CH-1:0]            reg_req_msk;
+  logic [PARA_USB2_NUM_DMA_CH-1:0]            w_busy;
+  logic [3:0]                                 reg_w_ch;
+  logic [3:0]                                 reg_r_ch;
+  logic [3:0]                                 reg_rs_out;
   logic [PARA_USB2_NUM_DMA_CH-1:0]            w_req_cond;
   logic                                       w_rb_vld;
   logic                                       w_rb_rdy;
@@ -205,12 +219,19 @@ module m_usb2_axs #(
   assign w_head_rows = (LPARA_CW)'(({5'd0, w_head_len} + LPARA_BYTES[16:0] - 17'd1) >> LPARA_BSH);
 
   // Channel of an access: bits [15:12] of the address; its map decides the region and direction.
+  // The 4-bit index is zero-extended before the compare with the full channel count, so a count of
+  // 16 accepts channels 0 to 15 (review 2026-11-22 F-021: the compare used
+  // PARA_USB2_NUM_DMA_CH[3:0]).
   assign w_w_ch  = i_axis_awaddr[15:12];
   assign w_r_ch  = i_axis_araddr[15:12];
   assign w_w_map = i_dmach_map[w_w_ch];
   assign w_r_map = i_dmach_map[w_r_ch];
-  assign w_w_ok  = i_win_en & i_core_en & (w_w_ch < PARA_USB2_NUM_DMA_CH[3:0]) & w_w_map[6] & w_w_map[5];
-  assign w_r_ok  = i_win_en & i_core_en & (w_r_ch < PARA_USB2_NUM_DMA_CH[3:0]) & w_r_map[6] & ~w_r_map[5];
+  assign w_w_ok  = i_win_en & i_core_en & ({28'd0, w_w_ch} < PARA_USB2_NUM_DMA_CH) & w_w_map[6] & w_w_map[5] &
+                   (w_w_q < LPARA_NQ[4:0]);
+  assign w_r_ok  = i_win_en & i_core_en & ({28'd0, w_r_ch} < PARA_USB2_NUM_DMA_CH) & w_r_map[6] & ~w_r_map[5];
+
+  // A read is served only through an enabled read window while the head packet has its tag.
+  assign w_r_good = w_r_ok & (reg_evq_cnt != '0) & (w_head_tag == w_r_map[4:0]);
 
   // Queue of a region: the device IN endpoint number, 30 for the host non-periodic queue and 31
   // for the host periodic queue.
@@ -279,8 +300,10 @@ module m_usb2_axs #(
       reg_w_q    <= 5'd0;
       reg_w_err  <= 1'b0;
       reg_w_rows <= '0;
+      reg_w_ch   <= 4'd0;
     end else begin
       if ((reg_fsm_wr_current_state == ENUM_ST_W_IDLE) & i_axis_awvalid) begin
+        reg_w_ch   <= w_w_ch;
         reg_wid    <= i_axis_awid;
         reg_w_q    <= w_w_q;
         reg_w_err  <= ~w_w_ok;
@@ -366,8 +389,10 @@ module m_usb2_axs #(
       reg_r_rq_left <= '0;
       reg_r_beats   <= 8'd0;
       reg_r_err     <= 1'b0;
+      reg_r_ch      <= 4'd0;
     end else begin
       if ((reg_fsm_rd_current_state == ENUM_ST_R_IDLE) & i_axis_arvalid) begin
+        reg_r_ch    <= w_r_ch;
         reg_rid     <= i_axis_arid;
         reg_r_beats <= i_axis_arlen;
         reg_r_err   <= ~w_r_ok | (reg_evq_cnt == '0) | (w_head_tag != w_r_map[4:0]);
@@ -405,9 +430,18 @@ module m_usb2_axs #(
     if ((reg_fsm_rd_current_state == ENUM_ST_R_POP) & (reg_r_left == '0)) begin
       w_r_want = 1'b1;
       w_r_op   = LPARA_OP_POP[2:0];
-    end else if ((reg_fsm_rd_current_state == ENUM_ST_R_DATA) & ~reg_r_err & (reg_r_rq_left != '0)) begin
+    end else if ((reg_fsm_rd_current_state == ENUM_ST_R_DATA) & ~reg_r_err & (reg_r_rq_left != '0) &
+                 (reg_rs_out < LPARA_RS_DEPTH[3:0])) begin
       w_r_want = 1'b1;
     end
+  end
+
+  // Read rows requested and not yet taken from the response FIFO.
+  always_ff @(posedge i_clk_bus, negedge i_rst_n_bus) begin : p_ff_rs_out
+    if (!i_rst_n_bus)
+      reg_rs_out <= 4'd0;
+    else
+      reg_rs_out <= reg_rs_out + {3'd0, (w_grant_r & (reg_fsm_rd_current_state == ENUM_ST_R_DATA))} - {3'd0, o_rs_pop};
   end
 
   assign w_sel_w   = w_w_want;
@@ -455,16 +489,27 @@ module m_usb2_axs #(
     end
   end
 
-  // Request lines: a write channel asks when its queue has credit for a maximum packet (one row of
-  // credit per row of the packet; the map region tells the queue), a read channel asks while the
-  // head packet carries its tag. The request is withdrawn by the acknowledge until the condition
-  // goes away and comes back.
+  // Request lines: a write channel asks when its queue has credit (one row of credit per row of the
+  // packet; the map region tells the queue), a read channel asks while the head packet carries its
+  // tag. The request falls when a burst of the window starts and stays low until the burst has
+  // finished (write response sent, read packet released), and an acknowledge pulse blanks it for
+  // one cycle; after that the condition decides again, so a channel whose region still has room or
+  // another packet is asked again (REQ-IF-009, DEC-036).
   always_comb begin : p_com_cond
     w_req_cond = '0;
+    w_thr_rows = '0;
     for (int idx = 0; idx < PARA_USB2_NUM_DMA_CH; idx++) begin
       if (i_dmach_map[idx][6] & i_win_en & i_core_en) begin
         if (i_dmach_map[idx][5]) begin
-          w_req_cond[idx] = (reg_credit[({1'b0, i_dmach_map[idx][3:0]} + 5'd1)] != '0);
+          // Write window: the free rows of the queue reach the threshold u2_dma_cfg.req_thr (words,
+          // at least one row, never more than the whole region, DEC-038).
+          w_thr_rows = (LPARA_CW)'({1'b0, i_req_thr} >> LPARA_SH);
+          if (w_thr_rows == '0)
+            w_thr_rows = (LPARA_CW)'(1);
+          if (w_thr_rows > w_q_size[({1'b0, i_dmach_map[idx][3:0]} + 5'd1)])
+            w_thr_rows = w_q_size[({1'b0, i_dmach_map[idx][3:0]} + 5'd1)];
+          w_req_cond[idx] = (reg_credit[({1'b0, i_dmach_map[idx][3:0]} + 5'd1)] >= w_thr_rows) &
+                            (reg_credit[({1'b0, i_dmach_map[idx][3:0]} + 5'd1)] != '0);
         end else begin
           w_req_cond[idx] = (reg_evq_cnt != '0) & (reg_evq_tag[reg_evq_rd] == i_dmach_map[idx][4:0]);
         end
@@ -476,10 +521,31 @@ module m_usb2_axs #(
     if (!i_rst_n_bus) begin
       reg_req_msk <= '0;
     end else begin
-      reg_req_msk <= (reg_req_msk | i_dma_ack) & w_req_cond;
+      reg_req_msk <= i_dma_ack;
     end
   end
 
-  assign o_dma_req = w_req_cond & ~reg_req_msk;
+  // A burst of window c is in progress from the cycle after its address until its response (write)
+  // or until the packet was released (read).
+  always_comb begin : p_com_busy
+    w_busy = '0;
+    for (int idx = 0; idx < PARA_USB2_NUM_DMA_CH; idx++) begin
+      w_busy[idx] = ((reg_fsm_wr_current_state != ENUM_ST_W_IDLE) & (reg_w_ch == idx[3:0])) |
+                    ((reg_fsm_rd_current_state != ENUM_ST_R_IDLE) & (reg_r_ch == idx[3:0]));
+    end
+  end
+
+  assign o_dma_req = w_req_cond & ~w_busy & ~reg_req_msk;
+
+  // Event of a refused access (ERR-008): the cycle in which the address of the burst is taken.
+  always_ff @(posedge i_clk_bus, negedge i_rst_n_bus) begin : p_ff_err_evt
+    if (!i_rst_n_bus)
+      reg_err_evt <= 1'b0;
+    else
+      reg_err_evt <= ((reg_fsm_wr_current_state == ENUM_ST_W_IDLE) & i_axis_awvalid & ~w_w_ok) |
+                     ((reg_fsm_rd_current_state == ENUM_ST_R_IDLE) & i_axis_arvalid & ~w_r_good);
+  end
+
+  assign o_err_evt = reg_err_evt;
 
 endmodule

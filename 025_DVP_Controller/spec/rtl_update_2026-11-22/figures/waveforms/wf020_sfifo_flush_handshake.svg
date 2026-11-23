@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1255" height="358" viewBox="0 0 1255 358" font-family="Helvetica,Arial,sans-serif">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="12" y="20" font-size="14" font-weight="bold">WF-020: gated-mode SFIFO flush and retained frame count</text>
+<line x1="163" y1="30" x2="163" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="271" y1="30" x2="271" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="379" y1="30" x2="379" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="487" y1="30" x2="487" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="595" y1="30" x2="595" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="703" y1="30" x2="703" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="811" y1="30" x2="811" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="919" y1="30" x2="919" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="1027" y1="30" x2="1027" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="1135" y1="30" x2="1135" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="1243" y1="30" x2="1243" y2="330" stroke="#ccc" stroke-dasharray="2,3"/>
+<text x="155" y="49" font-size="12" text-anchor="end">i_clk_apb</text>
+<polyline points="163.0,51.0 163.0,33.0 217.0,33.0 217.0,51.0 271.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,51.0 271.0,33.0 325.0,33.0 325.0,51.0 379.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,51.0 379.0,33.0 433.0,33.0 433.0,51.0 487.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,51.0 487.0,33.0 541.0,33.0 541.0,51.0 595.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,51.0 595.0,33.0 649.0,33.0 649.0,51.0 703.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,51.0 703.0,33.0 757.0,33.0 757.0,51.0 811.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,51.0 811.0,33.0 865.0,33.0 865.0,51.0 919.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,51.0 919.0,33.0 973.0,33.0 973.0,51.0 1027.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,51.0 1027.0,33.0 1081.0,33.0 1081.0,51.0 1135.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,51.0 1135.0,33.0 1189.0,33.0 1189.0,51.0 1243.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="79" font-size="12" text-anchor="end">i_capture_en</text>
+<polyline points="163.0,81.0 271.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,81.0 379.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,81.0 487.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,81.0 595.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,81.0 703.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,81.0 811.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,81.0 919.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,81.0 1027.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,81.0 1135.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,81.0 1243.0,81.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="109" font-size="12" text-anchor="end">w_gate_quiescent</text>
+<polyline points="163.0,93.0 271.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,93.0 379.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,93.0 487.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,93.0 595.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,93.0 703.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,93.0 811.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,93.0 919.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,93.0 1027.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,93.0 1135.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,93.0 1243.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="139" font-size="12" text-anchor="end">dvp_ctrl.fifo_flush</text>
+<polyline points="163.0,141.0 271.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,141.0 379.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,141.0 379.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,123.0 487.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,123.0 595.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,123.0 703.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,123.0 811.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,123.0 919.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,123.0 1027.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,123.0 1135.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,123.0 1135.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,141.0 1243.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="169" font-size="12" text-anchor="end">i_sfifo_rst_n_sw</text>
+<polyline points="163.0,153.0 271.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,153.0 379.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,153.0 487.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,153.0 487.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,171.0 595.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,171.0 703.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,171.0 703.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,153.0 811.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,153.0 919.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,153.0 1027.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,153.0 1135.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,153.0 1243.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="199" font-size="12" text-anchor="end">w_sfifo_busy</text>
+<polyline points="163.0,201.0 271.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,201.0 379.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,201.0 487.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,201.0 595.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,201.0 595.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,183.0 703.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,183.0 811.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,183.0 811.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,201.0 919.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,201.0 1027.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,201.0 1135.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,201.0 1243.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="229" font-size="12" text-anchor="end">i_fifo_rd_en</text>
+<polyline points="163.0,231.0 271.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,231.0 379.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,231.0 487.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,231.0 595.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,231.0 703.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,231.0 811.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,231.0 919.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,231.0 1027.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,231.0 1135.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,231.0 1243.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="259" font-size="12" text-anchor="end">o_fifo_occupancy</text>
+<polygon points="167.0,243.0 1239.0,243.0 1243.0,252.0 1239.0,261.0 167.0,261.0 163.0,252.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="703.0" y="256.0" text-anchor="middle" font-size="11">5</text>
+<text x="155" y="289" font-size="12" text-anchor="end">o_flush_done</text>
+<polyline points="163.0,291.0 271.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="271.0,291.0 379.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="379.0,291.0 487.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="487.0,291.0 595.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="595.0,291.0 703.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="703.0,291.0 811.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="811.0,291.0 919.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="919.0,291.0 1027.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,291.0 1027.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1027.0,273.0 1135.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="1135.0,273.0 1243.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="155" y="319" font-size="12" text-anchor="end">dvp_frame_count.count</text>
+<polygon points="167.0,303.0 1239.0,303.0 1243.0,312.0 1239.0,321.0 167.0,321.0 163.0,312.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="703.0" y="316.0" text-anchor="middle" font-size="11">7</text>
+<text x="12" y="350" font-size="11" fill="#444">The local software-reset handshake blocks reads. Occupancy is presented as zero while flush is pending; the FIFO reset clears stored samples, while the frame counter is retained.</text>
+</svg>

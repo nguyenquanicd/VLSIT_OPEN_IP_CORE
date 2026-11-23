@@ -1,0 +1,193 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "dvp_controller_block_diagram.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 220,
+    "gap_v": 180,
+    "margin": 80,
+    "block_h": 72
+  },
+  "top": {
+    "frame_label": [
+      "DVP",
+      "CONTROLLER"
+    ],
+    "block_label": [
+      "TOP",
+      "(m_dvp_controller)"
+    ],
+    "block_row": [
+      "TOP (m_dvp_controller)",
+      "Captures pixels using a CSR-selected PCLK mode and serves them through APB4.",
+      "Section 14.2"
+    ]
+  },
+  "frame_row": [
+    "DVP controller",
+    "Captures qualified pixels through two selectable buffering paths and exposes APB4 data/control.",
+    "Sections 5.1, 6 and 14.2"
+  ],
+  "frame_interfaces": [
+    "DVP",
+    "APB",
+    "SYS",
+    "REQ",
+    "ACK"
+  ],
+  "blocks": [
+    {
+      "key": "U_CAPTURE",
+      "label": [
+        "u_dvp_capture",
+        "(m_dvp_capture)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_dvp_capture (m_dvp_capture)",
+      "function": "Samples sensor pixels, detects frame boundaries and generates continuous or gated-pixel events.",
+      "source": "Sections 5.1, 6 and 14.2"
+    },
+    {
+      "key": "U_APB",
+      "label": [
+        "u_dvp_apb_service",
+        "(m_dvp_apb_service)"
+      ],
+      "width": 240,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_dvp_apb_service (m_dvp_apb_service)",
+      "function": "Selects the AFIFO or SFIFO path, serves FIFO_DATA reads and manages CSR and DMA batches.",
+      "source": "Sections 5.1 and 14.2"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "SMP",
+      "src": "U_CAPTURE",
+      "src_side": "R",
+      "dst": "U_APB",
+      "dst_side": "L"
+    },
+    {
+      "id": "CTL",
+      "src": "U_APB",
+      "src_side": "L",
+      "dst": "U_CAPTURE",
+      "dst_side": "R"
+    }
+  ],
+  "externals": [
+    {
+      "id": "DVP",
+      "block": "U_CAPTURE",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "DVP",
+        "PCLK/data/VSYNC/HREF"
+      ]
+    },
+    {
+      "id": "APB",
+      "block": "U_APB",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "APB",
+        "APB4"
+      ]
+    },
+    {
+      "id": "SYS",
+      "block": "U_APB",
+      "side": "T",
+      "dir": "in",
+      "pos": -30,
+      "text": [
+        "SYS",
+        "i_clk_apb/i_rst_n_sys"
+      ]
+    },
+    {
+      "id": "REQ",
+      "block": "U_APB",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "REQ",
+        "DMA batch request"
+      ]
+    },
+    {
+      "id": "ACK",
+      "block": "U_APB",
+      "side": "T",
+      "dir": "in",
+      "pos": 45,
+      "text": [
+        "ACK",
+        "DMA acknowledge"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "DVP",
+      "name": "Sensor DVP sample interface",
+      "category": "source-synchronous camera interface",
+      "active": "camera sensor -> controller",
+      "signals": "i_clk_dvp, i_dvp_data, i_dvp_vsync, i_dvp_href"
+    },
+    {
+      "id": "APB",
+      "name": "APB4 control and sample-data access",
+      "category": "standard protocol (APB4)",
+      "active": "system DMA/software -> controller",
+      "signals": "i_paddr, i_psel, i_penable, i_pwrite, i_pwdata, i_pstrb, i_pprot, o_pready, o_prdata, o_pslverr"
+    },
+    {
+      "id": "SYS",
+      "name": "APB clock and common reset",
+      "category": "clock/reset",
+      "active": "SoC -> controller",
+      "signals": "i_clk_apb, i_rst_n_sys"
+    },
+    {
+      "id": "REQ",
+      "name": "DMA batch request",
+      "category": "custom level request",
+      "active": "controller -> system DMA",
+      "signals": "o_dma_req"
+    },
+    {
+      "id": "ACK",
+      "name": "DMA batch acknowledge",
+      "category": "custom pulse acknowledge",
+      "active": "system DMA -> controller",
+      "signals": "i_dma_ack"
+    },
+    {
+      "id": "SMP",
+      "name": "Mode-specific captured pixel event",
+      "category": "sample and CDC interface",
+      "active": "capture block -> APB/buffer subsystem",
+      "signals": "sample_data, sample_write, pixel_toggle, frame_active, overflow_event"
+    },
+    {
+      "id": "CTL",
+      "name": "Capture configuration",
+      "category": "custom control",
+      "active": "APB subsystem -> capture block",
+      "signals": "pclk_mode, capture_en, sample_edge"
+    }
+  ],
+  "legend_note": "PCLK_MODE=0 selects the continuous AFIFO path. PCLK_MODE=1 selects the gated valid-pixel path: APB-clocked 2-FF synchronizers detect VSYNC and both pixel-toggle transitions, then write the stable held sample to SFIFO. These buffer and decode children are contained in the APB service subsystem; common FIFO/reset helpers are reused.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

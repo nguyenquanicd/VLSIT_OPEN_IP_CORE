@@ -1,0 +1,54 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p..........."
+    },
+    {
+      "name": "i_clk_dvp",
+      "wave": "p..........."
+    },
+    {
+      "name": "i_capture_en",
+      "wave": "111111111100"
+    },
+    {
+      "name": "i_pclk_mode",
+      "wave": "000000111111"
+    },
+    {
+      "name": "o_cont_frame_start",
+      "wave": "001000000000"
+    },
+    {
+      "name": "o_cont_frame_event_apb",
+      "wave": "000001000000"
+    },
+    {
+      "name": "o_gate_frame_start",
+      "wave": "000000010000"
+    },
+    {
+      "name": "o_frame_count",
+      "wave": "=....=..=...",
+      "data": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "name": "disabled_vsync_edge",
+      "wave": "000000000010"
+    }
+  ],
+  "head": {
+    "text": "WF-021: one frame-count increment per accepted frame start"
+  },
+  "foot": {
+    "text": "The continuous PCLK event is synchronized before the APB count increments. Gated mode counts its APB-synchronized VSYNC edge directly. A VSYNC edge while capture is disabled does not change the count."
+  },
+  "config": {
+    "hscale": 3
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p............"
+    },
+    {
+      "name": "i_clk_dvp",
+      "wave": "p............"
+    },
+    [
+      "reset",
+      {
+        "name": "i_rst_n_sys",
+        "wave": "1111001111111"
+      },
+      {
+        "name": "rst_n_apb_sync",
+        "wave": "1111001111111"
+      },
+      {
+        "name": "rst_n_dvp_sync",
+        "wave": "1111000111111"
+      }
+    ],
+    [
+      "aborted APB read",
+      {
+        "name": "i_apb_psel",
+        "wave": "0111000001100"
+      },
+      {
+        "name": "i_apb_penable",
+        "wave": "0011000000100"
+      },
+      {
+        "name": "i_apb_paddr",
+        "wave": "x=xxxxxxx=xxx",
+        "data": [
+          "DATA",
+          "DATA"
+        ]
+      },
+      {
+        "name": "i_apb_pstrb",
+        "wave": "0000000000000"
+      },
+      {
+        "name": "o_apb_pready",
+        "wave": "0000000000100"
+      },
+      {
+        "name": "o_apb_pslverr",
+        "wave": "0000000000000"
+      }
+    ],
+    [
+      "FIFO",
+      {
+        "name": "o_fifo_empty",
+        "wave": "1111111100000"
+      },
+      {
+        "name": "o_sample_valid",
+        "wave": "0000000010000"
+      },
+      {
+        "name": "o_fifo_pop",
+        "wave": "0000000000100"
+      },
+      {
+        "name": "timeout_count",
+        "wave": "xx==xxxxxxxxx",
+        "data": [
+          "1",
+          "2"
+        ]
+      }
+    ]
+  ],
+  "head": {
+    "text": "WF-007: reset cancels a pending FIFO APB read"
+  },
+  "foot": {
+    "text": "Reset aborts the old read without a pop/error; the master retries after both domains are initialized."
+  },
+  "config": {
+    "hscale": 3
+  }
+}

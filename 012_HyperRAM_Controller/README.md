@@ -1,5 +1,76 @@
 # HyperRAM Controller
 
+## IP overview and status
+
+HyperBus/HyperRAM controller with AXI4 access, configuration registers, and verification collateral.
+
+**Status:** Inventory: 10 RTL source file(s), 4 specification/reference artifact(s), and 1235 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Standard directory structure
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
+
+## Tổng quan IP và trạng thái
+
+HyperBus/HyperRAM controller with AXI4 access, configuration registers, and verification collateral.
+
+**Trạng thái:** Inventory: 10 RTL source file(s), 4 specification/reference artifact(s), and 1235 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+
+## Cấu trúc thư mục chuẩn
+
+~~~text
+<IP>/
+├── README.md             Overview, current status, and usage notes
+├── LICENSE               Apache-2.0 pointer and author notice
+├── spec/                 Detailed design specification and CSR definitions
+├── figures/              Figures and diagrams referenced by the specification
+├── rtl/                  Active synthesizable RTL and source filelists
+├── lint/                 Lint setup and retained lint evidence
+├── cdc/                  Clock-domain-crossing analysis and reports
+├── rdc/                  Reset-domain-crossing analysis and reports
+├── sdc/                  Synopsys Design Constraints and timing collateral
+├── syn/                  Synthesis setup and retained synthesis evidence
+├── verification/
+│   ├── plan/             Detailed test plan extracted from the specification
+│   ├── tests/            Reusable testcases and testcase generators
+│   ├── models/           Independent Python/C/C++/SystemVerilog models
+│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── review/
+│   ├── reference/        Review images, source snapshots, and supporting evidence
+│   └── *.md              One Markdown report per review step
+├── research/             Source research and external references
+├── sim/                  Isolated simulation run outputs (tool/config/run ID)
+├── formal/               Optional formal-verification environment
+└── archive/              Optional preserved historical/source packages
+~~~
+
+
 ## Scope
 
 This folder contains the design specification and research for one structural AXI4-to-HyperRAM controller top. The top has six functional RTL child modules (APB4 interface, CSR register file, AXI4 clock crossing, AXI4 frontend, HyperBus controller, and HyperBus PHY) plus the interrupt glue `m_vlsit_hyperram_irq` and two library tie cells. APB4 connects directly to the generated CSR register file, which implements the APB/core CDC handshake internally.

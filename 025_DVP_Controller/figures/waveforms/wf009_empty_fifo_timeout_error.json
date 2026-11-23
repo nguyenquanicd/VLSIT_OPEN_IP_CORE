@@ -1,0 +1,73 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p..........."
+    },
+    [
+      "APB4",
+      {
+        "name": "i_apb_psel",
+        "wave": "01101111000"
+      },
+      {
+        "name": "i_apb_penable",
+        "wave": "00100111000"
+      },
+      {
+        "name": "i_apb_pwrite",
+        "wave": "x000000000x"
+      },
+      {
+        "name": "i_apb_paddr",
+        "wave": "x=xx=xxxxxxx",
+        "data": [
+          "DATA",
+          "DATA"
+        ]
+      },
+      {
+        "name": "i_apb_pstrb",
+        "wave": "00000000000"
+      },
+      {
+        "name": "o_apb_pready",
+        "wave": "00100001000"
+      },
+      {
+        "name": "o_apb_pslverr",
+        "wave": "00100001000"
+      }
+    ],
+    [
+      "FIFO / timeout",
+      {
+        "name": "o_fifo_empty",
+        "wave": "11111111111"
+      },
+      {
+        "name": "o_fifo_pop",
+        "wave": "00000000000"
+      },
+      {
+        "name": "timeout_count",
+        "wave": "xx=.=.=.=xx",
+        "data": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ]
+      }
+    ]
+  ],
+  "head": {
+    "text": "WF-009: zero and positive FIFO-empty timeouts"
+  },
+  "foot": {
+    "text": "An empty read with timeout zero errors in its first access cycle; a positive timeout errors at its terminal cycle. Neither read pops."
+  },
+  "config": {
+    "hscale": 2.5
+  }
+}

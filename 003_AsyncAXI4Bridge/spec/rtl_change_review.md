@@ -32,7 +32,7 @@ Status: Implemented
 | Verification instantiations | `verification/tb/tb_axi_bridge.sv` | Update the three top module types; preserve parameters, connections and stimulus. | Keep the existing testbench attached to the renamed tops. |
 | Filelist generator | `verification/scripts/prepare_filelists.py` | Update the profile-to-top mapping. | Regenerate filelists from the current top names. |
 | Generated verification filelists | `verification/filelists/axi3_sim.f`, `axi3_synth.f`, `axi4_base_sim.f`, `axi4_base_synth.f`, `axi4_user_sim.f`, `axi4_user_synth.f` | Regenerate after updating the script. | Ensure simulation and synthesis builds use the renamed source files. |
-| Block diagram sources and render | `figures/axi_bridge_diagram_spec.json`, `figures/axi_bridge_block_diagram.drawio`, `figures/axi_bridge_block_diagram.svg` | Update the AXI4 base top label. | Keep the diagram label consistent with the default profile top. |
+| Block diagram sources and render | `../figures/axi_bridge_diagram_spec.json`, `../figures/axi_bridge_block_diagram.drawio`, `../figures/axi_bridge_block_diagram.svg` | Update the AXI4 base top label. | Keep the diagram label consistent with the default profile top. |
 
 Historical lint logs, prior rule reports, simulation logs and waveform evidence are excluded because they record earlier runs using the old names. Channel module names, ports, hierarchy, logic, parameters, and test scenarios are excluded from the change.
 
@@ -60,7 +60,7 @@ The requested names are explicit, and the AXI3 example establishes the `m_vlsit_
 | AXI3 RTL lint | `python C:\Users\PC\.codex\skills\vlsit-rtl-generator\scripts\vlsit_lint_rtl.py lint rtl\axi3\filelist.f --top m_vlsit_async_axi3_bridge --tool auto` | No lint errors; existing warnings reported separately. | PASS: 0 errors, 25 `PINCONNECTEMPTY` warnings. |
 | AXI4 base RTL lint | `python C:\Users\PC\.codex\skills\vlsit-rtl-generator\scripts\vlsit_lint_rtl.py lint rtl\axi4_base\filelist.f --top m_vlsit_async_axi4_bridge --tool auto` | No lint errors; existing warnings reported separately. | PASS: 0 errors, 25 `PINCONNECTEMPTY` warnings. |
 | AXI4 USER RTL lint | `python C:\Users\PC\.codex\skills\vlsit-rtl-generator\scripts\vlsit_lint_rtl.py lint rtl\axi4_user\filelist.f --top m_vlsit_async_user_axi4_bridge --tool auto` | No lint errors; existing warnings reported separately. | PASS: 0 errors, 25 `PINCONNECTEMPTY` warnings. |
-| Testbench elaboration | `make -C verification build/axi4_base_synth/Vtb_axi_bridge.exe build/axi4_user_synth/Vtb_axi_bridge.exe build/axi3_synth/Vtb_axi_bridge.exe` | All three testbench variants elaborate against the new module names. | BLOCKED before build: MSYS `make.exe` exited with `NtCreateDirectoryObject(...): 0xC0000022`. |
+| Testbench elaboration | `make -C verification build/axi4_base_syn/Vtb_axi_bridge.exe build/axi4_user_syn/Vtb_axi_bridge.exe build/axi3_syn/Vtb_axi_bridge.exe` | All three testbench variants elaborate against the new module names. | BLOCKED before build: MSYS `make.exe` exited with `NtCreateDirectoryObject(...): 0xC0000022`. |
 | Active-reference scan | Search source, specification, filelist, script and diagram files for all three old top identifiers. | No active references remain outside explicitly excluded historical evidence and this snapshot. | PASS: no old identifiers found. |
 
 Full simulation is not proposed because no RTL logic, ports, parameters or test scenarios change. The existing simulation results remain applicable to behavior, while testbench elaboration checks the renamed module bindings.
@@ -80,7 +80,7 @@ Plan version 1 was approved by the designer on 2026-10-26.
 - Updated RTL collateral: `rtl/README.md`, `rtl/axi3/filelist.f`, `rtl/axi4_base/filelist.f`, and `rtl/axi4_user/filelist.f`.
 - Updated verification sources: `verification/tb/tb_axi_bridge.sv` and `verification/scripts/prepare_filelists.py`.
 - Regenerated verification filelists: `verification/filelists/axi3_sim.f`, `axi3_synth.f`, `axi4_base_sim.f`, `axi4_base_synth.f`, `axi4_user_sim.f`, and `axi4_user_synth.f`.
-- Updated diagram artifacts: `figures/axi_bridge_diagram_spec.json`, `figures/axi_bridge_block_diagram.drawio`, and `figures/axi_bridge_block_diagram.svg`.
+- Updated diagram artifacts: `../figures/axi_bridge_diagram_spec.json`, `../figures/axi_bridge_block_diagram.drawio`, and `../figures/axi_bridge_block_diagram.svg`.
 - Created the approved review report `rtl_change_review.md` and task-start RTL snapshot `verification/change_snapshots/top_rename_plan_v1_20261026/`.
 - RTL hierarchy, ports, parameters, logic and test scenarios were unchanged. Historical lint logs, the older rule report, simulation logs and waveform evidence were preserved.
 

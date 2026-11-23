@@ -1,0 +1,172 @@
+{
+  "module": "m_vlsit_csr_dvp",
+  "prefix": "dvp",
+  "async": 0,
+  "ip_version": {
+    "major": 1,
+    "minor": 1
+  },
+  "registers": [
+    {
+      "name": "dvp_version",
+      "offset": "0x0",
+      "reset": "0x00010001",
+      "description": "DVP controller version register. Identifies the major and minor software interface revision.",
+      "fields": [
+        {
+          "name": "major",
+          "bits": "[31:16]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Major IP version number. Software reads this value to select a compatible driver.\n\nUsage: Read during initialization; software never writes this field.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number."
+        },
+        {
+          "name": "minor",
+          "bits": "[15:0]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Minor IP version number. Software reads this value to identify compatible interface additions.\n\nUsage: Read with the major version during initialization; software never writes this field.\n\nValues:\n0x1 minor version 1 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number."
+        }
+      ]
+    },
+    {
+      "name": "dvp_ctrl",
+      "offset": "0x4",
+      "reset": "0x00000000",
+      "description": "DVP controller control register. Enables or disables qualified sensor sample capture.",
+      "fields": [
+        {
+          "name": "capture_en",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Capture enable bit. Allows frame-qualified DVP samples to enter the FIFO selected by pclk_mode.\n\nUsage: Program PCLK_MODE, watermark and timeout before enabling. Capture arms at the next active VSYNC edge after the selected path is initialized; clear to stop accepting new samples. Existing FIFO entries remain available to DMA.\n\nValues:\n0x0 capture disabled (reset value);\n0x1 capture enabled.\n\nUnit: none\n\nLimits: One-bit value."
+        },
+        {
+          "name": "pclk_mode",
+          "bits": "[1]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "PCLK clock-mode selector. Selects the continuous-PCLK AFIFO path or gated valid-pixel toggle/SFIFO path.\n\nUsage: Program in a separate APB write while capture is disabled and before enabling capture. Writes while capture is enabled or when the same write sets capture_en are ignored; APB completes with OKAY. Keep mode unchanged for a capture session.\n\nValues:\n0x0 Continuous PCLK with asynchronous Gray FIFO (reset value);\n0x1 Gated PCLK with valid-pixel toggle bridge and APB-clocked FIFO.\n\nUnit: none\n\nLimits: One-bit runtime CSR field; see the PCLK spacing and VSYNC pulse requirements in the hardware specification."
+        },
+        {
+          "name": "fifo_flush",
+          "bits": "[2]",
+          "type": "rwi",
+          "reset": "0x0",
+          "description": "FIFO flush request and pending indicator. A software write of one requests reset of the FIFO selected by pclk_mode; hardware clears the field after the FIFO reset handshake completes.\n\nUsage: Disable capture and stop DMA APB reads, write one, then poll until hardware clears it. Do not start capture, change PCLK_MODE, or issue FIFO_DATA reads while the bit is one. Keep i_clk_dvp running for a continuous-mode flush. A write while capture is enabled is ignored; a write while a request is pending cannot cancel the operation.\n\nValues:\n0x0 no flush pending (reset value);\n0x1 flush pending/in progress.\n\nUnit: none\n\nLimits: One-bit RWI field; only the selected FIFO is reset; frame count and sticky overflow are retained."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:3]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "dvp_wmark",
+      "offset": "0x8",
+      "reset": "0x00000000",
+      "description": "DVP FIFO watermark register. Selects the occupancy that requests a DMA service batch.",
+      "fields": [
+        {
+          "name": "level",
+          "bits": "[31:0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "FIFO watermark level. Raises the DMA batch request when read-side occupancy reaches this sample count.\n\nUsage: Program before enabling capture; zero disables DMA requests; use a value no greater than PARA_FIFO_DEPTH.\n\nValues:\n0x0 DMA request disabled (reset value);\n0x1 to 0xFFFFFFFF request at or above the programmed occupancy, subject to FIFO depth.\n\nUnit: sample entries\n\nLimits: Zero disables requests; valid nonzero values are 1 through PARA_FIFO_DEPTH; values greater than the physical depth are unreachable thresholds and leave the request deasserted."
+        }
+      ]
+    },
+    {
+      "name": "dvp_timeout",
+      "offset": "0xC",
+      "reset": "0xFFFFFFFF",
+      "description": "DVP FIFO timeout register. Bounds APB wait cycles for reads of an empty FIFO-data endpoint.",
+      "fields": [
+        {
+          "name": "cycles",
+          "bits": "[31:0]",
+          "type": "rw",
+          "reset": "0xFFFFFFFF",
+          "description": "FIFO-empty timeout. Limits the APB access cycles an empty FIFO-data read may wait before returning PSLVERR.\n\nUsage: Reset default is the longest supported wait. Software may program a smaller value before DMA reads; zero gives an immediate error in the first access cycle when FIFO is empty. Data available on the terminal decision cycle wins.\n\nValues:\n0x0 immediate empty-read timeout;\n0x1 to 0xFFFFFFFF wait the programmed number of APB access cycles;\n0xFFFFFFFF reset value and maximum timeout.\n\nUnit: APB clock cycles\n\nLimits: 32-bit unsigned count; applies only while a FIFO-data read is active and the FIFO is empty."
+        }
+      ]
+    },
+    {
+      "name": "dvp_fifo_sts",
+      "offset": "0x10",
+      "reset": "0x00000002",
+      "description": "DVP FIFO status register. Reports capture state, selected FIFO flags and sticky overflow.",
+      "fields": [
+        {
+          "name": "active",
+          "bits": "[0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Capture armed/active status. Reports that capture is enabled and the selected path has observed its qualifying VSYNC frame boundary.\n\nUsage: Read to determine whether the controller is collecting samples from the current frame.\n\nValues:\n0x0 capture disabled or waiting for a qualifying VSYNC;\n0x1 capture active.\n\nUnit: none\n\nLimits: One-bit APB-domain status; gated mode waits for synchronized VSYNC and qualified pixel timing."
+        },
+        {
+          "name": "empty",
+          "bits": "[1]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "FIFO empty status. Reports that no sample is available in the FIFO selected by pclk_mode.\n\nUsage: Read before or after DMA service; a value of one means FIFO_DATA reads will wait or time out.\n\nValues:\n0x0 not empty;\n0x1 empty (reset value after coordinated FIFO reset).\n\nUnit: none\n\nLimits: Mode 0 uses the APB read-side AFIFO flag; mode 1 uses the APB SFIFO flag. Status is valid after the selected path initializes."
+        },
+        {
+          "name": "full",
+          "bits": "[2]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "FIFO full status. Reports that the FIFO selected by pclk_mode cannot accept another sample.\n\nUsage: Read while capture is active to monitor overflow risk; the sensor itself cannot be stalled.\n\nValues:\n0x0 not full (reset value);\n0x1 full.\n\nUnit: none\n\nLimits: Mode 0 AFIFO full indication is synchronized to APB; mode 1 SFIFO full is local to APB."
+        },
+        {
+          "name": "ovf",
+          "bits": "[3]",
+          "type": "w1c",
+          "reset": "0x0",
+          "description": "FIFO overflow event. Sticky flag records a qualified sample rejected because the FIFO was full.\n\nUsage: Read after capture; write one to clear after software records or handles the sample loss; a new hardware event wins over a simultaneous clear.\n\nValues:\n0x0 no recorded overflow (reset value);\n0x1 overflow recorded.\n\nUnit: none\n\nLimits: One-bit sticky status; hardware sets it from the mode-specific overflow event; continuous-mode pulse is synchronized to APB."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:4]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "dvp_fifo_level",
+      "offset": "0x14",
+      "reset": "0x00000000",
+      "description": "DVP FIFO level register. Reports occupancy of the FIFO selected by dvp_ctrl.pclk_mode.",
+      "fields": [
+        {
+          "name": "count",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Selected FIFO occupancy in sample entries.\n\nUsage: Read before servicing a DMA batch or while diagnosing overflow risk. The same value feeds the watermark request logic.\n\nValues:\n0x0 no samples available (reset value);\n0x1 to PARA_FIFO_DEPTH current visible entries.\n\nUnit: sample entries\n\nLimits: Mode 0 is the APB read-side AFIFO estimate and can lag new PCLK writes by CDC latency. Mode 1 is the exact APB-domain accepted-write/read count."
+        }
+      ]
+    },
+    {
+      "name": "dvp_frame_count",
+      "offset": "0x18",
+      "reset": "0x00000000",
+      "description": "DVP frame counter. Counts accepted active VSYNC frame-start events while capture is enabled.",
+      "fields": [
+        {
+          "name": "count",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Accepted frame-start count. Increments once when an active VSYNC edge is accepted by the selected capture path while CAPTURE_EN is one. Continuous-mode events cross from PCLK to CLK-APB through the event synchronizer; gated-mode events are detected in CLK-APB.\n\nUsage: Read to monitor completed frame starts; software may calculate a delta modulo 2^32. The counter is not cleared by FIFO flush.\n\nValues:\n0x0 no accepted frame start since reset (reset value);\n0x1 to 0xFFFFFFFF modulo-2^32 frame count.\n\nUnit: frames\n\nLimits: 32-bit unsigned counter; wraps from 0xFFFFFFFF to 0x00000000 and is cleared only by common reset."
+        }
+      ]
+    }
+  ]
+}

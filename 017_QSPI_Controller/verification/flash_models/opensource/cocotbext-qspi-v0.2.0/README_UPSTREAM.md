@@ -176,8 +176,8 @@ the closed loop had been happily agreeing with itself.
 | `cocotbext/qspi/qspi_bus.py` | `QspiBus` — signal bundle |
 | `cocotbext/qspi/verilog/qspi_flash.v` | NOR flash model: WEL, WIP, page program, sector erase |
 | `cocotbext/qspi/verilog/qspi_flash_test.v` | cocotb top level |
-| `tests/reference/` | third-party model for interop (ISC, see its README) |
+| `verification/tests/reference/` | third-party model for interop (ISC, see its README) |
 
 ## Licence
 
-MIT. `tests/reference/spiflash.v` is ISC, © Claire Xenia Wolf.
+MIT. `verification/tests/reference/spiflash.v` is ISC, © Claire Xenia Wolf.

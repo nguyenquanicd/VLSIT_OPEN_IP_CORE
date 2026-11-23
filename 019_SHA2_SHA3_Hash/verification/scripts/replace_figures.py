@@ -4,7 +4,7 @@ import glob, json, os, shutil, subprocess, sys
 IP = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IP = os.path.dirname(IP)
 SV = 'C:/Users/PC/.claude/skills/vlsit-asic-ip-microspec/scripts/vlsit_waveform_svg.py'
-os.makedirs(IP + '/spec/figures/spec_sketch', exist_ok=True)
+os.makedirs(IP + '/figures/spec_sketch', exist_ok=True)
 for jp in sorted(glob.glob(IP + '/verification/waveforms_sim/wf_0*.json')):
     stem = os.path.basename(jp)[:-5]
     if stem.endswith('_diff'):
@@ -19,9 +19,9 @@ for jp in sorted(glob.glob(IP + '/verification/waveforms_sim/wf_0*.json')):
     d['signal'] = clean(d['signal'])
     d['head'] = {'text': '%s: simulation of the RTL (verification/waveforms_sim)' % stem[:6].upper().replace('_', '-')}
     for ext in ('json', 'svg'):
-        src = IP + '/spec/figures/%s.%s' % (stem, ext)
-        dst = IP + '/spec/figures/spec_sketch/%s.%s' % (stem, ext)
+        src = IP + '/figures/%s.%s' % (stem, ext)
+        dst = IP + '/figures/spec_sketch/%s.%s' % (stem, ext)
         if os.path.exists(src) and not os.path.exists(dst): shutil.copy(src, dst)
-    json.dump(d, open(IP + '/spec/figures/%s.json' % stem, 'w'), indent=1)
-    subprocess.run([sys.executable, '-I', SV, 'render', IP + '/spec/figures/%s.json' % stem, '--out', IP + '/spec/figures/%s.svg' % stem, '--force'], capture_output=True)
+    json.dump(d, open(IP + '/figures/%s.json' % stem, 'w'), indent=1)
+    subprocess.run([sys.executable, '-I', SV, 'render', IP + '/figures/%s.json' % stem, '--out', IP + '/figures/%s.svg' % stem, '--force'], capture_output=True)
     print('replaced', stem)

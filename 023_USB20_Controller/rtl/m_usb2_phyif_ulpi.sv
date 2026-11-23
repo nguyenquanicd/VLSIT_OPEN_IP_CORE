@@ -126,6 +126,8 @@ module m_usb2_phyif_ulpi #(
   logic [7:0]              reg_otg_wr;
   logic                    w_fc_pend;
   logic                    w_otg_pend;
+  logic                    w_mode_pend;
+  logic                    w_tx_go;
   logic                    reg_user_pend;
   logic                    reg_user_wr;
   logic [7:0]              reg_user_addr;
@@ -164,9 +166,14 @@ module m_usb2_phyif_ulpi #(
   assign w_otg_pend = (w_otg_want != reg_otg_wr);
 
   // Operation start: only from IDLE, with a free bus and an idle link; mode registers go first.
+  // A transmit starts only when the PHY registers already show the mode inputs, so a chirp or a
+  // test stream never leaves with the old OpMode (BUG-027); a pending mode write goes first even
+  // when a stream is waiting.
+  assign w_mode_pend = w_fc_pend | w_otg_pend;
+  assign w_tx_go    = i_tx_valid[0] & ~i_ulpi_dir & ~reg_dir_d & ~w_mode_pend;
   assign w_op_start = (reg_fsm_ulpi_current_state == ENUM_ST_IDLE) & ~i_ulpi_dir & ~reg_dir_d &
-                      ~i_tx_valid[0] & i_link_idle &
-                      (w_fc_pend | w_otg_pend | reg_user_pend);
+                      (~i_tx_valid[0] | w_mode_pend) & i_link_idle &
+                      (w_mode_pend | reg_user_pend);
   // Extended register address: addresses above 0x3F need the extended command.
   assign w_op_ext   = (reg_op_addr > LPARA_IMM_MAX[7:0]);
 
@@ -209,7 +216,7 @@ module m_usb2_phyif_ulpi #(
     w_fsm_ulpi_nxt_state = reg_fsm_ulpi_current_state;
     case (reg_fsm_ulpi_current_state)
       ENUM_ST_IDLE: begin
-        if (i_tx_valid[0] & ~i_ulpi_dir & ~reg_dir_d)
+        if (w_tx_go)
           w_fsm_ulpi_nxt_state = ENUM_ST_TXCMD;
         else if (w_op_start)
           w_fsm_ulpi_nxt_state = ENUM_ST_RCMD;
@@ -268,7 +275,7 @@ module m_usb2_phyif_ulpi #(
     w_op_done   = 1'b0;
     case (reg_fsm_ulpi_current_state)
       ENUM_ST_IDLE: begin
-        if (i_tx_valid[0] & ~i_ulpi_dir & ~reg_dir_d) begin
+        if (w_tx_go) begin
           w_data_nxt = LPARA_TXCMD_PID[7:0] | {4'h0, i_tx_data[3:0]};
           w_tx_ready = 1'b1;
         end else if (w_op_start) begin
@@ -280,7 +287,10 @@ module m_usb2_phyif_ulpi #(
       ENUM_ST_TXCMD: begin
         w_data_nxt = reg_data;
         casez ({i_ulpi_dir, i_ulpi_nxt, i_tx_valid[0]})
-          3'b1??: w_abort = 1'b1;
+          3'b1??: begin
+            w_abort    = 1'b1;
+            w_data_nxt = 8'h00;
+          end
           3'b011: begin
             w_data_nxt = i_tx_data[7:0];
             w_tx_ready = 1'b1;
@@ -295,7 +305,10 @@ module m_usb2_phyif_ulpi #(
       ENUM_ST_TXDATA: begin
         w_data_nxt = reg_data;
         casez ({i_ulpi_dir, i_ulpi_nxt, i_tx_valid[0]})
-          3'b1??: w_abort = 1'b1;
+          3'b1??: begin
+            w_abort    = 1'b1;
+            w_data_nxt = 8'h00;
+          end
           3'b011: begin
             w_data_nxt = i_tx_data[7:0];
             w_tx_ready = 1'b1;
@@ -313,17 +326,23 @@ module m_usb2_phyif_ulpi #(
       end
       ENUM_ST_RCMD: begin
         w_data_nxt = reg_data;
-        if (~i_ulpi_dir & i_ulpi_nxt)
+        if (i_ulpi_dir)
+          w_data_nxt = 8'h00;
+        else if (i_ulpi_nxt)
           w_data_nxt = w_op_ext ? reg_op_addr : (reg_op_wr ? reg_op_wdata : 8'h00);
       end
       ENUM_ST_RADDR: begin
         w_data_nxt = reg_data;
-        if (~i_ulpi_dir & i_ulpi_nxt)
+        if (i_ulpi_dir)
+          w_data_nxt = 8'h00;
+        else if (i_ulpi_nxt)
           w_data_nxt = reg_op_wr ? reg_op_wdata : 8'h00;
       end
       ENUM_ST_RWDATA: begin
         w_data_nxt = reg_data;
-        if (~i_ulpi_dir & i_ulpi_nxt) begin
+        if (i_ulpi_dir)
+          w_data_nxt = 8'h00;
+        else if (i_ulpi_nxt) begin
           w_data_nxt = 8'h00;
           w_stp_nxt  = 1'b1;
           w_op_done  = 1'b1;

@@ -1,5 +1,5 @@
 // filelist.f - RTL files in compile order (leaf modules first, top last).
-// Top module: m_usb2_top_ulpi_axis
+// Top module: m_usb2_top_ulpi_axim
 // Paths are relative to the folder of this file; run tools from that folder.
 m_usb2_axs.sv
 ../../000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv
@@ -44,4 +44,4 @@ m_usb2_rst.sv
 m_usb2_spd.sv
 m_usb2_ulpilp.sv
 m_usb2_core.sv
-m_usb2_top_ulpi_axis.sv
+m_usb2_top_ulpi_axim.sv

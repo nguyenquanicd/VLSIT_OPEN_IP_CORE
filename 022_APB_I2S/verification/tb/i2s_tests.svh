@@ -449,7 +449,7 @@ endtask
 // ---------------------------------------------------------------- TEST-011 watermark
 task automatic t_watermark();
   logic [31:0] v;
-  int t, wmk;
+  int t, wmk, lvl;
   begin
     wmk = (DEPTH * LINES / 2 < 4) ? (DEPTH * LINES / 2) : 4;
     if (wmk < 1) wmk = 1;
@@ -466,6 +466,11 @@ task automatic t_watermark();
       sb(11, 1'b1, !v[I_TXWM], "TX: level above the watermark: the cleared cause stays clear");
       flush_unit(0); wait_apb(10); rd32(R_IRAW, v);
       sb(11, 1'b1, v[I_TXWM], "TX: level back at 0 sets the cause");
+      // boundary: a level equal to the watermark is at or below it (REQ-FUNC-016)
+      for (int i = 0; i < wmk; i++) wr32(U(0, R_DATA), 32'h180 + i);
+      wr32(R_IRAW, 32'h1); wait_apb(6); rd32(R_IRAW, v);
+      sb(11, 1'b1, v[I_TXWM], "TX: level equal to the watermark: the cause is set (at or below)");
+      flush_unit(0); wait_apb(10);
       wr32(U(0, R_FIFO), 0);
       wr32(U(0, R_DATA), 32'h1); wait_apb(6);
       wr32(R_IRAW, 32'h1); wait_apb(6); rd32(R_IRAW, v);
@@ -486,6 +491,14 @@ task automatic t_watermark();
       sb(11, 1'b1, v[27:16] >= wmk, "RX: level reached the watermark");
       rd32(R_IRAW, v);
       sb(11, 1'b1, v[I_RXWM], "RX: level at or above the watermark sets the cause");
+      // boundary: a watermark equal to the level is at or above it, one above the level is not (REQ-FUNC-016)
+      lvl = v[27:16];
+      rd32(U(1, R_STS), v); lvl = v[27:16];
+      wr32(U(1, R_FIFO), lvl); wr32(R_IRAW, 32'h8); wait_apb(6); rd32(R_IRAW, v);
+      sb(11, 1'b1, v[I_RXWM], "RX: watermark equal to the level: the cause is set (at or above)");
+      wr32(U(1, R_FIFO), lvl + 1); wr32(R_IRAW, 32'h8); wait_apb(6); rd32(R_IRAW, v);
+      sb(11, 1'b1, !v[I_RXWM], "RX: watermark one above the level: the cause stays clear");
+      wr32(U(1, R_FIFO), wmk);
       for (int i = 0; i < 400; i++) begin rd32(U(1, R_STS), v); if (v[27:16] >= wmk) rd32(U(1, R_DATA), r_); end
       rd32(U(1, R_STS), v);
       wr32(R_IRAW, 32'h8); wait_apb(6); rd32(R_IRAW, v);
@@ -529,7 +542,7 @@ task automatic t_sync_hung();
       if (HUNG_EN != 0) begin
         // stop the bit clock: the hung cause comes after about timeout x 256 master clock cycles
         drx.clk_stop = 1;
-        wait_m(2 * 256 - 200);
+        wait_m(2 * 256 - 48);
         rd32(R_IRAW, v); check(!v[I_HUNG], "no hung cause before the timeout (REQ-FUNC-023)");
         wait_m(600);
         rd32(R_IRAW, v); check(v[I_HUNG], "hung cause after the timeout (REQ-FUNC-023)");
@@ -879,6 +892,16 @@ task automatic t_resets();
       rd32(R_GCTRL, v); sb(3, 1'b1, v[0] == 0, "the global reset bit reads 0");
       rd32(U(0, R_STS), v); check(v[27:16] == 0, "global soft reset empties the FIFO");
       unit_dis(0); dtx.run = 0;
+    end
+    // busy covers a pending flush (ASM-019): the unit is stopped, a flush is requested and busy is read at once
+    if (TX_EN != 0) begin
+      hw_reset();
+      for (int i = 0; i < 4; i++) wr32(U(0, R_DATA), 32'hF00 + i);
+      wr32(U(0, R_CTRL), 32'h4);
+      rd32(U(0, R_STS), v);
+      check(v[0] === 1'b1, $sformatf("busy is high while the flush is pending, sts %h", v));
+      t = 0; while (v[0] && t < 400) begin wait_apb(10); rd32(U(0, R_STS), v); t++; end
+      check(!v[0] && v[27:16] == 0, "busy falls when the flush is done and the FIFO is empty");
     end
     // flush while stopped
     if (TX_EN != 0) begin

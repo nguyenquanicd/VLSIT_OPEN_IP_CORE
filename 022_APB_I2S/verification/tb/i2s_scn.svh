@@ -30,6 +30,8 @@ logic [31:0] words [0:2047];
 logic [31:0] samp  [0:2047];
 int          t_scn_err;
 longint      scn_count = 0;
+logic [31:0] wf_fix [0:3];     // fixed words of a waveform scenario (readable figures); wf_fix_n = 0: random words
+int          wf_fix_n = 0;
 
 task automatic dev_cfg(input int u, input int fmt, input int nslot, input int slot_w, input int data_w,
                        input int bpol, input int sync_w, input int fsp, input int fse, input logic [31:0] mask);
@@ -79,7 +81,7 @@ task automatic tx_scn(input string tag, input int fmt, input int nslot, input in
       wpf = wpf_of(nslot, mask, pk);
       nw = wpf * nframes;
       if (nw > DEPTH * LINES) begin nframes = (DEPTH * LINES) / wpf; nw = wpf * nframes; end
-      for (int i = 0; i < nw; i++) begin words[i] = rnd32(); wr32(U(0, R_DATA), words[i]); end
+      for (int i = 0; i < nw; i++) begin words[i] = (wf_fix_n > 0) ? wf_fix[i % wf_fix_n] : rnd32(); wr32(U(0, R_DATA), words[i]); end
       rd32(U(0, R_STS), r_);
       sb(1, 1'b1, r_[27:16] == nw, $sformatf("%s: TX level after %0d pushes is %0d", tag, nw, r_[27:16]));
       dtx.cap_limit = nframes * en * LINES;
@@ -140,7 +142,7 @@ task automatic rx_scn(input string tag, input int fmt, input int nslot, input in
       if (wpf * nframes > DEPTH * LINES) nframes = (DEPTH * LINES) / wpf;
       nw = wpf * nframes;
       nsamp = nframes * en * LINES;
-      for (int i = 0; i < nsamp; i++) begin samp[i] = rnd32() & dmk(data_w); drx.src_q.push_back(samp[i]); end
+      for (int i = 0; i < nsamp; i++) begin samp[i] = ((wf_fix_n > 0) ? wf_fix[i % wf_fix_n] : rnd32()) & dmk(data_w); drx.src_q.push_back(samp[i]); end
       if (ipm) begin drx.run = 1; unit_en(1, (1 << C_ROLE)); end
       else begin unit_en(1, 0); wait_apb(20); drx.run = 1; end
       t = 0; r_ = 0;

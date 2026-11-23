@@ -3,7 +3,7 @@
 | Field / Trường | Value / Giá trị |
 |---|---|
 | IP | USB 2.0 Controller (device, host, dual-role; UTMI+ or ULPI) |
-| Specification reviewed | C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\023_USB20_Controller\VLSIT_USB20_CONTROLLER_HDS.md |
+| Specification reviewed | C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\023_USB20_Controller\../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md |
 | Revision and date | version 0.1 draft, 2026-11-20 |
 | Reviewer | Claude (skill vlsit-ip-spec-review) |
 | Review date | 2026-11-20 |
@@ -364,7 +364,7 @@ Proxy table (label: proxy, no mapped area; no library or corner) / Bảng proxy:
 
 **EN.** Inventory of the reviewed folder (rule R-001), gate result, audit sample and the limits of the review. **VI.** Kiểm kê thư mục được review (R-001), kết quả gate, mẫu kiểm tra và giới hạn của review.
 
-- Folder inventory: VLSIT_USB20_CONTROLLER_HDS.md, the CSR workbook VLSIT_USB20_CONTROLLER_CSR.xlsx and csr/regs_usb2.json, figures/ (8 FSM, 1 block diagram, 37 waveform with sources, figures/src), research/reference_ip_log.md, review/. There is no rtl/, verification/, sanity/, sdc/ or constraints/ folder.
+- Folder inventory: ../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md, the CSR workbook VLSIT_USB20_CONTROLLER_CSR.xlsx and csr/regs_usb2.json, figures/ (8 FSM, 1 block diagram, 37 waveform with sources, figures/src), research/reference_ip_log.md, review/. There is no rtl/, verification/, verification/tests/sanity/, sdc/ or sdc/ folder.
 
 - File hashes (sha256, first 16 hex): spec 950c6c3796e82ebc, workbook 0d36ba678f6183af, regs_usb2.json 9eeb47a2b7d9452d.
 - Requirements: 59 (FUNC 36, IF 10, CLK 2, RESET 2, PARAM 2, ERR 2, REG 1, PERF 1, RTL 1, VER 1, DFT 1); tests 29; properties 15; open items 41 (ASM, DEP, TBD without owner or date). Source: review/inventory.json.

@@ -26,7 +26,7 @@ With the earlier model (random extra latency of 0, 1 or 2 destination cycles on 
 
 ### What changed
 
-The model of `000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv`: the first flop captures the new or the old value with a probability of 50% each, only when the input changed less than a window W before the capturing edge (W is `+AFIFO_MSYNC_WIN_PCT` percent of the measured period of the destination clock, default 10); outside the window it captures as a plain flop. The latency after the first capturing edge is S-1 or S. A bit that is not close to the capturing edge cannot be late, so two bits of a pointer are not reordered while W is shorter than the source clock period. No RTL file of this IP was changed for this fix. The model is tested alone by `000_Common/lib_tests/tb_afifo_cell_sync.sv`.
+The model of `000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv`: the first flop captures the new or the old value with a probability of 50% each, only when the input changed less than a window W before the capturing edge (W is `+AFIFO_MSYNC_WIN_PCT` percent of the measured period of the destination clock, default 10); outside the window it captures as a plain flop. The latency after the first capturing edge is S-1 or S. A bit that is not close to the capturing edge cannot be late, so two bits of a pointer are not reordered while W is shorter than the source clock period. No RTL file of this IP was changed for this fix. The model is tested alone by `000_Common/lib_verification/tests/tb_afifo_cell_sync.sv`.
 
 ### Limits
 

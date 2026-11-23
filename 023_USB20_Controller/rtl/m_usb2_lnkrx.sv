@@ -77,6 +77,7 @@ module m_usb2_lnkrx #(
   // Token, split token and handshake events
   output logic        o_tok_vld,
   output logic        o_tok_ext,
+  output logic [10:0] o_tok_efld,
   output logic [3:0]  o_tok_pid,
   output logic [10:0] o_tok_fld,
   output logic        o_spl_vld,
@@ -172,6 +173,7 @@ module m_usb2_lnkrx #(
   logic reg_tok_ext;
   logic [3:0] reg_tok_pid;
   logic [10:0] reg_tok_fld;
+  logic [10:0] reg_tok_efld;
   logic reg_spl_vld;
   logic [18:0] reg_spl_fld;
   logic reg_hs_vld;
@@ -423,8 +425,10 @@ module m_usb2_lnkrx #(
       if (w_s_eop) begin
         reg_in_pkt <= 1'b0;
         if (reg_cls == LPARA_CLS_EXT[2:0] && reg_pid_ok && w_cnt_fin == 13'd2 &&
-            w_crc5_tok == w_h1[7:3])
+            w_crc5_tok == w_h1[7:3]) begin
           reg_ext_pend <= 1'b1;
+          reg_tok_efld <= {w_h1[2:0], w_h0};
+        end
       end
     end
   end
@@ -436,6 +440,7 @@ module m_usb2_lnkrx #(
       reg_tok_ext    <= 1'b0;
       reg_tok_pid    <= 4'h0;
       reg_tok_fld    <= '0;
+      reg_tok_efld   <= '0;
       reg_spl_vld    <= 1'b0;
       reg_spl_fld    <= '0;
       reg_hs_vld     <= 1'b0;
@@ -527,6 +532,7 @@ module m_usb2_lnkrx #(
   // Registered outputs.
   assign o_tok_vld = reg_tok_vld;
   assign o_tok_ext = reg_tok_ext;
+  assign o_tok_efld = reg_tok_efld;
   assign o_tok_pid = reg_tok_pid;
   assign o_tok_fld = reg_tok_fld;
   assign o_spl_vld = reg_spl_vld;

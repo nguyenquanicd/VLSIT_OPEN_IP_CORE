@@ -1,0 +1,60 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p........."
+    },
+    {
+      "name": "i_clk_dvp",
+      "wave": "p........."
+    },
+    {
+      "name": "i_capture_en",
+      "wave": "0........."
+    },
+    {
+      "name": "w_cont_quiescent",
+      "wave": "0.1......."
+    },
+    {
+      "name": "dvp_ctrl.fifo_flush",
+      "wave": "0.1......0"
+    },
+    {
+      "name": "w_afifo_req_dvp",
+      "wave": "0...1...0."
+    },
+    {
+      "name": "w_afifo_busy",
+      "wave": "0....1..0."
+    },
+    {
+      "name": "w_afifo_busy_apb",
+      "wave": "0.....1..0"
+    },
+    {
+      "name": "o_fifo_empty",
+      "wave": "0.1......1"
+    },
+    {
+      "name": "o_fifo_occupancy",
+      "wave": "=.........",
+      "data": [
+        "5"
+      ]
+    },
+    {
+      "name": "o_flush_done",
+      "wave": "0........1"
+    }
+  ],
+  "head": {
+    "text": "WF-019: continuous-mode AFIFO flush CDC and completion"
+  },
+  "foot": {
+    "text": "Capture is disabled and PCLK continues. The APB request crosses to PCLK; busy returns to APB. The CSR clears only after synchronized busy deasserts. FIFO reads are blocked while pending."
+  },
+  "config": {
+    "hscale": 3
+  }
+}

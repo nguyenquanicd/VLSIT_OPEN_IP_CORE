@@ -1,0 +1,45 @@
+{
+ "signal": [
+  {
+   "name": "i_bclk_rx",
+   "wave": "p......................................................................."
+  },
+  {
+   "name": "i_ws_rx",
+   "wave": "001000000000000000000000000000000010000000000000000000000000000000100000"
+  },
+  {
+   "name": "i_sdi_0",
+   "wave": "000000100000001000100010010000100110001010000010101000101100001011100011"
+  },
+  {
+   "name": "w_mask_apb",
+   "wave": "=........=..............................................................",
+   "data": [
+    "F",
+    "D"
+   ]
+  },
+  {
+   "name": "w_mask_eff",
+   "wave": "=..................................=....................................",
+   "data": [
+    "F",
+    "D"
+   ]
+  },
+  {
+   "name": "w_rx_push",
+   "wave": "000000000001000000010000000100000001000000010000000000000001000000010000"
+  }
+ ],
+ "head": {
+  "text": "WF-007 OP-006 Slot mask change at a frame boundary (corner)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock, TDM slave with four 8-bit slots. The mask written during frame 1 (w_mask_apb, the CSR field) becomes the effective mask w_mask_eff at the start of frame 2: slot 1 is then skipped and no word is pushed for it."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

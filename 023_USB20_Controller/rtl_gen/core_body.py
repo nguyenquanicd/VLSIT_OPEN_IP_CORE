@@ -40,7 +40,7 @@ def build_body():
     e('  // Internal signal declarations')
     # ---- generic wires
     for n in ['w_cfg_err', 'w_rst_n_phy', 'w_rst_n_core', 'w_rst_n_bus', 'w_soft_req', 'w_phy_hold', 'w_soft_busy',
-              'w_soft_clr', 'w_role_bus', 'w_ocur_flag', 'w_oc_evt', 'w_oc_act', 'w_oc_act_phy', 'w_phy_alive',
+              'w_soft_clr', 'w_role_bus', 'w_ocur_flag', 'w_oc_evt', 'w_oc_act', 'w_pwr_en_phy', 'w_phy_alive',
               'reg_alive', 'w_axi_err', 'w_dma_err', 'w_wake_csr']:
         e(f'  logic {n};')
     for n, w in (('w_ld_addr', '[31:0]'), ('w_ld_epi_we', '[LPARA_NEP1-1:0]'), ('w_ld_epo_we', '[LPARA_NEP1-1:0]'),
@@ -79,7 +79,7 @@ def build_body():
                  ('w_spd_lpm_hird', '[3:0]'), ('w_spd_lpm_rw', '')):
         e(f'  logic {w + " " if w else ""}{n};')
     # link
-    for n, w in (('w_tok_vld', ''), ('w_tok_ext', ''), ('w_tok_pid', '[3:0]'), ('w_tok_fld', '[10:0]'),
+    for n, w in (('w_tok_vld', ''), ('w_tok_ext', ''), ('w_tok_efld', '[10:0]'), ('w_tok_pid', '[3:0]'), ('w_tok_fld', '[10:0]'),
                  ('w_spl_vld', ''), ('w_spl_fld', '[18:0]'), ('w_hs_vld', ''), ('w_hs_pid', '[3:0]'),
                  ('w_dat_sop', ''), ('w_dat_pid', '[3:0]'), ('w_dat_n', '[1:0]'), ('w_dat_b', '[15:0]'),
                  ('w_dat_end', ''), ('w_dat_ok', ''), ('w_dat_len', '[11:0]'), ('w_err_pid', ''),
@@ -103,12 +103,12 @@ def build_body():
     for n in ('w_host_hc_xfer_pub', 'w_host_hc_cfg_pub', 'w_host_hc_int_set', 'w_host_hc_ctrl_clr'):
         e(f'  logic [PARA_USB2_NUM_HC-1:0][31:0] {n};')
     for n, w in (('w_dev_frame', '[10:0]'), ('w_dev_uframe', '[2:0]'), ('w_dev_lpm_vld', ''),
-                 ('w_dev_lpm_hird', '[3:0]'), ('w_dev_lpm_rw', ''), ('w_dev_evt_udf', ''),
+                 ('w_dev_lpm_hird', '[3:0]'), ('w_dev_lpm_rw', ''), ('w_dev_evt_udf', ''), ('w_evt_tmo', ''), ('w_evt_iso', ''),
                  ('w_host_frame', '[13:0]'), ('w_host_busy', ''), ('w_host_lpm_evt', ''), ('w_host_lpm_ack', ''), ('w_host_lpm_clr', '')):
         e(f'  logic {w + " " if w else ""}{n};')
     # fifo
     for n, w in (('w_q_base', '[LPARA_NQ*16-1:0]'), ('w_q_size', '[LPARA_NQ*16-1:0]'), ('w_flush_vld', ''),
-                 ('w_flush_q', '[4:0]'), ('w_rxw_sop', ''), ('w_rxw_tag', '[4:0]'), ('w_rxw_n', '[1:0]'),
+                 ('w_flush_q', '[4:0]'), ('w_txq_phy', '[4:0]'), ('w_txq_bus', '[4:0]'), ('w_rxw_sop', ''), ('w_rxw_tag', '[4:0]'), ('w_rxw_n', '[1:0]'),
                  ('w_rxw_b', '[15:0]'), ('w_rxw_end', ''), ('w_rxw_ok', ''), ('w_rxw_len', '[11:0]'),
                  ('w_rx_free', '[16:0]'), ('w_plq_free', ''), ('w_txr_start', ''), ('w_txr_q', '[4:0]'),
                  ('w_txr_len', '[11:0]'), ('w_txr_commit', ''), ('w_txr_cancel', ''), ('w_fifo_src_dat', '[15:0]'),
@@ -176,17 +176,17 @@ def build_body():
     e('    .o_oc_act    (w_oc_act)')
     e('  );')
     e()
-    e('  // Crossings of single status bits: the over-current state to CLK-PHY, the PHY clock alive flag')
+    e('  // Crossings of single status bits: the port power state to CLK-PHY, the PHY clock alive flag')
     e('  // (the reset of CLK-PHY is released) to CLK-BUS.')
     e('  m_vlsit_afifo_sync #(')
     e('    .PARA_AFIFO_SYNC_W       (1),')
     e('    .PARA_AFIFO_SYNC_RST_VAL (0),')
     e('    .PARA_AFIFO_CELL_TYPE    (LPARA_CELL_2FF)')
-    e('  ) u_sync_oc (')
+    e('  ) u_sync_pwr (')
     e('    .i_clk_dst   (i_clk_phy),')
     e('    .i_rst_n_dst (w_rst_n_phy),')
-    e('    .i_data      (w_oc_act),')
-    e('    .o_data      (w_oc_act_phy)')
+    e('    .i_data      (o_vbus_pwr_en),')
+    e('    .o_data      (w_pwr_en_phy)')
     e('  );')
     e()
     e('  m_vlsit_afifo_sync #(')

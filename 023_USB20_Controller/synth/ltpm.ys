@@ -1,5 +1,0 @@
-plugin -i slang
-read_slang -f ../synth/fl_nosram.f --top m_usb2_host -D VLSIT_SYNTHESIS
-hierarchy -top m_usb2_host
-synth -top m_usb2_host -flatten
-tee -o ../synth/ltpm_new.txt ltp -noff

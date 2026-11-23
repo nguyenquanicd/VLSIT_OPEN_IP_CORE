@@ -1,6 +1,6 @@
 import json, re, os
 ROOT = r"C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\023_USB20_Controller"
-H = ROOT + r"\VLSIT_USB20_CONTROLLER_HDS.md"
+H = ROOT + r"\spec\../spec/VLSIT_USB20_CONTROLLER_HDS.md"
 DATE = "2026-11-20"
 PLAN = [
  ("WF-001", "OP-001 device reset and chirp to high-speed", "success", "linestate, txvalid, xcvrsel, termsel, enum flag"),

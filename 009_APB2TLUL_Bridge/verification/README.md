@@ -1,8 +1,8 @@
 # Verification of m_apb_tlul_bridge / Kiểm chứng m_apb_tlul_bridge
 
-**EN:** `tb_apb_tlul_bridge.sv` is the self-checking testbench (requester model, TL-UL device model, scoreboard, monitors). `apb_tlul_protocol_assertions.sv` holds 36 protocol assertions on the APB4 and TL-UL ports. Run both with `make sim` and `make sim-narrow` from the parent folder; the results are written to `../sanity/`.
+**EN:** `tb_apb_tlul_bridge.sv` is the self-checking testbench (requester model, TL-UL device model, scoreboard, monitors). `apb_tlul_protocol_assertions.sv` holds 36 protocol assertions on the APB4 and TL-UL ports. Run both with `make sim` and `make sim-narrow` from the parent folder; the results are written to `../verification/tests/sanity/`.
 
-**VI:** `tb_apb_tlul_bridge.sv` là testbench tự kiểm (mô hình requester, mô hình thiết bị TL-UL, scoreboard, monitor). `apb_tlul_protocol_assertions.sv` chứa 36 assertion giao thức trên cổng APB4 và TL-UL. Chạy bằng `make sim` và `make sim-narrow` từ thư mục cha; kết quả ghi vào `../sanity/`.
+**VI:** `tb_apb_tlul_bridge.sv` là testbench tự kiểm (mô hình requester, mô hình thiết bị TL-UL, scoreboard, monitor). `apb_tlul_protocol_assertions.sv` chứa 36 assertion giao thức trên cổng APB4 và TL-UL. Chạy bằng `make sim` và `make sim-narrow` từ thư mục cha; kết quả ghi vào `../verification/tests/sanity/`.
 
 ## How the assertions work / Cách các assertion hoạt động
 

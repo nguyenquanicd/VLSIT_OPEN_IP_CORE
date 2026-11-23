@@ -6,7 +6,7 @@
 
 ## 1. Objective and baseline
 
-Resolve the six RTL rule-check errors reported in `sanity/rerun_20261026/rtl_check_report.md` while preserving the bridge behavior and hierarchy. The baseline report lists three FIL-05 alignment errors and three FIL-06 missing functional port-group comment errors.
+Resolve the six RTL rule-check errors reported in `verification/tests/sanity/rerun_20261026/rtl_check_report.md` while preserving the bridge behavior and hierarchy. The baseline report lists three FIL-05 alignment errors and three FIL-06 missing functional port-group comment errors.
 
 The same report lists eight NAM-08 warnings for TL-UL protocol names (`error`, `source`, and `address`). These names match the externally defined protocol signals and are retained under the protocol-name exception in NAM-02. They are not part of this repair.
 
@@ -50,7 +50,7 @@ After the approved edit, run the IP's single Makefile flow with the skill-script
 ```powershell
 & 'C:/Users/PC/Tools/msys64/usr/bin/make.exe' all `
   'SKILL=../../../VLSIT_CODEX_CLAUDE_SKILLS/.claude/skills/vlsit-rtl-generator/scripts' `
-  'SANITY=sanity/rule_fix_20261026' `
+  'SANITY=verification/tests/sanity/rule_fix_20261026' `
   'BUILD=build/rule_fix_20261026' `
   'PYTHON=C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' `
   'OSSCAD=C:/Tools/oss-cad-suite'
@@ -74,7 +74,7 @@ Execution results:
 - Default simulation: PASS, 440 TL-UL requests; 36 protocol assertions, 0 failures, 0 unexercised.
 - Narrow-parameter simulation: PASS, 440 TL-UL requests; 36 protocol assertions, 0 failures, 0 unexercised.
 - Change metric: 340 baseline RTL code lines; 6 added and 6 deleted, 3.53%. This metric counts changed port-list lines; comparison confirms parameter declarations and module bodies are unchanged and all port declarations are preserved.
-- Logs and rule report: sanity/rule_fix_20261026/.
+- Logs and rule report: verification/tests/sanity/rule_fix_20261026/.
 
 Note: the Makefile's default `SKILL` path points to a different checkout. The command-line override above selects the existing skill scripts and does not modify the Makefile.
 

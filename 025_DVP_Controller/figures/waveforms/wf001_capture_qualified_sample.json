@@ -1,0 +1,54 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_dvp",
+      "wave": "p......."
+    },
+    {
+      "name": "i_rst_n_sys",
+      "wave": "00111111"
+    },
+    {
+      "name": "i_capture_en",
+      "wave": "00011111"
+    },
+    {
+      "name": "i_frame_valid",
+      "wave": "00111100"
+    },
+    {
+      "name": "i_href",
+      "wave": "00011100"
+    },
+    {
+      "name": "i_data[11:0]",
+      "wave": "xx===xxx",
+      "data": [
+        "0x123",
+        "0x234",
+        "0x345"
+      ]
+    },
+    {
+      "name": "o_sample_accept",
+      "wave": "00011100"
+    },
+    {
+      "name": "o_fifo_full",
+      "wave": "00000000"
+    },
+    {
+      "name": "o_fifo_ovf",
+      "wave": "00000000"
+    }
+  ],
+  "head": {
+    "text": "WF-001: qualified DVP samples enter the asynchronous FIFO"
+  },
+  "foot": {
+    "text": "Illustrative cycle-level behavior. Qualifiers inactive means no sample write; overflow remains low."
+  },
+  "config": {
+    "hscale": 2.5
+  }
+}

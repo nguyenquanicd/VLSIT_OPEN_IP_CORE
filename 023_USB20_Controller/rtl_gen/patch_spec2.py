@@ -1,4 +1,4 @@
-p = '../VLSIT_USB20_CONTROLLER_HDS.md'
+p = '../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md'
 lines = open(p, encoding='utf-8').read().split('\n')
 
 

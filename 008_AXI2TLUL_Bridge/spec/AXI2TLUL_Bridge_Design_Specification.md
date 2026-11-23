@@ -212,9 +212,9 @@ The bridge has two independent request paths (read and write) that meet at one a
 
 ### 5.2 Block diagram
 
-![Block diagram of the AXI2TLUL Bridge (draw.io source: figures/vlsit_block_diagram.drawio)](figures/vlsit_block_diagram.svg)
+![Block diagram of the AXI2TLUL Bridge (draw.io source: ../figures/vlsit_block_diagram.drawio)](../figures/vlsit_block_diagram.svg)
 
-*Figure 5-1. Block diagram of the AXI2TLUL Bridge (draw.io source: figures/vlsit_block_diagram.drawio). Source: `figures/vlsit_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
+*Figure 5-1. Block diagram of the AXI2TLUL Bridge (draw.io source: ../figures/vlsit_block_diagram.drawio). Source: `../figures/vlsit_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
 
 ### 5.3 Transaction and dataflow
 
@@ -501,29 +501,29 @@ The IP has no operating modes. The state is held in the engines, the slot tables
 
 **Conventions.** Cycle `cN` is the clock period that ends at the Nth rising edge shown in the waveform. A value is "sampled" at the rising edge that ends its cycle. A handshake takes place in the cycle in which VALID and READY are both 1. A signal that "appears in the next cycle" is the output of a flip-flop loaded at the edge that ends the current cycle.
 
-**Waveform plan (rule R-024).** The requester confirmed on 2026-10-26 the list below (option A: all proposed waveforms; WF-019 was added after the per-ID ordering decision DEC-015). It covers every operation of 10.2, the success and the error case of the AXI and the TL-UL interface, and the special cases (reset, backpressure, back-to-back bursts, reordering, arbitration). Every figure is drawn from the cycle behavior of this section; its WaveJSON source is beside it in `figures/`.
+**Waveform plan (rule R-024).** The requester confirmed on 2026-10-26 the list below (option A: all proposed waveforms; WF-019 was added after the per-ID ordering decision DEC-015). It covers every operation of 10.2, the success and the error case of the AXI and the TL-UL interface, and the special cases (reset, backpressure, back-to-back bursts, reordering, arbitration). Every figure is drawn from the cycle behavior of this section; its WaveJSON source is beside it in `../figures/`.
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-005 Reset | Corner: reset in the middle of traffic, release, ready outputs rise in the second cycle | i_rst_n_main, AXI VALID and READY, o_tl_a_valid, o_tl_d_ready | ![WF-001](figures/wf-001.svg); [WaveJSON](figures/wf-001.json) | 2026-10-26 |
-| WF-002 | OP-001 Read burst | Success: single read beat, latency 1 + 1 cycles | AR, TL-UL A, TL-UL D, R | ![WF-002](figures/wf-002.svg); [WaveJSON](figures/wf-002.json) | 2026-10-26 |
-| WF-003 | OP-001 Read burst | Success: four-beat INCR read at full rate | AR, TL-UL A, TL-UL D, R, RLAST | ![WF-003](figures/wf-003.svg); [WaveJSON](figures/wf-003.json) | 2026-10-26 |
-| WF-004 | OP-001 Read burst | Corner: WRAP burst from the middle of the container, then FIXED burst, no bubble between bursts | araddr, o_tl_a_addr, tag | ![WF-004](figures/wf-004.svg); [WaveJSON](figures/wf-004.json) | 2026-10-26 |
-| WF-005 | OP-001 Read burst | Corner: unaligned and narrow transfers (size, aligned address, lane mask) | o_tl_a_size, o_tl_a_addr, o_tl_a_mask | ![WF-005](figures/wf-005.svg); [WaveJSON](figures/wf-005.json) | 2026-10-26 |
-| WF-006 | OP-001 Read burst | Corner: backpressure on i_tl_a_ready and i_axi_rready | TL-UL A, ready, R | ![WF-006](figures/wf-006.svg); [WaveJSON](figures/wf-006.json) | 2026-10-26 |
-| WF-007 | OP-002 Write burst | Success: single write beat, AW and W in the same cycle | AW, W, TL-UL A, TL-UL D, B | ![WF-007](figures/wf-007.svg); [WaveJSON](figures/wf-007.json) | 2026-10-26 |
-| WF-008 | OP-002 Write burst | Success: four-beat INCR write at full rate | AW, W, TL-UL A, TL-UL D, B | ![WF-008](figures/wf-008.svg); [WaveJSON](figures/wf-008.json) | 2026-10-26 |
-| WF-009 | OP-002 Write burst | Corner: W before AW, then AW before W | AWVALID, WVALID, TL-UL A | ![WF-009](figures/wf-009.svg); [WaveJSON](figures/wf-009.json) | 2026-10-26 |
-| WF-010 | OP-002 Write burst | Corner: WSTRB patterns select PutFullData and PutPartialData, non-contiguous strobes | wstrb, o_tl_a_opcode, o_tl_a_mask | ![WF-010](figures/wf-010.svg); [WaveJSON](figures/wf-010.json) | 2026-10-26 |
-| WF-011 | OP-004 Response collection | Error: i_tl_d_err on the third beat of a read burst gives SLVERR for that beat | TL-UL D, R, rresp | ![WF-011](figures/wf-011.svg); [WaveJSON](figures/wf-011.json) | 2026-10-26 |
-| WF-012 | OP-004 Response collection | Error: i_tl_d_err on the second beat of a write burst gives SLVERR on B | TL-UL D, B, bresp | ![WF-012](figures/wf-012.svg); [WaveJSON](figures/wf-012.json) | 2026-10-26 |
-| WF-013 | OP-003 Illegal burst rejection | Error: read burst across a 4 KB boundary, no TL-UL request, SLVERR beats | AR, o_tl_a_valid, o_evt_axi_err_rd, R | ![WF-013](figures/wf-013.svg); [WaveJSON](figures/wf-013.json) | 2026-10-26 |
-| WF-014 | OP-003 Illegal burst rejection | Error: write burst with WRAP length 3, W beats dropped, SLVERR on B | AW, W, o_evt_axi_err_wr, B | ![WF-014](figures/wf-014.svg); [WaveJSON](figures/wf-014.json) | 2026-10-26 |
-| WF-015 | OP-004 Response collection | Corner: two IDs, TL-UL responses in reverse order, the later ID overtakes | arid, TL-UL A, TL-UL D, rid, R | ![WF-015](figures/wf-015.svg); [WaveJSON](figures/wf-015.json) | 2026-10-26 |
-| WF-016 | OP-006 Arbitration | Corner: read and write streams share channel A, round-robin | AR, AW, W, TL-UL A | ![WF-016](figures/wf-016.svg); [WaveJSON](figures/wf-016.json) | 2026-10-26 |
-| WF-017 | OP-001 Read burst | Corner: exclusive read gives OKAY, ARPROT[2] sets instr_type | arlock, arprot, o_tl_a_user, R | ![WF-017](figures/wf-017.svg); [WaveJSON](figures/wf-017.json) | 2026-10-26 |
-| WF-019 | OP-004 Response collection | Corner: one ID, TL-UL responses in reverse order, storage, R in request order | arid, TL-UL A, TL-UL D, rid, R | ![WF-019](figures/wf-019.svg); [WaveJSON](figures/wf-019.json) | 2026-10-26 |
-| WF-018 | OP-004 Response collection | Error: wrong response opcode and orphaned response, two status pulses | TL-UL D, o_evt_bad_resp, o_evt_orphan_resp, R | ![WF-018](figures/wf-018.svg); [WaveJSON](figures/wf-018.json) | 2026-10-26 |
+| WF-001 | OP-005 Reset | Corner: reset in the middle of traffic, release, ready outputs rise in the second cycle | i_rst_n_main, AXI VALID and READY, o_tl_a_valid, o_tl_d_ready | ![WF-001](../figures/wf-001.svg); [WaveJSON](../figures/wf-001.json) | 2026-10-26 |
+| WF-002 | OP-001 Read burst | Success: single read beat, latency 1 + 1 cycles | AR, TL-UL A, TL-UL D, R | ![WF-002](../figures/wf-002.svg); [WaveJSON](../figures/wf-002.json) | 2026-10-26 |
+| WF-003 | OP-001 Read burst | Success: four-beat INCR read at full rate | AR, TL-UL A, TL-UL D, R, RLAST | ![WF-003](../figures/wf-003.svg); [WaveJSON](../figures/wf-003.json) | 2026-10-26 |
+| WF-004 | OP-001 Read burst | Corner: WRAP burst from the middle of the container, then FIXED burst, no bubble between bursts | araddr, o_tl_a_addr, tag | ![WF-004](../figures/wf-004.svg); [WaveJSON](../figures/wf-004.json) | 2026-10-26 |
+| WF-005 | OP-001 Read burst | Corner: unaligned and narrow transfers (size, aligned address, lane mask) | o_tl_a_size, o_tl_a_addr, o_tl_a_mask | ![WF-005](../figures/wf-005.svg); [WaveJSON](../figures/wf-005.json) | 2026-10-26 |
+| WF-006 | OP-001 Read burst | Corner: backpressure on i_tl_a_ready and i_axi_rready | TL-UL A, ready, R | ![WF-006](../figures/wf-006.svg); [WaveJSON](../figures/wf-006.json) | 2026-10-26 |
+| WF-007 | OP-002 Write burst | Success: single write beat, AW and W in the same cycle | AW, W, TL-UL A, TL-UL D, B | ![WF-007](../figures/wf-007.svg); [WaveJSON](../figures/wf-007.json) | 2026-10-26 |
+| WF-008 | OP-002 Write burst | Success: four-beat INCR write at full rate | AW, W, TL-UL A, TL-UL D, B | ![WF-008](../figures/wf-008.svg); [WaveJSON](../figures/wf-008.json) | 2026-10-26 |
+| WF-009 | OP-002 Write burst | Corner: W before AW, then AW before W | AWVALID, WVALID, TL-UL A | ![WF-009](../figures/wf-009.svg); [WaveJSON](../figures/wf-009.json) | 2026-10-26 |
+| WF-010 | OP-002 Write burst | Corner: WSTRB patterns select PutFullData and PutPartialData, non-contiguous strobes | wstrb, o_tl_a_opcode, o_tl_a_mask | ![WF-010](../figures/wf-010.svg); [WaveJSON](../figures/wf-010.json) | 2026-10-26 |
+| WF-011 | OP-004 Response collection | Error: i_tl_d_err on the third beat of a read burst gives SLVERR for that beat | TL-UL D, R, rresp | ![WF-011](../figures/wf-011.svg); [WaveJSON](../figures/wf-011.json) | 2026-10-26 |
+| WF-012 | OP-004 Response collection | Error: i_tl_d_err on the second beat of a write burst gives SLVERR on B | TL-UL D, B, bresp | ![WF-012](../figures/wf-012.svg); [WaveJSON](../figures/wf-012.json) | 2026-10-26 |
+| WF-013 | OP-003 Illegal burst rejection | Error: read burst across a 4 KB boundary, no TL-UL request, SLVERR beats | AR, o_tl_a_valid, o_evt_axi_err_rd, R | ![WF-013](../figures/wf-013.svg); [WaveJSON](../figures/wf-013.json) | 2026-10-26 |
+| WF-014 | OP-003 Illegal burst rejection | Error: write burst with WRAP length 3, W beats dropped, SLVERR on B | AW, W, o_evt_axi_err_wr, B | ![WF-014](../figures/wf-014.svg); [WaveJSON](../figures/wf-014.json) | 2026-10-26 |
+| WF-015 | OP-004 Response collection | Corner: two IDs, TL-UL responses in reverse order, the later ID overtakes | arid, TL-UL A, TL-UL D, rid, R | ![WF-015](../figures/wf-015.svg); [WaveJSON](../figures/wf-015.json) | 2026-10-26 |
+| WF-016 | OP-006 Arbitration | Corner: read and write streams share channel A, round-robin | AR, AW, W, TL-UL A | ![WF-016](../figures/wf-016.svg); [WaveJSON](../figures/wf-016.json) | 2026-10-26 |
+| WF-017 | OP-001 Read burst | Corner: exclusive read gives OKAY, ARPROT[2] sets instr_type | arlock, arprot, o_tl_a_user, R | ![WF-017](../figures/wf-017.svg); [WaveJSON](../figures/wf-017.json) | 2026-10-26 |
+| WF-019 | OP-004 Response collection | Corner: one ID, TL-UL responses in reverse order, storage, R in request order | arid, TL-UL A, TL-UL D, rid, R | ![WF-019](../figures/wf-019.svg); [WaveJSON](../figures/wf-019.json) | 2026-10-26 |
+| WF-018 | OP-004 Response collection | Error: wrong response opcode and orphaned response, two status pulses | TL-UL D, o_evt_bad_resp, o_evt_orphan_resp, R | ![WF-018](../figures/wf-018.svg); [WaveJSON](../figures/wf-018.json) | 2026-10-26 |
 
 The cycle tables below are the reference for the waveforms. They assume that the TL-UL device has `i_tl_a_ready` = 1 and answers with `i_tl_d_valid` in the cycle after it accepted the request, that the AXI Manager has `i_axi_rready` = 1, and that the bridge is idle.
 

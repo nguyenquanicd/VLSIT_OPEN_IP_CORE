@@ -1,0 +1,67 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p.........."
+    },
+    [
+      "FIFO level",
+      {
+        "name": "o_fifo_level",
+        "wave": "=..=..=..=",
+        "data": [
+          "0",
+          "3",
+          "2",
+          "3"
+        ]
+      },
+      {
+        "name": "dvp_wmark.level",
+        "wave": "=.........",
+        "data": [
+          "3"
+        ]
+      }
+    ],
+    [
+      "DMA sideband",
+      {
+        "name": "o_dma_req",
+        "wave": "0001111001"
+      },
+      {
+        "name": "i_dma_ack",
+        "wave": "0000001000"
+      }
+    ],
+    [
+      "APB drain",
+      {
+        "name": "i_apb_psel",
+        "wave": "0000001110"
+      },
+      {
+        "name": "i_apb_penable",
+        "wave": "0000000110"
+      },
+      {
+        "name": "o_apb_pready",
+        "wave": "0000000110"
+      },
+      {
+        "name": "o_fifo_pop",
+        "wave": "0000000110"
+      }
+    ]
+  ],
+  "head": {
+    "text": "WF-005: DMA batch request, acknowledgement, drain, and re-arm"
+  },
+  "foot": {
+    "text": "REQ holds until ACK. A new request is issued only after occupancy falls below the watermark and crosses it again."
+  },
+  "config": {
+    "hscale": 3
+  }
+}

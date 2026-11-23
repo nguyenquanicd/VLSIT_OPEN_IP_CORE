@@ -1,0 +1,1047 @@
+{
+  "spec": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\spec\\rtl_generation_2026-11-22\\VLSIT_DVP_CONTROLLER_HDS.md",
+  "front_matter": {
+    "document_type": "asic_ip_design_specification",
+    "document_id": "DVP-CONTROLLER-SPEC",
+    "title": "DVP_Controller Design Specification",
+    "ip_name": "DVP_Controller",
+    "version": "0.2",
+    "status": "Draft",
+    "language": "SystemVerilog IEEE 1800-2017",
+    "rtl_rules": "VLSIT_RTL_Design_Rule.md",
+    "csr_spec": "VLSIT_DVP_CONTROLLER_CSR.xlsx"
+  },
+  "sections": [
+    {
+      "level": 2,
+      "title": "Document map",
+      "chars": 1573,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "1. Purpose, scope, and product context",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.1 Purpose and scope",
+      "chars": 1708,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "12 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "1.2 Deployment assumptions",
+      "chars": 985,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.3 Feature summary",
+      "chars": 1020,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-PARAM-001",
+        "REQ-REG-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.4 Real-world applications of the features",
+      "chars": 2235,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-IF-001",
+        "REQ-IF-004",
+        "REQ-REG-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "8 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "2. Normative references and precedence",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.1 Normative references",
+      "chars": 1732,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.2 Source-of-truth and conflict handling",
+      "chars": 1481,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.3 Compliance declaration",
+      "chars": 727,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "3. Requirements and traceability",
+      "chars": 9056,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-PARAM-001",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-SCOPE-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "12 bits",
+        "32 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "4. Features and configurations",
+      "chars": 1379,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "5. Architecture",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.1 Overview and block responsibilities",
+      "chars": 4270,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.2 Block diagram",
+      "chars": 5075,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.3 Transaction and dataflow",
+      "chars": 1432,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "6. External interfaces and ports",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.1 Interface inventory",
+      "chars": 691,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.2 Complete port list",
+      "chars": 3866,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.3 Protocol behavior",
+      "chars": 2099,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-REG-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.4 Interrupts and events",
+      "chars": 180,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "7. Clock, reset, and power",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.1 Clock domains",
+      "chars": 882,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.2 CDC and RDC",
+      "chars": 1422,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.3 Reset domains and sequencing",
+      "chars": 2035,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.4 Power intent",
+      "chars": 198,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "8. Parameters and elaboration configurations",
+      "chars": 1652,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "8.1 Delivered configuration",
+      "chars": 334,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "9. Data representation and arithmetic",
+      "chars": 1578,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "12 bits",
+        "32 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "10. Detailed functional behavior",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.1 Modes and state transitions",
+      "chars": 2332,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.2 Operations",
+      "chars": 1685,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.3 Cycle-level behavior and waveform plan",
+      "chars": 28566,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.4 Arbitration, buffering, and throughput",
+      "chars": 576,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.5 Memories and storage",
+      "chars": 647,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.6 CSR-selected PCLK modes and gated-pixel transfer contract",
+      "chars": 5291,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "10 ns"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "11. Register and programming model",
+      "chars": 368,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.1 CSR specification source",
+      "chars": 1915,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.2 Software sequences",
+      "chars": 3481,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.3 CSR connection to the design",
+      "chars": 2241,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.4 APB access behavior",
+      "chars": 2473,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "12. Error handling and recovery",
+      "chars": 1787,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "13. Performance, power, and area",
+      "chars": 2210,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "10 us",
+        "25 MHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "14. RTL implementation contract",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.1 Required coding baseline",
+      "chars": 571,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.2 RTL hierarchy",
+      "chars": 7600,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.3 Synthesis assumptions",
+      "chars": 918,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "15. Verification specification",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.1 Scope and strategy",
+      "chars": 432,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.2 Requirement-based test plan",
+      "chars": 3517,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-SCOPE-001"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.3 Assertions and coverage",
+      "chars": 1445,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.4 Formal, CDC, and RDC",
+      "chars": 520,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "16. DFT and testability",
+      "chars": 936,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "17. Physical design and timing integration",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.1 Timing constraints and budgets",
+      "chars": 2636,
+      "tables": 3,
+      "req_ids": [
+        "REQ-PERF-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.2 Physical assumptions",
+      "chars": 627,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "18. Security, safety, and reliability",
+      "chars": 956,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "19. Requirement-to-verification traceability",
+      "chars": 3034,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-PARAM-001",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-SCOPE-001"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "20. Assumptions, dependencies, and decisions",
+      "chars": 11992,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [
+        "TEST-015"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "21. Glossary",
+      "chars": 1090,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "22. References used to shape this template",
+      "chars": 1593,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "DVP research sources (informative; profile authority remains sensor-specific)",
+      "chars": 3666,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    }
+  ],
+  "requirements": {
+    "REQ-FUNC-001": {
+      "statement": "Each elaborated configuration shall select one supported DVP data width of 8, 10, or 12 bits using compile-time configuration.",
+      "source": "User answer 2026-11-21; sensor research corpus",
+      "verification": "Elaboration check and profile-specific simulation"
+    },
+    "REQ-FUNC-002": {
+      "statement": "Each elaborated configuration shall use compile-time-selected data width, PCLK sampling edge, and VSYNC/HREF active polarity; these profile settings shall not change at runtime.",
+      "source": "User answer 2026-11-21/22",
+      "verification": "Parameter sweep, elaboration, and capture simulation"
+    },
+    "REQ-FUNC-003": {
+      "statement": "The capture path shall preserve FIFO ordering. When full, it shall drop the newest sample, preserve unread entries, and set sticky W1C overflow status; a new event wins over a simultaneous clear.",
+      "source": "User decision 2026-11-22; DEC-010, DEC-023",
+      "verification": "Overflow/full boundary test; verify no overwrite and set-dominant clear"
+    },
+    "REQ-PARAM-001": {
+      "statement": "PARA_FIFO_DEPTH shall be a power of two, minimum 2, default 8, and apply to both mode-specific FIFOs.",
+      "source": "User decision 2026-11-22; AFIFO implementation",
+      "verification": "Parameter legality and depth-boundary elaboration"
+    },
+    "REQ-IF-001": {
+      "statement": "The controller shall expose one APB4 interface for control/status and system-DMA sample reads. One successful read from the sample-data endpoint shall return exactly one DVP sample and consume exactly one FIFO entry.",
+      "source": "User answer 2026-11-21; REF-001",
+      "verification": "APB protocol simulation and FIFO data-order scoreboard"
+    },
+    "REQ-IF-002": {
+      "statement": "For a read of the sample-data endpoint, the Completer shall hold PREADY LOW while the FIFO is empty and the configured timeout has not expired. It shall pop exactly one entry only when the APB read completes successfully.",
+      "source": "User answer 2026-11-21; REF-001 sections 3.1 and 3.4",
+      "verification": "Empty-to-nonempty completion and timed-out read simulations; no pop on error"
+    },
+    "REQ-IF-003": {
+      "statement": "The top-level DVP inputs shall be PCLK, parameter-width data, VSYNC, and HREF; VSYNC marks frame start, HREF is a level qualifier, and no independent HSYNC or embedded-code parser is required. In continuous mode, active VSYNC shall overlap at least one selected PCLK edge. In gated mode, each selected PCLK sample edge while HREF is active denotes one valid pixel, and the sensor shall provide no PCLK edge during active VSYNC or during an HREF-high gap with no valid pixel.",
+      "source": "User decision 2026-11-22",
+      "verification": "Port/profile checks and mode-specific capture waveform"
+    },
+    "REQ-IF-004": {
+      "statement": "The controller shall assert o_dma_req when occupancy of the selected FIFO reaches the programmed nonzero watermark; zero keeps request low. The request remains asserted until a one-cycle i_dma_ack pulse in CLK-APB. After acknowledgement, re-arm only after selected occupancy falls below the watermark and later reaches it again. AFIFO occupancy may lag writes by CDC latency; SFIFO occupancy is counted exactly in CLK-APB. Payload moves only through successful APB FIFO_DATA reads.",
+      "source": "User answers 2026-11-21/22; DEC-008, DEC-012, DEC-022",
+      "verification": "Watermark crossing/ACK/re-arm in both modes"
+    },
+    "REQ-IF-005": {
+      "statement": "The software-programmed empty-read timeout shall count CLK-APB cycles during an active FIFO-data read access that finds the FIFO empty. If the configured timeout is zero and the FIFO is empty in the first APB access cycle, the transfer shall immediately complete with PREADY=1 and PSLVERR=1, and shall not pop the FIFO. For a positive timeout, if the FIFO remains empty through the configured number of APB access cycles, the transfer shall complete with PREADY=1 and PSLVERR=1 only in the final APB cycle, and shall not pop the FIFO. If a sample is available at the completion decision, the successful read shall take priority and pop exactly one entry.",
+      "source": "User answer 2026-11-21; REF-001 section 3.4",
+      "verification": "Threshold-boundary tests for arrival before, at, and after expiration; check final-cycle PSLVERR and pop count"
+    },
+    "REQ-REG-001": {
+      "statement": "Software shall use the APB4 interface to configure capture operation and inspect controller status; the CSR workbook shall define all software-visible fields and reset values.",
+      "source": "User answer 2026-11-21; REF-001",
+      "verification": "Workbook validation, generated-port review, and APB simulation"
+    },
+    "REQ-SCOPE-001": {
+      "statement": "Camera configuration and auxiliary sensor board controls shall remain outside this IP; the controller shall perform DVP capture only.",
+      "source": "User answer 2026-11-21",
+      "verification": "Architecture and port inspection"
+    },
+    "REQ-FUNC-004": {
+      "statement": "`dvp_ctrl.pclk_mode` shall select continuous mode (0, reset) or gated-valid-pixel mode (1). The mode bit shall update only when capture is disabled, both mode FIFOs are empty, and the current capture source is quiescent (continuous mode: PCLK capture-disable acknowledgement after the registered AFIFO write pulse drains; gated mode: the synchronized pixel toggle has no pending event). If capture is enabled, the same write sets CAPTURE_EN, either FIFO is nonempty, or the source is not quiescent, the mode bit shall retain its prior value while the APB write completes with OKAY. Software shall read back the field to confirm an accepted mode change.",
+      "source": "User decision 2026-11-22; DEC-018, DEC-028",
+      "verification": "Mode-lock, nonempty-FIFO and source-quiescence checks"
+    },
+    "REQ-FUNC-005": {
+      "statement": "Continuous mode shall sample each selected PCLK edge when capture is enabled, a frame has been observed, and HREF is active; each accepted sample shall write once to the DVP-local AFIFO.",
+      "source": "User decision 2026-11-22; DEC-018",
+      "verification": "PCLK-edge and AFIFO data-order waveform/test"
+    },
+    "REQ-FUNC-006": {
+      "statement": "Gated mode shall synchronize VSYNC through two CLK-APB stages and detect its active edge. For each selected PCLK sample edge while HREF is active, the source shall register the pixel and toggle valid once; CLK-APB shall synchronize the toggle through two stages, detect either transition, and enqueue the held sample only when capture is enabled and the APB frame state is active. Toggle tracking continues while capture is disabled so enabling cannot replay a stale event.",
+      "source": "User decision 2026-11-22; DEC-020..DEC-024",
+      "verification": "Toggle both-edge, capture/frame qualification and bundled-data checks"
+    },
+    "REQ-FUNC-007": {
+      "statement": "Gated mode shall require a VSYNC active pulse of at least four CLK-APB cycles and at least four CLK-APB cycles between successive accepted PCLK sample edges; the synchronized VSYNC frame-start state shall be established before the first valid pixel event is enqueued. The pixel-spacing limit gives the 2-FF/toggle-detect/FIFO-write path time to consume the held sample.",
+      "source": "User decision 2026-11-22; DEC-021, DEC-024",
+      "verification": "Waveform and integration timing constraint check"
+    },
+    "REQ-FUNC-008": {
+      "statement": "Each FIFO_DATA read shall return one unsigned sample zero-extended to 32 bits, with the sample in the least-significant bits and upper bits zero.",
+      "source": "User decision 2026-11-21; DEC-014",
+      "verification": "Width-specific read-data checks"
+    },
+    "REQ-IF-006": {
+      "statement": "FIFO_DATA byte address shall be PARA_FIFO_DATA_ADDR, default 16'h0100; PARA_FIFO_DATA_ADDR shall be word-aligned and not overlap the CSR map. Decode the four-byte word using PADDR[15:2]; only the aligned base address is valid. Aligned reads pop once on successful completion, writes and misaligned accesses within that word return PSLVERR without pop.",
+      "source": "User decision 2026-11-21; DEC-016",
+      "verification": "Decode/alignment/write-error checks"
+    },
+    "REQ-PERF-001": {
+      "statement": "In gated mode, the minimum interval between accepted PCLK sample edges shall satisfy $T_{PIX,min} \\ge 4T_{APB}+T_{margin}$, where $T_{margin}$ includes bundled-data setup/hold and clock uncertainty; equivalently, nominal $f_{APB} \\ge 4f_{PIX,max}$. This limit applies to peak active-pixel spacing, not frame-average rate.",
+      "source": "User decision 2026-11-22; DEC-021, DEC-024",
+      "verification": "Waveform and STA/SDC review"
+    },
+    "REQ-RESET-001": {
+      "statement": "A common active-low reset shall assert asynchronously. APB and continuous-mode PCLK logic use local asynchronous-assert/synchronous-release resets. Gated-mode held-data/toggle launch registers use the APB-local reset because PCLK may be stopped; software shall enable capture only after reset release and before a subsequent active VSYNC pulse that lasts at least four APB cycles before the first pixel. Reset leaves capture disabled, both FIFOs empty, DMA request low, and a pending FIFO_DATA transfer cancelled without completion or pop.",
+      "source": "User answer 2026-11-21/22; DEC-012, DEC-017, DEC-029",
+      "verification": "Reset, gated-PCLK first-pixel and pending-read-abort checks"
+    }
+  },
+  "traceability": {
+    "REQ-FUNC-001": {
+      "module": "m_dvp_capture and parameter checks",
+      "test": "TEST-001",
+      "method": "Elaboration and profile simulation"
+    },
+    "REQ-FUNC-002": {
+      "module": "m_dvp_capture",
+      "test": "TEST-001, TEST-002",
+      "method": "Edge/polarity/sync sweep"
+    },
+    "REQ-FUNC-003": {
+      "module": "m_dvp_capture, m_dvp_afifo, m_vlsit_sfifo_top",
+      "test": "TEST-002, TEST-006",
+      "method": "Mode-specific scoreboard and bounded-stall test"
+    },
+    "REQ-PARAM-001": {
+      "module": "m_dvp_controller / both mode FIFOs parameter mapping",
+      "test": "TEST-001, TEST-006",
+      "method": "Elaboration and depth-boundary simulation"
+    },
+    "REQ-IF-001": {
+      "module": "m_dvp_controller, m_dvp_apb_data",
+      "test": "TEST-003",
+      "method": "APB monitor and FIFO scoreboard"
+    },
+    "REQ-IF-002": {
+      "module": "m_dvp_apb_service FIFO-data endpoint",
+      "test": "TEST-004",
+      "method": "Data-before-timeout wait simulation verifies PREADY and exactly one successful pop"
+    },
+    "REQ-IF-005": {
+      "module": "m_dvp_apb_data",
+      "test": "TEST-011",
+      "method": "Timeout-boundary simulation checks final-cycle PSLVERR and zero pop on error"
+    },
+    "REQ-IF-003": {
+      "module": "m_dvp_controller ports",
+      "test": "TEST-008",
+      "method": "Port/hierarchy inspection"
+    },
+    "REQ-IF-004": {
+      "module": "m_dvp_dma_req",
+      "test": "TEST-005",
+      "method": "Handshake and watermark-boundary simulation"
+    },
+    "REQ-REG-001": {
+      "module": "m_vlsit_csr_dvp and CSR workbook",
+      "test": "TEST-007",
+      "method": "Workbook validation and APB regression"
+    },
+    "REQ-SCOPE-001": {
+      "module": "m_dvp_controller hierarchy",
+      "test": "TEST-008",
+      "method": "Architecture and port review"
+    },
+    "REQ-RESET-001": {
+      "module": "Reset synchronizers, gated launch state and FIFO integration",
+      "test": "TEST-009, TEST-015",
+      "method": "APB/PCLK reset release plus gated first-pixel check"
+    },
+    "REQ-FUNC-004": {
+      "module": "`m_dvp_apb_service`, `m_dvp_buffer`, `m_vlsit_csr_dvp`",
+      "test": "TEST-001, TEST-007, TEST-014",
+      "method": "Runtime mode selection; mode write accepted only with capture disabled, both FIFOs empty and source quiescent"
+    },
+    "REQ-FUNC-005": {
+      "module": "`m_dvp_capture`, `m_dvp_afifo`",
+      "test": "TEST-012",
+      "method": "Continuous PCLK frame start, selected sample edge and ordered AFIFO writes"
+    },
+    "REQ-FUNC-006": {
+      "module": "`m_dvp_capture`, `m_dvp_gate_bridge`, `m_vlsit_sfifo_top`",
+      "test": "TEST-013",
+      "method": "APB VSYNC 2-FF, pixel toggle 2-FF, both-edge detect, capture/frame qualification and SFIFO write"
+    },
+    "REQ-FUNC-007": {
+      "module": "`m_dvp_gate_bridge`",
+      "test": "TEST-013",
+      "method": "VSYNC pulse capture and no-pixel-loss clock-spacing constraint"
+    },
+    "REQ-FUNC-008": {
+      "module": "`m_dvp_apb_data`",
+      "test": "TEST-003",
+      "method": "Zero-extension for 8/10/12-bit samples and one read/one pop"
+    },
+    "REQ-IF-006": {
+      "module": "`m_dvp_apb_decode`, `m_dvp_apb_data`",
+      "test": "TEST-003, TEST-008",
+      "method": "FIFO_DATA decode/alignment, endpoint-write error, zero extension and exactly-once pop"
+    },
+    "REQ-PERF-001": {
+      "module": "Gated bridge and SFIFO write path",
+      "test": "TEST-013",
+      "method": "Minimum four APB cycles per source pixel plus timing margin and bundled-data hold constraint"
+    }
+  },
+  "requirement_areas": {
+    "FUNC": 8,
+    "PARAM": 1,
+    "IF": 6,
+    "REG": 1,
+    "SCOPE": 1,
+    "PERF": 1,
+    "RESET": 1
+  },
+  "open_items": [
+    "ASM-001",
+    "ASM-002"
+  ],
+  "decisions": [
+    "DEC-001",
+    "DEC-002",
+    "DEC-003",
+    "DEC-004",
+    "DEC-005",
+    "DEC-006",
+    "DEC-007",
+    "DEC-008",
+    "DEC-009",
+    "DEC-010",
+    "DEC-011",
+    "DEC-012",
+    "DEC-013",
+    "DEC-014",
+    "DEC-015",
+    "DEC-016",
+    "DEC-017",
+    "DEC-018",
+    "DEC-019",
+    "DEC-020",
+    "DEC-021",
+    "DEC-022",
+    "DEC-023",
+    "DEC-024",
+    "DEC-025",
+    "DEC-026",
+    "DEC-027",
+    "DEC-028",
+    "DEC-029"
+  ],
+  "tests": [
+    "TEST-001",
+    "TEST-002",
+    "TEST-003",
+    "TEST-004",
+    "TEST-005",
+    "TEST-006",
+    "TEST-007",
+    "TEST-008",
+    "TEST-009",
+    "TEST-010",
+    "TEST-011",
+    "TEST-012",
+    "TEST-013",
+    "TEST-014",
+    "TEST-015"
+  ],
+  "properties": [],
+  "quantified_claims": [
+    "10 ns",
+    "10 us",
+    "10.3 Cycle",
+    "12 bits",
+    "25 MHz",
+    "32 bits",
+    "8 bits"
+  ],
+  "coverage": {
+    "requirements": 19,
+    "tests": 15,
+    "properties": 0,
+    "requirements_without_test": [],
+    "requirements_without_verification": []
+  },
+  "counts": {
+    "sections": 62,
+    "tables": 43,
+    "open_items": 2,
+    "decisions": 29
+  }
+}

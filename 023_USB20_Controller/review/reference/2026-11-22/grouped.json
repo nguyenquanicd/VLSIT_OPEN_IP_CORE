@@ -1,0 +1,247 @@
+{
+  "schema": "vlsit-gate-groups/1",
+  "groups": [
+    {
+      "id": "G-01",
+      "root_cause": "CSR update meaning",
+      "members": [
+        "F-001"
+      ],
+      "severities": [
+        "Critical"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-02",
+      "root_cause": "Commercial reference",
+      "members": [
+        "F-018"
+      ],
+      "severities": [
+        "Low"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-03",
+      "root_cause": "Configuration contract",
+      "members": [
+        "F-007",
+        "F-017"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 2,
+      "merged": true
+    },
+    {
+      "id": "G-04",
+      "root_cause": "DFT handoff",
+      "members": [
+        "F-013"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-05",
+      "root_cause": "DMA address policy",
+      "members": [
+        "F-006"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-06",
+      "root_cause": "DMA channel index width",
+      "members": [
+        "F-021"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-07",
+      "root_cause": "Feature semantics",
+      "members": [
+        "F-004"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-08",
+      "root_cause": "Gray credit launch",
+      "members": [
+        "F-020"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-09",
+      "root_cause": "PHY integration handoff",
+      "members": [
+        "F-015"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-10",
+      "root_cause": "Power and storage evidence",
+      "members": [
+        "F-012"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-11",
+      "root_cause": "Product envelope",
+      "members": [
+        "F-014"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-12",
+      "root_cause": "Protocol profile",
+      "members": [
+        "F-003"
+      ],
+      "severities": [
+        "Critical"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-13",
+      "root_cause": "Receive fault recovery",
+      "members": [
+        "F-019"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-14",
+      "root_cause": "Release evidence provenance",
+      "members": [
+        "F-016"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-15",
+      "root_cause": "Service and latency budgets",
+      "members": [
+        "F-008"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-16",
+      "root_cause": "Software contract",
+      "members": [
+        "F-010"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-17",
+      "root_cause": "Technology signoff",
+      "members": [
+        "F-011"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-18",
+      "root_cause": "Timebase policy",
+      "members": [
+        "F-005"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-19",
+      "root_cause": "Timing exception binding",
+      "members": [
+        "F-002"
+      ],
+      "severities": [
+        "Critical"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-20",
+      "root_cause": "Verification evidence",
+      "members": [
+        "F-009"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    }
+  ],
+  "count": 20
+}

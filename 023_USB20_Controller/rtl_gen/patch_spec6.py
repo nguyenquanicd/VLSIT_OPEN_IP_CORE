@@ -1,4 +1,4 @@
-p = '../VLSIT_USB20_CONTROLLER_HDS.md'
+p = '../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md'
 t = open(p, encoding='utf-8').read()
 lines = t.split('\n')
 for i, l in enumerate(lines):
@@ -8,7 +8,7 @@ for i, l in enumerate(lines):
             "needs (`clog2(rows)` bits for a pointer, one bit more for a count) and no longer 16 and 17 bits; the region base and size words of the "
             "CSR stay 16 bits wide. A region size larger than the RAM depth is a configuration error (it was undefined before). At the default "
             "depth of 1024 words and 8-bit UTMI+ `m_usb2_fifo` went from 13156 to 10001 generic cells (-24 %) and from 1307 to 989 flops. | "
-            "Measured with `synth/area.py`; the regression passes unchanged | Decided 2026-11-21 | spec owner | 2026-11-21 |")
+            "Measured with `syn/area.py`; the regression passes unchanged | Decided 2026-11-21 | spec owner | 2026-11-21 |")
         lines.insert(i + 2,
             "| DEC-028 | Decision | Latency budget, measured in simulation (`tb_dev_utmi`, trace of `rxactive`, `dat_end`, the device transmit request and `txvalid`): "
             "the first transmitted byte follows the fall of `rxactive` after 4 CLK-PHY cycles for a data packet and for a token (one cycle to the end of "

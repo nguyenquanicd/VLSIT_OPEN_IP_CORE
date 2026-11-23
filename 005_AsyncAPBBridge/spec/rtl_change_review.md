@@ -19,7 +19,7 @@ The target design specification is `AsyncAPBBridge_Design_Specification.md`. It 
 | Update design specification and implementation references | The specification uses the old top name in the hierarchy tables, requirement traceability, source-list section and DEC-015; the testbench instantiates the old module | Update all production-design references and the named testbench instance |
 | Keep function and interfaces unchanged | The top connects `m_vlsit_apbcdc_mst`, `m_vlsit_apbcdc_slv` and the synchronizer path; no port or parameter rename was requested | Preserve every port, parameter, child module, instance, and connection; this is an identity/file-path change only |
 
-The figures in `figures/` contain no old top-module identifier. The prototype under `waveforms/proto/` is explicitly documented as historical/throw-away and is not part of the delivered RTL filelist; its similarly named module and testbench are excluded from this rename. Existing simulation waveform artifacts will not be overwritten.
+The figures in `../figures/` contain no old top-module identifier. The prototype under `../verification/sim/waveform_proto/` is explicitly documented as historical/throw-away and is not part of the delivered RTL filelist; its similarly named module and testbench are excluded from this rename. Existing simulation waveform artifacts will not be overwritten.
 
 ## 3. Affected files
 
@@ -30,8 +30,8 @@ The figures in `figures/` contain no old top-module identifier. The prototype un
 | `lint/filelist_lint.f` | Update top source filename | Keep the lint source list valid |
 | `verification/tb_apbcdc.sv` | Update top-module comment and instance type; keep ports and test behavior unchanged | Compile the existing testbench against the renamed top |
 | `verification/vlsit_run_sim.py` | Update the top source filename in `RTL` | Make the documented verification runner compile the new file |
-| `constraints/m_vlsit_apbcdc_top.sdc` -> `constraints/m_vlsit_async_apb_bridge.sdc` | Rename file and update its header/source comments; keep all constraints unchanged | Keep the top-related constraint filename and documentation consistent |
-| `constraints/check_sdc.py` | Update the SDC filename in its docstring and both source calls | Keep the local SDC checker operational |
+| `sdc/m_vlsit_apbcdc_top.sdc` -> `sdc/m_vlsit_async_apb_bridge.sdc` | Rename file and update its header/source comments; keep all constraints unchanged | Keep the top-related constraint filename and documentation consistent |
+| `sdc/check_sdc.py` | Update the SDC filename in its docstring and both source calls | Keep the local SDC checker operational |
 | `AsyncAPBBridge_Design_Specification.md` | Replace old production top references; update the SDC path; record that the designer confirmed the top name while leaving the other DEC-015 names unconfirmed | Keep the specification and traceability aligned with implementation |
 | `rtl_change_review.md` | This review and, after implementation, the final validation record | Preserve the approved scope and evidence |
 
@@ -51,7 +51,7 @@ Only the production top identifier, its matching filename, directly dependent so
 
 ## 6. Assumptions, risks, and open items
 
-- The requested rename applies to the delivered production RTL top, not the separate historical prototype under `waveforms/proto/`.
+- The requested rename applies to the delivered production RTL top, not the separate historical prototype under `../verification/sim/waveform_proto/`.
 - Existing SoC RTL that instantiates `m_vlsit_apbcdc_top` must be updated to instantiate `m_vlsit_async_apb_bridge`; the port map is unchanged.
 - External constraint scripts that refer to `m_vlsit_apbcdc_top.sdc` must use `m_vlsit_async_apb_bridge.sdc`.
 - Existing generated waveform evidence is retained as historical output. The approved quick regression will compile and test the renamed production top into a new output directory.
@@ -69,18 +69,18 @@ After approval, verify Python, capture the task-start RTL snapshot, and record b
 Baseline commands:
 
 ```powershell
-& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_rtl_check.py' check 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/rtl' --report 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/sanity/module_rename_20261026/baseline_rule_report.md'
-& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_apbcdc_top --tool verilator --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/sanity/module_rename_20261026/baseline_verilator.log'
-& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_apbcdc_top --tool slang --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/sanity/module_rename_20261026/baseline_slang.log'
+& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_rtl_check.py' check 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/rtl' --report 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/tests/sanity/module_rename_20261026/baseline_rule_report.md'
+& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_apbcdc_top --tool verilator --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/tests/sanity/module_rename_20261026/baseline_verilator.log'
+& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_apbcdc_top --tool slang --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/tests/sanity/module_rename_20261026/baseline_slang.log'
 ```
 
 Post-change commands:
 
 ```powershell
-& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_rtl_check.py' check 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/rtl' --report 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/sanity/module_rename_20261026/final_rule_report.md'
-& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_async_apb_bridge --tool verilator --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/sanity/module_rename_20261026/final_verilator.log'
-& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_async_apb_bridge --tool slang --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/sanity/module_rename_20261026/final_slang.log'
-& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/constraints/check_sdc.py'
+& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_rtl_check.py' check 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/rtl' --report 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/tests/sanity/module_rename_20261026/final_rule_report.md'
+& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_async_apb_bridge --tool verilator --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/tests/sanity/module_rename_20261026/final_verilator.log'
+& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-generator/scripts/vlsit_lint_rtl.py' lint 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/lint/filelist_lint.f' --top m_vlsit_async_apb_bridge --tool slang --log 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/tests/sanity/module_rename_20261026/final_slang.log'
+& 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/sdc/check_sdc.py'
 & 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/vlsit_run_sim.py' quick --out 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/verification/module_rename_20261026'
 & 'C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe' 'C:/Users/PC/.codex/skills/vlsit-rtl-spec-change-implementer/scripts/vlsit_rtl_change_metrics.py' compare 'C:/HQuan/rtl_snapshots/apbcdc_top_rename_20261026' 'C:/HQuan/102_MyGithub/VLSIT_RTL_Generator_AI_Model/common_rtl/005_AsyncAPBBridge/rtl'
 ```
@@ -95,9 +95,9 @@ Plan version 1 was approved by the designer and implemented. The production top 
 
 - Top symbol and filename: rtl/m_vlsit_async_apb_bridge.sv declares m_vlsit_async_apb_bridge; the old production source path is absent.
 - Compile integration: rtl/filelist.f, lint/filelist_lint.f, verification/tb_apbcdc.sv and verification/vlsit_run_sim.py refer to the new top/file.
-- Constraints: constraints/m_vlsit_async_apb_bridge.sdc and constraints/check_sdc.py refer to the new SDC name; constraint commands and budgets are unchanged.
+- Constraints: sdc/m_vlsit_async_apb_bridge.sdc and sdc/check_sdc.py refer to the new SDC name; constraint commands and budgets are unchanged.
 - Specification: all production top references and the SDC path in AsyncAPBBridge_Design_Specification.md use the new name. DEC-015 records only the top name as designer-confirmed; other names in that decision remain unconfirmed.
-- The prototype under waveforms/proto/ and existing waveform evidence were intentionally retained as historical outputs.
+- The prototype under ../verification/sim/waveform_proto/ and existing waveform evidence were intentionally retained as historical outputs.
 
 ### Validation results
 

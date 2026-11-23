@@ -259,7 +259,7 @@ reg("dma_cfg", "0x34", "USB 2.0 DMA configuration register. Sets the burst lengt
         ["0x1 to 0x10 beats (reset value 0x10)", "0x11 to 0x1F reserved"], "beat", "1 to 16"),
     fld("axi_cache", "[8:5]", "rw", "0x0", "AXI cache attributes driven on awcache and arcache.", "Write before dma_en.", ["0x0 to 0xF AxCACHE value (reset value 0x0)"], "none", "4-bit value"),
     fld("axi_prot", "[11:9]", "rw", "0x0", "AXI protection attributes driven on awprot and arprot.", "Write before dma_en.", ["0x0 to 0x7 AxPROT value (reset value 0x0)"], "none", "3-bit value"),
-    fld("req_thr", "[19:12]", "rw", "0x10", "DMA request threshold. The FIFO fill level in 32-bit words that raises o_dma_req.", "Write before dma_en in AXI slave builds.",
+    fld("req_thr", "[19:12]", "rw", "0x10", "DMA request threshold. A write window raises o_dma_req while its queue has at least this many 32-bit words free (at least one row, at most the whole region); a read window ignores it and asks while a packet of its region waits.", "Write before dma_en in AXI slave builds.",
         ["0x1 to 0xFF words (reset value 0x10)"], "32-bit word", "1 to 255"),
     rsv("[31:20]")])
 reg("dma_hi", "0x38", "USB 2.0 DMA address high register. Holds address bits 63 to 32 shared by all endpoint and channel buffers.", [
@@ -312,8 +312,8 @@ reg("lpm_cfg", "0x60", "USB 2.0 LPM configuration register. Selects the device a
 # ---------------------------------------------------------------- DMA channel map (AXI slave)
 reg("dma_map", "0x100", "USB 2.0 DMA channel map register. Maps one DMA handshake channel to a FIFO region.", [
     fld("region", "[4:0]", "rw", "0x0", "Mapped region. The FIFO region that the DMA channel serves.", "Write before dma_en; one region per channel.",
-        ["0x0 to 0xF device endpoint number (reset value 0x0)", "0x10 to 0x1F host channel number plus 0x10"]),
-    flag("dir_in", 5, "Channel direction. Selects whether the DMA reads from or writes to the mapped region.", "Write before dma_en.", "0x0 DMA writes the region (OUT data, reset value)", "0x1 DMA reads the region (IN data)"),
+        ["0x0 to 0xF device endpoint number: the IN endpoint of a write window, or the endpoint tag of the packets of a read window (reset value 0x0)", "0x1E host non-periodic queue (write window)", "0x1F host periodic queue (write window)"]),
+    flag("dir_in", 5, "Channel direction. Selects a write window or a read window of the AXI slave port.", "Write before dma_en.", "0x0 read window: the DMA reads the received packets of an OUT region (reset value)", "0x1 write window: the DMA writes the rows of the transmit queue of an IN endpoint or host queue"),
     flag("ch_en", 6, "Channel enable. Lets the channel raise o_dma_req.", "Set after region and dir_in are written.", "0x0 channel disabled (reset value)", "0x1 channel enabled"),
     rsv("[31:7]")], bank(4, 16))
 

@@ -69,6 +69,7 @@ module m_usb2_dev #(
   // Receive events of the link
   input  wire                             i_tok_vld,
   input  wire                             i_tok_ext,
+  input  wire  [10:0]                     i_tok_efld,
   input  wire  [3:0]                      i_tok_pid,
   input  wire  [10:0]                     i_tok_fld,
   input  wire                             i_hs_vld,
@@ -131,6 +132,7 @@ module m_usb2_dev #(
   output logic [2:0]                      o_uframe,
   output logic                            o_evt_sof,
   output logic                            o_evt_xfer,
+  input  wire                             i_tx_starve,
   output logic                            o_evt_udf,
   output logic                            o_lpm_vld,
   output logic [3:0]                      o_lpm_hird,
@@ -203,6 +205,7 @@ module m_usb2_dev #(
   logic                                     w_tk_ping;
   logic                                     w_tk_sof;
   logic                                     w_tk_lpm;
+  logic                                     w_lpm_l1;
   logic                                     w_o_act;
   logic                                     w_o_nak;
   logic                                     w_o_stall;
@@ -221,6 +224,7 @@ module m_usb2_dev #(
   logic [PARA_USB2_NEP1-1:0]                reg_have_i;
   logic                                     w_pid_ok;
   logic                                     w_commit;
+  logic                                     w_o_bab;
   logic [3:0]                               w_rsp_pid;
   logic                                     w_rsp_send;
   logic                                     w_o_done;
@@ -239,6 +243,7 @@ module m_usb2_dev #(
   logic [PARA_USB2_NEP1-1:0]                w_hit_i_stall;
   logic [PARA_USB2_NEP1-1:0]                w_hit_setup;
   logic [PARA_USB2_NEP1-1:0]                w_hit_iso_i;
+  logic [PARA_USB2_NEP1-1:0]                w_hit_iso_o;
   logic [PARA_USB2_NEP1-1:0]                w_hit_unf;
   logic [PARA_USB2_NEP1-1:0]                w_hit_ovf;
   logic [PARA_USB2_NEP1-1:0]                w_hit_timeout;
@@ -260,7 +265,13 @@ module m_usb2_dev #(
   assign w_tk_in    = w_tk_match & (i_tok_pid == LPARA_PID_IN[3:0]);
   assign w_tk_ping  = w_tk_match & (i_tok_pid == LPARA_PID_PING[3:0]);
   assign w_tk_sof   = i_tok_vld & ~i_tok_ext & (i_tok_pid == LPARA_PID_SOF[3:0]);
-  assign w_tk_lpm   = i_tok_vld & i_tok_ext & i_dev_act & (i_tok_pid == 4'h3);
+  // LPM token: the EXT token before it must carry this device address and endpoint 0, LPM must
+  // be enabled at run time and the answer must not be "no response" (REQ-FUNC-021, BUG-017).
+  assign w_tk_lpm   = i_tok_vld & i_tok_ext & i_dev_act & (i_tok_pid == 4'h3) & i_lpm_cfg[2] &
+                      (i_tok_efld[6:0] == i_dctrl[6:0]) & (i_tok_efld[10:7] == 4'd0) &
+                      (i_lpm_cfg[1:0] != 2'd3);
+  // Only bLinkState = 0001b (L1) is supported; any other value is answered with STALL.
+  assign w_lpm_l1   = (i_tok_fld[3:0] == 4'd1);
 
   // OUT endpoint view of the token: armed, NAK status, stall, type and the room for a packet.
   assign w_o_act   = reg_act_o[w_tk_ep];
@@ -293,8 +304,10 @@ module m_usb2_dev #(
   assign w_pid_ok = reg_is_setup ? (i_dat_pid == LPARA_PID_DATA0[3:0]) :
                     reg_o_iso    ? 1'b1 :
                     (i_dat_pid == (reg_dpid_o[reg_ep] ? LPARA_PID_DATA1[3:0] : LPARA_PID_DATA0[3:0]));
+  // A data field longer than the maximum packet size is dropped and not answered (BUG-040).
+  assign w_o_bab  = i_dat_end & ~reg_is_setup & ({1'b0, i_dat_len} > {1'b0, 1'b0, reg_o_mps});
   assign w_commit = i_dat_end & (reg_fsm_dev_current_state == ENUM_ST_OUT_RX) & reg_o_accept &
-                    i_dat_ok & w_pid_ok;
+                    i_dat_ok & w_pid_ok & ~w_o_bab;
   // The free rows reported by the FIFO manager already count the rows of the packet that just ended
   // (the rows are written while the bytes arrive), so no row count is subtracted again (DEC-026).
   assign w_free_after = i_rx_free;
@@ -312,7 +325,7 @@ module m_usb2_dev #(
     w_rsp_pid  = LPARA_PID_NAK[3:0];
     w_rsp_send = 1'b0;
     if (i_dat_end & (reg_fsm_dev_current_state == ENUM_ST_OUT_RX) & ~reg_o_iso) begin
-      casez ({~i_dat_ok, (reg_o_stall & ~reg_is_setup), reg_is_setup, (~w_pid_ok & reg_o_accept),
+      casez ({(~i_dat_ok | w_o_bab), (reg_o_stall & ~reg_is_setup), reg_is_setup, (~w_pid_ok & reg_o_accept),
               reg_o_accept})
         5'b1????: w_rsp_send = 1'b0;
         5'b01???: begin
@@ -399,7 +412,7 @@ module m_usb2_dev #(
   assign o_rxw_n   = ((reg_fsm_dev_current_state == ENUM_ST_OUT_RX) & reg_o_accept) ? i_dat_n : 2'd0;
   assign o_rxw_b   = i_dat_b;
   assign o_rxw_end = i_dat_end & (reg_fsm_dev_current_state == ENUM_ST_OUT_RX) & reg_o_accept;
-  assign o_rxw_ok  = i_dat_ok & w_pid_ok;
+  assign o_rxw_ok  = i_dat_ok & w_pid_ok & ~w_o_bab;
   assign o_rxw_len = i_dat_len;
 
   // Transaction registers: endpoint, flags latched at the token, the timers, the request fields and
@@ -470,7 +483,7 @@ module m_usb2_dev #(
         reg_txr_start  <= w_i_have & ~w_i_stall;
       end
       if (w_tk_lpm) begin
-        reg_lpm_vld  <= (i_lpm_cfg[1:0] == 2'd0);
+        reg_lpm_vld  <= (i_lpm_cfg[1:0] == 2'd0) & w_lpm_l1;
         reg_lpm_hird <= i_tok_fld[7:4];
         reg_lpm_rw   <= i_tok_fld[8];
       end
@@ -530,8 +543,8 @@ module m_usb2_dev #(
       if (w_tk_lpm) begin
         reg_tx_req  <= 1'b1;
         reg_tx_kind <= LPARA_KIND_HS[2:0];
-        reg_tx_pid  <= (i_lpm_cfg[1:0] == 2'd0) ? LPARA_PID_ACK[3:0] :
-                       ((i_lpm_cfg[1:0] == 2'd1) ? LPARA_PID_NYET[3:0] : LPARA_PID_STALL[3:0]);
+        reg_tx_pid  <= (~w_lpm_l1 | (i_lpm_cfg[1:0] == 2'd2)) ? LPARA_PID_STALL[3:0] :
+                       ((i_lpm_cfg[1:0] == 2'd1) ? LPARA_PID_NYET[3:0] : LPARA_PID_ACK[3:0]);
         reg_tx_len  <= 12'd0;
       end
     end
@@ -547,6 +560,7 @@ module m_usb2_dev #(
     w_hit_i_stall  = '0;
     w_hit_setup    = '0;
     w_hit_iso_i    = '0;
+    w_hit_iso_o    = '0;
     w_hit_unf      = '0;
     w_hit_ovf      = '0;
     w_hit_timeout  = '0;
@@ -554,6 +568,7 @@ module m_usb2_dev #(
     w_o_done_hit   = '0;
     for (int idx = 0; idx < PARA_USB2_NEP1; idx++) begin
       if (reg_ep == idx[3:0]) begin
+        w_hit_unf[idx]      = i_tx_starve;
         w_hit_o_commit[idx] = w_commit & ~reg_is_setup;
         w_hit_setup[idx]    = w_commit & reg_is_setup;
         w_hit_o_nak[idx]    = i_dat_end & (reg_fsm_dev_current_state == ENUM_ST_OUT_RX) & i_dat_ok &
@@ -565,11 +580,18 @@ module m_usb2_dev #(
         w_hit_nyet[idx]     = w_rsp_send & (w_rsp_pid == LPARA_PID_NYET[3:0]);
         w_o_done_hit[idx]   = w_o_done;
         w_hit_i_commit[idx] = reg_txr_commit;
-        w_hit_i_nak[idx]    = w_tk_in & ~w_i_stall & ~w_i_have & ~w_i_iso & (w_tk_ep == idx[3:0]);
-        w_hit_iso_i[idx]    = w_tk_in & ~w_i_stall & ~w_i_have & w_i_iso & (w_tk_ep == idx[3:0]);
-        w_hit_i_stall[idx]  = w_tk_in & w_i_stall & (w_tk_ep == idx[3:0]);
-        w_hit_timeout[idx]  = (reg_fsm_dev_current_state == ENUM_ST_IN_ACK) & w_wait_end & ~w_ack_rx;
+        w_hit_iso_o[idx]    = i_dat_end & (reg_fsm_dev_current_state == ENUM_ST_OUT_RX) & reg_o_iso &
+                              ~(i_dat_ok & reg_o_accept);
       end
+      // Hits of an IN token belong to the endpoint of the token, and the time-out to the endpoint
+      // of the IN transaction in progress (BUG-010).
+      if (w_tk_ep == idx[3:0]) begin
+        w_hit_i_nak[idx]   = w_tk_in & ~w_i_stall & ~w_i_have & ~w_i_iso;
+        w_hit_iso_i[idx]   = w_tk_in & ~w_i_stall & ~w_i_have & w_i_iso;
+        w_hit_i_stall[idx] = w_tk_in & w_i_stall;
+      end
+      if (reg_ep == idx[3:0])
+        w_hit_timeout[idx] = (reg_fsm_dev_current_state == ENUM_ST_IN_ACK) & w_wait_end & ~w_ack_rx;
     end
   end
 
@@ -731,7 +753,7 @@ module m_usb2_dev #(
       assign o_epi_int_set[gen_ep]  = {22'd0, w_hit_iso_i[gen_ep], 1'b0, w_hit_unf[gen_ep], 1'b0,
                                        w_hit_i_stall[gen_ep], 1'b0, w_hit_i_nak[gen_ep],
                                        w_hit_timeout[gen_ep], w_edge_i[21], w_i_done};
-      assign o_epo_int_set[gen_ep]  = {22'd0, 1'b0, w_hit_setup[gen_ep], 1'b0, w_hit_ovf[gen_ep],
+      assign o_epo_int_set[gen_ep]  = {22'd0, w_hit_iso_o[gen_ep], w_hit_setup[gen_ep], 1'b0, w_hit_ovf[gen_ep],
                                        w_hit_o_stall[gen_ep], w_hit_nyet[gen_ep] & w_hit_o_commit[gen_ep],
                                        w_hit_o_nak[gen_ep], 1'b0, w_edge_o[21], w_o_done_hit[gen_ep]};
       assign w_xfer_hit[gen_ep]     = (|(o_epi_int_set[gen_ep] & i_epi_int_en[gen_ep])) |
@@ -755,7 +777,7 @@ module m_usb2_dev #(
   assign o_uframe      = reg_uframe;
   assign o_evt_sof     = reg_evt_sof;
   assign o_evt_xfer    = |w_xfer_hit;
-  assign o_evt_udf     = 1'b0;
+  assign o_evt_udf     = i_tx_starve;
   assign o_lpm_vld     = reg_lpm_vld;
   assign o_lpm_hird    = reg_lpm_hird;
   assign o_lpm_rw      = reg_lpm_rw;

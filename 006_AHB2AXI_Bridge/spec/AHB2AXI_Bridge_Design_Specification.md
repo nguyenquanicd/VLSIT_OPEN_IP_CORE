@@ -185,9 +185,9 @@ The hierarchy is: the single top module `m_ahb2axi_top` → `u_ahb2axi_ctrl` →
 
 ### 5.2 Block diagram
 
-![AHB-to-AXI4 RTL module architecture](figures/vlsit_block_diagram.svg)
+![AHB-to-AXI4 RTL module architecture](../figures/vlsit_block_diagram.svg)
 
-The diagram shows the single top module, three functional modules, their internal request/response links and each reused synchronous FIFO instance. The control module sits between the AHB and AXI interface modules. Solid-outline blocks marked **NEW RTL** are modules to write for this IP; gray blocks marked **REUSED RTL** are instances of `m_vlsit_sfifo_top` from `common_rtl/002_SyncFIFO`. The hierarchy and layout are editable in [`figures/vlsit_block_diagram.json`](figures/vlsit_block_diagram.json).
+The diagram shows the single top module, three functional modules, their internal request/response links and each reused synchronous FIFO instance. The control module sits between the AHB and AXI interface modules. Solid-outline blocks marked **NEW RTL** are modules to write for this IP; gray blocks marked **REUSED RTL** are instances of `m_vlsit_sfifo_top` from `common_rtl/002_SyncFIFO`. The hierarchy and layout are editable in [`../figures/vlsit_block_diagram.json`](../figures/vlsit_block_diagram.json).
 
 ### 5.3 Transaction and dataflow
 
@@ -419,12 +419,12 @@ Cycle detail is shown in the six waveforms below. The user approved this set on 
 
 | Waveform ID | Function / operation | Scenario | Signals shown | Figure and source | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | Shared reset and synchronous startup | One shared clock/reset; traffic begins only after reset release | `i_clk_core`, `i_rst_n_core`, HREADYOUT, ARVALID/READY | [SVG](figures/wf001_shared_reset.svg), [JSON](figures/wf001_shared_reset.json) | Yes, 2026-10-25 |
-| WF-002 | Serialized single read | ARREADY stalls; RRESP=SLVERR returns AHB ERROR | HTRANS, HREADYOUT, ARVALID/READY, RVALID/READY, RRESP, HRESP | [SVG](figures/wf002_read_error.svg), [JSON](figures/wf002_read_error.json) | Yes, 2026-10-25 |
-| WF-003 | Normal Write-back bufferable fixed write burst | INCR4, sparse HWSTRB, final BRESP=SLVERR reported on final AHB beat | HADDR/HTRANS, HWDATA/HWSTRB, AW, W/WLAST, B, HRESP | [SVG](figures/wf003_bufferable_burst.svg), [JSON](figures/wf003_bufferable_burst.json) | Yes, 2026-10-25 |
-| WF-004 | Non-bufferable write | Single-beat AXI write waits for BRESP before AHB completion | HPROT, HREADYOUT, AW, W, B, HRESP | [SVG](figures/wf004_nonbufferable_write.svg), [JSON](figures/wf004_nonbufferable_write.json) | Yes, 2026-10-25 |
-| WF-005 | Rejected transfer | HPROT[6]=1 and HMASTLOCK=1 each return two-cycle ERROR without AXI request | HPROT, HMASTLOCK, HREADYOUT, HRESP, AXI VALID | [SVG](figures/wf005_rejected_access.svg), [JSON](figures/wf005_rejected_access.json) | Yes, 2026-10-25 |
-| WF-006 | Defensive 4 KiB split | Out-of-profile boundary stimulus creates two AXI sub-bursts; statuses aggregate to final AHB response | HADDR, AWADDR/AWLEN, WLAST, BRESP, HRESP | [SVG](figures/wf006_4k_split.svg), [JSON](figures/wf006_4k_split.json) | Yes, 2026-10-25 |
+| WF-001 | Shared reset and synchronous startup | One shared clock/reset; traffic begins only after reset release | `i_clk_core`, `i_rst_n_core`, HREADYOUT, ARVALID/READY | [SVG](../figures/wf001_shared_reset.svg), [JSON](../figures/wf001_shared_reset.json) | Yes, 2026-10-25 |
+| WF-002 | Serialized single read | ARREADY stalls; RRESP=SLVERR returns AHB ERROR | HTRANS, HREADYOUT, ARVALID/READY, RVALID/READY, RRESP, HRESP | [SVG](../figures/wf002_read_error.svg), [JSON](../figures/wf002_read_error.json) | Yes, 2026-10-25 |
+| WF-003 | Normal Write-back bufferable fixed write burst | INCR4, sparse HWSTRB, final BRESP=SLVERR reported on final AHB beat | HADDR/HTRANS, HWDATA/HWSTRB, AW, W/WLAST, B, HRESP | [SVG](../figures/wf003_bufferable_burst.svg), [JSON](../figures/wf003_bufferable_burst.json) | Yes, 2026-10-25 |
+| WF-004 | Non-bufferable write | Single-beat AXI write waits for BRESP before AHB completion | HPROT, HREADYOUT, AW, W, B, HRESP | [SVG](../figures/wf004_nonbufferable_write.svg), [JSON](../figures/wf004_nonbufferable_write.json) | Yes, 2026-10-25 |
+| WF-005 | Rejected transfer | HPROT[6]=1 and HMASTLOCK=1 each return two-cycle ERROR without AXI request | HPROT, HMASTLOCK, HREADYOUT, HRESP, AXI VALID | [SVG](../figures/wf005_rejected_access.svg), [JSON](../figures/wf005_rejected_access.json) | Yes, 2026-10-25 |
+| WF-006 | Defensive 4 KiB split | Out-of-profile boundary stimulus creates two AXI sub-bursts; statuses aggregate to final AHB response | HADDR, AWADDR/AWLEN, WLAST, BRESP, HRESP | [SVG](../figures/wf006_4k_split.svg), [JSON](../figures/wf006_4k_split.json) | Yes, 2026-10-25 |
 
 ### 10.4 Arbitration, buffering, and throughput
 
@@ -679,5 +679,5 @@ No product-behavior choice remains open. The clock frequency is intentionally TB
 
 ## 22. References used to shape this template
 
-This document follows the VLSIT ASIC IP Design Specification Template and the `vlsit-asic-ip-microspec` writing guide. The product-specific evidence and candidate assessment are in [`research/vlsit_reference_ip_log.md`](research/vlsit_reference_ip_log.md).
+This document follows the VLSIT ASIC IP Design Specification Template and the `vlsit-asic-ip-microspec` writing guide. The product-specific evidence and candidate assessment are in [`../research/vlsit_reference_ip_log.md`](../research/vlsit_reference_ip_log.md).
 

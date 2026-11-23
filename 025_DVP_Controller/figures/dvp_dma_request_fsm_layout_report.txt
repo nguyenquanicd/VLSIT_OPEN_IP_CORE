@@ -1,0 +1,11 @@
+FSM: dma_request
+STATES: 3, TRANSITIONS: 3
+LAYOUT: flow-lr-2-g220
+CROSSINGS: 0
+LABEL CONFLICTS: 0
+BENDS: 1
+MINIMUM GAP: 100.0 px (minimum 100 px)
+TEXT FIT: PASS (worst fill ratio 0.57)
+DISTRIBUTION: PASS (2 x-centers, 2 y-centers)
+PAGE: 750 x 340 px
+RESULT: PASS

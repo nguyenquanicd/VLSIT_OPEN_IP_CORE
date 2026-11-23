@@ -1,0 +1,71 @@
+{
+  "signal": [
+    {
+      "name": "i_clk_apb",
+      "wave": "p........."
+    },
+    [
+      "APB4",
+      {
+        "name": "i_apb_psel",
+        "wave": "0111011000"
+      },
+      {
+        "name": "i_apb_penable",
+        "wave": "0011010000"
+      },
+      {
+        "name": "i_apb_pwrite",
+        "wave": "x111x111xx"
+      },
+      {
+        "name": "i_apb_paddr",
+        "wave": "x=x..x=x..",
+        "data": [
+          "CTRL",
+          "WMARK"
+        ]
+      },
+      {
+        "name": "i_apb_pstrb",
+        "wave": "x=x..x=x..",
+        "data": [
+          "1111",
+          "0011"
+        ]
+      },
+      {
+        "name": "i_apb_pwdata",
+        "wave": "x=x..x=x..",
+        "data": [
+          "0x1",
+          "0x3"
+        ]
+      }
+    ],
+    [
+      "response",
+      {
+        "name": "o_apb_pready",
+        "wave": "0001001000"
+      },
+      {
+        "name": "o_apb_pslverr",
+        "wave": "0000001000"
+      },
+      {
+        "name": "o_capture_en",
+        "wave": "0001100000"
+      }
+    ]
+  ],
+  "head": {
+    "text": "WF-002: CSR APB write and partial-strobe error"
+  },
+  "foot": {
+    "text": "Normal mapped write completes after the generator wait state; partial-strobe write completes with PSLVERR and no update."
+  },
+  "config": {
+    "hscale": 2.5
+  }
+}

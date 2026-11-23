@@ -1,0 +1,143 @@
+{
+  "module": "m_vlsit_csr_dvp",
+  "prefix": "dvp",
+  "async": 0,
+  "ip_version": {
+    "major": 1,
+    "minor": 0
+  },
+  "registers": [
+    {
+      "name": "dvp_version",
+      "offset": "0x0",
+      "reset": "0x00010000",
+      "description": "DVP controller version register. Identifies the major and minor software interface revision.",
+      "fields": [
+        {
+          "name": "major",
+          "bits": "[31:16]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Major IP version number. Software reads this value to select a compatible driver.\n\nUsage: Read during initialization; software never writes this field.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number."
+        },
+        {
+          "name": "minor",
+          "bits": "[15:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Minor IP version number. Software reads this value to identify compatible interface additions.\n\nUsage: Read with the major version during initialization; software never writes this field.\n\nValues:\n0x0 minor version 0 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number."
+        }
+      ]
+    },
+    {
+      "name": "dvp_ctrl",
+      "offset": "0x4",
+      "reset": "0x00000000",
+      "description": "DVP controller control register. Enables or disables qualified sensor sample capture.",
+      "fields": [
+        {
+          "name": "capture_en",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Capture enable bit. Allows qualified DVP samples to enter the asynchronous sample FIFO.\n\nUsage: Program after the sensor profile, watermark and timeout are configured; clear it to stop new capture.\n\nValues:\n0x0 capture disabled (reset value);\n0x1 capture enabled.\n\nUnit: none\n\nLimits: One-bit value."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:1]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "dvp_wmark",
+      "offset": "0x8",
+      "reset": "0x00000000",
+      "description": "DVP FIFO watermark register. Selects the occupancy that requests a DMA service batch.",
+      "fields": [
+        {
+          "name": "level",
+          "bits": "[31:0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "FIFO watermark level. Raises the DMA batch request when read-side occupancy reaches this sample count.\n\nUsage: Program before enabling capture; zero disables DMA requests; use a value no greater than PARA_FIFO_DEPTH.\n\nValues:\n0x0 DMA request disabled (reset value);\n0x1 to 0xFFFFFFFF request at or above the programmed occupancy, subject to FIFO depth.\n\nUnit: sample entries\n\nLimits: Zero disables requests; valid nonzero values are 1 through PARA_FIFO_DEPTH; values greater than the physical depth are unreachable thresholds and leave the request deasserted."
+        }
+      ]
+    },
+    {
+      "name": "dvp_timeout",
+      "offset": "0xC",
+      "reset": "0x00000000",
+      "description": "DVP FIFO timeout register. Bounds APB wait cycles for reads of an empty FIFO-data endpoint.",
+      "fields": [
+        {
+          "name": "cycles",
+          "bits": "[31:0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "FIFO-empty timeout. Limits the APB access cycles an empty FIFO-data read may wait before returning PSLVERR.\n\nUsage: Program before DMA reads; zero gives an immediate error in the first access cycle when FIFO is empty; data available on the terminal decision cycle wins.\n\nValues:\n0x0 immediate empty-read timeout (reset value);\n0x1 to 0xFFFFFFFF wait the programmed number of APB access cycles.\n\nUnit: APB clock cycles\n\nLimits: 32-bit unsigned count; applies only while a FIFO-data read is active and the FIFO is empty."
+        }
+      ]
+    },
+    {
+      "name": "dvp_fifo_sts",
+      "offset": "0x10",
+      "reset": "0x00000002",
+      "description": "DVP FIFO status register. Reports capture activity, FIFO flags and sticky overflow.",
+      "fields": [
+        {
+          "name": "active",
+          "bits": "[0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Capture active status. Reports the DVP-domain state after the capture enable request is synchronized.\n\nUsage: Read at any time to determine whether the capture logic is active.\n\nValues:\n0x0 inactive (reset value);\n0x1 active.\n\nUnit: none\n\nLimits: One-bit synchronized status; it may lag the APB control write by CDC latency."
+        },
+        {
+          "name": "empty",
+          "bits": "[1]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "FIFO empty status. Reports that no sample is available at the APB read side.\n\nUsage: Read before or after DMA service; a value of one means FIFO_DATA reads will wait or time out.\n\nValues:\n0x0 not empty;\n0x1 empty (reset value after coordinated FIFO reset).\n\nUnit: none\n\nLimits: Read-side FIFO flag; valid after both FIFO domains report reset initialization."
+        },
+        {
+          "name": "full",
+          "bits": "[2]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "FIFO full status. Reports that the sensor-side FIFO cannot accept another sample.\n\nUsage: Read while capture is active to monitor backpressure risk; the sensor itself cannot be stalled.\n\nValues:\n0x0 not full (reset value);\n0x1 full.\n\nUnit: none\n\nLimits: Write-side FIFO flag synchronized to the APB domain; subject to CDC latency."
+        },
+        {
+          "name": "ovf",
+          "bits": "[3]",
+          "type": "w1c",
+          "reset": "0x0",
+          "description": "FIFO overflow event. Sticky flag records a qualified sample rejected because the FIFO was full.\n\nUsage: Read after capture; write one to clear after software records or handles the sample loss; a new hardware event wins over a simultaneous clear.\n\nValues:\n0x0 no recorded overflow (reset value);\n0x1 overflow recorded.\n\nUnit: none\n\nLimits: One-bit sticky status; hardware sets it from the synchronized DVP-domain overflow event."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:4]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "name": "dvp_fifo_level",
+      "offset": "0x14",
+      "reset": "0x00000000",
+      "description": "DVP FIFO level register. Reports the APB read-side occupancy estimate in sample entries.",
+      "fields": [
+        {
+          "name": "count",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "FIFO occupancy estimate. Reports the number of sample entries visible at the APB read side.\n\nUsage: Read before selecting a DMA batch size or while diagnosing FIFO service; it is a read-only live estimate.\n\nValues:\n0x0 no samples available (reset value);\n0x1 to 0xFFFFFFFF current read-side occupancy estimate.\n\nUnit: sample entries\n\nLimits: Value ranges from zero through PARA_FIFO_DEPTH and can lag sensor-side writes by CDC synchronization latency."
+        }
+      ]
+    }
+  ]
+}

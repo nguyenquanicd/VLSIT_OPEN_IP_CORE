@@ -1,9 +1,9 @@
-p = '../VLSIT_USB20_CONTROLLER_HDS.md'
+p = '../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md'
 lines = open(p, encoding='utf-8').read().split('\n')
 for i, l in enumerate(lines):
     if l.startswith('| DEC-024 | Decision'):
         lines.insert(i + 1,
-            "| DEC-025 | Decision | Timing round (FPGA place-and-route, `synth/fpga.py`): (1) the scanner of `m_usb2_xreg` decides a push of a "
+            "| DEC-025 | Decision | Timing round (FPGA place-and-route, `syn/fpga.py`): (1) the scanner of `m_usb2_xreg` decides a push of a "
             "published word from the registered dirty flag (one cycle old) instead of the 32-bit comparison, which was the head of the "
             "longest path of CLK-PHY; a changed value is still pushed with its current value and an extra push of an unchanged value is "
             "harmless; (2) new option `PARA_USB2_PIPE_MODE` registers the PHY mode outputs of `m_usb2_spd` (transceiver select, "

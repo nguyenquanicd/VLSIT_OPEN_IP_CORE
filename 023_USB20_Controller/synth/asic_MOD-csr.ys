@@ -1,8 +1,0 @@
-plugin -i slang
-read_slang -f ../synth/fl_nosram.f --top m_vlsit_csr_usb2  -D VLSIT_SYNTHESIS
-hierarchy -top m_vlsit_csr_usb2
-synth -top m_vlsit_csr_usb2 -flatten
-dfflibmap -liberty ../synth/pdk_freepdk45/gscl45nm.lib
-abc -liberty ../synth/pdk_freepdk45/gscl45nm.lib -D 6667 -script +strash;&get,-n;&fraig,-x;&put;scorr;dc2;strash;&get,-n;&dch,-f;&nf,{D};&put;buffer;upsize,{D};dnsize,{D};topo;stime,-p
-opt_clean
-tee -o ../synth/asic_MOD-csr_stat.txt stat -liberty ../synth/pdk_freepdk45/gscl45nm.lib

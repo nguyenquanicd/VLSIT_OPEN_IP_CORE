@@ -1,6 +1,6 @@
 import os, re
 ROOT = r"C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\023_USB20_Controller"
-H = ROOT + r"\VLSIT_USB20_CONTROLLER_HDS.md"
+H = ROOT + r"\spec\../spec/VLSIT_USB20_CONTROLLER_HDS.md"
 t = open(H, encoding="utf-8").read()
 
 # ---- tests

@@ -16,7 +16,7 @@ BARE = [('epi_int_en', 'epi_ien'), ('epo_int_en', 'epo_ien'), ('hc_int_en', 'hc_
         ('epo_ctrl', 'epo_ctl'), ('epi_xfer', 'epi_xfr'), ('epo_xfer', 'epo_xfr'), ('epi_fifo', 'epi_buf'),
         ('hc_split', 'hc_spl'), ('dmach_map', 'dma_map')]
 
-files = [f for pat in ('../VLSIT_USB20_CONTROLLER_HDS.md', '../csr/gen_csr.py', '../csr/regs_usb2.json',
+files = [f for pat in ('../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md', '../csr/gen_csr.py', '../csr/regs_usb2.json',
                        '../figures/*.json', '../figures/*.svg', '../figures/*.drawio', '../figures/src/*.py',
                        '../verification/tb/*.sv', 'gen_regs.py', 'core_body.py', 'core_body2.py', 'gen_core.py')
          for f in glob.glob(pat)]

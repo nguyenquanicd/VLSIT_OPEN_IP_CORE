@@ -1,0 +1,228 @@
+{
+  "schema": "vlsit-gate-groups/1",
+  "groups": [
+    {
+      "id": "G-01",
+      "root_cause": "RC-APBWAIT",
+      "members": [
+        "F-007"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-02",
+      "root_cause": "RC-AREA",
+      "members": [
+        "F-017",
+        "F-018"
+      ],
+      "severities": [
+        "High",
+        "Medium"
+      ],
+      "count": 2,
+      "merged": true
+    },
+    {
+      "id": "G-03",
+      "root_cause": "RC-COMPAT",
+      "members": [
+        "F-003"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-04",
+      "root_cause": "RC-COMPILE-TIME",
+      "members": [
+        "F-011"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-05",
+      "root_cause": "RC-DFT-CLK",
+      "members": [
+        "F-014",
+        "F-022"
+      ],
+      "severities": [
+        "High",
+        "Medium"
+      ],
+      "count": 2,
+      "merged": true
+    },
+    {
+      "id": "G-06",
+      "root_cause": "RC-DMA",
+      "members": [
+        "F-004",
+        "F-005"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 2,
+      "merged": true
+    },
+    {
+      "id": "G-07",
+      "root_cause": "RC-DMAIF",
+      "members": [
+        "F-008"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-08",
+      "root_cause": "RC-DOC",
+      "members": [
+        "F-027",
+        "F-028"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 2,
+      "merged": true
+    },
+    {
+      "id": "G-09",
+      "root_cause": "RC-FRAME",
+      "members": [
+        "F-002",
+        "F-006",
+        "F-020",
+        "F-031"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 4,
+      "merged": true
+    },
+    {
+      "id": "G-10",
+      "root_cause": "RC-GATED-SILENT",
+      "members": [
+        "F-010"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-11",
+      "root_cause": "RC-RESET",
+      "members": [
+        "F-009"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-12",
+      "root_cause": "RC-SDC",
+      "members": [
+        "F-015",
+        "F-016",
+        "F-030"
+      ],
+      "severities": [
+        "High",
+        "Medium"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-13",
+      "root_cause": "RC-SECURITY",
+      "members": [
+        "F-023"
+      ],
+      "severities": [
+        "Low"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-14",
+      "root_cause": "RC-SENSOR",
+      "members": [
+        "F-029"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-15",
+      "root_cause": "RC-SW-SILENT",
+      "members": [
+        "F-012",
+        "F-021",
+        "F-024"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-16",
+      "root_cause": "RC-THROUGHPUT",
+      "members": [
+        "F-001",
+        "F-013",
+        "F-019"
+      ],
+      "severities": [
+        "High",
+        "Medium"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-17",
+      "root_cause": "RC-VERIF",
+      "members": [
+        "F-025",
+        "F-026"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 2,
+      "merged": true
+    }
+  ],
+  "count": 17
+}

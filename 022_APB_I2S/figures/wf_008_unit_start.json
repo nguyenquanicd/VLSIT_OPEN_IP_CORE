@@ -1,0 +1,54 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_mclk",
+   "wave": "p..........................................."
+  },
+  {
+   "name": "i2s_tx_ctrl.en",
+   "wave": "00111111111111111111111111111111111111111111"
+  },
+  {
+   "name": "w_snap_valid",
+   "wave": "00000000100000000000000000000000000000000000"
+  },
+  {
+   "name": "w_en_s",
+   "wave": "00001111111111111111111111111111111111111111"
+  },
+  {
+   "name": "w_fsm_frame_state",
+   "wave": "=........=...=..............................",
+   "data": [
+    "OFF",
+    "ARM",
+    "RUN"
+   ]
+  },
+  {
+   "name": "i2s_sts.tx_busy",
+   "wave": "00111111111111111111111111111111111111111111"
+  },
+  {
+   "name": "o_bclk_tx_oe",
+   "wave": "00000000001111111111111111111111111111111111"
+  },
+  {
+   "name": "o_bclk_tx",
+   "wave": "00000000000110011001100110011001100110011001"
+  },
+  {
+   "name": "o_ws_tx",
+   "wave": "00000000001110000000000000000000000000000000"
+  }
+ ],
+ "head": {
+  "text": "WF-008 OP-001 Unit start: snapshot and first frame (success)"
+ },
+ "foot": {
+  "text": "Cell = one master clock cycle (the enable bit is written in the APB domain and sampled here). The rising enable sends one configuration snapshot to the master domain; the engine goes to ARM, then RUN, the bit clock output is enabled and the frame sync falls."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

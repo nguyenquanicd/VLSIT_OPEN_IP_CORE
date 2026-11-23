@@ -52,6 +52,7 @@ module m_usb2_lnk #(
   // Receive events to the engines
   output logic        o_tok_vld,
   output logic        o_tok_ext,
+  output logic [10:0] o_tok_efld,
   output logic [3:0]  o_tok_pid,
   output logic [10:0] o_tok_fld,
   output logic        o_spl_vld,
@@ -82,6 +83,7 @@ module m_usb2_lnk #(
   input  wire         i_src_vld,
   output logic        o_src_pop,
   output logic        o_tx_busy,
+  output logic        o_tx_starve,
   output logic        o_tx_done,
   output logic        o_tx_fail,
   output logic        o_link_idle
@@ -136,6 +138,7 @@ module m_usb2_lnk #(
     .i_rx_err     (w_rx_err),
     .o_tok_vld    (w_tok_vld),
     .o_tok_ext    (o_tok_ext),
+    .o_tok_efld   (o_tok_efld),
     .o_tok_pid    (o_tok_pid),
     .o_tok_fld    (o_tok_fld),
     .o_spl_vld    (w_spl_vld),
@@ -172,6 +175,7 @@ module m_usb2_lnk #(
     .i_src_vld    (i_src_vld),
     .o_src_pop    (o_src_pop),
     .o_tx_busy    (w_tx_busy),
+    .o_starve     (o_tx_starve),
     .o_tx_done    (w_tx_done),
     .o_tx_fail    (o_tx_fail),
     .o_tx_data    (w_tx_data),

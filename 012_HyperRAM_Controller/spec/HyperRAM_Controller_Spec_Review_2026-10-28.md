@@ -43,7 +43,7 @@ Kết quả `check` trên 10 spec: 8 PASS, `001_AsyncGrayFIFO` FAIL 43 lỗi (sp
 | S7 | R-007 nói `verify` phải báo OK, nhưng với AXI (500 trang) `verify` luôn báo CHECK (53 trang lệch trên 5% số từ, chủ yếu bảng và hình). Chưa có quy định xử lý. | Bổ sung vào R-007: kết quả CHECK chấp nhận được nếu các trang lệch được người vận hành kiểm tay và ghi vào header; thêm tham số ngưỡng cho `verify` |
 | S8 | Thư viện chuẩn của skill (`md_doc`) chỉ có APB, AXI, TL-UL. Spec 009 tự giữ HyperBus và datasheet ở `reference/md_doc` của IP, không qua `vlsit_INDEX.md`. R-006 nói "take from md_doc of the skill". | Cho phép md_doc theo từng IP nhưng ghi rõ trong R-006 và dùng `vlsit_protocol_docs.py index --dir` cho thư mục đó |
 | S9 | Tooling draw.io: bố cục chỉ một frame, block phải có chiều rộng chia hết cho 20 (đã thêm kiểm tra), cây clock/reset đôi khi vòng quanh frame, không có nhiều cấp. `vlsit_diagram_rules.md` đã ghi ngoại lệ RHD-087 nhưng chưa được người dùng xác nhận. | Xác nhận ngoại lệ; tạo `reference/drawio/` hướng dẫn xử lý lỗi thường gặp |
-| S10 | Khối không có kiểm thử tự động: các script chỉ được chạy tay. | Thêm thư mục `tests/` với ví dụ nhỏ (SyncFIFO, AXI bridge) chạy `check`, `build` và so sánh kết quả |
+| S10 | Khối không có kiểm thử tự động: các script chỉ được chạy tay. | Thêm thư mục `verification/tests/` với ví dụ nhỏ (SyncFIFO, AXI bridge) chạy `check`, `build` và so sánh kết quả |
 | S11 | `vlsit_find_python.sh` và `vlsit_drawio_to_svg.py` chưa được chạy trên Linux (môi trường hiện tại chỉ có Windows). | Chạy thử trên Linux hoặc ghi rõ "chưa kiểm chứng trên Linux" trong README |
 
 **Thấp**

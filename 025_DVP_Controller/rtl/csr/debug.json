@@ -1,0 +1,346 @@
+    {
+    "Project": "APB-CSR-Generator",
+    "Module": "JSON debug file",
+    "Function": "Used to check the configuration after generation",
+    "Author": "Nguyen Quan and Codex (user)",
+    "Generator": "PC",
+    "Generator version": "3.4",
+    "Page": "VLSI Technology",
+    "Table - Configuration": [
+    {
+        "Module Name": "m_vlsit_csr_dvp",
+        "Address Width": "16",
+        "Data Width": "32",
+        "Protocol": "APB4",
+        "Asynchronous": "0",
+        "Strobe Mode": "HONOR",
+        "AXI Outstanding Mode": "SINGLE",
+        "AXI Read Depth": "2",
+        "AXI Write Depth": "2",
+        "AHB Endian": "LITTLE",
+        "Register Event Sideband": "0"
+    }
+    ],
+    "Table - Register Definition": [
+        {
+        "Register Name": "dvp_version",
+        "Offset": "0x0000",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x00010001",
+        "Descriprtion": "DVP controller version register. Identifies the major and minor software interface revision.",
+        "Bits": [
+            {
+                "Bit Name": "major",
+                "Bit Type": "ro",
+                "Bit Field": "[31:16]",
+                "Reset Value": "0x1",
+                "Description": "Major IP version number. Software reads this value to select a compatible driver.
+
+Usage: Read during initialization; software never writes this field.
+
+Values:
+0x1 major version 1 (reset value).
+
+Unit: none
+
+Limits: 16-bit unsigned version number."
+            },
+            {
+                "Bit Name": "minor",
+                "Bit Type": "ro",
+                "Bit Field": "[15:0]",
+                "Reset Value": "0x1",
+                "Description": "Minor IP version number. Software reads this value to identify compatible interface additions.
+
+Usage: Read with the major version during initialization; software never writes this field.
+
+Values:
+0x1 minor version 1 (reset value).
+
+Unit: none
+
+Limits: 16-bit unsigned version number."
+            }
+          ]
+        },
+        {
+        "Register Name": "dvp_ctrl",
+        "Offset": "0x0004",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x00000000",
+        "Descriprtion": "DVP controller control register. Enables or disables qualified sensor sample capture.",
+        "Bits": [
+            {
+                "Bit Name": "reserved",
+                "Bit Type": "ro",
+                "Bit Field": "[31:3]",
+                "Reset Value": "0x0",
+                "Description": "This field is unused.
+Read-as-zero and write-ignored."
+            },
+            {
+                "Bit Name": "pclk_mode",
+                "Bit Type": "rw",
+                "Bit Field": "[1]",
+                "Reset Value": "0x0",
+                "Description": "PCLK clock-mode selector. Selects the continuous-PCLK AFIFO path or gated valid-pixel toggle/SFIFO path.
+
+Usage: Program in a separate APB write while capture is disabled and before enabling capture. Writes while capture is enabled or when the same write sets capture_en are ignored; APB completes with OKAY. Keep mode unchanged for a capture session.
+
+Values:
+0x0 Continuous PCLK with asynchronous Gray FIFO (reset value);
+0x1 Gated PCLK with valid-pixel toggle bridge and APB-clocked FIFO.
+
+Unit: none
+
+Limits: One-bit runtime CSR field; see the PCLK spacing and VSYNC pulse requirements in the hardware specification."
+            },
+            {
+                "Bit Name": "fifo_flush",
+                "Bit Type": "rwi",
+                "Bit Field": "[2]",
+                "Reset Value": "0x0",
+                "Description": "FIFO flush request and pending indicator. A software write of one requests reset of the FIFO selected by pclk_mode; hardware clears the field after the FIFO reset handshake completes.
+
+Usage: Disable capture and stop DMA APB reads, write one, then poll until hardware clears it. Do not start capture, change PCLK_MODE, or issue FIFO_DATA reads while the bit is one. Keep i_clk_dvp running for a continuous-mode flush. A write while capture is enabled is ignored; a write while a request is pending cannot cancel the operation.
+
+Values:
+0x0 no flush pending (reset value);
+0x1 flush pending/in progress.
+
+Unit: none
+
+Limits: One-bit RWI field; only the selected FIFO is reset; frame count and sticky overflow are retained."
+            },
+            {
+                "Bit Name": "capture_en",
+                "Bit Type": "rw",
+                "Bit Field": "[0]",
+                "Reset Value": "0x0",
+                "Description": "Capture enable bit. Allows frame-qualified DVP samples to enter the FIFO selected by pclk_mode.
+
+Usage: Program PCLK_MODE, watermark and timeout before enabling. Capture arms at the next active VSYNC edge after the selected path is initialized; clear to stop accepting new samples. Existing FIFO entries remain available to DMA.
+
+Values:
+0x0 capture disabled (reset value);
+0x1 capture enabled.
+
+Unit: none
+
+Limits: One-bit value."
+            }
+          ]
+        },
+        {
+        "Register Name": "dvp_wmark",
+        "Offset": "0x0008",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x00000000",
+        "Descriprtion": "DVP FIFO watermark register. Selects the occupancy that requests a DMA service batch.",
+        "Bits": [
+            {
+                "Bit Name": "level",
+                "Bit Type": "rw",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "FIFO watermark level. Raises the DMA batch request when read-side occupancy reaches this sample count.
+
+Usage: Program before enabling capture; zero disables DMA requests; use a value no greater than PARA_FIFO_DEPTH.
+
+Values:
+0x0 DMA request disabled (reset value);
+0x1 to 0xFFFFFFFF request at or above the programmed occupancy, subject to FIFO depth.
+
+Unit: sample entries
+
+Limits: Zero disables requests; valid nonzero values are 1 through PARA_FIFO_DEPTH; values greater than the physical depth are unreachable thresholds and leave the request deasserted."
+            }
+          ]
+        },
+        {
+        "Register Name": "dvp_timeout",
+        "Offset": "0x000c",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x00000000",
+        "Descriprtion": "DVP FIFO timeout register. Bounds APB wait cycles for reads of an empty FIFO-data endpoint.",
+        "Bits": [
+            {
+                "Bit Name": "cycles",
+                "Bit Type": "rw",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0xFFFFFFFF",
+                "Description": "FIFO-empty timeout. Limits the APB access cycles an empty FIFO-data read may wait before returning PSLVERR.
+
+Usage: Reset default is the longest supported wait. Software may program a smaller value before DMA reads; zero gives an immediate error in the first access cycle when FIFO is empty. Data available on the terminal decision cycle wins.
+
+Values:
+0x0 immediate empty-read timeout;
+0x1 to 0xFFFFFFFF wait the programmed number of APB access cycles;
+0xFFFFFFFF reset value and maximum timeout.
+
+Unit: APB clock cycles
+
+Limits: 32-bit unsigned count; applies only while a FIFO-data read is active and the FIFO is empty."
+            }
+          ]
+        },
+        {
+        "Register Name": "dvp_fifo_sts",
+        "Offset": "0x0010",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x00000002",
+        "Descriprtion": "DVP FIFO status register. Reports capture state, selected FIFO flags and sticky overflow.",
+        "Bits": [
+            {
+                "Bit Name": "reserved",
+                "Bit Type": "ro",
+                "Bit Field": "[31:4]",
+                "Reset Value": "0x0",
+                "Description": "This field is unused.
+Read-as-zero and write-ignored."
+            },
+            {
+                "Bit Name": "ovf",
+                "Bit Type": "w1c",
+                "Bit Field": "[3]",
+                "Reset Value": "0x0",
+                "Description": "FIFO overflow event. Sticky flag records a qualified sample rejected because the FIFO was full.
+
+Usage: Read after capture; write one to clear after software records or handles the sample loss; a new hardware event wins over a simultaneous clear.
+
+Values:
+0x0 no recorded overflow (reset value);
+0x1 overflow recorded.
+
+Unit: none
+
+Limits: One-bit sticky status; hardware sets it from the mode-specific overflow event; continuous-mode pulse is synchronized to APB."
+            },
+            {
+                "Bit Name": "full",
+                "Bit Type": "ro",
+                "Bit Field": "[2]",
+                "Reset Value": "0x0",
+                "Description": "FIFO full status. Reports that the FIFO selected by pclk_mode cannot accept another sample.
+
+Usage: Read while capture is active to monitor overflow risk; the sensor itself cannot be stalled.
+
+Values:
+0x0 not full (reset value);
+0x1 full.
+
+Unit: none
+
+Limits: Mode 0 AFIFO full indication is synchronized to APB; mode 1 SFIFO full is local to APB."
+            },
+            {
+                "Bit Name": "empty",
+                "Bit Type": "ro",
+                "Bit Field": "[1]",
+                "Reset Value": "0x1",
+                "Description": "FIFO empty status. Reports that no sample is available in the FIFO selected by pclk_mode.
+
+Usage: Read before or after DMA service; a value of one means FIFO_DATA reads will wait or time out.
+
+Values:
+0x0 not empty;
+0x1 empty (reset value after coordinated FIFO reset).
+
+Unit: none
+
+Limits: Mode 0 uses the APB read-side AFIFO flag; mode 1 uses the APB SFIFO flag. Status is valid after the selected path initializes."
+            },
+            {
+                "Bit Name": "active",
+                "Bit Type": "ro",
+                "Bit Field": "[0]",
+                "Reset Value": "0x0",
+                "Description": "Capture armed/active status. Reports that capture is enabled and the selected path has observed its qualifying VSYNC frame boundary.
+
+Usage: Read to determine whether the controller is collecting samples from the current frame.
+
+Values:
+0x0 capture disabled or waiting for a qualifying VSYNC;
+0x1 capture active.
+
+Unit: none
+
+Limits: One-bit APB-domain status; gated mode waits for synchronized VSYNC and qualified pixel timing."
+            }
+          ]
+        },
+        {
+        "Register Name": "dvp_fifo_level",
+        "Offset": "0x0014",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x00000000",
+        "Descriprtion": "DVP FIFO level register. Reports occupancy of the FIFO selected by dvp_ctrl.pclk_mode.",
+        "Bits": [
+            {
+                "Bit Name": "count",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Selected FIFO occupancy in sample entries.
+
+Usage: Read before servicing a DMA batch or while diagnosing overflow risk. The same value feeds the watermark request logic.
+
+Values:
+0x0 no samples available (reset value);
+0x1 to PARA_FIFO_DEPTH current visible entries.
+
+Unit: sample entries
+
+Limits: Mode 0 is the APB read-side AFIFO estimate and can lag new PCLK writes by CDC latency. Mode 1 is the exact APB-domain accepted-write/read count."
+            }
+          ]
+        },
+        {
+        "Register Name": "dvp_frame_count",
+        "Offset": "0x0018",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x00000000",
+        "Descriprtion": "DVP frame counter. Counts accepted active VSYNC frame-start events while capture is enabled.",
+        "Bits": [
+            {
+                "Bit Name": "count",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Accepted frame-start count. Increments once when an active VSYNC edge is accepted by the selected capture path while CAPTURE_EN is one. Continuous-mode events cross from PCLK to CLK-APB through the event synchronizer; gated-mode events are detected in CLK-APB.
+
+Usage: Read to monitor completed frame starts; software may calculate a delta modulo 2^32. The counter is not cleared by FIFO flush.
+
+Values:
+0x0 no accepted frame start since reset (reset value);
+0x1 to 0xFFFFFFFF modulo-2^32 frame count.
+
+Unit: frames
+
+Limits: 32-bit unsigned counter; wraps from 0xFFFFFFFF to 0x00000000 and is cleared only by common reset."
+            }
+          ]
+        }
+    ]
+}

@@ -1368,7 +1368,7 @@
      "bits": "[19:12]",
      "type": "rw",
      "reset": "0x10",
-     "description": "DMA request threshold. The FIFO fill level in 32-bit words that raises o_dma_req.\n\nUsage: Write before dma_en in AXI slave builds.\n\nValues:\n0x1 to 0xFF words (reset value 0x10).\n\nUnit: 32-bit word.\n\nLimits: 1 to 255."
+     "description": "DMA request threshold. A write window raises o_dma_req while its queue has at least this many 32-bit words free (at least one row, at most the whole region); a read window ignores it and asks while a packet of its region waits.\n\nUsage: Write before dma_en in AXI slave builds.\n\nValues:\n0x1 to 0xFF words (reset value 0x10).\n\nUnit: 32-bit word.\n\nLimits: 1 to 255."
     },
     {
      "name": "reserved",
@@ -1648,14 +1648,14 @@
      "bits": "[4:0]",
      "type": "rw",
      "reset": "0x0",
-     "description": "Mapped region. The FIFO region that the DMA channel serves.\n\nUsage: Write before dma_en; one region per channel.\n\nValues:\n0x0 to 0xF device endpoint number (reset value 0x0);\n0x10 to 0x1F host channel number plus 0x10.\n\nUnit: none.\n\nLimits: none."
+     "description": "Mapped region. The FIFO region that the DMA channel serves.\n\nUsage: Write before dma_en; one region per channel.\n\nValues:\n0x0 to 0xF device endpoint number: the IN endpoint of a write window, or the endpoint tag of the packets of a read window (reset value 0x0);\n0x1E host non-periodic queue (write window);\n0x1F host periodic queue (write window).\n\nUnit: none.\n\nLimits: none."
     },
     {
      "name": "dir_in",
      "bits": "[5]",
      "type": "rw",
      "reset": "0x0",
-     "description": "Channel direction. Selects whether the DMA reads from or writes to the mapped region.\n\nUsage: Write before dma_en.\n\nValues:\n0x0 DMA writes the region (OUT data, reset value);\n0x1 DMA reads the region (IN data).\n\nUnit: none.\n\nLimits: none."
+     "description": "Channel direction. Selects a write window or a read window of the AXI slave port.\n\nUsage: Write before dma_en.\n\nValues:\n0x0 read window: the DMA reads the received packets of an OUT region (reset value);\n0x1 write window: the DMA writes the rows of the transmit queue of an IN endpoint or host queue.\n\nUnit: none.\n\nLimits: none."
     },
     {
      "name": "ch_en",

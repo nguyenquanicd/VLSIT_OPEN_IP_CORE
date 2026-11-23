@@ -1,0 +1,27 @@
+%%{init: {"theme": "base", "themeVariables": {"background": "#ffffff", "primaryColor": "#ffffff", "primaryTextColor": "#000000", "primaryBorderColor": "#000000", "lineColor": "#000000", "clusterBkg": "#ffffff", "clusterBorder": "#6a1b9a", "fontFamily": "Arial"}}}%%
+flowchart LR
+  subgraph TOPBOX["m_dvp_controller (rtl/m_dvp_controller.sv)"]
+    direction LR
+    u_rst_sync_apb["u_rst_sync_apb<br/>m_vlsit_rst_sync"]
+    u_rst_sync_dvp["u_rst_sync_dvp<br/>m_vlsit_rst_sync"]
+    u_dvp_capture["u_dvp_capture<br/>m_dvp_capture"]
+    u_dvp_apb_service["u_dvp_apb_service<br/>m_dvp_apb_service"]
+  end
+  PIN(["inputs of m_dvp_controller"])
+  POUT(["outputs of m_dvp_controller"])
+  u_dvp_apb_service -->|"w_capture_en, w_pclk_mode"| u_dvp_capture
+  u_dvp_capture -->|"w_afifo_wr_data, w_afifo_wr_en, w_capture_quiescent +3"| u_dvp_apb_service
+  u_rst_sync_apb -->|"w_rst_n_apb"| u_dvp_apb_service
+  u_rst_sync_apb -->|"w_rst_n_apb"| u_dvp_capture
+  u_rst_sync_dvp -->|"w_rst_n_dvp"| u_dvp_apb_service
+  u_rst_sync_dvp -->|"w_rst_n_dvp"| u_dvp_capture
+  PIN -->|"i_clk_apb, i_clk_dvp, i_dma_ack +8"| u_dvp_apb_service
+  PIN -->|"i_clk_dvp, i_dvp_data, i_dvp_href +1"| u_dvp_capture
+  PIN -->|"i_clk_apb, i_rst_n_sys"| u_rst_sync_apb
+  PIN -->|"i_clk_dvp, i_rst_n_sys"| u_rst_sync_dvp
+  u_dvp_apb_service -->|"o_dma_req, o_prdata, o_pready +1"| POUT
+  classDef inst fill:#ffffff,stroke:#000000,color:#000000;
+  classDef pin fill:#6a1b9a,stroke:#000000,color:#ffffff;
+  class u_rst_sync_apb,u_rst_sync_dvp,u_dvp_capture,u_dvp_apb_service inst;
+  class PIN,POUT pin;
+  style TOPBOX fill:#ffffff,stroke:#6a1b9a,stroke-width:2px

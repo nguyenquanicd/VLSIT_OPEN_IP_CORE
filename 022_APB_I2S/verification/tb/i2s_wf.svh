@@ -54,18 +54,21 @@ task automatic wf_run(input int n);
       end
       // ---- I2S transmit, master (WF-003)
       3: begin
+        wf_fix[0] = 32'hC3; wf_fix[1] = 32'h5A; wf_fix_n = 2;
         wf_begin();
         tx_scn("wf003", 1, 2, 8, 8, 0, 0, 32'hFFFFFFFF, 1, 2, 0, 1, 0, 1, 2, 0, 4);
         wf_end();
       end
       // ---- I2S receive, slave at ratio 8 (WF-004)
       4: begin
+        wf_fix[0] = 32'hC3; wf_fix[1] = 32'h5A; wf_fix_n = 2;
         wf_begin();
         rx_scn("wf004", 1, 2, 8, 8, 0, 0, 32'hFFFFFFFF, 0, 2, 0, 1, 0, 1, 2, 4);
         wf_end();
       end
       // ---- I2S and left-justified frame sync (WF-005): two runs in one dump
       5: begin
+        wf_fix[0] = 32'hC3; wf_fix[1] = 32'h5A; wf_fix_n = 2;
         wf_begin();
         tx_scn("wf005 I2S", 1, 2, 8, 8, 0, 0, 32'hFFFFFFFF, 1, 2, 0, 1, 0, 1, 2, 0, 4);
         tx_scn("wf005 LJ",  2, 2, 8, 8, 0, 0, 32'hFFFFFFFF, 1, 2, 0, 1, 0, 1, 2, 0, 4);
@@ -73,6 +76,7 @@ task automatic wf_run(input int n);
       end
       // ---- PCM short, four slots, slot 1 masked with tri-state (WF-006)
       6: begin
+        wf_fix[0] = 32'hC3; wf_fix[1] = 32'h5A; wf_fix[2] = 32'h96; wf_fix_n = 3;
         wf_begin();
         tx_scn("wf006", 3, 4, 8, 8, 0, 0, 32'hD, 1, 2, 0, 1, 0, 1, 2, 1, 4);
         wf_end();
@@ -86,8 +90,8 @@ task automatic wf_run(input int n);
         for (int i = 0; i < 200; i++) drx.src_q.push_back(32'h10 + i);
         unit_en(1, (1 << C_AUTO));
         wait_apb(20); drx.run = 1;
-        wait_m(300);
-        wr32(U(1, R_MASK), 32'hD);                // slot 1 off from the next frame
+        wait_m(60);
+        wr32(U(1, R_MASK), 32'hD);                // written during frame 1: slot 1 off from the next frame
         wait_m(700);
         unit_dis(1); drx.run = 0;
         wf_end();
@@ -115,9 +119,9 @@ task automatic wf_run(input int n);
         wf_begin();
         dtx.run = 1;
         unit_en(0, (1 << C_ROLE) | (1 << C_AUTO));
-        wait_m(700);
+        wait_m(200);
         wr32(U(0, R_DATA), 32'hB1); wr32(U(0, R_DATA), 32'hB2);
-        wait_m(700);
+        wait_m(400);
         unit_dis(0); dtx.run = 0;
         wf_end();
       end
@@ -149,15 +153,15 @@ task automatic wf_run(input int n);
         unit_en(0, (1 << C_ROLE) | (1 << C_ONDEM));
         wait_m(300);
         wr32(U(0, R_DATA), 32'hC1); wr32(U(0, R_DATA), 32'hC2);
-        wait_m(500);
+        wait_m(150);
         wr32(U(0, R_DATA), 32'hC3); wr32(U(0, R_DATA), 32'hC4);
-        wait_m(500);
+        wait_m(400);
         unit_dis(0); dtx.run = 0;
         wf_end();
       end
       // ---- frame sync error and hung clock, slave (WF-012)
       12: begin
-        dev_cfg(1, 5, 2, 8, 8, 0, 1, 0, 1, 32'hFFFFFFFF);
+        dev_cfg(1, 1, 2, 8, 8, 0, 1, 0, 1, 32'hFFFFFFFF);
         drx.src_en = 1; drx.master = 1; drx.hp_ps = 4 * TM_PS; drx.div = 2;
         cfg_unit(1, 1, 2, 8, 8, 0, 0, 32'hFFFFFFFF, 2, 0, 1, 0, 1, 4);
         for (int i = 0; i < 400; i++) drx.src_q.push_back(32'h20 + i);
@@ -165,12 +169,12 @@ task automatic wf_run(input int n);
         wf_begin();
         unit_en(1, (1 << C_AUTO)); wait_apb(20); drx.run = 1;
         wait_m(300);
-        drx.glitch_t = 20;
-        wait_m(300);
+        drx.glitch_t = 12;                         // a false frame sync inside the right slot
+        wait_m(150);
         drx.glitch_t = -1;
-        wait_m(100);
+        wait_m(20);
         drx.clk_stop = 1;
-        wait_m(600);
+        wait_m(700);
         drx.clk_stop = 0;
         wait_m(100);
         unit_dis(1); drx.run = 0;
@@ -261,7 +265,7 @@ task automatic wf_run(input int n);
         wait_m(150);
         wf_begin();
         wr32(U(0, R_CTRL), 32'h0);                // stop: the running frame finishes
-        wait_m(300);
+        wait_m(100);
         wr32(U(0, R_CTRL), 32'h4);                // flush
         wait_m(40);
         wf_end();
@@ -282,6 +286,7 @@ task automatic wf_run(input int n);
       end
       default: check(1'b0, "unknown waveform scenario");
     endcase
+    wf_fix_n = 0;
     end_test();
   end
 endtask

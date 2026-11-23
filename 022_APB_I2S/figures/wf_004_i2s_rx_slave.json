@@ -1,0 +1,29 @@
+{
+ "signal": [
+  {
+   "name": "i_bclk_rx",
+   "wave": "p........................."
+  },
+  {
+   "name": "i_ws_rx",
+   "wave": "01000000001111111100000000"
+  },
+  {
+   "name": "i_sdi_0",
+   "wave": "00011000011010110101100001"
+  },
+  {
+   "name": "w_rx_push",
+   "wave": "00000000000100000001000000"
+  }
+ ],
+ "head": {
+  "text": "WF-004 OP-004 I2S receive frame, slave (success)"
+ },
+ "foot": {
+  "text": "Cell = one bit clock, master clock 8 times the bit clock, two 8-bit slots, words 0xC3 and 0x5A. Inputs are synchronized in the master clock domain; the sample tick follows each rising bit clock edge by two master clocks (PARA_I2S_SYNC_DEPTH = 2); a word is pushed at the end of each slot."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

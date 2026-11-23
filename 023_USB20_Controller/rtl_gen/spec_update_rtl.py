@@ -1,5 +1,5 @@
 """Write the implementation decisions of the RTL phase back into the specification (rule R-046, R-054 to R-061)."""
-p = '../VLSIT_USB20_CONTROLLER_HDS.md'
+p = '../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md'
 s = open(p, encoding='utf-8').read()
 
 # 14.2 hierarchy: new modules

@@ -1,0 +1,6 @@
+plugin -i slang
+read_slang -f ../syn/fl_nosram.f --top m_usb2_top_utmi_axim -D VLSIT_SYNTHESIS
+hierarchy -top m_usb2_top_utmi_axim
+synth -top m_usb2_top_utmi_axim -flatten
+tee -o ../syn/stat_core_nosram.txt stat
+tee -o ../syn/ltp.txt ltp -noff

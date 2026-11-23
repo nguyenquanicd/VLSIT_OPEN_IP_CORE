@@ -1261,7 +1261,9 @@ module m_usb2_regs #(
     end
   end
 
-  // Write decode: the written address becomes the slot of the register in the crossing.
+  // Write decode: the written address becomes the slot of the register in the crossing. The bank
+  // index is zero-extended before the compare with the full bank count, so a count of 16 accepts
+  // indices 0 to 15 (review 2026-11-22: the compare used the count [3:0], which is 0 for 16).
   always_comb begin : p_com_dec
     w_dec_vld  = 1'b0;
     w_dec_slot = '0;
@@ -1287,31 +1289,31 @@ module m_usb2_regs #(
         w_dec_slot = LPARA_B_LPBK_STS[LPARA_SLOT_W-1:0];
       end
       14'b0000001000????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NEP1[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NEP1);
         w_dec_slot = (LPARA_B_EPI_CTL[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000001001????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NEP1[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NEP1);
         w_dec_slot = (LPARA_B_EPI_XFR[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000010000????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NEP1[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NEP1);
         w_dec_slot = (LPARA_B_EPO_CTL[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000010001????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NEP1[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NEP1);
         w_dec_slot = (LPARA_B_EPO_XFR[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000011000????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NHC[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NHC);
         w_dec_slot = (LPARA_B_HC_CTRL[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000011010????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NHC[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NHC);
         w_dec_slot = (LPARA_B_HC_XFER[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000011110????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NHC[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NHC);
         w_dec_slot = (LPARA_B_HC_CFG[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b00000000000001: begin
@@ -1339,23 +1341,23 @@ module m_usb2_regs #(
         w_dec_slot = LPARA_B_LPM_CFG[LPARA_SLOT_W-1:0];
       end
       14'b0000001011????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NEP1[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NEP1);
         w_dec_slot = (LPARA_B_EPI_BUF[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000001101????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NEP1[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NEP1);
         w_dec_slot = (LPARA_B_EPI_IEN[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000010100????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NEP1[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NEP1);
         w_dec_slot = (LPARA_B_EPO_IEN[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000011001????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NHC[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NHC);
         w_dec_slot = (LPARA_B_HC_SPL[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       14'b0000011101????: begin
-        w_dec_vld  = (w_reg_wr_addr[5:2] < PARA_USB2_NHC[3:0]);
+        w_dec_vld  = ({28'd0, w_reg_wr_addr[5:2]} < PARA_USB2_NHC);
         w_dec_slot = (LPARA_B_HC_IEN[LPARA_SLOT_W-1:0] + {4'd0, w_reg_wr_addr[5:2]});
       end
       default: begin

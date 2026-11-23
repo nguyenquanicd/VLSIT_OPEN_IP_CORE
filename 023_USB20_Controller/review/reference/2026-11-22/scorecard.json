@@ -1,0 +1,309 @@
+{
+  "ip": "USB 2.0 Controller",
+  "reviewed_spec": "VLSIT_USB20_CONTROLLER_HDS.md",
+  "date": "2026-11-22",
+  "areas": [
+    {
+      "id": "clock_reset_cdc",
+      "score": 1,
+      "justification": "CSR stale update protection missing. §7.2 CDC-002, §11.3 REQ-REG-003"
+    },
+    {
+      "id": "sdc_timing",
+      "score": 1,
+      "justification": "CDC constraints do not identify the actual Gray endpoints. §7.2 CDC-001/002/004/007, §17.1.3 EXC-001/002"
+    },
+    {
+      "id": "interfaces",
+      "score": 2,
+      "justification": "AXI3 reference cannot establish the AXI4 subordinate contract. §2.1–2.3 REF-010, §6.2–6.3 REQ-IF-006/007"
+    },
+    {
+      "id": "features",
+      "score": 2,
+      "justification": "Double buffering has incompatible software contracts. §3 REQ-FUNC-029, §8, §10.4, §15.2 TEST-023, §20 DEC-040"
+    },
+    {
+      "id": "functions",
+      "score": 2,
+      "justification": "SOF phase cannot be guaranteed when its clock stops. §3 REQ-FUNC-037, §7.4, §15.2 TEST-034"
+    },
+    {
+      "id": "security_ras",
+      "score": 2,
+      "justification": "DMA range comparison uses a low-word aperture. §3 REQ-IF-014, §8, §18, TEST-035"
+    },
+    {
+      "id": "parameters",
+      "score": 2,
+      "justification": "RAM organization and legal width combinations conflict. §8, §10.4–10.5, §17.2, §20 DEC-006/010/041"
+    },
+    {
+      "id": "performance",
+      "score": 2,
+      "justification": "Throughput has a no-stall premise and no product margin. §13 PERF-001/002, §15.2 TEST-017, §20 DEC-025/032"
+    },
+    {
+      "id": "verification_quality",
+      "score": 2,
+      "justification": "Traceability is present but closure is incomplete. §15.3–15.4, §19, REQ-VER-003"
+    },
+    {
+      "id": "software_ease",
+      "score": 2,
+      "justification": "Scatter-gather interrupt estimate exceeds the programmed feature set. §1.4 FEAT-023, §9, §11.5, §20 DEC-013/039/042"
+    },
+    {
+      "id": "asic_feasibility",
+      "score": 2,
+      "justification": "FreePDK45 estimate leaves macro and timing implementation open. §10.5 MEM-001, §14.3, §17.2, §20 DEC-034/035"
+    },
+    {
+      "id": "area_power",
+      "score": 3,
+      "justification": "Storage and mapped logic are available but product power is open. §13 area/power, §20 DEC-034"
+    },
+    {
+      "id": "dft",
+      "score": 3,
+      "justification": "DFT responsibilities are named without insertion evidence. §16, §17.2, DEP-004"
+    },
+    {
+      "id": "application_fit",
+      "score": 3,
+      "justification": "Drone product operating point is still a proposal. §1.2–1.4 FEAT-012/016/021, §13 PERF-001"
+    },
+    {
+      "id": "integration_effort",
+      "score": 2,
+      "justification": "PHY bring-up depends on unresolved vendor timing. §6.3 REQ-IF-011, §7.3, §14.4, §20 DEC-025/TBD-007/TBD-015"
+    },
+    {
+      "id": "documentation",
+      "score": 3,
+      "justification": "The release-status language mixes incompatible evidence. Front matter, §15, §19, §20 TBD-016"
+    },
+    {
+      "id": "data_representation",
+      "score": 3,
+      "justification": "FIFO capacity alternates between 32-bit words and physical rows. §8, §9, §10.5"
+    },
+    {
+      "id": "market_position",
+      "score": 3,
+      "justification": "Feature breadth is credible, integration effort is higher. §1.3–1.4, §2.1 REF-011/012, §11.5"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-001",
+      "area": "clock_reset_cdc",
+      "severity": "Blocker",
+      "label": "FACT",
+      "locator": "§7.2 CDC-002, §11.3 REQ-REG-003",
+      "title": "CSR stale update protection missing",
+      "detail": "The HDS requires a per-register generation comparison. The return entry carries a scanner sequence that increments on update pushes. The receive interface discards its tag and the load path decodes enable, kind and slot only. INFERENCE — An earlier hardware update can overwrite a later software value or clear a newly issued command.",
+      "action": "Transport the accepted software generation per slot to the PHY and echo it on returned updates. Compare at conditional load, define simultaneous writes and W1C events separately, and prevent tag reuse until stale entries are impossible."
+    },
+    {
+      "id": "F-002",
+      "area": "sdc_timing",
+      "severity": "Blocker",
+      "label": "FACT",
+      "locator": "§7.2 CDC-001/002/004/007, §17.1.3 EXC-001/002",
+      "title": "CDC constraints do not identify the actual Gray endpoints",
+      "detail": "Pointer selectors use gray_ptr and gray_sync patterns while the reused FIFO uses reg_rgray and u_sync_wr_gray. The clock group cuts both directions and the ULPI input exception needs to remain scoped to its asynchronous receivers. INFERENCE — STA may report clean timing while intended Gray constraints have no effective endpoints.",
+      "action": "Bind actual registered launch Q and first synchronizer D pins, assert nonzero counts and expected bit widths, and use target-tool exception precedence and skew reporting. Keep functional ULPI pin timing active."
+    },
+    {
+      "id": "F-003",
+      "area": "interfaces",
+      "severity": "Blocker",
+      "label": "FACT",
+      "locator": "§2.1–2.3 REF-010, §6.2–6.3 REQ-IF-006/007",
+      "title": "AXI3 reference cannot establish the AXI4 subordinate contract",
+      "detail": "The HDS calls both interfaces AXI4 while citing AXI3 as its normative text. A Manager can limit what it issues to 16-beat INCR bursts. An interconnect can present valid AXI4 requests outside the FIFO window profile, so the Subordinate boundary needs a supported traffic contract and complete beat/response semantics.",
+      "action": "Pin Arm IHI 0022H AXI4 clauses. Declare the integration profile, excluded attributes, fabric restrictions and defined response/side-effect policy for unsupported legal requests. Add RTL support or integration restrictions where necessary."
+    },
+    {
+      "id": "F-004",
+      "area": "features",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§3 REQ-FUNC-029, §8, §10.4, §15.2 TEST-023, §20 DEC-040",
+      "title": "Double buffering has incompatible software contracts",
+      "detail": "REQ-FUNC-029 and TEST-023 require an enable-controlled two-buffer swap and buf_cur. DEC-040 documents ordinary ring capacity and informational fields with no dedicated swap. A driver following either description can make a different ownership decision.",
+      "action": "Make ring queue overlap the single contract or implement the explicitly controlled feature. For the ring contract, define packet enqueue, dequeue and credits and mark each legacy field reserved or informational in the workbook."
+    },
+    {
+      "id": "F-005",
+      "area": "functions",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§3 REQ-FUNC-037, §7.4, §15.2 TEST-034",
+      "title": "SOF phase cannot be guaranteed when its clock stops",
+      "detail": "The HDS requires the Start of Frame (SOF) timebase to continue across host suspend/L1. It also permits PHY clock stop without stating a host exception. The RTL timer uses i_clk_phy. A legal stopped-clock scenario under the written contract cannot advance it.",
+      "action": "Separate the free-running timebase from transmit eligibility. Keep an appropriate Host PHY clock running or move the phase to an always-on timebase with a defined resynchronization tolerance."
+    },
+    {
+      "id": "F-006",
+      "area": "security_ras",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§3 REQ-IF-014, §8, §18, TEST-035",
+      "title": "DMA range comparison uses a low-word aperture",
+      "detail": "The 40- and 64-bit Manager configurations assemble addresses using i_dma_hi, while range comparisons use low 32-bit values and lengths. The design can use a bank-local aperture if software locks the bank and the HDS says so. The current generic range wording leaves the high bits outside the stated policy.",
+      "action": "Define a full-width aperture with overflow-safe arithmetic or document and enforce a locked high-address bank. Validate descriptor fetch, writeback and payload ranges including every enabled lane before issuing AXI."
+    },
+    {
+      "id": "F-007",
+      "area": "parameters",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§8, §10.4–10.5, §17.2, §20 DEC-006/010/041",
+      "title": "RAM organization and legal width combinations conflict",
+      "detail": "Sections 10.4, 10.5 and 17.2 require a single-port RAM, while DEC-006 selects 1W1R by default with single port optional. The independent AXI width rows do not expose the UTMI-to-AXI coupling in DEC-010. A separately valid width choice can yield an unsupported configuration.",
+      "action": "Publish one legal matrix including RAM ports, word units, clock, width coupling and profile parameters. Derive guards and memory manifests from that matrix."
+    },
+    {
+      "id": "F-008",
+      "area": "performance",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§13 PERF-001/002, §15.2 TEST-017, §20 DEC-025/032",
+      "title": "Throughput has a no-stall premise and no product margin",
+      "detail": "Three 1024-byte transactions in 125 us yield 24.576 MB/s of protocol payload. TEST-017 targets this in a best-case interconnect. Raw PHY capacity of 60 MB/s and raw RAM capacity of 240 MB/s are structural ceilings. Service stalls, arbitration, packet overhead and optional stages need distinct acceptance budgets.",
+      "action": "Specify camera bitrate/transport assumptions, worst supported AXI service gap, queue occupancy and lost-microframe limit. Verify the separate 4-cycle UTMI+ 16-bit response bound at worst enabled pipeline combinations."
+    },
+    {
+      "id": "F-009",
+      "area": "verification_quality",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§15.3–15.4, §19, REQ-VER-003",
+      "title": "Traceability is present but closure is incomplete",
+      "detail": "All 75 extracted requirements map to tests. The latest retained report gives 184/211 stimulus markers, no measured finite state machine coverage and 14/16 mutants killed. Its directed tests and bounded formal results support selected cases. The only ULPI Subordinate simulation covers Device in three scenarios.",
+      "action": "Require DUT-observed coverage for critical bins, pin source hashes for each build, reopen uncovered or waived cases explicitly and keep protocol, formal and certification evidence separate."
+    },
+    {
+      "id": "F-010",
+      "area": "software_ease",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§1.4 FEAT-023, §9, §11.5, §20 DEC-013/039/042",
+      "title": "Scatter-gather interrupt estimate exceeds the programmed feature set",
+      "detail": "FEAT-023 estimates about 375 interrupts/s using a 64 KB list at 24.576 MB/s. The descriptor preserves last and ioc without interpreting them and endpoint/channel interrupt semantics remain. The list-level rate has no specified mechanism. Generated register comments also retain old window direction according to DEC-039.",
+      "action": "Remove the list-level interrupt claim or implement coalescing/list termination with defined writeback order. Pin the CSR generator including its event sideband, regenerate, and publish a driver sequence for PSTRB, barriers, cache maintenance, re-arm and error recovery."
+    },
+    {
+      "id": "F-011",
+      "area": "asic_feasibility",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§10.5 MEM-001, §14.3, §17.2, §20 DEC-034/035",
+      "title": "FreePDK45 estimate leaves macro and timing implementation open",
+      "detail": "The existing typical-corner mapping is useful for logic sizing. The report excludes FIFO RAM, interconnect load, clock tree and I/O budgets. It leaves memory latency/collision behavior and product setup/hold feasibility open.",
+      "action": "Qualify the actual SRAM model and macro views for selected widths, ports and collision behavior. Run target multi-corner static timing with I/O, reset recovery/removal and applicable clock modes."
+    },
+    {
+      "id": "F-012",
+      "area": "area_power",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§13 area/power, §20 DEC-034",
+      "title": "Storage and mapped logic are available but product power is open",
+      "detail": "At depth 1024, parity-enabled storage is 33,792 bits at 32-bit rows or 66,560 bits at 64-bit rows, assuming depth counts physical rows per MEM-001. Typical FreePDK45 logic mapping is 119,263 µm² for TOP-MIN-OPT0 and 315,036 µm² for TOP-DUAL-OPT0 excluding FIFO RAM. The HDS gives activity assumptions without a measured power budget.",
+      "action": "State the physical row unit and collect switching activity for sustained video, bulk, idle and suspend and include PHY, SRAM and clock tree in the budget."
+    },
+    {
+      "id": "F-013",
+      "area": "dft",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§16, §17.2, DEP-004",
+      "title": "DFT responsibilities are named without insertion evidence",
+      "detail": "The HDS assigns scan clocks and RAM memory built-in self-test to the System on Chip team and describes test reset override. The reviewed evidence does not provide a selected macro test interface, scan reset truth table or automatic test pattern generation results.",
+      "action": "Confirm macro and scan test-pin handoff with a mode/reset truth table. Bind the bypass and reset overrides and require ATPG and memory test reports."
+    },
+    {
+      "id": "F-014",
+      "area": "application_fit",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§1.2–1.4 FEAT-012/016/021, §13 PERF-001",
+      "title": "Drone product operating point is still a proposal",
+      "detail": "Host camera and Device companion use cases fit the proposed partition. Camera resolution, format, compression, frame-loss tolerance and AXI service assumptions require a product owner. A power-triggered loss of the camera link also needs defined system impact.",
+      "action": "Select a first release configuration and quantify camera traffic, acceptable dropped frames, CPU servicing load and over-current recovery."
+    },
+    {
+      "id": "F-015",
+      "area": "integration_effort",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§6.3 REQ-IF-011, §7.3, §14.4, §20 DEC-025/TBD-007/TBD-015",
+      "title": "PHY bring-up depends on unresolved vendor timing",
+      "detail": "The host reset OpMode is selectable and defaults to 3. The HDS keeps UTMI+ I/O assumptions and flags converted ULPI timing as uncertain. phyclk_ok reflects reset release according to DEC-012, so it cannot by itself establish ongoing clock activity before a soft reset.",
+      "action": "Freeze PHY model, reset/pin timing and clock restart behavior. Require a live clock indicator or a software sequence that first restarts the PHY and then confirms a fresh acknowledgment."
+    },
+    {
+      "id": "F-016",
+      "area": "documentation",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "Front matter, §15, §19, §20 TBD-016",
+      "title": "The release-status language mixes incompatible evidence",
+      "detail": "The root HDS remains Draft 0.1. TBD-016 says no ASIC library or formal tool was run and says every feature is implemented and simulated. Later mapped logic and bounded formal reports exist, while the verification report shows open closure. An integrator cannot infer a unique qualification baseline from these statements.",
+      "action": "Create one versioned evidence ledger for accepted requirements, options, RTL hash, methods, results and approval state. Update historical decision notes with links to the superseding evidence."
+    },
+    {
+      "id": "F-017",
+      "area": "data_representation",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§8, §9, §10.5",
+      "title": "FIFO capacity alternates between 32-bit words and physical rows",
+      "detail": "The parameter table says depth in 32-bit words while MEM-001 multiplies the depth by a 32- or 64-bit physical row width. The same numeric depth can mean 4 KiB or 8 KiB at 1024 depending on the interpretation. The workbook and driver need the same unit for region and threshold fields.",
+      "action": "Publish the exact unit of each pointer, length, credit and threshold, and rounding rules for tail bytes and 64-bit packing. Derive legal region ends from physical depth."
+    },
+    {
+      "id": "F-018",
+      "area": "market_position",
+      "severity": "Observation",
+      "label": "INFERENCE",
+      "locator": "§1.3–1.4, §2.1 REF-011/012, §11.5",
+      "title": "Feature breadth is credible, integration effort is higher",
+      "detail": "The proposed role options, endpoint sizing and integrated DMA have commercial analogues. Synopsys documents buffering and descriptor prefetch, and TI documents a software-supported dual-role USB subsystem. Equivalent software, interoperability and sustained performance evidence are required before claiming parity.",
+      "action": "Use public benchmarks as planning references for driver bring-up, prefetch and USB interoperability."
+    },
+    {
+      "id": "F-019",
+      "area": "functions",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§12 ERR-003/005, §20 DEC-043/046",
+      "title": "Host data phase has no independent completion watchdog",
+      "detail": "The response-start timeout is disabled once reception starts. Current next-state branches depend on packet end or a decoded handshake. If a PHY supplies a persistent active indication without a terminator, no bounded return to scheduling is established. This is a recovery issue distinct from the hub end-of-frame rule.",
+      "action": "Add a separate receive-duration watchdog derived from speed, packet size and PHY tolerance. On expiry halt the affected channel, discard uncommitted rows and expose sticky diagnostics."
+    },
+    {
+      "id": "F-020",
+      "area": "clock_reset_cdc",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§7.2 CDC-001, §11.3 REQ-REG-002",
+      "title": "Command credit Gray value crosses from a combinational encoder",
+      "detail": "The command credit pop count is registered in CLK-PHY, converted combinationally to Gray and then synchronized. INFERENCE — Skew from simultaneously switching binary bits can glitch the encoded Gray vector. The FIFO full check adds protection against overfill while software-visible credits can still be disturbed.",
+      "action": "Register Gray from the next binary value in CLK-PHY and constrain the registered crossing. Recheck credit behavior across independent clock ratios and soft reset."
+    },
+    {
+      "id": "F-021",
+      "area": "parameters",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§8 PARA_USB2_NUM_DMA_CH, §6.3 REQ-IF-007/009",
+      "title": "The 16-channel AXI window build rejects every request",
+      "detail": "The HDS permits 1 to 16 DMA channels. Both address checks compare a four-bit channel index with PARA_USB2_NUM_DMA_CH[3:0]. At 16 the sliced count becomes zero, so no channel is accepted for AXI reads or writes.",
+      "action": "Compare zero-extended channel indices against the full parameter and guard map indexing using the same bound. Enforce the legal channel range in the configuration check."
+    }
+  ]
+}

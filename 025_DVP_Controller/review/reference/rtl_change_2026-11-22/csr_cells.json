@@ -1,0 +1,1067 @@
+{
+  "analyzer": "2.0",
+  "file": "C:\\Users\\PC\\.codex\\worktrees\\4ace\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\spec\\rtl_generation_2026-11-22\\VLSIT_DVP_CONTROLLER_CSR.xlsx",
+  "format": ".xlsx",
+  "analysis_backend": "openpyxl",
+  "conversion_note": null,
+  "size_bytes": 12446,
+  "zip_integrity": "ok",
+  "zip_entries": 11,
+  "macro_container": false,
+  "legacy_format_may_contain_macros": false,
+  "macro_code_analyzed": false,
+  "sheet_count": 3,
+  "sheet_names": [
+    "ASYNC_CSR",
+    "CSR",
+    "Register_Description"
+  ],
+  "defined_name_count": 0,
+  "defined_names": [],
+  "external_link_count": 0,
+  "formula_values_note": "Formula text is preserved; cached_value is reported separately. This script does not recalculate formulas.",
+  "report_mode": "detailed",
+  "sheets": [
+    {
+      "name": "CSR",
+      "state": "visible",
+      "declared_range": "A1:K34",
+      "content_range": "A1:G34",
+      "nonempty_cells": 119,
+      "formulas": 0,
+      "formula_cache_cells": 0,
+      "cached_formula_errors": 0,
+      "formula_samples": [],
+      "error_cells": 0,
+      "error_samples": [],
+      "hyperlinks": {
+        "count": 0,
+        "samples": []
+      },
+      "comments": {
+        "count": 0,
+        "samples": []
+      },
+      "tables": [],
+      "autofilter": null,
+      "freeze_panes": null,
+      "merged_ranges": {
+        "count": 7,
+        "samples": [
+          "C4:G4",
+          "C7:G7",
+          "C6:G6",
+          "C2:G2",
+          "C5:G5",
+          "C8:G8",
+          "C3:G3"
+        ]
+      },
+      "validations": 0,
+      "images": 0,
+      "charts": 0,
+      "hidden_rows": [],
+      "hidden_columns": [],
+      "column_widths": [
+        {
+          "columns": "A",
+          "width": 23.0
+        },
+        {
+          "columns": "B",
+          "width": 23.0
+        },
+        {
+          "columns": "C",
+          "width": 23.0
+        },
+        {
+          "columns": "D",
+          "width": 23.0
+        },
+        {
+          "columns": "E",
+          "width": 23.0
+        },
+        {
+          "columns": "F",
+          "width": 23.0
+        },
+        {
+          "columns": "G",
+          "width": 115.0
+        },
+        {
+          "columns": "H:XFD",
+          "width": 23.0
+        }
+      ],
+      "print_area": null,
+      "style_summary": {
+        "fonts": [
+          {
+            "style": "Calibri 13.0 color=00000000",
+            "cells": 83
+          },
+          {
+            "style": "Calibri 13.0 bold color=00000000",
+            "cells": 24
+          },
+          {
+            "style": "Calibri 13.0 bold color=00FFFFFF",
+            "cells": 10
+          },
+          {
+            "style": "Calibri 14.0 bold color=007030A0",
+            "cells": 2
+          }
+        ],
+        "fills": [
+          {
+            "style": "solid:00FFFFFF",
+            "cells": 83
+          },
+          {
+            "style": "solid:00E6DCF2",
+            "cells": 24
+          },
+          {
+            "style": "solid:007030A0",
+            "cells": 10
+          },
+          {
+            "style": "none:00000000",
+            "cells": 2
+          }
+        ],
+        "number_formats": [
+          {
+            "format": "General",
+            "cells": 119
+          }
+        ],
+        "style_ids": [
+          {
+            "id": 21,
+            "cells": 83
+          },
+          {
+            "id": 22,
+            "cells": 24
+          },
+          {
+            "id": 18,
+            "cells": 10
+          },
+          {
+            "id": 15,
+            "cells": 2
+          }
+        ]
+      },
+      "preview": [
+        {
+          "row": 1,
+          "from": "A",
+          "values": [
+            "Table - Configuration",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "row": 2,
+          "from": "A",
+          "values": [
+            "Config",
+            "Value",
+            "Description",
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "row": 3,
+          "from": "A",
+          "values": [
+            "Module Name",
+            "m_vlsit_csr_dvp",
+            "Fill the module name",
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "row": 4,
+          "from": "A",
+          "values": [
+            "Protocol",
+            "APB",
+            "APB is fixed for this version.",
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "row": 34,
+          "from": "A",
+          "values": [
+            null,
+            null,
+            "count",
+            "[31:0]",
+            "ro",
+            "0x0",
+            "Selected FIFO occupancy in sample entries.\n\nUsage: Read before servicing a DMA batch or while..."
+          ]
+        }
+      ],
+      "cell_dump": [
+        {
+          "a": "A1",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Table - Configuration",
+          "style_id": 15
+        },
+        {
+          "a": "A2",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Config",
+          "style_id": 18
+        },
+        {
+          "a": "B2",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Value",
+          "style_id": 18
+        },
+        {
+          "a": "C2",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Description",
+          "style_id": 18
+        },
+        {
+          "a": "A3",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Module Name",
+          "style_id": 21
+        },
+        {
+          "a": "B3",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "m_vlsit_csr_dvp",
+          "style_id": 21
+        },
+        {
+          "a": "C3",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Fill the module name",
+          "style_id": 21
+        },
+        {
+          "a": "A4",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Protocol",
+          "style_id": 21
+        },
+        {
+          "a": "B4",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "APB",
+          "style_id": 21
+        },
+        {
+          "a": "C4",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "APB is fixed for this version.",
+          "style_id": 21
+        },
+        {
+          "a": "A5",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Data Width",
+          "style_id": 21
+        },
+        {
+          "a": "B5",
+          "kind": "value",
+          "excel_type": "n",
+          "value": 32,
+          "style_id": 21
+        },
+        {
+          "a": "C5",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "32 is fixed for this version",
+          "style_id": 21
+        },
+        {
+          "a": "A6",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Address Width",
+          "style_id": 21
+        },
+        {
+          "a": "B6",
+          "kind": "value",
+          "excel_type": "n",
+          "value": 16,
+          "style_id": 21
+        },
+        {
+          "a": "C6",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "16 is fixed for this version",
+          "style_id": 21
+        },
+        {
+          "a": "A7",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Write Strobe",
+          "style_id": 21
+        },
+        {
+          "a": "B7",
+          "kind": "value",
+          "excel_type": "n",
+          "value": 4,
+          "style_id": 21
+        },
+        {
+          "a": "C7",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "4 is fixed for this version",
+          "style_id": 21
+        },
+        {
+          "a": "A8",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Asynchronous",
+          "style_id": 21
+        },
+        {
+          "a": "B8",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0",
+          "style_id": 21
+        },
+        {
+          "a": "C8",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Enable the asynchronous domain between bus and register\n1: Turn on\n0: Turn off",
+          "style_id": 21
+        },
+        {
+          "a": "A14",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Table - Register Definition",
+          "style_id": 15
+        },
+        {
+          "a": "A15",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "REGISTER",
+          "style_id": 18
+        },
+        {
+          "a": "B15",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "OFFSET",
+          "style_id": 18
+        },
+        {
+          "a": "C15",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "BIT NAME",
+          "style_id": 18
+        },
+        {
+          "a": "D15",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "FIELD WIDTH",
+          "style_id": 18
+        },
+        {
+          "a": "E15",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "BIT TYPE",
+          "style_id": 18
+        },
+        {
+          "a": "F15",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "RESET VALUE",
+          "style_id": 18
+        },
+        {
+          "a": "G15",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "DESCRIPTION",
+          "style_id": 18
+        },
+        {
+          "a": "A16",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "dvp_version",
+          "style_id": 22
+        },
+        {
+          "a": "B16",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 22
+        },
+        {
+          "a": "F16",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x00010000",
+          "style_id": 22
+        },
+        {
+          "a": "G16",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "DVP controller version register. Identifies the major and minor software interface revision.",
+          "style_id": 22
+        },
+        {
+          "a": "C17",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "major",
+          "style_id": 21
+        },
+        {
+          "a": "D17",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[31:16]",
+          "style_id": 21
+        },
+        {
+          "a": "E17",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F17",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x1",
+          "style_id": 21
+        },
+        {
+          "a": "G17",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Major IP version number. Software reads this value to select a compatible driver.\n\nUsage: Read during initialization; software never writes this field.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number.",
+          "style_id": 21
+        },
+        {
+          "a": "C18",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "minor",
+          "style_id": 21
+        },
+        {
+          "a": "D18",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[15:0]",
+          "style_id": 21
+        },
+        {
+          "a": "E18",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F18",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G18",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Minor IP version number. Software reads this value to identify compatible interface additions.\n\nUsage: Read with the major version during initialization; software never writes this field.\n\nValues:\n0x0 minor version 0 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number.",
+          "style_id": 21
+        },
+        {
+          "a": "A19",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "dvp_ctrl",
+          "style_id": 22
+        },
+        {
+          "a": "B19",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x4",
+          "style_id": 22
+        },
+        {
+          "a": "F19",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x00000000",
+          "style_id": 22
+        },
+        {
+          "a": "G19",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "DVP controller control register. Enables or disables qualified sensor sample capture.",
+          "style_id": 22
+        },
+        {
+          "a": "C20",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "reserved",
+          "style_id": 21
+        },
+        {
+          "a": "D20",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[31:2]",
+          "style_id": 21
+        },
+        {
+          "a": "E20",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F20",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G20",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "This field is unused.\nRead-as-zero and write-ignored.",
+          "style_id": 21
+        },
+        {
+          "a": "C21",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "pclk_mode",
+          "style_id": 21
+        },
+        {
+          "a": "D21",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[1]",
+          "style_id": 21
+        },
+        {
+          "a": "E21",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "rw",
+          "style_id": 21
+        },
+        {
+          "a": "F21",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G21",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "PCLK clock-mode selector. Selects the continuous-PCLK AFIFO path or gated valid-pixel toggle/SFIFO path.\n\nUsage: Program in a separate APB write while capture is disabled and before enabling capture. Writes while capture is enabled or when the same write sets capture_en are ignored; APB completes with OKAY. Keep mode unchanged for a capture session.\n\nValues:\n0x0 Continuous PCLK with asynchronous Gray FIFO (reset value);\n0x1 Gated PCLK with valid-pixel toggle bridge and APB-clocked FIFO.\n\nUnit: none\n\nLimits: One-bit runtime CSR field; see the PCLK spacing and VSYNC pulse requirements in the hardware specification.",
+          "style_id": 21
+        },
+        {
+          "a": "C22",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "capture_en",
+          "style_id": 21
+        },
+        {
+          "a": "D22",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[0]",
+          "style_id": 21
+        },
+        {
+          "a": "E22",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "rw",
+          "style_id": 21
+        },
+        {
+          "a": "F22",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G22",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Capture enable bit. Allows frame-qualified DVP samples to enter the FIFO selected by pclk_mode.\n\nUsage: Program PCLK_MODE, watermark and timeout before enabling. Capture arms at the next active VSYNC edge after the selected path is initialized; clear to stop accepting new samples. Existing FIFO entries remain available to DMA.\n\nValues:\n0x0 capture disabled (reset value);\n0x1 capture enabled.\n\nUnit: none\n\nLimits: One-bit value.",
+          "style_id": 21
+        },
+        {
+          "a": "A23",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "dvp_wmark",
+          "style_id": 22
+        },
+        {
+          "a": "B23",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x8",
+          "style_id": 22
+        },
+        {
+          "a": "F23",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x00000000",
+          "style_id": 22
+        },
+        {
+          "a": "G23",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "DVP FIFO watermark register. Selects the occupancy that requests a DMA service batch.",
+          "style_id": 22
+        },
+        {
+          "a": "C24",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "level",
+          "style_id": 21
+        },
+        {
+          "a": "D24",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[31:0]",
+          "style_id": 21
+        },
+        {
+          "a": "E24",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "rw",
+          "style_id": 21
+        },
+        {
+          "a": "F24",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G24",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "FIFO watermark level. Raises the DMA batch request when read-side occupancy reaches this sample count.\n\nUsage: Program before enabling capture; zero disables DMA requests; use a value no greater than PARA_FIFO_DEPTH.\n\nValues:\n0x0 DMA request disabled (reset value);\n0x1 to 0xFFFFFFFF request at or above the programmed occupancy, subject to FIFO depth.\n\nUnit: sample entries\n\nLimits: Zero disables requests; valid nonzero values are 1 through PARA_FIFO_DEPTH; values greater than the physical depth are unreachable thresholds and leave the request deasserted.",
+          "style_id": 21
+        },
+        {
+          "a": "A25",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "dvp_timeout",
+          "style_id": 22
+        },
+        {
+          "a": "B25",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0xC",
+          "style_id": 22
+        },
+        {
+          "a": "F25",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x00000000",
+          "style_id": 22
+        },
+        {
+          "a": "G25",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "DVP FIFO timeout register. Bounds APB wait cycles for reads of an empty FIFO-data endpoint.",
+          "style_id": 22
+        },
+        {
+          "a": "C26",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "cycles",
+          "style_id": 21
+        },
+        {
+          "a": "D26",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[31:0]",
+          "style_id": 21
+        },
+        {
+          "a": "E26",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "rw",
+          "style_id": 21
+        },
+        {
+          "a": "F26",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G26",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "FIFO-empty timeout. Limits the APB access cycles an empty FIFO-data read may wait before returning PSLVERR.\n\nUsage: Program before DMA reads; zero gives an immediate error in the first access cycle when FIFO is empty; data available on the terminal decision cycle wins.\n\nValues:\n0x0 immediate empty-read timeout (reset value);\n0x1 to 0xFFFFFFFF wait the programmed number of APB access cycles.\n\nUnit: APB clock cycles\n\nLimits: 32-bit unsigned count; applies only while a FIFO-data read is active and the FIFO is empty.",
+          "style_id": 21
+        },
+        {
+          "a": "A27",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "dvp_fifo_sts",
+          "style_id": 22
+        },
+        {
+          "a": "B27",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x10",
+          "style_id": 22
+        },
+        {
+          "a": "F27",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x00000002",
+          "style_id": 22
+        },
+        {
+          "a": "G27",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "DVP FIFO status register. Reports capture state, selected FIFO flags and sticky overflow.",
+          "style_id": 22
+        },
+        {
+          "a": "C28",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "reserved",
+          "style_id": 21
+        },
+        {
+          "a": "D28",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[31:4]",
+          "style_id": 21
+        },
+        {
+          "a": "E28",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F28",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G28",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "This field is unused.\nRead-as-zero and write-ignored.",
+          "style_id": 21
+        },
+        {
+          "a": "C29",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ovf",
+          "style_id": 21
+        },
+        {
+          "a": "D29",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[3]",
+          "style_id": 21
+        },
+        {
+          "a": "E29",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "w1c",
+          "style_id": 21
+        },
+        {
+          "a": "F29",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G29",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "FIFO overflow event. Sticky flag records a qualified sample rejected because the FIFO was full.\n\nUsage: Read after capture; write one to clear after software records or handles the sample loss; a new hardware event wins over a simultaneous clear.\n\nValues:\n0x0 no recorded overflow (reset value);\n0x1 overflow recorded.\n\nUnit: none\n\nLimits: One-bit sticky status; hardware sets it from the mode-specific overflow event; continuous-mode pulse is synchronized to APB.",
+          "style_id": 21
+        },
+        {
+          "a": "C30",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "full",
+          "style_id": 21
+        },
+        {
+          "a": "D30",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[2]",
+          "style_id": 21
+        },
+        {
+          "a": "E30",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F30",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G30",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "FIFO full status. Reports that the FIFO selected by pclk_mode cannot accept another sample.\n\nUsage: Read while capture is active to monitor overflow risk; the sensor itself cannot be stalled.\n\nValues:\n0x0 not full (reset value);\n0x1 full.\n\nUnit: none\n\nLimits: Mode 0 AFIFO full indication is synchronized to APB; mode 1 SFIFO full is local to APB.",
+          "style_id": 21
+        },
+        {
+          "a": "C31",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "empty",
+          "style_id": 21
+        },
+        {
+          "a": "D31",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[1]",
+          "style_id": 21
+        },
+        {
+          "a": "E31",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F31",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x1",
+          "style_id": 21
+        },
+        {
+          "a": "G31",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "FIFO empty status. Reports that no sample is available in the FIFO selected by pclk_mode.\n\nUsage: Read before or after DMA service; a value of one means FIFO_DATA reads will wait or time out.\n\nValues:\n0x0 not empty;\n0x1 empty (reset value after coordinated FIFO reset).\n\nUnit: none\n\nLimits: Mode 0 uses the APB read-side AFIFO flag; mode 1 uses the APB SFIFO flag. Status is valid after the selected path initializes.",
+          "style_id": 21
+        },
+        {
+          "a": "C32",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "active",
+          "style_id": 21
+        },
+        {
+          "a": "D32",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[0]",
+          "style_id": 21
+        },
+        {
+          "a": "E32",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F32",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G32",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Capture armed/active status. Reports that capture is enabled and the selected path has observed its qualifying VSYNC frame boundary.\n\nUsage: Read to determine whether the controller is collecting samples from the current frame.\n\nValues:\n0x0 capture disabled or waiting for a qualifying VSYNC;\n0x1 capture active.\n\nUnit: none\n\nLimits: One-bit APB-domain status; gated mode waits for synchronized VSYNC and qualified pixel timing.",
+          "style_id": 21
+        },
+        {
+          "a": "A33",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "dvp_fifo_level",
+          "style_id": 22
+        },
+        {
+          "a": "B33",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x14",
+          "style_id": 22
+        },
+        {
+          "a": "F33",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x00000000",
+          "style_id": 22
+        },
+        {
+          "a": "G33",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "DVP FIFO level register. Reports occupancy of the FIFO selected by dvp_ctrl.pclk_mode.",
+          "style_id": 22
+        },
+        {
+          "a": "C34",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "count",
+          "style_id": 21
+        },
+        {
+          "a": "D34",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "[31:0]",
+          "style_id": 21
+        },
+        {
+          "a": "E34",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "ro",
+          "style_id": 21
+        },
+        {
+          "a": "F34",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "0x0",
+          "style_id": 21
+        },
+        {
+          "a": "G34",
+          "kind": "value",
+          "excel_type": "s",
+          "value": "Selected FIFO occupancy in sample entries.\n\nUsage: Read before servicing a DMA batch or while diagnosing overflow risk. The same value feeds the watermark request logic.\n\nValues:\n0x0 no samples available (reset value);\n0x1 to PARA_FIFO_DEPTH current visible entries.\n\nUnit: sample entries\n\nLimits: Mode 0 is the APB read-side AFIFO estimate and can lag new PCLK writes by CDC latency. Mode 1 is the exact APB-domain accepted-write/read count.",
+          "style_id": 21
+        }
+      ],
+      "cell_dump_scope": "A1:G34"
+    }
+  ]
+}

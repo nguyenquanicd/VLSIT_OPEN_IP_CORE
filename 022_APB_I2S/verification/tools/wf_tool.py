@@ -14,7 +14,7 @@ import json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VER = os.path.dirname(HERE)
-SPEC_FIG = os.path.join(VER, "..", "spec", "figures")
+SPEC_FIG = os.path.join(VER, "..", "figures")
 SIM = os.path.join(VER, "waveforms_sim")
 D = "tb_i2s.dut."
 G = "tb_i2s."

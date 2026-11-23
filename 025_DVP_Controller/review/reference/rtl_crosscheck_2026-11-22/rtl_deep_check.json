@@ -1,0 +1,184 @@
+{
+  "files": [
+    "m_vlsit_csr_dvp.sv",
+    "m_vlsit_csr_sync.sv",
+    "m_dvp_afifo.sv",
+    "m_dvp_afifo_rd.sv",
+    "m_dvp_apb_data.sv",
+    "m_dvp_apb_decode.sv",
+    "m_dvp_apb_service.sv",
+    "m_dvp_buffer.sv",
+    "m_dvp_capture.sv",
+    "m_dvp_controller.sv",
+    "m_dvp_dma_req.sv",
+    "m_dvp_gate_bridge.sv"
+  ],
+  "counts": {
+    "Critical": 0,
+    "High": 9,
+    "Medium": 11,
+    "Low": 0
+  },
+  "findings": [
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_dvp_capture.sv",
+      "line": 116,
+      "message": "signal reg_vsync_active_dly is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_dvp_capture.sv",
+      "line": 118,
+      "message": "signal reg_frame_active is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_dvp_capture.sv",
+      "line": 121,
+      "message": "signal reg_capture_quiescent is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_dvp_capture.sv",
+      "line": 122,
+      "message": "signal reg_afifo_wr_en is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_dvp_capture.sv",
+      "line": 124,
+      "message": "signal reg_afifo_wr_data is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_dvp_capture.sv",
+      "line": 161,
+      "message": "signal reg_gated_data is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_dvp_capture.sv",
+      "line": 162,
+      "message": "signal reg_valid_toggle is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_vlsit_csr_dvp.sv",
+      "line": 295,
+      "message": "signal reg_pready is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "High",
+      "rule": "DEEP-06",
+      "file": "m_vlsit_csr_dvp.sv",
+      "line": 466,
+      "message": "signal reg_rdata is driven by 2 always blocks",
+      "fix": "keep one driver per signal and merge the branches into one always_ff"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_afifo_rd.sv",
+      "line": 233,
+      "message": "reset i_rst_n_rd drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_apb_data.sv",
+      "line": 100,
+      "message": "reset i_rst_n_apb drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_buffer.sv",
+      "line": 274,
+      "message": "reset i_rst_n_apb drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_capture.sv",
+      "line": 180,
+      "message": "reset i_clk_dvp drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_capture.sv",
+      "line": 180,
+      "message": "reset i_rst_n_gated drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_capture.sv",
+      "line": 180,
+      "message": "reset i_rst_n_dvp drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_dma_req.sv",
+      "line": 75,
+      "message": "reset i_rst_n_apb drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_dvp_gate_bridge.sv",
+      "line": 103,
+      "message": "reset i_rst_n_apb drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_vlsit_csr_dvp.sv",
+      "line": 490,
+      "message": "reset i_rst_n_reg drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_vlsit_csr_dvp.sv",
+      "line": 490,
+      "message": "reset w_rst_n_reg drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    },
+    {
+      "severity": "Medium",
+      "rule": "DEEP-08",
+      "file": "m_vlsit_csr_dvp.sv",
+      "line": 490,
+      "message": "reset i_rst_n_apb drives flops without a visible two-flop synchroniser",
+      "fix": "add a reset synchroniser in the destination clock domain (async assert, sync deassert)"
+    }
+  ]
+}

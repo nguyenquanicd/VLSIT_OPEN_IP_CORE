@@ -1,0 +1,17 @@
+flowchart LR
+  Sensor["CMOS image sensor<br/>DVP: PCLK, D[11:0], frame/line qualifiers"] --> Pads["Input pads<br/>voltage / timing"]
+  Pads --> Capture["PCLK-domain capture<br/>edge select, lane map"]
+  Capture --> Normalize["Sync normalization<br/>polarity, mode, SOF/SOL/EOL/EOF"]
+  Normalize --> Validate["Line/frame validation<br/>geometry, timeout, sticky errors"]
+  Validate --> Pack["Pixel formatter / packer<br/>raw, Bayer, RGB/YUV"]
+  Pack --> AsyncFIFO["Asynchronous FIFO<br/>PCLK domain → SoC domain"]
+  AsyncFIFO --> DMA["DMA / stream output"]
+  DMA --> Memory["System memory / frame buffer"]
+  Regs["Control/status registers<br/>profile, width, edge, polarity,<br/>geometry, watermark, counters"] --> Capture
+  Regs --> Normalize
+  Regs --> Validate
+  Regs --> Pack
+  AsyncFIFO --> Regs
+  SCCB["Optional SCCB / I²C sequencer"] --> Sensor
+  XCLK["Optional XCLK output<br/>RESETn / PWDN control"] --> Sensor
+  Sensor -. "PIXCLK is a distinct input clock domain" .-> Capture
