@@ -213,13 +213,11 @@ module m_usb2_dev #(
   logic [10:0]                              w_o_mps;
   logic                                     w_o_space;
   logic [16:0]                              w_o_rows;
-  logic                                     w_i_act;
   logic                                     w_i_stall;
   logic [1:0]                               w_i_type;
   logic [10:0]                              w_i_mps;
   logic [18:0]                              w_i_xs;
   logic [11:0]                              w_i_len;
-  logic [16:0]                              w_i_rows;
   logic                                     w_i_have;
   logic [PARA_USB2_NEP1-1:0]                reg_have_i;
   logic                                     w_pid_ok;
@@ -283,13 +281,11 @@ module m_usb2_dev #(
   assign w_o_space = (i_rx_free >= w_o_rows) & i_plq_free;
 
   // IN endpoint view of the token: armed, stall, type, remaining bytes and the data to send.
-  assign w_i_act   = reg_act_i[w_tk_ep];
   assign w_i_stall = i_epi_ctrl[w_tk_ep][13];
   assign w_i_type  = i_epi_ctrl[w_tk_ep][12:11];
   assign w_i_mps   = i_epi_ctrl[w_tk_ep][10:0];
   assign w_i_xs    = reg_xs_i[w_tk_ep];
   assign w_i_len   = (w_i_xs > {8'd0, w_i_mps}) ? {1'b0, w_i_mps} : w_i_xs[11:0];
-  assign w_i_rows  = ({5'd0, w_i_len} + (17'd1 << w_bpr_sh) - 17'd1) >> w_bpr_sh;
   assign w_i_iso   = (w_i_type == LPARA_TYPE_ISO[1:0]);
   assign w_hb      = w_i_iso & i_speed_hs;
   assign w_hb_pid  = (w_rem >= 2'd3) ? LPARA_PID_DATA2[3:0] : ((w_rem == 2'd2) ? LPARA_PID_DATA1[3:0] : LPARA_PID_DATA0[3:0]);

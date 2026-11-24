@@ -143,9 +143,9 @@ An illegal configuration is `PARA_AHS4_DATA_W` below 1 or above 256, `PARA_AHS4_
 
 ### 5.2 Block diagram
 
-![Async 4-phase handshake block diagram](../figures/vlsit_ahs4_block_diagram.svg)
+![Async 4-phase handshake block diagram](figures/vlsit_ahs4_block_diagram.svg)
 
-The editable draw.io source is [../figures/vlsit_ahs4_block_diagram.drawio](../figures/vlsit_ahs4_block_diagram.drawio). The diagram shows the structural top, the source and destination blocks, the request and payload crossing (CDC-001 and CDC-003), the acknowledge crossing into the source block (CDC-002), and the two clock domains. The synchronizer instances `u_sync_ack` and `u_sync_req` are inside `u_src` and `u_dst`; the interface table under the diagram lists every signal of each interface, including the internal acknowledge net `w_ack` that `u_dst` returns to `u_src`. The design intent of the two instances is identical; the split into two blocks keeps each clock domain's logic together. The source control is two flags, and the destination has no FSM in either mode.
+The editable draw.io source is [figures/vlsit_ahs4_block_diagram.drawio](figures/vlsit_ahs4_block_diagram.drawio). The diagram shows the structural top, the source and destination blocks, the request and payload crossing (CDC-001 and CDC-003), the acknowledge crossing into the source block (CDC-002), and the two clock domains. The synchronizer instances `u_sync_ack` and `u_sync_req` are inside `u_src` and `u_dst`; the interface table under the diagram lists every signal of each interface, including the internal acknowledge net `w_ack` that `u_dst` returns to `u_src`. The design intent of the two instances is identical; the split into two blocks keeps each clock domain's logic together. The source control is two flags, and the destination has no FSM in either mode.
 
 ### 5.3 Transaction and dataflow
 
@@ -321,12 +321,12 @@ The IP has no FSM. The source control state is the two flags `reg_req` and `reg_
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001 single transfer, mode 0, N=2, 1:1 clocks, one destination wait cycle | Success | `i_clk_src`, `i_req`, `i_data`, `o_ack`, `reg_req`, `reg_ack`, `w_ack_s`, `i_clk_dst`, `o_req`, `o_data`, `i_ack` | `../figures/vlsit_ahs4_wf001_success.svg` | 2026-11-12 |
-| WF-002 | OP-002 backpressured transfer, mode 0, `i_ack` delayed 4 destination cycles | Success with backpressure | Same signals as WF-001 | `../figures/vlsit_ahs4_wf002_backpressure.svg` | 2026-11-12 |
-| WF-003 | OP-003 reset during a transaction, both resets asserted together | Corner / recovery | Same signals plus `i_rst_n_src`, `i_rst_n_dst` | `../figures/vlsit_ahs4_wf003_reset.svg` | 2026-11-12 |
-| WF-004 | OP-004 back-to-back transfer with the minimum gap, mode 0 | Corner | Same signals as WF-001 | `../figures/vlsit_ahs4_wf004_backtoback.svg` | 2026-11-12 |
-| WF-005 | Illegal destination-only reset while the source keeps running | Error | Same signals plus `i_rst_n_dst` | `../figures/vlsit_ahs4_wf005_dst_reset.svg` | 2026-11-12 |
-| WF-006 | OP-005 captured transfer, mode 1, N=2, 1:1 clocks, one destination wait cycle | Success | `i_clk_src`, `i_req`, `i_data`, `o_ack`, `reg_req`, `reg_ack`, `w_ack_s`, `i_clk_dst`, `o_req`, `o_data`, `i_ack` | `../figures/vlsit_ahs4_wf006_capture.svg` | 2026-11-12 |
+| WF-001 | OP-001 single transfer, mode 0, N=2, 1:1 clocks, one destination wait cycle | Success | `i_clk_src`, `i_req`, `i_data`, `o_ack`, `reg_req`, `reg_ack`, `w_ack_s`, `i_clk_dst`, `o_req`, `o_data`, `i_ack` | `figures/vlsit_ahs4_wf001_success.svg` | 2026-11-12 |
+| WF-002 | OP-002 backpressured transfer, mode 0, `i_ack` delayed 4 destination cycles | Success with backpressure | Same signals as WF-001 | `figures/vlsit_ahs4_wf002_backpressure.svg` | 2026-11-12 |
+| WF-003 | OP-003 reset during a transaction, both resets asserted together | Corner / recovery | Same signals plus `i_rst_n_src`, `i_rst_n_dst` | `figures/vlsit_ahs4_wf003_reset.svg` | 2026-11-12 |
+| WF-004 | OP-004 back-to-back transfer with the minimum gap, mode 0 | Corner | Same signals as WF-001 | `figures/vlsit_ahs4_wf004_backtoback.svg` | 2026-11-12 |
+| WF-005 | Illegal destination-only reset while the source keeps running | Error | Same signals plus `i_rst_n_dst` | `figures/vlsit_ahs4_wf005_dst_reset.svg` | 2026-11-12 |
+| WF-006 | OP-005 captured transfer, mode 1, N=2, 1:1 clocks, one destination wait cycle | Success | `i_clk_src`, `i_req`, `i_data`, `o_ack`, `reg_req`, `reg_ack`, `w_ack_s`, `i_clk_dst`, `o_req`, `o_data`, `i_ack` | `figures/vlsit_ahs4_wf006_capture.svg` | 2026-11-12 |
 
 Cycle table for WF-001 with 10 ns clocks on both domains, aligned rising edges, N=2, mode 0, and one destination wait cycle. The launch edge is t0.
 

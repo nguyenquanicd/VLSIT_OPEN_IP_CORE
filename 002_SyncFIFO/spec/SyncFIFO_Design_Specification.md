@@ -14,7 +14,7 @@ csr_spec: "Not required (no software-visible registers)"
 
 > **Purpose:** Normative design contract for architecture, RTL, verification, DFT, and physical integration of this IP.
 >
-> **Status of this draft:** The decisions DEC-001 to DEC-013 were taken by the designer on 2026-10-23. The decisions DEC-014 to DEC-024 are choices of the author of this draft that the designer has not yet confirmed (Section 20). No RTL exists yet. The waveforms and the latency and depth figures of this document come from a throw-away prototype that follows this specification (`../figures/../verification/sim/waveform_proto/`); they are not results of the delivered RTL.
+> **Status of this draft:** The decisions DEC-001 to DEC-013 were taken by the designer on 2026-10-23. The decisions DEC-014 to DEC-024 are choices of the author of this draft that the designer has not yet confirmed (Section 20). No RTL exists yet. The waveforms and the latency and depth figures of this document come from a throw-away prototype that follows this specification (`figures/../verification/sim/waveform_proto/`); they are not results of the delivered RTL.
 >
 > Requirement terms: **shall** = mandatory and testable; **should** = recommended; **may** = optional.
 
@@ -119,7 +119,7 @@ The interface and the options are inherited from the sibling IP `001_AsyncGrayFI
 | REF-002 | Decisions of the designer, 2026-10-23 (Section 20) | DEC-001 to DEC-013 | Product behavior: no external product document exists |
 | REF-003 | VLSIT RTL Design Rules v2, `VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_RTL_Design_Rule.md` | All applicable rules | Mandatory RTL coding, hierarchy, reset, CDC and naming baseline |
 | REF-004 | IEEE 1800-2017 SystemVerilog | Synthesizable subset | Subject to REF-003 and the selected frontend |
-| REF-005 | Prototype and its logs, `../figures/../verification/sim/waveform_proto/` and `../figures/waveforms/sfifo_*.txt` | Sections 10.3, 10.4 and 15 | Evidence for the waveforms, the latency and the minimum depth; not the delivered RTL |
+| REF-005 | Prototype and its logs, `figures/../verification/sim/waveform_proto/` and `figures/waveforms/sfifo_*.txt` | Sections 10.3, 10.4 and 15 | Evidence for the waveforms, the latency and the minimum depth; not the delivered RTL |
 
 No external bus protocol is used, so no document of `reference/md_doc` is cited. The CSR workbook is not used (Section 11).
 
@@ -210,9 +210,9 @@ The IP has a write side in the write clock domain, a read side in the read clock
 
 ### 5.2 Block diagram
 
-![Block diagram of the synchronous-clock FIFO: write side, read side and storage in the top frame (diagram spec: ../figures/sfifo_diagram_spec.json). The two pointers and the software reset handshake cross between the sides as timed paths without a synchronizer](../figures/sfifo_block_diagram.svg)
+![Block diagram of the synchronous-clock FIFO: write side, read side and storage in the top frame (diagram spec: figures/sfifo_diagram_spec.json). The two pointers and the software reset handshake cross between the sides as timed paths without a synchronizer](figures/sfifo_block_diagram.svg)
 
-*Figure 5-1. Block diagram of the synchronous-clock FIFO: write side, read side and storage in the top frame (diagram spec: ../figures/sfifo_diagram_spec.json). The two pointers and the software reset handshake cross between the sides as timed paths without a synchronizer. Source: `../figures/sfifo_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
+*Figure 5-1. Block diagram of the synchronous-clock FIFO: write side, read side and storage in the top frame (diagram spec: figures/sfifo_diagram_spec.json). The two pointers and the software reset handshake cross between the sides as timed paths without a synchronizer. Source: `figures/sfifo_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
 
 ### 5.3 Transaction and dataflow
 
@@ -306,17 +306,17 @@ There is no external bus protocol. The FIFO interface follows these rules, the s
 
 Figure 6-1 to Figure 6-3 give the key waveforms of the interface (the full plan is in Section 10.3).
 
-![One write into an empty FIFO](../figures/waveforms/sfifo_wf001_write_into_empty.svg)
+![One write into an empty FIFO](figures/waveforms/sfifo_wf001_write_into_empty.svg)
 
-*Figure 6-1. Write into an empty FIFO and the fall of o_empty (WF-001, source `../figures/waveforms/sfifo_wf001_write_into_empty.json`).*
+*Figure 6-1. Write into an empty FIFO and the fall of o_empty (WF-001, source `figures/waveforms/sfifo_wf001_write_into_empty.json`).*
 
-![Three reads with show-ahead](../figures/waveforms/sfifo_wf002_read_show_ahead.svg)
+![Three reads with show-ahead](figures/waveforms/sfifo_wf002_read_show_ahead.svg)
 
-*Figure 6-2. Read with show-ahead data (WF-002, source `../figures/waveforms/sfifo_wf002_read_show_ahead.json`).*
+*Figure 6-2. Read with show-ahead data (WF-002, source `figures/waveforms/sfifo_wf002_read_show_ahead.json`).*
 
-![Full and overflow](../figures/waveforms/sfifo_wf003_full_overflow.svg)
+![Full and overflow](figures/waveforms/sfifo_wf003_full_overflow.svg)
 
-*Figure 6-3. Full FIFO: writes rejected and o_overflow pulses (WF-003, source `../figures/waveforms/sfifo_wf003_full_overflow.json`).*
+*Figure 6-3. Full FIFO: writes rejected and o_overflow pulses (WF-003, source `figures/waveforms/sfifo_wf003_full_overflow.json`).*
 
 ### 6.4 Interrupts and events
 
@@ -428,63 +428,63 @@ The data path has no mode: the flags alone decide acceptance. Two small FSMs run
 
 ### 10.3 Cycle-level behavior
 
-**Waveform plan (rule R-024).** The plan was proposed from sections 6.3 and 10.2 and confirmed by the designer on 2026-10-23 (option "proposed list" with the back-to-back waveforms that the designer asked for: continuous write and continuous read with only the initial latency). It covers every operation of 10.2, the success and the error case of both interfaces, and the special cases (latency with both pointer options, clock ratio, wrap-around of an odd depth, software reset, hardware reset). The waveforms come from the prototype (`../figures/../verification/sim/waveform_proto/gen_waves.py`).
+**Waveform plan (rule R-024).** The plan was proposed from sections 6.3 and 10.2 and confirmed by the designer on 2026-10-23 (option "proposed list" with the back-to-back waveforms that the designer asked for: continuous write and continuous read with only the initial latency). It covers every operation of 10.2, the success and the error case of both interfaces, and the special cases (latency with both pointer options, clock ratio, wrap-around of an odd depth, software reset, hardware reset). The waveforms come from the prototype (`figures/../verification/sim/waveform_proto/gen_waves.py`).
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001 write into an empty FIFO | success | Write, pointer, o_empty fall, show-ahead data | ../figures/waveforms/sfifo_wf001_write_into_empty.svg | 2026-10-23 |
-| WF-002 | OP-002 three reads with show-ahead data | success | Read, o_rd_data, pointer, o_empty rise | ../figures/waveforms/sfifo_wf002_read_show_ahead.svg | 2026-10-23 |
-| WF-003 | OP-003 write into a full FIFO | error | o_full, writes rejected, o_overflow pulses, o_full_thr | ../figures/waveforms/sfifo_wf003_full_overflow.svg | 2026-10-23 |
-| WF-004 | OP-004 read of an empty FIFO | error | o_empty, reads rejected, o_underflow pulses | ../figures/waveforms/sfifo_wf004_empty_underflow.svg | 2026-10-23 |
-| WF-005 | OP-005 threshold flags | success | o_full_thr, o_empty_thr against the occupancy | ../figures/waveforms/sfifo_wf005_thresholds.svg | 2026-10-23 |
-| WF-006 | OP-001 and OP-002 flag latency with `PARA_SFIFO_PTR_RETIME` = 0, clocks 12 ns and 8 ns | corner | Fall of o_empty after a write, fall of o_full after a read | ../figures/waveforms/sfifo_wf006_flag_latency_retime0.svg | 2026-10-23 |
-| WF-007 | OP-001 and OP-002 flag latency with `PARA_SFIFO_PTR_RETIME` = 1, clocks 12 ns and 8 ns | corner | The same with one more destination edge | ../figures/waveforms/sfifo_wf007_flag_latency_retime1.svg | 2026-10-23 |
-| WF-008 | OP-001 and OP-002 continuous write and continuous read, equal clocks, `PARA_SFIFO_PTR_RETIME` = 0 | corner (back-to-back) | Initial latency, then one word per cycle, no gap | ../figures/waveforms/sfifo_wf008_back_to_back_equal_retime0.svg | 2026-10-23 |
-| WF-009 | OP-001 and OP-002 continuous write and continuous read, equal clocks, `PARA_SFIFO_PTR_RETIME` = 1 | corner (back-to-back) | The same with the longer initial latency | ../figures/waveforms/sfifo_wf009_back_to_back_equal_retime1.svg | 2026-10-23 |
-| WF-010 | OP-001 and OP-002 continuous traffic, write clock 8 ns faster than read clock 12 ns | corner (back-to-back) | Reader never stalls; the writer is held by o_full | ../figures/waveforms/sfifo_wf010_back_to_back_write_faster.svg | 2026-10-23 |
-| WF-011 | OP-001 and OP-002 continuous traffic, read clock 8 ns faster than write clock 12 ns | corner (back-to-back) | Writer never stalls; the reader waits by o_empty | ../figures/waveforms/sfifo_wf011_back_to_back_read_faster.svg | 2026-10-23 |
-| WF-012 | OP-001 and OP-002 pointer and address wrap with depth 5 | corner | Pointer 0 to 9, address 0 to 4 | ../figures/waveforms/sfifo_wf012_pointer_wrap_depth5.svg | 2026-10-23 |
-| WF-013 | OP-006 software reset sequence | success | i_rst_n_sw, both FSMs, request, acknowledge, busy, pointers | ../figures/waveforms/sfifo_wf013_software_reset.svg | 2026-10-23 |
-| WF-014 | OP-006 one-cycle software reset pulse while the FIFO is full | corner | The whole sequence started by a one-cycle pulse | ../figures/waveforms/sfifo_wf014_software_reset_pulse_full.svg | 2026-10-23 |
-| WF-015 | OP-007 hardware reset in the middle of traffic | corner | Both resets, state cleared at once, o_empty 1 | ../figures/waveforms/sfifo_wf015_hardware_reset.svg | 2026-10-23 |
+| WF-001 | OP-001 write into an empty FIFO | success | Write, pointer, o_empty fall, show-ahead data | figures/waveforms/sfifo_wf001_write_into_empty.svg | 2026-10-23 |
+| WF-002 | OP-002 three reads with show-ahead data | success | Read, o_rd_data, pointer, o_empty rise | figures/waveforms/sfifo_wf002_read_show_ahead.svg | 2026-10-23 |
+| WF-003 | OP-003 write into a full FIFO | error | o_full, writes rejected, o_overflow pulses, o_full_thr | figures/waveforms/sfifo_wf003_full_overflow.svg | 2026-10-23 |
+| WF-004 | OP-004 read of an empty FIFO | error | o_empty, reads rejected, o_underflow pulses | figures/waveforms/sfifo_wf004_empty_underflow.svg | 2026-10-23 |
+| WF-005 | OP-005 threshold flags | success | o_full_thr, o_empty_thr against the occupancy | figures/waveforms/sfifo_wf005_thresholds.svg | 2026-10-23 |
+| WF-006 | OP-001 and OP-002 flag latency with `PARA_SFIFO_PTR_RETIME` = 0, clocks 12 ns and 8 ns | corner | Fall of o_empty after a write, fall of o_full after a read | figures/waveforms/sfifo_wf006_flag_latency_retime0.svg | 2026-10-23 |
+| WF-007 | OP-001 and OP-002 flag latency with `PARA_SFIFO_PTR_RETIME` = 1, clocks 12 ns and 8 ns | corner | The same with one more destination edge | figures/waveforms/sfifo_wf007_flag_latency_retime1.svg | 2026-10-23 |
+| WF-008 | OP-001 and OP-002 continuous write and continuous read, equal clocks, `PARA_SFIFO_PTR_RETIME` = 0 | corner (back-to-back) | Initial latency, then one word per cycle, no gap | figures/waveforms/sfifo_wf008_back_to_back_equal_retime0.svg | 2026-10-23 |
+| WF-009 | OP-001 and OP-002 continuous write and continuous read, equal clocks, `PARA_SFIFO_PTR_RETIME` = 1 | corner (back-to-back) | The same with the longer initial latency | figures/waveforms/sfifo_wf009_back_to_back_equal_retime1.svg | 2026-10-23 |
+| WF-010 | OP-001 and OP-002 continuous traffic, write clock 8 ns faster than read clock 12 ns | corner (back-to-back) | Reader never stalls; the writer is held by o_full | figures/waveforms/sfifo_wf010_back_to_back_write_faster.svg | 2026-10-23 |
+| WF-011 | OP-001 and OP-002 continuous traffic, read clock 8 ns faster than write clock 12 ns | corner (back-to-back) | Writer never stalls; the reader waits by o_empty | figures/waveforms/sfifo_wf011_back_to_back_read_faster.svg | 2026-10-23 |
+| WF-012 | OP-001 and OP-002 pointer and address wrap with depth 5 | corner | Pointer 0 to 9, address 0 to 4 | figures/waveforms/sfifo_wf012_pointer_wrap_depth5.svg | 2026-10-23 |
+| WF-013 | OP-006 software reset sequence | success | i_rst_n_sw, both FSMs, request, acknowledge, busy, pointers | figures/waveforms/sfifo_wf013_software_reset.svg | 2026-10-23 |
+| WF-014 | OP-006 one-cycle software reset pulse while the FIFO is full | corner | The whole sequence started by a one-cycle pulse | figures/waveforms/sfifo_wf014_software_reset_pulse_full.svg | 2026-10-23 |
+| WF-015 | OP-007 hardware reset in the middle of traffic | corner | Both resets, state cleared at once, o_empty 1 | figures/waveforms/sfifo_wf015_hardware_reset.svg | 2026-10-23 |
 
 Active edge: the rising edge of the clock of the signal's own domain. Inputs are sampled at the edge that ends a cycle; flop outputs change after the edge that starts it. The waveforms use a grid in which one slot is half of the common divisor of the two half periods, so every clock edge is at a slot boundary.
 
-![Latency with PTR_RETIME 0](../figures/waveforms/sfifo_wf006_flag_latency_retime0.svg)
+![Latency with PTR_RETIME 0](figures/waveforms/sfifo_wf006_flag_latency_retime0.svg)
 
-*Figure 10-1. WF-006: flag latency with `PARA_SFIFO_PTR_RETIME` = 0, write clock 12 ns, read clock 8 ns, depth 4 (source `../figures/waveforms/sfifo_wf006_flag_latency_retime0.json`).*
+*Figure 10-1. WF-006: flag latency with `PARA_SFIFO_PTR_RETIME` = 0, write clock 12 ns, read clock 8 ns, depth 4 (source `figures/waveforms/sfifo_wf006_flag_latency_retime0.json`).*
 
-![Latency with PTR_RETIME 1](../figures/waveforms/sfifo_wf007_flag_latency_retime1.svg)
+![Latency with PTR_RETIME 1](figures/waveforms/sfifo_wf007_flag_latency_retime1.svg)
 
-*Figure 10-2. WF-007: the same scenario with `PARA_SFIFO_PTR_RETIME` = 1: o_empty and o_full fall one destination edge later (source `../figures/waveforms/sfifo_wf007_flag_latency_retime1.json`).*
+*Figure 10-2. WF-007: the same scenario with `PARA_SFIFO_PTR_RETIME` = 1: o_empty and o_full fall one destination edge later (source `figures/waveforms/sfifo_wf007_flag_latency_retime1.json`).*
 
-![Back to back, equal clocks, PTR_RETIME 0](../figures/waveforms/sfifo_wf008_back_to_back_equal_retime0.svg)
+![Back to back, equal clocks, PTR_RETIME 0](figures/waveforms/sfifo_wf008_back_to_back_equal_retime0.svg)
 
-*Figure 10-3. WF-008: continuous write and continuous read, equal clocks, depth 8, `PARA_SFIFO_PTR_RETIME` = 0. After the initial latency a word is read in every cycle (source `../figures/waveforms/sfifo_wf008_back_to_back_equal_retime0.json`).*
+*Figure 10-3. WF-008: continuous write and continuous read, equal clocks, depth 8, `PARA_SFIFO_PTR_RETIME` = 0. After the initial latency a word is read in every cycle (source `figures/waveforms/sfifo_wf008_back_to_back_equal_retime0.json`).*
 
-![Back to back, equal clocks, PTR_RETIME 1](../figures/waveforms/sfifo_wf009_back_to_back_equal_retime1.svg)
+![Back to back, equal clocks, PTR_RETIME 1](figures/waveforms/sfifo_wf009_back_to_back_equal_retime1.svg)
 
-*Figure 10-4. WF-009: the same with `PARA_SFIFO_PTR_RETIME` = 1; the initial latency is one cycle longer, there is still no gap (source `../figures/waveforms/sfifo_wf009_back_to_back_equal_retime1.json`).*
+*Figure 10-4. WF-009: the same with `PARA_SFIFO_PTR_RETIME` = 1; the initial latency is one cycle longer, there is still no gap (source `figures/waveforms/sfifo_wf009_back_to_back_equal_retime1.json`).*
 
-![Back to back, write clock faster](../figures/waveforms/sfifo_wf010_back_to_back_write_faster.svg)
+![Back to back, write clock faster](figures/waveforms/sfifo_wf010_back_to_back_write_faster.svg)
 
-*Figure 10-5. WF-010: write clock 8 ns, read clock 12 ns, depth 6. The reader never stalls; the faster writer is held back by o_full only because the reader is slower (source `../figures/waveforms/sfifo_wf010_back_to_back_write_faster.json`).*
+*Figure 10-5. WF-010: write clock 8 ns, read clock 12 ns, depth 6. The reader never stalls; the faster writer is held back by o_full only because the reader is slower (source `figures/waveforms/sfifo_wf010_back_to_back_write_faster.json`).*
 
-![Back to back, read clock faster](../figures/waveforms/sfifo_wf011_back_to_back_read_faster.svg)
+![Back to back, read clock faster](figures/waveforms/sfifo_wf011_back_to_back_read_faster.svg)
 
-*Figure 10-6. WF-011: write clock 12 ns, read clock 8 ns, depth 6. The writer never stalls; the faster reader waits (o_empty, o_underflow) only because the writer is slower. o_rd_data is meaningful only while o_empty is 0 (source `../figures/waveforms/sfifo_wf011_back_to_back_read_faster.json`).*
+*Figure 10-6. WF-011: write clock 12 ns, read clock 8 ns, depth 6. The writer never stalls; the faster reader waits (o_empty, o_underflow) only because the writer is slower. o_rd_data is meaningful only while o_empty is 0 (source `figures/waveforms/sfifo_wf011_back_to_back_read_faster.json`).*
 
-![Pointer wrap with depth 5](../figures/waveforms/sfifo_wf012_pointer_wrap_depth5.svg)
+![Pointer wrap with depth 5](figures/waveforms/sfifo_wf012_pointer_wrap_depth5.svg)
 
-*Figure 10-7. WF-012: depth 5, pointer 0 to 9 and address 0 to 4 (source `../figures/waveforms/sfifo_wf012_pointer_wrap_depth5.json`).*
+*Figure 10-7. WF-012: depth 5, pointer 0 to 9 and address 0 to 4 (source `figures/waveforms/sfifo_wf012_pointer_wrap_depth5.json`).*
 
-![Thresholds](../figures/waveforms/sfifo_wf005_thresholds.svg)
+![Thresholds](figures/waveforms/sfifo_wf005_thresholds.svg)
 
-*Figure 10-8. WF-005: o_full_thr rises at occupancy 6 and o_empty_thr falls at occupancy 3 (thresholds 6 and 2, depth 8) (source `../figures/waveforms/sfifo_wf005_thresholds.json`).*
+*Figure 10-8. WF-005: o_full_thr rises at occupancy 6 and o_empty_thr falls at occupancy 3 (thresholds 6 and 2, depth 8) (source `figures/waveforms/sfifo_wf005_thresholds.json`).*
 
-![Empty and underflow](../figures/waveforms/sfifo_wf004_empty_underflow.svg)
+![Empty and underflow](figures/waveforms/sfifo_wf004_empty_underflow.svg)
 
-*Figure 10-9. WF-004: read requests on an empty FIFO give one o_underflow pulse each (source `../figures/waveforms/sfifo_wf004_empty_underflow.json`).*
+*Figure 10-9. WF-004: read requests on an empty FIFO give one o_underflow pulse each (source `figures/waveforms/sfifo_wf004_empty_underflow.json`).*
 
 The software reset and hardware reset waveforms are in Section 10.7 (Figures 10-10 to 10-12).
 
@@ -503,7 +503,7 @@ There is no arbitration: one write interface and one read interface. Simultaneou
 
 **Throughput.** One word per write-clock cycle and one word per read-clock cycle (REQ-PERF-001).
 
-**Latency** (measured on the prototype, `../figures/waveforms/sfifo_wave_tables.txt`; clocks 12 ns and 8 ns, depth 4):
+**Latency** (measured on the prototype, `figures/waveforms/sfifo_wave_tables.txt`; clocks 12 ns and 8 ns, depth 4):
 
 | Event | PTR_RETIME = 0 | PTR_RETIME = 1 |
 |---|---|---|
@@ -513,7 +513,7 @@ There is no arbitration: one write interface and one read interface. Simultaneou
 | Last word read to o_empty = 1 | Next cycle | Next cycle |
 | Last free place written to o_full = 1 | Next cycle | Next cycle |
 
-**Gap-free streaming.** With i_wr_en and i_rd_en held at 1 there is only the initial latency. The sweep `../figures/../verification/sim/waveform_proto/run_regress.py` (`../figures/waveforms/sfifo_min_depth_table.txt`) measured the smallest depth for which the side that is not rate-limited never stalls, for 14 clock ratios (half periods from 1:1 to 2:9 and 9:2 ns):
+**Gap-free streaming.** With i_wr_en and i_rd_en held at 1 there is only the initial latency. The sweep `figures/../verification/sim/waveform_proto/run_regress.py` (`figures/waveforms/sfifo_min_depth_table.txt`) measured the smallest depth for which the side that is not rate-limited never stalls, for 14 clock ratios (half periods from 1:1 to 2:9 and 9:2 ns):
 
 | PARA_SFIFO_PTR_RETIME | Equal clocks | Ratios such as 3:2, 2:3, 7:5, 5:7 | Ratios such as 1:2, 2:1, 3:7, 7:3, 9:2 | Worst case over the 14 ratios |
 |---|---|---|---|---|
@@ -579,17 +579,17 @@ The sequence resets both pointers safely. It is the handshake of the sibling IP 
 
 The FIFO is ready for writes when o_sw_rst_busy is 0 and i_rst_n_sw is 1. A one-cycle low pulse starts the complete sequence. A hardware reset at any step clears all FSMs. A new low level during REL is served after the write FSM is back in RUN.
 
-![Software reset](../figures/waveforms/sfifo_wf013_software_reset.svg)
+![Software reset](figures/waveforms/sfifo_wf013_software_reset.svg)
 
-*Figure 10-10. WF-013: software reset with i_rst_n_sw held low for three cycles (source `../figures/waveforms/sfifo_wf013_software_reset.json`).*
+*Figure 10-10. WF-013: software reset with i_rst_n_sw held low for three cycles (source `figures/waveforms/sfifo_wf013_software_reset.json`).*
 
-![Software reset pulse while full](../figures/waveforms/sfifo_wf014_software_reset_pulse_full.svg)
+![Software reset pulse while full](figures/waveforms/sfifo_wf014_software_reset_pulse_full.svg)
 
-*Figure 10-11. WF-014: a one-cycle pulse on i_rst_n_sw while the FIFO is full starts the whole sequence (source `../figures/waveforms/sfifo_wf014_software_reset_pulse_full.json`).*
+*Figure 10-11. WF-014: a one-cycle pulse on i_rst_n_sw while the FIFO is full starts the whole sequence (source `figures/waveforms/sfifo_wf014_software_reset_pulse_full.json`).*
 
-![Hardware reset in traffic](../figures/waveforms/sfifo_wf015_hardware_reset.svg)
+![Hardware reset in traffic](figures/waveforms/sfifo_wf015_hardware_reset.svg)
 
-*Figure 10-12. WF-015: a hardware reset in the middle of traffic clears all state at once (source `../figures/waveforms/sfifo_wf015_hardware_reset.json`).*
+*Figure 10-12. WF-015: a hardware reset in the middle of traffic clears all state at once (source `figures/waveforms/sfifo_wf015_hardware_reset.json`).*
 
 ## 11. Register and programming model
 
@@ -707,7 +707,7 @@ Same columns and signal types as Section 6.2. The legend of the signal types is 
 
 Block-level simulation with a scoreboard, directed tests for the boundaries, random traffic over several clock ratios, assertions, lint and the structural and timing reviews of the crossing paths. Each simulation records its seed. The environment drives the two clocks from one generator so that their edges are related as in the product, including cycles in which the two edges coincide, and varies the ratio (equal, 3:2, 2:3, 1:2, 2:1, 3:7, 7:3).
 
-**Evidence from the prototype** (not from the delivered RTL, which does not exist yet): the prototype `../figures/../verification/sim/waveform_proto/sfifo_proto.sv` follows this specification. `run_regress.py random` ran 180 scoreboard simulations (depths 2, 3, 5, 8, 12 × both pointer options × six clock ratios × three seeds) with no error (`../figures/waveforms/sfifo_random_regression.txt`); `run_regress.py sweep` and the depth table produced the numbers of Section 10.4; `gen_waves.py` produced the waveforms. The prototype tests did not include the software reset, which is shown only by WF-013 to WF-015 and shall be verified on the RTL (TEST-009, TEST-010).
+**Evidence from the prototype** (not from the delivered RTL, which does not exist yet): the prototype `figures/../verification/sim/waveform_proto/sfifo_proto.sv` follows this specification. `run_regress.py random` ran 180 scoreboard simulations (depths 2, 3, 5, 8, 12 × both pointer options × six clock ratios × three seeds) with no error (`figures/waveforms/sfifo_random_regression.txt`); `run_regress.py sweep` and the depth table produced the numbers of Section 10.4; `gen_waves.py` produced the waveforms. The prototype tests did not include the software reset, which is shown only by WF-013 to WF-015 and shall be verified on the RTL (TEST-009, TEST-010).
 
 ### 15.2 Requirement-based test plan
 
@@ -924,7 +924,7 @@ No false path, multicycle path, maximum delay or clock group is set on the cross
 | DEC-024 | Decision | After reset the o_full_thr flop is 0 until the first clock edge after release; the first cycle may show 0 even if i_full_thr is 0 | Section 10.6 | Author's choice; to be confirmed by the designer |
 | DEP-001 | Dependency | `000_Common`: the cell `VLSIT_CELL_SRAM_1W1R` and the new wrapper `m_vlsit_sfifo_ram_macro` (OI-003) | CFG-MACRO | Integration |
 | DEP-002 | Dependency | A clock source that provides two related clocks, and a reset controller for each domain | REQ-CLK-001, REQ-RESET-002 | Integration |
-| DEP-003 | Dependency | The prototype scripts of `../figures/../verification/sim/waveform_proto/` need iverilog, vvp, Python 3, and the skill script `vlsit_waveform_svg.py` | REQ-VER-001 | Tool setup |
+| DEP-003 | Dependency | The prototype scripts of `figures/../verification/sim/waveform_proto/` need iverilog, vvp, Python 3, and the skill script `vlsit_waveform_svg.py` | REQ-VER-001 | Tool setup |
 
 ## 21. Glossary
 
@@ -948,4 +948,4 @@ No false path, multicycle path, maximum delay or clock group is set on the cross
 2. `VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_RTL_Design_Rule.md` v2: naming, hierarchy and coding rules.
 3. `VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_ASIC_IP_Design_Specification_Template.md`: structure of this document.
 4. `research/reference_ip_log.md`: reference-IP research of this design; no qualified public IP was found.
-5. `../figures/../verification/sim/waveform_proto/`: the prototype and the scripts that produced the waveforms, the latency table, the minimum-depth table and the regression result.
+5. `figures/../verification/sim/waveform_proto/`: the prototype and the scripts that produced the waveforms, the latency table, the minimum-depth table and the regression result.

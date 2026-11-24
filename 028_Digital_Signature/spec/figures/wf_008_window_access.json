@@ -1,0 +1,82 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p......................................."
+  },
+  [
+   "write",
+   {
+    "name": "o_reg_wr_en",
+    "wave": "010..10..10..10........................."
+   },
+   {
+    "name": "o_reg_wr_addr",
+    "wave": "===..==..==..==.........................",
+    "data": [
+     "0x0",
+     "0x90",
+     "0x0",
+     "WIN_WR",
+     "0x0",
+     "WIN_WR",
+     "0x0",
+     "0x90",
+     "0x0"
+    ]
+   },
+   {
+    "name": "o_dsig_win_wr_data",
+    "wave": "=.....=...=.............................",
+    "data": [
+     "0x0",
+     "0x11111111",
+     "0x22222222"
+    ]
+   }
+  ],
+  [
+   "address register",
+   {
+    "name": "o_dsig_win_addr_addr",
+    "wave": "=......=...=..=...=...=.................",
+    "data": [
+     "0x0",
+     "0x4",
+     "0x8",
+     "0x0",
+     "0x4",
+     "0x8"
+    ]
+   },
+   {
+    "name": "i_hw_we_dsig_win_addr_addr",
+    "wave": "0.....10..10.....10..10................."
+   }
+  ],
+  [
+   "read",
+   {
+    "name": "o_reg_rd_en",
+    "wave": "0................10..10................."
+   },
+   {
+    "name": "i_dsig_win_rd_data",
+    "wave": "x...............=...=...x...............",
+    "data": [
+     "0x11111111",
+     "0x22222222"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-001 through the CSR window: write words, then read words with auto-increment"
+ },
+ "foot": {
+  "text": "Simulated: a window write reaches the buffer one cycle after its register event and the address is added after that write (DEC-039); a window read adds 4 in the event cycle; software writes the address 0x000 first and again 0x000 before the reads."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

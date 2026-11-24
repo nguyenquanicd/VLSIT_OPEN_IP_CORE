@@ -1,0 +1,62 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p......................."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_start",
+    "wave": "0.10...................."
+   },
+   {
+    "name": "i_hw_clr_dsig_cmd_start",
+    "wave": "0.10...................."
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=..==........===........",
+    "data": [
+     "ENUM_ST_IDLE",
+     "ENUM_ST_CHECK",
+     "ENUM_ST_RUN",
+     "ENUM_ST_RESULT",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE"
+    ]
+   },
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "0..1...........0........"
+   }
+  ],
+  [
+   "result",
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "0.............1........."
+   },
+   {
+    "name": "i_dsig_sts_sigok",
+    "wave": "0.............1........."
+   },
+   {
+    "name": "o_irq",
+    "wave": "0.............1........."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-004, success: verification from start command to done"
+ },
+ "foot": {
+  "text": "Simulated (tb_dsig_p1, synthesis branch, one clock): the start bit is set for one cycle and cleared by hardware in the same cycle; ENUM_ST_CHECK lasts one cycle; the engine model needs 6 cycles; busy is 1 from ENUM_ST_RUN to the end of ENUM_ST_RESULT."
+ },
+ "config": {
+  "hscale": 3
+ }
+}

@@ -1,0 +1,50 @@
+# scenario fi_csr_access seed 1
+PIN 4 0
+PIN 5 0
+IB 4
+CHK FCA-STRB
+WS 68 ffffffff f 0 0
+RS 68 ffffffff ffffffff 0 0
+WS 68 12345678 3 0 0
+RS 68 ffff5678 ffffffff 0 0
+WS 68 a5a5a5a5 8 0 0
+RS 68 a5ff5678 ffffffff 0 0
+B cg_apberr.strobe_noerr
+WS 68 0 0 0 0
+RS 68 a5ff5678 ffffffff 0 0
+CHK FCA-UNMAP
+RS 7fc 0 ffffffff 0 0
+WS 7fc ffffffff f 0 0
+RS 7fc 0 ffffffff 0 0
+B cg_apberr.unmapped
+PIN 4 1
+IB 4
+CHK FCA-ERRSTRB
+WS 68 badf00d 7 0 1
+RS 68 a5ff5678 ffffffff 0 0
+B cg_apberr.strobe
+CHK FCA-ALIGN
+WS 69 badf00d f 0 1
+RS 6a 0 0 0 1
+RS 68 a5ff5678 ffffffff 0 0
+B cg_apberr.align
+WS 68 11223344 f 0 0
+RS 68 11223344 ffffffff 0 0
+RS 7fc 0 ffffffff 0 0
+CHK FCA-PROT
+WS 68 55667788 f 2 0
+RS 68 55667788 ffffffff 2 0
+PIN 5 1
+IB 4
+WS 68 badf00d f 2 1
+RS 68 0 0 2 1
+RS 68 55667788 ffffffff 0 0
+WS 68 99aabbcc f 1 0
+RS 68 99aabbcc ffffffff 0 0
+B cg_apberr.prot
+PIN 4 0
+IB 4
+CHK FCA-PROTOFF
+WS 68 badf00d f 2 0
+PIN 5 0
+END

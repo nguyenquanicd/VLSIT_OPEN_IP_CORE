@@ -138,9 +138,9 @@ The IP follows `VLSIT_RTL_Design_Rule.md` v2. No external protocol standard appl
 
 ### 5.2 Block diagram
 
-![Async Gray synchronizer block diagram](../figures/vlsit_agray_block_diagram.svg)
+![Async Gray synchronizer block diagram](figures/vlsit_agray_block_diagram.svg)
 
-The editable draw.io source is [../figures/vlsit_agray_block_diagram.drawio](../figures/vlsit_agray_block_diagram.drawio). The source block encodes `i_data` to Gray and registers it; the Gray bus crosses to the destination block, where the n-stage synchronizer and the Gray-to-binary decoder produce `o_data`. The synchronizer instances are inside the destination block.
+The editable draw.io source is [figures/vlsit_agray_block_diagram.drawio](figures/vlsit_agray_block_diagram.drawio). The source block encodes `i_data` to Gray and registers it; the Gray bus crosses to the destination block, where the n-stage synchronizer and the Gray-to-binary decoder produce `o_data`. The synchronizer instances are inside the destination block.
 
 ### 5.3 Transaction and dataflow
 
@@ -314,12 +314,12 @@ The IP has no finite-state machine. The state is the source Gray register `reg_g
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001 single value, mode 0, N=2 | Success | `i_clk_src`, `i_data`, `reg_gray`, `i_clk_dst`, `o_data` | `../figures/vlsit_agray_wf001_single.svg` | 2026-11-14 |
-| WF-002 | OP-002 increment streaming, mode 0 | Success, corner | Same signals as WF-001 | `../figures/vlsit_agray_wf002_stream.svg` | 2026-11-14 |
-| WF-003 | OP-004 registered input, `PARA_AGRAY_SRC_REG` = 1 | Corner | WF-001 signals plus `reg_src` | `../figures/vlsit_agray_wf003_src_reg.svg` | 2026-11-14 |
-| WF-004 | OP-005 registered output, `PARA_AGRAY_DST_REG` = 1 | Corner | WF-001 signals plus `reg_dst` | `../figures/vlsit_agray_wf004_dst_reg.svg` | 2026-11-14 |
-| WF-005 | OP-003 paired reset | Corner, recovery | WF-001 signals plus `i_rst_n_src`, `i_rst_n_dst` | `../figures/vlsit_agray_wf005_reset.svg` | 2026-11-14 |
-| WF-006 | Gray-code violation: `i_data` jumps by more than one | Error | WF-001 signals | `../figures/vlsit_agray_wf006_jump.svg` | 2026-11-14 |
+| WF-001 | OP-001 single value, mode 0, N=2 | Success | `i_clk_src`, `i_data`, `reg_gray`, `i_clk_dst`, `o_data` | `figures/vlsit_agray_wf001_single.svg` | 2026-11-14 |
+| WF-002 | OP-002 increment streaming, mode 0 | Success, corner | Same signals as WF-001 | `figures/vlsit_agray_wf002_stream.svg` | 2026-11-14 |
+| WF-003 | OP-004 registered input, `PARA_AGRAY_SRC_REG` = 1 | Corner | WF-001 signals plus `reg_src` | `figures/vlsit_agray_wf003_src_reg.svg` | 2026-11-14 |
+| WF-004 | OP-005 registered output, `PARA_AGRAY_DST_REG` = 1 | Corner | WF-001 signals plus `reg_dst` | `figures/vlsit_agray_wf004_dst_reg.svg` | 2026-11-14 |
+| WF-005 | OP-003 paired reset | Corner, recovery | WF-001 signals plus `i_rst_n_src`, `i_rst_n_dst` | `figures/vlsit_agray_wf005_reset.svg` | 2026-11-14 |
+| WF-006 | Gray-code violation: `i_data` jumps by more than one | Error | WF-001 signals | `figures/vlsit_agray_wf006_jump.svg` | 2026-11-14 |
 
 ### 10.4 Arbitration, buffering, and throughput
 

@@ -1,0 +1,300 @@
+# scenario dev_suspend_lpm_reset seed 2
+WD ea60
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 60 4
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 fb
+IB 190
+W 4c4 1
+W 484 2000
+W 444 80040
+W 404 481040
+IB 190
+CHK DSL-TRAFFIC
+TK 1 7b 1 0
+DT 3 0 40 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
+XH 2 190
+GAP 1 18
+IB 7d0
+MC 2000 40 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
+SG 0 12c
+TK 5 12 3 0
+CHK DSL-SUSP
+WP 0 14 df 304
+GAP 2b3 2e8
+LS 1
+WP 0 0 20 668
+P 10 4 4 190
+R 8 10 10
+R 24 4000 4000
+W 10 4
+B cg_susp.enter
+B cg_susp.hs_revert
+B cg_mode.each_state
+LS 2
+I 124f
+LS 0
+CHK DSL-RESUME
+WP 0 20 ff 75
+SG 1 12c
+P 10 8 8 190
+R 8 0 10
+W 10 8
+W 4c4 1
+W 484 2100
+W 444 80040
+W 404 481040
+IB 190
+CHK DSL-TRAFFIC
+TK 1 7b 1 0
+DT 3 0 40 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7
+XH 2 190
+GAP 1 18
+IB 7d0
+MC 2100 40 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7
+B cg_xreg.burst
+B cg_xreg.both_dir
+SG 0 12c
+TK 5 13 3 0
+ID 290
+CHK DSL-NOSUSP
+XP 0 20 ff
+TK 5 14 3 0
+SG 1 12c
+I 5d
+R 10 0 4
+W 4c4 1
+W 484 2200
+W 444 80040
+W 404 481040
+IB 190
+CHK DSL-TRAFFIC
+TK 1 7b 1 0
+DT 3 0 40 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c 30 f5 bb 9 3c bb 94
+XH 2 190
+GAP 1 18
+IB 7d0
+MC 2200 40 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c 30 f5 bb 9 3c bb 94
+B cg_susp.no_enter
+W 20 2fb
+IB 12c
+SG 0 12c
+TK 5 12 3 0
+CHK DSL-SUSP
+WP 0 14 df 304
+GAP 2b3 2e8
+LS 1
+WP 0 0 20 668
+P 10 4 4 190
+R 8 10 10
+R 24 4000 4000
+W 10 4
+W 20 3fb
+CHK DSL-RWAKE
+WP 3 1 1 2bf
+GAP 46 2bf
+XP 0 16 df
+LS 2
+XC ea dbb 0 ea6
+P 20 0 100 190
+B cg_wake.early_req
+B cg_wake.drive
+LS 2
+I 124f
+LS 0
+CHK DSL-RESUME
+WP 0 20 ff 75
+SG 1 12c
+P 10 8 8 190
+R 8 0 10
+W 10 8
+W 4c4 1
+W 484 2300
+W 444 80040
+W 404 481040
+IB 190
+CHK DSL-TRAFFIC
+TK 1 7b 1 0
+DT 3 0 40 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca 76 50 fa 84 da 2b 31
+XH 2 190
+GAP 1 18
+IB 7d0
+MC 2300 40 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca 76 50 fa 84 da 2b 31
+SG 0 12c
+TK 5 12 3 0
+CHK DSL-SUSP
+WP 0 14 df 304
+GAP 2b3 2e8
+LS 1
+WP 0 0 20 668
+P 10 4 4 190
+R 8 10 10
+R 24 4000 4000
+W 10 4
+LS 0
+CHK DSL-RSTSUSP
+WP 3 1 1 5d
+XP 0 12 df
+LS 2
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+WP 0 0 df 7d
+SG 1 12c
+P 10 82 82 190
+R 8 0 16
+W 10 1ffffff
+W 4c4 1
+W 484 2400
+W 444 80040
+W 404 481040
+IB 190
+CHK DSL-TRAFFIC
+TK 1 7b 1 0
+DT 3 0 40 24 b6 5a 4b d5 22 2c 13 41 97 c7 76 a8 e0 58 92 39 4f d8 31 a8 7f 83 56 50 ec 78 ce b7 4a ee e1 f c4 5c c9 1b f7 8c cf 81 d3 f1 b8 a9 29 73 60 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e 33 c7 66
+XH 2 190
+GAP 1 18
+IB 7d0
+MC 2400 40 24 b6 5a 4b d5 22 2c 13 41 97 c7 76 a8 e0 58 92 39 4f d8 31 a8 7f 83 56 50 ec 78 ce b7 4a ee e1 f c4 5c c9 1b f7 8c cf 81 d3 f1 b8 a9 29 73 60 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e 33 c7 66
+B cg_susp.reset_wake
+B cg_chirp_d.hs
+TK 0 7b 0 0
+TK 3 51 2 0
+CHK DSL-L1
+XH 2 190
+GAP 1 18
+SG 0 12c
+WP 0 0 20 258
+LS 1
+P 10 20000 20000 190
+P 8 10 10 190
+R 24 158000 1f8000
+B cg_lpm.ack
+LS 2
+I 67
+LS 0
+SG 1 12c
+CHK DSL-L1EXIT
+P 24 0 8000 190
+W 10 1ffffff
+W 4c4 1
+W 484 2500
+W 444 80040
+W 404 481040
+IB 190
+CHK DSL-TRAFFIC
+TK 1 7b 1 0
+DT 3 0 40 8c 62 fa 46 4 de f6 81 58 ef 68 25 b3 1 f8 21 f8 ab eb 88 eb e 28 b1 58 cf 82 45 1b 53 ff c3 ed 96 4f 5 90 ef 0 bb 11 c3 e2 68 9d ff 44 f7 9a 27 84 a0 9b aa 9f c9 2f 6b c8 4c 2d 9d 14 77
+XH 2 190
+GAP 1 18
+IB 7d0
+MC 2500 40 8c 62 fa 46 4 de f6 81 58 ef 68 25 b3 1 f8 21 f8 ab eb 88 eb e 28 b1 58 cf 82 45 1b 53 ff c3 ed 96 4f 5 90 ef 0 bb 11 c3 e2 68 9d ff 44 f7 9a 27 84 a0 9b aa 9f c9 2f 6b c8 4c 2d 9d 14 77
+B cg_lpm.l1_exit
+W 60 5
+IB 12c
+CHK DSL-LPMNYET
+TK 0 7b 0 0
+TK 3 21 0 0
+XH 6 190
+IB 12c
+R 24 0 8000
+B cg_lpm.nyet
+W 60 6
+IB 12c
+CHK DSL-LPMSTALL
+TK 0 7b 0 0
+TK 3 21 0 0
+XH e 190
+B cg_lpm.stall
+W 60 4
+IB 12c
+TK 0 7b 0 0
+TK 3 23 0 0
+XH e 190
+IB 12c
+R 24 0 8000
+CHK DSL-LPMIGN
+TK 0 5a 0 0
+TK 3 51 0 0
+XN 96
+W 60 0
+IB 12c
+TK 0 7b 0 0
+TK 3 21 0 0
+XN 96
+W 4c4 1
+W 484 2600
+W 444 80040
+W 404 481040
+IB 190
+CHK DSL-TRAFFIC
+TK 1 7b 1 0
+DT 3 0 40 ea 76 8e 1f 39 39 c2 ba 6d a3 b6 27 ab ea b9 55 fe e2 95 ec 44 e2 6e 8b a7 51 32 79 f0 61 bf 5e b6 47 45 77 89 c1 cc af 8f a4 cc 95 25 bc 9d ca f7 59 84 b5 e1 f4 2c 5f a1 c2 41 e 35 b3 55 b7
+XH 2 190
+GAP 1 18
+IB 7d0
+MC 2600 40 ea 76 8e 1f 39 39 c2 ba 6d a3 b6 27 ab ea b9 55 fe e2 95 ec 44 e2 6e 8b a7 51 32 79 f0 61 bf 5e b6 47 45 77 89 c1 cc af 8f a4 cc 95 25 bc 9d ca f7 59 84 b5 e1 f4 2c 5f a1 c2 41 e 35 b3 55 b7
+W 4 60
+W 4 62
+CHK DSL-SWRST
+P 4 0 2 190
+TK 1 7b 1 0
+DT 3 0 8 27 df 4 a4 79 c7 91 f0
+XN 96
+B cg_rst.soft
+END

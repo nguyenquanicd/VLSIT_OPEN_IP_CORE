@@ -209,9 +209,9 @@ The IP has one write path and one read path that share the attribute converter, 
 
 ### 5.2 Block diagram
 
-![Figure 5-1. Block diagram of the AXI4 upsizer](../figures/axi_upsizer_block_diagram.svg)
+![Figure 5-1. Block diagram of the AXI4 upsizer](figures/axi_upsizer_block_diagram.svg)
 
-*Figure 5-1. Block diagram of the AXI4 upsizer: the top frame with the write path and the read path; the AXI3 top has the same blocks. Source: `../figures/axi_upsizer_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py` from `../figures/axi_upsizer_diagram_spec.json`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
+*Figure 5-1. Block diagram of the AXI4 upsizer: the top frame with the write path and the read path; the AXI3 top has the same blocks. Source: `figures/axi_upsizer_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py` from `figures/axi_upsizer_diagram_spec.json`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
 
 ### 5.3 Transaction and dataflow
 
@@ -485,73 +485,73 @@ Bit and byte numbering follow AXI: byte n of a data bus is bits [8n+7:8n]; WSTRB
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001, OP-003: Write INCR packed, S 32 bit to M 128 bit, 8 beats, aligned start | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf001_write_incr_pack.svg | 2026-10-27 |
-| WF-002 | OP-001, OP-003: Write INCR packed, start 0x1008, partial first and last M word | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf002_write_incr_unaligned.svg | 2026-10-27 |
-| WF-003 | OP-001, OP-002: Write lane steering (Non-modifiable): one S beat gives one M beat | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf003_write_lane_steering.svg | 2026-10-27 |
-| WF-004 | OP-003, OP-005: Write with backpressure on AWREADY and WREADY of the M side and a gap in WVALID | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf004_write_backpressure.svg | 2026-10-27 |
-| WF-005 | OP-003: W data offered before the AW | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf005_write_w_before_aw.svg | 2026-10-27 |
-| WF-006 | OP-001, OP-003, OP-007: Write WRAP packed: container 32 bytes aligned to M, then container 8 bytes inside one M word | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf006_write_wrap.svg | 2026-10-27 |
-| WF-007 | OP-001, OP-006: Read INCR packed: each M beat split into 4 S beats | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf007_read_incr_pack.svg | 2026-10-27 |
-| WF-008 | OP-001, OP-005: Read lane steering (Non-modifiable) | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf008_read_lane_steering.svg | 2026-10-27 |
-| WF-009 | OP-001, OP-006, OP-007: Read WRAP packed: container 32 bytes, then container 8 bytes | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf009_read_wrap.svg | 2026-10-27 |
-| WF-010 | OP-004, OP-006: Error responses: BRESP SLVERR, RRESP SLVERR copied to the S beats of one M beat | error | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf010_error_response.svg | 2026-10-27 |
-| WF-011 | OP-001: Outstanding queue of depth 2 full: third AW and third AR wait | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf011_queue_full.svg | 2026-10-27 |
-| WF-012 | OP-008: Reset during a write burst, then a new burst after the release | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf012_reset.svg | 2026-10-27 |
-| WF-013 | OP-009: AXI3 write data interleave, depth 2: WID 1 and 2 alternate beat by beat, WID 3 waits for its AW | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | ../figures/upsizer_wf013_axi3_write_interleave.svg | 2026-10-28 |
+| WF-001 | OP-001, OP-003: Write INCR packed, S 32 bit to M 128 bit, 8 beats, aligned start | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf001_write_incr_pack.svg | 2026-10-27 |
+| WF-002 | OP-001, OP-003: Write INCR packed, start 0x1008, partial first and last M word | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf002_write_incr_unaligned.svg | 2026-10-27 |
+| WF-003 | OP-001, OP-002: Write lane steering (Non-modifiable): one S beat gives one M beat | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf003_write_lane_steering.svg | 2026-10-27 |
+| WF-004 | OP-003, OP-005: Write with backpressure on AWREADY and WREADY of the M side and a gap in WVALID | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf004_write_backpressure.svg | 2026-10-27 |
+| WF-005 | OP-003: W data offered before the AW | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf005_write_w_before_aw.svg | 2026-10-27 |
+| WF-006 | OP-001, OP-003, OP-007: Write WRAP packed: container 32 bytes aligned to M, then container 8 bytes inside one M word | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf006_write_wrap.svg | 2026-10-27 |
+| WF-007 | OP-001, OP-006: Read INCR packed: each M beat split into 4 S beats | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf007_read_incr_pack.svg | 2026-10-27 |
+| WF-008 | OP-001, OP-005: Read lane steering (Non-modifiable) | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf008_read_lane_steering.svg | 2026-10-27 |
+| WF-009 | OP-001, OP-006, OP-007: Read WRAP packed: container 32 bytes, then container 8 bytes | success | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf009_read_wrap.svg | 2026-10-27 |
+| WF-010 | OP-004, OP-006: Error responses: BRESP SLVERR, RRESP SLVERR copied to the S beats of one M beat | error | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf010_error_response.svg | 2026-10-27 |
+| WF-011 | OP-001: Outstanding queue of depth 2 full: third AW and third AR wait | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf011_queue_full.svg | 2026-10-27 |
+| WF-012 | OP-008: Reset during a write burst, then a new burst after the release | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf012_reset.svg | 2026-10-27 |
+| WF-013 | OP-009: AXI3 write data interleave, depth 2: WID 1 and 2 alternate beat by beat, WID 3 waits for its AW | corner | Both sides of the channels involved; clock, reset, VALID, READY, payload | figures/upsizer_wf013_axi3_write_interleave.svg | 2026-10-28 |
 
 **Figures.** Source files (WaveJSON) are beside the images.
 
-![WF-001 Write INCR packed, S 32 bit to M 128 bit, 8 beats, aligned start](../figures/upsizer_wf001_write_incr_pack.svg)
+![WF-001 Write INCR packed, S 32 bit to M 128 bit, 8 beats, aligned start](figures/upsizer_wf001_write_incr_pack.svg)
 
-*Figure 10.3-1. WF-001: Write INCR packed, S 32 bit to M 128 bit, 8 beats, aligned start. Source: `../figures/upsizer_wf001_write_incr_pack.json`.*
+*Figure 10.3-1. WF-001: Write INCR packed, S 32 bit to M 128 bit, 8 beats, aligned start. Source: `figures/upsizer_wf001_write_incr_pack.json`.*
 
-![WF-002 Write INCR packed, start 0x1008, partial first and last M word](../figures/upsizer_wf002_write_incr_unaligned.svg)
+![WF-002 Write INCR packed, start 0x1008, partial first and last M word](figures/upsizer_wf002_write_incr_unaligned.svg)
 
-*Figure 10.3-2. WF-002: Write INCR packed, start 0x1008, partial first and last M word. Source: `../figures/upsizer_wf002_write_incr_unaligned.json`.*
+*Figure 10.3-2. WF-002: Write INCR packed, start 0x1008, partial first and last M word. Source: `figures/upsizer_wf002_write_incr_unaligned.json`.*
 
-![WF-003 Write lane steering (Non-modifiable): one S beat gives one M beat](../figures/upsizer_wf003_write_lane_steering.svg)
+![WF-003 Write lane steering (Non-modifiable): one S beat gives one M beat](figures/upsizer_wf003_write_lane_steering.svg)
 
-*Figure 10.3-3. WF-003: Write lane steering (Non-modifiable): one S beat gives one M beat. Source: `../figures/upsizer_wf003_write_lane_steering.json`.*
+*Figure 10.3-3. WF-003: Write lane steering (Non-modifiable): one S beat gives one M beat. Source: `figures/upsizer_wf003_write_lane_steering.json`.*
 
-![WF-004 Write with backpressure on AWREADY and WREADY of the M side and a gap in WVALID](../figures/upsizer_wf004_write_backpressure.svg)
+![WF-004 Write with backpressure on AWREADY and WREADY of the M side and a gap in WVALID](figures/upsizer_wf004_write_backpressure.svg)
 
-*Figure 10.3-4. WF-004: Write with backpressure on AWREADY and WREADY of the M side and a gap in WVALID. Source: `../figures/upsizer_wf004_write_backpressure.json`.*
+*Figure 10.3-4. WF-004: Write with backpressure on AWREADY and WREADY of the M side and a gap in WVALID. Source: `figures/upsizer_wf004_write_backpressure.json`.*
 
-![WF-005 W data offered before the AW](../figures/upsizer_wf005_write_w_before_aw.svg)
+![WF-005 W data offered before the AW](figures/upsizer_wf005_write_w_before_aw.svg)
 
-*Figure 10.3-5. WF-005: W data offered before the AW. Source: `../figures/upsizer_wf005_write_w_before_aw.json`.*
+*Figure 10.3-5. WF-005: W data offered before the AW. Source: `figures/upsizer_wf005_write_w_before_aw.json`.*
 
-![WF-006 Write WRAP packed: container 32 bytes aligned to M, then container 8 bytes inside one M word](../figures/upsizer_wf006_write_wrap.svg)
+![WF-006 Write WRAP packed: container 32 bytes aligned to M, then container 8 bytes inside one M word](figures/upsizer_wf006_write_wrap.svg)
 
-*Figure 10.3-6. WF-006: Write WRAP packed: container 32 bytes aligned to M, then container 8 bytes inside one M word. Source: `../figures/upsizer_wf006_write_wrap.json`.*
+*Figure 10.3-6. WF-006: Write WRAP packed: container 32 bytes aligned to M, then container 8 bytes inside one M word. Source: `figures/upsizer_wf006_write_wrap.json`.*
 
-![WF-007 Read INCR packed: each M beat split into 4 S beats](../figures/upsizer_wf007_read_incr_pack.svg)
+![WF-007 Read INCR packed: each M beat split into 4 S beats](figures/upsizer_wf007_read_incr_pack.svg)
 
-*Figure 10.3-7. WF-007: Read INCR packed: each M beat split into 4 S beats. Source: `../figures/upsizer_wf007_read_incr_pack.json`.*
+*Figure 10.3-7. WF-007: Read INCR packed: each M beat split into 4 S beats. Source: `figures/upsizer_wf007_read_incr_pack.json`.*
 
-![WF-008 Read lane steering (Non-modifiable)](../figures/upsizer_wf008_read_lane_steering.svg)
+![WF-008 Read lane steering (Non-modifiable)](figures/upsizer_wf008_read_lane_steering.svg)
 
-*Figure 10.3-8. WF-008: Read lane steering (Non-modifiable). Source: `../figures/upsizer_wf008_read_lane_steering.json`.*
+*Figure 10.3-8. WF-008: Read lane steering (Non-modifiable). Source: `figures/upsizer_wf008_read_lane_steering.json`.*
 
-![WF-009 Read WRAP packed: container 32 bytes, then container 8 bytes](../figures/upsizer_wf009_read_wrap.svg)
+![WF-009 Read WRAP packed: container 32 bytes, then container 8 bytes](figures/upsizer_wf009_read_wrap.svg)
 
-*Figure 10.3-9. WF-009: Read WRAP packed: container 32 bytes, then container 8 bytes. Source: `../figures/upsizer_wf009_read_wrap.json`.*
+*Figure 10.3-9. WF-009: Read WRAP packed: container 32 bytes, then container 8 bytes. Source: `figures/upsizer_wf009_read_wrap.json`.*
 
-![WF-010 Error responses: BRESP SLVERR, RRESP SLVERR copied to the S beats of one M beat](../figures/upsizer_wf010_error_response.svg)
+![WF-010 Error responses: BRESP SLVERR, RRESP SLVERR copied to the S beats of one M beat](figures/upsizer_wf010_error_response.svg)
 
-*Figure 10.3-10. WF-010: Error responses: BRESP SLVERR, RRESP SLVERR copied to the S beats of one M beat. Source: `../figures/upsizer_wf010_error_response.json`.*
+*Figure 10.3-10. WF-010: Error responses: BRESP SLVERR, RRESP SLVERR copied to the S beats of one M beat. Source: `figures/upsizer_wf010_error_response.json`.*
 
-![WF-011 Outstanding queue of depth 2 full: third AW and third AR wait](../figures/upsizer_wf011_queue_full.svg)
+![WF-011 Outstanding queue of depth 2 full: third AW and third AR wait](figures/upsizer_wf011_queue_full.svg)
 
-*Figure 10.3-11. WF-011: Outstanding queue of depth 2 full: third AW and third AR wait. Source: `../figures/upsizer_wf011_queue_full.json`.*
+*Figure 10.3-11. WF-011: Outstanding queue of depth 2 full: third AW and third AR wait. Source: `figures/upsizer_wf011_queue_full.json`.*
 
-![WF-012 Reset during a write burst, then a new burst after the release](../figures/upsizer_wf012_reset.svg)
+![WF-012 Reset during a write burst, then a new burst after the release](figures/upsizer_wf012_reset.svg)
 
-*Figure 10.3-12. WF-012: Reset during a write burst, then a new burst after the release. Source: `../figures/upsizer_wf012_reset.json`.*
+*Figure 10.3-12. WF-012: Reset during a write burst, then a new burst after the release. Source: `figures/upsizer_wf012_reset.json`.*
 
-![WF-013 AXI3 write data interleave, depth 2: WID 1 and 2 alternate beat by beat, WID 3 waits for its AW](../figures/upsizer_wf013_axi3_write_interleave.svg)
+![WF-013 AXI3 write data interleave, depth 2: WID 1 and 2 alternate beat by beat, WID 3 waits for its AW](figures/upsizer_wf013_axi3_write_interleave.svg)
 
-*Figure 10.3-13. WF-013: AXI3 write data interleave, depth 2: WID 1 and 2 alternate beat by beat, WID 3 waits for its AW. Source: `../figures/upsizer_wf013_axi3_write_interleave.json`.*
+*Figure 10.3-13. WF-013: AXI3 write data interleave, depth 2: WID 1 and 2 alternate beat by beat, WID 3 waits for its AW. Source: `figures/upsizer_wf013_axi3_write_interleave.json`.*
 
 **Timing of the figures (active edge: rising edge of i_clk_axi; values are those before the edge; a handshake is VALID and READY both 1).** Cycle table of WF-001 (S = 32, M = 128, depth 4, no backpressure):
 

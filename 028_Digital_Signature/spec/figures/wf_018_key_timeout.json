@@ -1,0 +1,66 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "key request",
+   {
+    "name": "o_key_req",
+    "wave": "0011111110.."
+   },
+   {
+    "name": "o_key_idx",
+    "wave": "xx=.....xxxx",
+    "data": [
+     "0"
+    ]
+   },
+   {
+    "name": "i_key_valid",
+    "wave": "000000000000"
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=.=...=.=...",
+    "data": [
+     "ENUM_ST_CHECK",
+     "ENUM_ST_KEY",
+     "ENUM_ST_ERR"
+    ]
+   },
+   {
+    "name": "w_key_timeout",
+    "wave": "00000001...."
+   }
+  ],
+  [
+   "error",
+   {
+    "name": "i_hw_we_dsig_err_keytmo",
+    "wave": "000000010..."
+   },
+   {
+    "name": "o_dsig_err_keytmo",
+    "wave": "0000000.11.."
+   },
+   {
+    "name": "o_irq",
+    "wave": "0000000..11."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Error: the key store does not answer within the key timeout"
+ },
+ "foot": {
+  "text": "The timeout is drawn short; the real value is dsig_tmo.key in units of 1024 core clock cycles; the key is cleared afterwards."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

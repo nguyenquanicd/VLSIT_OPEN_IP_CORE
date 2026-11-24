@@ -1,0 +1,23 @@
+[tasks]
+bmc
+cover
+prove
+
+[options]
+bmc: mode bmc
+prove: mode prove
+cover: mode cover
+depth 24
+multiclock off
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal -sv m_dvp_apb_data.sv
+read -formal -sv f_apb_data.sv
+prep -top f_apb_data
+
+[files]
+../../../rtl/m_dvp_apb_data.sv
+f_apb_data.sv

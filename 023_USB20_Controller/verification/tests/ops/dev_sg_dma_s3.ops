@@ -1,0 +1,204 @@
+# scenario dev_sg_dma seed 3
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 9f
+IB 190
+MW 4000 80 42 bd f2 21 6 f0 84 77 62 f0 f3 cb 4d 76 4d c7 7 20 51 15 9a f 89 f2 c6 da ca e3 44 bb 31 12 45 fd 6f 84 df 9a d7 c5 b3 d0 76 ac e 8f 53 a7 35 6c 88 91 3f 20 f6 f7 2d b0 22 d2 4d a 96 da d4 3c 16 17 c1 a9 8e 78 12 9e 3 27 37 10 65 d0 95 86 4f 15 ad a0 b8 46 c1 c0 eb c5 34 8a dc 79 9a df 84 9b ad 5 d4 a1 a c0 44 1e aa ee b4 b4 8e fa b 1f a bd 80 e9 98 a3 5a ba 5e a0 bd 87
+W 288 4000
+W 248 180080
+W 208 4401040
+IB bb8
+CHK DSG-ZLP
+TK 9 1f 2 0
+XD 3 7d0 40 42 bd f2 21 6 f0 84 77 62 f0 f3 cb 4d 76 4d c7 7 20 51 15 9a f 89 f2 c6 da ca e3 44 bb 31 12 45 fd 6f 84 df 9a d7 c5 b3 d0 76 ac e 8f 53 a7 35 6c 88 91 3f 20 f6 f7 2d b0 22 d2 4d a 96 da
+GAP 1 18
+HS 2
+I 28
+TK 9 1f 2 0
+XD b 7d0 40 d4 3c 16 17 c1 a9 8e 78 12 9e 3 27 37 10 65 d0 95 86 4f 15 ad a0 b8 46 c1 c0 eb c5 34 8a dc 79 9a df 84 9b ad 5 d4 a1 a c0 44 1e aa ee b4 b4 8e fa b 1f a bd 80 e9 98 a3 5a ba 5e a0 bd 87
+GAP 1 18
+HS 2
+I 28
+TK 9 1f 2 0
+XD 3 7d0 0
+GAP 1 18
+HS 2
+I 28
+IB 5dc
+R 308 1 1
+TK 9 1f 2 0
+XH a 190
+GAP 1 18
+B cg_zlp.sent
+W 308 1
+MW 4400 80 99 c1 35 d 43 9e 71 89 7a a7 5f de 31 34 a4 aa 72 e0 56 28 ac 6f e6 8a 73 3d 11 61 a1 5d 8e ae 2b b0 42 d7 95 8a ed b1 d5 94 d6 d1 12 d3 4f 66 2 f4 de 71 10 e9 93 ae 74 22 92 3d 7d 17 11 65 dc 19 6 f6 3d 57 99 7a a d3 1b 3a ae 40 81 f4 1f b4 71 65 3e 3d 57 7a 8c 41 3 f9 cc 19 8a 7f 89 d8 1a f2 a5 0 1c 40 17 3f 19 23 f7 10 2c fa a1 50 a1 24 b3 c5 c7 9b b8 87 61 a8 db 3f 41 1
+W 288 4400
+W 248 100080
+W 208 401040
+IB bb8
+CHK DSG-NOZLP
+TK 9 1f 2 0
+XD b 7d0 40 99 c1 35 d 43 9e 71 89 7a a7 5f de 31 34 a4 aa 72 e0 56 28 ac 6f e6 8a 73 3d 11 61 a1 5d 8e ae 2b b0 42 d7 95 8a ed b1 d5 94 d6 d1 12 d3 4f 66 2 f4 de 71 10 e9 93 ae 74 22 92 3d 7d 17 11 65
+GAP 1 18
+HS 2
+I 28
+TK 9 1f 2 0
+XD 3 7d0 40 dc 19 6 f6 3d 57 99 7a a d3 1b 3a ae 40 81 f4 1f b4 71 65 3e 3d 57 7a 8c 41 3 f9 cc 19 8a 7f 89 d8 1a f2 a5 0 1c 40 17 3f 19 23 f7 10 2c fa a1 50 a1 24 b3 c5 c7 9b b8 87 61 a8 db 3f 41 1
+GAP 1 18
+HS 2
+I 28
+IB 5dc
+R 308 1 1
+TK 9 1f 2 0
+XH a 190
+GAP 1 18
+B cg_zlp.not_sent
+W 484 2000
+W 444 200100
+W 404 4401040
+IB 190
+CHK DSG-SHORT
+TK 1 1f 1 0
+DT 3 0 40 c2 28 5b 15 bf eb c2 16 dc 1b be fe a1 d7 d6 eb 9 7d 6f 8a 24 d9 72 da 42 e a6 bf 86 3e ed 3f c0 37 a3 34 2 f2 49 78 c7 16 2f 32 c0 5b c ae 3e d 3a f6 91 99 2d 12 7a 36 33 1f a6 5c 27 7b
+XH 2 190
+GAP 1 18
+I 3c
+TK 1 1f 1 0
+DT b 0 a 5c 7f e8 c9 81 bc cb b3 d6 2a
+XH 2 190
+GAP 1 18
+I 3c
+IB 7d0
+MC 2000 4a c2 28 5b 15 bf eb c2 16 dc 1b be fe a1 d7 d6 eb 9 7d 6f 8a 24 d9 72 da 42 e a6 bf 86 3e ed 3f c0 37 a3 34 2 f2 49 78 c7 16 2f 32 c0 5b c ae 3e d 3a f6 91 99 2d 12 7a 36 33 1f a6 5c 27 7b 5c 7f e8 c9 81 bc cb b3 d6 2a
+R 4c4 1 1
+R 444 b6 7ffff
+B cg_short.mid
+W 4c4 1
+W 484 2400
+W 444 200100
+W 404 4401040
+IB 190
+CHK DSG-ZLPOUT
+TK 1 1f 1 0
+DT 3 0 0
+XH 2 190
+GAP 1 18
+IB 5dc
+R 4c4 1 1
+R 444 100 7ffff
+B cg_short.first
+W 4c4 1
+W 2c 100000
+IB c8
+MW 8000 20 0 90 0 0 40 0 1 0 0 91 0 0 40 0 28 0 0 92 0 0 20 0 2 0 0 93 0 0 40 0 3f 0
+MW 9200 40 ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee
+W 484 8000
+W 444 200100
+W 404 401040
+IB 258
+CHK DSG-SGOUT
+TK 1 1f 1 0
+DT b 0 40 c0 78 d3 52 d4 f7 4f cd 4c 53 31 fe f7 e2 5f 45 88 65 4b a1 76 97 d3 88 6f 9d b 89 f5 c3 66 58 b8 7a a4 f7 49 d6 f5 69 ef e f6 25 cc 17 ef 75 78 23 6f 82 7b 61 84 46 5f 12 82 56 17 a0 5d d8
+XH 2 190
+GAP 1 18
+IB 4b0
+TK 1 1f 1 0
+DT 3 0 14 2e 2b 3c 2f 87 95 12 b6 e7 ac 3 f ab a9 df c2 f8 27 6b fa
+XH 2 190
+GAP 1 18
+IB 4b0
+TK 1 1f 1 0
+DT b 0 40 c8 40 a3 3d 8c 27 dd 39 e0 80 31 bf bc e6 97 87 36 ad 3a fc b4 1e 96 5d 4c 5b bd e8 3f 37 48 a9 d7 99 5f ea f6 9f 5a 23 36 5c c8 b7 33 88 8a c4 1b 45 15 f5 8a 7e b5 aa ce e5 23 b4 fe 39 4d 8a
+XH 2 190
+GAP 1 18
+IB 4b0
+TK 1 1f 1 0
+DT 3 0 40 33 39 39 5e 60 d5 c8 41 4a cb 63 57 5b 67 80 bd 96 f e3 d0 c4 a1 9e fe 99 f7 f 61 1 37 77 fb 58 eb 65 63 6c 12 e3 39 91 4e 45 ef 2d 19 d b8 77 27 ff 9 ad a5 a8 b0 44 29 11 28 af 69 20 66
+XH 2 190
+GAP 1 18
+IB 4b0
+MC 9000 40 c0 78 d3 52 d4 f7 4f cd 4c 53 31 fe f7 e2 5f 45 88 65 4b a1 76 97 d3 88 6f 9d b 89 f5 c3 66 58 b8 7a a4 f7 49 d6 f5 69 ef e f6 25 cc 17 ef 75 78 23 6f 82 7b 61 84 46 5f 12 82 56 17 a0 5d d8
+MC 9100 14 2e 2b 3c 2f 87 95 12 b6 e7 ac 3 f ab a9 df c2 f8 27 6b fa
+MC 9200 40 ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee
+MC 9300 40 33 39 39 5e 60 d5 c8 41 4a cb 63 57 5b 67 80 bd 96 f e3 d0 c4 a1 9e fe 99 f7 f 61 1 37 77 fb 58 eb 65 63 6c 12 e3 39 91 4e 45 ef 2d 19 d b8 77 27 ff 9 ad a5 a8 b0 44 29 11 28 af 69 20 66
+CHK DSG-SGWB
+MC 8000 20 0 90 0 0 0 0 1 1 0 91 0 0 2c 0 28 5 0 92 0 0 20 0 2 3 0 93 0 0 0 0 3f 1
+R 484 8020 ffffffff
+R 10 10000 10000
+W 10 10000
+B cg_sg.chain
+B cg_sg.short
+B cg_sg.ioc
+B cg_irq.each_source
+MW 8100 20 0 a0 0 0 40 0 1 0 0 a1 0 0 40 0 1 0 0 a2 0 0 17 0 1 0 0 a3 0 0 0 0 0 0
+MW a000 40 df 71 f8 a1 37 15 d1 27 66 52 c8 fe f2 22 d8 6a fa 9b b ed ea cd e0 5c e9 13 83 bb bd e5 b9 cd 72 1 6b 84 bd 49 eb 63 51 6b b 57 ce 56 e 47 38 56 e2 fb 5e 1e b ce e5 a2 d0 10 1a 7a ce 14
+MW a100 40 cb fc d 70 7b 30 c7 f2 61 54 aa 3b b1 3f 1a 94 8c ee 99 fa 7f 88 f ac b0 a2 2f 1d de 2d 1 35 f 2e 9 57 12 f6 1b 60 a9 66 f4 ae f5 b3 11 c3 9c c9 2c 96 5e d3 3a c7 ab ce 59 c5 b7 5e b9 d4
+MW a200 17 e0 75 e3 f6 b0 89 56 c6 f9 15 4e 57 b ef 2f 31 a3 79 1c 18 e6 ee aa
+W 288 8100
+W 248 180097
+W 208 401040
+IB bb8
+CHK DSG-SGIN
+TK 9 1f 2 0
+XD b 7d0 40 df 71 f8 a1 37 15 d1 27 66 52 c8 fe f2 22 d8 6a fa 9b b ed ea cd e0 5c e9 13 83 bb bd e5 b9 cd 72 1 6b 84 bd 49 eb 63 51 6b b 57 ce 56 e 47 38 56 e2 fb 5e 1e b ce e5 a2 d0 10 1a 7a ce 14
+GAP 1 18
+HS 2
+IB 5dc
+TK 9 1f 2 0
+XD 3 7d0 40 cb fc d 70 7b 30 c7 f2 61 54 aa 3b b1 3f 1a 94 8c ee 99 fa 7f 88 f ac b0 a2 2f 1d de 2d 1 35 f 2e 9 57 12 f6 1b 60 a9 66 f4 ae f5 b3 11 c3 9c c9 2c 96 5e d3 3a c7 ab ce 59 c5 b7 5e b9 d4
+GAP 1 18
+HS 2
+IB 5dc
+TK 9 1f 2 0
+XD b 7d0 17 e0 75 e3 f6 b0 89 56 c6 f9 15 4e 57 b ef 2f 31 a3 79 1c 18 e6 ee aa
+GAP 1 18
+HS 2
+IB 5dc
+R 308 1 1
+MC 8100 18 0 a0 0 0 0 0 1 1 0 a1 0 0 0 0 1 1 0 a2 0 0 0 0 1 1
+R 288 8118 ffffffff
+B cg_sg.single
+END

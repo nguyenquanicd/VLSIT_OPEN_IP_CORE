@@ -1,0 +1,138 @@
+# scenario fi_ulpi_abort seed 2
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 fb
+IB 190
+MW 4000 100 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c 30 f5 bb 9 3c bb 94 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca 76 50 fa 84 da 2b 31
+MW 4100 80 24 b6 5a 4b d5 22 2c 13 41 97 c7 76 a8 e0 58 92 39 4f d8 31 a8 7f 83 56 50 ec 78 ce b7 4a ee e1 f c4 5c c9 1b f7 8c cf 81 d3 f1 b8 a9 29 73 60 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e 33 c7 66 8c 62 fa 46 4 de f6 81 58 ef 68 25 b3 1 f8 21 f8 ab eb 88 eb e 28 b1 58 cf 82 45 1b 53 ff c3 ed 96 4f 5 90 ef 0 bb 11 c3 e2 68 9d ff 44 f7 9a 27 84 a0 9b aa 9f c9 2f 6b c8 4c 2d 9d 14 77
+W 288 4000
+W 248 300180
+W 208 481040
+IB bb8
+AB 0
+TK 9 7b 2 0
+ID 78
+FLUSH
+B cg_ulpi.abort_tx
+TK 9 7b 2 0
+CHK FUA-RETRY
+XD 3 190 40 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
+ID 8
+HS 2
+ID 28
+AB 1
+TK 9 7b 2 0
+ID 78
+FLUSH
+B cg_ulpi.abort_tx
+TK 9 7b 2 0
+CHK FUA-RETRY
+XD b 190 40 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7
+ID 8
+HS 2
+ID 28
+AB 2
+TK 9 7b 2 0
+ID 78
+FLUSH
+B cg_ulpi.abort_tx
+TK 9 7b 2 0
+CHK FUA-RETRY
+XD 3 190 40 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c 30 f5 bb 9 3c bb 94
+ID 8
+HS 2
+ID 28
+AB 3
+TK 9 7b 2 0
+ID 78
+FLUSH
+B cg_ulpi.abort_tx
+TK 9 7b 2 0
+CHK FUA-RETRY
+XD b 190 40 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca 76 50 fa 84 da 2b 31
+ID 8
+HS 2
+ID 28
+AB 5
+TK 9 7b 2 0
+ID 78
+FLUSH
+B cg_ulpi.abort_tx
+TK 9 7b 2 0
+CHK FUA-RETRY
+XD 3 190 40 24 b6 5a 4b d5 22 2c 13 41 97 c7 76 a8 e0 58 92 39 4f d8 31 a8 7f 83 56 50 ec 78 ce b7 4a ee e1 f c4 5c c9 1b f7 8c cf 81 d3 f1 b8 a9 29 73 60 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e 33 c7 66
+ID 8
+HS 2
+ID 28
+AB 9
+TK 9 7b 2 0
+ID 78
+FLUSH
+B cg_ulpi.abort_tx
+TK 9 7b 2 0
+CHK FUA-RETRY
+XD b 190 40 8c 62 fa 46 4 de f6 81 58 ef 68 25 b3 1 f8 21 f8 ab eb 88 eb e 28 b1 58 cf 82 45 1b 53 ff c3 ed 96 4f 5 90 ef 0 bb 11 c3 e2 68 9d ff 44 f7 9a 27 84 a0 9b aa 9f c9 2f 6b c8 4c 2d 9d 14 77
+ID 8
+HS 2
+ID 28
+IB 5dc
+CHK FUA-REGW
+XR 4 0
+B cg_ulpi.abort_reg
+B cg_ulpi.regwr
+W 60 4
+IB 12c
+SG 0 12c
+TK 5 21 1 0
+CHK FUA-FSREV
+WP 0 14 df 534
+AB ffffffff
+LS 1
+B cg_ulpi.rxcmd_idle
+CHK FUA-SUSP
+WP 0 0 20 927
+B cg_ulpilp.enter
+END

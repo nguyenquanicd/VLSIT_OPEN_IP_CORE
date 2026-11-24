@@ -1,0 +1,104 @@
+# scenario fi_axis_err seed 2
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 fb
+IB 190
+W 2c 200000
+W 100 61
+W 104 42
+W 108 44
+W 10c 23
+R 10 0 8000
+CHK FAX-OUTSIDE
+AW 1 4000 4 2 dcf4bb99 f2a4d27b d95bafc8 e7a269f
+B cg_axiserr.outside
+P 10 8000 8000 28
+W 10 8000
+R 10 0 8000
+AR 1 7000 3 2
+AW 0 f174 1 2 15ba2bdd
+AR 0 a000 10 2
+W 10 8000
+CHK FAX-DISABLED
+AW 1 3000 2 2 5c6e4337 d5e34124
+AR 1 3000 2 2
+B cg_axiserr.disabled
+CHK FAX-DIR
+AR 1 0 4 2
+AW 1 1000 4 2 2b491044 bc688778 cf1822ff ab73738f
+B cg_axiserr.direction
+CHK FAX-EMPTY
+AR 1 1000 10 2
+B cg_axiserr.empty
+W 244 80040
+W 204 481040
+IB 12c
+CHK FAX-NOSIDE
+AW 1 1000 10 2 da94e3e8 4ee207f8 4067c358 9b1f282e 3653f8dd 9b575bd1 925e474 94c9c950 ae662675 288bc781 ffed9235 6e405d93 a372db8f 64be8049 cdbd47d3 b91751da
+AW 1 4000 10 2 dc38f519 feac7eb7 82523e86 f30b94fa 5f3f57eb 8b4f2fc1 ef8acd12 71e1f6d2 80877b6f 44ab6cce e6b58de7 9325626 defc044a 706a045 5d300cb9 770348a0
+AW 1 3000 10 2 ee8d7ee9 5186ee32 e8624fab 6148a86f 6c71c4a6 e44c5055 e2520e33 8697bbd0 2a1be9cd 8f7d9b78 2d6c797f 3c729578 3b08c6e3 61b9030 2d3d854e 533c9135
+IB 190
+TK 9 7b 1 0
+XH a 190
+B cg_axiserr.no_side_effect
+W 448 80040
+W 408 481040
+IB 12c
+TK 1 7b 2 0
+DT 3 0 40 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a
+XH 2 190
+IB 190
+CHK FAX-TAG
+AR 1 2000 10 2
+B cg_axiserr.tag
+AR 0 2000 4 2
+CHK FAX-RECOVER
+AR 1 1000 10 0 5db84558 ffffffff b5bad4e4 ffffffff cc52e4b9 ffffffff 8efa7fec ffffffff ece8b5ff ffffffff 71f9e9b3 ffffffff f58955a6 ffffffff 9fd09b9e ffffffff 26bbfa6a ffffffff 366104ae ffffffff 748b191e ffffffff 7d884536 ffffffff 10d81e6b ffffffff 58b8b91d ffffffff 3a2a0c7f ffffffff a140c22 ffffffff
+DR 1 0 50
+B cg_axiserr.recover
+R 10 0 16300
+W 10 8000
+END

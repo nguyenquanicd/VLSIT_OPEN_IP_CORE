@@ -1,0 +1,143 @@
+{
+  "page_name": "FSM_DSIG_CTL",
+  "out_name": "dsig_ctl_fsm.drawio",
+  "function": "dsig_ctl",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_CHECK"
+    },
+    {
+      "name": "ENUM_ST_KEY"
+    },
+    {
+      "name": "ENUM_ST_RNG"
+    },
+    {
+      "name": "ENUM_ST_RUN"
+    },
+    {
+      "name": "ENUM_ST_VAS"
+    },
+    {
+      "name": "ENUM_ST_RESULT"
+    },
+    {
+      "name": "ENUM_ST_CLEAR"
+    },
+    {
+      "name": "ENUM_ST_ERR"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_CHECK",
+      "label": "cmd_start"
+    },
+    {
+      "src": "ENUM_ST_CHECK",
+      "dst": "ENUM_ST_ERR",
+      "label": "chk_fail"
+    },
+    {
+      "src": "ENUM_ST_CHECK",
+      "dst": "ENUM_ST_KEY",
+      "label": "ok & key_op"
+    },
+    {
+      "src": "ENUM_ST_CHECK",
+      "dst": "ENUM_ST_RNG",
+      "label": "ok & rng_only"
+    },
+    {
+      "src": "ENUM_ST_CHECK",
+      "dst": "ENUM_ST_RUN",
+      "label": "ok & verify"
+    },
+    {
+      "src": "ENUM_ST_KEY",
+      "dst": "ENUM_ST_RNG",
+      "label": "key_ok & rng"
+    },
+    {
+      "src": "ENUM_ST_KEY",
+      "dst": "ENUM_ST_RUN",
+      "label": "key_ok & !rng"
+    },
+    {
+      "src": "ENUM_ST_KEY",
+      "dst": "ENUM_ST_ERR",
+      "label": "key_tmo"
+    },
+    {
+      "src": "ENUM_ST_KEY",
+      "dst": "ENUM_ST_CLEAR",
+      "label": "abort"
+    },
+    {
+      "src": "ENUM_ST_RNG",
+      "dst": "ENUM_ST_RUN",
+      "label": "rng_ready"
+    },
+    {
+      "src": "ENUM_ST_RNG",
+      "dst": "ENUM_ST_ERR",
+      "label": "ent_tmo"
+    },
+    {
+      "src": "ENUM_ST_RNG",
+      "dst": "ENUM_ST_CLEAR",
+      "label": "abort"
+    },
+    {
+      "src": "ENUM_ST_RUN",
+      "dst": "ENUM_ST_VAS",
+      "label": "done & vas"
+    },
+    {
+      "src": "ENUM_ST_RUN",
+      "dst": "ENUM_ST_RESULT",
+      "label": "done & !vas"
+    },
+    {
+      "src": "ENUM_ST_RUN",
+      "dst": "ENUM_ST_ERR",
+      "label": "eng_error"
+    },
+    {
+      "src": "ENUM_ST_RUN",
+      "dst": "ENUM_ST_CLEAR",
+      "label": "abort"
+    },
+    {
+      "src": "ENUM_ST_VAS",
+      "dst": "ENUM_ST_RESULT",
+      "label": "vas_ok"
+    },
+    {
+      "src": "ENUM_ST_VAS",
+      "dst": "ENUM_ST_ERR",
+      "label": "vas_mismatch"
+    },
+    {
+      "src": "ENUM_ST_RESULT",
+      "dst": "ENUM_ST_CLEAR",
+      "label": "res_written"
+    },
+    {
+      "src": "ENUM_ST_ERR",
+      "dst": "ENUM_ST_CLEAR",
+      "label": "flags_set"
+    },
+    {
+      "src": "ENUM_ST_CLEAR",
+      "dst": "ENUM_ST_IDLE",
+      "label": "cleared"
+    }
+  ]
+}

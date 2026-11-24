@@ -1,0 +1,78 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........................................."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_start",
+    "wave": "0.10.........................10............."
+   },
+   {
+    "name": "o_dsig_op_alg",
+    "wave": "=........................=..................",
+    "data": [
+     "0x0",
+     "0xA"
+    ]
+   },
+   {
+    "name": "o_dsig_op_hybpol",
+    "wave": "=...........................................",
+    "data": [
+     "0x0"
+    ]
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=..==......===................==......===...",
+    "data": [
+     "ENUM_ST_IDLE",
+     "ENUM_ST_CHECK",
+     "ENUM_ST_RUN",
+     "ENUM_ST_RESULT",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE",
+     "ENUM_ST_CHECK",
+     "ENUM_ST_RUN",
+     "ENUM_ST_RESULT",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE"
+    ]
+   },
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "0..1.........0................1.........0..."
+   }
+  ],
+  [
+   "latched results",
+   {
+    "name": "i_dsig_sts_edok",
+    "wave": "0...........1..............................."
+   },
+   {
+    "name": "i_dsig_sts_mlok",
+    "wave": "0......................................1...."
+   },
+   {
+    "name": "i_dsig_sts_sigok",
+    "wave": "0......................................1...."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-005, success then one part invalid: hybrid verification as two verifications, policy both valid"
+ },
+ "foot": {
+  "text": "Simulated: Ed25519 verifies valid (edok 1, sigok 0 under the policy both valid); the ML-DSA-65 verification then sets mlok and sigok."
+ },
+ "config": {
+  "hscale": 3
+ }
+}

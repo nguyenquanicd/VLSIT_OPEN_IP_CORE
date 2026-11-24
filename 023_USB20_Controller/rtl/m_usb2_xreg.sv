@@ -134,6 +134,8 @@ module m_usb2_xreg #(
   logic [PARA_USB2_XREG_NA-1:0]                w_clrany;
   logic                                        w_sel_dirty;
   logic                                        w_sel_set;
+  logic                                        w_sel_set_ok;
+  logic                                        w_clr_pend;
   logic                                        w_sel_clr;
 
   // Command FIFO from CLK-BUS to CLK-PHY: 8 entries of 48 bits. A push while full is dropped and
@@ -360,7 +362,13 @@ module m_usb2_xreg #(
   // reg_pdirty is one more cycle late. Without the wait, done reached the CSR before the final
   // xsize, and the clear of ep_en before active (BUG-044, found by t_dev_xreg_race).
   assign w_evt_hold  = reg_evt_in | (reg_evt_hold != 3'd0);
-  assign w_hit       = ((w_sel_set | w_sel_clr) & ~w_pub_dirty & ~w_evt_hold) | w_sel_dirty;
+  // Clears go before events: an event set waits while a command clear of any slot is pending, so
+  // software sees a done flag only after the command bit it wrote has returned to 0. Otherwise a
+  // re-arm right after done hit a command bit still at 1 (no arming edge for the DMA) and the late
+  // clear then removed the new command (BUG-049, found by t_rand_host_traffic seed 7).
+  assign w_clr_pend   = (w_clrany != '0);
+  assign w_sel_set_ok = w_sel_set & ~w_clr_pend;
+  assign w_hit       = ((w_sel_set_ok | w_sel_clr) & ~w_pub_dirty & ~w_evt_hold) | w_sel_dirty;
 
   always_ff @(posedge i_clk_phy, negedge i_rst_n_phy) begin : p_ff_evthold
     if (!i_rst_n_phy) begin
@@ -375,23 +383,23 @@ module m_usb2_xreg #(
     end
   end
 
-  // Value and kind of the entry pushed for the scan slot, by priority: published word, event set
-  // mask, command clear mask.
+  // Value and kind of the entry pushed for the scan slot, by priority: published word, command
+  // clear mask, event set mask (BUG-049).
   always_comb begin : p_com_scan_val
     w_scan_val  = w_scan_pub;
     w_scan_kind = LPARA_KIND_PUB[LPARA_KIND_W-1:0];
-    casez ({w_sel_dirty, w_sel_set, w_sel_clr})
+    casez ({w_sel_dirty, w_sel_clr, w_sel_set_ok})
       3'b1??: begin
         w_scan_val  = w_scan_pub;
         w_scan_kind = LPARA_KIND_PUB[LPARA_KIND_W-1:0];
       end
       3'b01?: begin
-        w_scan_val  = w_scan_set;
-        w_scan_kind = LPARA_KIND_SET[LPARA_KIND_W-1:0];
-      end
-      3'b001: begin
         w_scan_val  = w_scan_clr;
         w_scan_kind = LPARA_KIND_CLR[LPARA_KIND_W-1:0];
+      end
+      3'b001: begin
+        w_scan_val  = w_scan_set;
+        w_scan_kind = LPARA_KIND_SET[LPARA_KIND_W-1:0];
       end
       default: begin
         w_scan_val = w_scan_pub;

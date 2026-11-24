@@ -1,0 +1,97 @@
+# scenario dev_axis_thr seed 2
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 100190
+W 2d0 4001a0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 fb
+IB 190
+W 2c 200000
+W 34 20010
+W 100 61
+W 244 200100
+W 204 481040
+IB c8
+CHK DAT-ABOVE
+DR 0 1 7d0
+AW 1 0 10 0 b82b2e1c 6c809d56 c9dc5112 1289e3be a3eeba0e 5a54d8c2 5a0c7678 b84558a6 bad4e45d 52e4b9b5 fa7feccc e8b5ff8e f9e9b3ec 8955a671 d09b9ef5 bbfa6a9f
+DR 0 1 28
+AW 1 0 10 0 6104ae26 8b191e36 88453674 d81e6b7d b8b91d10 2a0c7f58 140c223a 4182bf0a c5005e50 124d7e16 9239b002 9d0ffaac cd8717e5 2f73f24e e50c34a1 a7f9c941
+CHK DAT-EQUAL
+DR 0 1 28
+AW 1 0 10 0 8684ae49 1d4709d6 52431181 76e83157 e3777e10 74298025 8ed883b8 c4124d02 2c3852d1 a33347b 6f35765d 9ee8ed0c de6b6cc2 d61a0ad9 bbf5305c 94bb3c09
+CHK DAT-BELOW
+DR 0 0 28
+B cg_dbuf.both_full
+IB c8
+DX 0 0
+B cg_dmareq.thr_low
+CHK DAT-BACK
+TK 9 7b 1 0
+XD 3 190 40 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
+ID 8
+HS 2
+B cg_dbuf.swap
+DR 0 1 7d0
+B cg_dmareq.thr_back
+AW 1 0 10 0 d3099dbe 659c3533 d21ee708 256aedf8 be0c9102 fb70279c c8bf3b62 cab047ed 3e3e823e 6cc8ab29 16f00c35 eab794fe f789bf48 97fbd6f4 fa5076ca 312bda84
+CHK DAT-ORDER
+IB 12c
+TK 9 7b 1 0
+XD b 190 40 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7
+ID 8
+HS 2
+IB 12c
+TK 9 7b 1 0
+XD 3 190 40 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c 30 f5 bb 9 3c bb 94
+ID 8
+HS 2
+IB 12c
+TK 9 7b 1 0
+XD b 190 40 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca 76 50 fa 84 da 2b 31
+ID 8
+HS 2
+ID 3c
+CHK DAT-CLEAN
+R 10 0 1e300
+END

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "status": "pending_review",
+  "campaign_id": "usb2_block_plan_draft1",
+  "measured_at": "2026-11-21",
+  "host": {
+    "os": "Windows 11 Home Single Language 10.0.26200",
+    "ram_total_bytes": 16357158912,
+    "ram_available_bytes": 681119744,
+    "ram_status": "measured",
+    "ram_measurement_reason": "",
+    "disk_path_or_volume": "C:",
+    "disk_free_bytes": 4247011328,
+    "disk_status": "measured",
+    "disk_measurement_reason": "",
+    "measurement_method": "PowerShell Get-CimInstance Win32_ComputerSystem / Win32_OperatingSystem and Get-PSDrive C, one sample while other applications were running"
+  },
+  "limits": {
+    "reserved_host_ram_bytes": 4294967296,
+    "simulation_ram_budget_bytes": null,
+    "max_concurrent_jobs": 1,
+    "disk_stop_free_bytes": 2147483648,
+    "expected_max_run_output_bytes": 134217728,
+    "output_estimation_method": "measured: the largest retained run so far (full-chip simulation with logs) is below 20 MB; a build folder is 87 MB; 128 MB per run is the conservative bound",
+    "revision_note": "2026-11-21: stop threshold lowered from 4 GiB to 2 GiB because the host had 4.2 GiB free and the 5 GiB scratch build tree of the old verification folder was not deleted without approval"
+  },
+  "waveform_policy": {
+    "default_capture": "only_when_required_by_test_or_review",
+    "planned_signal_scope": "none for passing runs; PHY, APB and AXI interface pins for a failure rerun",
+    "planned_time_windows": "the failing transaction and 2000 CLK-PHY cycles before it",
+    "failure_diagnostic": "rerun_same_configuration_and_seed_with_targeted_capture"
+  },
+  "compression": {
+    "method": "none",
+    "round_trip_hash_required": true
+  },
+  "review": {
+    "reviewer": "to be named (Q-002)",
+    "decision": "pending",
+    "record": "docs/00_plan/signoff.md"
+  }
+}

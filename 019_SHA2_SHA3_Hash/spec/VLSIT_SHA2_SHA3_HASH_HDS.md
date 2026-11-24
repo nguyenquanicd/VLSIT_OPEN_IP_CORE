@@ -210,9 +210,9 @@ The write path is: AXI4 subordinate window, per-context input FIFO, context sequ
 
 ### 5.2 Block diagram
 
-The block diagram below was drawn with draw.io from the hierarchy of 14.2 (source `../figures/vlsit_sha_block_diagram.drawio`, spec `../figures/sha_diagram_spec.json`). It shows the data path chain and the interfaces; the bus links between the sequencer and the SHA-512 and Keccak cores follow the SHA-256 core bus (sequencer to core: start, block and state; core to sequencer: done and result).
+The block diagram below was drawn with draw.io from the hierarchy of 14.2 (source `figures/vlsit_sha_block_diagram.drawio`, spec `figures/sha_diagram_spec.json`). It shows the data path chain and the interfaces; the bus links between the sequencer and the SHA-512 and Keccak cores follow the SHA-256 core bus (sequencer to core: start, block and state; core to sequencer: done and result).
 
-![Block diagram of m_vlsit_sha_top](../figures/vlsit_sha_block_diagram.svg)
+![Block diagram of m_vlsit_sha_top](figures/vlsit_sha_block_diagram.svg)
 
 ### 5.3 Transaction and dataflow
 
@@ -486,31 +486,31 @@ State of one context (read in `sha_sts.cstate` for the selected context).
 
 ### 10.3 Cycle-level behavior
 
-**Status of the figures (2026-11-10).** The figures of WF-001 to WF-019 were replaced by the waveforms of the simulation of the RTL (`verification/waveforms_sim`, same stems; the sketches of the design intent are kept in `../figures/spec_sketch/`). The cycle counts in the descriptions below are the intent of the specification phase and differ by 1 to 3 cycles from the figures (for example the AXI address ready is high in the first cycle, and the command bits reach the sequencer one cycle earlier or later); the protocol and requirement rules are checked by the assertions of the testbench (DEC-028). WF-012 (fault response, stage 2a) and WF-013 (entropy port, stage 2b) were simulated and replaced as well. `../figures/gen_waveforms.py` makes the sketches and would overwrite the replaced figures; `verification/scripts/replace_figures.py` restores the simulated figures.
+**Status of the figures (2026-11-10).** The figures of WF-001 to WF-019 were replaced by the waveforms of the simulation of the RTL (`verification/waveforms_sim`, same stems; the sketches of the design intent are kept in `figures/spec_sketch/`). The cycle counts in the descriptions below are the intent of the specification phase and differ by 1 to 3 cycles from the figures (for example the AXI address ready is high in the first cycle, and the command bits reach the sequencer one cycle earlier or later); the protocol and requirement rules are checked by the assertions of the testbench (DEC-028). WF-012 (fault response, stage 2a) and WF-013 (entropy port, stage 2b) were simulated and replaced as well. `figures/gen_waveforms.py` makes the sketches and would overwrite the replaced figures; `verification/scripts/replace_figures.py` restores the simulated figures.
 
 **Waveform plan (rule R-024).** Proposed and confirmed by the user on 2026-11-09 (option C: the proposed list plus corner cases WF-017 to WF-019). The waveforms show design intent derived from sections 6.3 and 10.2; they are not simulation output. Each figure has its WaveJSON source beside it in the folder `figures`; notes follow the table.
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001, OP-002 write burst of the message window | Success | `i_axi_aw*`, `i_axi_w*`, `o_axi_b*`, `sha_lvl.inlvl` | ![WF-001](../figures/wf_001_axi_write_burst.svg) (source `../figures/wf_001_axi_write_burst.json`) | 2026-11-09 |
-| WF-002 | OP-002 | Error: partial `wstrb` or WRAP burst, SLVERR | `i_axi_w*`, `o_axi_bresp`, `o_irq` | ![WF-002](../figures/wf_002_axi_write_error.svg) (source `../figures/wf_002_axi_write_error.json`) | 2026-11-09 |
-| WF-003 | OP-002 | Corner: input FIFO full, `o_axi_wready` low | `o_axi_wready`, FIFO level | ![WF-003](../figures/wf_003_fifo_full_backpressure.svg) (source `../figures/wf_003_fifo_full_backpressure.json`) | 2026-11-09 |
-| WF-004 | OP-003 | Success: final, padding, digest ready, `cdone` | `sha_cmd.final`, core busy, `o_irq` | ![WF-004](../figures/wf_004_final_digest_ready.svg) (source `../figures/wf_004_final_digest_ready.json`) | 2026-11-09 |
-| WF-005 | OP-004 | Success: read digest burst | `i_axi_ar*`, `o_axi_r*` | ![WF-005](../figures/wf_005_digest_read_burst.svg) (source `../figures/wf_005_digest_read_burst.json`) | 2026-11-09 |
-| WF-006 | OP-004 | Error: read of an empty digest FIFO | `o_axi_rdata`, `udf` event | ![WF-006](../figures/wf_006_read_empty_underflow.svg) (source `../figures/wf_006_read_empty_underflow.json`) | 2026-11-09 |
-| WF-007 | OP-001 | Success and error: APB init, non-secure access PSLVERR | `i_apb_*`, `o_apb_*` | ![WF-007](../figures/wf_007_apb_init_and_nonsecure.svg) (source `../figures/wf_007_apb_init_and_nonsecure.json`) | 2026-11-09 |
-| WF-008 | OP-002, OP-003 | Corner: two contexts interleaved, state save and restore | Context number, core load and store | ![WF-008](../figures/wf_008_two_contexts_interleaved.svg) (source `../figures/wf_008_two_contexts_interleaved.json`) | 2026-11-09 |
-| WF-009 | OP-005 | Corner: SHAKE squeeze of more than one block | Output FIFO level, core | ![WF-009](../figures/wf_009_shake_squeeze.svg) (source `../figures/wf_009_shake_squeeze.json`) | 2026-11-09 |
-| WF-010 | OP-010 | Success: DMA input 4-phase handshake | `o_dma_in_req`, `i_dma_in_ack` | ![WF-010](../figures/wf_010_dma_input_handshake.svg) (source `../figures/wf_010_dma_input_handshake.json`) | 2026-11-09 |
-| WF-011 | OP-010 | Corner: DMA output timeout, padded burst | `o_dma_out_req`, `sha_dvld.words` | ![WF-011](../figures/wf_011_dma_output_timeout.svg) (source `../figures/wf_011_dma_output_timeout.json`) | 2026-11-09 |
-| WF-012 | OP-011 | Error: fault detected, gate, lock, alarm | `o_alarm`, `sha_sts.locked` | ![WF-012](../figures/wf_012_fault_response.svg) (source `../figures/wf_012_fault_response.json`) | 2026-11-09 |
-| WF-013 | OP-009 | Corner: masked core entropy request | `o_ent_req`, `i_ent_valid` | ![WF-013](../figures/wf_013_entropy_request.svg) (source `../figures/wf_013_entropy_request.json`) | 2026-11-09 |
-| WF-014 | OP-006, OP-007, OP-008 | Corner: abort, soft reset, state clearing | Context state, FIFO levels | ![WF-014](../figures/wf_014_abort_zero_reset.svg) (source `../figures/wf_014_abort_zero_reset.json`) | 2026-11-09 |
-| WF-015 | Reset | Reset assertion and release in both domains | `i_rst_n_*`, outputs | ![WF-015](../figures/wf_015_reset_release.svg) (source `../figures/wf_015_reset_release.json`) | 2026-11-09 |
-| WF-016 | CDC-001 | Corner: APB write with asynchronous clocks, PREADY wait | `i_apb_*`, `o_apb_pready` | ![WF-016](../figures/wf_016_apb_async_write.svg) (source `../figures/wf_016_apb_async_write.json`) | 2026-11-09 |
-| WF-017 | OP-003 | Corner: final command while the core is busy and the input FIFO holds words | Command, core busy, FIFO level | ![WF-017](../figures/wf_017_final_with_busy_core.svg) (source `../figures/wf_017_final_with_busy_core.json`) | 2026-11-09 |
-| WF-018 | OP-003 | Corner: message that needs two padded final blocks | Block kind, core start, event | ![WF-018](../figures/wf_018_two_block_padding.svg) (source `../figures/wf_018_two_block_padding.json`) | 2026-11-09 |
-| WF-019 | OP-001, OP-003 | Corner: context select changed while the core is busy | `sha_ctrl.ctxsel`, level and state read-back | ![WF-019](../figures/wf_019_ctxsel_while_busy.svg) (source `../figures/wf_019_ctxsel_while_busy.json`) | 2026-11-09 |
+| WF-001 | OP-001, OP-002 write burst of the message window | Success | `i_axi_aw*`, `i_axi_w*`, `o_axi_b*`, `sha_lvl.inlvl` | ![WF-001](figures/wf_001_axi_write_burst.svg) (source `figures/wf_001_axi_write_burst.json`) | 2026-11-09 |
+| WF-002 | OP-002 | Error: partial `wstrb` or WRAP burst, SLVERR | `i_axi_w*`, `o_axi_bresp`, `o_irq` | ![WF-002](figures/wf_002_axi_write_error.svg) (source `figures/wf_002_axi_write_error.json`) | 2026-11-09 |
+| WF-003 | OP-002 | Corner: input FIFO full, `o_axi_wready` low | `o_axi_wready`, FIFO level | ![WF-003](figures/wf_003_fifo_full_backpressure.svg) (source `figures/wf_003_fifo_full_backpressure.json`) | 2026-11-09 |
+| WF-004 | OP-003 | Success: final, padding, digest ready, `cdone` | `sha_cmd.final`, core busy, `o_irq` | ![WF-004](figures/wf_004_final_digest_ready.svg) (source `figures/wf_004_final_digest_ready.json`) | 2026-11-09 |
+| WF-005 | OP-004 | Success: read digest burst | `i_axi_ar*`, `o_axi_r*` | ![WF-005](figures/wf_005_digest_read_burst.svg) (source `figures/wf_005_digest_read_burst.json`) | 2026-11-09 |
+| WF-006 | OP-004 | Error: read of an empty digest FIFO | `o_axi_rdata`, `udf` event | ![WF-006](figures/wf_006_read_empty_underflow.svg) (source `figures/wf_006_read_empty_underflow.json`) | 2026-11-09 |
+| WF-007 | OP-001 | Success and error: APB init, non-secure access PSLVERR | `i_apb_*`, `o_apb_*` | ![WF-007](figures/wf_007_apb_init_and_nonsecure.svg) (source `figures/wf_007_apb_init_and_nonsecure.json`) | 2026-11-09 |
+| WF-008 | OP-002, OP-003 | Corner: two contexts interleaved, state save and restore | Context number, core load and store | ![WF-008](figures/wf_008_two_contexts_interleaved.svg) (source `figures/wf_008_two_contexts_interleaved.json`) | 2026-11-09 |
+| WF-009 | OP-005 | Corner: SHAKE squeeze of more than one block | Output FIFO level, core | ![WF-009](figures/wf_009_shake_squeeze.svg) (source `figures/wf_009_shake_squeeze.json`) | 2026-11-09 |
+| WF-010 | OP-010 | Success: DMA input 4-phase handshake | `o_dma_in_req`, `i_dma_in_ack` | ![WF-010](figures/wf_010_dma_input_handshake.svg) (source `figures/wf_010_dma_input_handshake.json`) | 2026-11-09 |
+| WF-011 | OP-010 | Corner: DMA output timeout, padded burst | `o_dma_out_req`, `sha_dvld.words` | ![WF-011](figures/wf_011_dma_output_timeout.svg) (source `figures/wf_011_dma_output_timeout.json`) | 2026-11-09 |
+| WF-012 | OP-011 | Error: fault detected, gate, lock, alarm | `o_alarm`, `sha_sts.locked` | ![WF-012](figures/wf_012_fault_response.svg) (source `figures/wf_012_fault_response.json`) | 2026-11-09 |
+| WF-013 | OP-009 | Corner: masked core entropy request | `o_ent_req`, `i_ent_valid` | ![WF-013](figures/wf_013_entropy_request.svg) (source `figures/wf_013_entropy_request.json`) | 2026-11-09 |
+| WF-014 | OP-006, OP-007, OP-008 | Corner: abort, soft reset, state clearing | Context state, FIFO levels | ![WF-014](figures/wf_014_abort_zero_reset.svg) (source `figures/wf_014_abort_zero_reset.json`) | 2026-11-09 |
+| WF-015 | Reset | Reset assertion and release in both domains | `i_rst_n_*`, outputs | ![WF-015](figures/wf_015_reset_release.svg) (source `figures/wf_015_reset_release.json`) | 2026-11-09 |
+| WF-016 | CDC-001 | Corner: APB write with asynchronous clocks, PREADY wait | `i_apb_*`, `o_apb_pready` | ![WF-016](figures/wf_016_apb_async_write.svg) (source `figures/wf_016_apb_async_write.json`) | 2026-11-09 |
+| WF-017 | OP-003 | Corner: final command while the core is busy and the input FIFO holds words | Command, core busy, FIFO level | ![WF-017](figures/wf_017_final_with_busy_core.svg) (source `figures/wf_017_final_with_busy_core.json`) | 2026-11-09 |
+| WF-018 | OP-003 | Corner: message that needs two padded final blocks | Block kind, core start, event | ![WF-018](figures/wf_018_two_block_padding.svg) (source `figures/wf_018_two_block_padding.json`) | 2026-11-09 |
+| WF-019 | OP-001, OP-003 | Corner: context select changed while the core is busy | `sha_ctrl.ctxsel`, level and state read-back | ![WF-019](figures/wf_019_ctxsel_while_busy.svg) (source `figures/wf_019_ctxsel_while_busy.json`) | 2026-11-09 |
 
 **Waveform notes.**
 

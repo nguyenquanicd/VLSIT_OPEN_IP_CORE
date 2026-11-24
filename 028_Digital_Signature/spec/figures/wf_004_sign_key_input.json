@@ -1,0 +1,64 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "key request",
+   {
+    "name": "o_key_req",
+    "wave": "001.1.1.1..."
+   },
+   {
+    "name": "o_key_idx",
+    "wave": "xx=.=.=.=...",
+    "data": [
+     "0",
+     "1",
+     "2",
+     "3"
+    ]
+   },
+   {
+    "name": "i_key_valid",
+    "wave": "0001.01.01.."
+   },
+   {
+    "name": "i_key_data",
+    "wave": "xxx=x=x=x=x.",
+    "data": [
+     "K0",
+     "K1",
+     "K2",
+     "K3"
+    ]
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=.=.=...=...",
+    "data": [
+     "ENUM_ST_IDLE",
+     "ENUM_ST_CHECK",
+     "ENUM_ST_RUN"
+    ]
+   },
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "01111111111."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-003, success: signing with the key taken from the key input port"
+ },
+ "foot": {
+  "text": "The key word index is requested one word at a time; a key of 4 words is shown for brevity."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

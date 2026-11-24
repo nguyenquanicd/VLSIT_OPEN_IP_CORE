@@ -19,7 +19,7 @@ VVP      ?= vvp
 FLIST    := rtl/filelist.f
 TOP      := m_vlsit_timer
 TB_TOP   := tb_timer_dma_reqack
-TB_SRCS  := ../verification/tb_timer_dma_reqack.sv
+TB_SRCS  := ../verification/env/verificationtb_timer_dma_reqack.sv
 
 .PHONY: help lint rule verify
 

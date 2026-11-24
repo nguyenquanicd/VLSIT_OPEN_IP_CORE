@@ -1,5 +1,6 @@
-// filelist.f - RTL files (alphabetical; Verilator/slang lint is order-independent).
-// Top module: see the Makefile TOP variable.
+# Master filelist: union of active synthesizable RTL profiles for this IP.
+# Select the required top module and profile-specific defines at the tool invocation.
+# Paths are relative to this file; invoke the simulator from this directory.
 m_vlsit_lib_dff_rising_edge_async_reset_n.sv
 m_vlsit_lib_sync_rising_edge_async_reset_n.sv
 m_vlsit_wdt_apb_err.sv

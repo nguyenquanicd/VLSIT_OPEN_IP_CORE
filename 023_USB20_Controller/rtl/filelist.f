@@ -1,10 +1,8 @@
-// filelist.f - RTL files in compile order (leaf modules first, top last).
-// Top module: m_usb2_top_ulpi_axim
-// Paths are relative to the folder of this file; run tools from that folder.
-m_usb2_axs.sv
+# Master filelist: union of active synthesizable RTL profiles for this IP.
+# Select the required top module and profile-specific defines at the tool invocation.
+# Paths are relative to this file; invoke the simulator from this directory.
 ../../000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv
 ../../000_Common/rtl_lib/m_vlsit_afifo_ram_macro.sv
-../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_mem.sv
 ../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_RN.sv
 ../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_SN.sv
 ../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_RN.sv
@@ -14,6 +12,11 @@ m_usb2_axs.sv
 ../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_RN.sv
 ../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_SN.sv
 ../../000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv
+../../000_Common/rtl_lib/m_vlsit_sfifo_ram_macro.sv
+../../000_Common/rtl_cells/VLSIT_CELL_TIEH.sv
+../../000_Common/rtl_lib/m_vlsit_rst_sync.sv
+m_usb2_axs.sv
+../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_mem.sv
 ../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_sync.sv
 ../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_rd.sv
 ../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_wr.sv
@@ -22,7 +25,6 @@ m_usb2_cdc_fifo.sv
 m_usb2_cfgchk.sv
 m_usb2_dev.sv
 m_usb2_dma.sv
-../../000_Common/rtl_lib/m_vlsit_sfifo_ram_macro.sv
 m_usb2_fifo.sv
 m_usb2_host.sv
 m_usb2_crc16.sv
@@ -38,10 +40,11 @@ m_usb2_xreg.sv
 csr/m_vlsit_csr_sync.sv
 csr/m_vlsit_csr_usb2.sv
 m_usb2_regs.sv
-../../000_Common/rtl_cells/VLSIT_CELL_TIEH.sv
-../../000_Common/rtl_lib/m_vlsit_rst_sync.sv
 m_usb2_rst.sv
 m_usb2_spd.sv
 m_usb2_ulpilp.sv
 m_usb2_core.sv
 m_usb2_top_ulpi_axim.sv
+m_usb2_top_ulpi_axis.sv
+m_usb2_top_utmi_axim.sv
+m_usb2_top_utmi_axis.sv

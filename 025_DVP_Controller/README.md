@@ -2,107 +2,45 @@
 
 ## IP overview and status
 
-Digital Video Port (DVP) capture controller with register, RTL, specification, and verification collateral.
+Digital Video Port (DVP) camera capture controller with an Advanced Peripheral Bus 4 (APB4) programming/data interface, two selectable pixel-clock capture paths, first-in-first-out (FIFO) buffering, and direct-memory-access (DMA) batch request/acknowledge signals.
 
-**Status:** Inventory: 12 RTL source file(s), 14 specification/reference artifact(s), and 39 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
+The normative design package is HDS v0.3 and CSR v1.1. See [spec/README.md](spec/README.md) for the key HDS, CSR workbook/JSON, block diagrams, and waveform assets. The consolidated review status is [REVIEW_STATUS_2026-11-23.md](review/REVIEW_STATUS_2026-11-23.md); older reports remain dated evidence for the revisions they reviewed.
 
-## Standard directory structure
+## Directory organization
 
-~~~text
-<IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
-├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
+- spec/ contains the HDS, CSR sources, spec README, validation evidence, and spec/figures/.
+- rtl/ contains active synthesizable RTL and the sole RTL filelist, rtl/filelist.f.
+- lint/, cdc/, rdc/, sdc/, and syn/ hold flow-specific setup and evidence.
+- verification/ has exactly five direct directories: docs/, tests/, models/, env/, and sim/. All verification documents and reports are flat in verification/docs/.
+- verification/env/ contains the BFMs, the checker with its reference model, the testbenches, the single driver script `scripts/dvp_regress.py` and the resource budget. verification/tests/regression/ holds the test list; verification/docs/ holds the plan, architecture, qualification record, decisions and the verification report.
+- verification/sim/final/ is the single retained result set (flat logs, summary, manifest). There is no top-level sim/ directory and no other run history: the verification package was consolidated into one final version on 2026-11-24.
+- review/ contains Markdown review reports directly and supporting evidence in review/reference/.
+
+No .log file belongs in rtl/. New lint logs go to lint/, specification checks to spec/validation_logs/, and simulation outputs to verification/sim/<run>/.
+
+## Capture and software behavior
+
+- DVP_CTRL.PCLK_MODE=0 selects continuous PCLK capture into the asynchronous FIFO.
+- DVP_CTRL.PCLK_MODE=1 selects valid-pixel gated PCLK capture through the data/toggle bridge and APB-clocked FIFO. Integration must provide at least four APB cycles between sampled pixels and a VSYNC pulse lasting at least four APB cycles.
+- Capture starts at the next active VSYNC after enable. Clearing capture enable stops new samples after control crosses into the sensor-clock domain and preserves queued FIFO pixels.
+- FIFO full drops the new pixel and sets sticky OVERFLOW; software clears it with write-one-to-clear (W1C).
+- FIFO flush is accepted only while capture is disabled and DMA reads are stopped. In continuous mode, PCLK must run while the reset handshake completes.
+- DVP_FRAME_COUNT increments for each accepted active VSYNC frame start and wraps modulo 2^32. FIFO flush does not clear it.
+- DVP_TIMEOUT resets to 0xFFFF_FFFF APB cycles; software can program a shorter empty-read timeout. Zero requests an immediate empty-read error.
+- Pixel width, PCLK sample edge, VSYNC/HREF active levels, FIFO depth, and FIFO_DATA address are elaboration parameters. Defaults are 8-bit, rising-edge, active-high qualifiers, and FIFO depth 8. FIFO depth must be a power of two and at least 2.
+
+## Build, lint, and verification
+
+Run from the repository root with GNU make under MSYS2 or Git Bash:
+
+~~~sh
+make -C 025_DVP_Controller help
+make -C 025_DVP_Controller lint
+make -C 025_DVP_Controller spec-check
+make -C 025_DVP_Controller wavejson-check
+make -C 025_DVP_Controller regress RUN=<new-name>   # Verilator regression; writes verification/sim/<new-name>/, never overwrites
 ~~~
 
-000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
+`regress` runs checker qualification (synthetic traffic with injected faults), parameter legality, a static scope review and the regression matrix (13 simulation tests over several widths, edges, polarities, FIFO depths and seeds, with the passive checker and the synchronizer latency models enabled). Tool paths are at the top of `verification/env/scripts/dvp_regress.py`.
 
-## Tổng quan IP và trạng thái
-
-Digital Video Port (DVP) capture controller with register, RTL, specification, and verification collateral.
-
-**Trạng thái:** Inventory: 12 RTL source file(s), 14 specification/reference artifact(s), and 39 verification file(s) are present. Functional, lint, CDC/RDC, formal, and synthesis status was not rerun or re-certified by this directory reorganization.
-
-## Cấu trúc thư mục chuẩn
-
-~~~text
-<IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
-├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
-~~~
-
-
-The DVP protocol research is in [research/README.md](research/README.md). The original RTL-generation package remains in [spec/rtl_generation_2026-11-22/README.md](spec/rtl_generation_2026-11-22/README.md). The updated timeout, frame-counter, and FIFO-flush HDS/CSR package is [spec/rtl_update_2026-11-22/README.md](spec/rtl_update_2026-11-22/README.md).
-
-The synthesizable top is `m_dvp_controller` in `rtl/`. It provides one APB4 completer for control/status and pixel reads through `FIFO_DATA`, plus batch `dma_req`/`dma_ack` sideband signals.
-
-## Capture modes
-
-- `DVP_CTRL.PCLK_MODE=0`: continuous PCLK sampling into a dual-clock Gray-pointer FIFO.
-- `DVP_CTRL.PCLK_MODE=1`: valid-pixel gated PCLK sampling into a synchronized data/toggle bridge and APB-clocked FIFO. It requires at least four APB clock cycles between sampled pixels and a VSYNC active pulse spanning at least four APB clock cycles.
-- `DVP_CTRL.FIFO_FLUSH`: write one with capture disabled and DMA reads stopped; the selected FIFO resets through its software-reset handshake, then hardware clears the bit. Keep PCLK running for a continuous-mode flush. Frame count and sticky overflow are retained.
-- `DVP_FRAME_COUNT`: read-only modulo-2^32 count of accepted active VSYNC frame starts; common reset clears it, FIFO flush does not.
-- `DVP_TIMEOUT` resets to `0xFFFF_FFFF` APB cycles; software may program a shorter timeout, including zero for immediate empty-read error.
-- Both modes sample rising PCLK by default. Width, edge, VSYNC polarity, HREF polarity, FIFO depth and the FIFO_DATA address are elaboration parameters.
-- The default FIFO depth is eight pixels. It must be a power of two and at least two. Integrators select the depth from the peak pixel arrival rate and maximum DMA service gap, then confirm it against the APB service rate and sensor timing.
-
-## RTL and specification
-
-- `rtl/m_dvp_controller.sv`: top-level wrapper.
-- `rtl/csr/`: generated DVP CSR module and generator evidence.
-- `spec/rtl_update_2026-11-22/`: updated HDS, CSR workbook/JSON, flush/frame-count waveforms, and implementation report; the original spec remains alongside it.
-- `spec/rtl_generation_2026-11-22/`: original HDS, CSR workbook/JSON, figures, waveforms, and RTL generation report.
-- `verification/`: static rule/lint reports, profile elaboration logs, and modified-RTL regression collateral/results.
-- Common RTL dependencies are listed in `rtl/filelist.f`; common library sources are reused from `000_Common`, `001_AsyncGrayFIFO`, and `002_SyncFIFO`.
-
-## Rule check and lint
-
-From the repository root in PowerShell:
-
-```powershell
-python C:\Users\PC\.agents\skills\vlsit-rtl-generator\scripts\vlsit_rtl_check.py check 025_DVP_Controller\rtl
-python C:\Users\PC\.agents\skills\vlsit-rtl-generator\scripts\vlsit_lint_rtl.py lint 025_DVP_Controller\rtl\filelist.f --top m_dvp_controller --tool verilator --log 025_DVP_Controller\verification\lint\verilator_final.log
-```
-
-The generated filelist compiles the DVP RTL with the referenced common FIFO, reset, tie, event-sync and SRAM model sources. Sensor timing limits and clock relationships are integration-level STA/SDC obligations; RTL intentionally does not impose a maximum PCLK or APB frequency.
-
-See `verification/README.md` for current run commands, simulation results, and warning classification.
+Results, their limits and the open findings are in [verification/docs/verification_report.md](verification/docs/verification_report.md). Formal (10/10 tasks), mutation (20 of 22 mutants killed) and code coverage (DVP-owned: line 93.3%, branch 96.3%, toggle 76.5%) have been run; two mutants survive and the toggle target is unmet; finding F-003 (stuck flush request) was found and fixed; no closure or sign-off is claimed.

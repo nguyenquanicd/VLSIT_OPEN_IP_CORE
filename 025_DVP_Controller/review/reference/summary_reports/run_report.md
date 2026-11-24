@@ -11,7 +11,7 @@
 
 - Verdict **Conditional**, điểm có trọng số 2,76 trên 5, không có Blocker.
 - 31 finding (19 Major, 11 Minor, 1 Observation) trong 17 nhóm root cause; 30 finding là `fix`, 1 là `waive` (F-023).
-- Gate PASS; checker của báo cáo song ngữ PASS; checker của báo cáo `vlsit_spec_2026-11-22.md` PASS.
+- Gate PASS; checker của báo cáo song ngữ PASS; checker của báo cáo `reference/spec_review_2026-11-22/vlsit_spec_2026-11-22.md` PASS.
 - Audit 4 trên 31 finding (F-009, F-003, F-010, F-019): 4 tp, 0 fp, 0 fn ở vùng lân cận. Chỉ một reviewer làm audit nên con số fn chưa độc lập.
 
 ## Phần không làm được và cách xử lý
@@ -31,4 +31,5 @@
 
 ## File
 
-Tất cả nằm trong `025_DVP_Controller/review/`: `REVIEW_DVP_Controller.md` (báo cáo song ngữ), `vlsit_spec_2026-11-22.md` (finding kèm verdict và fix), `scorecard.json`, `scorecard.md`, `findings.json`, `gate_metrics.json`, `audit_sample.json`, `root_cause_groups.json`, `inventory.json`, `findings_checked.json`, `run_report.md`.
+Tất cả nằm trong `025_DVP_Controller/review/`: `REVIEW_DVP_Controller.md` (báo cáo song ngữ), `reference/spec_review_2026-11-22/vlsit_spec_2026-11-22.md` (finding kèm verdict và fix), `scorecard.json`, `scorecard.md`, `findings.json`, `gate_metrics.json`, `audit_sample.json`, `root_cause_groups.json`, `inventory.json`, `findings_checked.json`, `run_report.md`.
+

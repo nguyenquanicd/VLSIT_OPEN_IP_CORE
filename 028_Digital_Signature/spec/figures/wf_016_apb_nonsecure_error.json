@@ -1,0 +1,76 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "control inputs",
+   {
+    "name": "i_protect_en",
+    "wave": "1..............."
+   },
+   {
+    "name": "i_slverr_en",
+    "wave": "1..............."
+   }
+  ],
+  [
+   "request",
+   {
+    "name": "i_apb_psel",
+    "wave": "0.1.0..........."
+   },
+   {
+    "name": "i_apb_penable",
+    "wave": "0..10..........."
+   },
+   {
+    "name": "i_apb_pwrite",
+    "wave": "0.1.0..........."
+   },
+   {
+    "name": "i_apb_pprot",
+    "wave": "=.=.=...........",
+    "data": [
+     "0x0",
+     "0x2",
+     "0x0"
+    ]
+   },
+   {
+    "name": "i_apb_paddr",
+    "wave": "=.=.=...........",
+    "data": [
+     "0x0",
+     "0x44",
+     "0x0"
+    ]
+   }
+  ],
+  [
+   "response",
+   {
+    "name": "o_apb_pready",
+    "wave": "0..10..........."
+   },
+   {
+    "name": "o_apb_pslverr",
+    "wave": "0..1............"
+   },
+   {
+    "name": "o_dsig_alg_en_ed25519",
+    "wave": "0..............."
+   }
+  ]
+ ],
+ "head": {
+  "text": "APB4 CSR access with PPROT[1] = 1 while the protection check is on: PSLVERR, no change"
+ },
+ "foot": {
+  "text": "Simulated: the error answers in the first access cycle; PSLVERR stays high after the transfer (section 11.4); the write is ignored, so the enable bit stays 0."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

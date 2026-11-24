@@ -10,28 +10,28 @@ Bridge from an AXI4 subordinate interface to an APB4 manager interface.
 
 ~~~text
 <IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── README.md             Overall IP description and current status
+├── LICENSE               Usage terms and retained upstream notices
+├── spec/
+│   ├── README.md          Index of key specifications, registers, and figures
+│   └── spec/figures/           Block diagrams, waveforms, and specification figures
+├── rtl/                   Active synthesizable RTL; the sole filelist is filelist.f
+├── lint/                  Lint setup and retained lint evidence
+├── cdc/                   Clock-domain-crossing analysis and reports
+├── rdc/                   Reset-domain-crossing analysis and reports
+├── sdc/                   Timing constraints and timing collateral
+├── syn/                   Synthesis setup and evidence
+├── research/              Source research and external references
+├── verification/          Exactly five direct categories
+│   ├── docs/              Flat folder for plans, reports, and documentation
+│   ├── tests/             Reusable testcase sources and generators
+│   ├── models/            Independent reference models
+│   ├── env/               Testbench, BFMs, scripts, and configuration
+│   └── sim/               Isolated runs and preserved run archives
 ├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
+│   ├── reference/         Supporting review evidence
+│   └── *.md               One Markdown report per review step
+└── archive/               Historical source snapshots and inactive collateral
 ~~~
 
 000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
@@ -46,28 +46,28 @@ Bridge from an AXI4 subordinate interface to an APB4 manager interface.
 
 ~~~text
 <IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── README.md             Mô tả IP và trạng thái có bằng chứng
+├── LICENSE               Điều khoản sử dụng và thông báo nguồn
+├── spec/
+│   ├── README.md          Chỉ mục đặc tả, thanh ghi và hình vẽ chính
+│   └── spec/figures/           Sơ đồ khối, waveform và hình của đặc tả
+├── rtl/                   RTL tổng hợp được; filelist duy nhất là filelist.f
+├── lint/                  Cấu hình lint và bằng chứng lint
+├── cdc/                   Phân tích và báo cáo crossing clock domain
+├── rdc/                   Phân tích và báo cáo crossing reset domain
+├── sdc/                   Ràng buộc và tài liệu timing
+├── syn/                   Cấu hình và bằng chứng synthesis
+├── research/              Nghiên cứu nguồn và tài liệu tham khảo
+├── verification/          Đúng năm loại thư mục trực tiếp
+│   ├── docs/              Thư mục phẳng chứa plan, report và tài liệu
+│   ├── tests/             Testcase và script sinh testcase
+│   ├── models/            Reference model độc lập
+│   ├── env/               Testbench, BFM, script và cấu hình
+│   └── sim/               Run mô phỏng và archive được giữ lại
 ├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
+│   ├── reference/         Bằng chứng hỗ trợ review
+│   └── *.md               Mỗi bước review có một report Markdown
+└── archive/               Snapshot RTL cũ và tài liệu không còn hoạt động
 ~~~
 
 
@@ -86,7 +86,7 @@ Thư mục này chứa đặc tả vi kiến trúc và RTL có thể tổng hợ
 ## Files / Tệp
 
 - [Design specification](spec/AXI2APB_Bridge_Design_Specification.md) / Đặc tả thiết kế
-- [RTL hierarchy block diagram (SVG)](figures/vlsit_block_diagram.svg) / Sơ đồ khối hierarchy RTL (SVG)
+- [RTL hierarchy block diagram (SVG)](spec/figures/vlsit_block_diagram.svg) / Sơ đồ khối hierarchy RTL (SVG)
 - [Waveform index and sources](spec/AXI2APB_Bridge_Design_Specification.md#103-cycle-level-behavior) / Danh sách waveform và file nguồn
 - [Active RTL source set and filelist](rtl/filelist.f) / Bộ RTL đang dùng và filelist
 - [Reference IP research](research/vlsit_reference_ip_log.md) / Nghiên cứu IP tham chiếu

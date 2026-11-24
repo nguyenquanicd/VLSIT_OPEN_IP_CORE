@@ -1,0 +1,55 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_abort",
+    "wave": "0001........"
+   },
+   {
+    "name": "i_hw_clr_dsig_cmd_abort",
+    "wave": "0000100....."
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=..=..=.....",
+    "data": [
+     "ENUM_ST_RUN",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE"
+    ]
+   },
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "1111110....."
+   }
+  ],
+  [
+   "secret state",
+   {
+    "name": "w_key_nonzero",
+    "wave": "1111100....."
+   },
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "000000000000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "Corner: abort during a running operation clears the key"
+ },
+ "foot": {
+  "text": "No result is produced; the key registers are zero within 100 core clock cycles (drawn short)."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

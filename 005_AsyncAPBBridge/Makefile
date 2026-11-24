@@ -19,7 +19,7 @@ VVP      ?= vvp
 FLIST    := rtl/filelist.f
 TOP      := m_vlsit_async_apb_bridge
 TB_TOP   := tb_apbcdc
-TB_SRCS  := ../verification/tb_apbcdc.sv
+TB_SRCS  := ../verification/env/verificationtb_apbcdc.sv
 
 .PHONY: help lint rule verify
 

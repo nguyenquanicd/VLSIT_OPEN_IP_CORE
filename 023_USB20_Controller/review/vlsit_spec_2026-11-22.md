@@ -1,0 +1,339 @@
+# USB 2.0 Controller specification review / Đánh giá đặc tả USB 2.0 Controller
+
+## 1. Summary / Tóm tắt
+
+**EN.** FACT — Review of [USB 2.0 Controller HDS Draft 0.1](../spec/VLSIT_USB20_CONTROLLER_HDS.md), workspace baseline over `95a85f5`, dated 2026-11-22. The scorecard gives **2.10/5 (Conditional)**. The integration gate gives **FAIL**. INFERENCE — Continue development and prototype work. Release qualification depends on the three P0 findings and the product-specific evidence listed below.
+
+**VI.** FACT — Bản HDS Draft 0.1 đạt **2,10/5 (Conditional)**. Gate tích hợp **FAIL** do ba Blocker. INFERENCE — Có thể tiếp tục phát triển và làm prototype. Cần sửa ba mục P0 trước khi đủ điều kiện duyệt tích hợp.
+
+| Item | Value |
+|---|---:|
+| Findings | 21 |
+| Critical | 3 |
+| High | 15 |
+| Medium | 2 |
+| Low | 1 |
+| Waivable | 0 |
+| Fixable | 20 |
+
+FACT — `vlsit_review_gate.py metrics`: `RESULT: FAIL, 21 finding(s)`. Waivers **0/10**. 21 findings traced in 20 root-cause groups. The script's 100% closure field counts assigned fix verdicts among fix/waive dispositions. Fix effectiveness remains open.
+
+[Full bilingual review with 21 chapters](REVIEW_USB20_CONTROLLER_2026-11-22.md) · [Scorecard](reference/2026-11-22/scorecard.md) · [Inventory](reference/2026-11-22/inventory.json) · [Gate results](reference/2026-11-22/gate.json).
+
+## 2. Findings / Phát hiện
+
+**EN.** FACT — Severity maps to the shared gate as Blocker → Critical, Major → High, Minor → Medium, Observation → Low. Every proposed change has a follow-up acceptance check.
+
+**VI.** FACT — Cột severity theo thang của gate. Từng mục có bằng chứng, đề xuất xử lý và tiêu chí kiểm tra.
+
+### F-001 CSR stale update protection missing
+
+- Severity: `Critical` (Blocker)
+- Evidence: §7.2 CDC-002, §11.3 REQ-REG-003. `rtl/m_usb2_xreg.sv:164,184-187,418-422, rtl/m_usb2_regs.sv:1407-1424`.
+- Assessment: FACT — The HDS requires a per-register generation comparison. The return entry carries a scanner sequence that increments on update pushes. The receive interface discards its tag and the load path decodes enable, kind and slot only. INFERENCE — An earlier hardware update can overwrite a later software value or clear a newly issued command.
+- Verdict: `fix`
+- Fix: Transport the accepted software generation per slot to the PHY and echo it on returned updates. Compare at conditional load, define simultaneous writes and W1C events separately, and prevent tag reuse until stale entries are impossible.
+- Why: An echoed generation ties each return to the exact configuration epoch and prevents stale loads from passing the acceptance check.
+- Acceptance check: Run a stalled-PHY re-arm, stale return, same-edge update and tag-wrap regression. Confirm command and status semantics independently.
+
+**VI.** FACT — **Thiếu cơ chế chặn cập nhật CSR cũ.** HDS yêu cầu so sánh generation theo thanh ghi. Entry trả về mang sequence của scanner và đường load chỉ dùng enable, kind, slot. INFERENCE — Update cũ có thể ghi đè giá trị software mới hoặc xóa command vừa phát. Truyền generation theo slot, trả tag với update, kiểm tra trước load và quy định chống quay vòng tag khi entry cũ còn tồn tại. Tách xử lý W1C và write cùng cạnh.
+
+
+### F-002 CDC constraints do not identify the actual Gray endpoints
+
+- Severity: `Critical` (Blocker)
+- Evidence: §7.2 CDC-001/002/004/007, §17.1.3 EXC-001/002. `sdc/usb2_clocks.sdc:12-32, ../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_rd.sv:80,205-213, rtl/m_usb2_phyif_ulpi.sv:200-203`.
+- Assessment: FACT — Pointer selectors use gray_ptr and gray_sync patterns while the reused FIFO uses reg_rgray and u_sync_wr_gray. The clock group cuts both directions and the ULPI input exception needs to remain scoped to its asynchronous receivers. INFERENCE — STA may report clean timing while intended Gray constraints have no effective endpoints.
+- Verdict: `fix`
+- Fix: Bind actual registered launch Q and first synchronizer D pins, assert nonzero counts and expected bit widths, and use target-tool exception precedence and skew reporting. Keep functional ULPI pin timing active.
+- Why: Actual endpoints and verified exception precedence make the implementation enforce the crossing budget that the HDS assumes.
+- Acceptance check: Inspect emitted exception and unconstrained-path reports for each wrapper and clock scenario, including both Gray directions.
+
+**VI.** FACT — **SDC chưa trỏ đúng các điểm đầu cuối Gray.** Pattern gray_ptr/gray_sync không khớp tên RTL được truy vết. Clock group cắt hai chiều và ULPI vẫn có đường nhận đồng bộ. INFERENCE — Báo cáo STA có thể sạch trong khi constraint Gray không hữu hiệu. Bind chân Q/D thực tế, kiểm số lượng endpoint, xác minh thứ tự ưu tiên exception và giữ timing cho ULPI active.
+
+
+### F-003 AXI3 reference cannot establish the AXI4 subordinate contract
+
+- Severity: `Critical` (Blocker)
+- Evidence: §2.1–2.3 REF-010, §6.2–6.3 REQ-IF-006/007. `rtl/m_usb2_top_utmi_axis.sv:170-190, ../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:131-137,166-175,922-955`.
+- Assessment: FACT — The HDS calls both interfaces AXI4 while citing AXI3 as its normative text. A Manager can limit what it issues to 16-beat INCR bursts. An interconnect can present valid AXI4 requests outside the FIFO window profile, so the Subordinate boundary needs a supported traffic contract and complete beat/response semantics.
+- Verdict: `fix`
+- Fix: Pin Arm IHI 0022H AXI4 clauses. Declare the integration profile, excluded attributes, fabric restrictions and defined response/side-effect policy for unsupported legal requests. Add RTL support or integration restrictions where necessary.
+- Why: A common request and response contract lets the interconnect and FIFO agree on transfer length and completion under error.
+- Acceptance check: Exercise legal unsupported transactions and confirm the declared integration contract with a protocol checker, including burst completion under errors.
+
+**VI.** FACT — **Tham chiếu AXI3 chưa đủ để chốt AXI4 Subordinate.** HDS gọi hai cổng là AXI4 nhưng dùng AXI3 làm chuẩn. Manager có thể giới hạn burst do mình phát. Subordinate cần quy định rõ traffic do fabric đưa tới, cách xử lý số beat và response ngoài profile FIFO. Khóa phiên bản IHI 0022H, giới hạn traffic từ fabric và quy định response, số beat và side effect khi gặp request hợp lệ ngoài profile.
+
+
+### F-004 Double buffering has incompatible software contracts
+
+- Severity: `High` (Major)
+- Evidence: §3 REQ-FUNC-029, §8, §10.4, §15.2 TEST-023, §20 DEC-040. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:209,4769-4771,5090,5400`.
+- Assessment: FACT — REQ-FUNC-029 and TEST-023 require an enable-controlled two-buffer swap and buf_cur. DEC-040 documents ordinary ring capacity and informational fields with no dedicated swap. A driver following either description can make a different ownership decision.
+- Verdict: `fix`
+- Fix: Make ring queue overlap the single contract or implement the explicitly controlled feature. For the ring contract, define packet enqueue, dequeue and credits and mark each legacy field reserved or informational in the workbook.
+- Why: A single ownership contract lets software use queue state and credits consistently instead of interpreting undocumented buffer toggles.
+- Acceptance check: Measure two packets queued, overlap, wrap, partial abort and release. Retire tests that depend on a nonfunctional buf_cur.
+
+**VI.** FACT — **Double buffering có hai hợp đồng software mâu thuẫn.** REQ-FUNC-029 và TEST-023 yêu cầu đổi hai buffer và cập nhật buf_cur. DEC-040 mô tả ring FIFO và các field mang tính thông tin. Driver có thể hiểu sai quyền sở hữu buffer. Chọn ring FIFO làm hợp đồng duy nhất hoặc triển khai cơ chế swap. Nếu dùng ring, đồng bộ workbook, HDS, waveform và test theo packet ownership và credit.
+
+
+### F-005 SOF phase cannot be guaranteed when its clock stops
+
+- Severity: `High` (Major)
+- Evidence: §3 REQ-FUNC-037, §7.4, §15.2 TEST-034. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:217,996-998,5101, rtl/m_usb2_host.sv:282,548-577`.
+- Assessment: INFERENCE — The HDS requires the Start of Frame (SOF) timebase to continue across host suspend/L1. It also permits PHY clock stop without stating a host exception. The RTL timer uses i_clk_phy. A legal stopped-clock scenario under the written contract cannot advance it.
+- Verdict: `fix`
+- Fix: Separate the free-running timebase from transmit eligibility. Keep an appropriate Host PHY clock running or move the phase to an always-on timebase with a defined resynchronization tolerance.
+- Why: Keeping phase state live preserves its relationship to elapsed time while packet emission is suppressed.
+- Acceptance check: Check suspend, L1, clock stop if allowed and first legal SOF after resume at TSCALE=1.
+
+**VI.** INFERENCE — **Không bảo đảm pha SOF khi clock của bộ đếm dừng.** HDS yêu cầu timebase SOF chạy xuyên suspend/L1 của Host và cho phép dừng CLK-PHY mà chưa nêu ngoại lệ Host. RTL đếm theo i_clk_phy, nên không thể tiến khi clock dừng. Tách timebase khỏi điều kiện phát SOF. Giữ clock Host chạy hoặc chuyển pha sang timebase luôn chạy và quy định sai số khi đồng bộ lại.
+
+
+### F-006 DMA range comparison uses a low-word aperture
+
+- Severity: `High` (Major)
+- Evidence: §3 REQ-IF-014, §8, §18, TEST-035. `rtl/m_usb2_dma.sv:343-344,405-419,441,703, ../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:235,1015`.
+- Assessment: FACT — The 40- and 64-bit Manager configurations assemble addresses using i_dma_hi, while range comparisons use low 32-bit values and lengths. The design can use a bank-local aperture if software locks the bank and the HDS says so. The current generic range wording leaves the high bits outside the stated policy.
+- Verdict: `fix`
+- Fix: Define a full-width aperture with overflow-safe arithmetic or document and enforce a locked high-address bank. Validate descriptor fetch, writeback and payload ranges including every enabled lane before issuing AXI.
+- Why: A full-width comparison or locked bank bounds all accepted transactions to the intended physical aperture.
+- Acceptance check: Test 32/40/64-bit configurations, high-bank changes while busy, boundary crossings, descriptor and payload rejection and zero AXI side effects.
+
+**VI.** FACT — **DMA kiểm tra vùng bằng phần địa chỉ thấp.** Profile 40/64-bit ghép địa chỉ với i_dma_hi nhưng kiểm tra 32 bit thấp và độ dài. Có thể dùng cửa sổ theo bank nếu khóa bank và ghi rõ. Cách viết hiện tại chưa mô tả giới hạn bit cao. Quy định aperture toàn độ rộng hoặc khóa bank địa chỉ cao. Kiểm tra cả descriptor fetch/writeback và payload bằng số học chống tràn trước khi phát AXI.
+
+
+### F-007 RAM organization and legal width combinations conflict
+
+- Severity: `High` (Major)
+- Evidence: §8, §10.4–10.5, §17.2, §20 DEC-006/010/041. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:1004-1030,4757-4781,5206,5366,5370`.
+- Assessment: FACT — Sections 10.4, 10.5 and 17.2 require a single-port RAM, while DEC-006 selects 1W1R by default with single port optional. The independent AXI width rows do not expose the UTMI-to-AXI coupling in DEC-010. A separately valid width choice can yield an unsupported configuration.
+- Verdict: `fix`
+- Fix: Publish one legal matrix including RAM ports, word units, clock, width coupling and profile parameters. Derive guards and memory manifests from that matrix.
+- Why: A configuration matrix gives designers and tools one interpretation of memory ports, packing and legal settings.
+- Acceptance check: Elaborate each legal tuple and reject independent-width values that violate packing.
+
+**VI.** FACT — **Tổ chức RAM và tổ hợp width hợp lệ chưa đồng nhất.** Mục 10.4, 10.5, 17.2 quy định RAM 1 port, DEC-006 chọn 1W1R mặc định. Bảng AXI width chưa phản ánh quan hệ cố định với UTMI width ở DEC-010. Dùng một ma trận hợp lệ gồm RAM port, đơn vị word, clock và quan hệ width. Sinh checker và manifest từ bảng này.
+
+
+### F-008 Throughput has a no-stall premise and no product margin
+
+- Severity: `High` (Major)
+- Evidence: §13 PERF-001/002, §15.2 TEST-017, §20 DEC-025/032. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:4954-4974,5084`.
+- Assessment: INFERENCE — Three 1024-byte transactions in 125 us yield 24.576 MB/s of protocol payload. TEST-017 targets this in a best-case interconnect. Raw PHY capacity of 60 MB/s and raw RAM capacity of 240 MB/s are structural ceilings. Service stalls, arbitration, packet overhead and optional stages need distinct acceptance budgets.
+- Verdict: `fix`
+- Fix: Specify camera bitrate/transport assumptions, worst supported AXI service gap, queue occupancy and lost-microframe limit. Verify the separate 4-cycle UTMI+ 16-bit response bound at worst enabled pipeline combinations.
+- Why: A worst-case service budget links packet arrival rates to guaranteed FIFO and bus capacity and identifies the stall margin.
+- Acceptance check: Run sustained full-rate data with defined competing traffic and worst accepted stalls at TSCALE=1. Measure gaps and overflow, not just average rate.
+
+**VI.** INFERENCE — **Thông lượng giả định không stall và chưa có margin sản phẩm.** Ba giao dịch 1024 byte mỗi 125 µs cho 24,576 MB/s payload. TEST-017 giả định interconnect lý tưởng. 60 MB/s PHY và 240 MB/s RAM chỉ là trần. Stall, arbitration, overhead và pipeline cần budget riêng. Chốt bitrate, khoảng chờ AXI tối đa, ngưỡng FIFO và số microframe mất. Kiểm tra riêng bound 4 cycle ở UTMI+ 16 bit với tổ hợp pipeline bất lợi.
+
+
+### F-009 Traceability is present but closure is incomplete
+
+- Severity: `High` (Major)
+- Evidence: §15.3–15.4, §19, REQ-VER-003. `verification/sim/docs/verification_report.md:450-467,515-522,585-614`.
+- Assessment: FACT — All 75 extracted requirements map to tests. The latest retained report gives 184/211 stimulus markers, no measured finite state machine coverage and 14/16 mutants killed. Its directed tests and bounded formal results support selected cases. The only ULPI Subordinate simulation covers Device in three scenarios.
+- Verdict: `fix`
+- Fix: Require DUT-observed coverage for critical bins, pin source hashes for each build, reopen uncovered or waived cases explicitly and keep protocol, formal and certification evidence separate.
+- Why: Observed events and hash-pinned builds support closure for the same configuration and sources that will ship.
+- Acceptance check: Add host ULPI Subordinate, reset while traffic is outstanding, SOF phase, persistent receive active and independent scoreboards.
+
+**VI.** FACT — **Có traceability nhưng chưa đạt closure.** 75 yêu cầu có test liên kết. Báo cáo giữ lại 184/211 stimulus marker, FSM coverage chưa đo và diệt 14/16 mutant. ULPI Subordinate mới có ba kịch bản Device. Đo bin từ DUT cho luồng quan trọng, ghim hash nguồn từng build và theo dõi bin thiếu. Tách bằng chứng protocol, formal và chứng nhận.
+
+
+### F-010 Scatter-gather interrupt estimate exceeds the programmed feature set
+
+- Severity: `High` (Major)
+- Evidence: §1.4 FEAT-023, §9, §11.5, §20 DEC-013/039/042. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:120,1056,4924-4928,5373,5399,5402`.
+- Assessment: FACT — FEAT-023 estimates about 375 interrupts/s using a 64 KB list at 24.576 MB/s. The descriptor preserves last and ioc without interpreting them and endpoint/channel interrupt semantics remain. The list-level rate has no specified mechanism. Generated register comments also retain old window direction according to DEC-039.
+- Verdict: `fix`
+- Fix: Remove the list-level interrupt claim or implement coalescing/list termination with defined writeback order. Pin the CSR generator including its event sideband, regenerate, and publish a driver sequence for PSTRB, barriers, cache maintenance, re-arm and error recovery.
+- Why: Matching the driver-visible promise to implemented descriptor behavior makes interrupt rate and software initialization predictable.
+- Acceptance check: Publish a reproducible register-generation manifest and test EP0 enumeration plus host/device descriptor flows on a real software stack.
+
+**VI.** FACT — **Ước tính interrupt scatter-gather vượt hợp đồng hiện có.** FEAT-023 dự tính 375 interrupt/s cho list 64 KB. Hardware không xử lý last/ioc. Cơ chế giảm interrupt chưa được quy định. DEC-039 ghi comment CSR đã sinh còn nghĩa direction cũ. Bỏ claim theo list hoặc triển khai coalescing/termination. Ghim generator có sideband, tái sinh CSR và chốt luồng driver gồm barrier, cache, re-arm và lỗi.
+
+
+### F-011 FreePDK45 estimate leaves macro and timing implementation open
+
+- Severity: `High` (Major)
+- Evidence: §10.5 MEM-001, §14.3, §17.2, §20 DEC-034/035. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:4772-4781,5032-5043,5202-5213,5394-5395, RTL_REPORT.md:81-105`.
+- Assessment: INFERENCE — The existing typical-corner mapping is useful for logic sizing. The report excludes FIFO RAM, interconnect load, clock tree and I/O budgets. It leaves memory latency/collision behavior and product setup/hold feasibility open.
+- Verdict: `fix`
+- Fix: Qualify the actual SRAM model and macro views for selected widths, ports and collision behavior. Run target multi-corner static timing with I/O, reset recovery/removal and applicable clock modes.
+- Why: Physical macro models and analysis views expose setup, hold and SRAM behavior excluded by isolated gate sizing.
+- Acceptance check: Deliver macro manifest, synthesis and STA reports with exact options and zero unexplained unconstrained endpoints.
+
+**VI.** INFERENCE — **Ước tính FreePDK45 chưa chốt macro và timing thực tế.** Mapping typical corner dùng để ước tính logic. Báo cáo loại RAM FIFO, tải dây, clock tree và I/O. Cần chốt hành vi macro và setup/hold của sản phẩm. Chọn model và view SRAM theo width/port/collision, chạy STA đa corner với I/O, reset và các mode clock.
+
+
+### F-012 Storage and mapped logic are available but product power is open
+
+- Severity: `Medium` (Minor)
+- Evidence: §13 area/power, §20 DEC-034. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:4975-4987, RTL_REPORT.md:81-105`.
+- Assessment: FACT — At depth 1024, parity-enabled storage is 33,792 bits at 32-bit rows or 66,560 bits at 64-bit rows, assuming depth counts physical rows per MEM-001. Typical FreePDK45 logic mapping is 119,263 µm² for TOP-MIN-OPT0 and 315,036 µm² for TOP-DUAL-OPT0 excluding FIFO RAM. The HDS gives activity assumptions without a measured power budget.
+- Verdict: `fix`
+- Fix: State the physical row unit and collect switching activity for sustained video, bulk, idle and suspend and include PHY, SRAM and clock tree in the budget.
+- Why: Named workload and technology inputs let power results be reproduced and related to the product duty cycle.
+- Acceptance check: Compare power at named voltage, frequency, workload and library corner.
+
+**VI.** FACT — **Có số storage và mapped logic, công suất sản phẩm còn mở.** Ở 1024 row, storage có parity là 33.792 hoặc 66.560 bit, giả sử depth tính theo row vật lý. Mapping typical FreePDK45 cho hai cấu hình là 119.263 và 315.036 µm², chưa tính RAM. HDS còn thiếu power budget đã đo. Chốt đơn vị row và thu switching activity cho video, bulk, idle, suspend cùng PHY, SRAM và clock tree.
+
+
+### F-013 DFT responsibilities are named without insertion evidence
+
+- Severity: `Medium` (Minor)
+- Evidence: §16, §17.2, DEP-004. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:5141-5152,5206`.
+- Assessment: FACT — The HDS assigns scan clocks and RAM memory built-in self-test to the System on Chip team and describes test reset override. The reviewed evidence does not provide a selected macro test interface, scan reset truth table or automatic test pattern generation results.
+- Verdict: `fix`
+- Fix: Confirm macro and scan test-pin handoff with a mode/reset truth table. Bind the bypass and reset overrides and require ATPG and memory test reports.
+- Why: An explicit test-mode handoff establishes scan reset behavior and keeps the memory test path accessible.
+- Acceptance check: Check functional mode, scan shift/capture and memory test entry/exit on the selected SoC configuration.
+
+**VI.** FACT — **Đã phân trách nhiệm DFT, còn thiếu kết quả insertion.** HDS giao scan clock và memory built-in self-test cho SoC và có reset override. Hồ sơ chưa có interface macro test, bảng reset trong scan hay kết quả ATPG. Chốt interface test macro, truth table mode/reset, nối bypass và override, yêu cầu báo cáo ATPG và memory test.
+
+
+### F-014 Drone product operating point is still a proposal
+
+- Severity: `High` (Major)
+- Evidence: §1.2–1.4 FEAT-012/016/021, §13 PERF-001. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:56-64,94-120,4962`.
+- Assessment: INFERENCE — Host camera and Device companion use cases fit the proposed partition. Camera resolution, format, compression, frame-loss tolerance and AXI service assumptions require a product owner. A power-triggered loss of the camera link also needs defined system impact.
+- Verdict: `fix`
+- Fix: Select a first release configuration and quantify camera traffic, acceptable dropped frames, CPU servicing load and over-current recovery.
+- Why: Quantified product limits make the camera and companion profiles testable against real platform traffic.
+- Acceptance check: Run the agreed camera workload at its actual peak payload and saturation margin.
+
+**VI.** INFERENCE — **Operating point của sản phẩm drone còn ở mức đề xuất.** Cấu hình phù hợp hướng camera Host và companion Device. Cần chủ sản phẩm chốt resolution, format, nén, frame loss, điều kiện AXI và tác động khi mất link. Chọn cấu hình phát hành đầu và định lượng traffic, số frame mất chấp nhận được, CPU load và recovery over-current.
+
+
+### F-015 PHY bring-up depends on unresolved vendor timing
+
+- Severity: `High` (Major)
+- Evidence: §6.3 REQ-IF-011, §7.3, §14.4, §20 DEC-025/TBD-007/TBD-015. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:922-955,987-998,5044-5057,5343,5385,5407`.
+- Assessment: FACT — The host reset OpMode is selectable and defaults to 3. The HDS keeps UTMI+ I/O assumptions and flags converted ULPI timing as uncertain. phyclk_ok reflects reset release according to DEC-012, so it cannot by itself establish ongoing clock activity before a soft reset.
+- Verdict: `fix`
+- Fix: Freeze PHY model, reset/pin timing and clock restart behavior. Require a live clock indicator or a software sequence that first restarts the PHY and then confirms a fresh acknowledgment.
+- Why: A live-clock handshake and chosen PHY timing make the initialization and restart sequence observable.
+- Acceptance check: Capture the real PHY startup, chirp, ULPI ownership, suspend/wake and over-current cutoff in board integration tests.
+
+**VI.** FACT — **Bring-up PHY còn phụ thuộc timing của vendor.** OpMode reset Host có tham số và mặc định 3. HDS dùng giả định timing UTMI+ và ghi bảng ULPI chuyển đổi còn bất định. phyclk_ok phản ánh release reset, chưa xác nhận clock còn chạy. Chốt model PHY, timing reset/pin và restart clock. Thêm chỉ thị clock sống hoặc trình tự restart và xác nhận ACK mới.
+
+
+### F-016 The release-status language mixes incompatible evidence
+
+- Severity: `High` (Major)
+- Evidence: Front matter, §15, §19, §20 TBD-016. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:1-12,5058-5140,5408, RTL_REPORT.md:81-105, verification/sim/docs/verification_report.md:515-522,609-614`.
+- Assessment: FACT — The root HDS remains Draft 0.1. TBD-016 says no ASIC library or formal tool was run and says every feature is implemented and simulated. Later mapped logic and bounded formal reports exist, while the verification report shows open closure. An integrator cannot infer a unique qualification baseline from these statements.
+- Verdict: `fix`
+- Fix: Create one versioned evidence ledger for accepted requirements, options, RTL hash, methods, results and approval state. Update historical decision notes with links to the superseding evidence.
+- Why: A single evidence ledger prevents stale decision text from being read as current release qualification.
+- Acceptance check: Audit every capability claim against a specific run, current source hash and approval status.
+
+**VI.** FACT — **Trạng thái tài liệu trộn các mức bằng chứng.** HDS vẫn Draft 0.1. TBD-016 nói chưa chạy ASIC library/formal và mọi feature đã mô phỏng. Hồ sơ có logic mapping và bounded formal sau đó, đồng thời còn gap closure. Lập ledger theo version cho requirement, option, hash RTL, phương pháp, kết quả và duyệt. Gắn link thay thế vào decision cũ.
+
+
+### F-017 FIFO capacity alternates between 32-bit words and physical rows
+
+- Severity: `High` (Major)
+- Evidence: §8, §9, §10.5. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:1012-1025,1048-1056,4776`.
+- Assessment: FACT — The parameter table says depth in 32-bit words while MEM-001 multiplies the depth by a 32- or 64-bit physical row width. The same numeric depth can mean 4 KiB or 8 KiB at 1024 depending on the interpretation. The workbook and driver need the same unit for region and threshold fields.
+- Verdict: `fix`
+- Fix: Publish the exact unit of each pointer, length, credit and threshold, and rounding rules for tail bytes and 64-bit packing. Derive legal region ends from physical depth.
+- Why: A common address unit makes region limits and tail packing consistent across software and RTL.
+- Acceptance check: Check byte counts, padding, region boundaries and thresholds at 32-bit and 64-bit rows.
+
+**VI.** FACT — **Dung lượng FIFO đang dùng lẫn word 32 bit và row vật lý.** Bảng parameter dùng đơn vị word 32 bit, MEM-001 nhân với row 32/64 bit. Depth 1024 có thể được hiểu là 4 KiB hoặc 8 KiB. Workbook và driver cần thống nhất đơn vị. Chốt đơn vị pointer, length, credit, threshold, quy tắc làm tròn tail byte và packing 64 bit. Tính cận vùng từ depth vật lý.
+
+
+### F-018 Feature breadth is credible, integration effort is higher
+
+- Severity: `Low` (Observation)
+- Evidence: §1.3–1.4, §2.1 REF-011/012, §11.5. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:66-120,136-139,4916-4928`.
+- Assessment: INFERENCE — The proposed role options, endpoint sizing and integrated DMA have commercial analogues. Synopsys documents buffering and descriptor prefetch, and TI documents a software-supported dual-role USB subsystem. Equivalent software, interoperability and sustained performance evidence are required before claiming parity.
+- Verdict: `none`
+
+**VI.** INFERENCE — **Tính năng đủ rộng, cần đầu tư thêm cho tích hợp.** Role option, endpoint sizing và DMA có đối chiếu thương mại. Synopsys có buffering và descriptor prefetch, TI có subsystem dual-role với software. Muốn nói tương đương cần bằng chứng driver, interop và thông lượng. Dùng benchmark công khai để lập kế hoạch driver, prefetch và USB interop.
+
+
+### F-019 Host data phase has no independent completion watchdog
+
+- Severity: `High` (Major)
+- Evidence: §12 ERR-003/005, §20 DEC-043/046. `rtl/m_usb2_host.sv:401,480-492,519-523, verification/sim/docs/verification_report.md:438-440`.
+- Assessment: INFERENCE — The response-start timeout is disabled once reception starts. Current next-state branches depend on packet end or a decoded handshake. If a PHY supplies a persistent active indication without a terminator, no bounded return to scheduling is established. This is a recovery issue distinct from the hub end-of-frame rule.
+- Verdict: `fix`
+- Fix: Add a separate receive-duration watchdog derived from speed, packet size and PHY tolerance. On expiry halt the affected channel, discard uncommitted rows and expose sticky diagnostics.
+- Why: An independent receive-duration bound forces recovery even when the response-start timer has already succeeded.
+- Acceptance check: Fault-inject a persistent RxActive and prove queues recover without ACK or data commit.
+
+**VI.** INFERENCE — **Host thiếu watchdog độc lập cho data phase.** Timeout chờ bắt đầu phản hồi dừng sau khi nhận dữ liệu. Nếu PHY giữ active mãi thì chưa có đường quay lại scheduler có giới hạn. Đây là vấn đề recovery riêng với yêu cầu hub. Thêm watchdog thời gian nhận theo speed, kích thước và sai số PHY. Khi hết hạn, halt channel, hủy row chưa commit và báo lỗi sticky.
+
+
+### F-020 Command credit Gray value crosses from a combinational encoder
+
+- Severity: `High` (Major)
+- Evidence: §7.2 CDC-001, §11.3 REQ-REG-002. `rtl/m_usb2_xreg.sv:217-226,243-266`.
+- Assessment: FACT — The command credit pop count is registered in CLK-PHY, converted combinationally to Gray and then synchronized. INFERENCE — Skew from simultaneously switching binary bits can glitch the encoded Gray vector. The FIFO full check adds protection against overfill while software-visible credits can still be disturbed.
+- Verdict: `fix`
+- Fix: Register Gray from the next binary value in CLK-PHY and constrain the registered crossing. Recheck credit behavior across independent clock ratios and soft reset.
+- Why: A registered source Gray encoding prevents transient binary encoder outputs from reaching the synchronizer.
+- Acceptance check: Verify successive Gray launch values differ by at most one bit and reconcile credit with accepted pushes/pops.
+
+**VI.** FACT — **Gray của bộ đếm credit đi qua encoder tổ hợp.** Pop count được chốt trong CLK-PHY rồi mã hóa Gray tổ hợp trước synchronizer. INFERENCE — Các bit binary đổi cùng cạnh có thể tạo glitch. Cờ full chặn overfill nhưng giá trị credit software vẫn có thể bị nhiễu. Chốt Gray theo next binary ngay trong CLK-PHY rồi constraint điểm crossing. Kiểm tra lại credit khi tỷ lệ clock thay đổi và soft reset.
+
+
+Illustrative source register. Compute `w_pop_bin_nxt` from the accepted pop and drive the synchronizer from `reg_pop_gray_phy`.
+
+```systemverilog
+always_ff @(posedge i_clk_phy, negedge i_rst_n_phy) begin : p_ff_pop_gray
+  if (!i_rst_n_phy)
+    reg_pop_gray_phy <= '0;
+  else
+    reg_pop_gray_phy <= w_pop_bin_nxt ^ (w_pop_bin_nxt >> 1);
+end
+```
+
+### F-021 The 16-channel AXI window build rejects every request
+
+- Severity: `High` (Major)
+- Evidence: §8 PARA_USB2_NUM_DMA_CH, §6.3 REQ-IF-007/009. `../spec/../spec/VLSIT_USB20_CONTROLLER_HDS.md:1018, rtl/m_usb2_axs.sv:180-181,222-228,306,395`.
+- Assessment: FACT — The HDS permits 1 to 16 DMA channels. Both address checks compare a four-bit channel index with PARA_USB2_NUM_DMA_CH[3:0]. At 16 the sliced count becomes zero, so no channel is accepted for AXI reads or writes.
+- Verdict: `fix`
+- Fix: Compare zero-extended channel indices against the full parameter and guard map indexing using the same bound. Enforce the legal channel range in the configuration check.
+- Why: The widened count preserves 16 and allows indices 0 through 15 while continuing to reject addresses outside shorter configurations.
+- Acceptance check: Run both Subordinate wrappers at 1, 4, 15 and 16 channels. Check successful accesses to window 15 at 16 and rejection of that same window at 15.
+
+**VI.** FACT — **Cấu hình 16 kênh AXI window từ chối mọi request.** HDS cho phép 1–16 kênh. Hai phép so sánh đọc/ghi cắt số lượng còn 4 bit. Giá trị 16 thành 0 nên mọi channel bị từ chối. Mở rộng index trước khi so với parameter đầy đủ, chỉ đọc bảng map khi index hợp lệ và chặn số kênh ngoài khoảng.
+
+Illustrative bound for the read and write checks. Guard the map lookup with the resulting valid bit.
+
+```systemverilog
+assign w_rd_ch_in_range = {28'b0, w_r_ch} < PARA_USB2_NUM_DMA_CH;
+assign w_wr_ch_in_range = {28'b0, w_w_ch} < PARA_USB2_NUM_DMA_CH;
+```
+
+
+## 3. Actions / Hành động
+
+**EN.** INFERENCE — Close F-001, F-002 and F-003 first. In the next RTL pass, correct the DMA channel count and aperture, then close Gray credit launch and host receive recovery. Freeze the product profile, software contract and PHY/memory assumptions before running the end-to-end qualification.
+
+**VI.** INFERENCE — Ưu tiên F-001, F-002, F-003. Trong lượt sửa RTL tiếp theo, xử lý số kênh và aperture DMA, Gray credit và recovery khi Host nhận kéo dài. Chốt profile sản phẩm và điều kiện PHY/RAM trước khi kiểm chứng đầu-cuối.
+
+## 4. Limits / Giới hạn
+
+**EN.** FACT — The work used source inspection and retained evidence. Fresh simulation, certification, DFT insertion, target library timing, or power measurements are outside the evidence of this run. ULPI timing-table conversion and a clause-level review of the selected Phase-locked SOF ECN remain open. Source hashes and reviewed companions appear in the [evidence appendix](REVIEW_USB20_CONTROLLER_2026-11-22.md#21-evidence-appendix--phụ-lục-bằng-chứng).
+
+**VI.** FACT — Bản review dùng phân tích source và hồ sơ đã lưu. Chưa có kết quả chạy mới về simulation, chứng nhận, DFT insertion, timing target library hoặc công suất. Bảng timing ULPI và bản ECN Phase-locked SOF còn cần đối chiếu.
+
+#### Audit sample / Mẫu kiểm tra
+
+| Sample | Result | Independent evidence within this review |
+|---|---|---|
+| F-009 | tp | Verification report §§5.0 and 13.2 confirm 184/211 stimulus markers, unmeasured FSM coverage and Device-only ULPI Subordinate scenarios. |
+| F-003 | tp | HDS §2.3 uses AXI3 and a 16-beat subset. Arm IHI 0022H §A3.4.1 distinguishes the AXI4 INCR length field and requires complete bursts. |
+| F-010 | tp | HDS §1.4 FEAT-023 claims list-level interrupt rates. DEC-013 and §9 explicitly preserve last/ioc without acting on them. |
+
+FACT — Deterministic sample 3/21 (14.3%). A second pass by the same reviewer confirmed 3/3 sampled items. Sample false-positive rate 0/3. The false-negative rate is unmeasured because there is no independently enumerated ground-truth set.
+
+FACT — Rule precedence is `rule.md`, then `SKILL.md`, then files under `reference/`.

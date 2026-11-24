@@ -1,0 +1,73 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "write",
+   {
+    "name": "o_reg_wr_en",
+    "wave": "0101.0......"
+   },
+   {
+    "name": "o_reg_wr_addr",
+    "wave": "x=x=.x......",
+    "data": [
+     "WIN_WR",
+     "WIN_WR"
+    ]
+   },
+   {
+    "name": "o_dsig_win_wr_data",
+    "wave": "x=x=.x......",
+    "data": [
+     "W0",
+     "W1"
+    ]
+   }
+  ],
+  [
+   "address register",
+   {
+    "name": "o_dsig_win_addr_addr",
+    "wave": "=.=.=.=.=...",
+    "data": [
+     "0x000",
+     "0x004",
+     "0x008",
+     "0x004",
+     "0x008"
+    ]
+   },
+   {
+    "name": "i_hw_we_dsig_win_addr_addr",
+    "wave": "0101.010...."
+   }
+  ],
+  [
+   "read",
+   {
+    "name": "o_reg_rd_en",
+    "wave": "0000.0101..."
+   },
+   {
+    "name": "i_dsig_win_rd_data",
+    "wave": "xxxxxxx=x=x.",
+    "data": [
+     "W1",
+     "W2"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-001 through the CSR window: write words, then read words with auto-increment"
+ },
+ "foot": {
+  "text": "After each window access hardware adds 4 to the address; software writes the address first (0x000) and later 0x004."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

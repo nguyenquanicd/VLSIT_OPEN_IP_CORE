@@ -10,28 +10,28 @@ AXI3/AXI4 data-width upsizer supporting multiple bus-width profiles.
 
 ~~~text
 <IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── README.md             Overall IP description and current status
+├── LICENSE               Usage terms and retained upstream notices
+├── spec/
+│   ├── README.md          Index of key specifications, registers, and figures
+│   └── spec/figures/           Block diagrams, waveforms, and specification figures
+├── rtl/                   Active synthesizable RTL; the sole filelist is filelist.f
+├── lint/                  Lint setup and retained lint evidence
+├── cdc/                   Clock-domain-crossing analysis and reports
+├── rdc/                   Reset-domain-crossing analysis and reports
+├── sdc/                   Timing constraints and timing collateral
+├── syn/                   Synthesis setup and evidence
+├── research/              Source research and external references
+├── verification/          Exactly five direct categories
+│   ├── docs/              Flat folder for plans, reports, and documentation
+│   ├── tests/             Reusable testcase sources and generators
+│   ├── models/            Independent reference models
+│   ├── env/               Testbench, BFMs, scripts, and configuration
+│   └── sim/               Isolated runs and preserved run archives
 ├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
+│   ├── reference/         Supporting review evidence
+│   └── *.md               One Markdown report per review step
+└── archive/               Historical source snapshots and inactive collateral
 ~~~
 
 000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
@@ -46,28 +46,28 @@ AXI3/AXI4 data-width upsizer supporting multiple bus-width profiles.
 
 ~~~text
 <IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── README.md             Mô tả IP và trạng thái có bằng chứng
+├── LICENSE               Điều khoản sử dụng và thông báo nguồn
+├── spec/
+│   ├── README.md          Chỉ mục đặc tả, thanh ghi và hình vẽ chính
+│   └── spec/figures/           Sơ đồ khối, waveform và hình của đặc tả
+├── rtl/                   RTL tổng hợp được; filelist duy nhất là filelist.f
+├── lint/                  Cấu hình lint và bằng chứng lint
+├── cdc/                   Phân tích và báo cáo crossing clock domain
+├── rdc/                   Phân tích và báo cáo crossing reset domain
+├── sdc/                   Ràng buộc và tài liệu timing
+├── syn/                   Cấu hình và bằng chứng synthesis
+├── research/              Nghiên cứu nguồn và tài liệu tham khảo
+├── verification/          Đúng năm loại thư mục trực tiếp
+│   ├── docs/              Thư mục phẳng chứa plan, report và tài liệu
+│   ├── tests/             Testcase và script sinh testcase
+│   ├── models/            Reference model độc lập
+│   ├── env/               Testbench, BFM, script và cấu hình
+│   └── sim/               Run mô phỏng và archive được giữ lại
 ├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
+│   ├── reference/         Bằng chứng hỗ trợ review
+│   └── *.md               Mỗi bước review có một report Markdown
+└── archive/               Snapshot RTL cũ và tài liệu không còn hoạt động
 ~~~
 
 
@@ -82,7 +82,7 @@ Status (2026-11-01): RTL for both AXI4 and AXI3 is present under `rtl/`. The Ups
 | [spec/AXI4_Upsizer_Design_Specification.md](spec/AXI4_Upsizer_Design_Specification.md) | The specification (22 sections of the VLSIT template) |
 | `rtl/` | AXI4 and AXI3 tops and shared Upsizer RTL; local queue module at `rtl/common/m_vlsit_sfifo_1clk.sv` |
 | `verification/` | Verilator testbench, assertions, 8-configuration regression runner, and mutation runner |
-| `figures/` | Block diagram (`axi_upsizer_block_diagram.drawio`, `.svg`, `.png`, diagram spec JSON) and the 13 waveforms (`upsizer_wf001_...` to `upsizer_wf013_...`, WaveJSON source and SVG) |
+| `spec/figures/` | Block diagram (`axi_upsizer_block_diagram.drawio`, `.svg`, `.png`, diagram spec JSON) and the 13 waveforms (`upsizer_wf001_...` to `upsizer_wf013_...`, WaveJSON source and SVG) |
 | `verification/models/` | Reference cycle model of the specification (`ups_cycle_model.py`), the waveform generator (`gen_waveforms.py`) and the byte-level checks (`check_model.py`, `check_interleave.py` for the AXI3 write interleave) and the equivalence check of the optimized combinational forms (`check_equivalence.py`); not RTL |
 | `sdc/m_vlsit_axi_upsizer.sdc` | Clock definition and the statement that the IP owns no exception (variable `T_CLK_AXI` set by the SoC) |
 | `research/reference_ip_log.md` | Reference IP research log (ideas only, nothing copied) |

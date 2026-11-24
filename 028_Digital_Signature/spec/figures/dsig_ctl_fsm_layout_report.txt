@@ -1,0 +1,11 @@
+FSM: dsig_ctl
+STATES: 9, TRANSITIONS: 21
+LAYOUT: flow-tb-snake-4-g180
+CROSSINGS: 17
+LABEL CONFLICTS: 0
+BENDS: 4
+MINIMUM GAP: 140.0 px (minimum 140 px)
+TEXT FIT: PASS (worst fill ratio 0.55)
+DISTRIBUTION: PASS (8 x-centers, 4 y-centers)
+PAGE: 1330 x 660 px
+RESULT: PASS

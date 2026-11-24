@@ -1,0 +1,25 @@
+[tasks]
+fifo_tx g_fifo g_bmc g_tx
+fifo_rx g_fifo g_bmc g_rx
+fifo_cov g_fifo g_cover g_tx
+
+[options]
+g_bmc: mode bmc
+g_cover: mode cover
+depth 28
+
+[engines]
+smtbmc z3
+
+[script]
+plugin -i slang
+g_tx: read_slang -D VLSIT_SYNTHESIS --top fml_fifo -G CHK=0 fml_fifo.sv m_usb2_fifo.sv VLSIT_CELL_SRAM_1W1R.sv m_vlsit_sfifo_ram_macro.sv
+g_rx: read_slang -D VLSIT_SYNTHESIS --top fml_fifo -G CHK=1 fml_fifo.sv m_usb2_fifo.sv VLSIT_CELL_SRAM_1W1R.sv m_vlsit_sfifo_ram_macro.sv
+g_fifo: prep -top fml_fifo
+g_fifo: async2sync
+
+[files]
+fml_fifo.sv
+../../../rtl/m_usb2_fifo.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv
+../../../../000_Common/rtl_lib/m_vlsit_sfifo_ram_macro.sv

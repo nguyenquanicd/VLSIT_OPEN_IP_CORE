@@ -70,6 +70,41 @@ module m_dvp_controller #(
   output logic                       o_dma_req
 );
 
+  // Elaboration-time parameter legality (REQ-PARAM-001, ERR-006): an unsupported value is reported
+  // as an elaboration error with a message.
+  // Each branch is generated only for an illegal override; legal values omit it.
+  // 32'h0000_0018 is the last implemented CSR byte address (dvp_frame_count, REQ-IF-006).
+  // Simulation-only check; VLSIT_SYNTHESIS excludes it from synthesis and lint (SCP-03).
+`ifndef VLSIT_SYNTHESIS
+  generate
+    if ((PARA_DVP_DATA_W != 32'd8) && (PARA_DVP_DATA_W != 32'd10) && (PARA_DVP_DATA_W != 32'd12)) begin : gen_invalid_dvp_data_w
+      $error("PARA_DVP_DATA_W must be 8, 10 or 12");
+    end
+    if (PARA_DVP_SAMPLE_EDGE > 32'd1) begin : gen_invalid_dvp_sample_edge
+      $error("PARA_DVP_SAMPLE_EDGE must be 0 or 1");
+    end
+    if (PARA_DVP_VSYNC_ACTIVE > 32'd1) begin : gen_invalid_dvp_vsync_active
+      $error("PARA_DVP_VSYNC_ACTIVE must be 0 or 1");
+    end
+    if (PARA_DVP_HREF_ACTIVE > 32'd1) begin : gen_invalid_dvp_href_active
+      $error("PARA_DVP_HREF_ACTIVE must be 0 or 1");
+    end
+    if ((PARA_FIFO_DEPTH < 32'd2) || ((PARA_FIFO_DEPTH & (PARA_FIFO_DEPTH - 32'd1)) != 32'd0)) begin : gen_invalid_fifo_depth
+      $error("PARA_FIFO_DEPTH must be a power of two and at least 2");
+    end
+    if (PARA_AFIFO_CELL_TYPE > 32'd4) begin : gen_invalid_afifo_cell_type
+      $error("PARA_AFIFO_CELL_TYPE must be between 0 and 4");
+    end
+    if (PARA_AFIFO_MEM_USE_MACRO > 32'd1) begin : gen_invalid_afifo_mem_use_macro
+      $error("PARA_AFIFO_MEM_USE_MACRO must be 0 or 1");
+    end
+    if ((PARA_FIFO_DATA_ADDR[31:16] != 16'd0) || (PARA_FIFO_DATA_ADDR[1:0] != 2'd0) ||
+        (PARA_FIFO_DATA_ADDR <= 32'h0000_0018)) begin : gen_invalid_fifo_data_addr
+      $error("PARA_FIFO_DATA_ADDR must be a 16-bit word-aligned address above the CSR map (0x18)");
+    end
+  endgenerate
+`endif
+
   // Local reset releases and interconnects between the capture and APB subsystems.
   logic w_rst_n_apb;
   logic w_rst_n_dvp;

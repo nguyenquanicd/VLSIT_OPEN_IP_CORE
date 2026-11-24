@@ -1,0 +1,56 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_start",
+    "wave": "0110........"
+   },
+   {
+    "name": "i_hw_clr_dsig_cmd_start",
+    "wave": "0010........"
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=.=.=.=.....",
+    "data": [
+     "ENUM_ST_IDLE",
+     "ENUM_ST_CHECK",
+     "ENUM_ST_ERR",
+     "ENUM_ST_CLEAR"
+    ]
+   }
+  ],
+  [
+   "error",
+   {
+    "name": "i_hw_we_dsig_err_algdis",
+    "wave": "000010......"
+   },
+   {
+    "name": "o_dsig_err_algdis",
+    "wave": "0000011....."
+   },
+   {
+    "name": "o_irq",
+    "wave": "00000001...."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Error: start command for an algorithm whose enable bit is 0"
+ },
+ "foot": {
+  "text": "No engine is started; the error flag is set and the interrupt follows the raw event and the mask."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

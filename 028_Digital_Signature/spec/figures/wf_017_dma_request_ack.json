@@ -1,0 +1,54 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "input request",
+   {
+    "name": "o_dma_in_req",
+    "wave": "001111000000"
+   },
+   {
+    "name": "i_dma_in_ack",
+    "wave": "000001000000"
+   }
+  ],
+  [
+   "data",
+   {
+    "name": "i_axi_wvalid",
+    "wave": "000000111000"
+   },
+   {
+    "name": "o_axi_wready",
+    "wave": "000000111000"
+   }
+  ],
+  [
+   "output request",
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "000000000111"
+   },
+   {
+    "name": "o_dma_out_req",
+    "wave": "000000000110"
+   },
+   {
+    "name": "i_dma_out_ack",
+    "wave": "000000000001"
+   }
+  ]
+ ],
+ "head": {
+  "text": "DMA request and acknowledge: the request stays asserted until the acknowledge"
+ },
+ "foot": {
+  "text": "The input request is raised when the buffer can take data; the acknowledge is a one-cycle pulse that ends the request."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

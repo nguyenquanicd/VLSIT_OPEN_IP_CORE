@@ -1,0 +1,54 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_start",
+    "wave": "0110........"
+   }
+  ],
+  [
+   "inputs",
+   {
+    "name": "o_key_req",
+    "wave": "0011.1.1.0.."
+   },
+   {
+    "name": "i_key_valid",
+    "wave": "00010.1.1..."
+   },
+   {
+    "name": "o_ent_req",
+    "wave": "0000011111.."
+   },
+   {
+    "name": "i_ent_valid",
+    "wave": "000000.1.1.."
+   }
+  ],
+  [
+   "result",
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "011111111110"
+   },
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "000000000111"
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-002, success: key generation with entropy and key seed"
+ },
+ "foot": {
+  "text": "The public key is written at dsig_off_res.off; the private key and the working registers are then cleared."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

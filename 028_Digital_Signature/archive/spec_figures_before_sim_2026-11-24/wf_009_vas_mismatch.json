@@ -1,0 +1,61 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=.=.=.=.=...",
+    "data": [
+     "ENUM_ST_RUN",
+     "ENUM_ST_VAS",
+     "ENUM_ST_ERR",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE"
+    ]
+   },
+   {
+    "name": "w_vas_ok",
+    "wave": "000000000000"
+   }
+  ],
+  [
+   "flags",
+   {
+    "name": "i_hw_we_dsig_err_vasmis",
+    "wave": "000001......"
+   },
+   {
+    "name": "i_hw_we_dsig_alarm_fault",
+    "wave": "000001......"
+   },
+   {
+    "name": "o_dsig_alarm_fault",
+    "wave": "0000001....."
+   },
+   {
+    "name": "o_alarm",
+    "wave": "0000001....."
+   }
+  ],
+  [
+   "result",
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "000000000000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "Error: verify-after-sign finds a mismatch, the signature is suppressed"
+ },
+ "foot": {
+  "text": "No result is written (resvld stays 0); alarm stays until software writes 1 to dsig_alarm.fault."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

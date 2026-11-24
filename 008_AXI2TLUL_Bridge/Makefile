@@ -19,7 +19,7 @@ VVP      ?= vvp
 FLIST    := rtl/filelist.f
 TOP      := m_vlsit_axi2tlul_top
 TB_TOP   := tb_axi2tlul
-TB_SRCS  := ../verification/tb_axi2tlul.sv
+TB_SRCS  := ../verification/env/verificationtb_axi2tlul.sv
 
 .PHONY: help lint rule verify
 

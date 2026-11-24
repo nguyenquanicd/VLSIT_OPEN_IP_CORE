@@ -1,0 +1,49 @@
+[tasks]
+ocp g_ocp1 g_ocp g_bmc
+ocp_cov g_ocp1 g_ocp g_cover
+ocp_dis g_ocp g_prove
+irq g_irq g_prove
+irq_cov g_irq g_cover
+rst g_rst g_bmc
+rst_cov g_rst g_cover
+
+[options]
+g_prove: mode prove
+g_bmc: mode bmc
+g_cover: mode cover
+depth 60
+
+
+[engines]
+smtbmc z3
+
+[script]
+plugin -i slang
+g_ocp1: read_slang -D VLSIT_SYNTHESIS --top fml_ocp -G FILT=4 -G EN=1 fml_ocp.sv m_usb2_ocp.sv m_vlsit_afifo_sync.sv m_vlsit_afifo_cell_sync.sv VLSIT_CELL_SYNC_2FF_RN.sv VLSIT_CELL_SYNC_2FF_SN.sv VLSIT_CELL_SYNC_3FF_RN.sv VLSIT_CELL_SYNC_3FF_SN.sv VLSIT_CELL_SYNC_4FF_RN.sv VLSIT_CELL_SYNC_4FF_SN.sv VLSIT_CELL_SYNC_DFF_RN.sv VLSIT_CELL_SYNC_DFF_SN.sv
+ocp_dis: read_slang -D VLSIT_SYNTHESIS --top fml_ocp -G FILT=4 -G EN=0 fml_ocp.sv m_usb2_ocp.sv m_vlsit_afifo_sync.sv m_vlsit_afifo_cell_sync.sv VLSIT_CELL_SYNC_2FF_RN.sv VLSIT_CELL_SYNC_2FF_SN.sv VLSIT_CELL_SYNC_3FF_RN.sv VLSIT_CELL_SYNC_3FF_SN.sv VLSIT_CELL_SYNC_4FF_RN.sv VLSIT_CELL_SYNC_4FF_SN.sv VLSIT_CELL_SYNC_DFF_RN.sv VLSIT_CELL_SYNC_DFF_SN.sv
+g_irq: read_slang -D VLSIT_SYNTHESIS --top fml_irq -G N=4 fml_irq.sv m_usb2_irq.sv
+g_rst: read_slang -D VLSIT_SYNTHESIS --top fml_rst fml_rst.sv m_usb2_rst.sv m_vlsit_rst_sync.sv VLSIT_CELL_TIEH.sv m_vlsit_afifo_sync.sv m_vlsit_afifo_cell_sync.sv VLSIT_CELL_SYNC_2FF_RN.sv VLSIT_CELL_SYNC_2FF_SN.sv VLSIT_CELL_SYNC_3FF_RN.sv VLSIT_CELL_SYNC_3FF_SN.sv VLSIT_CELL_SYNC_4FF_RN.sv VLSIT_CELL_SYNC_4FF_SN.sv VLSIT_CELL_SYNC_DFF_RN.sv VLSIT_CELL_SYNC_DFF_SN.sv
+g_ocp: prep -top fml_ocp
+g_irq: prep -top fml_irq
+g_rst: prep -top fml_rst
+async2sync
+
+[files]
+fml_ocp.sv
+fml_irq.sv
+fml_rst.sv
+../../../rtl/m_usb2_rst.sv
+../../../../000_Common/rtl_lib/m_vlsit_rst_sync.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_TIEH.sv
+../../../rtl/m_usb2_ocp.sv
+../../../rtl/m_usb2_irq.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_sync.sv
+../../../../000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_SN.sv

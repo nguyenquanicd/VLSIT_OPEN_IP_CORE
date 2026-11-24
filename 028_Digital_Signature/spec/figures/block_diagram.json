@@ -1,0 +1,484 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "block_diagram.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 100,
+    "gap_v": 90,
+    "margin": 40,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "TOP",
+      "(m_vlsit_dsig_top)"
+    ],
+    "block_label": [
+      "TOP",
+      "(m_vlsit_dsig_top)"
+    ],
+    "block_row": [
+      "TOP (m_vlsit_dsig_top)",
+      "Structural top.",
+      "Section 14.2"
+    ]
+  },
+  "frame_row": [
+    "TOP (m_vlsit_dsig_top) frame",
+    "Structural top.",
+    "Section 14.2"
+  ],
+  "frame_interfaces": [
+    "APB",
+    "AXI",
+    "DMA",
+    "KEYIF",
+    "ENT",
+    "IRQ",
+    "CRCLK"
+  ],
+  "blocks": [
+    {
+      "key": "U_CSR",
+      "label": [
+        "u_csr",
+        "(m_vlsit_csr_dsig)"
+      ],
+      "width": 220,
+      "row": 3,
+      "col": 0,
+      "row_name": "u_csr (m_vlsit_csr_dsig)",
+      "function": "APB4 CSR generated from the workbook",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_CTL",
+      "label": [
+        "u_ctl",
+        "(m_vlsit_dsig_ctl)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_ctl (m_vlsit_dsig_ctl)",
+      "function": "Control FSM, checks, status, counters and log, hybrid policy",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_AXI",
+      "label": [
+        "u_axi",
+        "(m_vlsit_dsig_axi)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_axi (m_vlsit_dsig_axi)",
+      "function": "AXI4 subordinate, DMA lines",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_BUF",
+      "label": [
+        "u_buf",
+        "(m_vlsit_dsig_buf)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_buf (m_vlsit_dsig_buf)",
+      "function": "Buffer memory and window path",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_KEY",
+      "label": [
+        "u_key",
+        "(m_vlsit_dsig_key)"
+      ],
+      "width": 220,
+      "row": 3,
+      "col": 2,
+      "row_name": "u_key (m_vlsit_dsig_key)",
+      "function": "Key intake and clearing",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_EC",
+      "label": [
+        "u_ec",
+        "(m_vlsit_dsig_ec)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_ec (m_vlsit_dsig_ec)",
+      "function": "Elliptic-curve engine",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_LAT",
+      "label": [
+        "u_lat",
+        "(m_vlsit_dsig_lat)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_lat (m_vlsit_dsig_lat)",
+      "function": "Lattice engine (ML-DSA)",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_HBS",
+      "label": [
+        "u_hbs",
+        "(m_vlsit_dsig_hbs)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_hbs (m_vlsit_dsig_hbs)",
+      "function": "Hash-based signature verifier",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_RNG",
+      "label": [
+        "u_rng",
+        "(m_vlsit_dsig_rng)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_rng (m_vlsit_dsig_rng)",
+      "function": "Random source and hash-based generator",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_HARB",
+      "label": [
+        "u_harb",
+        "(m_vlsit_dsig_harb)"
+      ],
+      "width": 240,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_harb (m_vlsit_dsig_harb)",
+      "function": "Hash arbiter",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_HSEQ",
+      "label": [
+        "u_hseq",
+        "(m_vlsit_dsig_hseq)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_hseq (m_vlsit_dsig_hseq)",
+      "function": "Stream sequencer: padding, absorb, squeeze",
+      "source": "Section 14.2"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "CMD",
+      "src": "U_CSR",
+      "src_side": "T",
+      "dst": "U_CTL",
+      "dst_side": "B"
+    },
+    {
+      "id": "WIN",
+      "src": "U_CSR",
+      "src_side": "T",
+      "dst": "U_BUF",
+      "dst_side": "B"
+    },
+    {
+      "id": "BUFW",
+      "src": "U_AXI",
+      "src_side": "L",
+      "dst": "U_BUF",
+      "dst_side": "R"
+    },
+    {
+      "id": "ECRUN",
+      "src": "U_CTL",
+      "src_side": "R",
+      "dst": "U_EC",
+      "dst_side": "L"
+    },
+    {
+      "id": "B2EC",
+      "src": "U_BUF",
+      "src_side": "R",
+      "dst": "U_EC",
+      "dst_side": "L"
+    },
+    {
+      "id": "K2EC",
+      "src": "U_KEY",
+      "src_side": "T",
+      "dst": "U_EC",
+      "dst_side": "B"
+    },
+    {
+      "id": "H1",
+      "src": "U_EC",
+      "src_side": "L",
+      "dst": "U_HARB",
+      "dst_side": "R"
+    },
+    {
+      "id": "H4",
+      "src": "U_RNG",
+      "src_side": "B",
+      "dst": "U_HARB",
+      "dst_side": "T"
+    },
+    {
+      "id": "H2",
+      "src": "U_LAT",
+      "src_side": "R",
+      "dst": "U_HARB",
+      "dst_side": "L"
+    },
+    {
+      "id": "H5",
+      "src": "U_HARB",
+      "src_side": "T",
+      "dst": "U_HSEQ",
+      "dst_side": "B"
+    }
+  ],
+  "externals": [
+    {
+      "id": "APB",
+      "block": "U_CSR",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "APB",
+        "i_apb_*, o_apb_*"
+      ]
+    },
+    {
+      "id": "AXI",
+      "block": "U_AXI",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXI",
+        "i_axi_*, o_axi_*"
+      ]
+    },
+    {
+      "id": "DMA",
+      "block": "U_AXI",
+      "side": "R",
+      "dir": "out",
+      "pos": 1,
+      "text": [
+        "DMA",
+        "o_dma_*, i_dma_*"
+      ]
+    },
+    {
+      "id": "KEYIF",
+      "block": "U_KEY",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "KEYIF",
+        "o_key_*, i_key_*"
+      ]
+    },
+    {
+      "id": "ENT",
+      "block": "U_RNG",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "ENT",
+        "o_ent_req, i_ent_*"
+      ]
+    },
+    {
+      "id": "IRQ",
+      "block": "U_CTL",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "IRQ",
+        "o_irq, o_alarm"
+      ]
+    },
+    {
+      "id": "CRCLK",
+      "block": "U_HSEQ",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CRCLK",
+        "i_clk_*, i_rst_n_*"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "entry": "CRCLK",
+      "sinks": [
+        {
+          "id": "CK1",
+          "block": "U_HARB",
+          "side": "B",
+          "pos": 0
+        },
+        {
+          "id": "CK2",
+          "block": "U_HBS",
+          "side": "R",
+          "pos": 0
+        },
+        {
+          "id": "CK3",
+          "block": "U_LAT",
+          "side": "L",
+          "pos": 0
+        }
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "APB",
+      "name": "APB4 CSR port",
+      "category": "bus",
+      "active": "external -> TOP",
+      "signals": "external -> TOP: i_apb_psel, i_apb_penable, i_apb_pwrite, i_apb_paddr, i_apb_pwdata, i_apb_pstrb, i_apb_pprot; TOP -> external: o_apb_pready, o_apb_pslverr, o_apb_prdata"
+    },
+    {
+      "id": "AXI",
+      "name": "AXI4 subordinate data port",
+      "category": "bus",
+      "active": "external -> TOP",
+      "signals": "external -> TOP: i_axi_awvalid, i_axi_awid, i_axi_awaddr, i_axi_awlen, i_axi_awsize, i_axi_awburst, i_axi_wvalid, i_axi_wdata, i_axi_wstrb, i_axi_wlast, i_axi_bready, i_axi_arvalid, i_axi_arid, i_axi_araddr, i_axi_arlen, i_axi_arsize, i_axi_arburst, i_axi_rready; TOP -> external: o_axi_awready, o_axi_wready, o_axi_bvalid, o_axi_bid, o_axi_bresp, o_axi_arready, o_axi_rvalid, o_axi_rid, o_axi_rdata, o_axi_rresp, o_axi_rlast"
+    },
+    {
+      "id": "DMA",
+      "name": "DMA request and acknowledge",
+      "category": "handshake",
+      "active": "TOP -> external",
+      "signals": "TOP -> external: o_dma_in_req, o_dma_out_req; external -> TOP: i_dma_in_ack, i_dma_out_ack"
+    },
+    {
+      "id": "KEYIF",
+      "name": "Private-key input",
+      "category": "handshake",
+      "active": "TOP -> external",
+      "signals": "TOP -> external: o_key_req, o_key_idx; external -> TOP: i_key_valid, i_key_data"
+    },
+    {
+      "id": "ENT",
+      "name": "Entropy input",
+      "category": "handshake",
+      "active": "TOP -> external",
+      "signals": "TOP -> external: o_ent_req; external -> TOP: i_ent_valid, i_ent_data"
+    },
+    {
+      "id": "IRQ",
+      "name": "Interrupt and alarm",
+      "category": "custom",
+      "active": "TOP -> external",
+      "signals": "TOP -> external: o_irq, o_alarm"
+    },
+    {
+      "id": "CRCLK",
+      "name": "Clock and reset",
+      "category": "custom",
+      "active": "SoC -> TOP",
+      "signals": "i_clk_core, i_rst_n_core, i_clk_apb, i_rst_n_apb"
+    },
+    {
+      "id": "CMD",
+      "name": "Command and status",
+      "category": "custom",
+      "active": "u_csr -> u_ctl",
+      "signals": "u_csr -> u_ctl: command and configuration fields; u_ctl -> u_csr: status, events"
+    },
+    {
+      "id": "WIN",
+      "name": "Data window",
+      "category": "custom",
+      "active": "u_csr -> u_buf",
+      "signals": "u_csr -> u_buf: window read and write events; u_buf -> u_csr: read data"
+    },
+    {
+      "id": "BUFW",
+      "name": "Buffer access from AXI4",
+      "category": "custom",
+      "active": "u_axi -> u_buf",
+      "signals": "u_axi <-> u_buf: address, data, strobes, response"
+    },
+    {
+      "id": "ECRUN",
+      "name": "Engine start and result",
+      "category": "custom",
+      "active": "u_ctl -> engines",
+      "signals": "u_ctl -> u_ec, u_lat, u_hbs: start, parameters; engines -> u_ctl: done, status"
+    },
+    {
+      "id": "B2EC",
+      "name": "Buffer access of the engines",
+      "category": "custom",
+      "active": "u_ec <-> u_buf",
+      "signals": "u_ec <-> u_buf: read address, read data, result write"
+    },
+    {
+      "id": "K2EC",
+      "name": "Key to engines",
+      "category": "custom",
+      "active": "u_key -> u_ec",
+      "signals": "u_key -> u_ec, u_lat: key words"
+    },
+    {
+      "id": "H1",
+      "name": "Hash request from the elliptic-curve engine",
+      "category": "custom",
+      "active": "u_ec -> u_harb",
+      "signals": "u_ec <-> u_harb: request, data, digest"
+    },
+    {
+      "id": "H2",
+      "name": "Hash request from the lattice engine",
+      "category": "custom",
+      "active": "u_lat -> u_harb",
+      "signals": "u_lat <-> u_harb: request, data, squeeze"
+    },
+    {
+      "id": "H4",
+      "name": "Hash request from the random block",
+      "category": "custom",
+      "active": "u_rng -> u_harb",
+      "signals": "u_rng <-> u_harb: request, data, digest"
+    },
+    {
+      "id": "H5",
+      "name": "Granted stream to the sequencer",
+      "category": "custom",
+      "active": "u_harb -> u_hseq",
+      "signals": "u_harb <-> u_hseq: stream data, last, digest"
+    }
+  ],
+  "legend_note": "The enclosing frame is the top module; blocks inside are its instances. For clarity the figure omits the key-word path of u_csr to u_key, the hash request path of u_hbs to u_harb (same as u_lat), and the key and random paths to u_lat and u_hbs (same as u_ec); the hash engine m_vlsit_sha_eng and the padder m_vlsit_sha_pad are inside u_hseq.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

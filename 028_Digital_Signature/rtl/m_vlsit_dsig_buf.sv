@@ -1,0 +1,293 @@
+/*
+ * Project      : VLSIT Common RTL library
+ * Author       : Nguyen Quan and Claude Sonnet 5.5 (user)
+ * AI Flow      : VLSIT RTL Generator AI Automation Flow
+ * AI Flow Page : https://github.com/nguyenquanicd/VLSIT_RTL_Generator_AI_Model
+ * Date         : 2026-11-24
+ * Description  : Message, signature and public-key buffer of the digital signature IP (MEM-001).
+ *                It is built from byte lanes of the library RAM wrapper m_vlsit_sfifo_mem, so a
+ *                write changes only the lanes whose strobe bit is 1. Three sources write: the
+ *                engines (while an operation runs), the AXI4 port block and the CSR window; the
+ *                engines read while an operation runs, the AXI4 block and the CSR window read
+ *                when the IP is idle. The window address is a byte address owned by the CSR
+ *                (dsig_win_addr); this module asks for the add of 4 after every accepted window
+ *                access. Behavior and numbered example 1: section 10.5 of the specification.
+ *                Decisions: DEC-027 (byte lanes and reuse), DEC-017 (window registers).
+ *                Requirements: REQ-IF-002, REQ-IF-005.
+ *                Deviation from HIE-02 (SHOULD): this module is a function block, not a design top;
+ *                it holds the lane instances and the small control logic of one buffer.
+ */
+`timescale 1ns/1ps
+
+module m_vlsit_dsig_buf #(
+  // Parameter Description: size of the buffer; a multiple of the lane count PARA_AXI_DW / 8.
+  // Parameter values: 64 to 65536, a multiple of PARA_AXI_DW / 8; default is 1024.
+  // Parameter unit: byte
+  parameter logic [31:0] PARA_BUF_BYTES = 1024,
+  // Parameter Description: data width of the buffer word and of the AXI4 and engine ports.
+  // Parameter values: 32, 64 or 128; default is 64.
+  // Parameter unit: bit
+  parameter logic [31:0] PARA_AXI_DW = 64,
+  // Parameter Description: selects the SRAM macro wrapper instead of the RTL array in each lane.
+  // Parameter values: 0 RTL array or 1 SRAM macro; default is 0.
+  // Parameter unit: none
+  parameter logic [31:0] PARA_BUF_USE_MACRO = 0,
+  // Parameter Description: CSR byte offset of the window write register dsig_win_wr.
+  // Parameter values: must equal the offset of dsig_win_wr in the CSR workbook; default is 0x94.
+  // Parameter unit: byte
+  parameter logic [31:0] PARA_WIN_WR_OFF = 32'h94,
+  // Parameter Description: CSR byte offset of the window read register dsig_win_rd.
+  // Parameter values: must equal the offset of dsig_win_rd in the CSR workbook; default is 0x98.
+  // Parameter unit: byte
+  parameter logic [31:0] PARA_WIN_RD_OFF = 32'h98,
+  localparam logic [31:0] LPARA_LANES = PARA_AXI_DW / 8,
+  localparam logic [31:0] LPARA_DEPTH = PARA_BUF_BYTES / LPARA_LANES,
+  localparam logic [31:0] LPARA_ADDR_W = $clog2(LPARA_DEPTH),
+  localparam logic [31:0] LPARA_GRP_N = PARA_AXI_DW / 32,
+  localparam logic [31:0] LPARA_GRP_B = $clog2(LPARA_GRP_N),
+  localparam logic [31:0] LPARA_GRP_MASK = LPARA_GRP_N - 1,
+  localparam logic [31:0] LPARA_BYTE_W = 8,
+  localparam logic [31:0] LPARA_GRP_W = 32,
+  localparam logic [31:0] LPARA_GRP_LANES = 4,
+  localparam logic [31:0] LPARA_WIN_STEP = 4
+) (
+  // Clock and reset
+  input  wire                     i_clk_core,
+  input  wire                     i_rst_n_core,
+
+  // Write port of the AXI4 block (word address, byte strobes)
+  input  wire                     i_axi_wr_en,
+  input  wire  [LPARA_ADDR_W-1:0] i_axi_wr_addr,
+  input  wire  [PARA_AXI_DW-1:0]  i_axi_wr_data,
+  input  wire  [LPARA_LANES-1:0]  i_axi_wr_strb,
+  output logic                    o_axi_wr_rej,
+
+  // Read port of the AXI4 block (word address)
+  input  wire                     i_axi_rd_en,
+  input  wire  [LPARA_ADDR_W-1:0] i_axi_rd_addr,
+  output logic [PARA_AXI_DW-1:0]  o_axi_rd_data,
+  output logic                    o_axi_rd_valid,
+  output logic                    o_axi_rd_rej,
+
+  // CSR window: register events and the window registers
+  input  wire                     i_reg_wr_en,
+  input  wire  [15:0]             i_reg_wr_addr,
+  input  wire                     i_reg_rd_en,
+  input  wire  [15:0]             i_reg_rd_addr,
+  input  wire  [31:0]             i_win_wr_data,
+  input  wire  [16:0]             i_win_addr,
+  output logic                    o_win_addr_we,
+  output logic [16:0]             o_win_addr_wdata,
+  output logic [31:0]             o_win_rd_data,
+
+  // Engine port (word address, byte strobes), used only while an operation runs
+  input  wire                     i_eng_rd_en,
+  input  wire  [LPARA_ADDR_W-1:0] i_eng_rd_addr,
+  output logic [PARA_AXI_DW-1:0]  o_eng_rd_data,
+  output logic                    o_eng_rd_valid,
+  input  wire                     i_eng_wr_en,
+  input  wire  [LPARA_ADDR_W-1:0] i_eng_wr_addr,
+  input  wire  [PARA_AXI_DW-1:0]  i_eng_wr_data,
+  input  wire  [LPARA_LANES-1:0]  i_eng_wr_strb,
+
+  // Control and status
+  input  wire                     i_busy,
+  output logic                    o_err_ovf,
+  output logic                    o_err_busy
+);
+
+  // Internal signal declarations
+  logic                    w_win_wr_ev;
+  logic                    w_win_rd_ev;
+  logic                    w_win_inr;
+  logic                    w_win_wr_ok;
+  logic                    w_win_rd_ok;
+  logic [14:0]             w_win_idx32;
+  logic [31:0]             w_win_grp;
+  logic [LPARA_ADDR_W-1:0] w_win_waddr;
+  logic [PARA_AXI_DW-1:0]  w_win_wdata;
+  logic [LPARA_LANES-1:0]  w_win_strb;
+  logic                    w_sel_eng_wr;
+  logic                    w_sel_axi_wr;
+  logic                    w_wr_en;
+  logic [LPARA_ADDR_W-1:0] w_wr_addr;
+  logic [PARA_AXI_DW-1:0]  w_wr_data;
+  logic [LPARA_LANES-1:0]  w_wr_strb;
+  logic                    w_sel_eng_rd;
+  logic                    w_sel_axi_rd;
+  logic [LPARA_ADDR_W-1:0] w_rd_addr;
+  logic [PARA_AXI_DW-1:0]  w_mem_rd_data;
+  logic [127:0]            w_mem_rd_pad;
+  logic [31:0]             w_win_sel_data;
+  logic [7:0]              w_lane_rd [LPARA_LANES-1:0];
+
+  logic                    reg_eng_rd_vld;
+  logic                    reg_axi_rd_ok;
+  logic                    reg_axi_rd_rej;
+  logic                    reg_axi_wr_rej;
+  logic                    reg_win_sel;
+  logic                    reg_win_inr;
+  logic [1:0]              reg_win_grp;
+  logic [31:0]             reg_win_rd_data;
+  logic                    reg_err_ovf;
+  logic                    reg_err_busy;
+  logic                    reg_win_wr_pend;
+
+  // Window event decode: a successful CSR write or read of the window data register.
+  assign w_win_wr_ev = i_reg_wr_en & (i_reg_wr_addr == PARA_WIN_WR_OFF[15:0]);
+  assign w_win_rd_ev = i_reg_rd_en & (i_reg_rd_addr == PARA_WIN_RD_OFF[15:0]);
+
+  // Window address split: the window address is a byte address; bits 16:2 select a 32-bit group.
+  // The word address of the buffer drops the group bits that lie inside one buffer word.
+  assign w_win_idx32 = i_win_addr[16:2];
+  assign w_win_grp   = {17'd0, w_win_idx32} & LPARA_GRP_MASK;
+  assign w_win_waddr = $bits(w_win_waddr)'({17'd0, w_win_idx32} >> LPARA_GRP_B);
+
+  // Window range and acceptance: an access is accepted only inside the buffer and while idle.
+  assign w_win_inr   = ({15'd0, i_win_addr} < PARA_BUF_BYTES);
+  assign w_win_wr_ok = w_win_wr_ev & w_win_inr & ~i_busy;
+  assign w_win_rd_ok = w_win_rd_ev & w_win_inr & ~i_busy;
+
+  // Hardware load of the window address: add 4 after every accepted window access. A window write
+  // is performed one cycle after its register event, because the window data register of the CSR
+  // loads at the end of the event cycle; the address is added after that write (DEC-039).
+  assign o_win_addr_we    = reg_win_wr_pend | w_win_rd_ok;
+  assign o_win_addr_wdata = $bits(o_win_addr_wdata)'(i_win_addr + $bits(i_win_addr)'(LPARA_WIN_STEP));
+
+  // Window write data: the 32-bit value is replicated over the word and only the four lanes of
+  // the selected 32-bit group are enabled.
+  assign w_win_wdata = {LPARA_GRP_N{i_win_wr_data}};
+
+  // Window lane strobes: enables the four byte lanes of the selected 32-bit group, none otherwise.
+  always_comb begin : p_com_win_strb
+    w_win_strb = '0;
+    for (int idx = 0; idx < LPARA_LANES; idx++)
+      w_win_strb[idx] = ($bits(w_win_grp)'(idx / LPARA_GRP_LANES) == w_win_grp);
+  end
+
+  // Write source selection: the engines while busy, then the AXI4 block, then the window.
+  assign w_sel_eng_wr = i_busy & i_eng_wr_en;
+  assign w_sel_axi_wr = ~i_busy & i_axi_wr_en;
+
+  // Write multiplexer: gives the write port to the engines first, then the AXI4 block, then the
+  // window (the delayed window write); with no source the port is idle and every output holds a
+  // defined zero.
+  always_comb begin : p_com_wr_mux
+    w_wr_en   = 1'b0;
+    w_wr_addr = '0;
+    w_wr_data = '0;
+    w_wr_strb = '0;
+    casez ({w_sel_eng_wr, w_sel_axi_wr, reg_win_wr_pend})
+      3'b1??: begin
+        w_wr_en   = 1'b1;
+        w_wr_addr = i_eng_wr_addr;
+        w_wr_data = i_eng_wr_data;
+        w_wr_strb = i_eng_wr_strb;
+      end
+      3'b01?: begin
+        w_wr_en   = 1'b1;
+        w_wr_addr = i_axi_wr_addr;
+        w_wr_data = i_axi_wr_data;
+        w_wr_strb = i_axi_wr_strb;
+      end
+      3'b001: begin
+        w_wr_en   = 1'b1;
+        w_wr_addr = w_win_waddr;
+        w_wr_data = w_win_wdata;
+        w_wr_strb = w_win_strb;
+      end
+      default: begin
+        w_wr_en   = 1'b0;
+        w_wr_addr = '0;
+        w_wr_data = '0;
+        w_wr_strb = '0;
+      end
+    endcase
+  end
+
+  // Read source selection: the engines while busy, then the AXI4 block when idle. Otherwise the
+  // read port follows the window address, so that the window read data is ready one cycle later.
+  assign w_sel_eng_rd = i_busy & i_eng_rd_en;
+  assign w_sel_axi_rd = ~i_busy & i_axi_rd_en;
+
+  // Read multiplexer: selects the read address of the engines, of the AXI4 block or of the window.
+  always_comb begin : p_com_rd_mux
+    w_rd_addr = w_win_waddr;
+    casez ({w_sel_eng_rd, w_sel_axi_rd})
+      2'b1?:   w_rd_addr = i_eng_rd_addr;
+      2'b01:   w_rd_addr = i_axi_rd_addr;
+      default: w_rd_addr = w_win_waddr;
+    endcase
+  end
+
+  // Byte lanes of the buffer: one library RAM wrapper per lane; the lane write enable is the
+  // write enable gated by the strobe bit of the lane. The memory has no reset: the content is
+  // read only after a write by software or by an engine (SEQ-04).
+  for (genvar gen_idx = 0; gen_idx < LPARA_LANES; gen_idx++) begin : gen_lane
+    m_vlsit_sfifo_mem #(
+      .PARA_SFIFO_DEPTH        (LPARA_DEPTH),
+      .PARA_SFIFO_DATA_W       (LPARA_BYTE_W),
+      .PARA_SFIFO_MEM_USE_MACRO(PARA_BUF_USE_MACRO)
+    ) u_lane (
+      .i_clk_wr  (i_clk_core),
+      .i_wr_en   (w_wr_en & w_wr_strb[gen_idx]),
+      .i_wr_addr (w_wr_addr),
+      .i_wr_data (w_wr_data[(LPARA_BYTE_W * gen_idx) +: LPARA_BYTE_W]),
+      .i_clk_rd  (i_clk_core),
+      .i_rd_addr (w_rd_addr),
+      .o_rd_data (w_lane_rd[gen_idx])
+    );
+
+    // Lane read data: collects the byte of this lane into the word read from the buffer.
+    assign w_mem_rd_data[(LPARA_BYTE_W * gen_idx) +: LPARA_BYTE_W] = w_lane_rd[gen_idx];
+  end
+
+  // Window read data: the 32-bit group that matches the group index of the read request of the
+  // previous cycle; zero outside the buffer. The last window value is kept while the read port
+  // serves the engines or the AXI4 block.
+  assign w_mem_rd_pad   = $bits(w_mem_rd_pad)'(w_mem_rd_data);
+  assign w_win_sel_data = w_mem_rd_pad[(LPARA_GRP_W * reg_win_grp) +: LPARA_GRP_W];
+
+  // Control registers: response flags, window read data and one-cycle error pulses.
+  always_ff @(posedge i_clk_core, negedge i_rst_n_core) begin : p_ff_ctrl
+    if (!i_rst_n_core) begin
+      reg_eng_rd_vld  <= 1'b0;
+      reg_axi_rd_ok   <= 1'b0;
+      reg_axi_rd_rej  <= 1'b0;
+      reg_axi_wr_rej  <= 1'b0;
+      reg_win_sel     <= 1'b0;
+      reg_win_inr     <= 1'b0;
+      reg_win_grp     <= 2'd0;
+      reg_win_rd_data <= 32'd0;
+      reg_err_ovf     <= 1'b0;
+      reg_err_busy    <= 1'b0;
+      reg_win_wr_pend <= 1'b0;
+    end
+    else begin
+      reg_eng_rd_vld <= w_sel_eng_rd;
+      reg_axi_rd_ok  <= w_sel_axi_rd;
+      reg_axi_rd_rej <= i_busy & i_axi_rd_en;
+      reg_axi_wr_rej <= i_busy & i_axi_wr_en;
+      reg_win_sel    <= ~(w_sel_eng_rd | w_sel_axi_rd);
+      reg_win_inr    <= w_win_inr;
+      reg_win_grp    <= w_win_grp[1:0];
+      reg_err_ovf    <= (w_win_wr_ev | w_win_rd_ev) & ~w_win_inr & ~i_busy;
+      reg_err_busy   <= w_win_wr_ev & i_busy;
+      reg_win_wr_pend <= w_win_wr_ok;
+      if (reg_win_sel)
+        reg_win_rd_data <= reg_win_inr ? w_win_sel_data : 32'd0;
+    end
+  end
+
+  // Output mapping: read responses, window data masked while an operation runs, error pulses.
+  assign o_axi_wr_rej   = reg_axi_wr_rej;
+  assign o_axi_rd_data  = reg_axi_rd_ok ? w_mem_rd_data : '0;
+  assign o_axi_rd_valid = reg_axi_rd_ok | reg_axi_rd_rej;
+  assign o_axi_rd_rej   = reg_axi_rd_rej;
+  assign o_eng_rd_data  = w_mem_rd_data;
+  assign o_eng_rd_valid = reg_eng_rd_vld;
+  assign o_win_rd_data  = {LPARA_GRP_W{~i_busy}} & reg_win_rd_data;
+  assign o_err_ovf      = reg_err_ovf;
+  assign o_err_busy     = reg_err_busy;
+
+endmodule

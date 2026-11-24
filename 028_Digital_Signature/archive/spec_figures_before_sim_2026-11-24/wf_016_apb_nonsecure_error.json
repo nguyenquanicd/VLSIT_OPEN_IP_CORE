@@ -1,0 +1,73 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "control inputs",
+   {
+    "name": "i_protect_en",
+    "wave": "111111111111"
+   },
+   {
+    "name": "i_slverr_en",
+    "wave": "111111111111"
+   }
+  ],
+  [
+   "request",
+   {
+    "name": "i_apb_psel",
+    "wave": "011000000000"
+   },
+   {
+    "name": "i_apb_penable",
+    "wave": "001000000000"
+   },
+   {
+    "name": "i_apb_pwrite",
+    "wave": "011000000000"
+   },
+   {
+    "name": "i_apb_pprot",
+    "wave": "x==xxxxxxxxx",
+    "data": [
+     "0x2",
+     "0x2"
+    ]
+   },
+   {
+    "name": "i_apb_paddr",
+    "wave": "x=.xxxxxxxxx",
+    "data": [
+     "0x044"
+    ]
+   }
+  ],
+  [
+   "response",
+   {
+    "name": "o_apb_pready",
+    "wave": "001000000000"
+   },
+   {
+    "name": "o_apb_pslverr",
+    "wave": "001000000000"
+   },
+   {
+    "name": "o_dsig_alg_en_ed25519",
+    "wave": "000000000000"
+   }
+  ]
+ ],
+ "head": {
+  "text": "APB4 CSR access with PPROT[1] = 1 while the protection check is on: PSLVERR, no change"
+ },
+ "foot": {
+  "text": "An error answers in the first access cycle (no wait state); the write is ignored, so the enable bit stays 0."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -1,9 +1,11 @@
+> **Historical report:** Static cross-check performed on 2026-11-22 against HDS v0.2. The current specification and later verification evidence are indexed in [REVIEW_STATUS_2026-11-23.md](REVIEW_STATUS_2026-11-23.md).
+
 # DVP Controller — Independent Review Rebuttal and RTL Cross-check
 
 | Item | Value |
 |---|---|
 | IP | DVP Controller |
-| Review target | `025_DVP_Controller/review/REVIEW_DVP_Controller.md` and `vlsit_spec_2026-11-22.md` |
+| Review target | `025_DVP_Controller/review/REVIEW_DVP_Controller.md` and `025_DVP_Controller/review/reference/spec_review_2026-11-22/vlsit_spec_2026-11-22.md` |
 | RTL/spec revision | RTL generation dated 2026-11-22; HDS v0.2, status Draft |
 | Review date | 2026-11-22 |
 | Scope | Independent static rebuttal of the 31 findings against the HDS, CSR artifacts, RTL and recorded verification evidence |
@@ -147,7 +149,10 @@
 
 ## Evidence files / Tệp bằng chứng
 
-- Original review: `025_DVP_Controller/review/REVIEW_DVP_Controller.md`, `vlsit_spec_2026-11-22.md`, `findings.json`, `audit_sample.json`, `gate_metrics.json`, `run_report.md`.
+- Original review: `025_DVP_Controller/review/REVIEW_DVP_Controller.md`, `025_DVP_Controller/review/reference/spec_review_2026-11-22/vlsit_spec_2026-11-22.md`, `findings.json`, `audit_sample.json`, `gate_metrics.json`, `run_report.md`.
 - Normative HDS: `025_DVP_Controller/spec/rtl_generation_2026-11-22/VLSIT_DVP_CONTROLLER_HDS.md`.
 - Key RTL: `025_DVP_Controller/rtl/m_dvp_dma_req.sv`, `m_dvp_capture.sv`, `m_dvp_gate_bridge.sv`, `m_dvp_apb_data.sv`, `m_dvp_apb_service.sv`, `m_dvp_buffer.sv`, `m_dvp_controller.sv`, `rtl/csr/m_vlsit_csr_dvp.sv`.
 - Verification boundary: `025_DVP_Controller/verification/README.md` and `spec/rtl_generation_2026-11-22/RTL_GENERATION_REPORT.md`.
+
+
+

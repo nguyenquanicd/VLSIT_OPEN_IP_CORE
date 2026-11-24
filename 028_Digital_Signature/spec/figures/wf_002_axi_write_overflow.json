@@ -1,0 +1,87 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "write address",
+   {
+    "name": "i_axi_awvalid",
+    "wave": "01.0........"
+   },
+   {
+    "name": "o_axi_awready",
+    "wave": "0.10........"
+   },
+   {
+    "name": "i_axi_awaddr",
+    "wave": "x=.x........",
+    "data": [
+     "0x3FC"
+    ]
+   },
+   {
+    "name": "i_axi_awlen",
+    "wave": "x=.x........",
+    "data": [
+     "3"
+    ]
+   }
+  ],
+  [
+   "write data",
+   {
+    "name": "i_axi_wvalid",
+    "wave": "0001...0...."
+   },
+   {
+    "name": "o_axi_wready",
+    "wave": "0001...0...."
+   },
+   {
+    "name": "i_axi_wlast",
+    "wave": "00000010...."
+   },
+   {
+    "name": "w_buf_wr_en",
+    "wave": "000000000000"
+   }
+  ],
+  [
+   "response and error",
+   {
+    "name": "o_axi_bvalid",
+    "wave": "000000011.0."
+   },
+   {
+    "name": "i_axi_bready",
+    "wave": "00000001..0."
+   },
+   {
+    "name": "o_axi_bresp",
+    "wave": "xxxxxxx=.xxx",
+    "data": [
+     "SLVERR"
+    ]
+   },
+   {
+    "name": "i_hw_we_dsig_err_bufovf",
+    "wave": "000000100..."
+   },
+   {
+    "name": "o_dsig_err_bufovf",
+    "wave": "0000000.1..."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-001, error: burst past the window end gets SLVERR, nothing is written"
+ },
+ "foot": {
+  "text": "The buffer is 1 KiB (default); the burst starts at 0x3FC and needs 16 bytes, so it does not fit."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

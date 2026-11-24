@@ -1,0 +1,21 @@
+# scenario host_conn_ls seed 1
+WD ea60
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 14 1ffffff
+W 4 61
+W 28 400008
+LS 2
+ID 60216
+P 2c 1 1 7d0
+P 10 10 10 190
+W 10 10
+W 28 400009
+ID 2eb12
+P 10 80 80 bb8
+R 2c a e
+XP 0 d8 df
+B cg_conn.ls
+END

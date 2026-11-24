@@ -1,0 +1,91 @@
+# scenario fi_ocp seed 1
+WD ea60
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 14 1ffffff
+W 4 61
+XP 2 0 3
+W 28 400008
+WP 2 3 3 190
+B cg_drvvbus.ulpi
+B cg_ocin.async_edge
+PIN 3 0
+IB a
+PIN 3 1
+IB 28
+B cg_ocp.short
+XP 2 3 3
+R 10 0 400000
+PIN 3 0
+IB f
+PIN 3 1
+IB 28
+B cg_ocp.short
+XP 2 3 3
+R 10 0 400000
+R 2c 0 80000
+PIN 3 0
+IB e
+XP 2 3 3
+IB c
+WP 2 0 3 28
+R 2c 80000 80000
+PIN 3 1
+IB 28
+P 10 400000 400000 190
+XP 2 0 3
+B cg_ocp.trip
+W 10 400000
+IB 28
+XP 2 0 3
+W 28 400000
+IB 28
+W 28 400008
+WP 2 3 3 190
+R 10 0 400000
+B cg_ocp.rearm
+PIN 3 0
+IB 10
+PIN 3 1
+IB 28
+B cg_ocp.trip
+WP 2 0 3 64
+P 10 400000 400000 190
+W 10 400000
+IB 28
+XP 2 0 3
+W 28 400000
+IB 28
+W 28 400008
+WP 2 3 3 190
+PIN 3 0
+IB 3c
+WP 2 0 3 64
+W 10 400000
+W 28 400000
+IB 28
+W 28 400008
+IB 64
+XP 2 0 3
+PIN 3 1
+IB 28
+W 10 400000
+W 28 400000
+IB 28
+W 28 400008
+WP 2 3 3 190
+W 28 8
+IB 28
+PIN 3 0
+IB 3c
+PIN 3 1
+IB 28
+B cg_ocp.disabled
+XP 2 3 3
+R 10 0 400000
+W 28 0
+WP 2 0 3 190
+B cg_ocin.async_edge
+END

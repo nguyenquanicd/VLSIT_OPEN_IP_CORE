@@ -120,6 +120,7 @@ module m_usb2_spd #(
   output logic        o_dev_act,
   output logic        o_test_nak,
   output logic        o_host_act,
+  output logic        o_host_quiet,
   output logic [1:0]  o_speed,
   output logic        o_attached,
   output logic        o_suspended,
@@ -442,9 +443,11 @@ module m_usb2_spd #(
             w_fsm_hp_nxt_state = (i_hport[21] | (reg_speed == 2'd2)) ? ENUM_ST_HP_RSTW : ENUM_ST_HP_LISTK;
         end
         ENUM_ST_HP_LISTK: begin
+          // The listen window has its own timer (reg_htmr); reg_atmr keeps counting the 50 ms of
+          // the whole reset (REQ-FUNC-011, BUG-047: the window reloaded reg_atmr, reset ~5 ms).
           if (w_ls_k & (reg_flt == '0))
             w_fsm_hp_nxt_state = ENUM_ST_HP_CHIRP;
-          else if (reg_atmr == '0)
+          else if (reg_htmr == '0)
             w_fsm_hp_nxt_state = ENUM_ST_HP_RSTW;
         end
         ENUM_ST_HP_CHIRP: begin
@@ -572,7 +575,7 @@ module m_usb2_spd #(
             reg_htmr <= LPARA_T_HRSE0[LPARA_TMR_W-1:0];
             reg_atmr <= LPARA_T_HRST[LPARA_TMR_W-1:0];
           end
-          ENUM_ST_HP_LISTK: reg_atmr <= LPARA_T_CHWAIT[LPARA_TMR_W-1:0];
+          ENUM_ST_HP_LISTK: reg_htmr <= LPARA_T_CHWAIT[LPARA_TMR_W-1:0];
           ENUM_ST_HP_CHIRP: begin
             reg_htmr     <= LPARA_T_HCHIRP[LPARA_TMR_W-1:0];
             reg_cnt_kj   <= 4'd0;
@@ -834,7 +837,15 @@ module m_usb2_spd #(
           w_term_sel = 1'b0;
           w_op_mode  = 2'b10;
         end
-        ENUM_ST_HP_RSTW, ENUM_ST_HP_EN: begin
+        ENUM_ST_HP_RSTW: begin
+          // Rest of the 50 ms reset: a high-speed port keeps the high-speed idle (SE0 under the
+          // high-speed terminations); a full- or low-speed port keeps driving SE0, otherwise the
+          // bus returned to idle when the listen window ended (REQ-FUNC-011, BUG-047).
+          w_xcvr_sel = (reg_speed == 2'd0) ? 2'b00 : 2'b01;
+          w_term_sel = (reg_speed != 2'd0);
+          w_op_mode  = (reg_speed == 2'd0) ? 2'b00 : PARA_USB2_RST_OPMODE[1:0];
+        end
+        ENUM_ST_HP_EN: begin
           w_xcvr_sel = (reg_speed == 2'd0) ? 2'b00 : ((reg_speed == 2'd2) ? 2'b10 : 2'b01);
           w_term_sel = (reg_speed != 2'd0);
         end
@@ -913,6 +924,11 @@ module m_usb2_spd #(
                           (reg_fsm_dv_current_state != ENUM_ST_DV_CHJ) &
                           (~w_test_on | (w_test_mode == 3'd3));
   assign o_host_act     = reg_role_host & reg_port_en & ~w_test_on;
+  // The host port sends nothing while it is suspended (also L1) or drives the resume K; the
+  // frame timer keeps counting (o_host_act), so SOF restarts in phase (REQ-FUNC-020, 021, 037,
+  // BUG-048).
+  assign o_host_quiet   = reg_role_host & ((reg_fsm_hp_current_state == ENUM_ST_HP_SUSP) |
+                                           (reg_fsm_hp_current_state == ENUM_ST_HP_RESM));
   assign o_speed        = reg_speed;
   assign o_attached     = reg_role_host ? (reg_fsm_hp_current_state != ENUM_ST_HP_OFF) &
                                           (reg_fsm_hp_current_state != ENUM_ST_HP_DBNC) :

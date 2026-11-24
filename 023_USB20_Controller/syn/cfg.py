@@ -17,7 +17,7 @@ tee -o ../syn/st_{name}.txt stat
 tee -o ../syn/ltp_{name}.txt ltp -noff
 """)
     # file list without SRAM for this wrapper
-    src=open(f'filelist_{fl}.f').read().split('\n')
+    src=open('filelist.f').read().split('\n')
     out=[l for l in src if 'VLSIT_CELL_SRAM_1W1R' not in l]+['../syn/sram_bb.sv']
     open(f'../syn/fl_{fl}.f','w').write('\n'.join(out))
     r=subprocess.run(['yosys','-q','../syn/s.ys'],capture_output=True,text=True,timeout=1500)

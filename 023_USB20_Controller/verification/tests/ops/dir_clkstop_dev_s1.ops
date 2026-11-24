@@ -1,0 +1,74 @@
+# scenario dir_clkstop seed 1
+WD 190
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 92
+IB 190
+PCLKA 1
+SG 0 12c
+TK 5 12 3 0
+WP 0 14 df 304
+LS 1
+WP 0 0 20 927
+ID 1d4
+LS 2
+WP 0 20 20 124f
+B cg_clkstop.dev_wake
+I 124f
+LS 0
+WP 0 20 ff 75
+SG 1 12c
+P 10 8 8 190
+W 484 2000
+W 444 80040
+W 404 401040
+IB 190
+TK 1 12 1 0
+DT 3 0 40 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd fa
+XH 2 190
+GAP 1 18
+P 4c4 1 1 190
+END

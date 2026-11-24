@@ -1,0 +1,483 @@
+# scenario dev_axis_win seed 1
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 100190
+W 2d0 4001a0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 92
+IB 190
+W 2c 200000
+W 100 61
+W 104 63
+W 108 42
+W 10c 44
+P 204 0 400000 12c
+W 244 10000a
+W 204 481008
+BP 0
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 1 b20 2 0 6bc2f1e6 c70ef930
+B cg_axis.wr_incr
+CHK DAW-ACK
+DA 0
+DR 0 0 4
+B cg_dmareq.ack
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD 3 190 8 e6 f1 c2 6b 30 f9 e c7
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+BP 0
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 1 b4 1 0 40d3475
+B cg_axis.wr_incr
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD b 190 2 75 34
+ID 8
+HS 2
+ID 28
+B cg_axis.len_odd
+P 204 0 400000 12c
+W 244 18009c
+W 204 481040
+BP 14
+B cg_axis.bp
+B cg_axis.len16
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 1 6a0 10 0 fde0710e 7076b077 d50b94eb 3d975f33 9b61d8aa 11c9ff91 d4ce7cf5 2cbfbb58 c95337e0 f00ffabd 57c99d16 66067456 b4b0cf76 c40289eb 1cda6942 d366baf6
+B cg_axis.wr_incr
+CHK DAW-ACK
+DA 0
+DR 0 0 4
+B cg_dmareq.ack
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD 3 190 40 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd fa f f0 16 9d c9 57 56 74 6 66 76 cf b0 b4 eb 89 2 c4 42 69 da 1c f6 ba 66 d3
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+BP 14
+B cg_axis.bp
+B cg_axis.len16
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 0 240 10 0 750eeaa9 822e5c5a 82a2410 7f8f07e7 b05e3889 51552394 968b5682 f2fea4e8 c59f0c3a 8460d7af dd6b8137 cb09730a e452124a 72e670da daa4ca0f 6c40981e
+B cg_axis.wr_fixed
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD b 190 40 a9 ea e 75 5a 5c 2e 82 10 24 2a 8 e7 7 8f 7f 89 38 5e b0 94 23 55 51 82 56 8b 96 e8 a4 fe f2 3a c 9f c5 af d7 60 84 37 81 6b dd a 73 9 cb 4a 12 52 e4 da 70 e6 72 f ca a4 da 1e 98 40 6c
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+BP 0
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 0 66c 7 0 d551989e 13044281 1357eb6f 32b166c1 fc63dd69 ff97c735 90cda608
+B cg_axis.wr_fixed
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD 3 190 1c 9e 98 51 d5 81 42 4 13 6f eb 57 13 c1 66 b1 32 69 dd 63 fc 35 c7 97 ff 8 a6 cd 90
+ID 8
+HS 2
+ID 28
+B cg_axis.len_odd
+P 204 0 400000 12c
+W 244 100020
+W 204 481010
+BP 14
+B cg_axis.bp
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 1 570 4 0 b0c23188 142178f8 5556442b 82aa896d
+B cg_axis.wr_incr
+CHK DAW-ACK
+DA 0
+DR 0 0 4
+B cg_dmareq.ack
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD 3 190 10 88 31 c2 b0 f8 78 21 14 2b 44 56 55 6d 89 aa 82
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+BP 14
+B cg_axis.bp
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 0 bac 4 0 3545fa78 25d014a4 ae404bc2 7227c13a
+B cg_axis.wr_fixed
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD b 190 10 78 fa 45 35 a4 14 d0 25 c2 4b 40 ae 3a c1 27 72
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+P 204 0 400000 12c
+W 244 100010
+W 204 481008
+BP 0
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 0 d78 2 0 7069717 143ad32e
+B cg_axis.wr_fixed
+CHK DAW-ACK
+DA 0
+DR 0 0 4
+B cg_dmareq.ack
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD 3 190 8 17 97 6 7 2e d3 3a 14
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+BP 32
+B cg_axis.bp
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 1 508 2 0 517b55e6 96c1de34
+B cg_axis.wr_incr
+CHK DAW-ACK
+DA 0
+DR 0 0 4
+B cg_dmareq.ack
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD b 190 8 e6 55 7b 51 34 de c1 96
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+P 204 0 400000 12c
+W 244 80020
+W 204 481020
+BP 0
+CHK DAW-REQ
+DR 0 1 bb8
+B cg_dmareq.rise
+IB 3c
+DX 0 1
+B cg_dmareq.hold
+CHK DAW-WR
+AW 1 510 8 0 c8e6a397 2020cca0 8039e9a2 84b6f06e 659d6a5d 8f29b87e ad2ee52d 159dc774
+B cg_axis.wr_incr
+BP 0
+IB 12c
+CHK DAW-INPKT
+TK 9 12 1 0
+XD 3 190 20 97 a3 e6 c8 a0 cc 20 20 a2 e9 39 80 6e f0 b6 84 5d 6a 9d 65 7e b8 29 8f 2d e5 2e ad 74 c7 9d 15
+ID 8
+HS 2
+ID 28
+B cg_axis.len_max
+P 408 0 400000 12c
+W 448 80020
+W 408 481020
+IB 12c
+TK 1 12 2 0
+DT 3 0 20 7d 70 a 7c cd 25 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 0
+CHK DAW-RD
+DR 2 1 258
+AR 0 2990 8 0 7c0a707d ffffffff 248925cd ffffffff 94050b26 ffffffff 4ef0fcb7 ffffffff 5827a733 ffffffff a3484c5b ffffffff 4096369c ffffffff a1104869 ffffffff
+B cg_axis.rd_fixed
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+P 408 0 400000 12c
+W 448 1800c0
+W 408 481040
+IB 12c
+TK 1 12 2 0
+DT 3 0 40 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3 5a a2 e0 73 7a a0 fd f5 73 d3 ac 8c 70 18 24 bc 51 68 9f 98 99 be 54 ed 2b 3f c1 5a 4f 80 da 6f 1a fd
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 14
+CHK DAW-RD
+DR 2 1 258
+AR 1 2624 10 0 dce42081 ffffffff 5e8e080 ffffffff 8457adca ffffffff 9d50cf8 ffffffff 4046b51f ffffffff cb8d8446 ffffffff 772d58cd ffffffff a25a03f8 ffffffff a07a73e0 ffffffff d373f5fd ffffffff 18708cac ffffffff 6851bc24 ffffffff be99989f ffffffff 3f2bed54 ffffffff 804f5ac1 ffffffff fd1a6fda ffffffff
+B cg_axis.rd_incr
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+TK 1 12 2 0
+DT b 0 40 14 2e 82 33 88 2a 47 29 e3 7b c3 dd cb 54 a6 e0 40 f9 6c 3d dc d1 3c 97 8e 7f c1 2 61 e0 a f 7c 85 69 58 91 4b 66 8b 9f 80 e4 56 b6 fb d7 3e 6a c4 68 91 37 c 3c 6 97 45 26 bf 9f df b6 a5
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 0
+CHK DAW-RD
+DR 2 1 258
+AR 0 2e24 10 0 33822e14 ffffffff 29472a88 ffffffff ddc37be3 ffffffff e0a654cb ffffffff 3d6cf940 ffffffff 973cd1dc ffffffff 2c17f8e ffffffff f0ae061 ffffffff 5869857c ffffffff 8b664b91 ffffffff 56e4809f ffffffff 3ed7fbb6 ffffffff 9168c46a ffffffff 63c0c37 ffffffff bf264597 ffffffff a5b6df9f ffffffff
+B cg_axis.rd_fixed
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+TK 1 12 2 0
+DT 3 0 40 b3 9c cc ad fc 39 c1 c3 68 1 8e 65 ec d1 9c 57 e6 65 b8 1 c7 da cf ac 22 fc 7e 94 a d0 4f cb 8a 5b 25 5 b2 87 d2 9b 4d ec 84 f8 56 ef 17 8a 32 d8 23 b5 22 e2 a 54 52 2f cd 8d 9b 6a 6a 79
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 14
+CHK DAW-RD
+DR 2 1 258
+AR 1 2118 10 0 adcc9cb3 ffffffff c3c139fc ffffffff 658e0168 ffffffff 579cd1ec ffffffff 1b865e6 ffffffff accfdac7 ffffffff 947efc22 ffffffff cb4fd00a ffffffff 5255b8a ffffffff 9bd287b2 ffffffff f884ec4d ffffffff 8a17ef56 ffffffff b523d832 ffffffff 540ae222 ffffffff 8dcd2f52 ffffffff 796a6a9b ffffffff
+B cg_axis.rd_incr
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+P 408 0 400000 12c
+W 448 180016
+W 408 481008
+IB 12c
+TK 1 12 2 0
+DT 3 0 8 56 98 8a b6 76 c8 cc 58
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 14
+CHK DAW-RD
+DR 2 1 258
+AR 1 2ddc 2 0 b68a9856 ffffffff 58ccc876 ffffffff
+B cg_axis.rd_incr
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+TK 1 12 2 0
+DT b 0 8 71 84 7d f ce a2 dd 7f
+CHK DAW-OUT
+XH 2 190
+IB 78
+TK 1 12 2 0
+DT 3 0 6 89 61 25 54 e3 4b
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_queued
+BP 32
+CHK DAW-RD
+DR 2 1 258
+AR 1 286c 2 0 f7d8471 ffffffff 7fdda2ce ffffffff
+B cg_axis.rd_incr
+BP 0
+BP 0
+CHK DAW-RD
+DR 2 1 258
+AR 0 2b8c 2 0 54256189 ffffffff e1464be3 ffff
+B cg_axis.rd_fixed
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+P 408 0 400000 12c
+W 448 100040
+W 408 481020
+IB 12c
+TK 1 12 2 0
+DT 3 0 20 9c 22 36 74 cb a4 fc 33 5f 17 1c b 6e 11 fd e2 af 8c 3c 58 30 71 cc 77 fd e6 c1 56 76 78 91 ec
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 0
+CHK DAW-RD
+DR 2 1 258
+AR 1 2738 8 0 7436229c ffffffff 33fca4cb ffffffff b1c175f ffffffff e2fd116e ffffffff 583c8caf ffffffff 77cc7130 ffffffff 56c1e6fd ffffffff ec917876 ffffffff
+B cg_axis.rd_incr
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+TK 1 12 2 0
+DT b 0 20 a9 fe 38 6d 28 17 7 2 f5 a3 c4 93 64 cc 51 4d f 7 c6 4a 1d c2 82 42 28 ec 9b 7 12 1f 42 15
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 0
+CHK DAW-RD
+DR 2 1 258
+AR 1 26e8 8 0 6d38fea9 ffffffff 2071728 ffffffff 93c4a3f5 ffffffff 4d51cc64 ffffffff 4ac6070f ffffffff 4282c21d ffffffff 79bec28 ffffffff 15421f12 ffffffff
+B cg_axis.rd_incr
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+P 408 0 400000 12c
+W 448 80001
+W 408 481008
+IB 12c
+TK 1 12 2 0
+DT 3 0 1 8e
+CHK DAW-OUT
+XH 2 190
+IB 78
+B cg_axis.out_one
+BP 32
+CHK DAW-RD
+DR 2 1 258
+AR 0 2850 1 0 89a8c78e ff
+B cg_axis.rd_fixed
+BP 0
+CHK DAW-REL
+DR 2 0 50
+B cg_dmareq.rd_release
+P 20c 0 400000 12c
+W 24c 1800c0
+W 20c 481040
+CHK DAW-FULL
+DR 1 1 bb8
+AW 1 1000 10 0 591e7d7c b41fdbb3 23d966d3 5a802588 681e4d31 2e1b16db a032bdf0 e2104014 ce4ca41 a6802e8a c4119a2b 42a0851d 9b3bc285 697dd930 f6c8ada9 fe54235
+DR 1 0 14
+AWN 1 1000 10 0 bd665095 d131a6c7 162140b0 98d5a099 a68bb4a3 a24c3e04 e723a7a6 bae8f58f 441c28c2 7d80fb18 cebdb9ad 55aeed9d 71804b0e d25e3944 36883219 28228568
+AWS 190
+B cg_axis.full_region
+IB c8
+TK 9 12 3 0
+XD 3 190 40 7c 7d 1e 59 b3 db 1f b4 d3 66 d9 23 88 25 80 5a 31 4d 1e 68 db 16 1b 2e f0 bd 32 a0 14 40 10 e2 41 ca e4 c 8a 2e 80 a6 2b 9a 11 c4 1d 85 a0 42 85 c2 3b 9b 30 d9 7d 69 a9 ad c8 f6 35 42 e5 f
+ID 8
+HS 2
+CHK DAW-RESUME
+AWJ 4e20
+IB 12c
+TK 9 12 3 0
+XD b 190 40 95 50 66 bd c7 a6 31 d1 b0 40 21 16 99 a0 d5 98 a3 b4 8b a6 4 3e 4c a2 a6 a7 23 e7 8f f5 e8 ba c2 28 1c 44 18 fb 80 7d ad b9 bd ce 9d ed ae 55 e 4b 80 71 44 39 5e d2 19 32 88 36 68 85 22 28
+ID 8
+HS 2
+AW 1 1000 10 0 dd586f25 91f9bc0b 78fc6670 60bbe7d9 d08325f6 f9c20467 14d9ce27 6103eab4 9a3d0299 d1d290a1 439ae79d 815347e3 bc12d904 990cdd7 c4022e2e be8bed89
+IB 12c
+TK 9 12 3 0
+XD 3 190 40 25 6f 58 dd b bc f9 91 70 66 fc 78 d9 e7 bb 60 f6 25 83 d0 67 4 c2 f9 27 ce d9 14 b4 ea 3 61 99 2 3d 9a a1 90 d2 d1 9d e7 9a 43 e3 47 53 81 4 d9 12 bc d7 cd 90 9 2e 2e 2 c4 89 ed 8b be
+ID 8
+HS 2
+ID 3c
+CHK DAW-CLEAN
+R 10 0 1e300
+END

@@ -1,5 +1,6 @@
-// filelist.f - RTL files in compile order (package first, leaf modules, top last).
-// Top module: m_vlsit_uart_wrap
+# Master filelist: union of active synthesizable RTL profiles for this IP.
+# Select the required top module and profile-specific defines at the tool invocation.
+# Paths are relative to this file; invoke the simulator from this directory.
 m_vlsit_uart_package.sv
 m_vlsit_apb_uart.sv
 m_vlsit_counter.sv

@@ -193,9 +193,9 @@ An illegal configuration is `PARA_AHS2_DATA_W` or `PARA_AHS2_ACK_DATA_W` below 1
 
 ### 5.2 Block diagram
 
-![Async 2-phase handshake block diagram](../figures/vlsit_ahs2_block_diagram.svg)
+![Async 2-phase handshake block diagram](figures/vlsit_ahs2_block_diagram.svg)
 
-The editable draw.io source is [../figures/vlsit_ahs2_block_diagram.drawio](../figures/vlsit_ahs2_block_diagram.drawio). The diagram shows the structural top, the two clock domains, the source toggle and payload registers, the destination request synchronizer, the destination capture register, the acknowledge toggle, the source acknowledge synchronizer, and the return-payload path. The interface labels of REF-005 map to this specification as follows: `data_valid` becomes `i_req`, `async_in` becomes `i_data`, `rec_ready` becomes `i_ack`, `rec_data` becomes `o_data`, and the internal `sync_ack` becomes `w_ack_s`.
+The editable draw.io source is [figures/vlsit_ahs2_block_diagram.drawio](figures/vlsit_ahs2_block_diagram.drawio). The diagram shows the structural top, the two clock domains, the source toggle and payload registers, the destination request synchronizer, the destination capture register, the acknowledge toggle, the source acknowledge synchronizer, and the return-payload path. The interface labels of REF-005 map to this specification as follows: `data_valid` becomes `i_req`, `async_in` becomes `i_data`, `rec_ready` becomes `i_ack`, `rec_data` becomes `o_data`, and the internal `sync_ack` becomes `w_ack_s`.
 
 ### 5.3 Transaction and dataflow
 
@@ -401,14 +401,14 @@ The IP has no FSM. The source control state is the single toggle flop `reg_req`;
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001 single transfer, mode 0, direct ready, N=2, 1:1 clocks, accept in the first destination cycle | Success | `i_clk_src`, `i_req`, `i_data`, `reg_req`, `w_ack_s`, `o_ack_data`, `reg_data`, `i_clk_dst`, `w_req_s`, `i_ack`, `reg_ack`, `o_data` | `../figures/vlsit_ahs2_wf001_success.svg` | 2026-11-13 |
-| WF-002 | OP-002 backpressured transfer, `i_ack` low for 4 destination cycles | Success with backpressure | Same signals as WF-001 | `../figures/vlsit_ahs2_wf002_backpressure.svg` | 2026-11-13 |
-| WF-003 | OP-004 streaming transfer of three words with `i_req` held high and the minimum initiation interval | Success, corner | Same signals as WF-001 | `../figures/vlsit_ahs2_wf003_streaming.svg` | 2026-11-13 |
-| WF-004 | OP-003 paired reset during an in-flight transaction, both resets asserted together | Corner, recovery | Same signals plus `i_rst_n_src`, `i_rst_n_dst` | `../figures/vlsit_ahs2_wf004_reset.svg` | 2026-11-13 |
-| WF-005 | OP-005 captured return payload with `PARA_AHS2_ACK_DATA_MODE` = 2, 32-bit request and 16-bit return payload | Success | WF-001 signals plus `i_ack_data`, `reg_ack_data` | `../figures/vlsit_ahs2_wf005_return_payload.svg` | 2026-11-13 |
-| WF-006 | OP-006 registered ready with `PARA_AHS2_DST_MODE` = 1 and a late `i_ack` | Success, corner | WF-001 signals plus `reg_ready` | `../figures/vlsit_ahs2_wf006_registered_ready.svg` | 2026-11-13 |
-| WF-007 | Illegal destination-only reset while the source keeps running; the destination accepts the same word twice (ERR-001) | Error | WF-001 signals plus `i_rst_n_dst` | `../figures/vlsit_ahs2_wf007_dst_reset.svg` | 2026-11-13 |
-| WF-008 | Spurious `i_ack` high before any request, and `i_data` changed during flight | Error, corner | WF-001 signals | `../figures/vlsit_ahs2_wf008_spurious_ack.svg` | 2026-11-13 |
+| WF-001 | OP-001 single transfer, mode 0, direct ready, N=2, 1:1 clocks, accept in the first destination cycle | Success | `i_clk_src`, `i_req`, `i_data`, `reg_req`, `w_ack_s`, `o_ack_data`, `reg_data`, `i_clk_dst`, `w_req_s`, `i_ack`, `reg_ack`, `o_data` | `figures/vlsit_ahs2_wf001_success.svg` | 2026-11-13 |
+| WF-002 | OP-002 backpressured transfer, `i_ack` low for 4 destination cycles | Success with backpressure | Same signals as WF-001 | `figures/vlsit_ahs2_wf002_backpressure.svg` | 2026-11-13 |
+| WF-003 | OP-004 streaming transfer of three words with `i_req` held high and the minimum initiation interval | Success, corner | Same signals as WF-001 | `figures/vlsit_ahs2_wf003_streaming.svg` | 2026-11-13 |
+| WF-004 | OP-003 paired reset during an in-flight transaction, both resets asserted together | Corner, recovery | Same signals plus `i_rst_n_src`, `i_rst_n_dst` | `figures/vlsit_ahs2_wf004_reset.svg` | 2026-11-13 |
+| WF-005 | OP-005 captured return payload with `PARA_AHS2_ACK_DATA_MODE` = 2, 32-bit request and 16-bit return payload | Success | WF-001 signals plus `i_ack_data`, `reg_ack_data` | `figures/vlsit_ahs2_wf005_return_payload.svg` | 2026-11-13 |
+| WF-006 | OP-006 registered ready with `PARA_AHS2_DST_MODE` = 1 and a late `i_ack` | Success, corner | WF-001 signals plus `reg_ready` | `figures/vlsit_ahs2_wf006_registered_ready.svg` | 2026-11-13 |
+| WF-007 | Illegal destination-only reset while the source keeps running; the destination accepts the same word twice (ERR-001) | Error | WF-001 signals plus `i_rst_n_dst` | `figures/vlsit_ahs2_wf007_dst_reset.svg` | 2026-11-13 |
+| WF-008 | Spurious `i_ack` high before any request, and `i_data` changed during flight | Error, corner | WF-001 signals | `figures/vlsit_ahs2_wf008_spurious_ack.svg` | 2026-11-13 |
 
 Cycle table for WF-001 with 10 ns clocks on both domains, aligned rising edges, N=2, direct ready, return payload disabled, and `i_ack` already high. The launch edge is t0. In every waveform of this section a register that changes at edge tN is drawn from cell tN, a value drawn in cell tN is sampled by a flop at the next edge, and an input that is already high at the left edge was asserted before the window; the clock edges are aligned only to make the examples readable.
 

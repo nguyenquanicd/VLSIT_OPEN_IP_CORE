@@ -1,0 +1,1900 @@
+{
+ "module": "m_vlsit_csr_dsig",
+ "prefix": "dsig",
+ "async": 1,
+ "ip_version": {
+  "major": 1,
+  "minor": 0
+ },
+ "event_sideband": 1,
+ "registers": [
+  {
+   "name": "dsig_version",
+   "offset": "0x0",
+   "description": "Digital signature version register. Reports the IP major and minor version numbers.",
+   "fields": [
+    {
+     "name": "major",
+     "bits": "[31:16]",
+     "type": "ro",
+     "reset": "0x1",
+     "description": "Major version number of the IP. Software reads it to select compatible driver behavior.\n\nUsage: Read after reset and before any other register.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "minor",
+     "bits": "[15:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Minor version number of the IP. Software reads it to identify compatible additions.\n\nUsage: Read after reset and before any other register.\n\nValues:\n0x0 minor version 0 (reset value).\n\nUnit: none\n\nLimits: none"
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_alg",
+   "offset": "0x4",
+   "description": "Digital signature algorithm capability register. Reports which algorithms are built.",
+   "fields": [
+    {
+     "name": "ed25519",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519 built flag. Reports whether the hardware of Ed25519 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "ed25519ctx",
+     "bits": "[1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ctx built flag. Reports whether the hardware of Ed25519ctx exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "ed25519ph",
+     "bits": "[2]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ph built flag. Reports whether the hardware of Ed25519ph exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "ed448",
+     "bits": "[3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448 built flag. Reports whether the hardware of Ed448 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "ed448ph",
+     "bits": "[4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448ph built flag. Reports whether the hardware of Ed448ph exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "p256",
+     "bits": "[5]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-256 built flag. Reports whether the hardware of ECDSA P-256 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "p384",
+     "bits": "[6]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-384 built flag. Reports whether the hardware of ECDSA P-384 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "p521",
+     "bits": "[7]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-521 built flag. Reports whether the hardware of ECDSA P-521 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "k256",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA secp256k1 built flag. Reports whether the hardware of ECDSA secp256k1 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "mldsa44",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-44 built flag. Reports whether the hardware of ML-DSA-44 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "mldsa65",
+     "bits": "[10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-65 built flag. Reports whether the hardware of ML-DSA-65 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "mldsa87",
+     "bits": "[11]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-87 built flag. Reports whether the hardware of ML-DSA-87 exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "slhdsa",
+     "bits": "[12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "SLH-DSA built flag. Reports whether the hardware of SLH-DSA exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "lms",
+     "bits": "[13]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "LMS/HSS built flag. Reports whether the hardware of LMS/HSS exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "xmss",
+     "bits": "[14]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "XMSS/XMSS^MT built flag. Reports whether the hardware of XMSS/XMSS^MT exists in this build of the IP.\n\nUsage: Read after reset to learn which algorithms the build offers, before software sets the matching bit of the algorithm enable register.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Follows the build parameter of the algorithm; the value is constant after reset."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:15]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_kgen",
+   "offset": "0x8",
+   "description": "Digital signature key generation capability register. Reports which algorithms have key generation built.",
+   "fields": [
+    {
+     "name": "ed25519",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519 key generation built flag. Reports whether the key generation path of Ed25519 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed25519ctx",
+     "bits": "[1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ctx key generation built flag. Reports whether the key generation path of Ed25519ctx exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed25519ph",
+     "bits": "[2]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ph key generation built flag. Reports whether the key generation path of Ed25519ph exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed448",
+     "bits": "[3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448 key generation built flag. Reports whether the key generation path of Ed448 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed448ph",
+     "bits": "[4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448ph key generation built flag. Reports whether the key generation path of Ed448ph exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p256",
+     "bits": "[5]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-256 key generation built flag. Reports whether the key generation path of ECDSA P-256 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p384",
+     "bits": "[6]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-384 key generation built flag. Reports whether the key generation path of ECDSA P-384 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p521",
+     "bits": "[7]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-521 key generation built flag. Reports whether the key generation path of ECDSA P-521 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "k256",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA secp256k1 key generation built flag. Reports whether the key generation path of ECDSA secp256k1 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa44",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-44 key generation built flag. Reports whether the key generation path of ML-DSA-44 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa65",
+     "bits": "[10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-65 key generation built flag. Reports whether the key generation path of ML-DSA-65 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa87",
+     "bits": "[11]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-87 key generation built flag. Reports whether the key generation path of ML-DSA-87 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "slhdsa",
+     "bits": "[12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "SLH-DSA key generation built flag. Reports whether the key generation path of SLH-DSA exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "lms",
+     "bits": "[13]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "LMS/HSS key generation built flag. Reports whether the key generation path of LMS/HSS exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "xmss",
+     "bits": "[14]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "XMSS/XMSS^MT key generation built flag. Reports whether the key generation path of XMSS/XMSS^MT exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:15]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_sign",
+   "offset": "0xC",
+   "description": "Digital signature signing capability register. Reports which algorithms have signing built.",
+   "fields": [
+    {
+     "name": "ed25519",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519 signing built flag. Reports whether the signing path of Ed25519 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed25519ctx",
+     "bits": "[1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ctx signing built flag. Reports whether the signing path of Ed25519ctx exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed25519ph",
+     "bits": "[2]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ph signing built flag. Reports whether the signing path of Ed25519ph exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed448",
+     "bits": "[3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448 signing built flag. Reports whether the signing path of Ed448 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed448ph",
+     "bits": "[4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448ph signing built flag. Reports whether the signing path of Ed448ph exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p256",
+     "bits": "[5]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-256 signing built flag. Reports whether the signing path of ECDSA P-256 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p384",
+     "bits": "[6]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-384 signing built flag. Reports whether the signing path of ECDSA P-384 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p521",
+     "bits": "[7]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-521 signing built flag. Reports whether the signing path of ECDSA P-521 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "k256",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA secp256k1 signing built flag. Reports whether the signing path of ECDSA secp256k1 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa44",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-44 signing built flag. Reports whether the signing path of ML-DSA-44 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa65",
+     "bits": "[10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-65 signing built flag. Reports whether the signing path of ML-DSA-65 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa87",
+     "bits": "[11]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-87 signing built flag. Reports whether the signing path of ML-DSA-87 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "slhdsa",
+     "bits": "[12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "SLH-DSA signing built flag. Reports whether the signing path of SLH-DSA exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "lms",
+     "bits": "[13]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "LMS/HSS signing built flag. Reports whether the signing path of LMS/HSS exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "xmss",
+     "bits": "[14]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "XMSS/XMSS^MT signing built flag. Reports whether the signing path of XMSS/XMSS^MT exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:15]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_vrfy",
+   "offset": "0x10",
+   "description": "Digital signature verification capability register. Reports which algorithms have verification built.",
+   "fields": [
+    {
+     "name": "ed25519",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519 verification built flag. Reports whether the verification path of Ed25519 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed25519ctx",
+     "bits": "[1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ctx verification built flag. Reports whether the verification path of Ed25519ctx exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed25519ph",
+     "bits": "[2]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ph verification built flag. Reports whether the verification path of Ed25519ph exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed448",
+     "bits": "[3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448 verification built flag. Reports whether the verification path of Ed448 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "ed448ph",
+     "bits": "[4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448ph verification built flag. Reports whether the verification path of Ed448ph exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p256",
+     "bits": "[5]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-256 verification built flag. Reports whether the verification path of ECDSA P-256 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p384",
+     "bits": "[6]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-384 verification built flag. Reports whether the verification path of ECDSA P-384 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "p521",
+     "bits": "[7]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-521 verification built flag. Reports whether the verification path of ECDSA P-521 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "k256",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA secp256k1 verification built flag. Reports whether the verification path of ECDSA secp256k1 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa44",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-44 verification built flag. Reports whether the verification path of ML-DSA-44 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa65",
+     "bits": "[10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-65 verification built flag. Reports whether the verification path of ML-DSA-65 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "mldsa87",
+     "bits": "[11]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-87 verification built flag. Reports whether the verification path of ML-DSA-87 exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "slhdsa",
+     "bits": "[12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "SLH-DSA verification built flag. Reports whether the verification path of SLH-DSA exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "lms",
+     "bits": "[13]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "LMS/HSS verification built flag. Reports whether the verification path of LMS/HSS exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "xmss",
+     "bits": "[14]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "XMSS/XMSS^MT verification built flag. Reports whether the verification path of XMSS/XMSS^MT exists in this build of the IP.\n\nUsage: Read before issuing a start command for this operation; a command for an operation that is not built sets the unsupported-operation error.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset; always 0 when the algorithm itself is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:15]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_slh",
+   "offset": "0x14",
+   "description": "Digital signature SLH-DSA set capability register. Reports which SLH-DSA parameter sets are built.",
+   "fields": [
+    {
+     "name": "sets",
+     "bits": "[11:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "SLH-DSA built set mask. Bit n is 1 when SLH-DSA parameter set number n of the table in section 10 is built.\n\nUsage: Read before programming the SLH-DSA set field of the set register.\n\nValues:\n0x0 to 0xFFF mask of built sets.\n\nUnit: none\n\nLimits: Constant after reset; 0 when SLH-DSA is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_lms",
+   "offset": "0x18",
+   "description": "Digital signature LMS capability register. Reports which LMS tree types are built.",
+   "fields": [
+    {
+     "name": "lms",
+     "bits": "[19:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "LMS built type mask. Bit n is 1 when LMS tree type number n of the table in section 10 is built.\n\nUsage: Read before programming the LMS type field of the set register.\n\nValues:\n0x00000 to 0xFFFFF mask of built LMS types.\n\nUnit: none\n\nLimits: Constant after reset; 0 when LMS is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:20]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_lmots",
+   "offset": "0x2C",
+   "description": "Digital signature LM-OTS capability register. Reports which LM-OTS types are built.",
+   "fields": [
+    {
+     "name": "lmots",
+     "bits": "[15:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "LM-OTS built type mask. Bit n is 1 when LM-OTS type number n of the table in section 10 is built.\n\nUsage: Read before programming the LM-OTS type field of the set register.\n\nValues:\n0x0000 to 0xFFFF mask of built LM-OTS types.\n\nUnit: none\n\nLimits: Constant after reset; 0 when LMS is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:16]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_xmss",
+   "offset": "0x1C",
+   "description": "Digital signature XMSS capability low register. Reports which XMSS and XMSS^MT sets 0 to 31 are built.",
+   "fields": [
+    {
+     "name": "sets",
+     "bits": "[31:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "XMSS built set mask, low part. Bit n is 1 when XMSS or XMSS^MT set number n of the table in section 10 is built, for n from 0 to 31.\n\nUsage: Read before programming the XMSS set field of the set register.\n\nValues:\n0x0 to 0xFFFFFFFF mask of built sets.\n\nUnit: none\n\nLimits: Constant after reset; 0 when XMSS is not built."
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_xmssh",
+   "offset": "0x20",
+   "description": "Digital signature XMSS capability high register. Reports which XMSS and XMSS^MT sets 32 to 43 are built.",
+   "fields": [
+    {
+     "name": "sets",
+     "bits": "[11:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "XMSS built set mask, high part. Bit n is 1 when XMSS or XMSS^MT set number 32 plus n of the table in section 10 is built.\n\nUsage: Read together with the low capability register.\n\nValues:\n0x0 to 0xFFF mask of built sets.\n\nUnit: none\n\nLimits: Constant after reset; 0 when XMSS is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_feat",
+   "offset": "0x24",
+   "description": "Digital signature feature capability register. Reports which optional features are built.",
+   "fields": [
+    {
+     "name": "pure",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Pure message form built flag. Reports whether the optional feature \"Pure message form\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "prehash",
+     "bits": "[1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Prehash message form built flag. Reports whether the optional feature \"Prehash message form\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "axi",
+     "bits": "[2]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "AXI4 subordinate port built flag. Reports whether the optional feature \"AXI4 subordinate port\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "dma",
+     "bits": "[3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "DMA request and acknowledge lines built flag. Reports whether the optional feature \"DMA request and acknowledge lines\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "win",
+     "bits": "[4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "CSR data window built flag. Reports whether the optional feature \"CSR data window\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "keyif",
+     "bits": "[5]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Key input port built flag. Reports whether the optional feature \"Key input port\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "keyreg",
+     "bits": "[6]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Write-only key registers built flag. Reports whether the optional feature \"Write-only key registers\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "vas",
+     "bits": "[7]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Verify-after-sign built flag. Reports whether the optional feature \"Verify-after-sign\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "dpa_ec",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Elliptic-curve masking built flag. Reports whether the optional feature \"Elliptic-curve masking\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "dpa_pq",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Lattice and hash-based masking built flag. Reports whether the optional feature \"Lattice and hash-based masking\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "hybrid",
+     "bits": "[10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Hybrid verification built flag. Reports whether the optional feature \"Hybrid verification\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "log",
+     "bits": "[11]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Counters and lock log built flag. Reports whether the optional feature \"Counters and lock log\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "lock",
+     "bits": "[12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Algorithm enable lock built flag. Reports whether the optional feature \"Algorithm enable lock\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "rngsrc",
+     "bits": "[13]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Internal random generator built flag. Reports whether the optional feature \"Internal random generator\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "csrasync",
+     "bits": "[14]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Asynchronous CSR clock built flag. Reports whether the optional feature \"Asynchronous CSR clock\" is built in this IP.\n\nUsage: Read after reset to learn which optional features the build offers.\n\nValues:\n0x0 not built;\n0x1 built.\n\nUnit: none\n\nLimits: Constant after reset."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:15]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cap_buf",
+   "offset": "0x28",
+   "description": "Digital signature buffer capability register. Reports the message buffer size and the multiplier width code.",
+   "fields": [
+    {
+     "name": "buf",
+     "bits": "[16:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Buffer size in bytes. Size of the message, signature and public-key buffer that the AXI4 port and the data window address.\n\nUsage: Read before sizing the offsets of the message, signature and public key.\n\nValues:\n0x0 to 0x10000 buffer size.\n\nUnit: byte\n\nLimits: Constant after reset; the maximum is 65536."
+    },
+    {
+     "name": "reserved",
+     "bits": "[19:17]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "mulw",
+     "bits": "[21:20]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Multiplier width code. Digit width of the field multiplier that the build uses.\n\nUsage: Read to estimate the duration of an operation.\n\nValues:\n0x0 32 bits;\n0x1 64 bits;\n0x2 128 bits.\n\nUnit: code\n\nLimits: Constant after reset; the code 0x3 is not used."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:22]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_ctrl",
+   "offset": "0x40",
+   "description": "Digital signature control register. Enables the IP and selects basic operation.",
+   "fields": [
+    {
+     "name": "en",
+     "bits": "[0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "IP enable. Master enable of the IP; when 0 the control block starts no operation and rejects commands.\n\nUsage: Write 1 after the algorithm enable bits and the operation fields are programmed; clearing it while an operation runs lets that operation finish.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_alg_en",
+   "offset": "0x44",
+   "description": "Digital signature algorithm enable register. Enables each built algorithm at run time.",
+   "fields": [
+    {
+     "name": "ed25519",
+     "bits": "[0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Ed25519 run-time enable. Allows software to start operations of Ed25519 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed25519ctx",
+     "bits": "[1]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Ed25519ctx run-time enable. Allows software to start operations of Ed25519ctx when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed25519ph",
+     "bits": "[2]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Ed25519ph run-time enable. Allows software to start operations of Ed25519ph when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed448",
+     "bits": "[3]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Ed448 run-time enable. Allows software to start operations of Ed448 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed448ph",
+     "bits": "[4]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Ed448ph run-time enable. Allows software to start operations of Ed448ph when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "p256",
+     "bits": "[5]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ECDSA P-256 run-time enable. Allows software to start operations of ECDSA P-256 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "p384",
+     "bits": "[6]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ECDSA P-384 run-time enable. Allows software to start operations of ECDSA P-384 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "p521",
+     "bits": "[7]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ECDSA P-521 run-time enable. Allows software to start operations of ECDSA P-521 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "k256",
+     "bits": "[8]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ECDSA secp256k1 run-time enable. Allows software to start operations of ECDSA secp256k1 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "mldsa44",
+     "bits": "[9]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ML-DSA-44 run-time enable. Allows software to start operations of ML-DSA-44 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "mldsa65",
+     "bits": "[10]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ML-DSA-65 run-time enable. Allows software to start operations of ML-DSA-65 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "mldsa87",
+     "bits": "[11]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ML-DSA-87 run-time enable. Allows software to start operations of ML-DSA-87 when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "slhdsa",
+     "bits": "[12]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "SLH-DSA run-time enable. Allows software to start operations of SLH-DSA when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "lms",
+     "bits": "[13]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "LMS/HSS run-time enable. Allows software to start operations of LMS/HSS when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "xmss",
+     "bits": "[14]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "XMSS/XMSS^MT run-time enable. Allows software to start operations of XMSS/XMSS^MT when the algorithm is built.\n\nUsage: Write 1 before the start command of this algorithm; the bit has no effect while the algorithm enable lock is set; a start command while the effective bit is 0 sets the algorithm-disabled error.\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: The bit is ignored and reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:15]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_alg_act",
+   "offset": "0x48",
+   "description": "Digital signature effective algorithm enable register. Reports the enable state in use.",
+   "fields": [
+    {
+     "name": "ed25519",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519 effective enable. Reports the enable state that the control block actually uses for Ed25519.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed25519ctx",
+     "bits": "[1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ctx effective enable. Reports the enable state that the control block actually uses for Ed25519ctx.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed25519ph",
+     "bits": "[2]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519ph effective enable. Reports the enable state that the control block actually uses for Ed25519ph.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed448",
+     "bits": "[3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448 effective enable. Reports the enable state that the control block actually uses for Ed448.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "ed448ph",
+     "bits": "[4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed448ph effective enable. Reports the enable state that the control block actually uses for Ed448ph.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "p256",
+     "bits": "[5]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-256 effective enable. Reports the enable state that the control block actually uses for ECDSA P-256.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "p384",
+     "bits": "[6]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-384 effective enable. Reports the enable state that the control block actually uses for ECDSA P-384.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "p521",
+     "bits": "[7]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA P-521 effective enable. Reports the enable state that the control block actually uses for ECDSA P-521.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "k256",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ECDSA secp256k1 effective enable. Reports the enable state that the control block actually uses for ECDSA secp256k1.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "mldsa44",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-44 effective enable. Reports the enable state that the control block actually uses for ML-DSA-44.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "mldsa65",
+     "bits": "[10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-65 effective enable. Reports the enable state that the control block actually uses for ML-DSA-65.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "mldsa87",
+     "bits": "[11]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA-87 effective enable. Reports the enable state that the control block actually uses for ML-DSA-87.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "slhdsa",
+     "bits": "[12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "SLH-DSA effective enable. Reports the enable state that the control block actually uses for SLH-DSA.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "lms",
+     "bits": "[13]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "LMS/HSS effective enable. Reports the enable state that the control block actually uses for LMS/HSS.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "xmss",
+     "bits": "[14]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "XMSS/XMSS^MT effective enable. Reports the enable state that the control block actually uses for XMSS/XMSS^MT.\n\nUsage: Read to confirm that an enable written by software took effect; after the algorithm enable lock is set it keeps the value held at lock time.\n\nValues:\n0x0 disabled;\n0x1 enabled.\n\nUnit: none\n\nLimits: Reads 0 for an algorithm that is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:15]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_lock",
+   "offset": "0x4C",
+   "description": "Digital signature lock register. Freezes the algorithm enable bits until the next reset.",
+   "fields": [
+    {
+     "name": "req",
+     "bits": "[0]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Lock request. Command that freezes the algorithm enable bits at their current effective value until the next reset of the core.\n\nUsage: Write 1 once, after the algorithm enable register is final; hardware latches the lock and clears this bit; it reads as 0.\n\nValues:\n0x0 no request (reset value);\n0x1 request the lock.\n\nUnit: none\n\nLimits: Has no effect when the lock feature is not built; a write of 0 never removes the lock."
+    },
+    {
+     "name": "reserved",
+     "bits": "[7:1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "locked",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Lock state. Reports whether the algorithm enable bits are frozen.\n\nUsage: Read after writing the lock request to confirm the lock.\n\nValues:\n0x0 not locked (reset value);\n0x1 locked.\n\nUnit: none\n\nLimits: Cleared only by a reset of the core."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_op",
+   "offset": "0x50",
+   "description": "Digital signature operation register. Selects the algorithm, the operation and the modes of the next start command.",
+   "fields": [
+    {
+     "name": "alg",
+     "bits": "[3:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Algorithm index. Selects the algorithm that the next start command runs.\n\nUsage: Program before the start command; the index is checked against the algorithm built flag and the effective enable bit.\n\nValues:\n0x0 Ed25519 (reset value);\n0x1 Ed25519ctx;\n0x2 Ed25519ph;\n0x3 Ed448;\n0x4 Ed448ph;\n0x5 ECDSA P-256;\n0x6 ECDSA P-384;\n0x7 ECDSA P-521;\n0x8 ECDSA secp256k1;\n0x9 ML-DSA-44;\n0xA ML-DSA-65;\n0xB ML-DSA-87;\n0xC SLH-DSA;\n0xD LMS/HSS;\n0xE XMSS/XMSS^MT.\n\nUnit: code\n\nLimits: The code 0xF is reserved; a reserved or not built code sets the unsupported-operation error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[7:4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "op",
+     "bits": "[9:8]",
+     "type": "rw",
+     "reset": "0x2",
+     "description": "Operation select. Selects key generation, signing or verification for the next start command.\n\nUsage: Program before the start command; the operation must be built for the selected algorithm.\n\nValues:\n0x0 key generation;\n0x1 signing;\n0x2 verification (reset value);\n0x3 reserved.\n\nUnit: code\n\nLimits: SLH-DSA, LMS/HSS and XMSS/XMSS^MT accept only verification in this version."
+    },
+    {
+     "name": "reserved",
+     "bits": "[11:10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "form",
+     "bits": "[13:12]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Message form. Selects whether the message is in the buffer (pure) or only its digest is supplied (prehash).\n\nUsage: Program before the start command; the form must be built.\n\nValues:\n0x0 pure message (reset value);\n0x1 prehash digest;\n0x2 and 0x3 reserved.\n\nUnit: code\n\nLimits: The reserved codes set the unsupported-operation error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[15:14]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "hedged",
+     "bits": "[16]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Hedged signing. Selects the hedged form of ML-DSA signing, which adds random bytes, instead of the deterministic form.\n\nUsage: Program before a signing start command of ML-DSA; ignored for other algorithms.\n\nValues:\n0x0 deterministic (reset value);\n0x1 hedged.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "reserved",
+     "bits": "[19:17]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "nonce",
+     "bits": "[21:20]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ECDSA nonce mode. Selects the source of the ECDSA per-message secret number when the build allows both.\n\nUsage: Program before a signing start command of ECDSA; effective only when the nonce parameter of the build is 2.\n\nValues:\n0x0 random from the random source (reset value);\n0x1 deterministic as in RFC 6979;\n0x2 and 0x3 reserved.\n\nUnit: code\n\nLimits: Ignored when the build fixes the nonce mode; the reserved codes set the unsupported-operation error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[23:22]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "hash",
+     "bits": "[26:24]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Hash function select. Selects the hash function of ECDSA and of every prehash digest.\n\nUsage: Program before the start command of ECDSA or a prehash form; the digest length must fit the curve security.\n\nValues:\n0x0 SHA-256 (reset value);\n0x1 SHA-384;\n0x2 SHA-512;\n0x3 SHA3-256;\n0x4 SHA3-384;\n0x5 SHA3-512;\n0x6 and 0x7 reserved.\n\nUnit: code\n\nLimits: A pairing of curve and hash that gives less security than the curve is rejected with the bad-length error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[27]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "hybpol",
+     "bits": "[29:28]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Hybrid acceptance policy. Selects which signatures must be valid for the hybrid verification to accept.\n\nUsage: Program before a hybrid start command; used only when the hybrid feature is built.\n\nValues:\n0x0 Ed25519 and ML-DSA both valid (reset value);\n0x1 Ed25519 valid;\n0x2 ML-DSA valid;\n0x3 reserved.\n\nUnit: code\n\nLimits: The reserved code sets the unsupported-operation error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:30]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_set",
+   "offset": "0x54",
+   "description": "Digital signature parameter-set register. Selects the SLH-DSA, LMS/HSS and XMSS parameter sets.",
+   "fields": [
+    {
+     "name": "slh",
+     "bits": "[3:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "SLH-DSA parameter set. Selects one of the 12 parameter sets of FIPS 205 for SLH-DSA verification.\n\nUsage: Program before a start command of SLH-DSA; the matching bit of the SLH-DSA capability register must be 1.\n\nValues:\n0x0 to 0xB set number from the table in section 10 (reset value 0x0);\n0xC to 0xF reserved.\n\nUnit: code\n\nLimits: A set that is not built or reserved sets the unsupported-operation error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[7:4]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "lmstype",
+     "bits": "[12:8]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "LMS tree type. Selects the LMS tree type of the signature.\n\nUsage: Program before a start command of LMS/HSS; the matching bit of the LMS capability register must be 1.\n\nValues:\n0x00 to 0x13 type number from the table in section 10 (reset value 0x00);\n0x14 to 0x1F reserved.\n\nUnit: code\n\nLimits: A type that is not built sets the unsupported-operation error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[15:13]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "lmots",
+     "bits": "[19:16]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "LM-OTS type. Selects the one-time signature type of the LMS signature.\n\nUsage: Program before a start command of LMS/HSS.\n\nValues:\n0x0 to 0xF type number from the table in section 10 (reset value 0x0).\n\nUnit: code\n\nLimits: A type that is not built sets the unsupported-operation error."
+    },
+    {
+     "name": "hsslvl",
+     "bits": "[23:20]",
+     "type": "rw",
+     "reset": "0x1",
+     "description": "HSS level count. Number of LMS trees in the HSS hierarchy of the signature.\n\nUsage: Program before a start command of LMS/HSS.\n\nValues:\n0x1 to 0x8 level count (reset value 0x1);\n0x0 and 0x9 to 0xF reserved.\n\nUnit: count\n\nLimits: A level count outside 1 to 8 sets the bad-length error."
+    },
+    {
+     "name": "xmss",
+     "bits": "[29:24]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "XMSS set. Selects the XMSS or XMSS^MT parameter set of the signature.\n\nUsage: Program before a start command of XMSS/XMSS^MT; the matching bit of the XMSS capability registers must be 1.\n\nValues:\n0x00 to 0x2B set number from the table in section 10 (reset value 0x00);\n0x2C to 0x3F reserved.\n\nUnit: code\n\nLimits: A set that is not built sets the unsupported-operation error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:30]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_len_msg",
+   "offset": "0x58",
+   "description": "Digital signature message length register. Gives the message length in bytes.",
+   "fields": [
+    {
+     "name": "len",
+     "bits": "[31:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Message length. Number of message bytes in the buffer for the pure form, or the digest length for the prehash form.\n\nUsage: Program before the start command, after the data are written.\n\nValues:\n0x0 to 0xFFFFFFFF length (reset value 0x0).\n\nUnit: byte\n\nLimits: The length must fit the buffer at the message offset; a longer value sets the buffer-overflow error."
+    }
+   ]
+  },
+  {
+   "name": "dsig_len_ctx",
+   "offset": "0x5C",
+   "description": "Digital signature context length register. Gives the context length in bytes.",
+   "fields": [
+    {
+     "name": "len",
+     "bits": "[7:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Context length. Number of context bytes that follow the message in the buffer for Ed25519ctx, Ed25519ph, Ed448, Ed448ph, ML-DSA and SLH-DSA.\n\nUsage: Program before the start command of an algorithm that uses a context; ignored by the other algorithms.\n\nValues:\n0x00 to 0xFF length (reset value 0x00).\n\nUnit: byte\n\nLimits: A length above the limit of the algorithm sets the bad-length error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_off_msg",
+   "offset": "0x60",
+   "description": "Digital signature message offset register. Gives the buffer offset of the message.",
+   "fields": [
+    {
+     "name": "off",
+     "bits": "[16:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Message offset. Byte offset in the buffer where the message or digest starts.\n\nUsage: Program before the start command; the output offset is read after done.\n\nValues:\n0x00000 to 0x0FFFF offset (reset value 0x00000).\n\nUnit: byte\n\nLimits: The region must lie inside the buffer; otherwise the buffer-overflow error is set."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:17]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_off_sig",
+   "offset": "0x64",
+   "description": "Digital signature signature offset register. Gives the buffer offset of the signature.",
+   "fields": [
+    {
+     "name": "off",
+     "bits": "[16:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Signature offset. Byte offset in the buffer where the signature starts.\n\nUsage: Program before the start command; the output offset is read after done.\n\nValues:\n0x00000 to 0x0FFFF offset (reset value 0x00000).\n\nUnit: byte\n\nLimits: The region must lie inside the buffer; otherwise the buffer-overflow error is set."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:17]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_off_pk",
+   "offset": "0x68",
+   "description": "Digital signature public key offset register. Gives the buffer offset of the public key.",
+   "fields": [
+    {
+     "name": "off",
+     "bits": "[16:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Public key offset. Byte offset in the buffer where the public key starts.\n\nUsage: Program before the start command; the output offset is read after done.\n\nValues:\n0x00000 to 0x0FFFF offset (reset value 0x00000).\n\nUnit: byte\n\nLimits: The region must lie inside the buffer; otherwise the buffer-overflow error is set."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:17]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_off_res",
+   "offset": "0x6C",
+   "description": "Digital signature result offset register. Gives the buffer offset of the result.",
+   "fields": [
+    {
+     "name": "off",
+     "bits": "[16:0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Result offset. Byte offset in the buffer where the result (signature, public key or key-generation output) starts.\n\nUsage: Program before the start command; the output offset is read after done.\n\nValues:\n0x00000 to 0x0FFFF offset (reset value 0x00000).\n\nUnit: byte\n\nLimits: The region must lie inside the buffer; otherwise the buffer-overflow error is set."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:17]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_cmd",
+   "offset": "0x70",
+   "description": "Digital signature command register. Starts, aborts and clears.",
+   "fields": [
+    {
+     "name": "start",
+     "bits": "[0]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Start command. Starts the operation described by the operation, set, length and offset registers.\n\nUsage: Write 1 after the IP is enabled and the data are in the buffer; hardware clears the bit when it accepts the command; it reads as 0.\n\nValues:\n0x0 no command (reset value);\n0x1 start.\n\nUnit: none\n\nLimits: A start while busy, while the IP is disabled or for a disabled algorithm is rejected and sets an error."
+    },
+    {
+     "name": "abort",
+     "bits": "[1]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Abort command. Stops the running operation without a result and clears the secret state.\n\nUsage: Write 1 to cancel; hardware clears the bit when it takes the command.\n\nValues:\n0x0 no command (reset value);\n0x1 abort.\n\nUnit: none\n\nLimits: Has no effect when the IP is idle."
+    },
+    {
+     "name": "clr",
+     "bits": "[2]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Clear command. Clears the done, result and error flags and the secret state.\n\nUsage: Write 1 after reading the result; hardware clears the bit when it takes the command.\n\nValues:\n0x0 no command (reset value);\n0x1 clear.\n\nUnit: none\n\nLimits: Does not clear the enable bits or the lock."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_sts",
+   "offset": "0x74",
+   "description": "Digital signature status register. Reports the state of the current or last operation.",
+   "fields": [
+    {
+     "name": "busy",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Busy. Reports that an operation is running.\n\nUsage: Poll until 0 after a start command, or use the done interrupt.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "reserved",
+     "bits": "[7:1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "resvld",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Result valid. Reports that an operation completed and its result is in the buffer or in the verify flags.\n\nUsage: Read after done; cleared by the clear command and by a new start.\n\nValues:\n0x0 no result (reset value);\n0x1 result valid.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "sigok",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Signature valid. Reports the outcome of a verification: 1 when the signature is valid under the selected policy.\n\nUsage: Read after done for a verification; meaningless for other operations.\n\nValues:\n0x0 invalid or not a verification (reset value);\n0x1 valid.\n\nUnit: none\n\nLimits: An invalid signature is not an error flag."
+    },
+    {
+     "name": "edok",
+     "bits": "[10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Ed25519 part valid. In a hybrid verification, reports that the Ed25519 signature is valid.\n\nUsage: Read after done of a hybrid verification.\n\nValues:\n0x0 invalid or not hybrid (reset value);\n0x1 valid.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "mlok",
+     "bits": "[11]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "ML-DSA part valid. In a hybrid verification, reports that the ML-DSA signature is valid.\n\nUsage: Read after done of a hybrid verification.\n\nValues:\n0x0 invalid or not hybrid (reset value);\n0x1 valid.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_err",
+   "offset": "0x78",
+   "description": "Digital signature error register. Holds the sticky error flags.",
+   "fields": [
+    {
+     "name": "algdis",
+     "bits": "[0]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Algorithm disabled error. Sticky flag that the hardware sets when a start command named an algorithm whose enable bit is 0 or that is not built.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "opuns",
+     "bits": "[1]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Operation unsupported error. Sticky flag that the hardware sets when a start command named an operation, mode or parameter set that is not built or is reserved.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "badlen",
+     "bits": "[2]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Bad length error. Sticky flag that the hardware sets when a length or hash pairing is not allowed.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "badkey",
+     "bits": "[3]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Bad key error. Sticky flag that the hardware sets when the private key is malformed or missing.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "badpt",
+     "bits": "[4]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Invalid point or format error. Sticky flag that the hardware sets when a public key, signature or point failed the format or on-curve check.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "bufovf",
+     "bits": "[5]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Buffer overflow error. Sticky flag that the hardware sets when a region does not fit the buffer.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "buserr",
+     "bits": "[6]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Bus error error. Sticky flag that the hardware sets when the AXI4 port answered SLVERR.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "enttmo",
+     "bits": "[7]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Entropy timeout error. Sticky flag that the hardware sets when the entropy input did not deliver words in time.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "keytmo",
+     "bits": "[8]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Key timeout error. Sticky flag that the hardware sets when the key input did not deliver a word in time.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "vasmis",
+     "bits": "[9]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Verify-after-sign mismatch error. Sticky flag that the hardware sets when the check of a new signature failed.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "lockv",
+     "bits": "[10]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Lock violation error. Sticky flag that the hardware sets when a write was refused because the enable lock is set.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "busycmd",
+     "bits": "[11]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Access while busy error. Sticky flag that the hardware sets when a start command or a window write arrived while an operation was running.\n\nUsage: Read after done or after an interrupt; write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:12]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_irq_raw",
+   "offset": "0x7C",
+   "description": "Digital signature raw interrupt register. Holds the sticky interrupt events.",
+   "fields": [
+    {
+     "name": "done",
+     "bits": "[0]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Operation done raw event. Sticky flag that the hardware sets when an operation that was started by the start command finished, with or without an error.\n\nUsage: Read the status register for the masked value; write 1 to this bit to clear the event after handling it.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "err",
+     "bits": "[1]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Error raw event. Sticky flag that the hardware sets when an operation or a command was rejected, or an error flag of the error register was set.\n\nUsage: Read the status register for the masked value; write 1 to this bit to clear the event after handling it.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "sec",
+     "bits": "[2]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Security event raw event. Sticky flag that the hardware sets when a fault was detected by verify-after-sign, an enable write was refused while locked, or the random source failed.\n\nUsage: Read the status register for the masked value; write 1 to this bit to clear the event after handling it.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: A write of 0 keeps the bit; a hardware set in the same cycle as a clear wins."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_irq_en",
+   "offset": "0x80",
+   "description": "Digital signature interrupt enable register. Allows each event to drive the interrupt.",
+   "fields": [
+    {
+     "name": "done",
+     "bits": "[0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Operation done interrupt enable. Allows the raw event to drive the interrupt output.\n\nUsage: Write 1 before waiting for the interrupt; clearing it hides the event from the status register and the output.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "err",
+     "bits": "[1]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Error interrupt enable. Allows the raw event to drive the interrupt output.\n\nUsage: Write 1 before waiting for the interrupt; clearing it hides the event from the status register and the output.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "sec",
+     "bits": "[2]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Security event interrupt enable. Allows the raw event to drive the interrupt output.\n\nUsage: Write 1 before waiting for the interrupt; clearing it hides the event from the status register and the output.\n\nValues:\n0x0 masked (reset value);\n0x1 enabled.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_irq_inj",
+   "offset": "0x84",
+   "description": "Digital signature interrupt injection register. Injects events for test.",
+   "fields": [
+    {
+     "name": "done",
+     "bits": "[0]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Operation done interrupt injection. Test bit that makes the IP raise the raw event as if it had occurred.\n\nUsage: Write 1 to test the interrupt path; the IP raises the raw event on the rising edge of this bit; write 0 and 1 again to inject another event.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject event.\n\nUnit: none\n\nLimits: Use only in test; it does not start any operation."
+    },
+    {
+     "name": "err",
+     "bits": "[1]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Error interrupt injection. Test bit that makes the IP raise the raw event as if it had occurred.\n\nUsage: Write 1 to test the interrupt path; the IP raises the raw event on the rising edge of this bit; write 0 and 1 again to inject another event.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject event.\n\nUnit: none\n\nLimits: Use only in test; it does not start any operation."
+    },
+    {
+     "name": "sec",
+     "bits": "[2]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "Security event interrupt injection. Test bit that makes the IP raise the raw event as if it had occurred.\n\nUsage: Write 1 to test the interrupt path; the IP raises the raw event on the rising edge of this bit; write 0 and 1 again to inject another event.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject event.\n\nUnit: none\n\nLimits: Use only in test; it does not start any operation."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_irq_sts",
+   "offset": "0x88",
+   "description": "Digital signature masked interrupt status register. Reports the pending masked events.",
+   "fields": [
+    {
+     "name": "done",
+     "bits": "[0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Operation done masked status. Raw event ANDed with its interrupt enable; this is the value that drives the interrupt output.\n\nUsage: Read in the interrupt service routine to find the cause; clear the cause through the raw register.\n\nValues:\n0x0 not pending;\n0x1 pending.\n\nUnit: none\n\nLimits: Read-only; follows the raw and enable bits."
+    },
+    {
+     "name": "err",
+     "bits": "[1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Error masked status. Raw event ANDed with its interrupt enable; this is the value that drives the interrupt output.\n\nUsage: Read in the interrupt service routine to find the cause; clear the cause through the raw register.\n\nValues:\n0x0 not pending;\n0x1 pending.\n\nUnit: none\n\nLimits: Read-only; follows the raw and enable bits."
+    },
+    {
+     "name": "sec",
+     "bits": "[2]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Security event masked status. Raw event ANDed with its interrupt enable; this is the value that drives the interrupt output.\n\nUsage: Read in the interrupt service routine to find the cause; clear the cause through the raw register.\n\nValues:\n0x0 not pending;\n0x1 pending.\n\nUnit: none\n\nLimits: Read-only; follows the raw and enable bits."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_alarm",
+   "offset": "0x8C",
+   "description": "Digital signature alarm register. Holds the sticky security alarm flags.",
+   "fields": [
+    {
+     "name": "fault",
+     "bits": "[0]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Fault alarm. Sticky flag that the hardware sets when verify-after-sign finds that a new signature does not verify.\n\nUsage: Treat as a possible fault attack; write 1 to this bit to clear it after handling.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: Drives the alarm output while set."
+    },
+    {
+     "name": "lockv",
+     "bits": "[1]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Lock violation alarm. Sticky flag that the hardware sets when a write to the enable register is refused while locked.\n\nUsage: Write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: Drives the alarm output while set."
+    },
+    {
+     "name": "rngfail",
+     "bits": "[2]",
+     "type": "w1c",
+     "reset": "0x0",
+     "description": "Random source alarm. Sticky flag that the hardware sets when the random source fails its health check or times out.\n\nUsage: Write 1 to this bit to clear it.\n\nValues:\n0x0 not set (reset value);\n0x1 set.\n\nUnit: none\n\nLimits: Drives the alarm output while set."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:3]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_win_addr",
+   "offset": "0x90",
+   "description": "Digital signature window address register. Holds the buffer byte address of the data window.",
+   "fields": [
+    {
+     "name": "addr",
+     "bits": "[16:0]",
+     "type": "rwi",
+     "reset": "0x0",
+     "description": "Window address. Byte address in the buffer that the next window write or read uses; the hardware adds 4 after each access.\n\nUsage: Program before accessing the window registers; word aligned.\n\nValues:\n0x00000 to 0x0FFFC address (reset value 0x00000).\n\nUnit: byte\n\nLimits: Bits 1:0 are written as 0; an address past the buffer end sets the buffer-overflow error."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:17]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_win_wr",
+   "offset": "0x94",
+   "description": "Digital signature window write register. Writes one word into the buffer.",
+   "fields": [
+    {
+     "name": "data",
+     "bits": "[31:0]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Window write data. Word that the hardware writes into the buffer at the window address when software writes this register.\n\nUsage: Write after setting the window address; each write advances the address by 4.\n\nValues:\n0x00000000 to 0xFFFFFFFF data word.\n\nUnit: word\n\nLimits: Reads as 0."
+    }
+   ]
+  },
+  {
+   "name": "dsig_win_rd",
+   "offset": "0x98",
+   "description": "Digital signature window read register. Reads one word from the buffer.",
+   "fields": [
+    {
+     "name": "data",
+     "bits": "[31:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Window read data. Word that the buffer holds at the window address; the hardware advances the address by 4 after each software read.\n\nUsage: Read after setting the window address and after done for results.\n\nValues:\n0x00000000 to 0xFFFFFFFF data word.\n\nUnit: word\n\nLimits: The window returns zero while an operation is running and while the buffer is not readable."
+    }
+   ]
+  },
+  {
+   "name": "dsig_cnt_ops",
+   "offset": "0x9C",
+   "description": "Digital signature operation counter register. Counts operations.",
+   "fields": [
+    {
+     "name": "cnt",
+     "bits": "[31:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Operation count. Number of start commands accepted since reset, when the log feature is built.\n\nUsage: Read to audit use of the IP; frozen after the log lock.\n\nValues:\n0x00000000 to 0xFFFFFFFF count (reset value 0x00000000).\n\nUnit: count\n\nLimits: Saturates at 0xFFFFFFFF; reads 0 when the log feature is not built."
+    }
+   ]
+  },
+  {
+   "name": "dsig_cnt_fail",
+   "offset": "0xA0",
+   "description": "Digital signature failure counter register. Counts failed operations.",
+   "fields": [
+    {
+     "name": "cnt",
+     "bits": "[31:0]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Failure count. Number of operations that ended with an error flag or an invalid signature, when the log feature is built.\n\nUsage: Read to audit failures; frozen after the log lock.\n\nValues:\n0x00000000 to 0xFFFFFFFF count (reset value 0x00000000).\n\nUnit: count\n\nLimits: Saturates at 0xFFFFFFFF; reads 0 when the log feature is not built."
+    }
+   ]
+  },
+  {
+   "name": "dsig_log_lock",
+   "offset": "0xA4",
+   "description": "Digital signature log lock register. Freezes the counters until the next reset.",
+   "fields": [
+    {
+     "name": "req",
+     "bits": "[0]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Log lock request. Command that freezes the counters until the next reset of the core.\n\nUsage: Write 1 once; hardware latches the lock and clears this bit; it reads as 0.\n\nValues:\n0x0 no request (reset value);\n0x1 request the lock.\n\nUnit: none\n\nLimits: Has no effect when the log feature is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[7:1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "locked",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Log lock state. Reports whether the counters are frozen.\n\nUsage: Read after the request to confirm.\n\nValues:\n0x0 not locked (reset value);\n0x1 locked.\n\nUnit: none\n\nLimits: Cleared only by a reset of the core."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_rng",
+   "offset": "0xA8",
+   "description": "Digital signature random source register. Controls and reports the random source.",
+   "fields": [
+    {
+     "name": "reseed",
+     "bits": "[0]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Reseed command. Command that makes the internal random generator request fresh entropy and reseed.\n\nUsage: Write 1 before a series of signatures or after an alarm; hardware clears the bit when it takes the command.\n\nValues:\n0x0 no command (reset value);\n0x1 reseed.\n\nUnit: none\n\nLimits: Has no effect when the random source is the entropy input."
+    },
+    {
+     "name": "reserved",
+     "bits": "[7:1]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    },
+    {
+     "name": "ready",
+     "bits": "[8]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Random source ready. Reports that the random source can deliver bytes now.\n\nUsage: Poll before a signing start command when a seed may be pending.\n\nValues:\n0x0 not ready (reset value);\n0x1 ready.\n\nUnit: none\n\nLimits: none"
+    },
+    {
+     "name": "due",
+     "bits": "[9]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": "Reseed due. Reports that the internal generator reached its reseed limit.\n\nUsage: Write the reseed command when set.\n\nValues:\n0x0 not due (reset value);\n0x1 due.\n\nUnit: none\n\nLimits: Reads 0 when the internal generator is not built."
+    },
+    {
+     "name": "reserved",
+     "bits": "[31:10]",
+     "type": "ro",
+     "reset": "0x0",
+     "description": ""
+    }
+   ]
+  },
+  {
+   "name": "dsig_tmo",
+   "offset": "0xAC",
+   "description": "Digital signature timeout register. Sets the entropy and key input timeouts.",
+   "fields": [
+    {
+     "name": "ent",
+     "bits": "[15:0]",
+     "type": "rw",
+     "reset": "0xFFFF",
+     "description": "Entropy timeout. Time that the IP waits for an entropy word before the entropy-timeout error.\n\nUsage: Program before the first operation that needs randomness.\n\nValues:\n0x0001 to 0xFFFF timeout (reset value 0xFFFF).\n\nUnit: 1024 core clock cycles\n\nLimits: A value of 0 is treated as 1."
+    },
+    {
+     "name": "key",
+     "bits": "[31:16]",
+     "type": "rw",
+     "reset": "0xFFFF",
+     "description": "Key timeout. Time that the IP waits for a key word from the key input before the key-timeout error.\n\nUsage: Program before the first signing operation that uses the key input.\n\nValues:\n0x0001 to 0xFFFF timeout (reset value 0xFFFF).\n\nUnit: 1024 core clock cycles\n\nLimits: A value of 0 is treated as 1."
+    }
+   ]
+  },
+  {
+   "name": "dsig_key",
+   "offset": "0x100",
+   "description": "Digital signature private key register. Receives one 32-bit word of the private key.",
+   "repeat": {
+    "mode": "FIXED",
+    "count": 17,
+    "stride": "0x4"
+   },
+   "fields": [
+    {
+     "name": "data",
+     "bits": "[31:0]",
+     "type": "wo",
+     "reset": "0x0",
+     "description": "Private key word. One 32-bit word of the private key; word 0 holds the first four key bytes. Software cannot read it back; hardware clears it.\n\nUsage: Write all words of the key before a signing or key-generation start command when the write-only key register is built; hardware clears the words after completion, error, abort or reset.\n\nValues:\n0x00000000 to 0xFFFFFFFF key word.\n\nUnit: word\n\nLimits: Reads as 0; 17 words give 68 bytes, enough for a 66-byte P-521 key; unused words are ignored; ML-DSA uses the first 8 words as its 32-byte seed."
+    }
+   ]
+  }
+ ]
+}

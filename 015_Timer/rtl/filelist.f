@@ -1,5 +1,6 @@
-../../000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv
-../../000_Common/rtl_lib/m_vlsit_rst_sync.sv
+# Master filelist: union of active synthesizable RTL profiles for this IP.
+# Select the required top module and profile-specific defines at the tool invocation.
+# Paths are relative to this file; invoke the simulator from this directory.
 ../../002_SyncFIFO/rtl/m_vlsit_sfifo_mem.sv
 ../../002_SyncFIFO/rtl/m_vlsit_sfifo_rd.sv
 ../../002_SyncFIFO/rtl/m_vlsit_sfifo_wr.sv

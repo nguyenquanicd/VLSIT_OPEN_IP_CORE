@@ -1,0 +1,285 @@
+Module m_vlsit_csr_dsig (asynchronous); register clock i_clk_reg
+
+| Port | Direction | Width | Meaning | Clock domain of the signal |
+|---|---|---:|---|---|
+| i_clk_apb | input | 1 | APB clock | i_clk_apb |
+| i_rst_n_apb | input | 1 | APB reset, active low | i_clk_apb |
+| i_clk_reg | input | 1 | Register clock (tie to i_clk_apb when PARA_ASYNCHRONOUS = 0) | i_clk_reg |
+| i_rst_n_reg | input | 1 | Register reset, active low (tie to i_rst_n_apb when PARA_ASYNCHRONOUS = 0) | i_clk_reg |
+| i_apb_paddr | input | 16 | APB address | i_clk_apb |
+| i_apb_pwdata | input | 32 | APB write data | i_clk_apb |
+| i_apb_pwrite | input | 1 | APB write | i_clk_apb |
+| i_apb_penable | input | 1 | APB enable | i_clk_apb |
+| i_apb_psel | input | 1 | APB select | i_clk_apb |
+| i_apb_pstrb | input | 4 | APB byte strobes | i_clk_apb |
+| i_apb_pprot | input | 3 | APB protection (bit 1 used) | i_clk_apb |
+| i_protect_en | input | 1 | 1 = non-secure access gets PSLVERR | i_clk_apb |
+| i_slverr_en | input | 1 | 1 = PSLVERR checks on | i_clk_apb |
+| o_apb_pready | output | 1 | APB ready | i_clk_apb |
+| o_apb_pslverr | output | 1 | APB error | i_clk_apb |
+| o_apb_prdata | output | 32 | APB read data | i_clk_apb |
+| o_reg_rd_en | output | 1 | Pulse for a successful register read, in the register clock domain | i_clk_reg |
+| o_reg_rd_addr | output | 16 | Address of the successful register read | i_clk_reg |
+| o_reg_wr_en | output | 1 | Pulse for a successful write to a writable register | i_clk_reg |
+| o_reg_wr_addr | output | 16 | Address of the successful register write | i_clk_reg |
+| i_dsig_version_major | input | 16 | dsig_version.major (status in) | i_clk_reg |
+| i_dsig_version_minor | input | 16 | dsig_version.minor (status in) | i_clk_reg |
+| i_dsig_cap_alg_ed25519 | input | 1 | dsig_cap_alg.ed25519 (status in) | i_clk_reg |
+| i_dsig_cap_alg_ed25519ctx | input | 1 | dsig_cap_alg.ed25519ctx (status in) | i_clk_reg |
+| i_dsig_cap_alg_ed25519ph | input | 1 | dsig_cap_alg.ed25519ph (status in) | i_clk_reg |
+| i_dsig_cap_alg_ed448 | input | 1 | dsig_cap_alg.ed448 (status in) | i_clk_reg |
+| i_dsig_cap_alg_ed448ph | input | 1 | dsig_cap_alg.ed448ph (status in) | i_clk_reg |
+| i_dsig_cap_alg_p256 | input | 1 | dsig_cap_alg.p256 (status in) | i_clk_reg |
+| i_dsig_cap_alg_p384 | input | 1 | dsig_cap_alg.p384 (status in) | i_clk_reg |
+| i_dsig_cap_alg_p521 | input | 1 | dsig_cap_alg.p521 (status in) | i_clk_reg |
+| i_dsig_cap_alg_k256 | input | 1 | dsig_cap_alg.k256 (status in) | i_clk_reg |
+| i_dsig_cap_alg_mldsa44 | input | 1 | dsig_cap_alg.mldsa44 (status in) | i_clk_reg |
+| i_dsig_cap_alg_mldsa65 | input | 1 | dsig_cap_alg.mldsa65 (status in) | i_clk_reg |
+| i_dsig_cap_alg_mldsa87 | input | 1 | dsig_cap_alg.mldsa87 (status in) | i_clk_reg |
+| i_dsig_cap_alg_slhdsa | input | 1 | dsig_cap_alg.slhdsa (status in) | i_clk_reg |
+| i_dsig_cap_alg_lms | input | 1 | dsig_cap_alg.lms (status in) | i_clk_reg |
+| i_dsig_cap_alg_xmss | input | 1 | dsig_cap_alg.xmss (status in) | i_clk_reg |
+| i_dsig_cap_kgen_ed25519 | input | 1 | dsig_cap_kgen.ed25519 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_ed25519ctx | input | 1 | dsig_cap_kgen.ed25519ctx (status in) | i_clk_reg |
+| i_dsig_cap_kgen_ed25519ph | input | 1 | dsig_cap_kgen.ed25519ph (status in) | i_clk_reg |
+| i_dsig_cap_kgen_ed448 | input | 1 | dsig_cap_kgen.ed448 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_ed448ph | input | 1 | dsig_cap_kgen.ed448ph (status in) | i_clk_reg |
+| i_dsig_cap_kgen_p256 | input | 1 | dsig_cap_kgen.p256 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_p384 | input | 1 | dsig_cap_kgen.p384 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_p521 | input | 1 | dsig_cap_kgen.p521 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_k256 | input | 1 | dsig_cap_kgen.k256 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_mldsa44 | input | 1 | dsig_cap_kgen.mldsa44 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_mldsa65 | input | 1 | dsig_cap_kgen.mldsa65 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_mldsa87 | input | 1 | dsig_cap_kgen.mldsa87 (status in) | i_clk_reg |
+| i_dsig_cap_kgen_slhdsa | input | 1 | dsig_cap_kgen.slhdsa (status in) | i_clk_reg |
+| i_dsig_cap_kgen_lms | input | 1 | dsig_cap_kgen.lms (status in) | i_clk_reg |
+| i_dsig_cap_kgen_xmss | input | 1 | dsig_cap_kgen.xmss (status in) | i_clk_reg |
+| i_dsig_cap_sign_ed25519 | input | 1 | dsig_cap_sign.ed25519 (status in) | i_clk_reg |
+| i_dsig_cap_sign_ed25519ctx | input | 1 | dsig_cap_sign.ed25519ctx (status in) | i_clk_reg |
+| i_dsig_cap_sign_ed25519ph | input | 1 | dsig_cap_sign.ed25519ph (status in) | i_clk_reg |
+| i_dsig_cap_sign_ed448 | input | 1 | dsig_cap_sign.ed448 (status in) | i_clk_reg |
+| i_dsig_cap_sign_ed448ph | input | 1 | dsig_cap_sign.ed448ph (status in) | i_clk_reg |
+| i_dsig_cap_sign_p256 | input | 1 | dsig_cap_sign.p256 (status in) | i_clk_reg |
+| i_dsig_cap_sign_p384 | input | 1 | dsig_cap_sign.p384 (status in) | i_clk_reg |
+| i_dsig_cap_sign_p521 | input | 1 | dsig_cap_sign.p521 (status in) | i_clk_reg |
+| i_dsig_cap_sign_k256 | input | 1 | dsig_cap_sign.k256 (status in) | i_clk_reg |
+| i_dsig_cap_sign_mldsa44 | input | 1 | dsig_cap_sign.mldsa44 (status in) | i_clk_reg |
+| i_dsig_cap_sign_mldsa65 | input | 1 | dsig_cap_sign.mldsa65 (status in) | i_clk_reg |
+| i_dsig_cap_sign_mldsa87 | input | 1 | dsig_cap_sign.mldsa87 (status in) | i_clk_reg |
+| i_dsig_cap_sign_slhdsa | input | 1 | dsig_cap_sign.slhdsa (status in) | i_clk_reg |
+| i_dsig_cap_sign_lms | input | 1 | dsig_cap_sign.lms (status in) | i_clk_reg |
+| i_dsig_cap_sign_xmss | input | 1 | dsig_cap_sign.xmss (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_ed25519 | input | 1 | dsig_cap_vrfy.ed25519 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_ed25519ctx | input | 1 | dsig_cap_vrfy.ed25519ctx (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_ed25519ph | input | 1 | dsig_cap_vrfy.ed25519ph (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_ed448 | input | 1 | dsig_cap_vrfy.ed448 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_ed448ph | input | 1 | dsig_cap_vrfy.ed448ph (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_p256 | input | 1 | dsig_cap_vrfy.p256 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_p384 | input | 1 | dsig_cap_vrfy.p384 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_p521 | input | 1 | dsig_cap_vrfy.p521 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_k256 | input | 1 | dsig_cap_vrfy.k256 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_mldsa44 | input | 1 | dsig_cap_vrfy.mldsa44 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_mldsa65 | input | 1 | dsig_cap_vrfy.mldsa65 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_mldsa87 | input | 1 | dsig_cap_vrfy.mldsa87 (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_slhdsa | input | 1 | dsig_cap_vrfy.slhdsa (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_lms | input | 1 | dsig_cap_vrfy.lms (status in) | i_clk_reg |
+| i_dsig_cap_vrfy_xmss | input | 1 | dsig_cap_vrfy.xmss (status in) | i_clk_reg |
+| i_dsig_cap_slh_sets | input | 12 | dsig_cap_slh.sets (status in) | i_clk_reg |
+| i_dsig_cap_lms_lms | input | 20 | dsig_cap_lms.lms (status in) | i_clk_reg |
+| i_dsig_cap_xmss_sets | input | 32 | dsig_cap_xmss.sets (status in) | i_clk_reg |
+| i_dsig_cap_xmssh_sets | input | 12 | dsig_cap_xmssh.sets (status in) | i_clk_reg |
+| i_dsig_cap_feat_pure | input | 1 | dsig_cap_feat.pure (status in) | i_clk_reg |
+| i_dsig_cap_feat_prehash | input | 1 | dsig_cap_feat.prehash (status in) | i_clk_reg |
+| i_dsig_cap_feat_axi | input | 1 | dsig_cap_feat.axi (status in) | i_clk_reg |
+| i_dsig_cap_feat_dma | input | 1 | dsig_cap_feat.dma (status in) | i_clk_reg |
+| i_dsig_cap_feat_win | input | 1 | dsig_cap_feat.win (status in) | i_clk_reg |
+| i_dsig_cap_feat_keyif | input | 1 | dsig_cap_feat.keyif (status in) | i_clk_reg |
+| i_dsig_cap_feat_keyreg | input | 1 | dsig_cap_feat.keyreg (status in) | i_clk_reg |
+| i_dsig_cap_feat_vas | input | 1 | dsig_cap_feat.vas (status in) | i_clk_reg |
+| i_dsig_cap_feat_dpa_ec | input | 1 | dsig_cap_feat.dpa_ec (status in) | i_clk_reg |
+| i_dsig_cap_feat_dpa_pq | input | 1 | dsig_cap_feat.dpa_pq (status in) | i_clk_reg |
+| i_dsig_cap_feat_hybrid | input | 1 | dsig_cap_feat.hybrid (status in) | i_clk_reg |
+| i_dsig_cap_feat_log | input | 1 | dsig_cap_feat.log (status in) | i_clk_reg |
+| i_dsig_cap_feat_lock | input | 1 | dsig_cap_feat.lock (status in) | i_clk_reg |
+| i_dsig_cap_feat_rngsrc | input | 1 | dsig_cap_feat.rngsrc (status in) | i_clk_reg |
+| i_dsig_cap_feat_csrasync | input | 1 | dsig_cap_feat.csrasync (status in) | i_clk_reg |
+| i_dsig_cap_buf_buf | input | 17 | dsig_cap_buf.buf (status in) | i_clk_reg |
+| i_dsig_cap_buf_mulw | input | 2 | dsig_cap_buf.mulw (status in) | i_clk_reg |
+| i_dsig_cap_lmots_lmots | input | 16 | dsig_cap_lmots.lmots (status in) | i_clk_reg |
+| o_dsig_ctrl_en | output | 1 | dsig_ctrl.en (control out) | i_clk_reg |
+| o_dsig_alg_en_ed25519 | output | 1 | dsig_alg_en.ed25519 (control out) | i_clk_reg |
+| o_dsig_alg_en_ed25519ctx | output | 1 | dsig_alg_en.ed25519ctx (control out) | i_clk_reg |
+| o_dsig_alg_en_ed25519ph | output | 1 | dsig_alg_en.ed25519ph (control out) | i_clk_reg |
+| o_dsig_alg_en_ed448 | output | 1 | dsig_alg_en.ed448 (control out) | i_clk_reg |
+| o_dsig_alg_en_ed448ph | output | 1 | dsig_alg_en.ed448ph (control out) | i_clk_reg |
+| o_dsig_alg_en_p256 | output | 1 | dsig_alg_en.p256 (control out) | i_clk_reg |
+| o_dsig_alg_en_p384 | output | 1 | dsig_alg_en.p384 (control out) | i_clk_reg |
+| o_dsig_alg_en_p521 | output | 1 | dsig_alg_en.p521 (control out) | i_clk_reg |
+| o_dsig_alg_en_k256 | output | 1 | dsig_alg_en.k256 (control out) | i_clk_reg |
+| o_dsig_alg_en_mldsa44 | output | 1 | dsig_alg_en.mldsa44 (control out) | i_clk_reg |
+| o_dsig_alg_en_mldsa65 | output | 1 | dsig_alg_en.mldsa65 (control out) | i_clk_reg |
+| o_dsig_alg_en_mldsa87 | output | 1 | dsig_alg_en.mldsa87 (control out) | i_clk_reg |
+| o_dsig_alg_en_slhdsa | output | 1 | dsig_alg_en.slhdsa (control out) | i_clk_reg |
+| o_dsig_alg_en_lms | output | 1 | dsig_alg_en.lms (control out) | i_clk_reg |
+| o_dsig_alg_en_xmss | output | 1 | dsig_alg_en.xmss (control out) | i_clk_reg |
+| i_dsig_alg_act_ed25519 | input | 1 | dsig_alg_act.ed25519 (status in) | i_clk_reg |
+| i_dsig_alg_act_ed25519ctx | input | 1 | dsig_alg_act.ed25519ctx (status in) | i_clk_reg |
+| i_dsig_alg_act_ed25519ph | input | 1 | dsig_alg_act.ed25519ph (status in) | i_clk_reg |
+| i_dsig_alg_act_ed448 | input | 1 | dsig_alg_act.ed448 (status in) | i_clk_reg |
+| i_dsig_alg_act_ed448ph | input | 1 | dsig_alg_act.ed448ph (status in) | i_clk_reg |
+| i_dsig_alg_act_p256 | input | 1 | dsig_alg_act.p256 (status in) | i_clk_reg |
+| i_dsig_alg_act_p384 | input | 1 | dsig_alg_act.p384 (status in) | i_clk_reg |
+| i_dsig_alg_act_p521 | input | 1 | dsig_alg_act.p521 (status in) | i_clk_reg |
+| i_dsig_alg_act_k256 | input | 1 | dsig_alg_act.k256 (status in) | i_clk_reg |
+| i_dsig_alg_act_mldsa44 | input | 1 | dsig_alg_act.mldsa44 (status in) | i_clk_reg |
+| i_dsig_alg_act_mldsa65 | input | 1 | dsig_alg_act.mldsa65 (status in) | i_clk_reg |
+| i_dsig_alg_act_mldsa87 | input | 1 | dsig_alg_act.mldsa87 (status in) | i_clk_reg |
+| i_dsig_alg_act_slhdsa | input | 1 | dsig_alg_act.slhdsa (status in) | i_clk_reg |
+| i_dsig_alg_act_lms | input | 1 | dsig_alg_act.lms (status in) | i_clk_reg |
+| i_dsig_alg_act_xmss | input | 1 | dsig_alg_act.xmss (status in) | i_clk_reg |
+| o_dsig_lock_req | output | 1 | dsig_lock.req (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_lock_req | input | 1 | dsig_lock.req (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| i_dsig_lock_locked | input | 1 | dsig_lock.locked (status in) | i_clk_reg |
+| o_dsig_op_alg | output | 4 | dsig_op.alg (control out) | i_clk_reg |
+| o_dsig_op_op | output | 2 | dsig_op.op (control out) | i_clk_reg |
+| o_dsig_op_form | output | 2 | dsig_op.form (control out) | i_clk_reg |
+| o_dsig_op_hedged | output | 1 | dsig_op.hedged (control out) | i_clk_reg |
+| o_dsig_op_nonce | output | 2 | dsig_op.nonce (control out) | i_clk_reg |
+| o_dsig_op_hash | output | 3 | dsig_op.hash (control out) | i_clk_reg |
+| o_dsig_op_hybpol | output | 2 | dsig_op.hybpol (control out) | i_clk_reg |
+| o_dsig_set_slh | output | 4 | dsig_set.slh (control out) | i_clk_reg |
+| o_dsig_set_lmstype | output | 5 | dsig_set.lmstype (control out) | i_clk_reg |
+| o_dsig_set_lmots | output | 4 | dsig_set.lmots (control out) | i_clk_reg |
+| o_dsig_set_hsslvl | output | 4 | dsig_set.hsslvl (control out) | i_clk_reg |
+| o_dsig_set_xmss | output | 6 | dsig_set.xmss (control out) | i_clk_reg |
+| o_dsig_len_msg_len | output | 32 | dsig_len_msg.len (control out) | i_clk_reg |
+| o_dsig_len_ctx_len | output | 8 | dsig_len_ctx.len (control out) | i_clk_reg |
+| o_dsig_off_msg_off | output | 17 | dsig_off_msg.off (control out) | i_clk_reg |
+| o_dsig_off_sig_off | output | 17 | dsig_off_sig.off (control out) | i_clk_reg |
+| o_dsig_off_pk_off | output | 17 | dsig_off_pk.off (control out) | i_clk_reg |
+| o_dsig_off_res_off | output | 17 | dsig_off_res.off (control out) | i_clk_reg |
+| o_dsig_cmd_start | output | 1 | dsig_cmd.start (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_cmd_start | input | 1 | dsig_cmd.start (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_cmd_abort | output | 1 | dsig_cmd.abort (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_cmd_abort | input | 1 | dsig_cmd.abort (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_cmd_clr | output | 1 | dsig_cmd.clr (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_cmd_clr | input | 1 | dsig_cmd.clr (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| i_dsig_sts_busy | input | 1 | dsig_sts.busy (status in) | i_clk_reg |
+| i_dsig_sts_resvld | input | 1 | dsig_sts.resvld (status in) | i_clk_reg |
+| i_dsig_sts_sigok | input | 1 | dsig_sts.sigok (status in) | i_clk_reg |
+| i_dsig_sts_edok | input | 1 | dsig_sts.edok (status in) | i_clk_reg |
+| i_dsig_sts_mlok | input | 1 | dsig_sts.mlok (status in) | i_clk_reg |
+| o_dsig_err_algdis | output | 1 | dsig_err.algdis (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_algdis | input | 1 | dsig_err.algdis (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_algdis | input | 1 | dsig_err.algdis (hardware load enable) | i_clk_reg |
+| o_dsig_err_opuns | output | 1 | dsig_err.opuns (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_opuns | input | 1 | dsig_err.opuns (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_opuns | input | 1 | dsig_err.opuns (hardware load enable) | i_clk_reg |
+| o_dsig_err_badlen | output | 1 | dsig_err.badlen (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_badlen | input | 1 | dsig_err.badlen (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_badlen | input | 1 | dsig_err.badlen (hardware load enable) | i_clk_reg |
+| o_dsig_err_badkey | output | 1 | dsig_err.badkey (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_badkey | input | 1 | dsig_err.badkey (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_badkey | input | 1 | dsig_err.badkey (hardware load enable) | i_clk_reg |
+| o_dsig_err_badpt | output | 1 | dsig_err.badpt (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_badpt | input | 1 | dsig_err.badpt (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_badpt | input | 1 | dsig_err.badpt (hardware load enable) | i_clk_reg |
+| o_dsig_err_bufovf | output | 1 | dsig_err.bufovf (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_bufovf | input | 1 | dsig_err.bufovf (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_bufovf | input | 1 | dsig_err.bufovf (hardware load enable) | i_clk_reg |
+| o_dsig_err_buserr | output | 1 | dsig_err.buserr (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_buserr | input | 1 | dsig_err.buserr (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_buserr | input | 1 | dsig_err.buserr (hardware load enable) | i_clk_reg |
+| o_dsig_err_enttmo | output | 1 | dsig_err.enttmo (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_enttmo | input | 1 | dsig_err.enttmo (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_enttmo | input | 1 | dsig_err.enttmo (hardware load enable) | i_clk_reg |
+| o_dsig_err_keytmo | output | 1 | dsig_err.keytmo (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_keytmo | input | 1 | dsig_err.keytmo (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_keytmo | input | 1 | dsig_err.keytmo (hardware load enable) | i_clk_reg |
+| o_dsig_err_vasmis | output | 1 | dsig_err.vasmis (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_vasmis | input | 1 | dsig_err.vasmis (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_vasmis | input | 1 | dsig_err.vasmis (hardware load enable) | i_clk_reg |
+| o_dsig_err_lockv | output | 1 | dsig_err.lockv (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_lockv | input | 1 | dsig_err.lockv (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_lockv | input | 1 | dsig_err.lockv (hardware load enable) | i_clk_reg |
+| o_dsig_err_busycmd | output | 1 | dsig_err.busycmd (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_err_busycmd | input | 1 | dsig_err.busycmd (hardware value) | i_clk_reg |
+| i_hw_we_dsig_err_busycmd | input | 1 | dsig_err.busycmd (hardware load enable) | i_clk_reg |
+| o_dsig_irq_raw_done | output | 1 | dsig_irq_raw.done (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_irq_raw_done | input | 1 | dsig_irq_raw.done (hardware value) | i_clk_reg |
+| i_hw_we_dsig_irq_raw_done | input | 1 | dsig_irq_raw.done (hardware load enable) | i_clk_reg |
+| o_dsig_irq_raw_err | output | 1 | dsig_irq_raw.err (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_irq_raw_err | input | 1 | dsig_irq_raw.err (hardware value) | i_clk_reg |
+| i_hw_we_dsig_irq_raw_err | input | 1 | dsig_irq_raw.err (hardware load enable) | i_clk_reg |
+| o_dsig_irq_raw_sec | output | 1 | dsig_irq_raw.sec (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_irq_raw_sec | input | 1 | dsig_irq_raw.sec (hardware value) | i_clk_reg |
+| i_hw_we_dsig_irq_raw_sec | input | 1 | dsig_irq_raw.sec (hardware load enable) | i_clk_reg |
+| o_dsig_irq_en_done | output | 1 | dsig_irq_en.done (control out) | i_clk_reg |
+| o_dsig_irq_en_err | output | 1 | dsig_irq_en.err (control out) | i_clk_reg |
+| o_dsig_irq_en_sec | output | 1 | dsig_irq_en.sec (control out) | i_clk_reg |
+| o_dsig_irq_inj_done | output | 1 | dsig_irq_inj.done (control out) | i_clk_reg |
+| o_dsig_irq_inj_err | output | 1 | dsig_irq_inj.err (control out) | i_clk_reg |
+| o_dsig_irq_inj_sec | output | 1 | dsig_irq_inj.sec (control out) | i_clk_reg |
+| i_dsig_irq_sts_done | input | 1 | dsig_irq_sts.done (status in) | i_clk_reg |
+| i_dsig_irq_sts_err | input | 1 | dsig_irq_sts.err (status in) | i_clk_reg |
+| i_dsig_irq_sts_sec | input | 1 | dsig_irq_sts.sec (status in) | i_clk_reg |
+| o_dsig_alarm_fault | output | 1 | dsig_alarm.fault (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_alarm_fault | input | 1 | dsig_alarm.fault (hardware value) | i_clk_reg |
+| i_hw_we_dsig_alarm_fault | input | 1 | dsig_alarm.fault (hardware load enable) | i_clk_reg |
+| o_dsig_alarm_lockv | output | 1 | dsig_alarm.lockv (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_alarm_lockv | input | 1 | dsig_alarm.lockv (hardware value) | i_clk_reg |
+| i_hw_we_dsig_alarm_lockv | input | 1 | dsig_alarm.lockv (hardware load enable) | i_clk_reg |
+| o_dsig_alarm_rngfail | output | 1 | dsig_alarm.rngfail (status/event, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_alarm_rngfail | input | 1 | dsig_alarm.rngfail (hardware value) | i_clk_reg |
+| i_hw_we_dsig_alarm_rngfail | input | 1 | dsig_alarm.rngfail (hardware load enable) | i_clk_reg |
+| o_dsig_win_addr_addr | output | 17 | dsig_win_addr.addr (control out, hardware load) | i_clk_reg |
+| i_hw_wdata_dsig_win_addr_addr | input | 17 | dsig_win_addr.addr (hardware value) | i_clk_reg |
+| i_hw_we_dsig_win_addr_addr | input | 1 | dsig_win_addr.addr (hardware load enable) | i_clk_reg |
+| o_dsig_win_wr_data | output | 32 | dsig_win_wr.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_win_wr_data | input | 1 | dsig_win_wr.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| i_dsig_win_rd_data | input | 32 | dsig_win_rd.data (status in) | i_clk_reg |
+| i_dsig_cnt_ops_cnt | input | 32 | dsig_cnt_ops.cnt (status in) | i_clk_reg |
+| i_dsig_cnt_fail_cnt | input | 32 | dsig_cnt_fail.cnt (status in) | i_clk_reg |
+| o_dsig_log_lock_req | output | 1 | dsig_log_lock.req (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_log_lock_req | input | 1 | dsig_log_lock.req (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| i_dsig_log_lock_locked | input | 1 | dsig_log_lock.locked (status in) | i_clk_reg |
+| o_dsig_rng_reseed | output | 1 | dsig_rng.reseed (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_rng_reseed | input | 1 | dsig_rng.reseed (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| i_dsig_rng_ready | input | 1 | dsig_rng.ready (status in) | i_clk_reg |
+| i_dsig_rng_due | input | 1 | dsig_rng.due (status in) | i_clk_reg |
+| o_dsig_tmo_ent | output | 16 | dsig_tmo.ent (control out) | i_clk_reg |
+| o_dsig_tmo_key | output | 16 | dsig_tmo.key (control out) | i_clk_reg |
+| o_dsig_key_0_data | output | 32 | dsig_key_0.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_0_data | input | 1 | dsig_key_0.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_1_data | output | 32 | dsig_key_1.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_1_data | input | 1 | dsig_key_1.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_2_data | output | 32 | dsig_key_2.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_2_data | input | 1 | dsig_key_2.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_3_data | output | 32 | dsig_key_3.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_3_data | input | 1 | dsig_key_3.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_4_data | output | 32 | dsig_key_4.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_4_data | input | 1 | dsig_key_4.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_5_data | output | 32 | dsig_key_5.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_5_data | input | 1 | dsig_key_5.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_6_data | output | 32 | dsig_key_6.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_6_data | input | 1 | dsig_key_6.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_7_data | output | 32 | dsig_key_7.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_7_data | input | 1 | dsig_key_7.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_8_data | output | 32 | dsig_key_8.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_8_data | input | 1 | dsig_key_8.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_9_data | output | 32 | dsig_key_9.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_9_data | input | 1 | dsig_key_9.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_10_data | output | 32 | dsig_key_10.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_10_data | input | 1 | dsig_key_10.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_11_data | output | 32 | dsig_key_11.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_11_data | input | 1 | dsig_key_11.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_12_data | output | 32 | dsig_key_12.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_12_data | input | 1 | dsig_key_12.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_13_data | output | 32 | dsig_key_13.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_13_data | input | 1 | dsig_key_13.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_14_data | output | 32 | dsig_key_14.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_14_data | input | 1 | dsig_key_14.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_15_data | output | 32 | dsig_key_15.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_15_data | input | 1 | dsig_key_15.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |
+| o_dsig_key_16_data | output | 32 | dsig_key_16.data (write-only control out (reads return 0), hardware clear input) | i_clk_reg |
+| i_hw_clr_dsig_key_16_data | input | 1 | dsig_key_16.data (synchronous hardware clear (overrides a software write)) | i_clk_reg |

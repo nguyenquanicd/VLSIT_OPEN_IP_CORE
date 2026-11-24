@@ -10,28 +10,28 @@ Asynchronous Advanced eXtensible Interface 4 (AXI4) bridge with independently bu
 
 ~~~text
 <IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── README.md             Overall IP description and current status
+├── LICENSE               Usage terms and retained upstream notices
+├── spec/
+│   ├── README.md          Index of key specifications, registers, and figures
+│   └── spec/figures/           Block diagrams, waveforms, and specification figures
+├── rtl/                   Active synthesizable RTL; the sole filelist is filelist.f
+├── lint/                  Lint setup and retained lint evidence
+├── cdc/                   Clock-domain-crossing analysis and reports
+├── rdc/                   Reset-domain-crossing analysis and reports
+├── sdc/                   Timing constraints and timing collateral
+├── syn/                   Synthesis setup and evidence
+├── research/              Source research and external references
+├── verification/          Exactly five direct categories
+│   ├── docs/              Flat folder for plans, reports, and documentation
+│   ├── tests/             Reusable testcase sources and generators
+│   ├── models/            Independent reference models
+│   ├── env/               Testbench, BFMs, scripts, and configuration
+│   └── sim/               Isolated runs and preserved run archives
 ├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
+│   ├── reference/         Supporting review evidence
+│   └── *.md               One Markdown report per review step
+└── archive/               Historical source snapshots and inactive collateral
 ~~~
 
 000_Common is a shared-library exception and does not use this per-IP layout. Existing self-contained simulation workspaces remain atomic under verification/sim/ where moving their internal files would invalidate recorded run inputs or relative-path assumptions. formal/ is used when a standalone formal environment can be separated safely; otherwise formal collateral remains inside that self-contained verification package.
@@ -46,28 +46,28 @@ Asynchronous Advanced eXtensible Interface 4 (AXI4) bridge with independently bu
 
 ~~~text
 <IP>/
-├── README.md             Overview, current status, and usage notes
-├── LICENSE               Apache-2.0 pointer and author notice
-├── spec/                 Detailed design specification and CSR definitions
-├── figures/              Figures and diagrams referenced by the specification
-├── rtl/                  Active synthesizable RTL and source filelists
-├── lint/                 Lint setup and retained lint evidence
-├── cdc/                  Clock-domain-crossing analysis and reports
-├── rdc/                  Reset-domain-crossing analysis and reports
-├── sdc/                  Synopsys Design Constraints and timing collateral
-├── syn/                  Synthesis setup and retained synthesis evidence
-├── verification/
-│   ├── plan/             Detailed test plan extracted from the specification
-│   ├── tests/            Reusable testcases and testcase generators
-│   ├── models/           Independent Python/C/C++/SystemVerilog models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
+├── README.md             Mô tả IP và trạng thái có bằng chứng
+├── LICENSE               Điều khoản sử dụng và thông báo nguồn
+├── spec/
+│   ├── README.md          Chỉ mục đặc tả, thanh ghi và hình vẽ chính
+│   └── spec/figures/           Sơ đồ khối, waveform và hình của đặc tả
+├── rtl/                   RTL tổng hợp được; filelist duy nhất là filelist.f
+├── lint/                  Cấu hình lint và bằng chứng lint
+├── cdc/                   Phân tích và báo cáo crossing clock domain
+├── rdc/                   Phân tích và báo cáo crossing reset domain
+├── sdc/                   Ràng buộc và tài liệu timing
+├── syn/                   Cấu hình và bằng chứng synthesis
+├── research/              Nghiên cứu nguồn và tài liệu tham khảo
+├── verification/          Đúng năm loại thư mục trực tiếp
+│   ├── docs/              Thư mục phẳng chứa plan, report và tài liệu
+│   ├── tests/             Testcase và script sinh testcase
+│   ├── models/            Reference model độc lập
+│   ├── env/               Testbench, BFM, script và cấu hình
+│   └── sim/               Run mô phỏng và archive được giữ lại
 ├── review/
-│   ├── reference/        Review images, source snapshots, and supporting evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Source research and external references
-├── sim/                  Isolated simulation run outputs (tool/config/run ID)
-├── formal/               Optional formal-verification environment
-└── archive/              Optional preserved historical/source packages
+│   ├── reference/         Bằng chứng hỗ trợ review
+│   └── *.md               Mỗi bước review có một report Markdown
+└── archive/               Snapshot RTL cũ và tài liệu không còn hoạt động
 ~~~
 
 
@@ -77,9 +77,9 @@ This folder contains 18 SystemVerilog modules generated from the resolved specif
 
 | Profile | Top module | Interface | Files and lint log |
 |---|---|---|---|
-| AXI4 base | `m_vlsit_async_axi4_bridge` | QOS and REGION; no USER or WID | [filelist](rtl/axi4_base/filelist.f), [default lint](lint/axi4_base/lint_verilator.log), [variant lint](lint/axi4_base/lint_variants.log) |
-| AXI4 USER | `m_vlsit_async_user_axi4_bridge` | QOS, REGION, and five USER ports; each USER width defaults to 1 | [filelist](rtl/axi4_user/filelist.f), [default lint](lint/axi4_user/lint_verilator.log), [variant lint](lint/axi4_user/lint_variants.log) |
-| AXI3 | `m_vlsit_async_axi3_bridge` | WID; no QOS, REGION, or USER | [filelist](rtl/axi3/filelist.f), [default lint](lint/axi3/lint_verilator.log), [variant lint](lint/axi3/lint_variants.log) |
+| AXI4 base | `m_vlsit_async_axi4_bridge` | QOS and REGION; no USER or WID | [filelist](rtl/filelist.f), [default lint](lint/axi4_base/lint_verilator.log), [variant lint](lint/axi4_base/lint_variants.log) |
+| AXI4 USER | `m_vlsit_async_user_axi4_bridge` | QOS, REGION, and five USER ports; each USER width defaults to 1 | [filelist](rtl/filelist.f), [default lint](lint/axi4_user/lint_verilator.log), [variant lint](lint/axi4_user/lint_variants.log) |
+| AXI3 | `m_vlsit_async_axi3_bridge` | WID; no QOS, REGION, or USER | [filelist](rtl/filelist.f), [default lint](lint/axi3/lint_verilator.log), [variant lint](lint/axi3/lint_variants.log) |
 
 Use the filelist in the selected profile folder. The lists include the FIFO and common-cell dependencies and define `VLSIT_SYNTHESIS`. Example, from `axi4_base`:
 
@@ -97,9 +97,9 @@ Thư mục này có 18 module SystemVerilog sinh từ bản đặc tả đã gi�
 
 | Profile | Top module | Giao tiếp | Filelist và log lint |
 |---|---|---|---|
-| AXI4 base | `m_vlsit_async_axi4_bridge` | Có QOS, REGION; không có USER hoặc WID | [filelist](rtl/axi4_base/filelist.f), [lint mặc định](lint/axi4_base/lint_verilator.log), [lint cấu hình](lint/axi4_base/lint_variants.log) |
-| AXI4 USER | `m_vlsit_async_user_axi4_bridge` | Có QOS, REGION và đủ năm USER; độ rộng mặc định mỗi USER là 1 | [filelist](rtl/axi4_user/filelist.f), [lint mặc định](lint/axi4_user/lint_verilator.log), [lint cấu hình](lint/axi4_user/lint_variants.log) |
-| AXI3 | `m_vlsit_async_axi3_bridge` | Có WID; không có QOS, REGION hoặc USER | [filelist](rtl/axi3/filelist.f), [lint mặc định](lint/axi3/lint_verilator.log), [lint cấu hình](lint/axi3/lint_variants.log) |
+| AXI4 base | `m_vlsit_async_axi4_bridge` | Có QOS, REGION; không có USER hoặc WID | [filelist](rtl/filelist.f), [lint mặc định](lint/axi4_base/lint_verilator.log), [lint cấu hình](lint/axi4_base/lint_variants.log) |
+| AXI4 USER | `m_vlsit_async_user_axi4_bridge` | Có QOS, REGION và đủ năm USER; độ rộng mặc định mỗi USER là 1 | [filelist](rtl/filelist.f), [lint mặc định](lint/axi4_user/lint_verilator.log), [lint cấu hình](lint/axi4_user/lint_variants.log) |
+| AXI3 | `m_vlsit_async_axi3_bridge` | Có WID; không có QOS, REGION hoặc USER | [filelist](rtl/filelist.f), [lint mặc định](lint/axi3/lint_verilator.log), [lint cấu hình](lint/axi3/lint_variants.log) |
 
 Chọn filelist trong thư mục profile tương ứng. Filelist bao gồm FIFO, common-cell dependencies và define `VLSIT_SYNTHESIS`. Có thể chạy Verilator từ thư mục profile theo lệnh ví dụ phía trên.
 

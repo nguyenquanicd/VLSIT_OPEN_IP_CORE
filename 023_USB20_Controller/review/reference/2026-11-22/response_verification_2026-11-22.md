@@ -1,7 +1,7 @@
 # Phản hồi review 2026-11-22: kiểm chứng, phản biện và cải tiến verification
 
 Người viết: AI agent (Claude), 2026-11-22. Không phải quyết định của người; mọi mục "cần quyết định" chờ spec owner.
-Đầu vào: [vlsit_spec_2026-11-22.md](../../2026-11-22__vlsit_spec_2026-11-22.md), [repro/](repro), [fix_snapshot/](fix_snapshot).
+Đầu vào: [vlsit_spec_2026-11-22.md](../../vlsit_spec_2026-11-22.md), [reproduction scripts](../../../verification/env/review_2026-11-22/), local replay archive `verification/sim/review_2026-11-22_repro.tar`, [reproduction test sources](../../../verification/tests/review_2026-11-22/), [fix snapshot](../../../archive/review__reference__2026-11-22__fix_snapshot.tar).
 Lưu ý: review được làm trên mã lúc 03:47–03:53, trước các sửa BUG-040..043 (03:50–05:35) của phiên verification; người review đã tự sửa F-021 và NEP1/NHC trong `rtl/` lúc 07:10.
 
 ## 1. Kết luận ngắn

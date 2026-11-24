@@ -1,0 +1,219 @@
+# scenario dev_enum_bulk_dma seed 3
+CHK DEB-ID
+R 0 10000 ffff0000
+B cg_tscale.scaled
+R c 0 1f
+W 40 400000
+W 2c0 100040
+W 2c4 400050
+W 34 10
+W 480 1000
+W 484 2000
+W 280 3000
+W 284 4000
+W 14 3fffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+CHK DBR-HS
+WP 0 0 df 7d
+CHK DEB-ENUM
+P 10 82 82 190
+R 8 0 6
+SG 1 12c
+XP 1 1 1
+B cg_chirp_d.hs
+B cg_speed.hs
+B cg_irq.each_source
+W 10 3fffff
+IB 28
+XP 1 0 1
+CHK DEB-ADDR
+TK d 55 0 0
+DT 3 0 8 42 bd f2 21 6 f0 84 77
+XN 96
+B cg_tok_addr.other
+CHK DEB-SETUP
+TK d 0 0 0
+DT 3 0 8 0 5 1f 0 0 0 0 0
+XH 2 190
+GAP 1 18
+IB 258
+MC 1000 8 0 5 1f 0 0 0 0 0
+R 4c0 100 100
+B cg_toggle.setup
+B cg_tok_addr.own
+B cg_ep.ep0
+B cg_crc.good5
+B cg_crc.good16
+W 240 80000
+W 200 400040
+IB 258
+CHK DEB-STATUS
+TK 9 0 0 0
+XD b 7d0 0
+GAP 1 18
+HS 2
+IB 12c
+W 20 9f
+IB 190
+CHK DEB-NEWADDR
+TK 9 0 0 0
+XN 96
+TK 1 1f 9 0
+DT 3 0 8 62 f0 f3 cb 4d 76 4d c7
+XN 96
+B cg_tok_addr.uninit_ep
+W 444 1800c0
+W 404 401040
+IB 190
+CHK DEB-BOUT
+TK 4 1f 1 0
+XH 2 190
+GAP 1 18
+TK 1 1f 1 0
+DT 3 0 40 7 20 51 15 9a f 89 f2 c6 da ca e3 44 bb 31 12 45 fd 6f 84 df 9a d7 c5 b3 d0 76 ac e 8f 53 a7 35 6c 88 91 3f 20 f6 f7 2d b0 22 d2 4d a 96 da d4 3c 16 17 c1 a9 8e 78 12 9e 3 27 37 10 65 d0
+XH 2 190
+GAP 1 18
+I 3c
+TK 1 1f 1 0
+DT b 0 40 95 86 4f 15 ad a0 b8 46 c1 c0 eb c5 34 8a dc 79 9a df 84 9b ad 5 d4 a1 a c0 44 1e aa ee b4 b4 8e fa b 1f a bd 80 e9 98 a3 5a ba 5e a0 bd 87 99 c1 35 d 43 9e 71 89 7a a7 5f de 31 34 a4 aa
+XH 2 190
+GAP 1 18
+I 3c
+TK 1 1f 1 0
+DT 3 0 40 72 e0 56 28 ac 6f e6 8a 73 3d 11 61 a1 5d 8e ae 2b b0 42 d7 95 8a ed b1 d5 94 d6 d1 12 d3 4f 66 2 f4 de 71 10 e9 93 ae 74 22 92 3d 7d 17 11 65 dc 19 6 f6 3d 57 99 7a a d3 1b 3a ae 40 81 f4
+XH 2 190
+GAP 1 18
+I 3c
+IB 7d0
+MC 2000 c0 7 20 51 15 9a f 89 f2 c6 da ca e3 44 bb 31 12 45 fd 6f 84 df 9a d7 c5 b3 d0 76 ac e 8f 53 a7 35 6c 88 91 3f 20 f6 f7 2d b0 22 d2 4d a 96 da d4 3c 16 17 c1 a9 8e 78 12 9e 3 27 37 10 65 d0 95 86 4f 15 ad a0 b8 46 c1 c0 eb c5 34 8a dc 79 9a df 84 9b ad 5 d4 a1 a c0 44 1e aa ee b4 b4 8e fa b 1f a bd 80 e9 98 a3 5a ba 5e a0 bd 87 99 c1 35 d 43 9e 71 89 7a a7 5f de 31 34 a4 aa 72 e0 56 28 ac 6f e6 8a 73 3d 11 61 a1 5d 8e ae 2b b0 42 d7 95 8a ed b1 d5 94 d6 d1 12 d3 4f 66 2 f4 de 71 10 e9 93 ae 74 22 92 3d 7d 17 11 65 dc 19 6 f6 3d 57 99 7a a d3 1b 3a ae 40 81 f4
+R 4c4 1 1
+R 444 0 7ffff
+R 484 20c0 ffffffff
+B cg_toggle.d0
+B cg_toggle.d1
+B cg_flow.ack
+B cg_flow.ping_ack
+B cg_gap_dev.min
+B cg_axim.len16
+MW 4000 97 1f b4 71 65 3e 3d 57 7a 8c 41 3 f9 cc 19 8a 7f 89 d8 1a f2 a5 0 1c 40 17 3f 19 23 f7 10 2c fa a1 50 a1 24 b3 c5 c7 9b b8 87 61 a8 db 3f 41 1 c2 28 5b 15 bf eb c2 16 dc 1b be fe a1 d7 d6 eb 9 7d 6f 8a 24 d9 72 da 42 e a6 bf 86 3e ed 3f c0 37 a3 34 2 f2 49 78 c7 16 2f 32 c0 5b c ae 3e d 3a f6 91 99 2d 12 7a 36 33 1f a6 5c 27 7b 5c 7f e8 c9 81 bc cb b3 d6 2a c0 78 d3 52 d4 f7 4f cd 4c 53 31 fe f7 e2 5f 45 88 65 4b a1 76 97 d3 88 6f 9d b 89 f5
+W 244 180097
+W 204 401040
+IB bb8
+CHK DEB-BIN
+TK 9 1f 1 0
+XD 3 7d0 40 1f b4 71 65 3e 3d 57 7a 8c 41 3 f9 cc 19 8a 7f 89 d8 1a f2 a5 0 1c 40 17 3f 19 23 f7 10 2c fa a1 50 a1 24 b3 c5 c7 9b b8 87 61 a8 db 3f 41 1 c2 28 5b 15 bf eb c2 16 dc 1b be fe a1 d7 d6 eb
+GAP 1 18
+HS 2
+I 28
+TK 9 1f 1 0
+XD b 7d0 40 9 7d 6f 8a 24 d9 72 da 42 e a6 bf 86 3e ed 3f c0 37 a3 34 2 f2 49 78 c7 16 2f 32 c0 5b c ae 3e d 3a f6 91 99 2d 12 7a 36 33 1f a6 5c 27 7b 5c 7f e8 c9 81 bc cb b3 d6 2a c0 78 d3 52 d4 f7
+GAP 1 18
+I 5d
+TK 9 1f 1 0
+XD b 7d0 40 9 7d 6f 8a 24 d9 72 da 42 e a6 bf 86 3e ed 3f c0 37 a3 34 2 f2 49 78 c7 16 2f 32 c0 5b c ae 3e d 3a f6 91 99 2d 12 7a 36 33 1f a6 5c 27 7b 5c 7f e8 c9 81 bc cb b3 d6 2a c0 78 d3 52 d4 f7
+GAP 1 18
+HS 2
+I 28
+TK 9 1f 1 0
+XD 3 7d0 17 4f cd 4c 53 31 fe f7 e2 5f 45 88 65 4b a1 76 97 d3 88 6f 9d b 89 f5
+GAP 1 18
+HS 2
+IB 7d0
+R 304 1 1
+TK 9 1f 1 0
+XH a 190
+GAP 1 18
+B cg_toggle.retry_same
+B cg_fifo.empty_nak
+W 4c4 1
+BP 64
+W 484 2400
+W 444 400200
+W 404 401040
+IB 190
+CHK DEB-NYET
+TK 1 1f 1 0
+DT b 0 40 c3 66 58 b8 7a a4 f7 49 d6 f5 69 ef e f6 25 cc 17 ef 75 78 23 6f 82 7b 61 84 46 5f 12 82 56 17 a0 5d d8 2e 2b 3c 2f 87 95 12 b6 e7 ac 3 f ab a9 df c2 f8 27 6b fa c8 40 a3 3d 8c 27 dd 39 e0
+XH 2 190
+GAP 1 18
+I 3c
+TK 1 1f 1 0
+DT 3 0 40 80 31 bf bc e6 97 87 36 ad 3a fc b4 1e 96 5d 4c 5b bd e8 3f 37 48 a9 d7 99 5f ea f6 9f 5a 23 36 5c c8 b7 33 88 8a c4 1b 45 15 f5 8a 7e b5 aa ce e5 23 b4 fe 39 4d 8a 33 39 39 5e 60 d5 c8 41 4a
+XH 2 190
+GAP 1 18
+I 3c
+TK 1 1f 1 0
+DT b 0 40 cb 63 57 5b 67 80 bd 96 f e3 d0 c4 a1 9e fe 99 f7 f 61 1 37 77 fb 58 eb 65 63 6c 12 e3 39 91 4e 45 ef 2d 19 d b8 77 27 ff 9 ad a5 a8 b0 44 29 11 28 af 69 20 66 df 71 f8 a1 37 15 d1 27 66
+XH 2 190
+GAP 1 18
+I 3c
+TK 1 1f 1 0
+DT 3 0 40 52 c8 fe f2 22 d8 6a fa 9b b ed ea cd e0 5c e9 13 83 bb bd e5 b9 cd 72 1 6b 84 bd 49 eb 63 51 6b b 57 ce 56 e 47 38 56 e2 fb 5e 1e b ce e5 a2 d0 10 1a 7a ce 14 cb fc d 70 7b 30 c7 f2 61
+XH 6 190
+GAP 1 18
+I 3c
+TK 4 1f 1 0
+XH a 190
+GAP 1 18
+TK 1 1f 1 0
+DT b 0 40 54 aa 3b b1 3f 1a 94 8c ee 99 fa 7f 88 f ac b0 a2 2f 1d de 2d 1 35 f 2e 9 57 12 f6 1b 60 a9 66 f4 ae f5 b3 11 c3 9c c9 2c 96 5e d3 3a c7 ab ce 59 c5 b7 5e b9 d4 e0 75 e3 f6 b0 89 56 c6 f9
+XH a 190
+GAP 1 18
+I 3c
+B cg_flow.nyet
+B cg_flow.nak
+B cg_flow.ping_nak
+B cg_fifo.full_nak
+BP 1e
+IB 1770
+CHK DEB-DRAIN
+TK 4 1f 1 0
+XH 2 190
+GAP 1 18
+TK 1 1f 1 0
+DT b 0 40 54 aa 3b b1 3f 1a 94 8c ee 99 fa 7f 88 f ac b0 a2 2f 1d de 2d 1 35 f 2e 9 57 12 f6 1b 60 a9 66 f4 ae f5 b3 11 c3 9c c9 2c 96 5e d3 3a c7 ab ce 59 c5 b7 5e b9 d4 e0 75 e3 f6 b0 89 56 c6 f9
+XH 2 190
+GAP 1 18
+I 3c
+TK 1 1f 1 0
+DT 3 0 40 15 4e 57 b ef 2f 31 a3 79 1c 18 e6 ee aa bd 0 24 63 cc 35 ad 9f 38 e6 29 6b 7b 18 4e 49 5 39 75 93 6a 70 d6 a3 60 ef 5a 28 15 39 c 33 66 82 2b 37 ee cc 72 37 f8 b1 ce e4 38 95 e3 c2 69 3b
+XH 2 190
+GAP 1 18
+I 3c
+IB 1770
+MC 2400 100 c3 66 58 b8 7a a4 f7 49 d6 f5 69 ef e f6 25 cc 17 ef 75 78 23 6f 82 7b 61 84 46 5f 12 82 56 17 a0 5d d8 2e 2b 3c 2f 87 95 12 b6 e7 ac 3 f ab a9 df c2 f8 27 6b fa c8 40 a3 3d 8c 27 dd 39 e0 80 31 bf bc e6 97 87 36 ad 3a fc b4 1e 96 5d 4c 5b bd e8 3f 37 48 a9 d7 99 5f ea f6 9f 5a 23 36 5c c8 b7 33 88 8a c4 1b 45 15 f5 8a 7e b5 aa ce e5 23 b4 fe 39 4d 8a 33 39 39 5e 60 d5 c8 41 4a cb 63 57 5b 67 80 bd 96 f e3 d0 c4 a1 9e fe 99 f7 f 61 1 37 77 fb 58 eb 65 63 6c 12 e3 39 91 4e 45 ef 2d 19 d b8 77 27 ff 9 ad a5 a8 b0 44 29 11 28 af 69 20 66 df 71 f8 a1 37 15 d1 27 66 52 c8 fe f2 22 d8 6a fa 9b b ed ea cd e0 5c e9 13 83 bb bd e5 b9 cd 72 1 6b 84 bd 49 eb 63 51 6b b 57 ce 56 e 47 38 56 e2 fb 5e 1e b ce e5 a2 d0 10 1a 7a ce 14 cb fc d 70 7b 30 c7 f2 61
+MC 2500 80 54 aa 3b b1 3f 1a 94 8c ee 99 fa 7f 88 f ac b0 a2 2f 1d de 2d 1 35 f 2e 9 57 12 f6 1b 60 a9 66 f4 ae f5 b3 11 c3 9c c9 2c 96 5e d3 3a c7 ab ce 59 c5 b7 5e b9 d4 e0 75 e3 f6 b0 89 56 c6 f9 15 4e 57 b ef 2f 31 a3 79 1c 18 e6 ee aa bd 0 24 63 cc 35 ad 9f 38 e6 29 6b 7b 18 4e 49 5 39 75 93 6a 70 d6 a3 60 ef 5a 28 15 39 c 33 66 82 2b 37 ee cc 72 37 f8 b1 ce e4 38 95 e3 c2 69 3b
+R 484 2580 ffffffff
+B cg_axim.bp
+B cg_utmi.tx_wait
+B cg_utmi.rx_gap
+B cg_apb.read
+B cg_apb.write
+B cg_ratio.fast_bus
+END

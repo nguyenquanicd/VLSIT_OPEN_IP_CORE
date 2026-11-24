@@ -1,0 +1,347 @@
+[
+ {
+  "name": "cov_dev",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": true
+ },
+ {
+  "name": "cov_host",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=1",
+   "-GNUM_HC=8",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=16"
+  ],
+  "coverage": true
+ },
+ {
+  "name": "dev_ulpi_axim",
+  "top": "tb_usb2_ulpi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [
+   "verification/env/tb/ulpi_phy_bfm.sv"
+  ],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GFIFO_DEPTH=1024",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_ulpi_axis",
+  "top": "tb_usb2_ulpi_axis",
+  "filelist": "rtl/filelist.f",
+  "extra": [
+   "verification/env/tb/ulpi_phy_bfm.sv"
+  ],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GFIFO_DEPTH=1024",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi16_axim",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=16",
+   "-GAXI_DATA_W=64",
+   "-GFIFO_DEPTH=1024",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi8_axim",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi8_axim_epmax",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=15",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi8_axim_fault",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [
+   "verification/models/reference_models/sram_fault.sv"
+  ],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false,
+  "exclude": [
+   "../000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv"
+  ]
+ },
+ {
+  "name": "dev_utmi8_axim_pipe",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=256",
+   "-GPIPE=1"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi8_axim_ts1",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=1"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi8_axis",
+  "top": "tb_usb2_axis",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi8_axis_ch15",
+  "top": "tb_usb2_axis",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GLPM_EN=1",
+   "-GTSCALE=256",
+   "-GNUM_DMA_CH=15"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dev_utmi8_axis_ch16",
+  "top": "tb_usb2_axis",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=0",
+   "-GNUM_EP=4",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GLPM_EN=1",
+   "-GTSCALE=256",
+   "-GNUM_DMA_CH=16"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "dual_utmi8_axim_ts16",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=2",
+   "-GNUM_EP=4",
+   "-GNUM_HC=8",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=16"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "host_ulpi_axim_ts16",
+  "top": "tb_usb2_ulpi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [
+   "verification/env/tb/ulpi_phy_bfm.sv"
+  ],
+  "parameters": [
+   "-GROLE=1",
+   "-GNUM_HC=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=16"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "host_ulpi_axim_ts1",
+  "top": "tb_usb2_ulpi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [
+   "verification/env/tb/ulpi_phy_bfm.sv"
+  ],
+  "parameters": [
+   "-GROLE=1",
+   "-GNUM_HC=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=1"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "host_utmi8_axim",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=1",
+   "-GNUM_HC=8",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=256"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "host_utmi8_axim_hcmax_ts16",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=1",
+   "-GNUM_HC=16",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=16"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "host_utmi8_axim_ts16",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=1",
+   "-GNUM_HC=8",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=16"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "host_utmi8_axim_ts1",
+  "top": "tb_usb2_utmi_axim",
+  "filelist": "rtl/filelist.f",
+  "extra": [],
+  "parameters": [
+   "-GROLE=1",
+   "-GNUM_HC=8",
+   "-GUTMI_W=8",
+   "-GFIFO_DEPTH=1024",
+   "-GSPLIT_EN=1",
+   "-GSG_EN=1",
+   "-GLPM_EN=1",
+   "-GTSCALE=1"
+  ],
+  "coverage": false
+ },
+ {
+  "name": "xreg",
+  "top": "tb_xreg",
+  "filelist": "verification/env/tb/filelist_xreg.f",
+  "extra": [],
+  "parameters": [],
+  "coverage": false
+ }
+]

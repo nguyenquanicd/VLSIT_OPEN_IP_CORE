@@ -1,15 +1,8 @@
-# common_rtl — simulation output and tool artifacts are never versioned.
-#
-# Committed layout (everything else is generated and ignored):
-#   <ip>/rtl/                   RTL sources (*.sv, *.v, *.svh, *.vh) and filelists (*.f)
-#   <ip>/csr/                   CSR documents and register maps
-#   <ip>/spec_original/         the specification sources the RTL was generated from
-#   <ip>/verification/tb/       testbench sources (*.sv, *.v) and checkers
-#   <ip>/verification/vectors/  hand-written test vectors (*.vec, *.txt)
-#   <ip>/verification/*.py      cocotb / python testbench, *.mk Makefiles
-#
-# Everything produced by simulation, lint, synthesis, STA or the C++/Verilator
-# build is ignored below, including waveform dumps and generated headers.
+# VLSIT Open IP Core generated output and tool artifacts.
+# Keep RTL, specifications, testcase sources, test generators, models, and flat verification documentation.
+# `rtl/filelist.f` is the sole active RTL filelist in each numbered IP.
+# `verification/` contains only docs, tests, models, env, and sim.
+# Simulation/build outputs and legacy run archives are not versioned.
 
 # --- whole-IP exclusions (deliberately not versioned) ----------------------
 /016_CAN_Controller/
@@ -19,6 +12,10 @@
 /026_I2C_Controller/
 /FTEL/
 
+# --- third-party documents kept locally for research only (not redistributed) ---
+# Vendor datasheets and scientific papers; the manifest and report beside them stay versioned.
+/027_ChaCha/research/vlsit_sources/
+
 # --- simulation waveforms & sim data --------------------------------------
 *.vcd
 *.fst
@@ -27,6 +24,8 @@
 *.vpd
 *.dat
 *.zip
+*.tar
+*.tar.gz
 
 # --- logs & reports --------------------------------------------------------
 *.log

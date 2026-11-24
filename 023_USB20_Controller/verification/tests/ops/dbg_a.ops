@@ -1,0 +1,97 @@
+# scenario fi_bus_errors seed 1
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+XP 0 14 df
+LS 0
+WP 3 1 1 2e
+XP 0 12 df
+LS 2
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+WP 0 0 df 7d
+P 10 82 82 190
+R 8 0 6
+SG 1 12c
+W 10 1ffffff
+W 20 92
+IB 190
+W 484 2000
+W 444 200100
+W 404 401040
+IB 190
+MW 4000 100 3b e6 55 7b 51 34 de c1 96 81 f4 a1 33 6a a2 14 d 5 97 a3 e6 c8 a0 cc 20 20 a2 e9 39 80 6e f0 b6 84 5d 6a 9d 65 7e b8 29 8f 2d e5 2e ad 74 c7 9d 15 a7 5f a2 9b 7d ab 33 2f 7d 70 a 7c cd 25 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3 5a a2 e0 73 7a a0 fd f5 73 d3 ac 8c 70 18 24 bc 51 68 9f 98 99 be 54 ed 2b 3f c1 5a 4f 80 da 6f 1a fd c9 b2 c4 54 14 2e 82 33 88 2a 47 29 e3 7b c3 dd cb 54 a6 e0 40 f9 6c 3d dc d1 3c 97 8e 7f c1 2 61 e0 a f 7c 85 69 58 91 4b 66 8b 9f 80 e4 56 b6 fb d7 3e 6a c4 68 91 37 c 3c 6 97 45 26 bf 9f df b6 a5 0 3f e2 e6 b3 9c cc ad fc 39 c1 c3 68 1 8e 65 ec d1 9c 57 e6 65 b8 1 c7 da cf
+W 288 4000
+W 248 200100
+W 208 401040
+IB bb8
+TK 9 12 2 0
+XD 3 190 40 3b e6 55 7b 51 34 de c1 96 81 f4 a1 33 6a a2 14 d 5 97 a3 e6 c8 a0 cc 20 20 a2 e9 39 80 6e f0 b6 84 5d 6a 9d 65 7e b8 29 8f 2d e5 2e ad 74 c7 9d 15 a7 5f a2 9b 7d ab 33 2f 7d 70 a 7c cd 25
+ID 50
+HS 2
+I 3c
+B cg_tmo.inside
+TK 9 12 2 0
+XD b 190 40 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3 5a
+ID 12c
+R 10 800 800
+W 10 800
+IB 1e
+R 10 0 800
+B cg_err.timeout
+TK 9 12 2 0
+XD b 190 40 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3 5a
+ID 7d
+HS 2
+ID 64
+TK 9 12 2 0
+XD b 190 40 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3 5a
+ID c
+TK 1 52 1 0
+DT 3 0 8 ac 22 fc 7e 94 a d0 4f
+XN 96
+ID 64
+B cg_tmo.late_edge
+TK 9 12 2 0
+XD b 190 40 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3 5a
+HS 2
+I 3c
+B cg_toggle.retry_same
+TK 9 12 2 0
+XD 3 190 40 a2 e0 73 7a a0 fd f5 73 d3 ac 8c 70 18 24 bc 51 68 9f 98 99 be 54 ed 2b 3f c1 5a 4f 80 da 6f 1a fd c9 b2 c4 54 14 2e 82 33 88 2a 47 29 e3 7b c3 dd cb 54 a6 e0 40 f9 6c 3d dc d1 3c 97 8e 7f c1
+RAW 0 1 f2
+ID 12c
+TK 9 12 2 0
+XD 3 190 40 a2 e0 73 7a a0 fd f5 73 d3 ac 8c 70 18 24 bc 51 68 9f 98 99 be 54 ed 2b 3f c1 5a 4f 80 da 6f 1a fd c9 b2 c4 54 14 2e 82 33 88 2a 47 29 e3 7b c3 dd cb 54 a6 e0 40 f9 6c 3d dc d1 3c 97 8e 7f c1
+HS 2
+I 3c
+TK 9 12 2 0
+XD b 190 40 2 61 e0 a f 7c 85 69 58 91 4b 66 8b 9f 80 e4 56 b6 fb d7 3e 6a c4 68 91 37 c 3c 6 97 45 26 bf 9f df b6 a5 0 3f e2 e6 b3 9c cc ad fc 39 c1 c3 68 1 8e 65 ec d1 9c 57 e6 65 b8 1 c7 da cf
+HS 2
+I 3c
+IB 7d0
+R 308 1 1
+W 10 1ffffff
+END

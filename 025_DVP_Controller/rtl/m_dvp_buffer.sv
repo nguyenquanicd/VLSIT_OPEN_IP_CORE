@@ -181,8 +181,11 @@ module m_dvp_buffer #(
       end
       ENUM_ST_CLEAR_REQ: w_fsm_flush_nxt_state = ENUM_ST_WAIT_SW_CLEAR;
       ENUM_ST_WAIT_SW_CLEAR: begin
+        // Request still set: the CSR did not take the hardware clear, so issue done again.
         if (!i_flush_req)
           w_fsm_flush_nxt_state = ENUM_ST_IDLE;
+        else
+          w_fsm_flush_nxt_state = ENUM_ST_CLEAR_REQ;
       end
       default: w_fsm_flush_nxt_state = ENUM_ST_IDLE;
     endcase

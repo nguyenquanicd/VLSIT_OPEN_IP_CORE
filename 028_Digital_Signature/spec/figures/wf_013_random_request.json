@@ -1,0 +1,47 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "request",
+   {
+    "name": "o_ent_req",
+    "wave": "0011.0......"
+   },
+   {
+    "name": "i_ent_valid",
+    "wave": "00001.1....."
+   },
+   {
+    "name": "i_ent_data",
+    "wave": "xxxx=x=x....",
+    "data": [
+     "E0",
+     "E1"
+    ]
+   }
+  ],
+  [
+   "generator",
+   {
+    "name": "i_dsig_rng_ready",
+    "wave": "000000.1111."
+   },
+   {
+    "name": "w_rng_valid",
+    "wave": "000000011..0"
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-007, success: random request served by the internal generator"
+ },
+ "foot": {
+  "text": "The generator is reseeded from the entropy words and then delivers bytes to the engine."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

@@ -7,7 +7,8 @@
  * Description  : ULPI low power wake detector in CLK-BUS (CDC-007, REQ-IF-006, TBD-005). It is
  *                always on, because the PHY may stop CLK-PHY in low power mode. dir is
  *                synchronized with the library synchronizer (the data bits are not used,
- *                DEC-004). When the PHY wakes the link by asserting dir, o_wake_evt pulses. When
+ *                DEC-004). A wake by the PHY (dir) is seen by the link through the ULPI
+ *                handshake once CLK-PHY runs (2026-11-24: the unused wake pulse was removed). When
  *                software or the speed engine requests a wake (i_wake_req), o_stp_lp is held at
  *                1 until dir has been seen high and has dropped again, as in REF-007 section
  *                3.9. i_wake_req is a level from the bus-side CSR (remote wake of a device,
@@ -35,14 +36,12 @@ module m_usb2_ulpilp #(
 
   // Wake outputs
   output logic o_stp_lp,
-  output logic o_wake_evt,
   output logic o_lp_sync
 );
 
   // Internal signal declarations
   logic w_dir_sync;
   logic w_lp_sync;
-  logic reg_dir_d;
   logic reg_stp;
   logic reg_seen_dir;
   logic reg_woke;
@@ -76,7 +75,6 @@ module m_usb2_ulpilp #(
   // Outputs: the wake pulse is the rising edge of dir while low power mode is active.
   assign o_lp_sync  = w_lp_sync;
   assign o_stp_lp   = reg_stp;
-  assign o_wake_evt = w_dir_sync & ~reg_dir_d & w_lp_sync;
 
   // Wake handshake: set by the request while low power is active, cleared after dir rose and fell.
   always_comb begin : p_com_stp
@@ -100,15 +98,13 @@ module m_usb2_ulpilp #(
     end
   end
 
-  // State flops of the wake handshake and the edge detector.
+  // State flops of the wake handshake.
   always_ff @(posedge i_clk_bus, negedge i_rst_n_bus) begin : p_ff_lp
     if (!i_rst_n_bus) begin
-      reg_dir_d    <= 1'b0;
       reg_stp      <= 1'b0;
       reg_seen_dir <= 1'b0;
       reg_woke     <= 1'b0;
     end else begin
-      reg_dir_d    <= w_dir_sync;
       reg_stp      <= w_stp_nxt;
       reg_seen_dir <= w_seen_nxt;
       reg_woke     <= w_woke_nxt;

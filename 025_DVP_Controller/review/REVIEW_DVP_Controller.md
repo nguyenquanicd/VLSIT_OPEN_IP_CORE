@@ -1,3 +1,5 @@
+> **Historical report:** This review assessed HDS v0.2 (Draft) on 2026-11-22. The current normative package is HDS v0.3/CSR v1.1; see [the consolidated current status](REVIEW_STATUS_2026-11-23.md).
+
 # Specification review — DVP_Controller / Đánh giá đặc tả — DVP_Controller
 
 | Field / Trường | Value / Giá trị |
@@ -31,7 +33,7 @@ Labels: `FACT` is read from the specification, a standard or a dated source; `IN
 
 ### 1.2 Gate / Cổng
 
-`RESULT: PASS, 31 finding(s), written C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\025_DVP_Controller\review\gate_metrics.json`; audit sample 4 of 31 findings, false positive 0 of 4, false negative 0 of 4 (section 21). Review list confirmed by the user on 2026-11-22: all 18 chapters, approved HDS, web search for the market chapter.
+`RESULT: PASS, 31 finding(s), written C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\025_DVP_Controller\review\reference\gate_metrics.json`; audit sample 4 of 31 findings, false positive 0 of 4, false negative 0 of 4 (section 21). Review list confirmed by the user on 2026-11-22: all 18 chapters, approved HDS, web search for the market chapter.
 
 ## 2. Scorecard / Bảng điểm
 
@@ -354,10 +356,10 @@ Registers (workbook `VLSIT_DVP_CONTROLLER_CSR.json`): `dvp_version` 0x0, `dvp_ct
 
 | Item | Value | Source |
 |---|---|---|
-| Requirements | 19 (`REQ-*`) | inventory.json |
+| Requirements | 19 (`REQ-*`) | reference/inventory.json |
 | Tests | 15 (TEST-001..015) | HDS section 15.2 |
-| Assertion IDs | 0 | inventory.json |
-| Requirements without a test | 0 | inventory.json |
+| Assertion IDs | 0 | reference/inventory.json |
+| Requirements without a test | 0 | reference/inventory.json |
 | Rule check | PASS, 12 files, 0 errors, 21 warnings | verification/README.md |
 | Verilator / Slang | PASS, 0 errors, 24 / 2 warnings | verification/lint |
 | Simulation | not run | RTL_GENERATION_REPORT.md |
@@ -499,13 +501,13 @@ Also read: the folder tree (all files listed), `spec/rtl_generation_2026-11-22/R
 
 ### 21.2 Requirement and open-item extraction / Trích xuất
 
-`inventory.json` (same folder): 62 sections, 43 tables, 19 requirements (FUNC 8, IF 6, PARAM 1, PERF 1, REG 1, RESET 1, SCOPE 1), 15 tests, 0 property IDs, 0 requirements without a test, open items ASM-001 and ASM-002 (both resolved by decisions on 2026-11-21 and 2026-11-22) and 15 INFO items of the gap scan (age one day). Quantified claims: 7.
+`reference/inventory.json` (same folder): 62 sections, 43 tables, 19 requirements (FUNC 8, IF 6, PARAM 1, PERF 1, REG 1, RESET 1, SCOPE 1), 15 tests, 0 property IDs, 0 requirements without a test, open items ASM-001 and ASM-002 (both resolved by decisions on 2026-11-21 and 2026-11-22) and 15 INFO items of the gap scan (age one day). Quantified claims: 7.
 
 ### 21.3 Gate / Cổng
 
-- `RESULT: PASS, 31 finding(s), written C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\025_DVP_Controller\review\gate_metrics.json`
-- `RESULT: 31 finding(s) in 17 group(s), written C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\025_DVP_Controller\review\root_cause_groups.json`
-- Waiver usage: 1 of 10 (F-023; owner SoC architect; invalidation condition recorded in `vlsit_spec_2026-11-22.md`).
+- `RESULT: PASS, 31 finding(s), written C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\025_DVP_Controller\review\reference\gate_metrics.json`
+- `RESULT: 31 finding(s) in 17 group(s), written C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\025_DVP_Controller\review\reference\root_cause_groups.json`
+- Waiver usage: 1 of 10 (F-023; owner SoC architect; invalidation condition recorded in `reference/spec_review_2026-11-22/vlsit_spec_2026-11-22.md`).
 - Deep analysis: 31 of 31 findings traced against the cited text, at most 4 per root-cause group (limit 10), none aggregated, so no further analysis needs the user approval of rule R-022.
 
 ### 21.4 Root-cause groups / Nhóm root cause
@@ -551,3 +553,7 @@ False positives: 0 of 4. False negatives found in the neighbourhood: 0 of 4. / D
 4. Commercial IP details beyond search summaries: no reference manual was opened; the table of §19 marks unconfirmed cells.
 5. Requirements of the ISO or any camera-interface standard: none applies (no universal DVP standard); sensor datasheets were relied on through the research report.
 6. The baseline HDS was not reviewed in depth; it is a superseded revision.
+
+
+
+

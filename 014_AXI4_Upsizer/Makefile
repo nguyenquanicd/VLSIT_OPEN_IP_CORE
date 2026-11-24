@@ -16,10 +16,10 @@ endif
 IVERILOG ?= iverilog
 VVP      ?= vvp
 
-FLIST    := rtl/axi3/filelist.f
+FLIST    := rtl/filelist.f
 TOP      := m_vlsit_axi3_upsizer
 TB_TOP   := tb_ups
-TB_SRCS  := ../verification/tb_ups.sv
+TB_SRCS  := ../verification/env/verificationtb_ups.sv
 
 .PHONY: help lint rule verify
 

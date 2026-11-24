@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "approved",
+  "campaign_id": "dvp_controller_final",
+  "measured_at": "2026-11-24T04:12:56",
+  "host": {
+    "os": "Windows 11 Home Single Language 10.0.26300",
+    "ram_total_bytes": 16357158912,
+    "ram_available_bytes": 2084093952,
+    "ram_status": "measured",
+    "ram_measurement_reason": "",
+    "disk_path_or_volume": "C: (volume holding verification/sim)",
+    "disk_free_bytes": 32156422144,
+    "disk_status": "measured",
+    "disk_measurement_reason": "",
+    "measurement_method": "PowerShell Get-CimInstance Win32_OperatingSystem (FreePhysicalMemory, TotalVisibleMemorySize) and Get-PSDrive C, 2026-11-24"
+  },
+  "limits": {
+    "reserved_host_ram_bytes": 805306368,
+    "simulation_ram_budget_bytes": 1073741824,
+    "max_concurrent_jobs": 1,
+    "disk_stop_free_bytes": 2147483648,
+    "expected_max_run_output_bytes": 536870912,
+    "output_estimation_method": "G0 plan value (768 MiB host reserve, one job, 4 GiB stop threshold, 64 MiB cap) based on the existing 183,472-byte directed VCD with margin; to be replaced by the measured output of the first bounded pilot run (see runs/ after approval)",
+    "decision_record": "2026-11-24, Nguyen Quan: per-run output cap 512 MiB (builds are temporary and outside the repository; retained output is flat logs); free-disk stop threshold lowered from 4 GiB to 2 GiB because the host volume had only 2-4 GiB free for reasons outside the project. Residual risk: a full disk during a run can corrupt that run; dvp_regress.py checks the threshold plus a 600 MiB working set before every build and case configuration."
+  },
+  "waveform_policy": {
+    "default_capture": "only_when_required_by_test_or_review",
+    "planned_signal_scope": "none by default; targeted VCD of dut ports plus dvp checker events for a failing run (gated first pixel, FIFO push/read, timeout terminal cycle, reset and flush windows)",
+    "planned_time_windows": "failure window of 2 us around the first checker error, captured in a new run with the same configuration and seed",
+    "failure_diagnostic": "rerun_same_configuration_and_seed_with_targeted_capture"
+  },
+  "compression": {
+    "method": "none planned; lossless zip with SHA-256 round trip only if a later reviewed need appears",
+    "round_trip_hash_required": true
+  },
+  "review": {
+    "reviewer": "Nguyen Quan",
+    "decision": "approved",
+    "date": "2026-11-24",
+    "record": "Approved with the per-run output cap raised to 512 MiB (536870912 bytes). RAM budget 1 GiB, one concurrent job and the 4 GiB free-disk stop threshold are unchanged."
+  },
+  "measurement": "Per-run peak RAM, disk and durations of the final regression are in sim/final/resource_usage.json and sim/final/commands.json."
+}

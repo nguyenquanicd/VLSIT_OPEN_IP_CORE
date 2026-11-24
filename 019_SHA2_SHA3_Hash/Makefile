@@ -13,28 +13,24 @@ ifneq ($(strip $(OSSCAD)),)
   endif
 endif
 
-IVERILOG ?= iverilog
-VVP      ?= vvp
+WORK     ?= $(shell $(PY) -c "import os;print(os.environ.get('TEMP','.').replace(chr(92),'/'))")/vlsit_019_ws
+SUITES   ?= main64
 
 FLIST    := rtl/filelist.f
 TOP      := m_vlsit_sha_top
-TB_TOP   := tb_sha_top
-TB_SRCS  := ../verification/tb/tb_sha_top.sv
 
 .PHONY: help lint rule verify
 
 help:
 	@echo "make lint    - Verilator lint of $(FLIST)"
 	@echo "make rule    - VLSIT RTL rule check (v2)"
-	@echo "make verify  - compile + run the testbench (iverilog)"
+	@echo "make verify  - Verilator regression of the suites in SUITES (default main64) in a temporary workspace WORK"
 
 lint:
-	$(PY) $(SKILL)/vlsit_lint_rtl.py lint $(FLIST) --top $(TOP) --tool verilator
+	$(PY) $(SKILL)/vlsit_lint_rtl.py lint $(FLIST) --top $(TOP) --tool verilator --log lint/lint_verilator_make.log
 
 rule:
 	$(PY) $(SKILL)/vlsit_rtl_check.py check rtl
 
 verify:
-	@mkdir -p build
-	cd rtl && $(IVERILOG) -g2012 -s $(TB_TOP) -o ../build/sim.vvp -f filelist.f $(TB_SRCS)
-	$(VVP) build/sim.vvp
+	$(PY) verification/env/run_regress_ws.py --work $(WORK) $(SUITES)

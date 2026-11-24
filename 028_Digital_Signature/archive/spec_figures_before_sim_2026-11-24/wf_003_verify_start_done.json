@@ -1,0 +1,59 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_start",
+    "wave": "0110........"
+   },
+   {
+    "name": "i_hw_clr_dsig_cmd_start",
+    "wave": "0010........"
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=.=.......=.",
+    "data": [
+     "ENUM_ST_IDLE",
+     "ENUM_ST_RUN",
+     "ENUM_ST_CLEAR"
+    ]
+   },
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "00111111110."
+   }
+  ],
+  [
+   "result",
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "000000011111"
+   },
+   {
+    "name": "i_dsig_sts_sigok",
+    "wave": "000000011111"
+   },
+   {
+    "name": "o_irq",
+    "wave": "000000001111"
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-004, success: verification from start command to done"
+ },
+ "foot": {
+  "text": "The state ENUM_ST_CHECK and ENUM_ST_RESULT last one cycle each and are not drawn; busy covers them."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

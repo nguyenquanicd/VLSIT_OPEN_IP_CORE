@@ -24,7 +24,7 @@ CFG = {
 def run(name):
     top, fl, ps = CFG[name]
     g = ' '.join('-G ' + p for p in ps)
-    ys = (f"plugin -i slang\nread_slang -f filelist_{fl}.f --top {top} {g} -D VLSIT_SYNTHESIS\n"
+    ys = (f"plugin -i slang\nread_slang -f filelist.f --top {top} {g} -D VLSIT_SYNTHESIS\n"
           f"synth_ecp5 -top {top} -json ../syn/fpga_{name}.json\n")
     open('../syn/fpga.ys', 'w').write(ys)
     r = subprocess.run(['yosys', '-q', '-l', f'../syn/fpga_{name}_yosys.log', '../syn/fpga.ys'],

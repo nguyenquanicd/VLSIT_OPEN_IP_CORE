@@ -1,0 +1,158 @@
+# scenario fi_host_bus_errors seed 1
+WD ea60
+CHK HBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 34 10
+W 14 1ffffff
+W 4 61
+W 28 400008
+LS 1
+ID 60216
+CHK HBU-CONN
+P 2c 1 1 7d0
+P 10 10 10 190
+W 10 10
+W 28 400009
+CHK HBU-RSTDRV
+WP 0 d7 df fa0
+TM
+LS 0
+ID 3057
+LS 2
+ID 1770
+LS 0
+CHK HBU-CHIRP
+XK 177 1b774 4 dbba
+CHK HBU-RST50
+P 10 80 80 57e4
+TC 2dc6a 2f9b8
+R 2c 2 e
+W 10 82
+CHK HBU-RECOV
+NSOF 99cf
+XN 14
+W 28 400018
+W 10 1ffffff
+W 6c0 1000
+W 680 80040
+W 600 80028840
+CHK FHB-STALLIN
+XT 9 0 1 7530
+ID 8
+HS e
+P 700 22 22 190
+R 600 0 80000000
+W 700 7ff
+W 10 1ffffff
+IB 14
+B cg_flow.nak
+MW 1100 40 44 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd
+W 6c0 1100
+W 680 80040
+W 600 80020840
+CHK FHB-STALLOUT
+XT 1 0 1 7530
+XD 3 7530 40 44 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd
+ID 8
+HS e
+P 700 22 22 190
+W 4c 40
+W 4c 42
+P 4c 0 2 190
+W 700 7ff
+W 10 1ffffff
+IB 14
+MW 1200 80 fa f f0 16 9d c9 57 56 74 6 66 76 cf b0 b4 eb 89 2 c4 42 69 da 1c f6 ba 66 d3 f8 b6 d4 b1 0 a9 ea e 75 5a 5c 2e 82 10 24 2a 8 e7 7 8f 7f 89 38 5e b0 94 23 55 51 82 56 8b 96 e8 a4 fe f2 3a c 9f c5 af d7 60 84 37 81 6b dd a 73 9 cb 4a 12 52 e4 da 70 e6 72 f ca a4 da 1e 98 40 6c 18 9c 24 27 9e 98 51 d5 81 42 4 13 6f eb 57 13 c1 66 b1 32 69 dd 63 fc 35 c7 97 ff 8 a6 cd 90
+W 6c0 1200
+W 680 100080
+W 600 80020840
+CHK FHB-NAK
+XT 1 0 1 7530
+XD 3 7530 40 fa f f0 16 9d c9 57 56 74 6 66 76 cf b0 b4 eb 89 2 c4 42 69 da 1c f6 ba 66 d3 f8 b6 d4 b1 0 a9 ea e 75 5a 5c 2e 82 10 24 2a 8 e7 7 8f 7f 89 38 5e b0 94 23 55 51 82 56 8b 96 e8 a4 fe f2
+ID 8
+HS a
+XT 1 0 1 7530
+XD 3 7530 40 fa f f0 16 9d c9 57 56 74 6 66 76 cf b0 b4 eb 89 2 c4 42 69 da 1c f6 ba 66 d3 f8 b6 d4 b1 0 a9 ea e 75 5a 5c 2e 82 10 24 2a 8 e7 7 8f 7f 89 38 5e b0 94 23 55 51 82 56 8b 96 e8 a4 fe f2
+ID 8
+HS 2
+XT 1 0 1 7530
+XD b 7530 40 3a c 9f c5 af d7 60 84 37 81 6b dd a 73 9 cb 4a 12 52 e4 da 70 e6 72 f ca a4 da 1e 98 40 6c 18 9c 24 27 9e 98 51 d5 81 42 4 13 6f eb 57 13 c1 66 b1 32 69 dd 63 fc 35 c7 97 ff 8 a6 cd 90
+ID 8
+HS 2
+P 700 1 1 190
+R 700 8 8
+W 700 7ff
+W 10 1ffffff
+IB 14
+B cg_toggle.retry_same
+W 6c0 1300
+W 680 80040
+W 600 80028840
+CHK FHB-TMO
+XT 9 0 1 7530
+XT 9 0 1 7530
+XT 9 0 1 7530
+P 700 6 6 190
+W 700 7ff
+W 10 1ffffff
+IB 14
+B cg_err.timeout
+W 6c0 1400
+W 680 80040
+W 600 80028840
+CHK FHB-CRC
+XT 9 0 1 7530
+ID 8
+DT 3 10 40 52 3b e6 55 7b 51 34 de c1 96 81 f4 a1 33 6a a2 14 d 5 97 a3 e6 c8 a0 cc 20 20 a2 e9 39 80 6e f0 b6 84 5d 6a 9d 65 7e b8 29 8f 2d e5 2e ad 74 c7 9d 15 a7 5f a2 9b 7d ab 33 2f 7d 70 a 7c cd
+XT 9 0 1 7530
+ID 8
+DT 3 0 40 9 50 66 a7 45 ad db 6d 88 31 c2 b0 f8 78 21 14 2b 44 56 55 6d 89 aa 82 bc ad ae 3a 95 78 fa 45 35 a4 14 d0 25 c2 4b 40 ae 3a c1 27 72 29 88 ba 97 3a ea 8d 37 17 97 6 7 2e d3 3a 14 60 7a d7
+XH 2 7d0
+P 700 1 1 190
+MC 1400 40 9 50 66 a7 45 ad db 6d 88 31 c2 b0 f8 78 21 14 2b 44 56 55 6d 89 aa 82 bc ad ae 3a 95 78 fa 45 35 a4 14 d0 25 c2 4b 40 ae 3a c1 27 72 29 88 ba 97 3a ea 8d 37 17 97 6 7 2e d3 3a 14 60 7a d7
+R 700 80 80
+W 700 7ff
+W 10 1ffffff
+IB 14
+B cg_err.crc
+W 6c0 1500
+W 680 100080
+W 600 80028840
+CHK FHB-DUP
+XT 9 0 1 7530
+ID 8
+DT 3 0 40 25 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3
+XH 2 7d0
+XT 9 0 1 7530
+ID 8
+DT 3 0 40 25 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3
+XH 2 7d0
+XT 9 0 1 7530
+ID 8
+DT b 0 40 5a a2 e0 73 7a a0 fd f5 73 d3 ac 8c 70 18 24 bc 51 68 9f 98 99 be 54 ed 2b 3f c1 5a 4f 80 da 6f 1a fd c9 b2 c4 54 14 2e 82 33 88 2a 47 29 e3 7b c3 dd cb 54 a6 e0 40 f9 6c 3d dc d1 3c 97 8e 7f
+XH 2 7d0
+P 700 1 1 190
+MC 1500 80 25 89 24 26 b 5 94 b7 fc f0 4e 33 a7 27 58 5b 4c 48 a3 9c 36 96 40 69 48 10 a1 69 5b 99 dd 50 18 7e 81 20 e4 dc 80 e0 e8 5 ca ad 57 84 f8 c d5 9 1f b5 46 40 46 84 8d cb cd 58 2d 77 f8 3 5a a2 e0 73 7a a0 fd f5 73 d3 ac 8c 70 18 24 bc 51 68 9f 98 99 be 54 ed 2b 3f c1 5a 4f 80 da 6f 1a fd c9 b2 c4 54 14 2e 82 33 88 2a 47 29 e3 7b c3 dd cb 54 a6 e0 40 f9 6c 3d dc d1 3c 97 8e 7f
+R 700 200 200
+W 700 7ff
+W 10 1ffffff
+IB 14
+B cg_toggle.dup_discard
+MW 1600 8 0 9 1 0 0 0 0 0
+W 6c0 1600
+W 680 80080008
+W 600 80000040
+CHK FHB-SETUPSTALL
+XT d 0 0 7530
+XD 3 7530 8 0 9 1 0 0 0 0 0
+ID 8
+HS e
+P 700 2 2 190
+W 700 7ff
+W 10 1ffffff
+IB 14
+B cg_err.pid
+END

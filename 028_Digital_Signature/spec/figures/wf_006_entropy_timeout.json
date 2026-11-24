@@ -1,0 +1,59 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "entropy",
+   {
+    "name": "o_ent_req",
+    "wave": "0011111110.."
+   },
+   {
+    "name": "i_ent_valid",
+    "wave": "000000000..."
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=.=...=.=...",
+    "data": [
+     "ENUM_ST_CHECK",
+     "ENUM_ST_ERR",
+     "ENUM_ST_CLEAR"
+    ]
+   },
+   {
+    "name": "w_ent_timeout",
+    "wave": "00000001...."
+   }
+  ],
+  [
+   "error",
+   {
+    "name": "i_hw_we_dsig_err_enttmo",
+    "wave": "000000010..."
+   },
+   {
+    "name": "o_dsig_err_enttmo",
+    "wave": "0000000.11.."
+   },
+   {
+    "name": "o_alarm",
+    "wave": "0000000.11.."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Error: no entropy word arrives within the entropy timeout"
+ },
+ "foot": {
+  "text": "The timeout is drawn short; the real value is dsig_tmo.ent in units of 1024 core clock cycles."
+ },
+ "config": {
+  "hscale": 2
+ }
+}

@@ -260,7 +260,6 @@ module m_usb2_core #(
 );
 
   // Internal signal declarations
-  logic w_cfg_err;
   logic w_rst_n_phy;
   logic w_rst_n_core;
   logic w_rst_n_bus;
@@ -378,7 +377,6 @@ module m_usb2_core #(
   logic w_id_pullup;
   logic w_stp_lp;
   logic w_lp_active;
-  logic w_wake_evt;
   logic w_reg_start;
   logic w_reg_busy;
   logic w_reg_done;
@@ -397,6 +395,7 @@ module m_usb2_core #(
   logic w_test_nak;
   logic w_dev_act;
   logic w_host_act;
+  logic w_host_quiet;
   logic [1:0] w_speed;
   logic w_attached;
   logic w_suspended;
@@ -421,8 +420,6 @@ module m_usb2_core #(
   logic [10:0] w_tok_efld;
   logic [3:0] w_tok_pid;
   logic [10:0] w_tok_fld;
-  logic w_spl_vld;
-  logic [18:0] w_spl_fld;
   logic w_hs_vld;
   logic [3:0] w_hs_pid;
   logic w_dat_sop;
@@ -437,7 +434,6 @@ module m_usb2_core #(
   logic w_err_stuf;
   logic w_err_babble;
   logic w_rx_busy;
-  logic w_pkt_end;
   logic w_tx_busy;
   logic w_tx_done;
   logic w_tx_fail;
@@ -510,7 +506,6 @@ module m_usb2_core #(
   logic w_evt_tmo;
   logic w_evt_iso;
   logic [13:0] w_host_frame;
-  logic w_host_busy;
   logic w_host_lpm_evt;
   logic w_host_lpm_ack;
   logic w_host_lpm_clr;
@@ -588,7 +583,7 @@ module m_usb2_core #(
     .PARA_USB2_TSCALE     (PARA_USB2_TSCALE),
     .PARA_USB2_AXI_DATA_W (PARA_USB2_AXI_DATA_W)
   ) u_cfgchk (
-    .o_cfg_err (w_cfg_err)
+    .o_cfg_err ()   // marker for tb_cfgchk; an illegal set stops elaboration
   );
 
   // Reset controller: synchronized releases, soft reset of the engines, reset of the PHY.
@@ -838,7 +833,6 @@ module m_usb2_core #(
       assign o_ulpi_data_oe = 1'b0;
       assign w_stp_lp       = 1'b0;
       assign w_lp_active    = 1'b0;
-      assign w_wake_evt     = 1'b0;
       assign w_reg_busy     = 1'b0;
       assign w_reg_done     = w_reg_start;
       assign w_reg_rdata    = 8'h00;
@@ -896,7 +890,6 @@ module m_usb2_core #(
         .i_lp_active (w_lp_active),
         .i_wake_req  (w_wake_csr),
         .o_stp_lp    (w_stp_lp),
-        .o_wake_evt  (w_wake_evt),
         .o_lp_sync   ()
       );
       assign o_utmi_dataout = 16'h0000;
@@ -947,8 +940,6 @@ module m_usb2_core #(
     .o_tok_efld (w_tok_efld),
     .o_tok_pid (w_tok_pid),
     .o_tok_fld (w_tok_fld),
-    .o_spl_vld (w_spl_vld),
-    .o_spl_fld (w_spl_fld),
     .o_hs_vld (w_hs_vld),
     .o_hs_pid (w_hs_pid),
     .o_dat_sop (w_dat_sop),
@@ -963,7 +954,6 @@ module m_usb2_core #(
     .o_err_stuf (w_err_stuf),
     .o_err_babble (w_err_babble),
     .o_rx_busy (w_rx_busy),
-    .o_pkt_end (w_pkt_end),
     .i_tx_req        (w_tx_req),
     .i_tx_kind       (w_tx_kind),
     .i_tx_pid        (w_tx_pid),
@@ -1056,6 +1046,7 @@ module m_usb2_core #(
     .o_dev_act       (w_dev_act),
     .o_test_nak      (w_test_nak),
     .o_host_act      (w_host_act),
+    .o_host_quiet    (w_host_quiet),
     .o_speed         (w_speed),
     .o_attached      (w_attached),
     .o_suspended     (w_suspended),
@@ -1204,6 +1195,7 @@ module m_usb2_core #(
         .i_clk_phy       (i_clk_phy),
         .i_rst_n_core    (w_rst_n_core),
         .i_host_act      (w_host_act),
+        .i_host_quiet    (w_host_quiet),
         .i_port_speed    (w_speed),
         .i_hs_vld (w_hs_vld),
         .i_hs_pid (w_hs_pid),
@@ -1250,7 +1242,6 @@ module m_usb2_core #(
         .o_frame         (w_host_frame),
         .o_evt_sof       (w_host_evt_sof),
         .o_evt_xfer      (w_host_evt_xfer),
-        .o_host_busy     (w_host_busy),
         .o_lpm_evt       (w_host_lpm_evt),
         .o_lpm_ack       (w_host_lpm_ack),
         .o_lpm_clr       (w_host_lpm_clr)
@@ -1276,7 +1267,6 @@ module m_usb2_core #(
       assign w_host_evt_sof = 1'b0;
       assign w_host_evt_xfer = 1'b0;
       assign w_host_frame = 14'd0;
-      assign w_host_busy = 1'b0;
       assign w_host_lpm_evt = 1'b0;
       assign w_host_lpm_ack = 1'b0;
       assign w_host_lpm_clr = 1'b0;

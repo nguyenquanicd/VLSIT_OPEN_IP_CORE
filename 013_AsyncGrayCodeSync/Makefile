@@ -19,7 +19,7 @@ VVP      ?= vvp
 FLIST    := rtl/filelist.f
 TOP      := m_vlsit_agray_sync_top
 TB_TOP   := tb_agray
-TB_SRCS  := ../verification/tb_agray.sv
+TB_SRCS  := ../verification/env/verificationtb_agray.sv
 
 .PHONY: help lint rule verify
 

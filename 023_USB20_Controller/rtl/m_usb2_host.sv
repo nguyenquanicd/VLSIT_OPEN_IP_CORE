@@ -93,6 +93,7 @@ module m_usb2_host #(
 
   // Role and port state from the speed engine
   input  wire                            i_host_act,
+  input  wire                            i_host_quiet,
   input  wire  [1:0]                     i_port_speed,
 
   // Receive events of the link
@@ -151,7 +152,6 @@ module m_usb2_host #(
   output logic [13:0]                    o_frame,
   output logic                           o_evt_sof,
   output logic                           o_evt_xfer,
-  output logic                           o_host_busy,
   output logic                           o_lpm_evt,
   output logic                           o_lpm_ack,
   output logic                           o_lpm_clr
@@ -264,7 +264,6 @@ module m_usb2_host #(
   logic [2:0]                               w_res_nxt;
   logic [31:0]                              w_c_ctrl;
   logic [31:0]                              w_c_split;
-  logic [31:0]                              w_c_cfg;
   logic [10:0]                              w_c_mps;
   logic [18:0]                              w_c_xs;
   logic [11:0]                              w_c_len;
@@ -301,7 +300,6 @@ module m_usb2_host #(
   // Channel view of the transaction in preparation.
   assign w_c_ctrl  = i_hc_ctrl[w_pick_ch];
   assign w_c_split = i_hc_split[w_pick_ch];
-  assign w_c_cfg   = i_hc_cfg[w_pick_ch];
   assign w_c_mps   = w_c_ctrl[10:0];
   assign w_c_type  = w_c_ctrl[17:16];
   assign w_c_xs    = reg_xs[w_pick_ch];
@@ -413,7 +411,7 @@ module m_usb2_host #(
   assign w_exp_pid  = reg_dat_pid;
   assign w_pid_ok   = reg_iso ? 1'b1 : (i_dat_pid == w_exp_pid);
   assign w_data_ok  = i_dat_end & i_dat_ok & reg_rx_acc;
-  assign w_lpm_start = reg_lpm_pend & i_host_act & ~reg_sof_pend;
+  assign w_lpm_start = reg_lpm_pend & i_host_act & ~i_host_quiet & ~reg_sof_pend;
   assign w_bab      = i_dat_end & (i_dat_len > {1'b0, reg_mps});
 
   // The data packet of the device has started (cleared outside the wait for data).
@@ -439,7 +437,8 @@ module m_usb2_host #(
     w_fsm_host_nxt_state = reg_fsm_host_current_state;
     case (reg_fsm_host_current_state)
       ENUM_ST_IDLE: begin
-        casez ({reg_sof_pend & w_sof_en, w_lpm_start, w_pick_vld & ~reg_done_p & i_host_act & ~reg_sof_pend})
+        casez ({reg_sof_pend & w_sof_en & ~i_host_quiet, w_lpm_start,
+                w_pick_vld & ~reg_done_p & i_host_act & ~i_host_quiet & ~reg_sof_pend})
           3'b1??:  w_fsm_host_nxt_state = ENUM_ST_SOF;
           3'b01?:  w_fsm_host_nxt_state = ENUM_ST_LPM_EXT;
           3'b001:  w_fsm_host_nxt_state = ENUM_ST_PREP;
@@ -571,7 +570,7 @@ module m_usb2_host #(
         reg_sof_pend <= 1'b0;
       end else if (w_uf_end) begin
         reg_uf_cnt   <= w_uf_reload;
-        reg_sof_pend <= 1'b1;
+        reg_sof_pend <= ~i_host_quiet;          // a SOF due while the port is quiet is dropped
         reg_tick     <= 1'b1;
         if (w_hs_mode) begin
           reg_uf_idx <= reg_uf_idx + 3'd1;
@@ -631,8 +630,8 @@ module m_usb2_host #(
       reg_done_p     <= 1'b0;
       case (reg_fsm_host_current_state)
         ENUM_ST_IDLE: begin
-          casez ({(w_lpm_start & ~(reg_sof_pend & w_sof_en)), (reg_sof_pend & w_sof_en),
-                  (w_pick_vld & ~reg_done_p & i_host_act)})
+          casez ({(w_lpm_start & ~(reg_sof_pend & w_sof_en & ~i_host_quiet)), (reg_sof_pend & w_sof_en & ~i_host_quiet),
+                  (w_pick_vld & ~reg_done_p & i_host_act & ~i_host_quiet)})
             3'b1??: begin
             reg_tx_req  <= 1'b1;
             reg_tx_kind <= LPARA_KIND_TOK[2:0];
@@ -1006,7 +1005,6 @@ module m_usb2_host #(
   assign o_frame      = {reg_uf_idx, reg_frame};
   assign o_evt_sof    = reg_evt_sof;
   assign o_evt_xfer   = |w_xfer_hit;
-  assign o_host_busy  = (reg_fsm_host_current_state != ENUM_ST_IDLE);
   assign o_lpm_evt    = reg_lpm_evt;
   assign o_lpm_ack    = reg_lpm_ack;
   assign o_lpm_clr    = reg_lpm_clr;

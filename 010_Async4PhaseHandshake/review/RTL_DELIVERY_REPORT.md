@@ -34,14 +34,14 @@
 | `lint/lint_verilator_d1_a2.log` | Verilator lint log, `PARA_AHS4_DST_MODE` = 1, `PARA_AHS4_ACK_DATA_MODE` = 2 |
 | `RTL_RULE_CHECK_REPORT.md` | `vlsit_rtl_check.py check --report` output |
 | `RTL_DELIVERY_REPORT.md` | This report |
-| `figures/vlsit_ahs4_block_diagram.drawio` / `.svg` / `_spec.json` | Editable and rendered block diagram with its source spec |
-| `figures/vlsit_ahs4_block_diagram_generator_report.txt` | Block-diagram generator result |
-| `figures/vlsit_ahs4_wf001_success.json` / `.svg` | WF-001 success waveform, mode 0 |
-| `figures/vlsit_ahs4_wf002_backpressure.json` / `.svg` | WF-002 backpressure waveform, mode 0 |
-| `figures/vlsit_ahs4_wf003_reset.json` / `.svg` | WF-003 reset waveform |
-| `figures/vlsit_ahs4_wf004_backtoback.json` / `.svg` | WF-004 back-to-back waveform, mode 0 |
-| `figures/vlsit_ahs4_wf005_dst_reset.json` / `.svg` | WF-005 illegal destination-only reset waveform |
-| `figures/vlsit_ahs4_wf006_capture.json` / `.svg` | WF-006 captured transfer waveform, mode 1 |
+| `../spec/figures/vlsit_ahs4_block_diagram.drawio` / `.svg` / `_spec.json` | Editable and rendered block diagram with its source spec |
+| `../spec/figures/vlsit_ahs4_block_diagram_generator_report.txt` | Block-diagram generator result |
+| `../spec/figures/vlsit_ahs4_wf001_success.json` / `.svg` | WF-001 success waveform, mode 0 |
+| `../spec/figures/vlsit_ahs4_wf002_backpressure.json` / `.svg` | WF-002 backpressure waveform, mode 0 |
+| `../spec/figures/vlsit_ahs4_wf003_reset.json` / `.svg` | WF-003 reset waveform |
+| `../spec/figures/vlsit_ahs4_wf004_backtoback.json` / `.svg` | WF-004 back-to-back waveform, mode 0 |
+| `../spec/figures/vlsit_ahs4_wf005_dst_reset.json` / `.svg` | WF-005 illegal destination-only reset waveform |
+| `../spec/figures/vlsit_ahs4_wf006_capture.json` / `.svg` | WF-006 captured transfer waveform, mode 1 |
 | `backup/VLSIT_ASYNC_4_PHASE_HANDSHAKE_HDS_2026-11-11.md` | Original specification copy |
 | `backup/VLSIT_ASYNC_4_PHASE_HANDSHAKE_HDS_2026-11-12.md` | Pre-edit specification copy for the v0.2 change |
 
@@ -142,7 +142,7 @@ python "C:\Users\PC\.claude\skills\vlsit-rtl-generator\scripts\vlsit_rtl_check.p
 python "C:\Users\PC\.claude\skills\vlsit-asic-ip-microspec\scripts\vlsit_spec_tool.py" check "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\../spec/../spec/VLSIT_ASYNC_4_PHASE_HANDSHAKE_HDS.md"
 python "C:\Users\PC\.claude\skills\vlsit-asic-ip-microspec\scripts\vlsit_spec_diagram.py" check "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\figures\vlsit_ahs4_block_diagram_spec.json"
 python "C:\Users\PC\.claude\skills\vlsit-asic-ip-microspec\scripts\vlsit_spec_diagram.py" build "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\figures\vlsit_ahs4_block_diagram_spec.json" --out-dir "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\figures" --gap-h 80 --gap-v 90 --seed 7
-python "C:\Users\PC\.claude\skills\vlsit-rtl-generator\scripts\vlsit_lint_rtl.py" filelist "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\rtl" --out "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\rtl\filelist.f" --top m_vlsit_ahs4_top --force
+python "C:\Users\PC\.claude\skills\vlsit-rtl-generator\scripts\vlsit_lint_rtl.py" filelist "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\rtl" --out "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\filelist.f" --top m_vlsit_ahs4_top --force
 python "C:\Users\PC\.claude\skills\vlsit-rtl-spec-change-implementer\scripts\vlsit_rtl_change_metrics.py" compare "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\backup\rtl_snapshot_2026-11-13" "C:\HQuan\102_MyGithub\VLSIT_DEEPSEEK\common_rtl\010_Async4PhaseHandshake\rtl"
 ```
 

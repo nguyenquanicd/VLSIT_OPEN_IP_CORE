@@ -1,0 +1,68 @@
+# scenario dir_loopback seed 1
+WD 1d4c0
+CHK HBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 34 10
+W 14 1ffffff
+W 4 61
+W 28 400008
+LS 1
+ID 60216
+CHK HBU-CONN
+P 2c 1 1 7d0
+P 10 10 10 190
+W 10 10
+W 28 400009
+CHK HBU-RSTDRV
+WP 0 d7 df fa0
+TM
+LS 0
+ID 3057
+LS 2
+ID 1770
+LS 0
+CHK HBU-CHIRP
+XK 177 1b774 4 dbba
+CHK HBU-RST50
+P 10 80 80 57e4
+TC 2dc6a 2f9b8
+R 2c 2 e
+W 10 82
+CHK HBU-RECOV
+NSOF 99cf
+XN 14
+W 28 400018
+W 10 1ffffff
+CHK DLB-OFF
+R 64 0 ffffff
+W 4 e1
+W 64 1000000
+CHK DLB-PINS
+WP 0 d5 df fa0
+XN 5dc
+B cg_lpbk.pins_idle
+CHK DLB-COUNT
+P 64 8 8 190
+B cg_lpbk.good
+ID f60c48
+ID 5dc
+CHK DLB-SAT
+R 64 fff ffffff
+B cg_lpbk.saturate
+XN 5dc
+W 4 61
+ID c8
+CHK DLB-EXIT
+RP 64
+RP 64
+R 64 fff ffffff
+CHK DLB-CLR
+W 64 1000000
+ID 64
+R 64 0 ffffff
+B cg_lpbk.clear
+R 10 0 300
+END

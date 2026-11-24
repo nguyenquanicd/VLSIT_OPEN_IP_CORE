@@ -172,16 +172,16 @@ The supplied hierarchy shown in the diagrams is the as-built RTL baseline. For t
 
 ### 5.2 Block diagram
 
-![Functional hierarchy of m_fpt_wdt_top, showing each supplied RTL module](../figures/wdt_top_function_diagram.svg)
+![Functional hierarchy of m_fpt_wdt_top, showing each supplied RTL module](figures/wdt_top_function_diagram.svg)
 
-*Figure 5-1. Functional hierarchy of m_fpt_wdt_top, showing each supplied RTL module. Source: `../figures/wdt_top_function_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
+*Figure 5-1. Functional hierarchy of m_fpt_wdt_top, showing each supplied RTL module. Source: `figures/wdt_top_function_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
 
 ### 5.3 Diagram notes
 
 All three diagrams describe the supplied RTL snapshot, not the target CSR or pulse-width implementation. Their hierarchy remains useful as a baseline; update them together with any future RTL hierarchy change.
 
-- [Wrapper boundary diagram](../figures/wdt_top_diagram.svg) ([draw.io source](../figures/wdt_top_diagram.drawio), [diagram data](../figures/wdt_top_diagram_spec.json)).
-- [Watchdog-core module diagram](../figures/wdt_core_diagram.svg) ([draw.io source](../figures/wdt_core_diagram.drawio), [diagram data](../figures/wdt_core_diagram_spec.json)).
+- [Wrapper boundary diagram](figures/wdt_top_diagram.svg) ([draw.io source](figures/wdt_top_diagram.drawio), [diagram data](figures/wdt_top_diagram_spec.json)).
+- [Watchdog-core module diagram](figures/wdt_core_diagram.svg) ([draw.io source](figures/wdt_core_diagram.drawio), [diagram data](figures/wdt_core_diagram_spec.json)).
 
 ## 6. External interfaces and ports
 
@@ -279,16 +279,16 @@ The user approved the updated set on 2026-11-14. WF-005 through WF-010 illustrat
 
 | Waveform ID | Function / operation | Scenario | Signals | Figure/source | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001 reset and CDC | Reset/success | Both clocks/resets, request/ack, PREADY | [SVG](../figures/wf001_reset_cdc.svg), [JSON](../figures/wf001_reset_cdc.json) | 2026-11-14 |
-| WF-002 | OP-002/OP-003 APB read wait | Success/wait | APB read, PREADY/PRDATA, read request/ack | [SVG](../figures/wf002_apb_read_wait.svg), [JSON](../figures/wf002_apb_read_wait.json) | 2026-11-14 |
-| WF-003 | OP-002 APB write wait | Success/wait | APB write, PREADY, write request/ack | [SVG](../figures/wf003_apb_write_wait.svg), [JSON](../figures/wf003_apb_write_wait.json) | 2026-11-14 |
-| WF-004 | OP-003 counter readback | Success | Load, count, APB read data | [SVG](../figures/wf004_counter_readback.svg), [JSON](../figures/wf004_counter_readback.json) | 2026-11-14 |
-| WF-005 | OP-004/OP-006 timeout, disable and IRQ independence | First timeout; disable retains raw; IRQ enable reveals cause | Count, `WDT_EN`, raw, `IRQ_EN`, status, IRQ | [SVG](../figures/wf005_first_timeout_irq.svg), [JSON](../figures/wf005_first_timeout_irq.json) | 2026-11-14 |
-| WF-006 | OP-005 W1C service | Real timeout recovery | APB W1C, raw, escalation pending, count, IRQ | [SVG](../figures/wf006_clear_interrupt.svg), [JSON](../figures/wf006_clear_interrupt.json) | 2026-11-14 |
-| WF-007 | OP-007/OP-008 second timeout and exact pulse width | Unserviced timeout; programmed `N−1` example | Reset request, width field, reset output, WDT clock | [SVG](../figures/wf007_second_timeout_reset.svg), [JSON](../figures/wf007_second_timeout_reset.json) | 2026-11-14 |
-| WF-008 | REQ-FUNC-006 debug halt/resume | Optional | DBGEN, count, timeout | [SVG](../figures/wf008_debug_halt.svg), [JSON](../figures/wf008_debug_halt.json) | 2026-11-14 |
-| WF-009 | OP-010 lock/address error | Locked and invalid-address accesses | Unlock, APB address/control, PREADY, PSLVERR | [SVG](../figures/wf009_lock_and_errors.svg), [JSON](../figures/wf009_lock_and_errors.json) | 2026-11-14 |
-| WF-010 | OP-009 interrupt injection | Rising edge injection | Injection, raw, enable, status/IRQ, count, escalation | [SVG](../figures/wf010_irq_injection.svg), [JSON](../figures/wf010_irq_injection.json) | 2026-11-14 |
+| WF-001 | OP-001 reset and CDC | Reset/success | Both clocks/resets, request/ack, PREADY | [SVG](figures/wf001_reset_cdc.svg), [JSON](figures/wf001_reset_cdc.json) | 2026-11-14 |
+| WF-002 | OP-002/OP-003 APB read wait | Success/wait | APB read, PREADY/PRDATA, read request/ack | [SVG](figures/wf002_apb_read_wait.svg), [JSON](figures/wf002_apb_read_wait.json) | 2026-11-14 |
+| WF-003 | OP-002 APB write wait | Success/wait | APB write, PREADY, write request/ack | [SVG](figures/wf003_apb_write_wait.svg), [JSON](figures/wf003_apb_write_wait.json) | 2026-11-14 |
+| WF-004 | OP-003 counter readback | Success | Load, count, APB read data | [SVG](figures/wf004_counter_readback.svg), [JSON](figures/wf004_counter_readback.json) | 2026-11-14 |
+| WF-005 | OP-004/OP-006 timeout, disable and IRQ independence | First timeout; disable retains raw; IRQ enable reveals cause | Count, `WDT_EN`, raw, `IRQ_EN`, status, IRQ | [SVG](figures/wf005_first_timeout_irq.svg), [JSON](figures/wf005_first_timeout_irq.json) | 2026-11-14 |
+| WF-006 | OP-005 W1C service | Real timeout recovery | APB W1C, raw, escalation pending, count, IRQ | [SVG](figures/wf006_clear_interrupt.svg), [JSON](figures/wf006_clear_interrupt.json) | 2026-11-14 |
+| WF-007 | OP-007/OP-008 second timeout and exact pulse width | Unserviced timeout; programmed `N−1` example | Reset request, width field, reset output, WDT clock | [SVG](figures/wf007_second_timeout_reset.svg), [JSON](figures/wf007_second_timeout_reset.json) | 2026-11-14 |
+| WF-008 | REQ-FUNC-006 debug halt/resume | Optional | DBGEN, count, timeout | [SVG](figures/wf008_debug_halt.svg), [JSON](figures/wf008_debug_halt.json) | 2026-11-14 |
+| WF-009 | OP-010 lock/address error | Locked and invalid-address accesses | Unlock, APB address/control, PREADY, PSLVERR | [SVG](figures/wf009_lock_and_errors.svg), [JSON](figures/wf009_lock_and_errors.json) | 2026-11-14 |
+| WF-010 | OP-009 interrupt injection | Rising edge injection | Injection, raw, enable, status/IRQ, count, escalation | [SVG](figures/wf010_irq_injection.svg), [JSON](figures/wf010_irq_injection.json) | 2026-11-14 |
 
 
 ## 11. Register and programming model

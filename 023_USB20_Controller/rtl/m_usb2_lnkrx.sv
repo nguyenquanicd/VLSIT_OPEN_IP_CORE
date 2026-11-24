@@ -81,7 +81,6 @@ module m_usb2_lnkrx #(
   output logic [3:0]  o_tok_pid,
   output logic [10:0] o_tok_fld,
   output logic        o_spl_vld,
-  output logic [18:0] o_spl_fld,
   output logic        o_hs_vld,
   output logic [3:0]  o_hs_pid,
 
@@ -99,8 +98,7 @@ module m_usb2_lnkrx #(
   output logic        o_err_crc,
   output logic        o_err_stuf,
   output logic        o_err_babble,
-  output logic        o_rx_busy,
-  output logic        o_pkt_end
+  output logic        o_rx_busy
 );
 
   // Internal signal declarations
@@ -175,7 +173,6 @@ module m_usb2_lnkrx #(
   logic [10:0] reg_tok_fld;
   logic [10:0] reg_tok_efld;
   logic reg_spl_vld;
-  logic [18:0] reg_spl_fld;
   logic reg_hs_vld;
   logic [3:0] reg_hs_pid;
   logic reg_dat_sop;
@@ -189,7 +186,6 @@ module m_usb2_lnkrx #(
   logic reg_err_crc;
   logic reg_err_stuf;
   logic reg_err_babble;
-  logic reg_pkt_end;
 
   // Optional register stage on the PHY inputs.
   always_ff @(posedge i_clk_phy, negedge i_rst_n_core) begin : p_ff_in
@@ -392,6 +388,9 @@ module m_usb2_lnkrx #(
       reg_pid      <= 4'h0;
       reg_pid_ok   <= 1'b0;
       reg_ext_pend <= 1'b0;
+      // Reset in the only process that writes it (2026-11-24, lint MULTIDRIVEN: the reset
+      // was in p_ff_out).
+      reg_tok_efld <= '0;
       reg_etk      <= 1'b0;
       reg_in_pkt   <= 1'b0;
       reg_err_seen <= 1'b0;
@@ -440,9 +439,7 @@ module m_usb2_lnkrx #(
       reg_tok_ext    <= 1'b0;
       reg_tok_pid    <= 4'h0;
       reg_tok_fld    <= '0;
-      reg_tok_efld   <= '0;
       reg_spl_vld    <= 1'b0;
-      reg_spl_fld    <= '0;
       reg_hs_vld     <= 1'b0;
       reg_hs_pid     <= 4'h0;
       reg_dat_sop    <= 1'b0;
@@ -456,7 +453,6 @@ module m_usb2_lnkrx #(
       reg_err_crc    <= 1'b0;
       reg_err_stuf   <= 1'b0;
       reg_err_babble <= 1'b0;
-      reg_pkt_end    <= 1'b0;
     end else begin
       reg_tok_vld    <= 1'b0;
       reg_spl_vld    <= 1'b0;
@@ -467,7 +463,6 @@ module m_usb2_lnkrx #(
       reg_err_crc    <= 1'b0;
       reg_err_stuf   <= 1'b0;
       reg_err_babble <= 1'b0;
-      reg_pkt_end    <= w_s_eop & (reg_in_pkt | w_s_sop);
       reg_dat_n      <= 2'd0;
       if (w_s_sop & (w_cls_nxt == LPARA_CLS_DATA[2:0])) begin
         reg_dat_sop <= 1'b1;
@@ -483,7 +478,6 @@ module m_usb2_lnkrx #(
         reg_tok_pid  <= reg_pid;
         reg_tok_ext  <= reg_etk;
         reg_tok_fld  <= {w_h1[2:0], w_h0};
-        reg_spl_fld  <= {w_h2[2:0], w_h1, w_h0};
         reg_hs_pid   <= reg_pid;
         reg_dat_len  <= (w_cnt_fin > 13'd2) ? (w_cnt_fin[11:0] - 12'd2) : 12'd0;
         reg_err_stuf <= reg_err_seen | w_s_err;
@@ -536,7 +530,6 @@ module m_usb2_lnkrx #(
   assign o_tok_pid = reg_tok_pid;
   assign o_tok_fld = reg_tok_fld;
   assign o_spl_vld = reg_spl_vld;
-  assign o_spl_fld = reg_spl_fld;
   assign o_hs_vld = reg_hs_vld;
   assign o_hs_pid = reg_hs_pid;
   assign o_dat_sop = reg_dat_sop;
@@ -550,6 +543,5 @@ module m_usb2_lnkrx #(
   assign o_err_crc = reg_err_crc;
   assign o_err_stuf = reg_err_stuf;
   assign o_err_babble = reg_err_babble;
-  assign o_pkt_end = reg_pkt_end;
 
 endmodule

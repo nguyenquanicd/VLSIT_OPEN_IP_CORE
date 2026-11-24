@@ -1,0 +1,58 @@
+# scenario host_edge seed 1
+WD 61a80
+CHK HBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 34 10
+W 14 1ffffff
+W 4 61
+W 28 400008
+LS 1
+ID 60216
+CHK HBU-CONN
+P 2c 1 1 7d0
+P 10 10 10 190
+W 10 10
+W 28 400009
+CHK HBU-RSTDRV
+WP 0 d7 df fa0
+TM
+LS 0
+ID 3057
+LS 2
+ID 1770
+LS 0
+CHK HBU-CHIRP
+XK 177 1b774 4 dbba
+CHK HBU-RST50
+P 10 80 80 57e4
+TC 2dc6a 2f9b8
+R 2c 2 e
+W 10 82
+CHK HBU-RECOV
+NSOF 99cf
+XN 14
+W 28 400018
+W 10 1ffffff
+ID bb8
+W 6dc 1f00
+W 69c 80040
+W 61c 80029040
+MW 1f00 40 ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee ee
+XT 9 0 2 7530
+ID 8
+RXH 4e20 c c3 fa f f0 16 9d c9 57 56 74 6 66
+XT 9 0 2 7530
+ID 8
+DT 3 0 40 44 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd
+XH 2 7d0
+P 71c 1 1 384
+IB 258
+MC 1f00 40 44 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd
+R 71c 80 80
+W 71c 81
+B cg_err.rx_stuck
+FLUSH
+END

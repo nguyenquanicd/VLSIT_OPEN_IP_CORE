@@ -1,0 +1,81 @@
+# scenario dbg_axis seed 1
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2e
+WP 0 12 df 320
+LS 2
+XC ea 668 0 753
+LS 0
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 2
+I b
+LS 1
+I b
+LS 0
+WP 0 0 df 7d
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 89
+IB 190
+W 2c 200000
+W 100 61
+W 104 42
+W 244 200100
+W 204 481040
+IB c8
+DR 0 1 7d0
+AW 1 0 10 0 2265b1f5 91b7584a d8f16adf cd613e30 c386bbc4 1027c4d1 414c343c 1e2feb89 7ed4d57b c2ce6f44 7311d8a3 78e51061 a6cecc1b 612e7696 c9e9c616 35bf992d
+IB 12c
+TK 9 9 1 0
+XD 3 190 40 f5 b1 65 22 4a 58 b7 91 df 6a f1 d8 30 3e 61 cd c4 bb 86 c3 d1 c4 27 10 3c 34 4c 41 89 eb 2f 1e 7b d5 d4 7e 44 6f ce c2 a3 d8 11 73 61 10 e5 78 1b cc ce a6 96 76 2e 61 16 c6 e9 c9 2d 99 bf 35
+ID 8
+HS 2
+ID 64
+DX 0 1
+RP 244
+RP 204
+AW 1 0 10 0 2265b1f5 91b7584a d8f16adf cd613e30 c386bbc4 1027c4d1 414c343c 1e2feb89 7ed4d57b c2ce6f44 7311d8a3 78e51061 a6cecc1b 612e7696 c9e9c616 35bf992d
+IB 12c
+TK 9 9 1 0
+XD b 190 40 f5 b1 65 22 4a 58 b7 91 df 6a f1 d8 30 3e 61 cd c4 bb 86 c3 d1 c4 27 10 3c 34 4c 41 89 eb 2f 1e 7b d5 d4 7e 44 6f ce c2 a3 d8 11 73 61 10 e5 78 1b cc ce a6 96 76 2e 61 16 c6 e9 c9 2d 99 bf 35
+ID 8
+HS 2
+IB c8
+W 448 100040
+W 408 401040
+IB c8
+TK 1 9 2 0
+DT 3 0 40 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd fa f f0 16 9d c9 57 56 74
+XH 2 190
+IB 12c
+DX 1 1
+AR 1 1000 10 0 c70ef930 88e401dd fa23475 c3040d0b 710ed86e b077fde0 94eb7076 5f33d50b d8aa3d97 ff919b61 7cf511c9 bb58d4ce 37e02cbf fabdc953 9d16f00f 745657c9
+DR 1 0 28
+AR 1 1000 10 2
+AW 1 7000 4 2 1 2 3 4
+AW 1 2000 4 2 1 2 3 4
+AR 1 0 4 2
+IB 64
+END

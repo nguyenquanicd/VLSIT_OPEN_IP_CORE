@@ -76,7 +76,7 @@ python "C:\Users\PC\.codex\skills\vlsit-rtl-generator\scripts\vlsit_rtl_check.py
   "C:\HQuan\102_MyGithub\VLSIT_RTL_Generator_AI_Model\common_rtl\004_CRC\rtl"
 
 python "C:\Users\PC\.codex\skills\vlsit-rtl-generator\scripts\vlsit_lint_rtl.py" lint `
-  "C:\HQuan\102_MyGithub\VLSIT_RTL_Generator_AI_Model\common_rtl\004_CRC\rtl\filelist.f" `
+  "C:\HQuan\102_MyGithub\VLSIT_RTL_Generator_AI_Model\common_rtl\filelist.f" `
   --top m_crc_engine --tool verilator
 
 verilator_bin --lint-only -Wall --top-module m_crc_engine `

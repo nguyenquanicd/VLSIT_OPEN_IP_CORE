@@ -1,0 +1,138 @@
+# scenario host_enum_bulk_dma seed 2
+WD ea60
+CHK HBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 34 10
+W 14 1ffffff
+W 4 61
+W 28 400008
+LS 1
+ID 60216
+CHK HBU-CONN
+P 2c 1 1 7d0
+P 10 10 10 190
+W 10 10
+W 28 400009
+CHK HBU-RSTDRV
+WP 0 d7 df fa0
+TM
+LS 0
+ID 3057
+LS 2
+ID 1770
+LS 0
+CHK HBU-CHIRP
+XK 177 1b774 4 dbba
+CHK HBU-RST50
+P 10 80 80 57e4
+TC 2dc6a 2f9b8
+R 2c 2 e
+W 10 82
+CHK HBU-RECOV
+NSOF 99cf
+XN 14
+W 28 400018
+W 10 1ffffff
+B cg_tscale.scaled
+B cg_chirp_h.detect
+B cg_chirp_h.kj
+B cg_chirp_h.end
+B cg_prst.duration
+B cg_prst.recovery
+ID bb8
+CHK HEB-SOF1
+SOF 3 1b77 2191
+B cg_sof.hs
+MW 1000 8 80 6 0 1 0 0 12 0
+W 6c0 1000
+W 680 80080008
+W 600 80000040
+CHK HEB-SETUP
+XT d 0 0 7530
+XD 3 7530 8 80 6 0 1 0 0 12 0
+ID 8
+HS 2
+P 700 1 1 190
+W 700 1
+B cg_toggle.setup
+W 6c0 1100
+W 680 20080012
+W 600 80008040
+CHK HEB-CIN
+XT 9 0 0 7530
+ID 8
+DT b 0 12 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba
+XH 2 7d0
+P 700 1 1 190
+W 700 1
+MC 1100 12 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba
+W 6c0 1200
+W 680 20080000
+W 600 80000040
+CHK HEB-CSTAT
+XT 1 0 0 7530
+XD b 7530 0
+ID 8
+HS 2
+P 700 1 1 190
+W 700 1
+MW 2000 94 ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34
+W 6c4 2000
+W 684 180094
+W 604 80021040
+CHK HEB-BOUT
+XT 1 0 2 7530
+XD 3 7530 40 ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d
+ID 8
+HS 2
+XT 1 0 2 7530
+XD b 7530 40 b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e
+ID 8
+HS 2
+XT 1 0 2 7530
+XD 3 7530 14 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34
+ID 8
+HS 2
+P 704 1 1 190
+W 704 1
+B cg_toggle.d0
+B cg_toggle.d1
+B cg_flow.ack
+W 6c8 3000
+W 688 1800c0
+W 788 4
+W 608 80029840
+CHK HEB-BIN
+XT 9 0 3 7530
+ID 8
+HS a
+XT 9 0 3 7530
+ID 8
+DT 3 0 40 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c 30 f5 bb 9 3c bb 94 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab
+XH 2 7d0
+XT 9 0 3 7530
+ID 8
+DT b 0 40 c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca 76 50 fa 84 da 2b 31 24 b6 5a 4b d5 22 2c 13 41 97 c7 76 a8 e0 58 92 39 4f d8 31 a8 7f 83 56 50 ec 78 ce b7 4a ee e1 f c4 5c c9 1b f7
+XH 2 7d0
+XT 9 0 3 7530
+ID 8
+DT 3 0 17 8c cf 81 d3 f1 b8 a9 29 73 60 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e
+XH 2 7d0
+P 708 1 1 190
+R 708 8 8
+W 708 9
+MC 3000 97 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c 30 f5 bb 9 3c bb 94 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca 76 50 fa 84 da 2b 31 24 b6 5a 4b d5 22 2c 13 41 97 c7 76 a8 e0 58 92 39 4f d8 31 a8 7f 83 56 50 ec 78 ce b7 4a ee e1 f c4 5c c9 1b f7 8c cf 81 d3 f1 b8 a9 29 73 60 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e
+R 688 29 7ffff
+B cg_short.last
+ID bb8
+CHK HEB-SOF2
+SOF 3 1b77 2191
+B cg_sched.guard
+B cg_axim.len16
+B cg_irq.each_source
+B cg_utmi.tx_wait
+B cg_utmi.rx_gap
+END

@@ -14,7 +14,7 @@ csr_spec: "Not required (no software-visible registers)"
 
 > **Purpose:** Normative design contract for architecture, RTL, verification, DFT, and physical integration of this IP.
 >
-> **Status of this draft:** The decisions DEC-001 to DEC-020 were taken by the designer on 2026-10-25. The decisions DEC-021 to DEC-028 are choices of the author of this draft that the designer has not yet confirmed (Section 20). No RTL exists yet. The waveforms and the latency and throughput figures of this document come from a throw-away prototype that follows this specification and instantiates the RTL of the sibling IP `001_AsyncGrayFIFO` (`../figures/../verification/sim/waveform_proto/`); they are not results of the delivered RTL.
+> **Status of this draft:** The decisions DEC-001 to DEC-020 were taken by the designer on 2026-10-25. The decisions DEC-021 to DEC-028 are choices of the author of this draft that the designer has not yet confirmed (Section 20). No RTL exists yet. The waveforms and the latency and throughput figures of this document come from a throw-away prototype that follows this specification and instantiates the RTL of the sibling IP `001_AsyncGrayFIFO` (`figures/../verification/sim/waveform_proto/`); they are not results of the delivered RTL.
 >
 > Requirement terms: **shall** = mandatory and testable; **should** = recommended; **may** = optional.
 
@@ -116,7 +116,7 @@ The bridge **forwards** the information: it does not check, interpret, reorder o
 | REF-003 | VLSIT RTL Design Rules v2, `VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_RTL_Design_Rule.md` | All applicable rules, section 9 (protocol interface naming) | Mandatory RTL coding, hierarchy, reset, CDC and naming baseline |
 | REF-004 | IEEE 1800-2017 SystemVerilog | Synthesizable subset | Subject to REF-003 and the selected frontend |
 | REF-005 | Decisions of the designer, 2026-10-25 (Section 20) | DEC-001 to DEC-020 | Product behavior; no external product document exists |
-| REF-006 | Prototype and its logs, `../figures/../verification/sim/waveform_proto/` and `../figures/waveforms/axi_perf_table.txt` | Sections 10.3, 10.4 and 15 | Evidence for the waveforms, the latency and the throughput; not the delivered RTL |
+| REF-006 | Prototype and its logs, `figures/../verification/sim/waveform_proto/` and `figures/waveforms/axi_perf_table.txt` | Sections 10.3, 10.4 and 15 | Evidence for the waveforms, the latency and the throughput; not the delivered RTL |
 
 ### 2.2 Source-of-truth and conflict handling
 
@@ -205,9 +205,9 @@ The bridge has five independent channels. Each channel is an asynchronous FIFO w
 
 ### 5.2 Block diagram
 
-![Block diagram of the asynchronous AXI bridge: five channel modules in the top frame, one FIFO per channel (diagram spec: ../figures/axi_bridge_diagram_spec.json)](../figures/axi_bridge_block_diagram.svg)
+![Block diagram of the asynchronous AXI bridge: five channel modules in the top frame, one FIFO per channel (diagram spec: figures/axi_bridge_diagram_spec.json)](figures/axi_bridge_block_diagram.svg)
 
-*Figure 5-1. Block diagram of the asynchronous AXI bridge: five channel modules in the top frame, one FIFO per channel (diagram spec: ../figures/axi_bridge_diagram_spec.json). Source: `../figures/axi_bridge_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
+*Figure 5-1. Block diagram of the asynchronous AXI bridge: five channel modules in the top frame, one FIFO per channel (diagram spec: figures/axi_bridge_diagram_spec.json). Source: `figures/axi_bridge_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
 
 ### 5.3 Transaction and dataflow
 
@@ -372,17 +372,17 @@ The bridge implements two AXI interfaces (REF-001, Part A). The rules below come
 
 The key waveforms of the interfaces (the full plan is in Section 10.3):
 
-![Write burst across the bridge](../figures/waveforms/axi_wf001_write_burst.svg)
+![Write burst across the bridge](figures/waveforms/axi_wf001_write_burst.svg)
 
-*Figure 6-1. Write burst of 4 beats (WF-001, source `../figures/waveforms/axi_wf001_write_burst.json`).*
+*Figure 6-1. Write burst of 4 beats (WF-001, source `figures/waveforms/axi_wf001_write_burst.json`).*
 
-![Read burst across the bridge](../figures/waveforms/axi_wf002_read_burst.svg)
+![Read burst across the bridge](figures/waveforms/axi_wf002_read_burst.svg)
 
-*Figure 6-2. Read burst of 4 beats (WF-002, source `../figures/waveforms/axi_wf002_read_burst.json`).*
+*Figure 6-2. Read burst of 4 beats (WF-002, source `figures/waveforms/axi_wf002_read_burst.json`).*
 
-![Error responses](../figures/waveforms/axi_wf006_error_response.svg)
+![Error responses](figures/waveforms/axi_wf006_error_response.svg)
 
-*Figure 6-3. Error responses pass unchanged (WF-006, source `../figures/waveforms/axi_wf006_error_response.json`).*
+*Figure 6-3. Error responses pass unchanged (WF-006, source `figures/waveforms/axi_wf006_error_response.json`).*
 
 ### 6.4 Interrupts and events
 
@@ -510,55 +510,55 @@ On the destination side of each channel the transfer completes when VALID and RE
 
 ### 10.3 Cycle-level behavior
 
-**Waveform plan (rule R-024).** The plan below was proposed from sections 6.3 and 10.2 and confirmed by the designer on 2026-10-25 (answer 16A, the proposed list). It covers every operation of 10.2, the success and the error case of the subordinate-side and the manager-side interface, and the special cases (back-pressure, data before address, user signals, AXI3, reset, streaming, small depth). The waveforms come from the prototype (`../figures/../verification/sim/waveform_proto/gen_axi_waves.py`); the signal names follow the port names of Section 6.2.
+**Waveform plan (rule R-024).** The plan below was proposed from sections 6.3 and 10.2 and confirmed by the designer on 2026-10-25 (answer 16A, the proposed list). It covers every operation of 10.2, the success and the error case of the subordinate-side and the manager-side interface, and the special cases (back-pressure, data before address, user signals, AXI3, reset, streaming, small depth). The waveforms come from the prototype (`figures/../verification/sim/waveform_proto/gen_axi_waves.py`); the signal names follow the port names of Section 6.2.
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001, OP-002, OP-003 write burst of 4 beats | success (subordinate clock faster) | AW, W, B of both sides | ../figures/waveforms/axi_wf001_write_burst.svg | 2026-10-25 |
-| WF-002 | OP-004, OP-005 read burst of 4 beats | success (manager clock faster) | AR, R of both sides | ../figures/waveforms/axi_wf002_read_burst.svg | 2026-10-25 |
-| WF-003 | OP-001 back-pressure on AW | corner | AWVALID, AWREADY of both sides, AW FIFO full | ../figures/waveforms/axi_wf003_aw_backpressure.svg | 2026-10-25 |
-| WF-004 | OP-001, OP-002 write data before write address | corner | AW and W of both sides | ../figures/waveforms/axi_wf004_w_before_aw.svg | 2026-10-25 |
-| WF-005 | OP-005 back-pressure on R | corner | AR and R of both sides, R FIFO of depth 2 | ../figures/waveforms/axi_wf005_r_backpressure.svg | 2026-10-25 |
-| WF-006 | OP-003, OP-005 error responses (SLVERR, DECERR) | error | B and R of both sides | ../figures/waveforms/axi_wf006_error_response.svg | 2026-10-25 |
-| WF-007 | OP-001 to OP-005 user signals | corner (option) | All channels and the five user signals | ../figures/waveforms/axi_wf007_user_signals.svg | 2026-10-25 |
-| WF-008 | OP-001, OP-002 AXI3 mode | corner (option) | AW, W, WID, AWLOCK | ../figures/waveforms/axi_wf008_axi3_mode.svg | 2026-10-25 |
-| WF-009 | OP-006 hardware reset exit | corner | AW, B, both resets | ../figures/waveforms/axi_wf009_reset_exit.svg | 2026-10-25 |
-| WF-010 | OP-002 streaming of a 16-beat burst | corner (back-to-back) | W of both sides | ../figures/waveforms/axi_wf010_streaming.svg | 2026-10-25 |
-| WF-011 | OP-002 small FIFO (depth 2) | corner (throughput limit) | W of both sides | ../figures/waveforms/axi_wf011_small_depth.svg | 2026-10-25 |
+| WF-001 | OP-001, OP-002, OP-003 write burst of 4 beats | success (subordinate clock faster) | AW, W, B of both sides | figures/waveforms/axi_wf001_write_burst.svg | 2026-10-25 |
+| WF-002 | OP-004, OP-005 read burst of 4 beats | success (manager clock faster) | AR, R of both sides | figures/waveforms/axi_wf002_read_burst.svg | 2026-10-25 |
+| WF-003 | OP-001 back-pressure on AW | corner | AWVALID, AWREADY of both sides, AW FIFO full | figures/waveforms/axi_wf003_aw_backpressure.svg | 2026-10-25 |
+| WF-004 | OP-001, OP-002 write data before write address | corner | AW and W of both sides | figures/waveforms/axi_wf004_w_before_aw.svg | 2026-10-25 |
+| WF-005 | OP-005 back-pressure on R | corner | AR and R of both sides, R FIFO of depth 2 | figures/waveforms/axi_wf005_r_backpressure.svg | 2026-10-25 |
+| WF-006 | OP-003, OP-005 error responses (SLVERR, DECERR) | error | B and R of both sides | figures/waveforms/axi_wf006_error_response.svg | 2026-10-25 |
+| WF-007 | OP-001 to OP-005 user signals | corner (option) | All channels and the five user signals | figures/waveforms/axi_wf007_user_signals.svg | 2026-10-25 |
+| WF-008 | OP-001, OP-002 AXI3 mode | corner (option) | AW, W, WID, AWLOCK | figures/waveforms/axi_wf008_axi3_mode.svg | 2026-10-25 |
+| WF-009 | OP-006 hardware reset exit | corner | AW, B, both resets | figures/waveforms/axi_wf009_reset_exit.svg | 2026-10-25 |
+| WF-010 | OP-002 streaming of a 16-beat burst | corner (back-to-back) | W of both sides | figures/waveforms/axi_wf010_streaming.svg | 2026-10-25 |
+| WF-011 | OP-002 small FIFO (depth 2) | corner (throughput limit) | W of both sides | figures/waveforms/axi_wf011_small_depth.svg | 2026-10-25 |
 
 Active edge: the rising edge of the clock of the signal's own side. Inputs are sampled at the edge that ends a cycle; flop outputs change after the edge that starts it. The waveforms use a grid of the common divisor of the two half periods, so every clock edge is at a slot boundary. Values are shown only while the qualifier (the VALID of the channel) is 1.
 
-![AW back-pressure](../figures/waveforms/axi_wf003_aw_backpressure.svg)
+![AW back-pressure](figures/waveforms/axi_wf003_aw_backpressure.svg)
 
-*Figure 10-1. WF-003: the manager side does not accept, the AW FIFO (depth 4) fills and o_axi_awready falls (source `../figures/waveforms/axi_wf003_aw_backpressure.json`).*
+*Figure 10-1. WF-003: the manager side does not accept, the AW FIFO (depth 4) fills and o_axi_awready falls (source `figures/waveforms/axi_wf003_aw_backpressure.json`).*
 
-![W before AW](../figures/waveforms/axi_wf004_w_before_aw.svg)
+![W before AW](figures/waveforms/axi_wf004_w_before_aw.svg)
 
-*Figure 10-2. WF-004: write data crosses before the write address (source `../figures/waveforms/axi_wf004_w_before_aw.json`).*
+*Figure 10-2. WF-004: write data crosses before the write address (source `figures/waveforms/axi_wf004_w_before_aw.json`).*
 
-![R back-pressure](../figures/waveforms/axi_wf005_r_backpressure.svg)
+![R back-pressure](figures/waveforms/axi_wf005_r_backpressure.svg)
 
-*Figure 10-3. WF-005: the master holds RREADY low, the R FIFO (depth 2) fills (source `../figures/waveforms/axi_wf005_r_backpressure.json`).*
+*Figure 10-3. WF-005: the master holds RREADY low, the R FIFO (depth 2) fills (source `figures/waveforms/axi_wf005_r_backpressure.json`).*
 
-![User signals](../figures/waveforms/axi_wf007_user_signals.svg)
+![User signals](figures/waveforms/axi_wf007_user_signals.svg)
 
-*Figure 10-4. WF-007: user signals of width 4 travel with their channels (source `../figures/waveforms/axi_wf007_user_signals.json`).*
+*Figure 10-4. WF-007: user signals of width 4 travel with their channels (source `figures/waveforms/axi_wf007_user_signals.json`).*
 
-![AXI3 mode](../figures/waveforms/axi_wf008_axi3_mode.svg)
+![AXI3 mode](figures/waveforms/axi_wf008_axi3_mode.svg)
 
-*Figure 10-5. WF-008: AXI3 mode with WID and a 2-bit lock (source `../figures/waveforms/axi_wf008_axi3_mode.json`).*
+*Figure 10-5. WF-008: AXI3 mode with WID and a 2-bit lock (source `figures/waveforms/axi_wf008_axi3_mode.json`).*
 
-![Reset exit](../figures/waveforms/axi_wf009_reset_exit.svg)
+![Reset exit](figures/waveforms/axi_wf009_reset_exit.svg)
 
-*Figure 10-6. WF-009: VALID outputs low during reset, first AWVALID after the release (source `../figures/waveforms/axi_wf009_reset_exit.json`).*
+*Figure 10-6. WF-009: VALID outputs low during reset, first AWVALID after the release (source `figures/waveforms/axi_wf009_reset_exit.json`).*
 
-![Streaming](../figures/waveforms/axi_wf010_streaming.svg)
+![Streaming](figures/waveforms/axi_wf010_streaming.svg)
 
-*Figure 10-7. WF-010: a 16-beat burst streams through the W FIFO of depth 16 (source `../figures/waveforms/axi_wf010_streaming.json`).*
+*Figure 10-7. WF-010: a 16-beat burst streams through the W FIFO of depth 16 (source `figures/waveforms/axi_wf010_streaming.json`).*
 
-![Small depth](../figures/waveforms/axi_wf011_small_depth.svg)
+![Small depth](figures/waveforms/axi_wf011_small_depth.svg)
 
-*Figure 10-8. WF-011: a W FIFO of depth 2 limits the rate (source `../figures/waveforms/axi_wf011_small_depth.json`).*
+*Figure 10-8. WF-011: a W FIFO of depth 2 limits the rate (source `figures/waveforms/axi_wf011_small_depth.json`).*
 
 Let S be the number of synchronizer stages (2 for `PARA_AXI_CELL_TYPE` 1 and 2, 3 for 3, 4 for 4). The behavior of one channel, counting destination clock edges after the source edge that accepted the transfer (REF-002 section 10.3):
 
@@ -574,7 +574,7 @@ Let S be the number of synchronizer stages (2 for `PARA_AXI_CELL_TYPE` 1 and 2, 
 
 There is no arbitration: each channel has one source and one destination. A write and a read transaction use disjoint channels.
 
-**Latency** (measured on the prototype, `../figures/waveforms/axi_perf_table.txt`; AW depth 4, `PARA_AXI_CELL_TYPE` = 2). Time from the source-side handshake edge to the first destination-side VALID:
+**Latency** (measured on the prototype, `figures/waveforms/axi_perf_table.txt`; AW depth 4, `PARA_AXI_CELL_TYPE` = 2). Time from the source-side handshake edge to the first destination-side VALID:
 
 | Clock half periods (subordinate / manager, ns) | Latency (ns) | Latency (manager clock periods) |
 |---|---:|---:|
@@ -704,7 +704,7 @@ Each channel module has the ports of its channel from Section 6.2 (the same name
 
 Block-level simulation with a scoreboard per channel, directed tests for the handshake and the options, random traffic with random back-pressure over several clock ratios, assertions on the AXI handshake, lint and structural and CDC review. The environment is an AXI manager model on the subordinate side and an AXI subordinate model on the manager side. Each simulation records its seed. The metastability model of the synchronizer cell wrapper is active in simulation.
 
-**Evidence from the prototype** (not from the delivered RTL, which does not exist yet): `../figures/../verification/sim/waveform_proto/` contains a prototype that follows this specification, uses the RTL of `001_AsyncGrayFIFO`, and produced the eleven waveforms, the latency table and the throughput table. It was simulated for the scenarios of the waveform plan only. No regression, no assertion and no coverage were run on it.
+**Evidence from the prototype** (not from the delivered RTL, which does not exist yet): `figures/../verification/sim/waveform_proto/` contains a prototype that follows this specification, uses the RTL of `001_AsyncGrayFIFO`, and produced the eleven waveforms, the latency table and the throughput table. It was simulated for the scenarios of the waveform plan only. No regression, no assertion and no coverage were run on it.
 
 ### 15.2 Requirement-based test plan
 
@@ -910,7 +910,7 @@ Do not use a whole-domain `set_false_path` or an unqualified `set_clock_groups -
 | DEC-028 | Decision | AXI3 write data interleaving is not handled: beats pass in the order presented with their WID | Section 6.3 | Author's choice; to be confirmed by the designer |
 | DEP-001 | Dependency | `001_AsyncGrayFIFO` (RTL and specification) and `000_Common` (cells, wrappers) | All configurations | Integration |
 | DEP-002 | Dependency | Two clock sources and one reset controller per domain | REQ-CLK-001, REQ-RESET-001 | Integration |
-| DEP-003 | Dependency | The prototype scripts of `../figures/../verification/sim/waveform_proto/` need iverilog, vvp, Python 3, and the skill script `vlsit_waveform_svg.py` | REQ-VER-001 | Tool setup |
+| DEP-003 | Dependency | The prototype scripts of `figures/../verification/sim/waveform_proto/` need iverilog, vvp, Python 3, and the skill script `vlsit_waveform_svg.py` | REQ-VER-001 | Tool setup |
 
 ## 21. Glossary
 
@@ -935,4 +935,4 @@ Do not use a whole-domain `set_false_path` or an unqualified `set_clock_groups -
 3. `VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_RTL_Design_Rule.md` v2: naming, hierarchy and coding rules.
 4. `VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_ASIC_IP_Design_Specification_Template.md`: structure of this document.
 5. `research/reference_ip_log.md`: reference-IP research of this design; no qualified public IP was found.
-6. `../figures/../verification/sim/waveform_proto/`: the prototype and the scripts that produced the waveforms, the latency table and the throughput table.
+6. `figures/../verification/sim/waveform_proto/`: the prototype and the scripts that produced the waveforms, the latency table and the throughput table.

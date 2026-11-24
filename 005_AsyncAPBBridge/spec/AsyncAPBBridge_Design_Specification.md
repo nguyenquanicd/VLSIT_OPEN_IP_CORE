@@ -116,7 +116,7 @@ The handshake is selectable: a **two-phase (toggle)** handshake or a **four-phas
 | REF-003 | VLSIT RTL Design Rules v2, `VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_RTL_Design_Rule.md` | All applicable rules, PRT-01 to PRT-04, CLK-01, CLK-02, P28 | Mandatory RTL coding, hierarchy, reset, CDC and naming baseline |
 | REF-004 | IEEE 1800-2017 SystemVerilog | Synthesizable subset | Subject to REF-003 and the selected frontend |
 | REF-005 | `VLSIT_RTL_Generator_AI_Model\common_rtl\001_AsyncGrayFIFO\AsyncGrayFIFO_Design_Specification.md` (sibling IP) | Synchronizer cell option, simulation metastability model | Source of the cell option and the wrapper structure; where this specification differs, this specification wins |
-| REF-006 | Prototype and its logs, `../verification/sim/waveform_proto/`, `../figures/waveforms/apbcdc_*.txt` | Sections 10.3, 10.4, 15 | Evidence for the waveforms, the latency bound and the regression; not the delivered RTL |
+| REF-006 | Prototype and its logs, `../verification/sim/waveform_proto/`, `figures/waveforms/apbcdc_*.txt` | Sections 10.3, 10.4, 15 | Evidence for the waveforms, the latency bound and the regression; not the delivered RTL |
 | REF-007 | AMD Vivado Design Suite User Guide: Using Constraints (UG903), Constraining Asynchronous Signals, and UG1387, Constraints on Individual CDC Paths | `set_max_delay -datapath_only`, `set_bus_skew`, priority of clock groups over maximum delay | Background for Section 17.1.4. These documents describe Vivado, not the Synopsys tools of DEC-007; the Synopsys option `-ignore_clock_latency` is described there by analogy and shall be confirmed in the Synopsys documentation (OI-004) |
 
 ### 2.2 Source-of-truth and conflict handling
@@ -205,9 +205,9 @@ The IP has two blocks, one per clock domain, and one structural top. Each block 
 
 ### 5.2 Block diagram
 
-![Block diagram of the asynchronous APB bridge: requester-side and completer-side blocks in the top frame (diagram spec: ../figures/apbcdc_diagram_spec.json). Only the control bits pass through the synchronizers inside the blocks; the request and response bundles are timed paths](../figures/apbcdc_block_diagram.svg)
+![Block diagram of the asynchronous APB bridge: requester-side and completer-side blocks in the top frame (diagram spec: figures/apbcdc_diagram_spec.json). Only the control bits pass through the synchronizers inside the blocks; the request and response bundles are timed paths](figures/apbcdc_block_diagram.svg)
 
-*Figure 5-1. Block diagram of the asynchronous APB bridge: requester-side and completer-side blocks in the top frame (diagram spec: ../figures/apbcdc_diagram_spec.json). Only the control bits pass through the synchronizers inside the blocks; the request and response bundles are timed paths. Source: `../figures/apbcdc_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
+*Figure 5-1. Block diagram of the asynchronous APB bridge: requester-side and completer-side blocks in the top frame (diagram spec: figures/apbcdc_diagram_spec.json). Only the control bits pass through the synchronizers inside the blocks; the request and response bundles are timed paths. Source: `figures/apbcdc_block_diagram.drawio` (draw.io, VLSIT library, drawn by `vlsit_spec_diagram.py`). The frame is the top module, the blocks are its instances, each connector is one interface with its mnemonic, and the two tables under the diagram in the source file describe the blocks and the interfaces.*
 
 ### 5.3 Transaction and dataflow
 
@@ -306,17 +306,17 @@ The bridge follows AMBA APB Issue D (REF-001) on both interfaces. The statements
 
 Figure 6-1 to Figure 6-3 give the key waveforms of the interfaces (the full plan is in Section 10.3).
 
-![Write transfer without wait states](../figures/waveforms/apbcdc_wf001_write_no_wait.svg)
+![Write transfer without wait states](figures/waveforms/apbcdc_wf001_write_no_wait.svg)
 
-*Figure 6-1. Write transfer without wait states, equal clocks, two-phase handshake (WF-001, source `../figures/waveforms/apbcdc_wf001_write_no_wait.json`).*
+*Figure 6-1. Write transfer without wait states, equal clocks, two-phase handshake (WF-001, source `figures/waveforms/apbcdc_wf001_write_no_wait.json`).*
 
-![Read transfer without wait states](../figures/waveforms/apbcdc_wf002_read_no_wait.svg)
+![Read transfer without wait states](figures/waveforms/apbcdc_wf002_read_no_wait.svg)
 
-*Figure 6-2. Read transfer without wait states (WF-002, source `../figures/waveforms/apbcdc_wf002_read_no_wait.json`).*
+*Figure 6-2. Read transfer without wait states (WF-002, source `figures/waveforms/apbcdc_wf002_read_no_wait.json`).*
 
-![Read transfer with an error](../figures/waveforms/apbcdc_wf004_read_error.svg)
+![Read transfer with an error](figures/waveforms/apbcdc_wf004_read_error.svg)
 
-*Figure 6-3. Read transfer with an error response (WF-004, source `../figures/waveforms/apbcdc_wf004_read_error.json`).*
+*Figure 6-3. Read transfer with an error response (WF-004, source `figures/waveforms/apbcdc_wf004_read_error.json`).*
 
 ### 6.4 Interrupts and events
 
@@ -447,56 +447,56 @@ The two FSMs follow the three-process style of REF-003 with the names `reg_fsm_h
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001 write transfer, two-phase | success | Both APB interfaces, request and acknowledge bits, both FSMs | ../figures/waveforms/apbcdc_wf001_write_no_wait.svg | 2026-10-25 |
-| WF-002 | OP-002 read transfer, two-phase | success | Both interfaces, read data | ../figures/waveforms/apbcdc_wf002_read_no_wait.svg | 2026-10-25 |
-| WF-003 | OP-003 write with three completer wait states | corner | Both interfaces, `PREADY` of the completer | ../figures/waveforms/apbcdc_wf003_write_wait_states.svg | 2026-10-25 |
-| WF-004 | OP-004 read with `PSLVERR` and one wait state | error | `PSLVERR` and `PRDATA` on both sides | ../figures/waveforms/apbcdc_wf004_read_error.svg | 2026-10-25 |
-| WF-005 | OP-004 write with `PSLVERR` | error | `PSLVERR` on both sides | ../figures/waveforms/apbcdc_wf005_write_error.svg | 2026-10-25 |
-| WF-006 | OP-005 three transfers back to back | corner | Setup phase right after `PREADY` | ../figures/waveforms/apbcdc_wf006_back_to_back.svg | 2026-10-25 |
-| WF-007 | OP-009 write with the four-phase handshake | success | Request and acknowledge returning to 0, `PREADY` late | ../figures/waveforms/apbcdc_wf007_four_phase_write.svg | 2026-10-25 |
-| WF-008 | OP-001 sparse writes with `PSTRB` 01 and 10 | corner | `PSTRB` on both sides | ../figures/waveforms/apbcdc_wf008_sparse_write.svg | 2026-10-25 |
-| WF-009 | OP-006 and OP-007 APB5 wake-up and user signals | success | `PWAKEUP`, `PAUSER`, `PWUSER`, `PRUSER`, `PBUSER` | ../figures/waveforms/apbcdc_wf009_apb5_wakeup_user.svg | 2026-10-25 |
-| WF-010 | OP-001 requester clock 3 times faster than the completer clock | corner | Both clocks, both interfaces | ../figures/waveforms/apbcdc_wf010_requester_clock_fast.svg | 2026-10-25 |
-| WF-011 | OP-001 completer clock 3 times faster than the requester clock | corner | Both clocks, both interfaces | ../figures/waveforms/apbcdc_wf011_completer_clock_fast.svg | 2026-10-25 |
-| WF-012 | OP-008 hardware reset in the middle of a transfer | corner | Both resets, all state, repeated transfer | ../figures/waveforms/apbcdc_wf012_hardware_reset.svg | 2026-10-25 |
+| WF-001 | OP-001 write transfer, two-phase | success | Both APB interfaces, request and acknowledge bits, both FSMs | figures/waveforms/apbcdc_wf001_write_no_wait.svg | 2026-10-25 |
+| WF-002 | OP-002 read transfer, two-phase | success | Both interfaces, read data | figures/waveforms/apbcdc_wf002_read_no_wait.svg | 2026-10-25 |
+| WF-003 | OP-003 write with three completer wait states | corner | Both interfaces, `PREADY` of the completer | figures/waveforms/apbcdc_wf003_write_wait_states.svg | 2026-10-25 |
+| WF-004 | OP-004 read with `PSLVERR` and one wait state | error | `PSLVERR` and `PRDATA` on both sides | figures/waveforms/apbcdc_wf004_read_error.svg | 2026-10-25 |
+| WF-005 | OP-004 write with `PSLVERR` | error | `PSLVERR` on both sides | figures/waveforms/apbcdc_wf005_write_error.svg | 2026-10-25 |
+| WF-006 | OP-005 three transfers back to back | corner | Setup phase right after `PREADY` | figures/waveforms/apbcdc_wf006_back_to_back.svg | 2026-10-25 |
+| WF-007 | OP-009 write with the four-phase handshake | success | Request and acknowledge returning to 0, `PREADY` late | figures/waveforms/apbcdc_wf007_four_phase_write.svg | 2026-10-25 |
+| WF-008 | OP-001 sparse writes with `PSTRB` 01 and 10 | corner | `PSTRB` on both sides | figures/waveforms/apbcdc_wf008_sparse_write.svg | 2026-10-25 |
+| WF-009 | OP-006 and OP-007 APB5 wake-up and user signals | success | `PWAKEUP`, `PAUSER`, `PWUSER`, `PRUSER`, `PBUSER` | figures/waveforms/apbcdc_wf009_apb5_wakeup_user.svg | 2026-10-25 |
+| WF-010 | OP-001 requester clock 3 times faster than the completer clock | corner | Both clocks, both interfaces | figures/waveforms/apbcdc_wf010_requester_clock_fast.svg | 2026-10-25 |
+| WF-011 | OP-001 completer clock 3 times faster than the requester clock | corner | Both clocks, both interfaces | figures/waveforms/apbcdc_wf011_completer_clock_fast.svg | 2026-10-25 |
+| WF-012 | OP-008 hardware reset in the middle of a transfer | corner | Both resets, all state, repeated transfer | figures/waveforms/apbcdc_wf012_hardware_reset.svg | 2026-10-25 |
 
 Active edge: the rising edge of the clock of the signal's own domain. Inputs are sampled at the edge that ends a cycle; flop outputs change at that edge. The waveforms use a grid in which one slot is the greatest common divisor of the two half periods, so every clock edge is at a slot boundary; the requester model changes its outputs a fraction of a nanosecond after the edge.
 
-![Write transfer with wait states](../figures/waveforms/apbcdc_wf003_write_wait_states.svg)
+![Write transfer with wait states](figures/waveforms/apbcdc_wf003_write_wait_states.svg)
 
-*Figure 10-1. WF-003: three wait states on the completer side (source `../figures/waveforms/apbcdc_wf003_write_wait_states.json`).*
+*Figure 10-1. WF-003: three wait states on the completer side (source `figures/waveforms/apbcdc_wf003_write_wait_states.json`).*
 
-![Write error](../figures/waveforms/apbcdc_wf005_write_error.svg)
+![Write error](figures/waveforms/apbcdc_wf005_write_error.svg)
 
-*Figure 10-2. WF-005: write with an error response (source `../figures/waveforms/apbcdc_wf005_write_error.json`).*
+*Figure 10-2. WF-005: write with an error response (source `figures/waveforms/apbcdc_wf005_write_error.json`).*
 
-![Back to back](../figures/waveforms/apbcdc_wf006_back_to_back.svg)
+![Back to back](figures/waveforms/apbcdc_wf006_back_to_back.svg)
 
-*Figure 10-3. WF-006: three transfers back to back (source `../figures/waveforms/apbcdc_wf006_back_to_back.json`).*
+*Figure 10-3. WF-006: three transfers back to back (source `figures/waveforms/apbcdc_wf006_back_to_back.json`).*
 
-![Four-phase handshake](../figures/waveforms/apbcdc_wf007_four_phase_write.svg)
+![Four-phase handshake](figures/waveforms/apbcdc_wf007_four_phase_write.svg)
 
-*Figure 10-4. WF-007: four-phase handshake; request and acknowledge both return to 0 before PREADY (source `../figures/waveforms/apbcdc_wf007_four_phase_write.json`).*
+*Figure 10-4. WF-007: four-phase handshake; request and acknowledge both return to 0 before PREADY (source `figures/waveforms/apbcdc_wf007_four_phase_write.json`).*
 
-![Sparse write](../figures/waveforms/apbcdc_wf008_sparse_write.svg)
+![Sparse write](figures/waveforms/apbcdc_wf008_sparse_write.svg)
 
-*Figure 10-5. WF-008: sparse writes, `PSTRB` selects one byte lane (source `../figures/waveforms/apbcdc_wf008_sparse_write.json`).*
+*Figure 10-5. WF-008: sparse writes, `PSTRB` selects one byte lane (source `figures/waveforms/apbcdc_wf008_sparse_write.json`).*
 
-![APB5 wake-up and user signals](../figures/waveforms/apbcdc_wf009_apb5_wakeup_user.svg)
+![APB5 wake-up and user signals](figures/waveforms/apbcdc_wf009_apb5_wakeup_user.svg)
 
-*Figure 10-6. WF-009: APB5 option with `PWAKEUP` and user signals (source `../figures/waveforms/apbcdc_wf009_apb5_wakeup_user.json`).*
+*Figure 10-6. WF-009: APB5 option with `PWAKEUP` and user signals (source `figures/waveforms/apbcdc_wf009_apb5_wakeup_user.json`).*
 
-![Requester clock fast](../figures/waveforms/apbcdc_wf010_requester_clock_fast.svg)
+![Requester clock fast](figures/waveforms/apbcdc_wf010_requester_clock_fast.svg)
 
-*Figure 10-7. WF-010: requester clock 4 ns, completer clock 12 ns (source `../figures/waveforms/apbcdc_wf010_requester_clock_fast.json`).*
+*Figure 10-7. WF-010: requester clock 4 ns, completer clock 12 ns (source `figures/waveforms/apbcdc_wf010_requester_clock_fast.json`).*
 
-![Completer clock fast](../figures/waveforms/apbcdc_wf011_completer_clock_fast.svg)
+![Completer clock fast](figures/waveforms/apbcdc_wf011_completer_clock_fast.svg)
 
-*Figure 10-8. WF-011: requester clock 12 ns, completer clock 4 ns (source `../figures/waveforms/apbcdc_wf011_completer_clock_fast.json`).*
+*Figure 10-8. WF-011: requester clock 12 ns, completer clock 4 ns (source `figures/waveforms/apbcdc_wf011_completer_clock_fast.json`).*
 
-![Hardware reset](../figures/waveforms/apbcdc_wf012_hardware_reset.svg)
+![Hardware reset](figures/waveforms/apbcdc_wf012_hardware_reset.svg)
 
-*Figure 10-9. WF-012: hardware reset in the middle of a transfer; the requester model repeats the transfer after the release (source `../figures/waveforms/apbcdc_wf012_hardware_reset.json`).*
+*Figure 10-9. WF-012: hardware reset in the middle of a transfer; the requester model repeats the transfer after the release (source `figures/waveforms/apbcdc_wf012_hardware_reset.json`).*
 
 | Cycle / event | Input condition | State/action | Output condition |
 |---|---|---|---|
@@ -517,7 +517,7 @@ There is no arbitration: one requester-side interface and one completer-side int
 | Two-phase | (N + 3) x T_mst + (N + 3 + w) x T_slv | 2N + 6 + w cycles |
 | Four-phase | (2N + 4) x T_mst + (2N + 4 + w) x T_slv | 4N + 8 + w cycles |
 
-The prototype was measured for both handshakes, N = 2, 3, 4, eight clock ratios (1:1, 1:3, 3:1, 3:7, 7:3, 1:2, 2:1, 4:5), and w = 0 and 2, one starting phase per ratio: 96 cases, no case above the bound (`../figures/waveforms/apbcdc_latency_table.txt`, produced by `../verification/sim/waveform_proto/latency_sweep.py`). For equal clocks the measured value equals the formula in every case. The bound is derived by analysis and checked against one starting phase per ratio, not against every phase; TEST-018 repeats the check on the RTL for several phases.
+The prototype was measured for both handshakes, N = 2, 3, 4, eight clock ratios (1:1, 1:3, 3:1, 3:7, 7:3, 1:2, 2:1, 4:5), and w = 0 and 2, one starting phase per ratio: 96 cases, no case above the bound (`figures/waveforms/apbcdc_latency_table.txt`, produced by `../verification/sim/waveform_proto/latency_sweep.py`). For equal clocks the measured value equals the formula in every case. The bound is derived by analysis and checked against one starting phase per ratio, not against every phase; TEST-018 repeats the check on the RTL for several phases.
 
 | Case (measured on the prototype, w = 0) | Two-phase | Four-phase |
 |---|---|---|
@@ -632,7 +632,7 @@ Same columns and signal types as Section 6.2; module-internal bundle widths are 
 
 Block-level simulation with scoreboards, directed tests for each operation, constrained-random traffic over many clock ratios, protocol assertions on both interfaces, structural and timing reviews of the crossings. The environment drives the two clocks from independent generators with random ratio and phase, runs the synchronizer simulation model with random extra latency (REQ-RTL-002), and models the requester and the completer with the rules of REF-001 (wait states, errors, back-to-back, idle gaps). The scoreboard compares both interfaces transfer by transfer (REQ-FUNC-001 to REQ-FUNC-003).
 
-**Evidence from the prototype** (not from the delivered RTL, which does not exist yet): the prototype `../verification/sim/waveform_proto/apbcdc_proto.sv` follows this specification. `../verification/sim/waveform_proto/regress.py` ran 80 simulations (two handshake types, two synchronizer depths, APB4 and APB5, ten clock ratios from 1:1 to 9:1 and 1:9) of 40 random transfers each (3200 transfers) with random wait states (0 to 6), errors, idle gaps and back-to-back traffic, checking every transfer on both interfaces: 0 failures (`../figures/waveforms/apbcdc_random_regression.txt`). Injecting a lost `PSLVERR` and an inverted two-phase event condition made the regression fail (2 of 2 injected faults caught). `../verification/sim/waveform_proto/latency_sweep.py` produced the latency table of Section 10.4. The prototype synchronizer has no metastability model, and the prototype tests did not include reset in the middle of random traffic (shown only by WF-012) or the APB protocol assertions; these shall be verified on the RTL.
+**Evidence from the prototype** (not from the delivered RTL, which does not exist yet): the prototype `../verification/sim/waveform_proto/apbcdc_proto.sv` follows this specification. `../verification/sim/waveform_proto/regress.py` ran 80 simulations (two handshake types, two synchronizer depths, APB4 and APB5, ten clock ratios from 1:1 to 9:1 and 1:9) of 40 random transfers each (3200 transfers) with random wait states (0 to 6), errors, idle gaps and back-to-back traffic, checking every transfer on both interfaces: 0 failures (`figures/waveforms/apbcdc_random_regression.txt`). Injecting a lost `PSLVERR` and an inverted two-phase event condition made the regression fail (2 of 2 injected faults caught). `../verification/sim/waveform_proto/latency_sweep.py` produced the latency table of Section 10.4. The prototype synchronizer has no metastability model, and the prototype tests did not include reset in the middle of random traffic (shown only by WF-012) or the APB protocol assertions; these shall be verified on the RTL.
 
 **Evidence from the delivered RTL** (`rtl/`, written 2026-10-25, rule check PASS, slang lint 0 errors, Verilator lint 0 errors and four warnings for the unused user ports of the default APB4 configuration): `verification/vlsit_run_sim.py quick` ran the testbench `verification/tb_apbcdc.sv` (28 assertions on both APB interfaces and the bridge, with hit counts, plus a two-sided scoreboard) for 16 configurations (both handshakes, APB4 and APB5, clock ratios 1:1, 1:3, 3:1 and 9:1), each in the synthesis branch and in the simulation branch with the metastability model for the seeds 1, 2 and 3: 64 runs, 0 failures, every run prints `assertion failures: 0, assertions never exercised: 0` (`verification/logs/`, `verification/quick_run.txt`). Every third configuration has a requester that changes the fields in the Access phase (checking that the Setup values are used, ERR-004) and every third APB5 configuration has a requester that never drives `PWAKEUP` (checking REQ-APB5-001). `verification/vlsit_gen_sim_waves.py` simulated the 12 waveforms of the plan on the RTL: all 12 are MATCH (the WaveJSON of the RTL, internal rows included, equals the WaveJSON of the figure) and the assertions pass in the metastability branch for each scenario (`verification/waveforms_sim/`, index `waveform_compare.md`, checked by `vlsit_sim_evidence.py check`). A fault injection into a copy of the RTL (8 faults of the control and the handshake) was caught by an assertion in 7 cases; the eighth (the completer side loading its request register in every cycle instead of at the request event) is equivalent in simulation, because the hold register is stable, and is a timing property that only the structural check (TEST-015) and the SDC (TEST-016) can show. The clock ratios beyond the quick set, the latency bound for many starting phases (TEST-018), the structural check, the SDC in a sign-off tool and a reset in the middle of random traffic (shown only by WF-012) are not yet verified on the RTL.
 

@@ -192,9 +192,9 @@ Internal interface between the two modules (all wires, no register crosses the b
 
 ### 5.2 Block diagram
 
-![Block diagram of m_apb_tlul_bridge](../figures/block_diagram.svg)
+![Block diagram of m_apb_tlul_bridge](figures/block_diagram.svg)
 
-*Figure 5-1. Source: `../figures/block_diagram.json`, generated as TikZ (`../figures/block_diagram.tex`) by `scripts/vlsit_block_diagram.py`.*
+*Figure 5-1. Source: `figures/block_diagram.json`, generated as TikZ (`figures/block_diagram.tex`) by `scripts/vlsit_block_diagram.py`.*
 
 ### 5.3 Transaction and dataflow
 
@@ -286,21 +286,21 @@ Signal types: a level is held until it is acknowledged or changed; the only puls
 | TL-UL response with a wrong d_opcode or d_source | None | Protocol error of the device | PSLVERR = 1, PRDATA = 0 | REQ-ERR-004, REQ-ERR-005 |
 | TL-UL response with no accepted request | None | Orphan response | Discarded, no APB effect | REQ-FUNC-007 |
 
-![APB write to TL-UL PutFullData](../figures/apb_write_ok.svg)
+![APB write to TL-UL PutFullData](figures/apb_write_ok.svg)
 
-*Figure 6-1. Successful write, device responds one cycle after acceptance (source: `../figures/apb_write_ok.json`). 3 Access cycles.*
+*Figure 6-1. Successful write, device responds one cycle after acceptance (source: `figures/apb_write_ok.json`). 3 Access cycles.*
 
-![APB read to TL-UL Get](../figures/apb_read_ok.svg)
+![APB read to TL-UL Get](figures/apb_read_ok.svg)
 
-*Figure 6-2. Successful read (source: `../figures/apb_read_ok.json`).*
+*Figure 6-2. Successful read (source: `figures/apb_read_ok.json`).*
 
-![Channel A back pressure](../figures/tlul_backpressure.svg)
+![Channel A back pressure](figures/tlul_backpressure.svg)
 
-*Figure 6-3. The device holds a_ready low for two extra cycles; channel A stays stable and the Access phase is extended (source: `../figures/tlul_backpressure.json`).*
+*Figure 6-3. The device holds a_ready low for two extra cycles; channel A stays stable and the Access phase is extended (source: `figures/tlul_backpressure.json`).*
 
-![Back-to-back APB transfers](../figures/apb_back_to_back.svg)
+![Back-to-back APB transfers](figures/apb_back_to_back.svg)
 
-*Figure 6-4. Back-to-back transfers with i_apb_psel held high and only i_apb_penable changing: a full-strobe write (3 Access cycles), a read (3 Access cycles) and a write with PSTRB = 4'b0011 that gets a local error (1 Access cycle). The Setup cycles are 4 cycles apart (source: `../figures/apb_back_to_back.json`).*
+*Figure 6-4. Back-to-back transfers with i_apb_psel held high and only i_apb_penable changing: a full-strobe write (3 Access cycles), a read (3 Access cycles) and a write with PSTRB = 4'b0011 that gets a local error (1 Access cycle). The Setup cycles are 4 cycles apart (source: `figures/apb_back_to_back.json`).*
 
 ### 6.4 Interrupts and events
 
@@ -427,15 +427,15 @@ Combinational equations (all inputs go to flip-flop D pins or to the next-state 
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-001 full-strobe write | success | APB write, channels A and D, both FSMs, PREADY | ../figures/apb_write_ok.svg (Figure 6-1) | 2026-10-21 |
-| WF-002 | OP-002 read | success | APB read, Get, read data on PRDATA | ../figures/apb_read_ok.svg (Figure 6-2) | 2026-10-21 |
-| WF-003 | OP-003 illegal request, local error | error | PSTRB, PREADY and PSLVERR in the first Access cycle, no channel A request | ../figures/apb_local_err.svg (Figure 12-2) | 2026-10-21 |
-| WF-004 | OP-004 TL-UL error response | error | d_error, PSLVERR, PRDATA = 0 | ../figures/apb_write_resp_err.svg (Figure 12-1) | 2026-10-21 |
-| WF-005 | OP-001 and OP-002 with channel A back pressure | corner | a_ready low, channel A stable, extended Access phase | ../figures/tlul_backpressure.svg (Figure 6-3) | 2026-10-21 |
-| WF-006 | OP-001, OP-002 and OP-003 back to back with PSEL held high | corner | Setup detection by level, Setup-to-Setup interval | ../figures/apb_back_to_back.svg (Figure 6-4) | 2026-10-21 |
-| WF-007 | OP-001 with the response in the acceptance cycle | corner | d_valid with a_ready, 2 Access cycles | ../figures/apb_write_same_cycle.svg (Figure 10-1) | 2026-10-21 |
-| WF-008 | Reset and the first cycles after release | corner | rst_n, d_ready 0 then 1, outputs 0 | ../figures/reset_sequence.svg (Figure 10-2) | 2026-10-21 |
-| WF-009 | Orphan response discarded | corner | d_valid with no accepted request, no APB effect | ../figures/tlul_orphan_response.svg (Figure 10-3) | 2026-10-21 |
+| WF-001 | OP-001 full-strobe write | success | APB write, channels A and D, both FSMs, PREADY | figures/apb_write_ok.svg (Figure 6-1) | 2026-10-21 |
+| WF-002 | OP-002 read | success | APB read, Get, read data on PRDATA | figures/apb_read_ok.svg (Figure 6-2) | 2026-10-21 |
+| WF-003 | OP-003 illegal request, local error | error | PSTRB, PREADY and PSLVERR in the first Access cycle, no channel A request | figures/apb_local_err.svg (Figure 12-2) | 2026-10-21 |
+| WF-004 | OP-004 TL-UL error response | error | d_error, PSLVERR, PRDATA = 0 | figures/apb_write_resp_err.svg (Figure 12-1) | 2026-10-21 |
+| WF-005 | OP-001 and OP-002 with channel A back pressure | corner | a_ready low, channel A stable, extended Access phase | figures/tlul_backpressure.svg (Figure 6-3) | 2026-10-21 |
+| WF-006 | OP-001, OP-002 and OP-003 back to back with PSEL held high | corner | Setup detection by level, Setup-to-Setup interval | figures/apb_back_to_back.svg (Figure 6-4) | 2026-10-21 |
+| WF-007 | OP-001 with the response in the acceptance cycle | corner | d_valid with a_ready, 2 Access cycles | figures/apb_write_same_cycle.svg (Figure 10-1) | 2026-10-21 |
+| WF-008 | Reset and the first cycles after release | corner | rst_n, d_ready 0 then 1, outputs 0 | figures/reset_sequence.svg (Figure 10-2) | 2026-10-21 |
+| WF-009 | Orphan response discarded | corner | d_valid with no accepted request, no APB effect | figures/tlul_orphan_response.svg (Figure 10-3) | 2026-10-21 |
 
 Active edge: rising edge of i_clk_core. Inputs are sampled at the edge that ends a cycle; flip-flop outputs change after that edge. The table follows Figure 6-1 (write, device accepts in A1 and responds in A2).
 
@@ -449,17 +449,17 @@ Active edge: rising edge of i_clk_core. Inputs are sampled at the edge that ends
 
 Variants: a response in A1 (the cycle of acceptance) gives o_apb_pready = 1 in A2, a 2-cycle Access phase (REQ-PERF-002). A local error loads reg_pready at the end of S, so o_apb_pready = 1 in A1, a 1-cycle Access phase (REQ-PERF-003, Figure 12-2). A device that holds a_ready low or answers late extends the Access phase by the same number of cycles. For back-to-back transfers the Setup cycle of the next transfer is the cycle after the PREADY cycle, with i_apb_psel still 1 and i_apb_penable = 0; the APB FSM is in ENUM_ST_IDLE in that cycle and captures the request at its end (Figure 6-4).
 
-![Response in the acceptance cycle](../figures/apb_write_same_cycle.svg)
+![Response in the acceptance cycle](figures/apb_write_same_cycle.svg)
 
-*Figure 10-1. The device answers in the cycle in which it accepts the request: 2 Access cycles (source: `../figures/apb_write_same_cycle.json`).*
+*Figure 10-1. The device answers in the cycle in which it accepts the request: 2 Access cycles (source: `figures/apb_write_same_cycle.json`).*
 
-![Reset sequence](../figures/reset_sequence.svg)
+![Reset sequence](figures/reset_sequence.svg)
 
-*Figure 10-2. Reset and release: all flop outputs are 0 in reset; o_tlul_d_ready becomes 1 at the first clock edge after release (source: `../figures/reset_sequence.json`).*
+*Figure 10-2. Reset and release: all flop outputs are 0 in reset; o_tlul_d_ready becomes 1 at the first clock edge after release (source: `figures/reset_sequence.json`).*
 
-![Orphan responses](../figures/tlul_orphan_response.svg)
+![Orphan responses](figures/tlul_orphan_response.svg)
 
-*Figure 10-3. d_valid at T1 (idle), T3 (before acceptance) and T7 (after the response) is discarded; the real response is at T5 (source: `../figures/tlul_orphan_response.json`).*
+*Figure 10-3. d_valid at T1 (idle), T3 (before acceptance) and T7 (after the response) is discarded; the real response is at T5 (source: `figures/tlul_orphan_response.json`).*
 
 ### 10.4 Arbitration, buffering, and throughput
 
@@ -488,13 +488,13 @@ There is no arbitration and no buffer: one request is outstanding. The earliest 
 
 All detected errors give the same result, PSLVERR = 1 with PRDATA = 0, so no priority between them is needed. A write that gets PSLVERR from the device may or may not have updated the device (REF-001 3.4). The bridge keeps no sticky error flag in the RTL: errors are visible only on PSLVERR. For simulation, the verification source set holds a sticky counter of the error kinds (DEC-009), so the RTL carries no dead logic.
 
-![TL-UL error response mapped to PSLVERR](../figures/apb_write_resp_err.svg)
+![TL-UL error response mapped to PSLVERR](figures/apb_write_resp_err.svg)
 
-*Figure 12-1. Write whose response has d_error = 1 (source: `../figures/apb_write_resp_err.json`).*
+*Figure 12-1. Write whose response has d_error = 1 (source: `figures/apb_write_resp_err.json`).*
 
-![Local error for an unsupported strobe](../figures/apb_local_err.svg)
+![Local error for an unsupported strobe](figures/apb_local_err.svg)
 
-*Figure 12-2. Write with PSTRB = 4'b0011: no TL-UL request, PSLVERR in the first Access cycle (source: `../figures/apb_local_err.json`).*
+*Figure 12-2. Write with PSTRB = 4'b0011: no TL-UL request, PSLVERR in the first Access cycle (source: `figures/apb_local_err.json`).*
 
 ## 13. Performance, power, and area
 

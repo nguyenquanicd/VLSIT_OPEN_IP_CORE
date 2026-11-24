@@ -1,0 +1,17 @@
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_SN.sv
+../../../../000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_sync.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv
+../../../../000_Common/rtl_lib/m_vlsit_afifo_ram_macro.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_mem.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_rd.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_wr.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_top.sv
+../../../rtl/m_usb2_xreg.sv

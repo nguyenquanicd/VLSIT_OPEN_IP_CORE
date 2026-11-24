@@ -142,7 +142,7 @@ flowchart LR
 
 ### 3.4 Hierarchy evidence files
 
-Updated scanner-generated diagrams for the modified RTL are in `mermaid_modified/`: [`top_m_dvp_controller.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/top_m_dvp_controller.mmd), [`l1_m_dvp_apb_service.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/l1_m_dvp_apb_service.mmd), [`l2_m_dvp_buffer.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/l2_m_dvp_buffer.mmd), [`l2_m_vlsit_csr_dvp.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/l2_m_vlsit_csr_dvp.mmd), and the reset/tie child diagrams. They show the selected Level 2 hierarchy. The existing draw.io under `figures/` describes an older hierarchy and is not current evidence.
+Updated scanner-generated diagrams for the modified RTL are in `mermaid_modified/`: [`top_m_dvp_controller.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/top_m_dvp_controller.mmd), [`l1_m_dvp_apb_service.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/l1_m_dvp_apb_service.mmd), [`l2_m_dvp_buffer.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/l2_m_dvp_buffer.mmd), [`l2_m_vlsit_csr_dvp.mmd`](reference/rtl_change_2026-11-22/mermaid_modified/l2_m_vlsit_csr_dvp.mmd), and the reset/tie child diagrams. They show the selected Level 2 hierarchy. The existing draw.io under `../spec/figures/` describes an older hierarchy and is not current evidence.
 
 ## 4. Functional analysis by instance
 
@@ -303,7 +303,7 @@ The normal reset/configure/capture sequence is unchanged except that software ma
 | ID | RTL evidence | Observed behavior | Required behavior | Evidence | Status | Decision date |
 |---|---|---|---|---|---|---|
 | BUG-001 | `rtl/m_dvp_capture.sv:104-149` | Static scanner sees two assignments to `reg_frame_active` in mutually exclusive `generate` branches. | Exactly one selected driver after elaboration. | The rising and falling sample-edge branches are mutually exclusive at elaboration; this is not a confirmed multi-driver defect. | REJECTED | 2026-11-22 |
-| BUG-002 | `rtl/m_dvp_dma_req.sv:54-68` | After ACK, REQ stays low until occupancy drops below watermark. A fixed-length DMA batch that stops above watermark can leave residual samples without a new request. | Existing approved batch contract requires DMA to drain below watermark or poll level; no DMA redesign was selected in this request. | Prior implementation review `review/rtl_crosscheck_2026-11-22/vlsit_impl_2026-11-22.md`, F-004/F-005; HDS REQ/ACK contract. | REJECTED | 2026-11-22 |
+| BUG-002 | `rtl/m_dvp_dma_req.sv:54-68` | After ACK, REQ stays low until occupancy drops below watermark. A fixed-length DMA batch that stops above watermark can leave residual samples without a new request. | Existing approved batch contract requires DMA to drain below watermark or poll level; no DMA redesign was selected in this request. | Prior implementation review `review/rtl_crosscheck_2026-11-22__vlsit_impl_2026-11-22.md`, F-004/F-005; HDS REQ/ACK contract. | REJECTED | 2026-11-22 |
 
 No additional confirmed behavioral defect was established from source-only inspection. Gated-mode reset recovery/removal and bundled-data timing remain integration STA/RDC obligations already documented in the HDS; no new asynchronous clock or top-level port is introduced.
 
@@ -391,3 +391,4 @@ The baseline was not linted or simulated, following the user's explicit modified
 ### 9.4 Remaining risks and completion
 
 CDC/RDC signoff, STA/SDC, synthesis, DFT, camera timing qualification, and SoC workload signoff remain open. The Verilator warnings must be reviewed if strict warning-free lint is required; most reported warnings arise from intentionally unconnected defensive outputs or shared simulation/model code. Plan version 2 and its 15.15% ceiling were approved on 2026-11-22. The 116 approved files were copied to the requested project directory and SHA-256 verified; target-only user files were retained. The modified-only Icarus regression was rerun there and passed. No baseline test was run.
+

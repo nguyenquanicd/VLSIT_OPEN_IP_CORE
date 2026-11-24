@@ -21,7 +21,7 @@ SEEDS = (1, 2, 3)
 def synth(name):
     g = ' '.join('-G ' + p for p in CFG[name])
     open('../syn/fpgat.ys', 'w').write(
-        f"plugin -i slang\nread_slang -f filelist_{FL}.f --top {TOP} {g} -D VLSIT_SYNTHESIS\n"
+        f"plugin -i slang\nread_slang -f filelist.f --top {TOP} {g} -D VLSIT_SYNTHESIS\n"
         f"synth_ecp5 -top {TOP} -json ../syn/fpgat_{name}.json\n")
     r = subprocess.run(['yosys', '-q', '../syn/fpgat.ys'], capture_output=True, text=True, timeout=3000)
     return r.returncode == 0

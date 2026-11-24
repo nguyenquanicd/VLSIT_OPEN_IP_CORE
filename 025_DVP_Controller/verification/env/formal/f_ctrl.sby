@@ -1,0 +1,58 @@
+[tasks]
+bmc
+cover
+
+[options]
+bmc: mode bmc
+cover: mode cover
+depth 24
+multiclock off
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal -DVLSIT_SYNTHESIS -sv VLSIT_CELL_TIEH.sv VLSIT_CELL_TIEL.sv VLSIT_CELL_CKINV.sv VLSIT_CELL_SYNC_DFF_RN.sv VLSIT_CELL_SYNC_DFF_SN.sv VLSIT_CELL_SYNC_2FF_RN.sv VLSIT_CELL_SYNC_2FF_SN.sv VLSIT_CELL_SYNC_3FF_RN.sv VLSIT_CELL_SYNC_3FF_SN.sv VLSIT_CELL_SYNC_4FF_RN.sv VLSIT_CELL_SYNC_4FF_SN.sv
+read -formal -DVLSIT_SYNTHESIS -sv m_vlsit_afifo_cell_sync.sv m_vlsit_afifo_sync.sv m_dvp_afifo_rd.sv VLSIT_CELL_SRAM_1W1R.sv m_vlsit_afifo_ram_macro.sv
+read -formal -DVLSIT_SYNTHESIS -sv m_vlsit_afifo_mem.sv m_vlsit_afifo_wr.sv m_vlsit_tie.sv m_dvp_afifo.sv m_dvp_gate_bridge.sv m_vlsit_event_sync.sv
+read -formal -DVLSIT_SYNTHESIS -sv m_vlsit_sfifo_ram_macro.sv m_vlsit_sfifo_mem.sv m_vlsit_sfifo_rd.sv m_vlsit_sfifo_wr.sv m_vlsit_sfifo_top.sv
+read -formal -DVLSIT_SYNTHESIS -sv m_dvp_buffer.sv m_dvp_dma_req.sv m_vlsit_csr_sync.sv m_vlsit_csr_dvp.sv m_dvp_apb_data.sv m_dvp_apb_decode.sv
+read -formal -DVLSIT_SYNTHESIS -sv m_dvp_apb_service.sv f_ctrl.sv
+prep -top f_ctrl
+
+[files]
+../../../rtl/m_dvp_apb_service.sv
+../../../rtl/m_dvp_apb_data.sv
+../../../rtl/m_dvp_apb_decode.sv
+../../../rtl/m_dvp_afifo.sv
+../../../rtl/m_dvp_afifo_rd.sv
+../../../rtl/m_dvp_buffer.sv
+../../../rtl/m_dvp_dma_req.sv
+../../../rtl/m_dvp_gate_bridge.sv
+../../../rtl/csr/m_vlsit_csr_dvp.sv
+../../../rtl/csr/m_vlsit_csr_sync.sv
+../../../../000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_TIEH.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_TIEL.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_CKINV.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_RN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_SN.sv
+../../../../000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv
+../../../../000_Common/rtl_lib/m_vlsit_afifo_ram_macro.sv
+../../../../000_Common/rtl_lib/m_vlsit_tie.sv
+../../../../000_Common/rtl_lib/m_vlsit_event_sync.sv
+../../../../000_Common/rtl_lib/m_vlsit_sfifo_ram_macro.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_sync.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_mem.sv
+../../../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_wr.sv
+../../../../002_SyncFIFO/rtl/m_vlsit_sfifo_mem.sv
+../../../../002_SyncFIFO/rtl/m_vlsit_sfifo_rd.sv
+../../../../002_SyncFIFO/rtl/m_vlsit_sfifo_wr.sv
+../../../../002_SyncFIFO/rtl/m_vlsit_sfifo_top.sv
+f_ctrl.sv

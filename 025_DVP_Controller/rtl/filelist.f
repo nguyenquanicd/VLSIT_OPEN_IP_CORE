@@ -1,6 +1,6 @@
-// filelist.f - RTL files in compile order (leaf modules first, top last).
-// Top module: m_dvp_controller
-// Paths are relative to the folder of this file; run tools from that folder.
+# Master filelist: union of active synthesizable RTL profiles for this IP.
+# Select the required top module and profile-specific defines at the tool invocation.
+# Paths are relative to this file; invoke the simulator from this directory.
 m_dvp_apb_data.sv
 m_dvp_apb_decode.sv
 ../../000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv

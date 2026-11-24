@@ -1,0 +1,303 @@
+# Regression scope source (R-215).
+# Test sources: env/tb/tb_dvp_controller.sv (tests selected by +TEST=<id>). Driver and matrix of configurations and seeds:
+# env/scripts/dvp_regress.py. Results: sim/final/summary.json. Implemented and run: every simulation test below; t_dvp_parameter_legality and
+# t_dvp_scope_review are elaboration/static steps of the driver; t_dvp_control_formal is run by env/scripts/dvp_formal.py, mutation by dvp_mutation.py and
+# coverage by dvp_coverage.py (results in sim/final/); t_dvp_performance_review (needs the integrator workload) is NOT run.
+tiers:
+  smoke:
+    timeout_s: 600
+    pass_criteria: "All selected planned checks pass; no required checker is vacuous."
+  nightly:
+    timeout_s: 14400
+    pass_criteria: "All planned directed and constrained-random tests pass; bins are hit or reviewed."
+  full:
+    timeout_s: 3600
+    pass_criteria: "Full modified-RTL campaign, formal, fault injection, mutation and coverage targets meet the approved plan."
+
+tests:
+  - id: t_dvp_gated_e2e
+    level: block
+    vplan_req: "REQ-FUNC-006, REQ-FUNC-007, REQ-PERF-001, REQ-FUNC-005, REQ-FUNC-003, REQ-FUNC-008, REQ-IF-001"
+    testbench: tb_dvp_controller
+    test: t_dvp_gated_e2e
+    test_type: combined
+    combines: [pixel_toggle, frame_qualifier, pixel_capture, bundled_data_hold, fifo_order, sample_format, apb_fifo_data]
+    interaction: "A multi-cycle APB-synchronized VSYNC arms frame state before stopped/gated PCLK pixel events cross by toggle and enter the APB SFIFO without loss or reordering."
+    seed: 1
+    timeout_s: 60
+    tier: smoke
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_continuous_e2e
+    level: block
+    vplan_req: "REQ-FUNC-005, REQ-FUNC-003, REQ-FUNC-008, REQ-IF-001, REQ-IF-004"
+    testbench: tb_dvp_controller
+    test: t_dvp_continuous_e2e
+    test_type: combined
+    combines: [pixel_capture, frame_qualifier, fifo_order, sample_format, apb_fifo_data, dma_watermark]
+    interaction: "A qualified continuous-PCLK sample crosses the AFIFO, raises a watermark request, and is returned once and in order by APB FIFO_DATA reads."
+    seed: 1
+    timeout_s: 60
+    tier: smoke
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_control_formal
+    level: block
+    vplan_req: "REQ-IF-002, REQ-IF-005, REQ-IF-004, REQ-FUNC-004, REQ-FUNC-010"
+    testbench: formal_harness
+    test: t_dvp_control_formal
+    test_type: formal
+    combines: [apb_pop_safety, timeout_counter, dma_request_state, flush_state, mode_guard]
+    interaction: "Bounded control proofs check no duplicate or early pop, exact empty-timeout completion, and legal DMA/mode/flush state transitions under reviewed APB and clock assumptions."
+    seed: 1
+    timeout_s: 300
+    tier: full
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_apb_protocol
+    level: block
+    vplan_req: "PROTO-APB4-3.1, PROTO-APB4-3.2, PROTO-APB4-3.3, PROTO-APB4-3.4, PROTO-APB4-Appendix-A, REQ-REG-001, REQ-REG-002"
+    testbench: tb_dvp_controller
+    test: t_dvp_apb_protocol
+    test_type: combined
+    combines: [apb_protocol, csr_registers, apb_fifo_data, w1c_status]
+    interaction: "The same passive APB4 checker observes CSR and FIFO_DATA traffic, including wait-state stability, read strobes, returned data and terminal error signaling."
+    seed: 1
+    timeout_s: 60
+    tier: smoke
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_flush_handshake
+    level: block
+    vplan_req: "REQ-FUNC-010, ERR-007, REQ-REG-002"
+    testbench: tb_dvp_controller
+    test: t_dvp_flush_handshake
+    test_type: fault_injection
+    combines: [fifo_flush, status_retention, apb_fifo_data, frame_counter]
+    interaction: "A selected FIFO reset completes through its busy handshake, blocks reads during pending flush and preserves frame/overflow status."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Request flush while capture is enabled; then disable capture, start a valid flush, set timeout to zero and attempt FIFO_DATA access while flush is pending."
+    expected_response: "Invalid flush write is ignored with OKAY; pending flush prevents pop and the empty read returns the configured timeout response; frame/overflow status remains."
+
+  - id: t_dvp_flush_race
+    level: block
+    vplan_req: "REQ-FUNC-010, ERR-007"
+    testbench: tb_dvp_controller
+    test: t_dvp_flush_race
+    test_type: fault_injection
+    combines: [fifo_flush, csr_registers, apb_fifo_data]
+    interaction: "A software CTRL write captured while the flush request is set races with the hardware clear of the same bit; hardware must win so the request never sticks."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Write CTRL (ignored while a flush is pending) after k idle cycles, k = 0..39, following a flush request in each mode."
+    expected_response: "The write completes with OKAY and the request bit reads 0 within the poll limit for every k."
+
+  - id: t_dvp_overflow
+    level: block
+    vplan_req: "REQ-FUNC-003, ERR-001"
+    testbench: tb_dvp_controller
+    test: t_dvp_overflow
+    test_type: fault_injection
+    combines: [fifo_overflow, fifo_order, w1c_status, apb_fifo_data]
+    interaction: "A full FIFO rejects the newest sample while retaining unread data, and W1C clear races are set-dominant in both storage modes."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Fill selected FIFO, then present one extra valid pixel while issuing W1C clear."
+    expected_response: "Newest pixel dropped; older FIFO entries remain ordered; OVERFLOW remains set because the new event is set-dominant."
+
+  - id: t_dvp_performance_characterization
+    level: block
+    vplan_req: "PERF-001, PERF-002, PERF-004"
+    testbench: tb_dvp_controller
+    test: t_dvp_performance_characterization
+    test_type: constrained_random
+    combines: [capture_rate, apb_throughput, fifo_depth, pixel_capture]
+    interaction: "The seeded pixel producer and APB consumer exercise capture_rate and apb_throughput through the shared FIFO; bounded burst/stall patterns expose occupancy, overflow or ordering failures without asserting an unprovided product workload."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    constraints_source: "constraints=seeded legal traffic only: profile is fixed to one supported width/edge/polarity build; data is in [0, 2^DATA_W-1]; frame/HREF qualifiers and selected sample edges follow HDS; gated pixels are at least 4 APB cycles apart plus margin; APB requests are aligned and hold fields stable through waits with PSTRB=0 on reads. Sources: HDS REQ-FUNC-001..008, REQ-PERF-001 and APB4 PROTO-APB4-3.1..3.4/Appendix-A. Synthetic clock ratios are not product limits."
+
+  - id: t_dvp_reset_recovery
+    level: block
+    vplan_req: "REQ-RESET-001, ERR-005"
+    testbench: tb_dvp_controller
+    test: t_dvp_reset_recovery
+    test_type: fault_injection
+    combines: [reset_recovery, apb_timeout, apb_fifo_data, pixel_toggle]
+    interaction: "Common asynchronous reset cancels an outstanding APB data read and initializes both domains without replaying stale gated-pixel events."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Assert common reset during a pending FIFO_DATA read, hold PCLK stopped through APB reset release, then restart with phase-shifted timing."
+    expected_response: "Pending read is cancelled without APB completion/pop; FIFO access is blocked until both sides initialize; no stale pixel is replayed."
+
+  - id: t_dvp_dma_rearm
+    level: block
+    vplan_req: "REQ-IF-004"
+    testbench: tb_dvp_controller
+    test: t_dvp_dma_rearm
+    test_type: combined
+    combines: [fifo_occupancy, dma_watermark, apb_fifo_data]
+    interaction: "Selected-FIFO occupancy, watermark and ACK share request state while APB reads consume payload independently; this exposes stale threshold/re-arm behavior or accidental payload consumption on ACK."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_endpoint_errors
+    level: block
+    vplan_req: "REQ-IF-006, ERR-003, ERR-004"
+    testbench: tb_dvp_controller
+    test: t_dvp_endpoint_errors
+    test_type: fault_injection
+    combines: [apb_decode_error, apb_protocol, apb_fifo_data]
+    interaction: "Endpoint address and direction errors must return APB error without changing FIFO contents or consuming a sample."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Write FIFO_DATA and access a misaligned FIFO_DATA address, then follow with a legal read."
+    expected_response: "Write and misaligned transfers return PSLVERR without changing FIFO; aligned unmapped accesses return zero/OKAY and do not pop."
+
+  - id: t_dvp_frame_counter
+    level: block
+    vplan_req: "REQ-FUNC-009, REQ-REG-002"
+    testbench: tb_dvp_controller
+    test: t_dvp_frame_counter
+    test_type: combined
+    combines: [frame_counter, frame_qualifier, fifo_flush]
+    interaction: "Frame counter accounting follows accepted active VSYNC events, independent of pixel FIFO draining and retained across FIFO flush."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_mode_guard
+    level: block
+    vplan_req: "REQ-FUNC-004"
+    testbench: tb_dvp_controller
+    test: t_dvp_mode_guard
+    test_type: fault_injection
+    combines: [mode_guard, frame_qualifier, pixel_capture]
+    interaction: "Runtime mode selection is accepted only after capture is disabled, both queues are empty and the active source path is quiescent."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Write PCLK_MODE while capture is enabled, either FIFO is nonempty, and source path is nonquiescent; then write under safe conditions."
+    expected_response: "Unsafe writes complete OKAY with mode unchanged; safe write is accepted and readback matches."
+
+  - id: t_dvp_parameter_legality
+    level: block
+    vplan_req: "REQ-PARAM-001, ERR-006"
+    testbench: parameter_build_harness
+    test: t_dvp_parameter_legality
+    test_type: fault_injection
+    combines: [fifo_depth, parameter_validity, profile_configuration]
+    interaction: "Compile-time profile and FIFO parameters must reject unsupported values while supported depths map to both mode-specific paths."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Elaborate width 9 and FIFO depths 1/3, then supported widths and depths 2/8/16."
+    expected_response: "Unsupported configurations fail clearly at elaboration; legal configurations elaborate successfully."
+
+  - id: t_dvp_profiles
+    level: block
+    vplan_req: "REQ-FUNC-001, REQ-FUNC-002, REQ-IF-003"
+    testbench: tb_dvp_controller
+    test: t_dvp_profiles
+    test_type: combined
+    combines: [profile_configuration, sampling_profile, frame_qualifier]
+    interaction: "The selected width, sample edge and qualifier polarities determine which frame-qualified sensor samples enter the selected path."
+    seed: 1
+    timeout_s: 120
+    tier: nightly
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_timeout_boundary
+    level: block
+    vplan_req: "REQ-IF-002, REQ-IF-005, ERR-002"
+    testbench: tb_dvp_controller
+    test: t_dvp_timeout_boundary
+    test_type: fault_injection
+    combines: [apb_fifo_data, apb_timeout, apb_protocol]
+    interaction: "The empty-read timer controls APB completion while the sample-arrival race determines whether the read succeeds and pops or errors without a pop."
+    seed: 1
+    timeout_s: 60
+    tier: smoke
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+    fault: "Keep FIFO empty through timeout and schedule sample arrival before, on, and after the terminal decision."
+    expected_response: "Timeout zero errors in first Access cycle; positive timeout errors on its terminal empty cycle; available sample at completion wins and pops once; timeout error never pops."
+
+  - id: t_dvp_performance_review
+    level: block
+    vplan_req: "PERF-003"
+    testbench: static_review
+    test: t_dvp_performance_review
+    test_type: compliance
+    combines: []
+    interaction: "A workload-specific FIFO depth sign-off requires the system integrator's resolution, frame rate/PCLK, APB rate and maximum DMA stall."
+    seed: 1
+    timeout_s: 300
+    tier: full
+    owner: dvp_verification
+    expected: pass
+    evidence: ""
+
+  - id: t_dvp_scope_review
+    level: block
+    vplan_req: "REQ-SCOPE-001"
+    testbench: static_review
+    test: t_dvp_scope_review
+    test_type: compliance
+    combines: []
+    interaction: "Static interface and hierarchy review verifies that the block remains DVP capture plus APB data endpoint and does not absorb sensor configuration or system DMA."
+    seed: 1
+    timeout_s: 300
+    tier: full
+    owner: dvp_verification
+    expected: pass
+    evidence: ""

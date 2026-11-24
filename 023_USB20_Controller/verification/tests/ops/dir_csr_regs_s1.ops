@@ -1,0 +1,403 @@
+# scenario dir_csr_regs seed 1
+CHK DCR-VER
+R 0 10000 ffffffff
+B cg_reg.reset_each
+CHK DCR-RESET
+R 0 0 0
+CHK DCR-RESET
+R 4 40 ffffffff
+CHK DCR-RESET
+R 8 0 fffe0000
+CHK DCR-RESET
+R c 0 ff000000
+CHK DCR-RESET
+R 10 0 ffffffff
+CHK DCR-RESET
+R 14 0 ffffffff
+CHK DCR-RW
+W 14 1555555
+IB 6
+R 14 1555555 1ffffff
+W 14 aaaaaa
+IB 6
+R 14 aaaaaa 1ffffff
+W 14 65b1f5
+IB 6
+R 14 65b1f5 1ffffff
+W 14 0
+IB 6
+CHK DCR-RESET
+R 18 0 ffffffff
+CHK DCR-RESET
+R 1c 0 fe000000
+CHK DCR-RESET
+R 20 0 ffffffff
+CHK DCR-RESET
+R 24 0 ffe00000
+CHK DCR-RESET
+R 28 0 ffffffff
+CHK DCR-RESET
+R 2c 0 fff00000
+CHK DCR-RESET
+R 30 1d4c ffffffff
+CHK DCR-RW
+W 30 5555
+IB 6
+R 30 5555 ffff
+W 30 aaaa
+IB 6
+R 30 aaaa ffff
+W 30 584a
+IB 6
+R 30 584a ffff
+W 30 1d4c
+IB 6
+CHK DCR-RESET
+R 34 10010 ffffffff
+CHK DCR-RW
+W 34 55555
+IB 6
+R 34 55555 fffff
+W 34 aaaaa
+IB 6
+R 34 aaaaa fffff
+W 34 16adf
+IB 6
+R 34 16adf fffff
+W 34 10010
+IB 6
+CHK DCR-RESET
+R 38 0 ffffffff
+CHK DCR-RW
+W 38 55555555
+IB 6
+R 38 55555555 ffffffff
+W 38 aaaaaaaa
+IB 6
+R 38 aaaaaaaa ffffffff
+W 38 cd613e30
+IB 6
+R 38 cd613e30 ffffffff
+W 38 0
+IB 6
+CHK DCR-RESET
+R 3c 0 fb00ffff
+CHK DCR-RESET
+R 40 1000000 ffffffff
+CHK DCR-RW
+W 40 55555555
+IB 6
+R 40 55555555 ffffffff
+W 40 aaaaaaaa
+IB 6
+R 40 aaaaaaaa ffffffff
+W 40 c386bbc4
+IB 6
+R 40 c386bbc4 ffffffff
+W 40 1000000
+IB 6
+CHK DCR-RESET
+R 44 1000000 ffffffff
+CHK DCR-RW
+W 44 55555555
+IB 6
+R 44 55555555 ffffffff
+W 44 aaaaaaaa
+IB 6
+R 44 aaaaaaaa ffffffff
+W 44 1027c4d1
+IB 6
+R 44 1027c4d1 ffffffff
+W 44 1000000
+IB 6
+CHK DCR-RESET
+R 48 1000000 ffffffff
+CHK DCR-RW
+W 48 55555555
+IB 6
+R 48 55555555 ffffffff
+W 48 aaaaaaaa
+IB 6
+R 48 aaaaaaaa ffffffff
+W 48 414c343c
+IB 6
+R 48 414c343c ffffffff
+W 48 1000000
+IB 6
+CHK DCR-RESET
+R 4c 0 ffffffff
+CHK DCR-RESET
+R 50 0 ffff0000
+CHK DCR-RESET
+R 54 0 ffff0000
+CHK DCR-RESET
+R 58 0 ffff0000
+CHK DCR-RESET
+R 60 0 ffffffff
+CHK DCR-RW
+W 60 5
+IB 6
+R 60 5 7
+W 60 2
+IB 6
+R 60 2 7
+W 60 1
+IB 6
+R 60 1 7
+W 60 0
+IB 6
+CHK DCR-RESET
+R 200 0 f7fe3fff
+CHK DCR-RW
+W 200 5001555
+IB 6
+R 200 5001555 7803fff
+W 200 2802aaa
+IB 6
+R 200 2802aaa 7803fff
+W 200 680157b
+IB 6
+R 200 680157b 7803fff
+W 200 0
+IB 6
+CHK DCR-RESET
+R 210 0 f7fe3fff
+CHK DCR-RW
+W 210 5001555
+IB 6
+R 210 5001555 7803fff
+W 210 2802aaa
+IB 6
+R 210 2802aaa 7803fff
+W 210 2802f44
+IB 6
+R 210 2802f44 7803fff
+W 210 0
+IB 6
+CHK DCR-BANK
+W 214 ffffffff
+R 214 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 240 0 ffffffff
+CHK DCR-RESET
+R 250 0 ffffffff
+CHK DCR-BANK
+W 254 ffffffff
+R 254 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 280 0 ffffffff
+CHK DCR-RESET
+R 290 0 ffffffff
+CHK DCR-BANK
+W 294 ffffffff
+R 294 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 2c0 800000 ffffffff
+CHK DCR-RW
+W 2c0 55555555
+IB 6
+R 2c0 55555555 ffffffff
+W 2c0 aaaaaaaa
+IB 6
+R 2c0 aaaaaaaa ffffffff
+W 2c0 7311d8a3
+IB 6
+R 2c0 7311d8a3 ffffffff
+W 2c0 800000
+IB 6
+CHK DCR-RESET
+R 2d0 800000 ffffffff
+CHK DCR-RW
+W 2d0 55555555
+IB 6
+R 2d0 55555555 ffffffff
+W 2d0 aaaaaaaa
+IB 6
+R 2d0 aaaaaaaa ffffffff
+W 2d0 78e51061
+IB 6
+R 2d0 78e51061 ffffffff
+W 2d0 800000
+IB 6
+CHK DCR-BANK
+W 2d4 ffffffff
+R 2d4 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 300 0 ffffffff
+CHK DCR-RESET
+R 310 0 ffffffff
+CHK DCR-BANK
+W 314 ffffffff
+R 314 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 340 0 ffffffff
+CHK DCR-RW
+W 340 155
+IB 6
+R 340 155 3ff
+W 340 2aa
+IB 6
+R 340 2aa 3ff
+W 340 1b
+IB 6
+R 340 1b 3ff
+W 340 0
+IB 6
+CHK DCR-RESET
+R 350 0 ffffffff
+CHK DCR-RW
+W 350 155
+IB 6
+R 350 155 3ff
+W 350 2aa
+IB 6
+R 350 2aa 3ff
+W 350 296
+IB 6
+R 350 296 3ff
+W 350 0
+IB 6
+CHK DCR-BANK
+W 354 ffffffff
+R 354 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 400 0 f7fe3fff
+CHK DCR-RW
+W 400 5001555
+IB 6
+R 400 5001555 7803fff
+W 400 2802aaa
+IB 6
+R 400 2802aaa 7803fff
+W 400 1800616
+IB 6
+R 400 1800616 7803fff
+W 400 0
+IB 6
+CHK DCR-RESET
+R 410 0 f7fe3fff
+CHK DCR-RW
+W 410 5001555
+IB 6
+R 410 5001555 7803fff
+W 410 2802aaa
+IB 6
+R 410 2802aaa 7803fff
+W 410 580192d
+IB 6
+R 410 580192d 7803fff
+W 410 0
+IB 6
+CHK DCR-BANK
+W 414 ffffffff
+R 414 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 440 0 ffffffff
+CHK DCR-RESET
+R 450 0 ffffffff
+CHK DCR-BANK
+W 454 ffffffff
+R 454 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 480 0 ffffffff
+CHK DCR-RESET
+R 490 0 ffffffff
+CHK DCR-BANK
+W 494 ffffffff
+R 494 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 4c0 0 ffffffff
+CHK DCR-RESET
+R 4d0 0 ffffffff
+CHK DCR-BANK
+W 4d4 ffffffff
+R 4d4 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 500 0 ffffffff
+CHK DCR-RW
+W 500 155
+IB 6
+R 500 155 3ff
+W 500 2aa
+IB 6
+R 500 2aa 3ff
+W 500 28c
+IB 6
+R 500 28c 3ff
+W 500 0
+IB 6
+CHK DCR-RESET
+R 510 0 ffffffff
+CHK DCR-RW
+W 510 155
+IB 6
+R 510 155 3ff
+W 510 2aa
+IB 6
+R 510 2aa 3ff
+W 510 82
+IB 6
+R 510 82 3ff
+W 510 0
+IB 6
+CHK DCR-BANK
+W 514 ffffffff
+R 514 0 ffffffff
+B cg_bank.beyond
+B cg_bank.last
+CHK DCR-RESET
+R 64 0 ff000000
+CHK DCR-RESET
+R 68 0 ffffffff
+CHK DCR-RW
+W 68 55555555
+IB 6
+R 68 55555555 ffffffff
+W 68 aaaaaaaa
+IB 6
+R 68 aaaaaaaa ffffffff
+W 68 741c7a8
+IB 6
+R 68 741c7a8 ffffffff
+W 68 0
+IB 6
+CHK DCR-RESET
+R 6c ffffffff ffffffff
+CHK DCR-RW
+W 6c 55555555
+IB 6
+R 6c 55555555 ffffffff
+W 6c aaaaaaaa
+IB 6
+R 6c aaaaaaaa ffffffff
+W 6c e4b06ce6
+IB 6
+R 6c e4b06ce6 ffffffff
+W 6c ffffffff
+IB 6
+CHK DCR-UNMAP
+R 7fc 0 ffffffff
+B cg_reg.access_each
+B cg_apb.read
+B cg_apb.write
+END

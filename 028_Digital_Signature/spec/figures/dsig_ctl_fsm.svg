@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1390" height="720" viewBox="10 10 1390 720" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="1390" height="720" fill="#FFFFFF"/>
+<ellipse cx="705" cy="70" rx="105" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="705" y="77" text-anchor="middle">ENUM_ST_IDLE</text>
+<ellipse cx="705" cy="270" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="705" y="277" text-anchor="middle">ENUM_ST_CHECK</text>
+<ellipse cx="535" cy="470" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="535" y="477" text-anchor="middle">ENUM_ST_KEY</text>
+<ellipse cx="1275" cy="470" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1275" y="477" text-anchor="middle">ENUM_ST_RNG</text>
+<ellipse cx="905" cy="470" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="905" y="477" text-anchor="middle">ENUM_ST_RUN</text>
+<ellipse cx="1110" cy="670" rx="95" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1110" y="677" text-anchor="middle">ENUM_ST_VAS</text>
+<ellipse cx="720" cy="670" rx="115" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="720" y="677" text-anchor="middle">ENUM_ST_RESULT</text>
+<ellipse cx="315" cy="670" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="315" y="677" text-anchor="middle">ENUM_ST_CLEAR</text>
+<ellipse cx="150" cy="470" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="150" y="477" text-anchor="middle">ENUM_ST_ERR</text>
+<path d="M 705 100 L 705 240" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="705,240 699,228 711,228" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="656.45" y="159" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="705" y="177" text-anchor="middle">cmd_start</text>
+<path d="M 638.618 293.921 L 216.382 446.079" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="216.382,446.079 225.637,436.366 229.705,447.655" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="383.9" y="359" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="427.5" y="377" text-anchor="middle">chk_fail</text>
+<path d="M 680.159 299.225 L 559.628 441.026" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="559.628,441.026 562.828,427.997 571.971,435.769" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="561.443" y="359.125" width="116.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="619.894" y="377.125" text-anchor="middle">ok &amp; key_op</text>
+<path d="M 772.506 293.686 L 1211.45 447.701" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1211.45,447.701 1198.14,449.39 1202.11,438.066" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="923.628" y="359.693" width="136.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="991.978" y="377.693" text-anchor="middle">ok &amp; rng_only</text>
+<path d="M 733.943 298.943 L 876.393 441.393" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="876.393,441.393 863.665,437.15 872.15,428.665" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="746.718" y="359.168" width="116.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="805.168" y="377.168" text-anchor="middle">ok &amp; verify</text>
+<path d="M 630 470 L 905 560 L 1180 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1180,470 1170.46,479.435 1166.73,468.03" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="704.1" y="504" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="767.5" y="522" text-anchor="middle">key_ok &amp; rng</text>
+<path d="M 630 470 L 810 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="810,470 798,476 798,464" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="651.65" y="459" width="136.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="720" y="477" text-anchor="middle">key_ok &amp; !rng</text>
+<path d="M 440 470 L 260 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,470 272,464 272,476" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="311.35" y="459" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="350" y="477" text-anchor="middle">key_tmo</text>
+<path d="M 503.827 498.339 L 346.608 641.265" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="346.608,641.265 351.451,628.753 359.523,637.633" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="396.467" y="558.802" width="57.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="425.217" y="576.802" text-anchor="middle">abort</text>
+<path d="M 1180 470 L 1000 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1000,470 1012,464 1012,476" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1041.45" y="459" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1090" y="477" text-anchor="middle">rng_ready</text>
+<path d="M 1180 470 L 720 380 L 260 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,470 270.625,461.808 272.929,473.584" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="911.35" y="414" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="950" y="432" text-anchor="middle">ent_tmo</text>
+<path d="M 1195.7 486.52 L 402.414 651.789" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="402.414,651.789 412.938,643.468 415.385,655.215" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="770.307" y="558.154" width="57.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="799.057" y="576.154" text-anchor="middle">abort</text>
+<path d="M 934.256 498.542 L 1080.74 641.458" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1080.74,641.458 1067.96,637.373 1076.34,628.783" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="953.998" y="559" width="107" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1007.5" y="577" text-anchor="middle">done &amp; vas</text>
+<path d="M 878.363 498.797 L 746.976 640.837" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="746.976,640.837 750.72,627.954 759.529,636.102" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="754.219" y="558.817" width="116.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="812.669" y="576.817" text-anchor="middle">done &amp; !vas</text>
+<path d="M 810 470 L 535 380 L 260 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,470 269.539,460.565 273.271,471.97" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="623.95" y="414" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="672.5" y="432" text-anchor="middle">eng_error</text>
+<path d="M 840.245 491.951 L 383.954 646.626" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="383.954,646.626 393.393,637.091 397.245,648.456" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="583.35" y="558.288" width="57.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="612.1" y="576.288" text-anchor="middle">abort</text>
+<path d="M 1015 670 L 835 670" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="835,670 847,664 847,676" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="891.3" y="659" width="67.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="925" y="677" text-anchor="middle">vas_ok</text>
+<path d="M 1030.7 653.48 L 237.414 488.211" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="237.414,488.211 250.385,484.785 247.938,496.532" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="570.657" y="559.846" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="634.057" y="577.846" text-anchor="middle">vas_mismatch</text>
+<path d="M 605 670 L 425 670" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="425,670 437,664 437,676" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="456.55" y="659" width="116.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="515" y="677" text-anchor="middle">res_written</text>
+<path d="M 174.146 499.268 L 290.854 640.732" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="290.854,640.732 278.589,635.294 287.846,627.657" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="183.95" y="559" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="232.5" y="577" text-anchor="middle">flags_set</text>
+<path d="M 334.201 640.461 L 434.554 320.929 L 685.828 99.4957" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="685.828,99.4957 680.792,111.931 672.858,102.928" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="345.727" y="469.695" width="77.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="384.377" y="487.695" text-anchor="middle">cleared</text>
+</svg>

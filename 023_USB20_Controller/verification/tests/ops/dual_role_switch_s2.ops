@@ -1,0 +1,154 @@
+# scenario dual_role_switch seed 2
+WD 1d4c0
+PIN 1 1
+IB c8
+R 8 0 101
+CHK DBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 2c0 100100
+W 2c4 400110
+W 2c8 400150
+W 2cc 400190
+W 2d0 4001d0
+W 34 10
+W 14 1ffffff
+W 4 61
+W 20 80
+IB 190
+CHK DBR-CHIRP
+WP 0 14 df 320
+LS 0
+WP 3 1 1 2ee
+XP 0 12 df
+WP 0 12 df 320
+LS 2
+ID c8
+XP 0 12 df
+XC ea6 668a 0 7530
+LS 0
+LS 2
+I bb
+LS 1
+I bb
+LS 2
+I bb
+LS 1
+I bb
+LS 2
+I bb
+LS 1
+I bb
+LS 0
+CHK DBR-HS
+WP 0 0 df 75b
+CHK DBU-ENUM
+P 10 82 82 190
+R 8 0 6
+FLUSH
+SG 1 12c
+W 10 1ffffff
+W 20 fb
+IB 190
+XP 0 0 c0
+MW 4000 40 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
+W 284 4000
+W 244 80040
+W 204 481040
+IB bb8
+TK 9 7b 1 0
+XD 3 190 40 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
+ID 8
+HS 2
+ID 28
+B cg_role.device
+B cg_role.dev
+B cg_ulpi_id.b
+PIN 1 0
+IB bb8
+R 8 100 101
+R 10 0 40
+B cg_role.hold_dev
+B cg_role.held
+B cg_ulpi_id.a
+W 20 0
+P 10 40 40 fa0
+R 8 101 101
+W 10 40
+B cg_role.to_host
+FLUSH
+CHK HBU-VER
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 34 10
+W 14 1ffffff
+W 4 61
+W 28 400008
+LS 1
+ID 60216
+CHK HBU-CONN
+P 2c 1 1 7d0
+P 10 10 10 190
+W 10 10
+W 28 400009
+CHK HBU-RSTDRV
+WP 0 d7 df fa0
+TM
+LS 0
+ID 3057
+LS 2
+ID 1770
+LS 0
+CHK HBU-CHIRP
+XK 177 1b774 4 dbba
+CHK HBU-RST50
+P 10 80 80 57e4
+TC 2dc6a 2f9b8
+R 2c 2 e
+W 10 82
+CHK HBU-RECOV
+NSOF 99cf
+XN 14
+W 28 400018
+W 10 1ffffff
+XP 0 c0 c0
+MW 20000 18 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a
+W 6c0 20000
+W 680 80018
+W 600 80020840
+XT 1 0 1 7530
+XD 3 7530 18 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a
+ID 8
+HS 2
+P 700 1 1 384
+W 700 7ff
+B cg_role.host
+PIN 1 1
+IB bb8
+R 8 1 101
+R 10 0 40
+B cg_role.hold_host
+W 28 400000
+P 10 40 40 fa0
+R 8 0 101
+W 10 40
+XP 0 0 c0
+B cg_role.to_device
+W 4 79
+P 10 40 40 fa0
+R 8 1 1
+W 10 40
+W 4 69
+P 10 40 40 fa0
+R 8 0 1
+W 10 40
+PIN 1 0
+IB 1f4
+R 8 100 101
+W 4 61
+P 10 40 40 fa0
+R 8 1 1
+B cg_role.override
+END

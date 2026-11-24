@@ -279,7 +279,7 @@ def evidence():
         source = folder / "trace.vcd"
         if config not in cache: cache[config] = parse_vcd(source)
         header, names, widths, changes = cache[config]
-        specjson = next((ROOT / "figures/waveforms").glob("WF_%03d_*.json" % wid))
+        specjson = next((ROOT.parent / "spec" / "figures" / "waveforms").glob("WF_%03d_*.json" % wid))
         original = json.loads(specjson.read_text())
         stem = specjson.stem; begin = (first-1)*10000; end = last*10000
         def value_at(code, time):

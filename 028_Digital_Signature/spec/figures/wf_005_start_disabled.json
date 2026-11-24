@@ -1,0 +1,57 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..................."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_start",
+    "wave": "0.10................"
+   },
+   {
+    "name": "i_hw_clr_dsig_cmd_start",
+    "wave": "0.10................"
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=..====.............",
+    "data": [
+     "ENUM_ST_IDLE",
+     "ENUM_ST_CHECK",
+     "ENUM_ST_ERR",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE"
+    ]
+   }
+  ],
+  [
+   "error",
+   {
+    "name": "i_hw_we_dsig_err_algdis",
+    "wave": "0...10.............."
+   },
+   {
+    "name": "o_dsig_err_algdis",
+    "wave": "0....1.............."
+   },
+   {
+    "name": "o_irq",
+    "wave": "0....1.............."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Error: start command for an algorithm whose enable bit is 0"
+ },
+ "foot": {
+  "text": "Simulated: no engine is started; ENUM_ST_ERR sets the error flag, the interrupt follows the raw event and the mask, then ENUM_ST_CLEAR waits for the cleared level of the secrets."
+ },
+ "config": {
+  "hscale": 3
+ }
+}

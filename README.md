@@ -1,38 +1,45 @@
 # VLSIT Common RTL
 
-See the [reorganization report](REORGANIZATION_REPORT.md) for the scope, retained evidence, license note, and validation limits of the current directory layout.
+See the [reorganization report](REORGANIZATION_REPORT.md) for the current migration status and validation limits.
 
-## Standard IP organization (current)
+## Standard IP organization and directory rules
 
-Each numbered directory is one IP design. The directory README gives its overall description and an evidence-based inventory status. Status statements distinguish inventory from functional sign-off; this reorganization did not rerun regressions.
+Each numbered directory is one IP. Keep the IP-level categories below; do not add a separate top-level `sim/` directory. `000_Common/` remains the special shared-library directory and is exempt from this IP template.
 
 ~~~text
 <NNN_IP_NAME>/
-├── README.md
-├── LICENSE
-├── spec/                 Detailed specification and register definitions
-├── figures/              Specification figures
-├── rtl/                  Synthesizable RTL and filelists
-├── lint/                 Lint setup and evidence
-├── cdc/                  Clock-domain crossing material
-├── rdc/                  Reset-domain crossing material
-├── sdc/                  Synopsys Design Constraints
-├── syn/                  Synthesis setup and evidence
-├── verification/
-│   ├── plan/             Specification-derived test plan
-│   ├── tests/            Reusable testcases and generators
-│   ├── models/           Independent verification models
-│   └── ...               Testbench, environment, scripts, logs, and evidence
-├── review/
-│   ├── reference/        Supporting review evidence
-│   └── *.md              One Markdown report per review step
-├── research/             Research notes and source references
-├── sim/                  Isolated run outputs, grouped by tool/config/run ID
-├── formal/               Optional standalone formal environment
-└── archive/              Optional historical/source packages
+├── README.md                 Overall IP description and current evidence-based status
+├── LICENSE                   Usage terms and retained upstream notices
+├── spec/                     Specification, CSR/register documents, and spec README
+│   ├── README.md             Index of key specifications, registers, and figures
+│   └── figures/              Block diagrams, waveforms, and specification figures
+├── rtl/                      Active synthesizable RTL and the sole filelist.f
+├── lint/                     Lint setup and retained lint evidence
+├── cdc/                      Clock-domain-crossing analysis
+├── rdc/                      Reset-domain-crossing analysis
+├── sdc/                      Timing constraints
+├── syn/                      Synthesis setup and evidence
+├── research/                 Source research and external references
+├── verification/             Exactly five direct directory types
+│   ├── docs/                 Flat folder for plans, reports, and documentation
+│   ├── tests/                Retained testcase sources and generators
+│   ├── models/               Independent reference models
+│   ├── env/                  Testbench, BFMs, scripts, configs, and formal setup
+│   └── sim/                  Simulation outputs and preserved run archives
+├── review/                   Reports in review/*.md; supporting evidence in reference/
+└── archive/                  Historical source snapshots and inactive collateral
 ~~~
 
-000_Common/ remains a special shared-library directory. Self-contained simulation workspaces whose scripts and retained evidence depend on internal relative paths are kept together under verification/sim/. A standalone formal/ folder is used only when its environment can be separated without breaking replay. Each per-IP LICENSE includes the full Apache-2.0 text, preserves the upstream source notices, and records the author's request to be contacted before tapeout at `nguyenquan.icd@gmail.com`. The contact request is not an additional Apache-2.0 condition; mandatory notification would require a separately reviewed custom license or agreement.
+### Mandatory layout limits
+
+- `verification/` has exactly five direct directory types: `docs`, `tests`, `models`, `env`, and `sim`. Do not add a sixth type. Keep every verification document, plan, report, and README directly in the single flat folder `verification/docs/`; do not create subfolders under `docs/` or separate `plan/`, `reports/`, `logs/`, `waveforms/`, or `formal/` directories under `verification/`. Empty required categories use a `.gitkeep` marker; the marker is structural and does not imply that testcases, models, or simulation evidence exist.
+- Keep every testcase and generator. Place active testcase source under `verification/tests/`. If an old workspace is too deeply nested, preserve its complete relative tree in a readable archive under the appropriate verification category and keep the active testcase source accessible under `tests/`.
+- Under `verification/`, directory depth is limited to two levels below `verification/`: `verification/<type>/<suite>/file` is allowed, but no directory may be created below `<suite>`. Keep `verification/docs/` flat. Apply a maximum of two directory levels below every other IP-level category as well; retain deeper historical trees in verified archive bundles rather than deleting them.
+- All simulation material belongs under `verification/sim/`. Keep each run at `verification/sim/<run>/` or as an archive directly in `verification/sim/`; do not create a top-level IP `sim/` or a third directory level under `verification/`.
+- Each IP has exactly one filelist inside the RTL tree: `rtl/filelist.f`. It must list all active synthesizable RTL sources for that IP, including profile sources. Select the elaboration top and required defines at the tool invocation. Keep editor backups and inactive historical RTL outside `rtl/` under `archive/`. Never store tool `.log` output in `rtl/`; place lint logs in `lint/` and other tool logs in the directory for the flow that produced them.
+- Keep all specification diagrams, figures, and waveform assets under `spec/figures/`; do not create a top-level `figures/` directory. Each `spec/README.md` must describe key HDS/specification files, CSR/register files, and block diagrams without trying to inventory every file. Keep review evidence under `review/reference/`.
+
+Each per-IP LICENSE includes the full Apache-2.0 text, preserves upstream source notices, and records the author's request to be contacted before tapeout at `nguyenquan.icd@gmail.com`. The contact request is not an additional Apache-2.0 condition; mandatory notification requires a separately reviewed custom license or agreement.
 
 ### IP index
 
@@ -60,18 +67,23 @@ Each numbered directory is one IP design. The directory README gives its overall
 | [020_WDT](020_WDT/README.md) | Watchdog timer RTL IP and design specification. |
 | [021_UART](021_UART/README.md) | Universal Asynchronous Receiver/Transmitter (UART) RTL IP with simulator-dependent verification collateral. |
 | [022_APB_I2S](022_APB_I2S/README.md) | APB-controlled Inter-IC Sound (I2S) audio interface IP with register, RTL, and simulation collateral. |
-| [023_USB20_Controller](023_USB20_Controller/README.md) | USB 2.0 controller supporting device/host profiles, PHY interfaces, bus integration, and a retained self-contained simulation workspace. |
+| [023_USB20_Controller](023_USB20_Controller/README.md) | USB 2.0 controller supporting device/host profiles, PHY interfaces, bus integration, and preserved simulation archives. |
 | [024_GPIO](024_GPIO/README.md) | General-purpose input/output (GPIO) IP with asynchronous capture, interrupts, DMA, simulation, and bounded formal collateral. |
-| [025_DVP_Controller](025_DVP_Controller/README.md) | Digital Video Port (DVP) capture controller with register, RTL, specification, and verification collateral. |
+| [025_DVP_Controller](025_DVP_Controller/README.md) | Digital Video Port (DVP) capture controller with APB4, continuous/gated PCLK capture, specification, verification, research, and review collateral. |
 | [026_I2C_Controller](026_I2C_Controller/README.md) | Inter-Integrated Circuit (I2C) controller with APB control, master/slave logic, DMA crossing, RTL, and verification collateral. |
+| [027_ChaCha](027_ChaCha/README.md) | ChaCha20-Poly1305 authenticated-encryption IP: feature research, draft hardware design specification and CSR workbook; synthesizable RTL (lint clean, scratch-simulated against RFC 8439 vectors); no verification environment yet. |
 
-## Tổ chức chuẩn các IP (hiện tại)
+## Quy tắc tổ chức thư mục IP
 
-Xem [báo cáo tổ chức lại](REORGANIZATION_REPORT.md) để biết phạm vi, bằng chứng được giữ lại, lưu ý license và giới hạn xác nhận cấu trúc hiện tại.
+Xem [báo cáo tổ chức lại](REORGANIZATION_REPORT.md) để biết tiến độ chuyển đổi và giới hạn kiểm tra.
 
-Mỗi thư mục đánh số là một thiết kế IP. README trong từng thư mục mô tả chức năng tổng quát và trạng thái dựa trên kiểm kê tệp. Trạng thái kiểm kê không đồng nghĩa với sign-off chức năng; đợt sắp xếp này không chạy lại regression.
+Mỗi thư mục đánh số là một IP; `000_Common/` là thư mục thư viện dùng chung và được miễn cấu trúc mẫu IP. Trong mỗi IP, giữ các thư mục chức năng chuẩn: `spec` (gồm README và `spec/figures/`), `rtl`, `lint`, `cdc`, `rdc`, `sdc`, `syn`, `research`, `verification`, `review` và `archive`. Không tạo `figures/` hoặc `sim/` ở cấp IP; mọi mô phỏng nằm trong `verification/sim/`.
 
-000_Common/ là thư mục thư viện dùng chung và không theo cây chuẩn của IP. Các môi trường mô phỏng tự chứa được giữ nguyên trong verification/sim/ nếu chuyển các tệp bên trong sẽ làm sai đường dẫn hoặc bằng chứng chạy lại. Thư mục formal/ riêng chỉ được dùng khi có thể tách môi trường formal mà không làm hỏng luồng replay. Mỗi LICENSE của IP chứa toàn văn Apache-2.0, giữ thông báo nguồn gốc và ghi đề nghị liên hệ tác giả trước tapeout qua `nguyenquan.icd@gmail.com`. Đây không phải điều kiện bổ sung của Apache-2.0; nếu cần bắt buộc thông báo thì phải có license hoặc thỏa thuận riêng được rà soát pháp lý.
+`verification/` chỉ có đúng năm loại thư mục trực tiếp: `docs`, `tests`, `models`, `env`, `sim`; không thêm loại thứ sáu. Mọi tài liệu, test plan, report và README verification phải nằm trực tiếp trong một thư mục phẳng `verification/docs/`, không tạo thư mục con ở đây. Loại thư mục bắt buộc nhưng chưa có nội dung dùng file `.gitkeep` để giữ cấu trúc; file đánh dấu này không khẳng định đã có testcase, model hay bằng chứng mô phỏng. Giữ testcase/generator trong `verification/tests/`. Độ sâu bên dưới `verification/` tối đa hai cấp: `verification/<type>/<suite>/file` được phép, không tạo thêm thư mục bên dưới `<suite>`. Các thư mục chức năng khác cũng tối đa hai cấp con; cây lịch sử sâu hơn phải được lưu trong archive đã kiểm tra, không xóa.
+
+Mọi mô phỏng nằm trong `verification/sim/`; mỗi IP chỉ có một `rtl/filelist.f` liệt kê toàn bộ RTL đang hoạt động. Chọn top và define lúc gọi tool. File backup/editor và RTL lịch sử không hoạt động phải chuyển ra `archive/`. Không lưu file log `.log` trong `rtl/`; log lint đặt trong `lint/` và log của flow khác đặt trong thư mục tương ứng với flow đó. Đặt hình, sơ đồ và waveform của đặc tả trong `spec/figures/`; evidence review trong `review/reference/`.
+
+Mỗi LICENSE của IP chứa toàn văn Apache-2.0, giữ thông báo nguồn gốc và ghi đề nghị liên hệ tác giả trước tapeout qua `nguyenquan.icd@gmail.com`. Đây không phải điều kiện bổ sung của Apache-2.0; nếu cần bắt buộc thông báo thì phải có license hoặc thỏa thuận riêng được rà soát pháp lý.
 
 
 ## English
@@ -98,21 +110,29 @@ This directory contains reusable ASIC RTL blocks, example cell models, and desig
 | [`013_AsyncGrayCodeSync`](013_AsyncGrayCodeSync/spec/VLSIT_ASYNC_GRAY_SYNC_HDS.md) | Gray-code synchronizer for asynchronous clock-domain crossings, with RTL and a self-checking testbench. |
 | [`014_AXI4_Upsizer`](014_AXI4_Upsizer/README.md) | AXI4/AXI3 data-width upsizer: design specification, RTL profiles, constraints, waveforms, and verification. |
 | [`015_Timer`](015_Timer/README.md) | Configurable Timer with capture, compare, PWM, one-pulse, APB and DMA request/ack functions. |
+| [`016_CAN_Controller`](016_CAN_Controller/README.md) | Controller Area Network (CAN) controller and verification collateral. |
 | [`017_QSPI_Controller`](017_QSPI_Controller/README.md) | SPI controller/target and controller-only Dual/Quad/QPI IP: VLSIT HDS, CSR workbook, generated RTL, diagrams, waveforms, lint and research collateral. |
+| [`018_MKV_Block_Cipher`](018_MKV_Block_Cipher/README.md) | Block-cipher IP supporting the repository's MKV design profiles and verification collateral. |
 | [`019_SHA2_SHA3_Hash`](019_SHA2_SHA3_Hash/spec/VLSIT_SHA2_SHA3_HASH_HDS.md) | SHA-2/SHA-3 hashing RTL with APB/AXI interfaces, CSR and DMA options, and a full regression suite. |
 | [`020_WDT`](020_WDT/spec/VLSIT_WDT_HDS.md) | Watchdog timer RTL and design specification. |
 | [`021_UART`](021_UART/rtl/filelist.f) | UART RTL and its simulator-specific verification flow. |
+| [`022_APB_I2S`](022_APB_I2S/README.md) | APB-controlled Inter-IC Sound (I2S) audio interface IP. |
+| [`023_USB20_Controller`](023_USB20_Controller/README.md) | USB 2.0 controller supporting device/host profiles, PHY interfaces, and preserved verification archives. |
+| [`024_GPIO`](024_GPIO/README.md) | General-purpose input/output (GPIO) IP with interrupt, DMA, simulation, and formal collateral. |
+| [`025_DVP_Controller`](025_DVP_Controller/README.md) | Digital Video Port (DVP) capture controller with APB4, two selectable capture paths, FIFO buffering, DMA requests, and a documented verification flow. |
+| [`026_I2C_Controller`](026_I2C_Controller/README.md) | Inter-Integrated Circuit (I2C) controller with APB control and master/slave logic. |
+| [`027_ChaCha`](027_ChaCha/README.md) | ChaCha20-Poly1305 authenticated-encryption IP: feature research, draft hardware design specification and CSR workbook; synthesizable RTL (lint clean, scratch-simulated against RFC 8439 vectors); no verification environment yet. |
 
-The block diagram in section 5.2 of each specification is a draw.io diagram (`figures/*.drawio`, VLSIT symbol library) with an SVG rendering, made by `vlsit_spec_diagram.py` of the skill `vlsit-asic-ip-microspec` from the JSON diagram spec beside it.
+The block diagram in section 5.2 of each specification is a draw.io diagram (`spec/figures/*.drawio`, VLSIT symbol library) with an SVG rendering, made by `vlsit_spec_diagram.py` of the skill `vlsit-asic-ip-microspec` from the JSON diagram spec beside it.
 
-Use the filelist documented by each design README; versioned designs may provide more than one source set. The CRC modules are alternatives: select the required CRC module as the elaboration top. FIFO filelists also depend on the shared wrappers and cell models noted in their filelist comments.
+Use the single canonical filelist `rtl/filelist.f` in each IP. It lists active RTL profiles and shared dependencies; select the required top module and profile defines at tool invocation. CRC modules are alternatives, so choose the intended CRC module as the elaboration top.
 
 ### Run lint and regressions
 
 From the repository root, use GNU make (MSYS2 or Git Bash on Windows):
 
 ```sh
-make lint        # lint configured IPs 001–021 (not all 26 IPs)
+make lint        # lint configured IPs 001–021 (not all 27 repository IPs)
 make regression  # run the available self-checking regressions
 make all         # run RTL rule checks, lint, and available regressions
 ```
@@ -225,17 +245,18 @@ Thư mục này chứa các khối RTL ASIC dùng chung, mô hình cell ví dụ
 | [`019_SHA2_SHA3_Hash`](019_SHA2_SHA3_Hash/spec/VLSIT_SHA2_SHA3_HASH_HDS.md) | RTL SHA-2/SHA-3 với giao tiếp APB/AXI, tùy chọn CSR/DMA và regression toàn diện. |
 | [`020_WDT`](020_WDT/spec/VLSIT_WDT_HDS.md) | RTL watchdog timer và đặc tả thiết kế. |
 | [`021_UART`](021_UART/rtl/filelist.f) | RTL UART và flow verification phụ thuộc simulator. |
+| [`027_ChaCha`](027_ChaCha/README.md) | IP mã hóa xác thực ChaCha20-Poly1305: nghiên cứu tính năng, bản nháp đặc tả thiết kế phần cứng và workbook CSR; RTL tổng hợp được (lint sạch, mô phỏng thử với vector RFC 8439); chưa có môi trường verification. |
 
-Sơ đồ khối ở mục 5.2 của mỗi đặc tả là sơ đồ draw.io (`figures/*.drawio`, thư viện symbol VLSIT) kèm bản SVG, do `vlsit_spec_diagram.py` của skill `vlsit-asic-ip-microspec` tạo từ file JSON mô tả sơ đồ nằm cạnh.
+Sơ đồ khối ở mục 5.2 của mỗi đặc tả là sơ đồ draw.io (`spec/figures/*.drawio`, thư viện symbol VLSIT) kèm bản SVG, do `vlsit_spec_diagram.py` của skill `vlsit-asic-ip-microspec` tạo từ file JSON mô tả sơ đồ nằm cạnh.
 
-Dùng filelist được ghi trong README của từng thiết kế; thiết kế có version có thể có nhiều bộ source. Các module CRC là phương án thay thế nhau: chọn module CRC cần dùng làm top khi elaborate. Filelist FIFO cũng cần các wrapper và cell model dùng chung được nêu trong comment của filelist.
+Dùng filelist chuẩn duy nhất `rtl/filelist.f` của mỗi IP. File này liệt kê các profile RTL đang hoạt động và các phụ thuộc dùng chung; chọn top cùng define profile cần thiết khi gọi tool. Các module CRC là phương án thay thế nhau nên phải chọn top phù hợp khi elaborate.
 
 ### Chạy lint và regression
 
 Từ thư mục gốc repository, dùng GNU make (MSYS2 hoặc Git Bash trên Windows):
 
 ```sh
-make lint        # lint các IP 001–021 đã khai báo (không phải cả 26 IP)
+make lint        # lint các IP 001–021 đã khai báo (không phải toàn bộ 27 IP)
 make regression  # chạy các regression tự kiểm hiện có
 make all         # chạy kiểm tra rule RTL, lint và regression hiện có
 ```
@@ -319,3 +340,4 @@ Các CRC dạng transaction nhận request khi `i_ctrl_en` và `o_crc_ready` cù
 Repository không có file Liberty của standard cell đích, diện tích memory compiler, process corner, timing constraint hoặc báo cáo synthesis đã map theo công nghệ. Vì vậy README này **không đưa ra** diện tích µm² hay con số NAND2-equivalent chính xác. Bảng dùng proxy có thể kiểm chứng ở mức RTL: số bit payload FIFO, số bit state CRC khai báo và số bước recurrence CRC. Muốn biết diện tích triển khai, cần synthesis theo thư viện đích và cấu hình macro dự kiến, rồi báo cáo riêng diện tích cell đã map và diện tích memory macro.
 
 CRC RTL trong `004_CRC` đã pass VLSIT rule checker và Verilator lint (5 top, mỗi top 0 lỗi/0 cảnh báo). Regression cũng pass mô phỏng, synthesis, mutation check, kiểm tra waveform evidence và tạo báo cáo. README CRC nguồn vẫn là tài liệu tham chiếu hành vi; thư mục chưa có CRC specification độc lập được duyệt.
+

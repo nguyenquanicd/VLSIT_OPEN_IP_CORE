@@ -55,8 +55,6 @@ module m_usb2_lnk #(
   output logic [10:0] o_tok_efld,
   output logic [3:0]  o_tok_pid,
   output logic [10:0] o_tok_fld,
-  output logic        o_spl_vld,
-  output logic [18:0] o_spl_fld,
   output logic        o_hs_vld,
   output logic [3:0]  o_hs_pid,
   output logic        o_dat_sop,
@@ -71,7 +69,6 @@ module m_usb2_lnk #(
   output logic        o_err_stuf,
   output logic        o_err_babble,
   output logic        o_rx_busy,
-  output logic        o_pkt_end,
 
   // Transmit request from the engines and payload source
   input  wire         i_tx_req,
@@ -142,7 +139,6 @@ module m_usb2_lnk #(
     .o_tok_pid    (o_tok_pid),
     .o_tok_fld    (o_tok_fld),
     .o_spl_vld    (w_spl_vld),
-    .o_spl_fld    (o_spl_fld),
     .o_hs_vld     (w_hs_vld),
     .o_hs_pid     (o_hs_pid),
     .o_dat_sop    (o_dat_sop),
@@ -156,8 +152,7 @@ module m_usb2_lnk #(
     .o_err_crc    (w_err_crc),
     .o_err_stuf   (w_err_stuf),
     .o_err_babble (w_err_babble),
-    .o_rx_busy    (w_rx_busy),
-    .o_pkt_end    (o_pkt_end)
+    .o_rx_busy    (w_rx_busy)
   );
 
   // Packet transmitter.
@@ -186,7 +181,6 @@ module m_usb2_lnk #(
 
   // Event outputs and busy flags.
   assign o_tok_vld    = w_tok_vld;
-  assign o_spl_vld    = w_spl_vld;
   assign o_hs_vld     = w_hs_vld;
   assign o_dat_end    = w_dat_end;
   assign o_dat_ok     = w_dat_ok;

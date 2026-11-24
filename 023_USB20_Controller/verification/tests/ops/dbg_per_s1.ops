@@ -1,0 +1,54 @@
+# scenario host_periodic seed 1
+WD 30d40
+R 0 10000 ffff0000
+W 40 1000000
+W 44 1000100
+W 48 1000200
+W 34 10
+W 14 1ffffff
+W 4 61
+W 28 400008
+LS 1
+ID 60216
+P 2c 1 1 7d0
+P 10 10 10 190
+W 10 10
+W 28 400009
+WP 0 d7 df fa0
+LS 0
+ID 3057
+LS 2
+ID 1770
+LS 0
+XK 177 1b774 4 dbba
+ID 2eb12
+P 10 80 80 bb8
+R 2c 2 e
+W 10 82
+ID 99cf
+W 28 400018
+W 10 1ffffff
+MW 6000 40 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd fa f f0 16 9d c9 57 56 74 6 66 76 cf b0 b4 eb 89 2 c4 42 69 da 1c f6
+ID bb8
+W 6c4 6100
+W 684 180008
+W 784 58
+W 604 80039808
+XT 9 0 3 7530
+B cg_sched.periodic_first
+DT 3 0 8 44 20 82 3c fd e6 f1 c2
+XH 2 7d0
+XN 1d4
+XT 9 0 3 7530
+ID 8
+DT b 0 8 6b 30 f9 e c7 dd 1 e4
+XH 2 7d0
+XT 9 0 3 7530
+ID 8
+DT 3 0 8 88 75 34 a2 f b d 4
+XH 2 7d0
+P 704 1 1 384
+B cg_poll.rearm
+W 704 7ff
+R 10 0 1300
+END

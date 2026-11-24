@@ -1,0 +1,58 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "arbiter",
+   {
+    "name": "w_hreq",
+    "wave": "0111111....."
+   },
+   {
+    "name": "w_hgrant",
+    "wave": "00111111...."
+   }
+  ],
+  [
+   "stream",
+   {
+    "name": "w_hin_valid",
+    "wave": "0011.0......"
+   },
+   {
+    "name": "w_hin_last",
+    "wave": "00010......."
+   },
+   {
+    "name": "w_perm_start",
+    "wave": "000100100..."
+   },
+   {
+    "name": "w_hout_valid",
+    "wave": "0000011.1.0."
+   },
+   {
+    "name": "w_hout_last",
+    "wave": "00000000010."
+   }
+  ],
+  [
+   "engine",
+   {
+    "name": "w_eng_done",
+    "wave": "0000100100.."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-008, success: arbiter grant, absorb and continuous SHAKE squeeze"
+ },
+ "foot": {
+  "text": "The squeeze repeats the permutation for each further block of output; request and grant end after the last output."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

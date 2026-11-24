@@ -1,19 +1,8 @@
-// filelist.f - RTL files in compile order (leaf modules first, top last).
-// Top module: m_vlsit_hyperram_controller
-// Paths are relative to the folder of this file; run tools from that folder.
+# Master filelist: union of active synthesizable RTL profiles for this IP.
+# Select the required top module and profile-specific defines at the tool invocation.
+# Paths are relative to this file; invoke the simulator from this directory.
 m_vlsit_apb4_if.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv
-../../000_Common/rtl_lib/m_vlsit_afifo_ram_macro.sv
 ../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_mem.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_RN.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_2FF_SN.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_RN.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_3FF_SN.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_RN.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_4FF_SN.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_RN.sv
-../../000_Common/rtl_cells/VLSIT_CELL_SYNC_DFF_SN.sv
-../../000_Common/rtl_lib/m_vlsit_afifo_cell_sync.sv
 ../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_sync.sv
 ../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_rd.sv
 ../../001_AsyncGrayFIFO/rtl/m_vlsit_afifo_wr.sv
@@ -30,11 +19,6 @@ csr/m_vlsit_csr_sync.sv
 csr/m_vlsit_csr_regfile.sv
 m_vlsit_hyperbus_ctrl.sv
 m_vlsit_cap_ring.sv
-../../000_Common/rtl_cells/VLSIT_CELL_CKINV.sv
-../../000_Common/rtl_lib/m_vlsit_clk_inv.sv
 m_vlsit_hyperbus_phy.sv
 m_vlsit_hyperram_irq.sv
-../../000_Common/rtl_cells/VLSIT_CELL_TIEH.sv
-../../000_Common/rtl_cells/VLSIT_CELL_TIEL.sv
-../../000_Common/rtl_lib/m_vlsit_tie.sv
 m_vlsit_hyperram_controller.sv

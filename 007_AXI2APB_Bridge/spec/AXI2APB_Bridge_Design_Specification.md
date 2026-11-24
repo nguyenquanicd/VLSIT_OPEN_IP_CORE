@@ -162,9 +162,9 @@ The RTL hierarchy has one structural top and three child modules. The top contai
 
 The enclosing frame is the top module `m_axi2apb_bridge`; each solid module box inside it is one child RTL module. Dashed side panels show the top-level AXI4/APB4 port bundles and are not RTL modules. The APB decoder, default error Completer, and peripheral Completers are outside this RTL hierarchy.
 
-![AXI2APB RTL module hierarchy](../figures/vlsit_block_diagram.svg)
+![AXI2APB RTL module hierarchy](figures/vlsit_block_diagram.svg)
 
-Editable vector source: [../figures/vlsit_block_diagram.svg](../figures/vlsit_block_diagram.svg).
+Editable vector source: [figures/vlsit_block_diagram.svg](figures/vlsit_block_diagram.svg).
 
 ### 5.3 Transaction and dataflow
 
@@ -253,7 +253,7 @@ Inputs are sampled on rising i_clk_axi when the associated handshake/completion 
 
 AXI4 prohibits a burst from crossing a 4-KiB address boundary. This bridge defensively rejects such a request before issuing APB traffic.
 
-**Waveform index (approved 2026-10-25):** [WF-001 reset](../figures/wf-001.svg); successful reads [WF-002 single](../figures/wf-002.svg), [WF-003 INCR](../figures/wf-003.svg), [WF-004 FIXED/WRAP](../figures/wf-004.svg); successful writes [WF-005 burst](../figures/wf-005.svg), [WF-006 byte lane](../figures/wf-006.svg); waits and backpressure [WF-007 APB wait](../figures/wf-007.svg), [WF-008 AXI response stall](../figures/wf-008.svg); errors [WF-009 read PSLVERR](../figures/wf-009.svg), [WF-010 write PSLVERR](../figures/wf-010.svg), [WF-012 unsupported request](../figures/wf-012.svg), [WF-013 4-KiB crossing](../figures/wf-013.svg), [WF-014 unmapped address](../figures/wf-014.svg); arbitration [WF-011 AR/AW contention](../figures/wf-011.svg). WaveJSON sources are paired with each SVG in `../figures/`.
+**Waveform index (approved 2026-10-25):** [WF-001 reset](figures/wf-001.svg); successful reads [WF-002 single](figures/wf-002.svg), [WF-003 INCR](figures/wf-003.svg), [WF-004 FIXED/WRAP](figures/wf-004.svg); successful writes [WF-005 burst](figures/wf-005.svg), [WF-006 byte lane](figures/wf-006.svg); waits and backpressure [WF-007 APB wait](figures/wf-007.svg), [WF-008 AXI response stall](figures/wf-008.svg); errors [WF-009 read PSLVERR](figures/wf-009.svg), [WF-010 write PSLVERR](figures/wf-010.svg), [WF-012 unsupported request](figures/wf-012.svg), [WF-013 4-KiB crossing](figures/wf-013.svg), [WF-014 unmapped address](figures/wf-014.svg); arbitration [WF-011 AR/AW contention](figures/wf-011.svg). WaveJSON sources are paired with each SVG in `figures/`.
 
 ### 6.4 Interrupts and events
 
@@ -348,20 +348,20 @@ Read PSLVERR marks its beat. Write PSLVERR accumulates; later beats still execut
 
 | Waveform ID | Function / operation | Scenario (success / error / corner) | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
-| WF-001 | OP-005 Reset | Success: synchronous active-low reset assertion/release and idle outputs | i_clk_axi, i_rst_n_axi, AXI VALID, APB PSEL/PENABLE | ![WF-001](../figures/wf-001.svg); [WaveJSON](../figures/wf-001.json) | 2026-10-25 |
-| WF-002 | OP-001 Read | Success: single-beat AXI read and APB completion | AR, APB PADDR/PSEL/PENABLE/PREADY/PRDATA, R | ![WF-002](../figures/wf-002.svg); [WaveJSON](../figures/wf-002.json) | 2026-10-25 |
-| WF-003 | OP-001 Read | Success: four-beat INCR read with final RLAST | AR, APB address sequence, RVALID/RREADY/RLAST | ![WF-003](../figures/wf-003.svg); [WaveJSON](../figures/wf-003.json) | 2026-10-25 |
-| WF-004 | OP-001 Read | Corner: FIXED and WRAP address sequences | ARBURST/ARADDR/ARLEN, APB PADDR | ![WF-004](../figures/wf-004.svg); [WaveJSON](../figures/wf-004.json) | 2026-10-25 |
-| WF-005 | OP-002 Write | Success: INCR write burst, WSTRB/PPROT and B response | AW, W, APB PADDR/PWDATA/PSTRB/PPROT, B | ![WF-005](../figures/wf-005.svg); [WaveJSON](../figures/wf-005.json) | 2026-10-25 |
-| WF-006 | OP-002 Write | Corner: byte write at 0x1001, APB PADDR=0x1000 and lane 1 | AWADDR, AWSIZE, WSTRB, APB PADDR/PSTRB | ![WF-006](../figures/wf-006.svg); [WaveJSON](../figures/wf-006.json) | 2026-10-25 |
-| WF-007 | OP-001 Read; OP-002 Write | Corner: APB PREADY wait with stable APB control/data | PSEL, PENABLE, PADDR, PWRITE, PREADY | ![WF-007](../figures/wf-007.svg); [WaveJSON](../figures/wf-007.json) | 2026-10-25 |
-| WF-008 | OP-001 Read; OP-002 Write | Corner: RREADY and BREADY backpressure | RVALID/RREADY/R payload, BVALID/BREADY/B payload | ![WF-008](../figures/wf-008.svg); [WaveJSON](../figures/wf-008.json) | 2026-10-25 |
-| WF-009 | OP-001 Read | Error: middle APB read beat returns PSLVERR; later beats continue | APB PSLVERR, RRESP, RLAST | ![WF-009](../figures/wf-009.svg); [WaveJSON](../figures/wf-009.json) | 2026-10-25 |
-| WF-010 | OP-002 Write | Error: middle APB write returns PSLVERR; final BRESP is SLVERR | APB PSLVERR, WLAST, BRESP/BVALID | ![WF-010](../figures/wf-010.svg); [WaveJSON](../figures/wf-010.json) | 2026-10-25 |
-| WF-011 | REQ-FUNC-003 | Corner: simultaneous AR/AW round-robin grant; WVALID before AW acceptance | AR/AW VALID/READY, WVALID/WREADY | ![WF-011](../figures/wf-011.svg); [WaveJSON](../figures/wf-011.json) | 2026-10-25 |
-| WF-012 | OP-003 Unsupported read; OP-004 Unsupported write | Error: unsupported size/cache/burst; no APB, read beats or write drain | AXI address/data/response, APB PSEL | ![WF-012](../figures/wf-012.svg); [WaveJSON](../figures/wf-012.json) | 2026-10-25 |
-| WF-013 | OP-003 Unsupported read; OP-004 Unsupported write | Boundary: request crossing 4 KiB is rejected without APB | AXI address/length, APB PSEL, AXI responses | ![WF-013](../figures/wf-013.svg); [WaveJSON](../figures/wf-013.json) | 2026-10-25 |
-| WF-014 | REQ-ERR-004 | Error: unmapped APB address uses default error Completer | APB PSEL/PREADY/PSLVERR, AXI RRESP/BRESP | ![WF-014](../figures/wf-014.svg); [WaveJSON](../figures/wf-014.json) | 2026-10-25 |
+| WF-001 | OP-005 Reset | Success: synchronous active-low reset assertion/release and idle outputs | i_clk_axi, i_rst_n_axi, AXI VALID, APB PSEL/PENABLE | ![WF-001](figures/wf-001.svg); [WaveJSON](figures/wf-001.json) | 2026-10-25 |
+| WF-002 | OP-001 Read | Success: single-beat AXI read and APB completion | AR, APB PADDR/PSEL/PENABLE/PREADY/PRDATA, R | ![WF-002](figures/wf-002.svg); [WaveJSON](figures/wf-002.json) | 2026-10-25 |
+| WF-003 | OP-001 Read | Success: four-beat INCR read with final RLAST | AR, APB address sequence, RVALID/RREADY/RLAST | ![WF-003](figures/wf-003.svg); [WaveJSON](figures/wf-003.json) | 2026-10-25 |
+| WF-004 | OP-001 Read | Corner: FIXED and WRAP address sequences | ARBURST/ARADDR/ARLEN, APB PADDR | ![WF-004](figures/wf-004.svg); [WaveJSON](figures/wf-004.json) | 2026-10-25 |
+| WF-005 | OP-002 Write | Success: INCR write burst, WSTRB/PPROT and B response | AW, W, APB PADDR/PWDATA/PSTRB/PPROT, B | ![WF-005](figures/wf-005.svg); [WaveJSON](figures/wf-005.json) | 2026-10-25 |
+| WF-006 | OP-002 Write | Corner: byte write at 0x1001, APB PADDR=0x1000 and lane 1 | AWADDR, AWSIZE, WSTRB, APB PADDR/PSTRB | ![WF-006](figures/wf-006.svg); [WaveJSON](figures/wf-006.json) | 2026-10-25 |
+| WF-007 | OP-001 Read; OP-002 Write | Corner: APB PREADY wait with stable APB control/data | PSEL, PENABLE, PADDR, PWRITE, PREADY | ![WF-007](figures/wf-007.svg); [WaveJSON](figures/wf-007.json) | 2026-10-25 |
+| WF-008 | OP-001 Read; OP-002 Write | Corner: RREADY and BREADY backpressure | RVALID/RREADY/R payload, BVALID/BREADY/B payload | ![WF-008](figures/wf-008.svg); [WaveJSON](figures/wf-008.json) | 2026-10-25 |
+| WF-009 | OP-001 Read | Error: middle APB read beat returns PSLVERR; later beats continue | APB PSLVERR, RRESP, RLAST | ![WF-009](figures/wf-009.svg); [WaveJSON](figures/wf-009.json) | 2026-10-25 |
+| WF-010 | OP-002 Write | Error: middle APB write returns PSLVERR; final BRESP is SLVERR | APB PSLVERR, WLAST, BRESP/BVALID | ![WF-010](figures/wf-010.svg); [WaveJSON](figures/wf-010.json) | 2026-10-25 |
+| WF-011 | REQ-FUNC-003 | Corner: simultaneous AR/AW round-robin grant; WVALID before AW acceptance | AR/AW VALID/READY, WVALID/WREADY | ![WF-011](figures/wf-011.svg); [WaveJSON](figures/wf-011.json) | 2026-10-25 |
+| WF-012 | OP-003 Unsupported read; OP-004 Unsupported write | Error: unsupported size/cache/burst; no APB, read beats or write drain | AXI address/data/response, APB PSEL | ![WF-012](figures/wf-012.svg); [WaveJSON](figures/wf-012.json) | 2026-10-25 |
+| WF-013 | OP-003 Unsupported read; OP-004 Unsupported write | Boundary: request crossing 4 KiB is rejected without APB | AXI address/length, APB PSEL, AXI responses | ![WF-013](figures/wf-013.svg); [WaveJSON](figures/wf-013.json) | 2026-10-25 |
+| WF-014 | REQ-ERR-004 | Error: unmapped APB address uses default error Completer | APB PSEL/PREADY/PSLVERR, AXI RRESP/BRESP | ![WF-014](figures/wf-014.svg); [WaveJSON](figures/wf-014.json) | 2026-10-25 |
 
 **Not required (confirmed by user, 2026-10-25):** APB timeout waveform; the bridge has no internal timeout.
 
@@ -601,7 +601,7 @@ No exceptions are approved. A later exception requires exact endpoints, mode, ra
 | ASM-007 | TBD | Threat model, privilege, safety class. | Current IP forwards PPROT and bus errors only. | System/security review. |
 | ASM-008 | TBD | Scan, ATPG, test-mode contract. | DFT signoff open. | SoC DFT owner. |
 | ASM-009 | TBD | Tool versions/options for lint/synthesis/STA/CDC. | Reproducibility criteria open. | Project flow owner. |
-| ASM-010 | Resolved | User approved all 14 planned waveforms on 2026-10-25; SVG and WaveJSON sources are present under `../figures/`. | Waveform plan and sources are linked in Section 10.3. | Complete. |
+| ASM-010 | Resolved | User approved all 14 planned waveforms on 2026-10-25; SVG and WaveJSON sources are present under `figures/`. | Waveform plan and sources are linked in Section 10.3. | Complete. |
 | ASM-011 | Resolved | Drive RDATA as zero when RRESP=SLVERR. | Read data is invalid on error; this deterministic value does not change the error contract. | User confirmed on 2026-10-25. |
 | ASM-012 | Assumption | The real-world applications of section 1.4 are proposed by the author from the common industrial use of this kind of block and confirmed by the user | Section 1.4 only; no requirement depends on them | Confirmed by the user, 2026-11-02 |
 

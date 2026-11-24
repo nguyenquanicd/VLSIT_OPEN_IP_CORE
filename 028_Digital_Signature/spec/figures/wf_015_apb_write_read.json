@@ -1,0 +1,65 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "request",
+   {
+    "name": "i_apb_psel",
+    "wave": "011101110000"
+   },
+   {
+    "name": "i_apb_penable",
+    "wave": "001100110000"
+   },
+   {
+    "name": "i_apb_pwrite",
+    "wave": "011100000000"
+   },
+   {
+    "name": "i_apb_paddr",
+    "wave": "x=..x=..xxxx",
+    "data": [
+     "0x044",
+     "0x074"
+    ]
+   },
+   {
+    "name": "i_apb_pwdata",
+    "wave": "x=..xxxxxxxx",
+    "data": [
+     "0x1"
+    ]
+   }
+  ],
+  [
+   "response",
+   {
+    "name": "o_apb_pready",
+    "wave": "000100010000"
+   },
+   {
+    "name": "o_apb_pslverr",
+    "wave": "000000000000"
+   },
+   {
+    "name": "o_apb_prdata",
+    "wave": "xxxxxxx=xxxx",
+    "data": [
+     "0x0"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "APB4 CSR write then read, success (one wait state)"
+ },
+ "foot": {
+  "text": "The write goes to dsig_alg_en and the read to dsig_sts; PREADY rises one cycle after the first access cycle (section 11.4)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}
