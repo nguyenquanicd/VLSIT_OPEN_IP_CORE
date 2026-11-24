@@ -1,0 +1,101 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p.............................................."
+  },
+  {
+   "name": "i_load",
+   "wave": "10............................................."
+  },
+  {
+   "name": "reg_fsm_blk_current_state",
+   "wave": "===.......................................=....",
+   "data": [
+    "IDLE",
+    "LDB",
+    "RUN",
+    "IDLE"
+   ]
+  },
+  {
+   "name": "reg_ph",
+   "wave": "0..1010101010101010101010101010101010101010...."
+  },
+  {
+   "name": "reg_left",
+   "wave": "==..=.=.=.=.=.=.=.=.=.=.=.=.=.=.=.=.=.=.=.=....",
+   "data": [
+    "0",
+    "19",
+    "18",
+    "17",
+    "16",
+    "15",
+    "14",
+    "13",
+    "12",
+    "11",
+    "10",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+    "1",
+    "0",
+    "19"
+   ]
+  },
+  {
+   "name": "w_stall",
+   "wave": "0.............................................."
+  },
+  {
+   "name": "w_dlv",
+   "wave": "0........................................10...."
+  },
+  [
+   "queue",
+   {
+    "name": "reg_q0_v",
+    "wave": "0.........................................1.0.."
+   },
+   {
+    "name": "reg_q1_v",
+    "wave": "0.........................................10..."
+   },
+   {
+    "name": "reg_q0_ctr",
+    "wave": "x.........................................==x..",
+    "data": [
+     "c0",
+     "c1"
+    ]
+   }
+  ],
+  [
+   "consumer",
+   {
+    "name": "o_blk_vld",
+    "wave": "0.........................................1.0.."
+   },
+   {
+    "name": "i_take",
+    "wave": "0.........................................1.0.."
+   }
+  ]
+ ],
+ "head": {
+  "text": "PARA_PIPE_CHACHA = 1 on the CFG-BASE core: the key block and the first data block form one pair (QN = 4, RC = 1)"
+ },
+ "foot": {
+  "text": "Cycle 0 is the load of a message with one data block, so the blocks are block 0 (the Poly1305 one-time key) and block 1. With one round per cycle a block needs 20 iterations of two cycles; the pair is delivered in cycle 41 (2 * 20 + 1 after the load), against 20 cycles for the key block alone without the option, and both blocks are in the queue in cycle 42. Measured with the RTL, the consumer takes a block as soon as it is valid"
+ },
+ "config": {
+  "hscale": 1
+ }
+}

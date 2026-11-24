@@ -1,0 +1,72 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..........."
+  },
+  [
+   "block interface",
+   {
+    "name": "i_blk_vld",
+    "wave": "010...10...."
+   },
+   {
+    "name": "o_blk_rdy",
+    "wave": "1.0...1....."
+   }
+  ],
+  [
+   "pmac_kar",
+   {
+    "name": "reg_fsm_pmac_current_state",
+    "wave": "=.=====.....",
+    "data": [
+     "IDLE",
+     "MUL0",
+     "MUL1",
+     "MUL2",
+     "RED",
+     "IDLE"
+    ]
+   },
+   {
+    "name": "reg_m0",
+    "wave": "x..=........",
+    "data": [
+     "M0"
+    ]
+   },
+   {
+    "name": "reg_m1",
+    "wave": "x...=.......",
+    "data": [
+     "M1"
+    ]
+   },
+   {
+    "name": "reg_m2",
+    "wave": "x....=......",
+    "data": [
+     "M2"
+    ]
+   },
+   {
+    "name": "o_acc",
+    "wave": "=.....=.....",
+    "data": [
+     "ACC0",
+     "ACC1"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "Poly1305 architecture 1: two consecutive blocks, 5 cycles per block"
+ },
+ "foot": {
+  "text": "The block is accepted in the start cycle; the three products and the recombination take four more cycles; the accumulator is updated at the end of RED and the next block is accepted five cycles after the first. Illustrative cycle counts, not measured"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

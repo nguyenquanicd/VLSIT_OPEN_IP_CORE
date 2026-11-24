@@ -1,0 +1,53 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_axi",
+   "wave": "p..........."
+  },
+  [
+   "CLK-CORE side",
+   {
+    "name": "i_msg_act",
+    "wave": "01.........."
+   },
+   {
+    "name": "i_aad_len",
+    "wave": "x=..........",
+    "data": [
+     "12"
+    ]
+   }
+  ],
+  [
+   "CLK-AXI side",
+   {
+    "name": "w_act_s",
+    "wave": "0..1........"
+   },
+   {
+    "name": "w_start_raw",
+    "wave": "0..10......."
+   },
+   {
+    "name": "o_aad_len",
+    "wave": "x...=.......",
+    "data": [
+     "12"
+    ]
+   },
+   {
+    "name": "o_start",
+    "wave": "0....10....."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Message parameter capture in CLK-AXI"
+ },
+ "foot": {
+  "text": "The parameters are stable before msg_act rises; the copy is taken when the synchronized level rises and o_start follows one cycle later. Illustrative cycle counts, not measured"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

@@ -1,0 +1,59 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p.............."
+  },
+  [
+   "CLK-CORE side",
+   {
+    "name": "i_flush_in_req",
+    "wave": "01.0..........."
+   },
+   {
+    "name": "w_req_lvl",
+    "wave": "0.1.......0...."
+   },
+   {
+    "name": "w_done_s",
+    "wave": "0.......1...0.."
+   },
+   {
+    "name": "o_flush_in_done",
+    "wave": "0.......10....."
+   }
+  ],
+  [
+   "CLK-AXI side",
+   {
+    "name": "w_req_s",
+    "wave": "0...1.......0.."
+   },
+   {
+    "name": "w_start",
+    "wave": "0...10.........."
+   },
+   {
+    "name": "o_rst_n_sw",
+    "wave": "1....01........."
+   },
+   {
+    "name": "i_swr_busy",
+    "wave": "0.....1.0......."
+   },
+   {
+    "name": "reg_done_lvl",
+    "wave": "0.......1.....0."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Flush of the input buffer: four-phase level handshake between the domains"
+ },
+ "foot": {
+  "text": "Request level, flush in CLK-AXI, done level, request falls, done falls. Illustrative cycle counts on one common axis, not measured"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

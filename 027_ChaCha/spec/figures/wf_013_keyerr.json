@@ -1,0 +1,73 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "APB start",
+   {
+    "name": "o_cha_ctrl_start",
+    "wave": "01.0............"
+   },
+   {
+    "name": "i_hw_we_cha_ctrl_start",
+    "wave": "0.10............"
+   }
+  ],
+  [
+   "state",
+   {
+    "name": "reg_fsm_msg_current_state",
+    "wave": "=.=.=...........",
+    "data": [
+     "IDLE",
+     "KEY",
+     "IDLE"
+    ]
+   },
+   {
+    "name": "i_cha_sts_busy",
+    "wave": "0.1.0..........."
+   }
+  ],
+  [
+   "key store",
+   {
+    "name": "o_key_req",
+    "wave": "0.1.0..........."
+   },
+   {
+    "name": "o_key_slot",
+    "wave": "x.=.x...........",
+    "data": [
+     "SLOT"
+    ]
+   },
+   {
+    "name": "i_key_err",
+    "wave": "0..1.0.........."
+   }
+  ],
+  [
+   "event",
+   {
+    "name": "i_hw_we_cha_irq_raw_key_err",
+    "wave": "0...10.........."
+   },
+   {
+    "name": "o_cha_irq_raw_key_err",
+    "wave": "0....1.........."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-001 encryption: the key store refuses the key"
+ },
+ "foot": {
+  "text": "i_key_err is seen at the end of c3, o_key_req falls in c4, the sequencer returns to idle with key_err and without done or tag_err (KEY-T4). Illustrative cycle counts, one common clock, not measured"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

@@ -1,0 +1,305 @@
+{
+ "schema": "vlsit-gate-findings/1",
+ "findings": [
+  {
+   "id": "F-001",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2660",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-002",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "traceability",
+   "evidence": "VLSIT_CHACHA_HDS.md:70",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-003",
+   "severity": "Low",
+   "verdict": "waive",
+   "root_cause": "features-scope",
+   "evidence": "VLSIT_CHACHA_HDS.md:2666",
+   "traced": false,
+   "owner": "user (product owner)",
+   "invalidation": "A storage or stand-alone MAC use case is added to the product requirements."
+  },
+  {
+   "id": "F-004",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2702",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-005",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2705",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-006",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2687",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-007",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2708",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-008",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "cdc-reset",
+   "evidence": "VLSIT_CHACHA_HDS.md:866",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-009",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "cdc-reset",
+   "evidence": "VLSIT_CHACHA_HDS.md:2710",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-010",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "defaults",
+   "evidence": "VLSIT_CHACHA_HDS.md:902",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-011",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "defaults",
+   "evidence": "VLSIT_CHACHA_HDS.md:897",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-012",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2691",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-013",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "timing",
+   "evidence": "VLSIT_CHACHA_HDS.md:903",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-014",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "timing",
+   "evidence": "VLSIT_CHACHA_HDS.md:2699",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-015",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "timing",
+   "evidence": "VLSIT_CHACHA_HDS.md:2562",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-016",
+   "severity": "Low",
+   "verdict": "fix HAS",
+   "root_cause": "timing",
+   "evidence": "VLSIT_CHACHA_HDS.md:2367",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-017",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "performance",
+   "evidence": "VLSIT_CHACHA_HDS.md:173",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-018",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "performance",
+   "evidence": "VLSIT_CHACHA_HDS.md:2365",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-019",
+   "severity": "Low",
+   "verdict": "fix HAS",
+   "root_cause": "traceability",
+   "evidence": "VLSIT_CHACHA_HDS.md:2235",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-020",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "dft",
+   "evidence": "VLSIT_CHACHA_HDS.md:2698",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-021",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "security",
+   "evidence": "VLSIT_CHACHA_HDS.md:2601",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-022",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "security",
+   "evidence": "VLSIT_CHACHA_HDS.md:2703",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-023",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "defaults",
+   "evidence": "VLSIT_CHACHA_HDS.md:903",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-024",
+   "severity": "Low",
+   "verdict": "waive",
+   "root_cause": "security",
+   "evidence": "VLSIT_CHACHA_HDS.md:2700",
+   "traced": false,
+   "owner": "user (product owner)",
+   "invalidation": "The target attacker model or a certification requires resistance to power analysis or fault injection."
+  },
+  {
+   "id": "F-025",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "verification",
+   "evidence": "VLSIT_CHACHA_HDS.md:2461",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-026",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2684",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-027",
+   "severity": "Low",
+   "verdict": "fix HAS",
+   "root_cause": "traceability",
+   "evidence": "VLSIT_CHACHA_HDS.md:2661",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-028",
+   "severity": "High",
+   "verdict": "fix HAS",
+   "root_cause": "open-decisions",
+   "evidence": "VLSIT_CHACHA_HDS.md:2681",
+   "traced": true,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-029",
+   "severity": "Medium",
+   "verdict": "fix HAS",
+   "root_cause": "performance",
+   "evidence": "VLSIT_CHACHA_HDS.md:2364",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  },
+  {
+   "id": "F-030",
+   "severity": "Low",
+   "verdict": "fix HAS",
+   "root_cause": "performance",
+   "evidence": "VLSIT_CHACHA_HDS.md:2364",
+   "traced": false,
+   "owner": "",
+   "invalidation": ""
+  }
+ ]
+}

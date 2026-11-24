@@ -1,0 +1,511 @@
+{
+  "report": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\027_ChaCha\\review\\REVIEW_CHACHA.md",
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§1.4, ASM-002, ASM-003",
+      "cells": [
+        "F-001",
+        "Major",
+        "application_fit",
+        "FACT: Every application number is the author's example",
+        "Mọi con số ứng dụng là ví dụ của tác giả",
+        "§1.4, ASM-002, ASM-003"
+      ]
+    },
+    {
+      "id": "F-004",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§6.3, §10.2, TBD-018",
+      "cells": [
+        "F-004",
+        "Major",
+        "functions",
+        "INFERENCE: Boundary between associated data and message data is undefined",
+        "Chưa xác định ranh giới giữa associated data và message data",
+        "§6.3, §10.2, TBD-018"
+      ]
+    },
+    {
+      "id": "F-005",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§10.1, TBD-009, TBD-022",
+      "cells": [
+        "F-005",
+        "Major",
+        "functions",
+        "FACT: Key capture and an invalid key have no defined behavior",
+        "Chưa định nghĩa việc nạp khóa và trường hợp khóa không hợp lệ",
+        "§10.1, TBD-009, TBD-022"
+      ]
+    },
+    {
+      "id": "F-006",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§6.3, TBD-004",
+      "cells": [
+        "F-006",
+        "Major",
+        "interfaces",
+        "FACT: DMA four-phase handshake has no cycle-level contract",
+        "Handshake bốn pha cho DMA chưa có hợp đồng theo chu kỳ",
+        "§6.3, TBD-004"
+      ]
+    },
+    {
+      "id": "F-007",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§6.2, ASM-007, TBD-015",
+      "cells": [
+        "F-007",
+        "Major",
+        "interfaces",
+        "FACT: AXI4 profile and transfer rules are not closed",
+        "Hồ sơ AXI4 và quy tắc transfer chưa chốt",
+        "§6.2, ASM-007, TBD-015"
+      ]
+    },
+    {
+      "id": "F-008",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§7.2, CDC-006, CDC-007",
+      "cells": [
+        "F-008",
+        "Major",
+        "clock_reset_cdc",
+        "INFERENCE: Single-cycle events cross asynchronous clocks without a stated structure",
+        "Event một chu kỳ đi qua clock bất đồng bộ nhưng chưa nêu cấu trúc",
+        "§7.2, CDC-006, CDC-007"
+      ]
+    },
+    {
+      "id": "F-001",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§1.4, ASM-002, ASM-003",
+      "cells": [
+        "F-001",
+        "Major",
+        "§1.4, ASM-002, ASM-003",
+        "FACT: Every application number is the author's example. The frame size (127 B), image block (1280 B), latency (tens of microseconds) and the link rate (1 to 5 Mbit/s) are recorded as assumptions ASM-002 and ASM-003; the user answered 'you decide', and no source in the research report covers the embedded-link case. The throughput target is TBD-001, so no configuration can be sized against a demand.",
+        "Kích thước frame (127 B), khối ảnh (1280 B), độ trễ (vài chục microsecond) và tốc độ link (1 đến 5 Mbit/s) chỉ là giả định ASM-002 và ASM-003; người dùng trả lời 'you decide' và không nguồn nào trong báo cáo research bao phủ trường hợp embedded link. Mục tiêu throughput là TBD-001 nên không cấu hình nào được định cỡ theo nhu cầu thật.",
+        "Obtain the real product numbers (message sizes, latency budget, link rate, core clock) from the user, replace ASM-002 and ASM-003, and close TBD-001 with a target in Gbit/s and a default frequency."
+      ]
+    },
+    {
+      "id": "F-002",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§1.3 table, 21 cells",
+      "cells": [
+        "F-002",
+        "Minor",
+        "§1.3 table, 21 cells",
+        "FACT: Feature table has no requirement mapping. All nine FEAT rows carry 'Pending' in the Requirements column although REQ-FUNC, REQ-IF, REQ-CLK, REQ-REG, REQ-PARAM, REQ-ERR, REQ-PERF and REQ-SEC exist in section 3, so a feature cannot be traced to its requirement.",
+        "Cả chín dòng FEAT ghi 'Pending' ở cột Requirements dù các REQ đã có ở mục 3, nên không truy vết được feature sang requirement.",
+        "Fill the Requirements column with the REQ identifiers (FEAT-001: REQ-FUNC-001 to 006; FEAT-004: REQ-IF-002 to 005, 010; FEAT-005: REQ-IF-006 to 008; and so on) and add a FEAT-to-REQ check to the traceability table of section 19."
+      ]
+    },
+    {
+      "id": "F-003",
+      "severity": "Observation",
+      "label": "INFERENCE",
+      "locator": "§1.1, DEC-003",
+      "cells": [
+        "F-003",
+        "Observation",
+        "§1.1, DEC-003",
+        "INFERENCE: Stand-alone ChaCha20 and Poly1305 are not offered. DEC-003 limits the IP to the full AEAD, while the sampled Secure-IC engine D1 offers stand-alone encryption, stand-alone authentication and context switching. The storage-encryption use named earlier in the project needs a stand-alone cipher.",
+        "DEC-003 giới hạn IP ở AEAD đầy đủ, trong khi engine D1 của Secure-IC có chế độ mã hóa độc lập, xác thực độc lập và context switching. Use case mã hóa lưu trữ nêu trước đó cần cipher độc lập.",
+        "Accepted by the user decision DEC-003 on 2026-11-23; revisit if inline storage encryption becomes a requirement."
+      ]
+    },
+    {
+      "id": "F-004",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§6.3, §10.2, TBD-018",
+      "cells": [
+        "F-004",
+        "Major",
+        "§6.3, §10.2, TBD-018",
+        "INFERENCE: Boundary between associated data and message data is undefined. The IP counts the first aad_len bytes as associated data, but it is not decided whether each part starts on a new beat or the parts are packed, nor how WSTRB marks a partial last beat. The packing logic, the padding to 16 bytes for Poly1305 and the software rule all depend on it.",
+        "IP đếm aad_len byte đầu là associated data nhưng chưa quyết mỗi phần bắt đầu ở beat mới hay đóng gói liền nhau, cũng chưa quyết WSTRB đánh dấu beat cuối không đầy. Logic đóng gói, padding 16 byte cho Poly1305 và quy tắc phần mềm đều phụ thuộc điều này.",
+        "Decide start-on-new-beat (software pads, WSTRB marks valid bytes of the last beat of each part) and write it as a REQ-FUNC requirement with a worked example from RFC 8439 section 2.8.2 in 32-, 64- and 128-bit windows."
+      ]
+    },
+    {
+      "id": "F-005",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§10.1, TBD-009, TBD-022",
+      "cells": [
+        "F-005",
+        "Major",
+        "§10.1, TBD-009, TBD-022",
+        "FACT: Key capture and an invalid key have no defined behavior. The key-store port is provisional (a 256-bit value with one valid bit, no ready, no slot selection, clock domain assumed), and a start with the key not valid is rejected with no event. The ENUM_ST_KEY timing cannot be specified without the port protocol.",
+        "Cổng key store chỉ là tạm (giá trị 256 bit kèm một bit valid, không ready, không chọn slot, miền clock giả định), và start khi khóa không hợp lệ bị từ chối không có event. Timing của ENUM_ST_KEY không thể đặc tả nếu chưa có giao thức cổng.",
+        "Define the port with the key-store owner (valid/ready or request/acknowledge, slot index, revocation) and add a `key_err` event or reuse `ctr_err`; then specify the ENUM_ST_KEY sampling cycle and a waveform."
+      ]
+    },
+    {
+      "id": "F-006",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§6.3, TBD-004",
+      "cells": [
+        "F-006",
+        "Major",
+        "§6.3, TBD-004",
+        "FACT: DMA four-phase handshake has no cycle-level contract. The handshake is project-defined and only its four phases are stated; the timing of the acknowledge release against the data beats, the request granularity and the DMA controller capability are open, and WF-007 to WF-009 draw an assumed ack release after the burst.",
+        "Handshake do dự án tự định nghĩa và chỉ nêu bốn pha; thời điểm nhả acknowledge so với các beat dữ liệu, độ mịn của request và khả năng của DMA controller còn mở, và WF-007 đến WF-009 vẽ giả định ack nhả sau burst.",
+        "Write the rules per phase (earliest and latest cycle between req, ack, the first and last beat, minimum low time), get the integrator's DMA controller documentation, and turn SVA-001 into the exact property."
+      ]
+    },
+    {
+      "id": "F-007",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§6.2, ASM-007, TBD-015",
+      "cells": [
+        "F-007",
+        "Major",
+        "§6.2, ASM-007, TBD-015",
+        "FACT: AXI4 profile and transfer rules are not closed. Narrow transfers (AxSIZE), the use of WSTRB, ID rules and the outstanding capacity are open; the profile (Required signals plus WLAST, BRESP, RRESP) is the author's proposal ASM-007, while Arm IHI 0022H.c section A9.3 suggests that a component include all signals for reuse.",
+        "Narrow transfer (AxSIZE), cách dùng WSTRB, quy tắc ID và số outstanding còn mở; hồ sơ (tín hiệu Required cộng WLAST, BRESP, RRESP) là đề xuất ASM-007 của tác giả, trong khi Arm IHI 0022H.c mục A9.3 khuyến nghị component nên có đủ tín hiệu để dễ tái sử dụng.",
+        "Fix the profile: AxSIZE shall equal the data width (otherwise SLVERR), WSTRB all ones except the last beat of a part, one outstanding transaction per direction, and decide whether to tie-off optional signals at the top."
+      ]
+    },
+    {
+      "id": "F-008",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§7.2, CDC-006, CDC-007",
+      "cells": [
+        "F-008",
+        "Major",
+        "§7.2, CDC-006, CDC-007",
+        "INFERENCE: Single-cycle events cross asynchronous clocks without a stated structure. CDC-006 and CDC-007 cross one-cycle event pulses (axi_err, the interrupt) between asynchronous domains by 'pulse synchronizers'. A pulse shorter than the destination period can be lost when the destination clock is slower, and the specification states neither a stretch, a toggle structure nor a minimum ratio.",
+        "CDC-006 và CDC-007 truyền xung event một chu kỳ (axi_err, ngắt) giữa các miền bất đồng bộ bằng 'pulse synchronizer'. Xung ngắn hơn chu kỳ clock đích có thể mất khi clock đích chậm hơn, và spec không nêu stretch, cấu trúc toggle hay tỷ lệ clock tối thiểu.",
+        "Specify the structure as a toggle (or request/acknowledge) crossing with the event held until acknowledged, add the cell from `000_Common`, and add an SVA that no event is lost for every clock ratio of TEST-015."
+      ]
+    },
+    {
+      "id": "F-009",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§7.3, TBD-017",
+      "cells": [
+        "F-009",
+        "Major",
+        "§7.3, TBD-017",
+        "FACT: Reset in a single domain is not specified. Release order core, AXI, APB is stated, but the effect of a reset asserted in one domain only (message in progress, FIFO pointers, half-finished DMA handshake, APB request in flight) is open, and no reset sequencing hardware is named.",
+        "Thứ tự nhả core, AXI, APB đã nêu, nhưng tác dụng của reset chỉ một miền (đang xử lý thông điệp, con trỏ FIFO, handshake DMA dở dang, yêu cầu APB đang chờ) còn mở và chưa nêu phần cứng sắp xếp reset.",
+        "Adopt a rule: a reset of any one domain resets the message sequencer and both window buffers through the coordinated software-reset handshake of the library FIFOs, drops the DMA requests, and is reported by an event; add TEST-016 cases for every domain."
+      ]
+    },
+    {
+      "id": "F-010",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§8 table, §10.4, ASM-002",
+      "cells": [
+        "F-010",
+        "Major",
+        "§8 table, §10.4, ASM-002",
+        "FACT: Parameter defaults contradict the stated application. PARA_FIFO_OUT_DEPTH is 16 beats of 64 bits (128 B) and PARA_MSG_MAX_B is 65535, while ASM-002 assumes 1280 B messages. In release mode a polling master that writes a 1280 B message before reading deadlocks (section 10.4), and the hold mode (PARA_HOLD_EN = 1) is an illegal combination with these defaults.",
+        "PARA_FIFO_OUT_DEPTH là 16 beat 64 bit (128 B) và PARA_MSG_MAX_B là 65535 trong khi ASM-002 giả định thông điệp 1280 B. Ở release mode, master polling ghi 1280 B trước khi đọc sẽ bị deadlock (mục 10.4), và hold mode (PARA_HOLD_EN = 1) là tổ hợp không hợp lệ với các mặc định này.",
+        "Set the delivered defaults to values that make both modes legal for the stated application and show a worked legal hold configuration."
+      ]
+    },
+    {
+      "id": "F-011",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§8 table, §4 CFG-BASE",
+      "cells": [
+        "F-011",
+        "Minor",
+        "§8 table, §4 CFG-BASE",
+        "FACT: Default of PARA_POLY_ARCH is stated twice. The parameter table gives 'TBD-003' as the default of PARA_POLY_ARCH, while CFG-BASE in sections 4 and 8 sets it to 1, so the delivered default is not defined in one place.",
+        "Bảng tham số ghi mặc định của PARA_POLY_ARCH là 'TBD-003' trong khi CFG-BASE ở mục 4 và 8 đặt bằng 1, nên mặc định giao hàng không được định nghĩa ở một nơi.",
+        "Set the default to 1 in the table and keep TBD-003 only as the reason to revisit it."
+      ]
+    },
+    {
+      "id": "F-012",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "§9, ASM-010",
+      "cells": [
+        "F-012",
+        "Minor",
+        "§9, ASM-010",
+        "INFERENCE: Byte order and nonce word placement are unconfirmed. The little-endian lane order of the window stream and the placement of the salt and counter in the hardware nonce are the author's choices; a software team reading the window the other way round would break interoperability silently.",
+        "Thứ tự lane little-endian của luồng cửa sổ và vị trí salt cùng counter trong nonce phần cứng là lựa chọn của tác giả; đội phần mềm đọc ngược sẽ làm hỏng khả năng tương tác mà không báo lỗi.",
+        "Confirm with the software owner and add the byte-level mapping of the RFC 8439 section 2.8.2 vector (key, nonce, AAD, plaintext) to section 9 as a worked example."
+      ]
+    },
+    {
+      "id": "F-013",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§8, §13, §14",
+      "cells": [
+        "F-013",
+        "Major",
+        "§8, §13, §14",
+        "INFERENCE: No critical-path statement for the two-round and parallel-multiplier options. PARA_RND_CYC = 2 chains eight quarter rounds (each an add, XOR and rotate in series) in one cycle, and PARA_POLY_ARCH = 2 uses a 130 by 128 bit multiplier. Neither the RTL contract nor section 13 states an estimated logic depth or a frequency range, so CFG-HP may close only at a fraction of the frequency that its throughput figure assumes.",
+        "PARA_RND_CYC = 2 nối tiếp tám quarter round (mỗi cái là add, XOR, rotate nối tiếp) trong một chu kỳ, và PARA_POLY_ARCH = 2 dùng bộ nhân 130 nhân 128 bit. Cả hợp đồng RTL lẫn mục 13 đều chưa nêu độ sâu logic ước tính hay dải tần số, nên CFG-HP có thể chỉ đóng timing ở một phần của tần số mà con số throughput giả định.",
+        "Add a logic-depth estimate per configuration (adder depth, XOR and rotate levels) to section 13, state the expected frequency ratio between the three configurations, and restrict the quoted Gbit/s per GHz of CFG-HP to the frequency that the estimate supports."
+      ]
+    },
+    {
+      "id": "F-014",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§17.1, TBD-023",
+      "cells": [
+        "F-014",
+        "Major",
+        "§17.1, TBD-023",
+        "FACT: The SDC is promised but not delivered. Section 17.1 says the constraint file is part of the delivery; `sdc/` holds only a placeholder, every period is a parameter, and the 60/40 budget split is the author's proposal ASM-008.",
+        "Mục 17.1 nói file constraint thuộc phần bàn giao; thư mục `sdc/` chỉ có placeholder, mọi chu kỳ là tham số và tỷ lệ ngân sách 60/40 là đề xuất ASM-008 của tác giả.",
+        "Write `sdc/chacha_top.sdc` with the three clock definitions, the clock groups per configuration, EXC-001 to EXC-005 and the parameters as Tcl variables; complete the numbers when TBD-002 is decided."
+      ]
+    },
+    {
+      "id": "F-015",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "§17.1.3, EXC-002 to EXC-004",
+      "cells": [
+        "F-015",
+        "Minor",
+        "§17.1.3, EXC-002 to EXC-004",
+        "INFERENCE: The datapath-only delay bounds are not validated. EXC-002 to EXC-004 use `set_max_delay -datapath_only` with 'less than one period of the faster clock'. The value does not account for the pointer skew of a Gray code or for the generated register-block handshake, whose adapter model is a placeholder.",
+        "EXC-002 đến EXC-004 dùng `set_max_delay -datapath_only` với 'nhỏ hơn một chu kỳ của clock nhanh hơn'. Giá trị này chưa tính độ lệch con trỏ Gray hay handshake của khối thanh ghi sinh tự động mà mô hình adapter chỉ là placeholder.",
+        "State the numeric rule (for example the smaller of the two periods minus the skew budget), take the library FIFO constraints as the reference, and check the result with the CDC tool."
+      ]
+    },
+    {
+      "id": "F-016",
+      "severity": "Observation",
+      "label": "FACT",
+      "locator": "§13 state proxy table",
+      "cells": [
+        "F-016",
+        "Observation",
+        "§13 state proxy table",
+        "FACT: Area and power are proxies with no target. The declared-state proxy (2591, 3615 and 6175 bits) is labelled as a proxy and excludes combinational logic; the sequencer bits (about 150) are the author's estimate; power has no target or activity.",
+        "Proxy trạng thái khai báo (2591, 3615 và 6175 bit) được gắn nhãn proxy và không tính logic tổ hợp; số bit bộ điều phối (khoảng 150) là ước lượng của tác giả; công suất chưa có mục tiêu hay activity.",
+        "Replace the proxy with mapped area and power from a named library once RTL exists; until then no area or power claim should be quoted outside the specification."
+      ]
+    },
+    {
+      "id": "F-017",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§13 PERF-001, REQ-PERF-001, TEST-019",
+      "cells": [
+        "F-017",
+        "Major",
+        "§13 PERF-001, REQ-PERF-001, TEST-019",
+        "FACT: Throughput is bounded for ChaCha20 only and the requirement is not testable. The Gbit/s per GHz figures (6.4 to 102.4) bound the ChaCha20 path; the Poly1305 cycles per 16-byte block are unquantified (TBD-003) and Poly1305 is a serial accumulation. REQ-PERF-001 is a 'should' with a 'small fixed overhead' that no section defines, so TEST-019 has no pass criterion.",
+        "Các con số Gbit/s trên GHz (6,4 đến 102,4) chỉ chặn trên đường ChaCha20; số chu kỳ Poly1305 trên mỗi block 16 byte chưa định lượng (TBD-003) và Poly1305 là cộng dồn tuần tự. REQ-PERF-001 là 'should' với 'small fixed overhead' không mục nào định nghĩa nên TEST-019 không có tiêu chí đạt.",
+        "Build the cycle model first, state Poly1305 cycles per block for the three architectures, set a numeric overhead for the sequencer, and rewrite REQ-PERF-001 as a 'shall' with numbers for CFG-BASE."
+      ]
+    },
+    {
+      "id": "F-018",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "§10.4, PERF-002",
+      "cells": [
+        "F-018",
+        "Minor",
+        "§10.4, PERF-002",
+        "INFERENCE: Per-message cost is unquantified for the short-frame use. Each message pays a one-time key block (20 cycles for CFG-BASE as a ChaCha20 bound) plus the fixed steps, which dominates frames of 8 to 64 bytes; PERF-002 has no number and no source of the research report measures it.",
+        "Mỗi thông điệp phải trả một block khóa một lần (20 chu kỳ cho CFG-BASE theo chặn trên ChaCha20) cộng các bước cố định, chiếm phần lớn với frame 8 đến 64 byte; PERF-002 chưa có số và không nguồn research nào đo.",
+        "State the cycles from start to the first output beat for a 16-byte and a 64-byte message in each configuration, and set a latency requirement."
+      ]
+    },
+    {
+      "id": "F-019",
+      "severity": "Observation",
+      "label": "INFERENCE",
+      "locator": "§11.2 S05 and S09",
+      "cells": [
+        "F-019",
+        "Observation",
+        "§11.2 S05 and S09",
+        "INFERENCE: Workable flow with polling and nonce discipline left to software. The 14-step flow, the 16 registers and the capability register give a clear driver contract; the software-nonce default leaves nonce uniqueness to the driver, and start acceptance needs two reads (start, then busy).",
+        "Luồng 14 bước, 16 thanh ghi và thanh ghi capability cho hợp đồng driver rõ ràng; mặc định nonce phần mềm để driver chịu trách nhiệm nonce duy nhất và việc start được chấp nhận cần hai lần đọc (start rồi busy).",
+        "Provide a reference driver sequence (pseudocode) with the nonce counter policy in the integration guide when the IP is delivered."
+      ]
+    },
+    {
+      "id": "F-020",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§16, TBD-025",
+      "cells": [
+        "F-020",
+        "Major",
+        "§16, TBD-025",
+        "FACT: No scan architecture and no test-controllable reset. The only test port is `i_dft_test_en`; the scan ports, scan mode, the reset override required by rule RST-04 and the test-mode priority are open, so the wrapper that owns the reset override cannot be written.",
+        "Cổng test duy nhất là `i_dft_test_en`; cổng scan, scan mode, ghi đè reset theo rule RST-04 và độ ưu tiên test-mode còn mở nên wrapper chứa phần ghi đè reset chưa viết được.",
+        "Agree the scan methodology with the SoC DFT owner, add `i_dft_scan_*` ports and a test reset override port to section 6.2, and put the override in the reset-synchronizer wrapper."
+      ]
+    },
+    {
+      "id": "F-021",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§18 access control, TBD-005",
+      "cells": [
+        "F-021",
+        "Major",
+        "§18 access control, TBD-005",
+        "FACT: The data window has no access control. The register block can reject a non-secure access, but the AXI4 profile has no protection signal (ASM-007), so any master that reaches the window can read results or feed data; the key-store and firewall decisions do not exist yet.",
+        "Khối thanh ghi có thể từ chối truy cập non-secure nhưng hồ sơ AXI4 không có tín hiệu bảo vệ (ASM-007), nên master nào tới được cửa sổ đều đọc được kết quả hay đưa dữ liệu vào; chưa có quyết định về key store và firewall.",
+        "Decide between adding AxPROT to the profile and checking it, or requiring an interconnect firewall in the integration guide; state the choice as a requirement and add a test."
+      ]
+    },
+    {
+      "id": "F-022",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§18, §9, TBD-019, REQ-SEC-001",
+      "cells": [
+        "F-022",
+        "Major",
+        "§18, §9, TBD-019, REQ-SEC-001",
+        "INFERENCE: Nonce reuse is not prevented in the delivered default. RFC 8439 section 2.6 forbids reusing a nonce under one key. In the software-nonce build the IP has no guard, and the hardware counter rule (invalid after reset, monotonic, persistence) is a proposal under TBD-019, not a decision.",
+        "RFC 8439 mục 2.6 cấm dùng lại nonce với cùng khóa. Ở build nonce phần mềm IP không có chốt chặn nào, và quy tắc bộ đếm phần cứng (không hợp lệ sau reset, đơn điệu, lưu bền) chỉ là đề xuất TBD-019, chưa là quyết định.",
+        "Adopt the TBD-019 rule (counter invalid until loaded, never decreasing) and, in the software-nonce build, add an optional comparator that rejects a nonce equal to the previous one under the same key; decide on persistence."
+      ]
+    },
+    {
+      "id": "F-023",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "§8 PARA_HOLD_EN, §18",
+      "cells": [
+        "F-023",
+        "Minor",
+        "§8 PARA_HOLD_EN, §18",
+        "INFERENCE: Insecure behavior is the default. PARA_HOLD_EN defaults to 0, so a decryption streams unauthenticated plaintext to the host; for a security-oriented microcontroller the safe behavior should be the default.",
+        "PARA_HOLD_EN mặc định bằng 0 nên giải mã phát plaintext chưa xác thực cho host; với MCU bảo mật thì hành vi an toàn nên là mặc định.",
+        "Default PARA_HOLD_EN to 1 together with the buffer sizing of the parameter finding, and document release mode as an opt-in."
+      ]
+    },
+    {
+      "id": "F-024",
+      "severity": "Observation",
+      "label": "FACT",
+      "locator": "§18 side channels, TBD-024",
+      "cells": [
+        "F-024",
+        "Observation",
+        "§18 side channels, TBD-024",
+        "FACT: No protection against physical attacks. Power analysis, fault injection and a malicious bus master are listed as not addressed; the sampled SoC data sheets D5 to D7 apply DPA countermeasures to AES and ECC only, and source P3 shows a masked variant with an area and throughput cost.",
+        "Phân tích công suất, chèn lỗi và bus master độc hại được ghi là chưa xử lý; datasheet SoC D5 đến D7 chỉ áp dụng DPA cho AES và ECC, và nguồn P3 có biến thể masked với chi phí diện tích và throughput.",
+        "Accepted for this release: the specification states the gap; reconsider if the product certification or threat model includes physical access."
+      ]
+    },
+    {
+      "id": "F-025",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "§15, verification/",
+      "cells": [
+        "F-025",
+        "Minor",
+        "§15, verification/",
+        "INFERENCE: The verification plan is complete on paper only. Every requirement has a test (0 requirements without a test, 24 tests, 10 SVA, 8 COV), but `verification/` holds placeholders, the independent model, the DMA and key-store models and the AXI4 checker do not exist, and the formal tool is not chosen. The spec author also wrote the plan, so independence is not shown.",
+        "Mọi requirement đều có test (0 requirement thiếu test, 24 test, 10 SVA, 8 COV) nhưng `verification/` chỉ có placeholder, mô hình độc lập, mô hình DMA và key store cùng bộ kiểm AXI4 chưa tồn tại, và chưa chọn công cụ formal. Tác giả spec cũng viết kế hoạch nên chưa chứng minh được tính độc lập.",
+        "Create the RFC 8439 reference model and run it against the three RFC vectors before any RTL; have the model and the testbench written by a person other than the RTL author."
+      ]
+    },
+    {
+      "id": "F-026",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§20, inventory",
+      "cells": [
+        "F-026",
+        "Major",
+        "§20, inventory",
+        "FACT: 38 open items, at least eight block RTL generation. The inventory reports 38 open items; TBD-001 (target), TBD-004 (DMA timing), TBD-009 (key port), TBD-015 (AXI profile), TBD-018 (packing), TBD-019 (nonce rule), TBD-020 (tag placement) and TBD-022 (invalid key) change ports, registers or behavior and must be closed or waived before RTL.",
+        "Inventory báo 38 mục mở; TBD-001 (mục tiêu), TBD-004 (timing DMA), TBD-009 (cổng khóa), TBD-015 (hồ sơ AXI), TBD-018 (đóng gói), TBD-019 (quy tắc nonce), TBD-020 (vị trí tag) và TBD-022 (khóa không hợp lệ) làm thay đổi cổng, thanh ghi hay hành vi nên phải đóng hoặc waive trước khi viết RTL.",
+        "Close the eight items with the user in one decision round, record each as a DEC, and re-run the specification check; carry the rest as dated assumptions."
+      ]
+    },
+    {
+      "id": "F-027",
+      "severity": "Observation",
+      "label": "FACT",
+      "locator": "§20 row order",
+      "cells": [
+        "F-027",
+        "Observation",
+        "§20 row order",
+        "FACT: Rows of section 20 are not in identifier order. ASM-004 and ASM-005 precede ASM-010, ASM-008, ASM-009, ASM-007, ASM-006 and ASM-003, and DEC-015 to DEC-017 precede DEC-014.",
+        "ASM-004 và ASM-005 đứng trước ASM-010, ASM-008, ASM-009, ASM-007, ASM-006 và ASM-003, và DEC-015 đến DEC-017 đứng trước DEC-014.",
+        "Sort the table by identifier and add a created date to each item so that the age of an open item is visible."
+      ]
+    },
+    {
+      "id": "F-028",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§20 DEP-001 to DEP-003, ASM-004",
+      "cells": [
+        "F-028",
+        "Major",
+        "§20 DEP-001 to DEP-003, ASM-004",
+        "FACT: The integrator cannot tell what to provide. The key-store owner and protocol, the DMA controller model, the clock domain of the key port and of the DMA handshake (ASM-004), and the reuse of the library FIFOs (DEP-003) are open, so there is no integration checklist.",
+        "Chủ sở hữu và giao thức key store, mô hình DMA controller, miền clock của cổng khóa và handshake DMA (ASM-004), việc dùng lại FIFO thư viện (DEP-003) đều còn mở nên chưa có checklist tích hợp.",
+        "Produce an integration checklist (clocks and reset relations, key-store port, DMA handshake, privilege decision, constants for i_protect_en and i_slverr_en, constraint file) and ask the user to confirm DEP-003."
+      ]
+    },
+    {
+      "id": "F-029",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "§1, §13, sources D1 to D7, P1 to P3",
+      "cells": [
+        "F-029",
+        "Minor",
+        "§1, §13, sources D1 to D7, P1 to P3",
+        "INFERENCE: Competitiveness is not demonstrated yet. Against commercial cores the IP lacks context switching and the stand-alone modes of D1, and has no throughput, area or frequency figure comparable to D3 (up to 50 Gbit/s) or D4 (800 Gbit/s ASIC claim); against SoC secure engines it is faster at the Poly1305 level (212 microseconds for 1 kB in D5 page 64) but no measured figure exists to prove it.",
+        "So với core thương mại, IP thiếu context switching và các chế độ độc lập của D1 và chưa có số throughput, diện tích hay tần số so sánh được với D3 (đến 50 Gbit/s) hay D4 (tuyên bố 800 Gbit/s ASIC); so với secure engine trong SoC thì có tiềm năng nhanh hơn ở mức Poly1305 (212 microsecond cho 1 kB ở D5 trang 64) nhưng chưa có số đo để chứng minh.",
+        "After RTL, publish mapped area, frequency and cycles per message for the three configurations in the same units as the sources, and add the table to section 13."
+      ]
+    },
+    {
+      "id": "F-030",
+      "severity": "Observation",
+      "label": "FACT",
+      "locator": "research report §3, manifest",
+      "cells": [
+        "F-030",
+        "Observation",
+        "research report §3, manifest",
+        "FACT: The benchmark evidence base is incomplete. The research bundle is INCOMPLETE (7 of 10 product families, 3 of 10 papers), the throughput figures are vendor claims without conditions, and the Rambus CH-7xx automotive core could not be read.",
+        "Bộ research ở trạng thái INCOMPLETE (7 trên 10 họ sản phẩm, 3 trên 10 bài báo), các con số throughput là tuyên bố của hãng không kèm điều kiện và core automotive Rambus CH-7xx chưa đọc được.",
+        "Add the missing datasheets and papers supplied by the user and re-run the evidence checker before the market chapter is relied upon."
+      ]
+    }
+  ],
+  "matrix_rows": 0,
+  "matrix_non_match": 0
+}

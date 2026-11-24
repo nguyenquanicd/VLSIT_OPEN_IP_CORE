@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="880" viewBox="320 260 1920 880" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="320" y="260" width="1920" height="880" fill="#FFFFFF"/>
+<rect x="520" y="390" width="1520" height="560" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="580" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_axi_win</text>
+<text x="700" y="558" text-anchor="middle">(m_chacha_axi_win)</text>
+<rect x="980" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1100" y="536" text-anchor="middle">u_win_buf</text>
+<text x="1100" y="558" text-anchor="middle">(m_chacha_win_buf)</text>
+<rect x="1380" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1480" y="536" text-anchor="middle">u_core</text>
+<text x="1480" y="558" text-anchor="middle">(m_chacha_core)</text>
+<rect x="1740" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1860" y="536" text-anchor="middle">u_csr</text>
+<text x="1860" y="558" text-anchor="middle">(m_vlsit_csr_chacha)</text>
+<rect x="980" y="830" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1100" y="856" text-anchor="middle">u_dma_req</text>
+<text x="1100" y="878" text-anchor="middle">(m_chacha_dma_req)</text>
+<rect x="1760" y="830" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1860" y="856" text-anchor="middle">u_int</text>
+<text x="1860" y="878" text-anchor="middle">(m_chacha_int)</text>
+<text x="660" y="311" text-anchor="middle">CKAXI</text>
+<text x="660" y="333" text-anchor="middle">i_clk_axi, i_rst_n_axi</text>
+<text x="1365" y="996" text-anchor="middle">KEYQ</text>
+<text x="1365" y="1018" text-anchor="middle">o_key_req, slot</text>
+<text x="1660" y="996" text-anchor="middle">TEST</text>
+<text x="1660" y="1018" text-anchor="middle">dft test en, rst</text>
+<text x="1510" y="1081" text-anchor="middle">KEY</text>
+<text x="1510" y="1103" text-anchor="middle">key, vld, err</text>
+<text x="1530" y="311" text-anchor="middle">CKCOR</text>
+<text x="1530" y="333" text-anchor="middle">i_clk_core, i_rst_n_core</text>
+<text x="2150" y="526" text-anchor="middle">APB</text>
+<text x="2150" y="548" text-anchor="middle">APB4 (sub)</text>
+<text x="425" y="801" text-anchor="middle">DMAW</text>
+<text x="425" y="823" text-anchor="middle">write req/ack</text>
+<text x="430" y="911" text-anchor="middle">DMAR</text>
+<text x="430" y="933" text-anchor="middle">read req/ack</text>
+<text x="1860" y="1081" text-anchor="middle">CKAPB</text>
+<text x="1860" y="1103" text-anchor="middle">i_clk_apb, i_rst_n_apb</text>
+<text x="2145" y="856" text-anchor="middle">INT</text>
+<text x="2145" y="878" text-anchor="middle">o_int_cha</text>
+<text x="2018" y="431" text-anchor="end">TOP</text>
+<text x="2018" y="453" text-anchor="end">(m_chacha_top)</text>
+<text x="845" y="526" text-anchor="middle">WIN</text>
+<text x="1260" y="526" text-anchor="middle">STRM</text>
+<text x="1133" y="602" text-anchor="middle">FLG</text>
+<text x="1372" y="602" text-anchor="middle">DCFG</text>
+<text x="750" y="476" text-anchor="middle">ERRF</text>
+<text x="1605" y="526" text-anchor="middle">REG</text>
+<text x="1893" y="602" text-anchor="middle">IRQ</text>
+<text x="410" y="536" text-anchor="middle">AXI</text>
+<text x="410" y="558" text-anchor="middle">AXI4 (sub)</text>
+<path d="M 470 540 L 580 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="580,540 568,546 568,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 660 340 L 660 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="660,510 654,498 666,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1460 570 L 1460 1000" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1460,1000 1454,988 1466,988" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1560 1000 L 1560 570" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1560,570 1566,582 1554,582" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1510 1060 L 1510 570" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1510,570 1516,582 1504,582" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1530 340 L 1530 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1530,510 1524,498 1536,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 2090 530 L 1980 530" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1980,530 1992,524 1992,536" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 980 840 L 470 840" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="470,840 482,834 482,846" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 980 880 L 470 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="470,880 482,874 482,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1860 1060 L 1860 890" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1860,890 1866,902 1854,902" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1960 860 L 2090 860" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="2090,860 2078,866 2078,854" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 660 402 L 1060 402 L 1060 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,510 1054,498 1066,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 660 402 L 532 402 L 532 534 A 6 6 0 0 0 532 546 L 532 834 A 6 6 0 0 0 532 846 L 532 860 L 980 860" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="980,860 968,866 968,854" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1530 402 L 1150 402 L 1150 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1150,510 1144,498 1156,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1530 402 L 1860 402 L 1860 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1860,510 1854,498 1866,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1860 402 L 2028 402 L 2028 524 A 6 6 0 0 0 2028 536 L 2028 550 L 1980 550" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1980,550 1992,544 1992,556" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 820 540 L 980 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="980,540 968,546 968,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1380 540 L 1220 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1220,540 1232,534 1232,546" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1100 830 L 1100 570" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1100,570 1106,582 1094,582" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1740 540 L 1580 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1580,540 1592,534 1592,546" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1860 570 L 1860 830" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1860,830 1854,818 1866,818" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1410 570 L 1410 860 L 1220 860" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1220,860 1232,854 1232,866" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 510 L 750 490 L 1054 490 A 6 6 0 0 1 1066 490 L 1144 490 A 6 6 0 0 1 1156 490 L 1440 490 L 1440 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1440,510 1434,498 1446,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

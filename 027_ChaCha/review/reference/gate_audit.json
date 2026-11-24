@@ -1,0 +1,27 @@
+{
+  "schema": "vlsit-gate-audit/1",
+  "ratio": 0.1,
+  "sample": [
+    {
+      "id": "F-009",
+      "severity": "High",
+      "root_cause": "cdc-reset",
+      "verdict": "",
+      "result": ""
+    },
+    {
+      "id": "F-003",
+      "severity": "Low",
+      "root_cause": "features-scope",
+      "verdict": "",
+      "result": ""
+    },
+    {
+      "id": "F-010",
+      "severity": "High",
+      "root_cause": "defaults",
+      "verdict": "",
+      "result": ""
+    }
+  ]
+}

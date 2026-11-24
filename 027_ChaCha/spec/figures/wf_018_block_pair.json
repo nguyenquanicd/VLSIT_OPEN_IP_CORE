@@ -1,0 +1,104 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............................................."
+  },
+  {
+   "name": "i_load",
+   "wave": "10.............................................."
+  },
+  {
+   "name": "reg_fsm_blk_current_state",
+   "wave": "===...................==...................=....",
+   "data": [
+    "IDLE",
+    "LDB",
+    "RUN",
+    "LDB",
+    "RUN",
+    "IDLE"
+   ]
+  },
+  {
+   "name": "reg_ph",
+   "wave": "0..10101010101010101010.10101010101010101010...."
+  },
+  {
+   "name": "reg_left",
+   "wave": "==..=.=.=.=.=.=.=.=.=.=..=.=.=.=.=.=.=.=.=.=....",
+   "data": [
+    "0",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+    "1",
+    "0",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+    "1",
+    "0",
+    "9"
+   ]
+  },
+  {
+   "name": "w_stall",
+   "wave": "0..............................................."
+  },
+  {
+   "name": "w_dlv",
+   "wave": "0....................10...................10...."
+  },
+  [
+   "queue",
+   {
+    "name": "reg_q0_v",
+    "wave": "0.....................1.0..................10..."
+   },
+   {
+    "name": "reg_q1_v",
+    "wave": "0.....................10........................"
+   },
+   {
+    "name": "reg_q0_ctr",
+    "wave": "x.....................==x..................=x...",
+    "data": [
+     "c0",
+     "c1",
+     "c2"
+    ]
+   }
+  ],
+  [
+   "consumer",
+   {
+    "name": "o_blk_vld",
+    "wave": "0.....................1.0..................10..."
+   },
+   {
+    "name": "i_take",
+    "wave": "0.....................1.0..................10..."
+   }
+  ]
+ ],
+ "head": {
+  "text": "PARA_PIPE_CHACHA = 1: three blocks, a pair and a block without a partner (QN = 4, RC = 2)"
+ },
+ "foot": {
+  "text": "Cycle 0 is the load. Block 0 and block 1 (a pair) run through the ring with reg_ph = 0 for block 0 and 1 for block 1; the pair is delivered in the cycle in which w_dlv is high (cycle 21 = 2 * 10 + 1 after the load) and both blocks are in the queue in the next cycle (reg_q0_v, reg_q1_v), the next pair is loaded in the same edge. Block 2 has no partner and takes the same 21 cycles as a pair. Measured with the RTL, the consumer takes a block as soon as it is valid"
+ },
+ "config": {
+  "hscale": 1
+ }
+}

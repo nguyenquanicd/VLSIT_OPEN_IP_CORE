@@ -1,0 +1,417 @@
+{
+ "ip": "m_chacha_top",
+ "reviewed_spec": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\027_ChaCha\\spec\\VLSIT_CHACHA_HDS.md",
+ "date": "2026-11-24",
+ "areas": [
+  {
+   "id": "application_fit",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Product class and neighbours are named, but all numbers are assumptions (F-001)."
+  },
+  {
+   "id": "features",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Nine FEAT rows with conditions; only a Minor mapping gap (F-002)."
+  },
+  {
+   "id": "functions",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "FSM, 8 operations and 12 waveforms exist; two Major open points (F-004, F-005)."
+  },
+  {
+   "id": "interfaces",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Two Major findings: DMA handshake contract and AXI4 profile are not closed (F-006, F-007)."
+  },
+  {
+   "id": "clock_reset_cdc",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "Three-domain table with 8 crossings, but event-crossing structure and single-domain reset are open (F-008, F-009)."
+  },
+  {
+   "id": "parameters",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Ranges and illegal-combination rules exist; defaults contradict the application (F-010)."
+  },
+  {
+   "id": "data_representation",
+   "weight": 0.5,
+   "score": 4,
+   "justification": "Complete table from RFC 8439; only an unconfirmed byte-order assumption (F-012)."
+  },
+  {
+   "id": "asic_feasibility",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "Structure is synthesizable, but no critical-path statement for the fast options (F-013)."
+  },
+  {
+   "id": "sdc_timing",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Contract and exceptions are written, but no SDC file exists (F-014)."
+  },
+  {
+   "id": "area_power",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Proxies are labelled as proxies; no mapped number yet (F-016)."
+  },
+  {
+   "id": "performance",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "ChaCha20 bound is stated; Poly1305 and per-message cost are unquantified (F-017, F-018)."
+  },
+  {
+   "id": "software_ease",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Register model, 14-step flow and capability register; only an Observation (F-019)."
+  },
+  {
+   "id": "dft",
+   "weight": 1.0,
+   "score": 2,
+   "justification": "Only the clock-gate test enable; no scan or reset controllability (F-020)."
+  },
+  {
+   "id": "security_ras",
+   "weight": 1.0,
+   "score": 2,
+   "justification": "Explicit boundary, but no data-window access control and no nonce guard (F-021, F-022)."
+  },
+  {
+   "id": "verification_quality",
+   "weight": 1.5,
+   "score": 4,
+   "justification": "Every requirement has a test; plan not yet implemented (F-025)."
+  },
+  {
+   "id": "documentation",
+   "weight": 0.5,
+   "score": 3,
+   "justification": "Stable IDs and traceability, but 38 open items with eight blocking (F-026)."
+  },
+  {
+   "id": "integration_effort",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Dependencies are listed but unresolved (F-028)."
+  },
+  {
+   "id": "market_position",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Positioning is argued from vendor sources only (F-029, F-030)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "F-001",
+   "area": "application_fit",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§1.4, ASM-002, ASM-003",
+   "title": "Every application number is the author's example",
+   "detail": "The frame size (127 B), image block (1280 B), latency (tens of microseconds) and the link rate (1 to 5 Mbit/s) are recorded as assumptions ASM-002 and ASM-003; the user answered 'you decide', and no source in the research report covers the embedded-link case. The throughput target is TBD-001, so no configuration can be sized against a demand.",
+   "action": "Obtain the real product numbers (message sizes, latency budget, link rate, core clock) from the user, replace ASM-002 and ASM-003, and close TBD-001 with a target in Gbit/s and a default frequency."
+  },
+  {
+   "id": "F-002",
+   "area": "features",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§1.3 table, 21 cells",
+   "title": "Feature table has no requirement mapping",
+   "detail": "All nine FEAT rows carry 'Pending' in the Requirements column although REQ-FUNC, REQ-IF, REQ-CLK, REQ-REG, REQ-PARAM, REQ-ERR, REQ-PERF and REQ-SEC exist in section 3, so a feature cannot be traced to its requirement.",
+   "action": "Fill the Requirements column with the REQ identifiers (FEAT-001: REQ-FUNC-001 to 006; FEAT-004: REQ-IF-002 to 005, 010; FEAT-005: REQ-IF-006 to 008; and so on) and add a FEAT-to-REQ check to the traceability table of section 19."
+  },
+  {
+   "id": "F-003",
+   "area": "features",
+   "severity": "Observation",
+   "label": "INFERENCE",
+   "locator": "§1.1, DEC-003",
+   "title": "Stand-alone ChaCha20 and Poly1305 are not offered",
+   "detail": "DEC-003 limits the IP to the full AEAD, while the sampled Secure-IC engine D1 offers stand-alone encryption, stand-alone authentication and context switching. The storage-encryption use named earlier in the project needs a stand-alone cipher.",
+   "action": "Accepted by the user decision DEC-003 on 2026-11-23; revisit if inline storage encryption becomes a requirement."
+  },
+  {
+   "id": "F-004",
+   "area": "functions",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§6.3, §10.2, TBD-018",
+   "title": "Boundary between associated data and message data is undefined",
+   "detail": "The IP counts the first aad_len bytes as associated data, but it is not decided whether each part starts on a new beat or the parts are packed, nor how WSTRB marks a partial last beat. The packing logic, the padding to 16 bytes for Poly1305 and the software rule all depend on it.",
+   "action": "Decide start-on-new-beat (software pads, WSTRB marks valid bytes of the last beat of each part) and write it as a REQ-FUNC requirement with a worked example from RFC 8439 section 2.8.2 in 32-, 64- and 128-bit windows."
+  },
+  {
+   "id": "F-005",
+   "area": "functions",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§10.1, TBD-009, TBD-022",
+   "title": "Key capture and an invalid key have no defined behavior",
+   "detail": "The key-store port is provisional (a 256-bit value with one valid bit, no ready, no slot selection, clock domain assumed), and a start with the key not valid is rejected with no event. The ENUM_ST_KEY timing cannot be specified without the port protocol.",
+   "action": "Define the port with the key-store owner (valid/ready or request/acknowledge, slot index, revocation) and add a `key_err` event or reuse `ctr_err`; then specify the ENUM_ST_KEY sampling cycle and a waveform."
+  },
+  {
+   "id": "F-006",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§6.3, TBD-004",
+   "title": "DMA four-phase handshake has no cycle-level contract",
+   "detail": "The handshake is project-defined and only its four phases are stated; the timing of the acknowledge release against the data beats, the request granularity and the DMA controller capability are open, and WF-007 to WF-009 draw an assumed ack release after the burst.",
+   "action": "Write the rules per phase (earliest and latest cycle between req, ack, the first and last beat, minimum low time), get the integrator's DMA controller documentation, and turn SVA-001 into the exact property."
+  },
+  {
+   "id": "F-007",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§6.2, ASM-007, TBD-015",
+   "title": "AXI4 profile and transfer rules are not closed",
+   "detail": "Narrow transfers (AxSIZE), the use of WSTRB, ID rules and the outstanding capacity are open; the profile (Required signals plus WLAST, BRESP, RRESP) is the author's proposal ASM-007, while Arm IHI 0022H.c section A9.3 suggests that a component include all signals for reuse.",
+   "action": "Fix the profile: AxSIZE shall equal the data width (otherwise SLVERR), WSTRB all ones except the last beat of a part, one outstanding transaction per direction, and decide whether to tie-off optional signals at the top."
+  },
+  {
+   "id": "F-008",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§7.2, CDC-006, CDC-007",
+   "title": "Single-cycle events cross asynchronous clocks without a stated structure",
+   "detail": "CDC-006 and CDC-007 cross one-cycle event pulses (axi_err, the interrupt) between asynchronous domains by 'pulse synchronizers'. A pulse shorter than the destination period can be lost when the destination clock is slower, and the specification states neither a stretch, a toggle structure nor a minimum ratio.",
+   "action": "Specify the structure as a toggle (or request/acknowledge) crossing with the event held until acknowledged, add the cell from `000_Common`, and add an SVA that no event is lost for every clock ratio of TEST-015."
+  },
+  {
+   "id": "F-009",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§7.3, TBD-017",
+   "title": "Reset in a single domain is not specified",
+   "detail": "Release order core, AXI, APB is stated, but the effect of a reset asserted in one domain only (message in progress, FIFO pointers, half-finished DMA handshake, APB request in flight) is open, and no reset sequencing hardware is named.",
+   "action": "Adopt a rule: a reset of any one domain resets the message sequencer and both window buffers through the coordinated software-reset handshake of the library FIFOs, drops the DMA requests, and is reported by an event; add TEST-016 cases for every domain."
+  },
+  {
+   "id": "F-010",
+   "area": "parameters",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§8 table, §10.4, ASM-002",
+   "title": "Parameter defaults contradict the stated application",
+   "detail": "PARA_FIFO_OUT_DEPTH is 16 beats of 64 bits (128 B) and PARA_MSG_MAX_B is 65535, while ASM-002 assumes 1280 B messages. In release mode a polling master that writes a 1280 B message before reading deadlocks (section 10.4), and the hold mode (PARA_HOLD_EN = 1) is an illegal combination with these defaults.",
+   "action": "Set the delivered defaults to values that make both modes legal for the stated application and show a worked legal hold configuration."
+  },
+  {
+   "id": "F-011",
+   "area": "parameters",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§8 table, §4 CFG-BASE",
+   "title": "Default of PARA_POLY_ARCH is stated twice",
+   "detail": "The parameter table gives 'TBD-003' as the default of PARA_POLY_ARCH, while CFG-BASE in sections 4 and 8 sets it to 1, so the delivered default is not defined in one place.",
+   "action": "Set the default to 1 in the table and keep TBD-003 only as the reason to revisit it."
+  },
+  {
+   "id": "F-012",
+   "area": "data_representation",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§9, ASM-010",
+   "title": "Byte order and nonce word placement are unconfirmed",
+   "detail": "The little-endian lane order of the window stream and the placement of the salt and counter in the hardware nonce are the author's choices; a software team reading the window the other way round would break interoperability silently.",
+   "action": "Confirm with the software owner and add the byte-level mapping of the RFC 8439 section 2.8.2 vector (key, nonce, AAD, plaintext) to section 9 as a worked example."
+  },
+  {
+   "id": "F-013",
+   "area": "asic_feasibility",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§8, §13, §14",
+   "title": "No critical-path statement for the two-round and parallel-multiplier options",
+   "detail": "PARA_RND_CYC = 2 chains eight quarter rounds (each an add, XOR and rotate in series) in one cycle, and PARA_POLY_ARCH = 2 uses a 130 by 128 bit multiplier. Neither the RTL contract nor section 13 states an estimated logic depth or a frequency range, so CFG-HP may close only at a fraction of the frequency that its throughput figure assumes.",
+   "action": "Add a logic-depth estimate per configuration (adder depth, XOR and rotate levels) to section 13, state the expected frequency ratio between the three configurations, and restrict the quoted Gbit/s per GHz of CFG-HP to the frequency that the estimate supports."
+  },
+  {
+   "id": "F-014",
+   "area": "sdc_timing",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§17.1, TBD-023",
+   "title": "The SDC is promised but not delivered",
+   "detail": "Section 17.1 says the constraint file is part of the delivery; `sdc/` holds only a placeholder, every period is a parameter, and the 60/40 budget split is the author's proposal ASM-008.",
+   "action": "Write `sdc/chacha_top.sdc` with the three clock definitions, the clock groups per configuration, EXC-001 to EXC-005 and the parameters as Tcl variables; complete the numbers when TBD-002 is decided."
+  },
+  {
+   "id": "F-015",
+   "area": "sdc_timing",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§17.1.3, EXC-002 to EXC-004",
+   "title": "The datapath-only delay bounds are not validated",
+   "detail": "EXC-002 to EXC-004 use `set_max_delay -datapath_only` with 'less than one period of the faster clock'. The value does not account for the pointer skew of a Gray code or for the generated register-block handshake, whose adapter model is a placeholder.",
+   "action": "State the numeric rule (for example the smaller of the two periods minus the skew budget), take the library FIFO constraints as the reference, and check the result with the CDC tool."
+  },
+  {
+   "id": "F-016",
+   "area": "area_power",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "§13 state proxy table",
+   "title": "Area and power are proxies with no target",
+   "detail": "The declared-state proxy (2591, 3615 and 6175 bits) is labelled as a proxy and excludes combinational logic; the sequencer bits (about 150) are the author's estimate; power has no target or activity.",
+   "action": "Replace the proxy with mapped area and power from a named library once RTL exists; until then no area or power claim should be quoted outside the specification."
+  },
+  {
+   "id": "F-017",
+   "area": "performance",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§13 PERF-001, REQ-PERF-001, TEST-019",
+   "title": "Throughput is bounded for ChaCha20 only and the requirement is not testable",
+   "detail": "The Gbit/s per GHz figures (6.4 to 102.4) bound the ChaCha20 path; the Poly1305 cycles per 16-byte block are unquantified (TBD-003) and Poly1305 is a serial accumulation. REQ-PERF-001 is a 'should' with a 'small fixed overhead' that no section defines, so TEST-019 has no pass criterion.",
+   "action": "Build the cycle model first, state Poly1305 cycles per block for the three architectures, set a numeric overhead for the sequencer, and rewrite REQ-PERF-001 as a 'shall' with numbers for CFG-BASE."
+  },
+  {
+   "id": "F-018",
+   "area": "performance",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§10.4, PERF-002",
+   "title": "Per-message cost is unquantified for the short-frame use",
+   "detail": "Each message pays a one-time key block (20 cycles for CFG-BASE as a ChaCha20 bound) plus the fixed steps, which dominates frames of 8 to 64 bytes; PERF-002 has no number and no source of the research report measures it.",
+   "action": "State the cycles from start to the first output beat for a 16-byte and a 64-byte message in each configuration, and set a latency requirement."
+  },
+  {
+   "id": "F-019",
+   "area": "software_ease",
+   "severity": "Observation",
+   "label": "INFERENCE",
+   "locator": "§11.2 S05 and S09",
+   "title": "Workable flow with polling and nonce discipline left to software",
+   "detail": "The 14-step flow, the 16 registers and the capability register give a clear driver contract; the software-nonce default leaves nonce uniqueness to the driver, and start acceptance needs two reads (start, then busy).",
+   "action": "Provide a reference driver sequence (pseudocode) with the nonce counter policy in the integration guide when the IP is delivered."
+  },
+  {
+   "id": "F-020",
+   "area": "dft",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§16, TBD-025",
+   "title": "No scan architecture and no test-controllable reset",
+   "detail": "The only test port is `i_dft_test_en`; the scan ports, scan mode, the reset override required by rule RST-04 and the test-mode priority are open, so the wrapper that owns the reset override cannot be written.",
+   "action": "Agree the scan methodology with the SoC DFT owner, add `i_dft_scan_*` ports and a test reset override port to section 6.2, and put the override in the reset-synchronizer wrapper."
+  },
+  {
+   "id": "F-021",
+   "area": "security_ras",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§18 access control, TBD-005",
+   "title": "The data window has no access control",
+   "detail": "The register block can reject a non-secure access, but the AXI4 profile has no protection signal (ASM-007), so any master that reaches the window can read results or feed data; the key-store and firewall decisions do not exist yet.",
+   "action": "Decide between adding AxPROT to the profile and checking it, or requiring an interconnect firewall in the integration guide; state the choice as a requirement and add a test."
+  },
+  {
+   "id": "F-022",
+   "area": "security_ras",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§18, §9, TBD-019, REQ-SEC-001",
+   "title": "Nonce reuse is not prevented in the delivered default",
+   "detail": "RFC 8439 section 2.6 forbids reusing a nonce under one key. In the software-nonce build the IP has no guard, and the hardware counter rule (invalid after reset, monotonic, persistence) is a proposal under TBD-019, not a decision.",
+   "action": "Adopt the TBD-019 rule (counter invalid until loaded, never decreasing) and, in the software-nonce build, add an optional comparator that rejects a nonce equal to the previous one under the same key; decide on persistence."
+  },
+  {
+   "id": "F-023",
+   "area": "security_ras",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§8 PARA_HOLD_EN, §18",
+   "title": "Insecure behavior is the default",
+   "detail": "PARA_HOLD_EN defaults to 0, so a decryption streams unauthenticated plaintext to the host; for a security-oriented microcontroller the safe behavior should be the default.",
+   "action": "Default PARA_HOLD_EN to 1 together with the buffer sizing of the parameter finding, and document release mode as an opt-in."
+  },
+  {
+   "id": "F-024",
+   "area": "security_ras",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "§18 side channels, TBD-024",
+   "title": "No protection against physical attacks",
+   "detail": "Power analysis, fault injection and a malicious bus master are listed as not addressed; the sampled SoC data sheets D5 to D7 apply DPA countermeasures to AES and ECC only, and source P3 shows a masked variant with an area and throughput cost.",
+   "action": "Accepted for this release: the specification states the gap; reconsider if the product certification or threat model includes physical access."
+  },
+  {
+   "id": "F-025",
+   "area": "verification_quality",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§15, verification/",
+   "title": "The verification plan is complete on paper only",
+   "detail": "Every requirement has a test (0 requirements without a test, 24 tests, 10 SVA, 8 COV), but `verification/` holds placeholders, the independent model, the DMA and key-store models and the AXI4 checker do not exist, and the formal tool is not chosen. The spec author also wrote the plan, so independence is not shown.",
+   "action": "Create the RFC 8439 reference model and run it against the three RFC vectors before any RTL; have the model and the testbench written by a person other than the RTL author."
+  },
+  {
+   "id": "F-026",
+   "area": "documentation",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§20, inventory",
+   "title": "38 open items, at least eight block RTL generation",
+   "detail": "The inventory reports 38 open items; TBD-001 (target), TBD-004 (DMA timing), TBD-009 (key port), TBD-015 (AXI profile), TBD-018 (packing), TBD-019 (nonce rule), TBD-020 (tag placement) and TBD-022 (invalid key) change ports, registers or behavior and must be closed or waived before RTL.",
+   "action": "Close the eight items with the user in one decision round, record each as a DEC, and re-run the specification check; carry the rest as dated assumptions."
+  },
+  {
+   "id": "F-027",
+   "area": "documentation",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "§20 row order",
+   "title": "Rows of section 20 are not in identifier order",
+   "detail": "ASM-004 and ASM-005 precede ASM-010, ASM-008, ASM-009, ASM-007, ASM-006 and ASM-003, and DEC-015 to DEC-017 precede DEC-014.",
+   "action": "Sort the table by identifier and add a created date to each item so that the age of an open item is visible."
+  },
+  {
+   "id": "F-028",
+   "area": "integration_effort",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§20 DEP-001 to DEP-003, ASM-004",
+   "title": "The integrator cannot tell what to provide",
+   "detail": "The key-store owner and protocol, the DMA controller model, the clock domain of the key port and of the DMA handshake (ASM-004), and the reuse of the library FIFOs (DEP-003) are open, so there is no integration checklist.",
+   "action": "Produce an integration checklist (clocks and reset relations, key-store port, DMA handshake, privilege decision, constants for i_protect_en and i_slverr_en, constraint file) and ask the user to confirm DEP-003."
+  },
+  {
+   "id": "F-029",
+   "area": "market_position",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§1, §13, sources D1 to D7, P1 to P3",
+   "title": "Competitiveness is not demonstrated yet",
+   "detail": "Against commercial cores the IP lacks context switching and the stand-alone modes of D1, and has no throughput, area or frequency figure comparable to D3 (up to 50 Gbit/s) or D4 (800 Gbit/s ASIC claim); against SoC secure engines it is faster at the Poly1305 level (212 microseconds for 1 kB in D5 page 64) but no measured figure exists to prove it.",
+   "action": "After RTL, publish mapped area, frequency and cycles per message for the three configurations in the same units as the sources, and add the table to section 13."
+  },
+  {
+   "id": "F-030",
+   "area": "market_position",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "research report §3, manifest",
+   "title": "The benchmark evidence base is incomplete",
+   "detail": "The research bundle is INCOMPLETE (7 of 10 product families, 3 of 10 papers), the throughput figures are vendor claims without conditions, and the Rambus CH-7xx automotive core could not be read.",
+   "action": "Add the missing datasheets and papers supplied by the user and re-run the evidence checker before the market chapter is relied upon."
+  }
+ ]
+}

@@ -1,0 +1,75 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "state",
+   {
+    "name": "reg_fsm_msg_current_state",
+    "wave": "=.=..==..==.==..",
+    "data": [
+     "IDLE",
+     "KEY",
+     "AAD",
+     "DATA",
+     "LEN",
+     "TAG",
+     "DONE",
+     "IDLE"
+    ]
+   }
+  ],
+  [
+   "release mode (PARA_HOLD_EN = 0)",
+   {
+    "name": "i_cha_sts_out_rdy rel",
+    "wave": "0.......1......."
+   },
+   {
+    "name": "o_axi_rdata rel",
+    "wave": "x.......==x.....",
+    "data": [
+     "P0",
+     "P1"
+    ]
+   }
+  ],
+  [
+   "hold mode (PARA_HOLD_EN = 1)",
+   {
+    "name": "i_cha_sts_out_rdy hold",
+    "wave": "0..............."
+   },
+   {
+    "name": "held plaintext in buffer",
+    "wave": "0.......1....0.."
+   }
+  ],
+  [
+   "event",
+   {
+    "name": "i_hw_we_cha_irq_raw_tag_err",
+    "wave": "0...........10.."
+   },
+   {
+    "name": "o_cha_irq_raw_tag_err",
+    "wave": "0............1.."
+   },
+   {
+    "name": "o_cha_irq_raw_done",
+    "wave": "0..............."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-002 decryption with a wrong tag: release mode and hold mode"
+ },
+ "foot": {
+  "text": "Release mode shows plaintext before the check and reports tag_err afterwards; hold mode never exposes it and discards it at ENUM_ST_DONE"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

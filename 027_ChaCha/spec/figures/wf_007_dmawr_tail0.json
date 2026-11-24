@@ -1,0 +1,67 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_axi",
+   "wave": "p......................."
+  },
+  [
+   "handshake",
+   {
+    "name": "o_dma_req_wr",
+    "wave": "01..0.....1..0.........."
+   },
+   {
+    "name": "i_dma_ack_wr",
+    "wave": "0..1.....0..1...0......."
+   }
+  ],
+  [
+   "beats",
+   {
+    "name": "w_req_beats",
+    "wave": "x=..x.....=..x..........",
+    "data": [
+     "4",
+     "2"
+    ]
+   },
+   {
+    "name": "w_beats_rem",
+    "wave": "=........=......=.......",
+    "data": [
+     "6",
+     "2",
+     "0"
+    ]
+   }
+  ],
+  [
+   "AXI4 W",
+   {
+    "name": "i_axi_wvalid",
+    "wave": "0....1...0....1.0......."
+   },
+   {
+    "name": "i_axi_wdata",
+    "wave": "x....====x....==x.......",
+    "data": [
+     "B0",
+     "B1",
+     "B2",
+     "B3",
+     "T0",
+     "T1"
+    ]
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-006 DMA write channel, tail mode 0: burst of 4 beats, then a short burst of 2"
+ },
+ "foot": {
+  "text": "Four phases: req up, ack up, req down, ack down. Remaining 6 beats: burst W=4, tail min(W, remaining)=2. Timing follows rules DMA-T1 to DMA-T7 of section 6.3; illustrative"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

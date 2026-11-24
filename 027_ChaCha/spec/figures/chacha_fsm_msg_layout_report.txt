@@ -1,0 +1,11 @@
+FSM: msg
+STATES: 8, TRANSITIONS: 17
+LAYOUT: flow-tb-snake-4-g100
+CROSSINGS: 5
+LABEL CONFLICTS: 0
+BENDS: 7
+MINIMUM GAP: 100.0 px (minimum 100 px)
+TEXT FIT: PASS (worst fill ratio 0.53)
+DISTRIBUTION: PASS (6 x-centers, 4 y-centers)
+PAGE: 1460 x 660 px
+RESULT: PASS

@@ -1,0 +1,59 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p.............."
+  },
+  [
+   "sequencer",
+   {
+    "name": "o_cha_ctrl_abort",
+    "wave": "01........0...."
+   },
+   {
+    "name": "reg_fsm_msg_current_state",
+    "wave": "=.=........=...",
+    "data": [
+     "DATA",
+     "ABORT",
+     "IDLE"
+    ]
+   }
+  ],
+  [
+   "flush machine, output buffer",
+   {
+    "name": "w_flush_out_req",
+    "wave": "0.1........0..."
+   },
+   {
+    "name": "w_rst_n_sw_out",
+    "wave": "1..0.1........."
+   },
+   {
+    "name": "w_sw_rst_busy_out",
+    "wave": "0...1....0....."
+   },
+   {
+    "name": "w_flush_out_done",
+    "wave": "0.........10..."
+   }
+  ],
+  [
+   "buffer",
+   {
+    "name": "w_out_empty",
+    "wave": "0.....1........"
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-003 abort in the data state: flush of the output buffer (DEC-027)"
+ },
+ "foot": {
+  "text": "i_rst_n_sw is low for one cycle; o_sw_rst_busy rises and falls; the sequencer leaves ABORT when both flush machines are done (the input machine is not drawn). Illustrative cycle counts, not measured"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

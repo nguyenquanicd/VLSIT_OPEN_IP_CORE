@@ -1,0 +1,1516 @@
+{
+  "spec": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\027_ChaCha\\spec\\VLSIT_CHACHA_HDS.md",
+  "front_matter": {
+    "document_type": "asic_ip_design_specification",
+    "document_id": "CHACHA-SPEC",
+    "title": "ChaCha Design Specification",
+    "ip_name": "ChaCha",
+    "version": "0.1",
+    "status": "Draft",
+    "language": "SystemVerilog IEEE 1800-2017",
+    "rtl_rules": "VLSIT_RTL_Design_Rule.md",
+    "csr_spec": "VLSIT_CSR_Specification_Template.xlsx"
+  },
+  "sections": [
+    {
+      "level": 2,
+      "title": "Document map",
+      "chars": 1573,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "1. Purpose, scope, and product context",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.1 Purpose and scope",
+      "chars": 1963,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.2 Deployment assumptions",
+      "chars": 1497,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1 KiB"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "1.3 Feature summary",
+      "chars": 1606,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.4 Real-world applications of the features",
+      "chars": 4884,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "80 MHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "2. Normative references and precedence",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.1 Normative references",
+      "chars": 1737,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.2 Source-of-truth and conflict handling",
+      "chars": 1227,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.3 Compliance declaration",
+      "chars": 954,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "65535 bytes"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "3. Requirements and traceability",
+      "chars": 10882,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-CLK-002",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-REG-002",
+        "REQ-REG-003",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003",
+        "REQ-SEC-004"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "65535 bytes"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "4. Features and configurations",
+      "chars": 2591,
+      "tables": 1,
+      "req_ids": [
+        "REQ-PARAM-001"
+      ],
+      "tests": [
+        "TEST-004",
+        "TEST-006",
+        "TEST-019",
+        "TEST-022"
+      ],
+      "properties": [],
+      "quantified": [
+        "128 bits",
+        "32 bits",
+        "64 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "5. Architecture",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.1 Overview and block responsibilities",
+      "chars": 3796,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "5.2 Block diagram",
+      "chars": 14865,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.3 Transaction and dataflow",
+      "chars": 3385,
+      "tables": 0,
+      "req_ids": [
+        "REQ-FUNC-006",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-SEC-002"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "256 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "5.4 Invariants",
+      "chars": 1284,
+      "tables": 0,
+      "req_ids": [
+        "REQ-CLK-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-007",
+        "REQ-FUNC-010",
+        "REQ-IF-004",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-SEC-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "6. External interfaces and ports",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.1 Interface inventory",
+      "chars": 1875,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.2 Complete port list",
+      "chars": 10225,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.3 Protocol behavior",
+      "chars": 6227,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.4 Interrupts and events",
+      "chars": 363,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "7. Clock, reset, and power",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.1 Clock domains",
+      "chars": 1879,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.2 CDC and RDC",
+      "chars": 2916,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.3 Reset domains and sequencing",
+      "chars": 1425,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.4 Power intent (if applicable)",
+      "chars": 363,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "8. Parameters and elaboration configurations",
+      "chars": 10010,
+      "tables": 3,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "128 bits",
+        "1360 cycles",
+        "340 cycles",
+        "65535 bytes",
+        "8 bytes",
+        "80 MHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "9. Data representation and arithmetic",
+      "chars": 3343,
+      "tables": 1,
+      "req_ids": [
+        "REQ-SEC-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "128 bits",
+        "130 bits",
+        "16 bits",
+        "16 bytes",
+        "2 bits",
+        "256 bits",
+        "32 bits",
+        "5 bits",
+        "512 bits",
+        "64 bits",
+        "65535 bytes",
+        "9 bits",
+        "96 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "10. Detailed functional behavior",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.1 Modes and state transitions",
+      "chars": 6080,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "256 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.2 Operations",
+      "chars": 3539,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.3 Cycle-level behavior",
+      "chars": 22655,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.4 Arbitration, buffering, and throughput",
+      "chars": 2205,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "8 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.5 Memories and storage",
+      "chars": 2024,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1 cycle",
+        "256 bits",
+        "512 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "11. Register and programming model",
+      "chars": 94,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.1 CSR specification source",
+      "chars": 3420,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.2 Software sequences",
+      "chars": 7043,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "11.3 CSR connection to the design",
+      "chars": 4287,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "32 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "11.4 APB access behavior of the CSR",
+      "chars": 1641,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "12. Error handling and recovery",
+      "chars": 2739,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "13. Performance, power, and area",
+      "chars": 3623,
+      "tables": 2,
+      "req_ids": [
+        "REQ-PERF-001"
+      ],
+      "tests": [
+        "TEST-019"
+      ],
+      "properties": [],
+      "quantified": [
+        "128 bits",
+        "150 bits",
+        "256 bits",
+        "2591 bits",
+        "263 bits",
+        "3615 bits",
+        "386 bits",
+        "512 bits",
+        "6175 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "14. RTL implementation contract",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.1 Required coding baseline",
+      "chars": 2344,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.2 RTL hierarchy",
+      "chars": 3455,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.3 Synthesis assumptions",
+      "chars": 792,
+      "tables": 1,
+      "req_ids": [
+        "REQ-PARAM-002"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "15. Verification specification",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.1 Scope and strategy",
+      "chars": 2077,
+      "tables": 0,
+      "req_ids": [
+        "REQ-PARAM-002"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.2 Requirement-based test plan",
+      "chars": 5793,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-CLK-002",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-REG-002",
+        "REQ-REG-003",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003",
+        "REQ-SEC-004"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024"
+      ],
+      "properties": [],
+      "quantified": [
+        "65535 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "15.3 Assertions and coverage",
+      "chars": 4491,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-ERR-002",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-REG-003",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-003"
+      ],
+      "tests": [
+        "TEST-009",
+        "TEST-022"
+      ],
+      "properties": [
+        "COV-001",
+        "COV-002",
+        "COV-003",
+        "COV-004",
+        "COV-005",
+        "COV-006",
+        "COV-007",
+        "COV-008",
+        "SVA-001",
+        "SVA-002",
+        "SVA-003",
+        "SVA-004",
+        "SVA-005",
+        "SVA-006",
+        "SVA-007",
+        "SVA-008",
+        "SVA-009",
+        "SVA-010"
+      ],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.4 Formal, CDC, and RDC",
+      "chars": 1280,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [
+        "SVA-001",
+        "SVA-003",
+        "SVA-009"
+      ],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "16. DFT and testability",
+      "chars": 2108,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "17. Physical design and timing integration",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.1 Timing constraints and budgets",
+      "chars": 8864,
+      "tables": 3,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.2 Physical assumptions",
+      "chars": 1741,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "18. Security, safety, and reliability",
+      "chars": 4289,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-007",
+        "REQ-FUNC-010",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-004"
+      ],
+      "tests": [
+        "TEST-005",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-016",
+        "TEST-018",
+        "TEST-020"
+      ],
+      "properties": [
+        "SVA-005",
+        "SVA-008",
+        "SVA-009",
+        "SVA-010"
+      ],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "19. Requirement-to-verification traceability",
+      "chars": 3641,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-CLK-002",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PERF-001",
+        "REQ-REG-001",
+        "REQ-REG-002",
+        "REQ-REG-003",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003",
+        "REQ-SEC-004"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024"
+      ],
+      "properties": [
+        "SVA-006"
+      ],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "20. Assumptions, dependencies, and decisions",
+      "chars": 20528,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-009"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "64 KiB",
+        "65535 bytes",
+        "80 MHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "21. Glossary",
+      "chars": 1759,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "22. References used to shape this template",
+      "chars": 1357,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    }
+  ],
+  "requirements": {
+    "REQ-FUNC-001": {
+      "statement": "The IP shall encrypt a message of 0 to 65535 data bytes with 0 to 65535 bytes of associated data using a 256-bit key and a 96-bit nonce, and shall output the ciphertext followed by a 16-byte tag exactly as AEAD_CHACHA20_POLY1305 of RFC 8439 section 2.8",
+      "source": "RFC 8439 §2.8, DEC-003, DEC-015",
+      "verification": "Simulation against RFC vectors and an independent model"
+    },
+    "REQ-FUNC-002": {
+      "statement": "The IP shall decrypt a message and shall compare the computed tag with the 16 bytes that follow the ciphertext; on a mismatch it shall set the `tag_err` event and shall not set the `done` event, and on a match it shall set `done`",
+      "source": "RFC 8439 §2.8, DEC-003",
+      "verification": "Simulation with corrupted tag, ciphertext and associated data"
+    },
+    "REQ-FUNC-003": {
+      "statement": "The IP shall derive the Poly1305 one-time key from the ChaCha20 block function with block counter 0 and shall encrypt the message data starting with block counter 1",
+      "source": "RFC 8439 §2.6, §2.8",
+      "verification": "Simulation against RFC vectors"
+    },
+    "REQ-FUNC-004": {
+      "statement": "The ChaCha20 block function shall use 20 rounds, a 256-bit key, a 96-bit nonce and a 32-bit block counter, with the quarter round and state layout of the RFC",
+      "source": "RFC 8439 §2.1 to §2.3",
+      "verification": "Simulation against RFC vectors"
+    },
+    "REQ-FUNC-005": {
+      "statement": "The IP shall compute Poly1305 over the associated data, padding to a multiple of 16 bytes with zero bytes, the ciphertext, padding to a multiple of 16 bytes, and the two 64-bit little-endian lengths in octets, using the clamped value r and the value s of the one-time key",
+      "source": "RFC 8439 §2.5, §2.8",
+      "verification": "Simulation against RFC vectors"
+    },
+    "REQ-FUNC-006": {
+      "statement": "The IP shall treat the first `cha_len.aad_len` bytes of the input stream as associated data, the next `cha_len.msg_len` bytes as message data and, for a decryption, the next 16 bytes as the tag; it shall perform the padding of REQ-FUNC-005 itself",
+      "source": "DEC-015, ASM-006, TBD-018, TBD-020",
+      "verification": "Simulation with random lengths"
+    },
+    "REQ-FUNC-007": {
+      "statement": "The IP shall take the 256-bit key only from the key-store port and shall provide no register or window from which software or the AXI4 interface can read the key or any part of the keystream state",
+      "source": "DEC-006",
+      "verification": "Inspection, register read test"
+    },
+    "REQ-FUNC-008": {
+      "statement": "A write of one to `cha_ctrl.abort` while busy shall stop the message, empty the window FIFOs, clear busy and then clear the abort bit; no `done` or `tag_err` event shall be raised for the aborted message",
+      "source": "DEC-008",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-009": {
+      "statement": "After a write of one to `cha_ctrl.start` with `cha_ctrl.en` set and the engine idle, the IP shall latch the message parameters, clear `cha_ctrl.start` and set `cha_sts.busy`; a start written while busy or with `cha_ctrl.en` clear shall be cleared by hardware without starting a message, so software confirms the acceptance by reading `cha_sts.busy` set",
+      "source": "Section 11.2",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-010": {
+      "statement": "With `PARA_HOLD_EN` = 0 the IP shall release decrypted data to the output window as it is produced and report the tag result afterwards; with `PARA_HOLD_EN` = 1 it shall not release any decrypted data before the tag has been verified, and shall release none if the tag does not match",
+      "source": "DEC-005",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-011": {
+      "statement": "With `PARA_NONCE_HW` = 0 the nonce shall come from `cha_nonce0` to `cha_nonce2` for every message",
+      "source": "DEC-017",
+      "verification": "Simulation"
+    },
+    "REQ-FUNC-012": {
+      "statement": "With `PARA_NONCE_HW` = 1 the encryption nonce shall be the 32-bit `cha_salt.salt` as the upper part and the 64-bit counter of `cha_ctr_lo` and `cha_ctr_hi` as the lower part, the counter shall increase by one after each encrypted message, and a decryption shall use the nonce words of `cha_nonce0` to `cha_nonce2`",
+      "source": "DEC-017",
+      "verification": "Simulation"
+    },
+    "REQ-IF-001": {
+      "statement": "The configuration interface shall be an APB4 slave generated from the workbook `VLSIT_CHACHA_CSR.xlsx`, with the access behavior of section 11.4",
+      "source": "DEC-007, section 11",
+      "verification": "Simulation, protocol checker"
+    },
+    "REQ-IF-002": {
+      "statement": "The AXI4 data window shall accept INCR bursts of 1 to $\\min(256, 4096/(D/8))$ transfers inside one 4 KB region, ignore the address bits inside the window, send write data to the input FIFO and return read data from the output FIFO",
+      "source": "DEC-014, Arm IHI 0022H.c §A3.4",
+      "verification": "Protocol checker, simulation"
+    },
+    "REQ-IF-003": {
+      "statement": "A FIXED or WRAP burst, or an INCR burst that crosses a 4 KB boundary, shall be answered with SLVERR (one `BRESP` for a write, every transfer for a read) and shall set the `axi_err` event",
+      "source": "DEC-014, DEC-016",
+      "verification": "Protocol checker, simulation"
+    },
+    "REQ-IF-004": {
+      "statement": "A read of the output window that finds no data shall return SLVERR with zero read data for each transfer that cannot be served, shall complete the burst with the requested number of transfers and a correct RLAST, and shall set `axi_err`",
+      "source": "DEC-016, Arm IHI 0022H.c \"Read and write response structure\"",
+      "verification": "Protocol checker, simulation"
+    },
+    "REQ-IF-005": {
+      "statement": "A write burst that exceeds the room of the input FIFO or the programmed message length shall return a single SLVERR on `BRESP`, drop the excess beats and set `axi_err`",
+      "source": "DEC-016",
+      "verification": "Protocol checker, simulation"
+    },
+    "REQ-IF-006": {
+      "statement": "Each DMA request/acknowledge pair shall follow the four-phase handshake: request raised, acknowledge raised, request released, acknowledge released; a new request shall not be raised before the acknowledge is released; both signals are levels",
+      "source": "DEC-010",
+      "verification": "Assertions, simulation"
+    },
+    "REQ-IF-007": {
+      "statement": "The write request shall be raised only when the input FIFO has room for the requested number of beats and the read request only when that many beats can be read; the number is $\\min(W, B_r)$ in tail mode 0 and one beat while $B_r < W$ in tail mode 1",
+      "source": "DEC-013",
+      "verification": "Assertions, simulation"
+    },
+    "REQ-IF-008": {
+      "statement": "Both request outputs shall be low when `PARA_DMA_EN` = 0 or `cha_ctrl.dma_en` = 0",
+      "source": "DEC-013",
+      "verification": "Assertions, simulation"
+    },
+    "REQ-IF-009": {
+      "statement": "The interrupt output shall be high while any bit of `cha_irq_sts` is set and low otherwise",
+      "source": "DEC-007",
+      "verification": "Simulation"
+    },
+    "REQ-IF-010": {
+      "statement": "Under backpressure the IP shall not drop, duplicate or reorder a beat: a full input buffer shall lower the write-data ready, and the engine shall stall instead of overwriting a full output buffer or reading an empty input buffer",
+      "source": "Section 10.4",
+      "verification": "Simulation with a scoreboard, assertions"
+    },
+    "REQ-CLK-001": {
+      "statement": "The IP shall have the clock inputs `i_clk_apb`, `i_clk_axi` and `i_clk_core`; with `PARA_SYNC_AXI_CORE` = 1 or `PARA_SYNC_APB_CORE` = 1 the corresponding crossing logic shall be absent, and with 0 every crossing of section 7.2 shall use the stated structure",
+      "source": "DEC-011",
+      "verification": "CDC lint, simulation"
+    },
+    "REQ-CLK-002": {
+      "statement": "No signal shall cross between clock domains without the structure listed in section 7.2",
+      "source": "Section 7.2",
+      "verification": "CDC lint, inspection"
+    },
+    "REQ-RESET-001": {
+      "statement": "Each domain shall have an active-low reset with asynchronous assertion and release synchronized to its clock; after reset both DMA request outputs shall be low, the AXI4 ready and valid outputs shall be low and the engine shall be idle",
+      "source": "Section 7.3",
+      "verification": "Reset test, assertions"
+    },
+    "REQ-RESET-002": {
+      "statement": "After reset the key-dependent state and the registers of the engine shall be cleared and `cha_sts.ctr_vld` shall be 0",
+      "source": "Section 7.3, TBD-017",
+      "verification": "Reset test"
+    },
+    "REQ-REG-001": {
+      "statement": "The register at offset 0x0 shall be `cha_version` with major 1 and minor 0",
+      "source": "Rule R-067, DEC-001",
+      "verification": "Register test"
+    },
+    "REQ-REG-002": {
+      "statement": "Every register shall follow the access type and the reset value of the workbook `VLSIT_CHACHA_CSR.xlsx`",
+      "source": "Section 11.1",
+      "verification": "Register test"
+    },
+    "REQ-REG-003": {
+      "statement": "The registers `cha_irq_en`, `cha_irq_inj` and `cha_irq_sts` shall have the same fields at the same bits as `cha_irq_raw`; an injection rising edge shall raise the raw event",
+      "source": "Rule R-040",
+      "verification": "Register test"
+    },
+    "REQ-PARAM-001": {
+      "statement": "The elaboration shall stop with an error for: `PARA_RND_CYC` = 2 with `PARA_QR_NUM` not 4, `PARA_AXI_DW` not a multiple of 32, a FIFO depth that is not a power of two, and `PARA_HOLD_EN` = 1 with an output capacity smaller than `PARA_MSG_MAX_B`",
+      "source": "Section 8",
+      "verification": "Elaboration test"
+    },
+    "REQ-PARAM-002": {
+      "statement": "The configurations CFG-LP, CFG-BASE and CFG-HP shall elaborate and pass lint",
+      "source": "Section 8",
+      "verification": "Lint, elaboration"
+    },
+    "REQ-PARAM-003": {
+      "statement": "A watermark above the maximum of section 8 shall set `len_err` and the message shall not start",
+      "source": "Section 8, DEC-013",
+      "verification": "Simulation"
+    },
+    "REQ-ERR-001": {
+      "statement": "A `cha_len.msg_len` above `PARA_MSG_MAX_B` shall set `len_err` and the message shall not start",
+      "source": "DEC-015, section 8",
+      "verification": "Simulation"
+    },
+    "REQ-ERR-002": {
+      "statement": "An encryption started with `PARA_NONCE_HW` = 1 while `cha_sts.ctr_vld` is 0, or with a counter that would wrap, shall not start and shall set `ctr_err`",
+      "source": "DEC-017, TBD-019",
+      "verification": "Simulation"
+    },
+    "REQ-PERF-001": {
+      "statement": "The ChaCha20 core should produce one 64-byte block in the number of cycles of the table of section 8 plus a small fixed overhead, for each setting of `PARA_QR_NUM`, `PARA_RND_CYC` and `PARA_CORE_NUM`",
+      "source": "Section 8, TBD-001",
+      "verification": "Cycle-accurate simulation against the model"
+    },
+    "REQ-SEC-001": {
+      "statement": "In the software-nonce build the nonce shall never be generated inside the IP, and in the hardware nonce build the counter value used for one encryption shall never be used again with the same salt until software loads a new start value",
+      "source": "RFC 8439 §2.6, DEC-017",
+      "verification": "Simulation, assertion"
+    },
+    "REQ-SEC-002": {
+      "statement": "The 16-byte tag comparison of a decryption should take the same number of cycles whatever the position of the first differing byte",
+      "source": "Author's proposal, TBD-005",
+      "verification": "Simulation, inspection"
+    },
+    "REQ-SEC-003": {
+      "statement": "The key-store port shall be sampled only while the engine latches the key for a message and no copy of the key shall be visible at an output other than the cipher core",
+      "source": "DEC-006, TBD-009",
+      "verification": "Inspection"
+    },
+    "REQ-SEC-004": {
+      "statement": "The key register and the ChaCha20 and Poly1305 state shall be cleared at the end of every message, on an abort and on reset, and a rejected plaintext in hold mode shall be discarded",
+      "source": "Section 10.1, section 18",
+      "verification": "Simulation, inspection"
+    }
+  },
+  "traceability": {
+    "REQ-FUNC-001": {
+      "module": "Not yet defined (section 14.2 pending, TBD-011)",
+      "test": "TEST-004, TEST-006, TEST-021",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-002": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-005, TEST-006",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-003": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-003",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-004": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-001",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-005": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-002, TEST-004, TEST-006",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-006": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-006, TEST-021",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-007": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-009",
+      "method": "Inspection, directed test"
+    },
+    "REQ-FUNC-008": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-010",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-009": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-010, TEST-024",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-010": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-007",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-011": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-008",
+      "method": "Simulation"
+    },
+    "REQ-FUNC-012": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-008",
+      "method": "Simulation"
+    },
+    "REQ-IF-001": {
+      "module": "Generated CSR module `m_vlsit_csr_chacha`",
+      "test": "TEST-011",
+      "method": "Simulation, protocol checker"
+    },
+    "REQ-IF-002": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-012",
+      "method": "Protocol checker"
+    },
+    "REQ-IF-003": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-012",
+      "method": "Protocol checker"
+    },
+    "REQ-IF-004": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-012",
+      "method": "Protocol checker"
+    },
+    "REQ-IF-005": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-012",
+      "method": "Protocol checker"
+    },
+    "REQ-IF-006": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-013",
+      "method": "Assertions"
+    },
+    "REQ-IF-007": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-013",
+      "method": "Assertions"
+    },
+    "REQ-IF-008": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-013",
+      "method": "Assertions"
+    },
+    "REQ-IF-009": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-014, TEST-023",
+      "method": "Simulation"
+    },
+    "REQ-IF-010": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-022, SVA-006",
+      "method": "Simulation with a scoreboard, assertions"
+    },
+    "REQ-CLK-001": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-015",
+      "method": "CDC lint, simulation"
+    },
+    "REQ-CLK-002": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-015",
+      "method": "CDC lint"
+    },
+    "REQ-RESET-001": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-016",
+      "method": "Reset test"
+    },
+    "REQ-RESET-002": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-016",
+      "method": "Reset test"
+    },
+    "REQ-REG-001": {
+      "module": "Generated CSR module `m_vlsit_csr_chacha`",
+      "test": "TEST-011",
+      "method": "Register test"
+    },
+    "REQ-REG-002": {
+      "module": "Generated CSR module `m_vlsit_csr_chacha`",
+      "test": "TEST-011, TEST-023",
+      "method": "Register test"
+    },
+    "REQ-REG-003": {
+      "module": "Generated CSR module `m_vlsit_csr_chacha`",
+      "test": "TEST-011",
+      "method": "Register test"
+    },
+    "REQ-PARAM-001": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-017",
+      "method": "Elaboration test"
+    },
+    "REQ-PARAM-002": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-017",
+      "method": "Lint, elaboration"
+    },
+    "REQ-PARAM-003": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-018",
+      "method": "Simulation"
+    },
+    "REQ-ERR-001": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-018",
+      "method": "Simulation"
+    },
+    "REQ-ERR-002": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-008",
+      "method": "Simulation"
+    },
+    "REQ-PERF-001": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-019",
+      "method": "Cycle-accurate simulation"
+    },
+    "REQ-SEC-001": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-008",
+      "method": "Simulation, assertion"
+    },
+    "REQ-SEC-002": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-020",
+      "method": "Simulation, inspection"
+    },
+    "REQ-SEC-003": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-009",
+      "method": "Inspection"
+    },
+    "REQ-SEC-004": {
+      "module": "Not yet defined (TBD-011)",
+      "test": "TEST-010, TEST-016",
+      "method": "Simulation, inspection"
+    }
+  },
+  "requirement_areas": {
+    "FUNC": 12,
+    "IF": 10,
+    "CLK": 2,
+    "RESET": 2,
+    "REG": 3,
+    "PARAM": 3,
+    "ERR": 2,
+    "PERF": 1,
+    "SEC": 4
+  },
+  "open_items": [
+    "ASM-001",
+    "ASM-002",
+    "ASM-003",
+    "ASM-004",
+    "ASM-005",
+    "ASM-006",
+    "ASM-007",
+    "ASM-008",
+    "ASM-009",
+    "ASM-010",
+    "DEP-001",
+    "DEP-002",
+    "DEP-003",
+    "TBD-001",
+    "TBD-002",
+    "TBD-003",
+    "TBD-004",
+    "TBD-005",
+    "TBD-006",
+    "TBD-007",
+    "TBD-008",
+    "TBD-009",
+    "TBD-010",
+    "TBD-011",
+    "TBD-012",
+    "TBD-013",
+    "TBD-014",
+    "TBD-015",
+    "TBD-016",
+    "TBD-017",
+    "TBD-018",
+    "TBD-019",
+    "TBD-020",
+    "TBD-021",
+    "TBD-022",
+    "TBD-023",
+    "TBD-024",
+    "TBD-025"
+  ],
+  "decisions": [
+    "DEC-001",
+    "DEC-002",
+    "DEC-003",
+    "DEC-004",
+    "DEC-005",
+    "DEC-006",
+    "DEC-007",
+    "DEC-008",
+    "DEC-009",
+    "DEC-010",
+    "DEC-011",
+    "DEC-012",
+    "DEC-013",
+    "DEC-014",
+    "DEC-015",
+    "DEC-016",
+    "DEC-017"
+  ],
+  "tests": [
+    "TEST-001",
+    "TEST-002",
+    "TEST-003",
+    "TEST-004",
+    "TEST-005",
+    "TEST-006",
+    "TEST-007",
+    "TEST-008",
+    "TEST-009",
+    "TEST-010",
+    "TEST-011",
+    "TEST-012",
+    "TEST-013",
+    "TEST-014",
+    "TEST-015",
+    "TEST-016",
+    "TEST-017",
+    "TEST-018",
+    "TEST-019",
+    "TEST-020",
+    "TEST-021",
+    "TEST-022",
+    "TEST-023",
+    "TEST-024"
+  ],
+  "properties": [
+    "COV-001",
+    "COV-002",
+    "COV-003",
+    "COV-004",
+    "COV-005",
+    "COV-006",
+    "COV-007",
+    "COV-008",
+    "SVA-001",
+    "SVA-002",
+    "SVA-003",
+    "SVA-004",
+    "SVA-005",
+    "SVA-006",
+    "SVA-007",
+    "SVA-008",
+    "SVA-009",
+    "SVA-010"
+  ],
+  "quantified_claims": [
+    "1 KiB",
+    "1 cycle",
+    "10.3 Cycle",
+    "128 bits",
+    "130 bits",
+    "1360 cycles",
+    "150 bits",
+    "16 bits",
+    "16 bytes",
+    "2 bits",
+    "256 bits",
+    "2591 bits",
+    "263 bits",
+    "32 bits",
+    "340 cycles",
+    "3615 bits",
+    "386 bits",
+    "5 bits",
+    "512 bits",
+    "6175 bits",
+    "64 KiB",
+    "64 bits",
+    "65535 bytes",
+    "8 bytes",
+    "80 MHz",
+    "9 bits",
+    "96 bits"
+  ],
+  "coverage": {
+    "requirements": 39,
+    "tests": 24,
+    "properties": 18,
+    "requirements_without_test": [],
+    "requirements_without_verification": []
+  },
+  "counts": {
+    "sections": 60,
+    "tables": 45,
+    "open_items": 38,
+    "decisions": 17
+  }
+}

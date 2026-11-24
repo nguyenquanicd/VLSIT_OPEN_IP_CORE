@@ -1,0 +1,108 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "APB start",
+   {
+    "name": "o_cha_ctrl_dir",
+    "wave": "1..............."
+   },
+   {
+    "name": "o_cha_ctrl_start",
+    "wave": "01.0............"
+   },
+   {
+    "name": "i_hw_we_cha_ctrl_start",
+    "wave": "0.10............"
+   }
+  ],
+  [
+   "state",
+   {
+    "name": "reg_fsm_msg_current_state",
+    "wave": "=.=..==..==.==..",
+    "data": [
+     "IDLE",
+     "KEY",
+     "AAD",
+     "DATA",
+     "LEN",
+     "TAG",
+     "DONE",
+     "IDLE"
+    ]
+   },
+   {
+    "name": "i_cha_sts_busy",
+    "wave": "0.1..........0.."
+   }
+  ],
+  [
+   "AXI4 write (input)",
+   {
+    "name": "i_axi_wvalid",
+    "wave": "0..1...0........"
+   },
+   {
+    "name": "o_axi_wready",
+    "wave": "0..1...0........"
+   },
+   {
+    "name": "i_axi_wdata",
+    "wave": "x..====x........",
+    "data": [
+     "AAD",
+     "C0",
+     "C1",
+     "TAG"
+    ]
+   }
+  ],
+  [
+   "AXI4 read (output)",
+   {
+    "name": "o_axi_rvalid",
+    "wave": "0.......1.0....."
+   },
+   {
+    "name": "o_axi_rdata",
+    "wave": "x.......==x.....",
+    "data": [
+     "P0",
+     "P1"
+    ]
+   },
+   {
+    "name": "i_axi_rready",
+    "wave": "0......1........"
+   }
+  ],
+  [
+   "event",
+   {
+    "name": "i_hw_we_cha_irq_raw_done",
+    "wave": "0...........10.."
+   },
+   {
+    "name": "o_cha_irq_raw_done",
+    "wave": "0............1.."
+   },
+   {
+    "name": "o_cha_irq_raw_tag_err",
+    "wave": "0..............."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-002 decryption with a matching tag (release mode)"
+ },
+ "foot": {
+  "text": "Input stream is associated data, ciphertext, received tag; plaintext P0 P1 is readable before the tag step; done after the match. Illustrative, not measured"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

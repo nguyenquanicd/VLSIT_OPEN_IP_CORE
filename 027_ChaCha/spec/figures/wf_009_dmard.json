@@ -1,0 +1,63 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_axi",
+   "wave": "p......................."
+  },
+  [
+   "output FIFO",
+   {
+    "name": "beats held",
+    "wave": "=.=...=...==............",
+    "data": [
+     "0",
+     "4",
+     "4",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  [
+   "handshake",
+   {
+    "name": "o_dma_req_rd",
+    "wave": "0.1..0.................."
+   },
+   {
+    "name": "i_dma_ack_rd",
+    "wave": "0...1......0............"
+   }
+  ],
+  [
+   "AXI4 R",
+   {
+    "name": "o_axi_rvalid",
+    "wave": "0.....1...0............."
+   },
+   {
+    "name": "o_axi_rdata",
+    "wave": "x.....====x.............",
+    "data": [
+     "R0",
+     "R1",
+     "R2",
+     "R3"
+    ]
+   },
+   {
+    "name": "o_axi_rlast",
+    "wave": "0........10............."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-006 DMA read channel: one burst of 4 beats"
+ },
+ "foot": {
+  "text": "The read request is raised when a read-watermark burst is held in the output buffer; data is read after the acknowledge. Timing follows rules DMA-T1 to DMA-T7 of section 6.3; illustrative"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

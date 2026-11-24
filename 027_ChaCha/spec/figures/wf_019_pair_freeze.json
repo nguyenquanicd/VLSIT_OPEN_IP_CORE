@@ -1,0 +1,83 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p............................"
+  },
+  {
+   "name": "i_load",
+   "wave": "0............................"
+  },
+  {
+   "name": "reg_fsm_blk_current_state",
+   "wave": "=.......................=....",
+   "data": [
+    "RUN",
+    "IDLE"
+   ]
+  },
+  {
+   "name": "reg_ph",
+   "wave": "10101...................0...."
+  },
+  {
+   "name": "reg_left",
+   "wave": "==.=....................=....",
+   "data": [
+    "2",
+    "1",
+    "0",
+    "9"
+   ]
+  },
+  {
+   "name": "w_stall",
+   "wave": "0...1..................0....."
+  },
+  {
+   "name": "w_dlv",
+   "wave": "0......................10...."
+  },
+  [
+   "queue",
+   {
+    "name": "reg_q0_v",
+    "wave": "1.........................0.."
+   },
+   {
+    "name": "reg_q1_v",
+    "wave": "1......................010..."
+   },
+   {
+    "name": "reg_q0_ctr",
+    "wave": "=......................===x..",
+    "data": [
+     "c0",
+     "c1",
+     "c2",
+     "c3"
+    ]
+   }
+  ],
+  [
+   "consumer",
+   {
+    "name": "o_blk_vld",
+    "wave": "1.........................0.."
+   },
+   {
+    "name": "i_take",
+    "wave": "0.....................1...0.."
+   }
+  ]
+ ],
+ "head": {
+  "text": "PARA_PIPE_CHACHA = 1: the ring freezes while the queue cannot take the next pair (QN = 4, RC = 2)"
+ },
+ "foot": {
+  "text": "Excerpt of cycles 38 to 66 of a message of four blocks; the consumer takes the first block of the first pair in cycle 60 and the second in cycle 61. The second pair is ready in cycle 42, but the queue holds both blocks of the first pair, so w_stall is high and reg_left, reg_ph and the ring registers hold; in cycle 61 the second block is taken, the queue is empty after that take (a pair needs both entries free) and w_dlv is high in cycle 61. Measured with the RTL"
+ },
+ "config": {
+  "hscale": 1
+ }
+}

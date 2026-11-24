@@ -1,0 +1,50 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "event",
+   {
+    "name": "i_hw_we_cha_irq_raw_tag_err",
+    "wave": "0.10............"
+   },
+   {
+    "name": "o_cha_irq_raw_tag_err",
+    "wave": "0..1.....0......"
+   },
+   {
+    "name": "o_cha_irq_en_tag_err",
+    "wave": "1..............."
+   },
+   {
+    "name": "i_cha_irq_sts_tag_err",
+    "wave": "0..1.....0......"
+   }
+  ],
+  [
+   "output",
+   {
+    "name": "o_int_cha",
+    "wave": "0.....1.....0..."
+   }
+  ],
+  [
+   "software",
+   {
+    "name": "w_sw_clr_tag_err",
+    "wave": "0.......10......"
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-008 interrupt event, mask and clear"
+ },
+ "foot": {
+  "text": "The raw bit follows the hardware load; status is raw AND enable; the output follows status after the synchronizer delay; software write of one clears the raw bit"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

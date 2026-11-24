@@ -1,0 +1,65 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "reset",
+   {
+    "name": "i_rst_n_core",
+    "wave": "0....1.........."
+   },
+   {
+    "name": "w_rst_n_core_sync",
+    "wave": "0......1........"
+   }
+  ],
+  [
+   "engine",
+   {
+    "name": "reg_fsm_msg_current_state",
+    "wave": "=...............",
+    "data": [
+     "IDLE"
+    ]
+   },
+   {
+    "name": "i_cha_sts_busy",
+    "wave": "0..............."
+   },
+   {
+    "name": "i_cha_sts_ctr_vld",
+    "wave": "0..............."
+   }
+  ],
+  [
+   "outputs",
+   {
+    "name": "o_axi_awready",
+    "wave": "0.......1......."
+   },
+   {
+    "name": "o_dma_req_wr",
+    "wave": "0..............."
+   },
+   {
+    "name": "o_dma_req_rd",
+    "wave": "0..............."
+   },
+   {
+    "name": "o_int_cha",
+    "wave": "0..............."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Reset release in the core domain"
+ },
+ "foot": {
+  "text": "Asynchronous assertion; the release is synchronized to the clock; the engine is idle, both DMA requests and the interrupt are low, and the counter is invalid until software loads it"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

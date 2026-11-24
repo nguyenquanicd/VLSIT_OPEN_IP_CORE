@@ -1,0 +1,94 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_axi",
+   "wave": "p................."
+  },
+  [
+   "AXI4 AR",
+   {
+    "name": "i_axi_arvalid",
+    "wave": "010......10......."
+   },
+   {
+    "name": "o_axi_arready",
+    "wave": "010......10......."
+   },
+   {
+    "name": "i_axi_arlen",
+    "wave": "x=x......=x.......",
+    "data": [
+     "3",
+     "3"
+    ]
+   }
+  ],
+  [
+   "output FIFO",
+   {
+    "name": "beats held",
+    "wave": "=..=...=..........",
+    "data": [
+     "4",
+     "0",
+     "0"
+    ]
+   }
+  ],
+  [
+   "AXI4 R",
+   {
+    "name": "o_axi_rvalid",
+    "wave": "0..1...0...1...0.."
+   },
+   {
+    "name": "o_axi_rdata",
+    "wave": "x..====x...=...x..",
+    "data": [
+     "R0",
+     "R1",
+     "R2",
+     "R3",
+     "0"
+    ]
+   },
+   {
+    "name": "o_axi_rresp",
+    "wave": "x..=...x...==..x..",
+    "data": [
+     "OKAY",
+     "SLVERR",
+     "SLVERR"
+    ]
+   },
+   {
+    "name": "o_axi_rlast",
+    "wave": "0.....10......10.."
+   },
+   {
+    "name": "i_axi_rready",
+    "wave": "1................."
+   }
+  ],
+  [
+   "event",
+   {
+    "name": "i_hw_we_cha_irq_raw_axi_err",
+    "wave": "0..........10....."
+   },
+   {
+    "name": "o_cha_irq_raw_axi_err",
+    "wave": "0...........1....."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-005 window read: a legal burst and a read of the empty output window"
+ },
+ "foot": {
+  "text": "The empty read still returns four transfers, each SLVERR with zero data and RLAST on the fourth; axi_err is raised once"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

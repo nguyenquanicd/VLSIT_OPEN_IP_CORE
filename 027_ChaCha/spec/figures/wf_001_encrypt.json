@@ -1,0 +1,118 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "APB start",
+   {
+    "name": "o_cha_ctrl_start",
+    "wave": "01.0............"
+   },
+   {
+    "name": "i_hw_we_cha_ctrl_start",
+    "wave": "0.10............"
+   }
+  ],
+  [
+   "state",
+   {
+    "name": "reg_fsm_msg_current_state",
+    "wave": "=.=..==..====...",
+    "data": [
+     "IDLE",
+     "KEY",
+     "AAD",
+     "DATA",
+     "LEN",
+     "TAG",
+     "DONE",
+     "IDLE"
+    ]
+   },
+   {
+    "name": "i_cha_sts_busy",
+    "wave": "0.1.........0..."
+   }
+  ],
+  [
+   "key store",
+   {
+    "name": "o_key_req",
+    "wave": "0.1.0..........."
+   },
+   {
+    "name": "o_key_slot",
+    "wave": "x.=.x...........",
+    "data": [
+     "SLOT"
+    ]
+   },
+   {
+    "name": "i_key_vld",
+    "wave": "0..1.0.........."
+   }
+  ],
+  [
+   "AXI4 write (input)",
+   {
+    "name": "i_axi_wvalid",
+    "wave": "0..1..0........."
+   },
+   {
+    "name": "o_axi_wready",
+    "wave": "0..1..0........."
+   },
+   {
+    "name": "i_axi_wdata",
+    "wave": "x..===x.........",
+    "data": [
+     "AAD",
+     "M0",
+     "M1"
+    ]
+   }
+  ],
+  [
+   "AXI4 read (output)",
+   {
+    "name": "o_axi_rvalid",
+    "wave": "0.......1.010..."
+   },
+   {
+    "name": "o_axi_rdata",
+    "wave": "x.......==x=x...",
+    "data": [
+     "C0",
+     "C1",
+     "TAG"
+    ]
+   },
+   {
+    "name": "i_axi_rready",
+    "wave": "0......1........"
+   }
+  ],
+  [
+   "event",
+   {
+    "name": "i_hw_we_cha_irq_raw_done",
+    "wave": "0..........10..."
+   },
+   {
+    "name": "o_cha_irq_raw_done",
+    "wave": "0...........1..."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-001 encryption: one beat of associated data, two beats of message data"
+ },
+ "foot": {
+  "text": "The key store answers the key request at c3 (KEY-T3). Ciphertext C0 C1 then the tag; done is raised in ENUM_ST_DONE. Illustrative cycle counts, one common clock, not measured"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

@@ -1,0 +1,13 @@
+Measured start-to-done cycles of the pipeline options against the formula of HDS section 13.2 (KD = 2, input preloaded, messages of at least one byte, 2026-11-24, after DEC-037, scratch simulation of m_chacha_core).
+CFG-LP   PC=0 PP=0 worst +7.6 % at AAD=0 MSG=640 (measured 1074, formula 998)
+CFG-LP   PC=0 PP=1 worst +8.1 % at AAD=0 MSG=640 (measured 1115, formula 1031)
+CFG-LP   PC=1 PP=0 worst +5.9 % at AAD=0 MSG=640 (measured 1148, formula 1084)
+CFG-LP   PC=1 PP=1 worst +6.6 % at AAD=0 MSG=640 (measured 1185, formula 1112)
+CFG-BASE PC=0 PP=0 worst +3.4 % at AAD=0 MSG=1 (measured 60, formula 58)
+CFG-BASE PC=0 PP=1 worst +8.0 % at AAD=0 MSG=640 (measured 296, formula 274)
+CFG-BASE PC=1 PP=0 worst +5.1 % at AAD=0 MSG=1 (measured 62, formula 59)
+CFG-BASE PC=1 PP=1 worst +6.4 % at AAD=0 MSG=640 (measured 314, formula 295)
+CFG-HP   PC=0 PP=0 worst +10.0 % at AAD=0 MSG=1 (measured 22, formula 20)
+CFG-HP   PC=0 PP=1 worst +9.1 % at AAD=0 MSG=1 (measured 24, formula 22)
+CFG-HP   PC=1 PP=0 worst +11.8 % at AAD=0 MSG=640 (measured 85, formula 76)
+CFG-HP   PC=1 PP=1 worst +6.1 % at AAD=0 MSG=1 (measured 35, formula 33)

@@ -1,0 +1,73 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_apb",
+   "wave": "1.0.1.0.1.0.1.0.1.0.1.0."
+  },
+  {
+   "name": "i_clk_core",
+   "wave": "p......................."
+  },
+  [
+   "APB4",
+   {
+    "name": "i_apb_psel",
+    "wave": "0...1...............0..."
+   },
+   {
+    "name": "i_apb_penable",
+    "wave": "0.......1...........0..."
+   },
+   {
+    "name": "i_apb_pwrite",
+    "wave": "x...1...............x..."
+   },
+   {
+    "name": "i_apb_paddr",
+    "wave": "x...=...............x...",
+    "data": [
+     "A0"
+    ]
+   },
+   {
+    "name": "i_apb_pwdata",
+    "wave": "x...=...............x...",
+    "data": [
+     "D0"
+    ]
+   },
+   {
+    "name": "o_apb_pready",
+    "wave": "0...............1...0..."
+   }
+  ],
+  [
+   "CSR crossing (CLK-CORE)",
+   {
+    "name": "w_req_toggle",
+    "wave": "0.....1................."
+   },
+   {
+    "name": "w_req_seen",
+    "wave": "0..........1............"
+   },
+   {
+    "name": "w_reg_wr_en",
+    "wave": "0...........10.........."
+   },
+   {
+    "name": "w_ack_toggle",
+    "wave": "0............1.........."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-007 APB write with asynchronous APB and core clocks"
+ },
+ "foot": {
+  "text": "PREADY waits for the request and acknowledge toggles to cross two synchronizer stages in each direction; the wait count depends on the clock ratio (ratio 4:1 drawn, illustrative)"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

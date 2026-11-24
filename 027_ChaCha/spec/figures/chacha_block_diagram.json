@@ -1,0 +1,475 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "chacha_block_diagram.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 60,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "TOP",
+      "(m_chacha_top)"
+    ],
+    "block_label": [
+      "TOP",
+      "(m_chacha_top)"
+    ],
+    "block_row": [
+      "TOP (m_chacha_top)",
+      "ChaCha20-Poly1305 engine.",
+      "Section 14.2"
+    ]
+  },
+  "frame_row": [
+    "TOP (m_chacha_top) frame",
+    "Structural top of the ChaCha20-Poly1305 IP. It holds no logic of its own and instantiates the register block, the data window, the window storage, the DMA request logic, the cipher engine and the interrupt logic. The configuration interface is on the right, the data window is on the left, and the DMA channels, the key-store port, the test enable and the three clock and reset pairs are the other boundary interfaces.",
+    "Section 14.2"
+  ],
+  "frame_interfaces": [
+    "AXI",
+    "APB",
+    "INT",
+    "DMAW",
+    "DMAR",
+    "KEYQ",
+    "KEY",
+    "TEST",
+    "CKAXI",
+    "CKCOR",
+    "CKAPB"
+  ],
+  "blocks": [
+    {
+      "key": "axi",
+      "label": [
+        "u_axi_win",
+        "(m_chacha_axi_win)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_axi_win (m_chacha_axi_win)",
+      "function": "Data window of the AXI4 subordinate interface. It accepts incrementing bursts into the input window and serves incrementing read bursts from the output window, ignores the address bits inside the window, and answers every unsupported burst, every overrun, every underrun and every non-secure access with the protection check on with a subordinate error while still completing the burst. It counts the beats against the programmed message length.",
+      "source": "Section 6.3, DEC-014, DEC-016"
+    },
+    {
+      "key": "buf",
+      "label": [
+        "u_win_buf",
+        "(m_chacha_win_buf)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_win_buf (m_chacha_win_buf)",
+      "function": "Window storage. It holds the input window, which buffers the associated data, the message data and for a decryption the tag, and the output window, which buffers the ciphertext or plaintext and the tag, between the bus clock and the core clock. Each window becomes a synchronous buffer when its two clocks are the same net. It reports the free room of the input window and the data held in the output window for the DMA request logic, and in the hold setting keeps decrypted data back until the tag is verified.",
+      "source": "Section 7.2, CDC-003, CDC-004, DEC-005"
+    },
+    {
+      "key": "core",
+      "label": [
+        "u_core",
+        "(m_chacha_core)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_core (m_chacha_core)",
+      "function": "Cipher engine. It requests the key from the key store, latches it, derives the one-time authentication key, generates the keystream, encrypts or decrypts the message data, authenticates the associated data and the ciphertext, builds and checks the tag, handles the nonce and the message sequence, and raises the completion and error events. Its datapath is gated while it is idle.",
+      "source": "Section 5.3, 10"
+    },
+    {
+      "key": "csr",
+      "label": [
+        "u_csr",
+        "(m_vlsit_csr_chacha)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 3,
+      "row_name": "u_csr (m_vlsit_csr_chacha)",
+      "function": "Register block generated from the register workbook. It decodes the peripheral bus accesses, holds the configuration fields, the nonce and counter fields, the interrupt registers and the capability constants, and crosses between the configuration clock and the core clock when they are different.",
+      "source": "Section 11"
+    },
+    {
+      "key": "dma",
+      "label": [
+        "u_dma_req",
+        "(m_chacha_dma_req)"
+      ],
+      "width": 240,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_dma_req (m_chacha_dma_req)",
+      "function": "System DMA request logic. It raises the write request when the input window can take the next burst and the read request when the output window holds the next burst, applies the watermark and the tail rule, and runs the four-phase handshake with the acknowledge inputs.",
+      "source": "Section 6.3, DEC-010, DEC-013"
+    },
+    {
+      "key": "int",
+      "label": [
+        "u_int",
+        "(m_chacha_int)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 3,
+      "row_name": "u_int (m_chacha_int)",
+      "function": "Interrupt logic. It combines the raw event bits and their enable mask into the masked status that the register block shows, and drives the interrupt output in the configuration clock domain.",
+      "source": "Section 6.4"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "WIN",
+      "src": "axi",
+      "src_side": "R",
+      "dst": "buf",
+      "dst_side": "L"
+    },
+    {
+      "id": "STRM",
+      "src": "core",
+      "src_side": "L",
+      "dst": "buf",
+      "dst_side": "R"
+    },
+    {
+      "id": "FLG",
+      "src": "dma",
+      "src_side": "T",
+      "dst": "buf",
+      "dst_side": "B"
+    },
+    {
+      "id": "DCFG",
+      "src": "core",
+      "src_side": "B",
+      "dst": "dma",
+      "dst_side": "R"
+    },
+    {
+      "id": "ERRF",
+      "src": "axi",
+      "src_side": "T",
+      "dst": "core",
+      "dst_side": "T"
+    },
+    {
+      "id": "REG",
+      "src": "csr",
+      "src_side": "L",
+      "dst": "core",
+      "dst_side": "R"
+    },
+    {
+      "id": "IRQ",
+      "src": "csr",
+      "src_side": "B",
+      "dst": "int",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "AXI",
+      "block": "axi",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXI",
+        "AXI4 (sub)"
+      ]
+    },
+    {
+      "id": "APB",
+      "block": "csr",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "APB",
+        "APB4 (sub)"
+      ]
+    },
+    {
+      "id": "INT",
+      "block": "int",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "INT",
+        "o_int_cha"
+      ]
+    },
+    {
+      "id": "DMAW",
+      "block": "dma",
+      "side": "L",
+      "dir": "out",
+      "pos": -20,
+      "text": [
+        "DMAW",
+        "write req/ack"
+      ]
+    },
+    {
+      "id": "DMAR",
+      "block": "dma",
+      "side": "L",
+      "dir": "out",
+      "pos": 20,
+      "text": [
+        "DMAR",
+        "read req/ack"
+      ]
+    },
+    {
+      "id": "KEY",
+      "block": "core",
+      "side": "B",
+      "dir": "in",
+      "pos": -20,
+      "text": [
+        "KEY",
+        "key, vld, err"
+      ]
+    },
+    {
+      "id": "TEST",
+      "block": "core",
+      "side": "B",
+      "dir": "in",
+      "pos": 70,
+      "text": [
+        "TEST",
+        "dft test en, rst"
+      ]
+    },
+    {
+      "id": "CKAXI",
+      "block": "axi",
+      "side": "T",
+      "dir": "in",
+      "pos": -40,
+      "text": [
+        "CKAXI",
+        "i_clk_axi, i_rst_n_axi"
+      ]
+    },
+    {
+      "id": "CKCOR",
+      "block": "core",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CKCOR",
+        "i_clk_core, i_rst_n_core"
+      ]
+    },
+    {
+      "id": "CKAPB",
+      "block": "int",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CKAPB",
+        "i_clk_apb, i_rst_n_apb"
+      ]
+    },
+    {
+      "id": "KEYQ",
+      "block": "core",
+      "side": "B",
+      "dir": "out",
+      "pos": -70,
+      "text": [
+        "KEYQ",
+        "o_key_req, slot"
+      ]
+    }
+  ],
+  "nets": [
+    {
+      "entry": "CKAXI",
+      "sinks": [
+        {
+          "id": "CA0",
+          "block": "buf",
+          "side": "T",
+          "pos": -60
+        },
+        {
+          "id": "CA1",
+          "block": "dma",
+          "side": "L",
+          "pos": 0
+        }
+      ]
+    },
+    {
+      "entry": "CKCOR",
+      "sinks": [
+        {
+          "id": "CC0",
+          "block": "buf",
+          "side": "T",
+          "pos": 60
+        },
+        {
+          "id": "CC1",
+          "block": "csr",
+          "side": "T",
+          "pos": -80
+        }
+      ]
+    },
+    {
+      "entry": "CKAPB",
+      "sinks": [
+        {
+          "id": "CP0",
+          "block": "csr",
+          "side": "R",
+          "pos": 40
+        }
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "AXI",
+      "name": "AXI4 data window, subordinate side (CLK-AXI)",
+      "category": "standard protocol (AXI4 memory subordinate profile)",
+      "active": "external manager -> TOP",
+      "signals": "external manager -> TOP: i_axi_awid, i_axi_awaddr, i_axi_awlen, i_axi_awsize, i_axi_awburst, i_axi_awprot, i_axi_awvalid, i_axi_wdata, i_axi_wstrb, i_axi_wlast, i_axi_wvalid, i_axi_bready, i_axi_arid, i_axi_araddr, i_axi_arlen, i_axi_arsize, i_axi_arburst, i_axi_arprot, i_axi_arvalid, i_axi_rready; TOP -> external manager: o_axi_awready, o_axi_wready, o_axi_bid, o_axi_bresp, o_axi_bvalid, o_axi_arready, o_axi_rid, o_axi_rdata, o_axi_rresp, o_axi_rlast, o_axi_rvalid"
+    },
+    {
+      "id": "APB",
+      "name": "APB4 configuration interface (CLK-APB)",
+      "category": "standard protocol (APB4)",
+      "active": "external manager -> TOP",
+      "signals": "external manager -> TOP: i_apb_paddr, i_apb_pwdata, i_apb_pwrite, i_apb_penable, i_apb_psel, i_apb_pstrb, i_apb_pprot, i_protect_en, i_slverr_en; TOP -> external manager: o_apb_pready, o_apb_pslverr, o_apb_prdata"
+    },
+    {
+      "id": "INT",
+      "name": "Interrupt output (CLK-APB)",
+      "category": "level",
+      "active": "TOP -> external interrupt controller",
+      "signals": "TOP -> external interrupt controller: o_int_cha"
+    },
+    {
+      "id": "DMAW",
+      "name": "DMA write request channel (CLK-AXI)",
+      "category": "four-phase request/acknowledge",
+      "active": "TOP -> external DMA controller",
+      "signals": "TOP -> external DMA controller: o_dma_req_wr; external DMA controller -> TOP: i_dma_ack_wr"
+    },
+    {
+      "id": "DMAR",
+      "name": "DMA read request channel (CLK-AXI)",
+      "category": "four-phase request/acknowledge",
+      "active": "TOP -> external DMA controller",
+      "signals": "TOP -> external DMA controller: o_dma_req_rd; external DMA controller -> TOP: i_dma_ack_rd"
+    },
+    {
+      "id": "KEYQ",
+      "name": "Key-store request (CLK-CORE)",
+      "category": "level and data",
+      "active": "TOP -> external key store",
+      "signals": "TOP -> external key store: o_key_req, o_key_slot"
+    },
+    {
+      "id": "KEY",
+      "name": "Key-store answer (CLK-CORE)",
+      "category": "level and data",
+      "active": "external key store -> TOP",
+      "signals": "external key store -> TOP: i_key_data, i_key_vld, i_key_err"
+    },
+    {
+      "id": "TEST",
+      "name": "Test enable and test reset",
+      "category": "static",
+      "active": "external DFT logic -> TOP",
+      "signals": "external DFT logic -> TOP: i_dft_test_en, i_dft_rst_n"
+    },
+    {
+      "id": "CKAXI",
+      "name": "Clock and reset, AXI4 side",
+      "category": "clock and reset",
+      "active": "SoC clock and reset controller -> TOP",
+      "signals": "SoC clock and reset controller -> TOP: i_clk_axi, i_rst_n_axi"
+    },
+    {
+      "id": "CKCOR",
+      "name": "Clock and reset, core side",
+      "category": "clock and reset",
+      "active": "SoC clock and reset controller -> TOP",
+      "signals": "SoC clock and reset controller -> TOP: i_clk_core, i_rst_n_core"
+    },
+    {
+      "id": "CKAPB",
+      "name": "Clock and reset, APB side",
+      "category": "clock and reset",
+      "active": "SoC clock and reset controller -> TOP",
+      "signals": "SoC clock and reset controller -> TOP: i_clk_apb, i_rst_n_apb"
+    },
+    {
+      "id": "WIN",
+      "name": "Input and output window data paths (CLK-AXI)",
+      "category": "custom",
+      "active": "u_axi_win -> u_win_buf",
+      "signals": "u_axi_win -> u_win_buf: w_win_wr_data, w_win_wr_en, w_win_wr_last, w_win_rd_en; u_win_buf -> u_axi_win: w_win_wr_full, w_win_rd_data, w_win_rd_empty, w_win_rd_last"
+    },
+    {
+      "id": "STRM",
+      "name": "Data streams between the engine and the window storage (CLK-CORE)",
+      "category": "custom",
+      "active": "u_core -> u_win_buf",
+      "signals": "u_core -> u_win_buf: w_in_rd_en, w_out_wr_data, w_out_wr_en, w_out_wr_last, w_out_hold; u_win_buf -> u_core: w_in_rd_data, w_in_rd_empty, w_out_wr_full"
+    },
+    {
+      "id": "FLG",
+      "name": "Window level flags for the DMA request logic (CLK-AXI)",
+      "category": "custom",
+      "active": "u_dma_req -> u_win_buf",
+      "signals": "u_win_buf -> u_dma_req: w_in_room, w_out_avail"
+    },
+    {
+      "id": "DCFG",
+      "name": "Message parameters for the DMA request logic (quasi-static)",
+      "category": "custom",
+      "active": "u_core -> u_dma_req",
+      "signals": "u_core -> u_dma_req: w_dma_wm_wr, w_dma_wm_rd, w_dma_tail_mode, w_dma_en, w_dma_beats_wr, w_dma_beats_rd, w_dma_msg_act"
+    },
+    {
+      "id": "ERRF",
+      "name": "Data window error events",
+      "category": "custom",
+      "active": "u_axi_win -> u_core",
+      "signals": "u_axi_win -> u_core: w_axi_err_pulse"
+    },
+    {
+      "id": "REG",
+      "name": "Configuration and status between the register block and the engine",
+      "category": "custom",
+      "active": "u_csr -> u_core",
+      "signals": "u_csr -> u_core: o_cha_ctrl_en, o_cha_ctrl_start, o_cha_ctrl_dir, o_cha_ctrl_abort, o_cha_ctrl_dma_en, o_cha_ctrl_tail_mode, o_cha_ctrl_key_slot, o_cha_len_aad_len, o_cha_len_msg_len, o_cha_wm_wm_wr, o_cha_wm_wm_rd, o_cha_nonce0_nonce_w, o_cha_nonce1_nonce_w, o_cha_nonce2_nonce_w, o_cha_salt_salt, o_cha_ctr_lo_ctr, o_cha_ctr_hi_ctr; u_core -> u_csr: i_cha_sts_busy, i_cha_sts_in_rdy, i_cha_sts_out_rdy, i_cha_sts_ctr_vld, i_hw_wdata_cha_ctrl_start, i_hw_we_cha_ctrl_start, i_hw_wdata_cha_ctrl_abort, i_hw_we_cha_ctrl_abort, i_hw_wdata_cha_ctr_lo_ctr, i_hw_we_cha_ctr_lo_ctr, i_hw_wdata_cha_ctr_hi_ctr, i_hw_we_cha_ctr_hi_ctr, i_hw_wdata_cha_irq_raw_done, i_hw_we_cha_irq_raw_done, i_hw_wdata_cha_irq_raw_tag_err, i_hw_we_cha_irq_raw_tag_err, i_hw_wdata_cha_irq_raw_len_err, i_hw_we_cha_irq_raw_len_err, i_hw_wdata_cha_irq_raw_axi_err, i_hw_we_cha_irq_raw_axi_err, i_hw_wdata_cha_irq_raw_ctr_err, i_hw_we_cha_irq_raw_ctr_err, i_hw_wdata_cha_irq_raw_key_err, i_hw_we_cha_irq_raw_key_err"
+    },
+    {
+      "id": "IRQ",
+      "name": "Raw events and masks to the interrupt logic, masked status back",
+      "category": "custom",
+      "active": "u_csr -> u_int",
+      "signals": "u_csr -> u_int: o_cha_irq_raw_done, o_cha_irq_raw_tag_err, o_cha_irq_raw_len_err, o_cha_irq_raw_axi_err, o_cha_irq_raw_ctr_err, o_cha_irq_raw_key_err, o_cha_irq_en_done, o_cha_irq_en_tag_err, o_cha_irq_en_len_err, o_cha_irq_en_axi_err, o_cha_irq_en_ctr_err, o_cha_irq_en_key_err; u_int -> u_csr: i_cha_irq_sts_done, i_cha_irq_sts_tag_err, i_cha_irq_sts_len_err, i_cha_irq_sts_axi_err, i_cha_irq_sts_ctr_err, i_cha_irq_sts_key_err"
+    }
+  ],
+  "legend_note": "The enclosing frame is the top module; blocks inside are its instances. Internal signal names beginning with w_ are provisional until section 14 is complete.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

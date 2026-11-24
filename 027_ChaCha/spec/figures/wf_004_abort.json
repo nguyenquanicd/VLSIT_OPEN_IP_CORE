@@ -1,0 +1,85 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..............."
+  },
+  [
+   "APB",
+   {
+    "name": "o_cha_ctrl_start",
+    "wave": "01.0............"
+   },
+   {
+    "name": "o_cha_ctrl_abort",
+    "wave": "0.....1...0....."
+   },
+   {
+    "name": "i_hw_we_cha_ctrl_abort",
+    "wave": "0........10....."
+   }
+  ],
+  [
+   "state",
+   {
+    "name": "reg_fsm_msg_current_state",
+    "wave": "=.=..===.=......",
+    "data": [
+     "IDLE",
+     "KEY",
+     "AAD",
+     "DATA",
+     "ABORT",
+     "IDLE"
+    ]
+   },
+   {
+    "name": "i_cha_sts_busy",
+    "wave": "0.1......0......"
+   }
+  ],
+  [
+   "window FIFOs",
+   {
+    "name": "input FIFO level",
+    "wave": "=..=...=.=......",
+    "data": [
+     "0",
+     "3",
+     "flush",
+     "0"
+    ]
+   },
+   {
+    "name": "output FIFO level",
+    "wave": "=.....==.=......",
+    "data": [
+     "0",
+     "1",
+     "flush",
+     "0"
+    ]
+   }
+  ],
+  [
+   "event",
+   {
+    "name": "o_cha_irq_raw_done",
+    "wave": "0..............."
+   },
+   {
+    "name": "o_cha_irq_raw_tag_err",
+    "wave": "0..............."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-003 abort in ENUM_ST_DATA"
+ },
+ "foot": {
+  "text": "Software writes abort while busy; both FIFOs are emptied, hardware clears abort, no done or tag_err event is raised"
+ },
+ "config": {
+  "hscale": 2
+ }
+}

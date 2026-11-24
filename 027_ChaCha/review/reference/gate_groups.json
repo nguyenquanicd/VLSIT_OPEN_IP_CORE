@@ -1,0 +1,154 @@
+{
+  "schema": "vlsit-gate-groups/1",
+  "groups": [
+    {
+      "id": "G-01",
+      "root_cause": "cdc-reset",
+      "members": [
+        "F-008",
+        "F-009"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 2,
+      "merged": true
+    },
+    {
+      "id": "G-02",
+      "root_cause": "defaults",
+      "members": [
+        "F-010",
+        "F-011",
+        "F-023"
+      ],
+      "severities": [
+        "High",
+        "Medium"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-03",
+      "root_cause": "dft",
+      "members": [
+        "F-020"
+      ],
+      "severities": [
+        "High"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-04",
+      "root_cause": "features-scope",
+      "members": [
+        "F-003"
+      ],
+      "severities": [
+        "Low"
+      ],
+      "count": 1,
+      "merged": false
+    },
+    {
+      "id": "G-05",
+      "root_cause": "open-decisions",
+      "members": [
+        "F-001",
+        "F-004",
+        "F-005",
+        "F-006",
+        "F-007",
+        "F-012",
+        "F-026",
+        "F-028"
+      ],
+      "severities": [
+        "High",
+        "Medium"
+      ],
+      "count": 8,
+      "merged": true
+    },
+    {
+      "id": "G-06",
+      "root_cause": "performance",
+      "members": [
+        "F-017",
+        "F-018",
+        "F-029",
+        "F-030"
+      ],
+      "severities": [
+        "High",
+        "Low",
+        "Medium"
+      ],
+      "count": 4,
+      "merged": true
+    },
+    {
+      "id": "G-07",
+      "root_cause": "security",
+      "members": [
+        "F-021",
+        "F-022",
+        "F-024"
+      ],
+      "severities": [
+        "High",
+        "Low"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-08",
+      "root_cause": "timing",
+      "members": [
+        "F-013",
+        "F-014",
+        "F-015",
+        "F-016"
+      ],
+      "severities": [
+        "High",
+        "Low",
+        "Medium"
+      ],
+      "count": 4,
+      "merged": true
+    },
+    {
+      "id": "G-09",
+      "root_cause": "traceability",
+      "members": [
+        "F-002",
+        "F-019",
+        "F-027"
+      ],
+      "severities": [
+        "Low",
+        "Medium"
+      ],
+      "count": 3,
+      "merged": true
+    },
+    {
+      "id": "G-10",
+      "root_cause": "verification",
+      "members": [
+        "F-025"
+      ],
+      "severities": [
+        "Medium"
+      ],
+      "count": 1,
+      "merged": false
+    }
+  ],
+  "count": 10
+}

@@ -1,0 +1,645 @@
+{
+    "Project": "VLSIT_OPEN_IP_CORE",
+    "Module": "JSON debug file",
+    "Function": "Used to check the configuration after generation",
+    "Author": "Nguyen Quan (user)",
+    "Generator": "PC",
+    "Generator version": "3.6",
+    "Page": "VLSI Technology",
+    "Table - Configuration": [
+        {
+            "Module Name": "m_vlsit_csr_chacha",
+            "Address Width": "16",
+            "Data Width": "32",
+            "Protocol": "APB4",
+            "Asynchronous": "1",
+            "Strobe Mode": "HONOR",
+            "AXI Outstanding Mode": "SINGLE",
+            "AXI Read Depth": "2",
+            "AXI Write Depth": "2",
+            "AHB Endian": "LITTLE",
+            "Register Event Sideband": "0"
+        }
+    ],
+    "Table - Register Definition": [
+        {
+            "Register Name": "cha_version",
+            "Offset": "0x0000",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00010000",
+            "Description": "ChaCha version register. Reports the IP major and minor version numbers.",
+            "Bits": [
+                {
+                    "Bit Name": "major",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:16]",
+                    "Reset Value": "0x1",
+                    "Description": "Major version number of the ChaCha20-Poly1305 IP. Software reads it to select a compatible driver.\n\nUsage: Read after reset and before any other register; software never writes this field.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned value."
+                },
+                {
+                    "Bit Name": "minor",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Minor version number of the ChaCha20-Poly1305 IP. Software reads it to identify compatible additions.\n\nUsage: Read after reset and before any other register; software never writes this field.\n\nValues:\n0x0 minor version 0 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned value."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_ctrl",
+            "Offset": "0x0004",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha control register. Enables the engine and starts, directs and aborts one message.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:10]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "key_slot",
+                    "Bit Type": "rw",
+                    "Bit Field": "[9:6]",
+                    "Reset Value": "0x0",
+                    "Description": "Key slot. Index that the engine presents to the key store with the key request when a message starts.\n\nUsage: Program before start; do not change while busy. The key store decides which key belongs to the slot.\n\nValues:\n0x0 to 0xF key store slot index (reset value 0x0).\n\nUnit: none\n\nLimits: Four-bit value."
+                },
+                {
+                    "Bit Name": "tail_mode",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "DMA tail mode. Selects how the last, shorter burst of a message is requested from the system DMA controller.\n\nUsage: Program before start together with the watermark fields; used only when dma_en is set.\n\nValues:\n0x0 short burst of the exact number of remaining beats (reset value);\n0x1 single-beat transfers for the remaining beats.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "dma_en",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "DMA request enable. Lets the engine drive the write and read request outputs of the system DMA controller handshake.\n\nUsage: Set before start when a DMA controller moves the data; leave clear for polling or interrupt use. Effective only when the build parameter PARA_DMA_EN is 1.\n\nValues:\n0x0 both request outputs held low (reset value);\n0x1 request outputs follow the burst rules.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "abort",
+                    "Bit Type": "rwi",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Message abort. Writing one stops the message in progress, discards the data held in the window FIFOs and returns the engine to idle.\n\nUsage: Write one only while busy is set; hardware clears the bit when the engine is idle and the FIFOs are empty. The tag check of an aborted message is not performed and no done event is raised.\n\nValues:\n0x0 no abort requested (reset value);\n0x1 abort the current message.\n\nUnit: none\n\nLimits: Self-clearing by hardware."
+                },
+                {
+                    "Bit Name": "dir",
+                    "Bit Type": "rw",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Direction. Selects encryption, which produces ciphertext followed by the 16-byte tag, or decryption, which consumes ciphertext followed by the tag and checks it.\n\nUsage: Program before start; do not change while busy.\n\nValues:\n0x0 encrypt (reset value);\n0x1 decrypt.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "start",
+                    "Bit Type": "rwi",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Message start. Writing one asks the engine to latch the message parameters and begin one AEAD operation.\n\nUsage: Write one after en, dir, aad_len, msg_len, the watermark fields and the nonce or counter registers are programmed. Hardware clears the bit when it has latched the parameters, so a read of zero means the start was accepted; a write while busy is ignored.\n\nValues:\n0x0 no start requested (reset value);\n0x1 start one message.\n\nUnit: none\n\nLimits: Self-clearing by hardware; a hardware load in the cycle of a software write has no effect, so software writes start once and polls it."
+                },
+                {
+                    "Bit Name": "en",
+                    "Bit Type": "rw",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Engine enable. Allows the engine to accept a message; while it is clear the engine stays idle and its core clock may be gated.\n\nUsage: Set before writing start; clear only while the busy status bit is clear. Software writes it; hardware never changes it.\n\nValues:\n0x0 engine disabled (reset value);\n0x1 engine enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_len",
+            "Offset": "0x0008",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha length register. Gives the associated data length and the message data length of one message.",
+            "Bits": [
+                {
+                    "Bit Name": "msg_len",
+                    "Bit Type": "rw",
+                    "Bit Field": "[31:16]",
+                    "Reset Value": "0x0",
+                    "Description": "Message data length. Number of bytes of plaintext or ciphertext, not counting the 16-byte tag.\n\nUsage: Program before start; do not change while busy. A value above the build parameter PARA_MSG_MAX_B sets the len_err event and the message is not started.\n\nValues:\n0x0 empty message (reset value);\n0x1 to 0xFFFF number of message data bytes.\n\nUnit: byte\n\nLimits: 0 to 65535 bytes, and not above PARA_MSG_MAX_B."
+                },
+                {
+                    "Bit Name": "aad_len",
+                    "Bit Type": "rw",
+                    "Bit Field": "[15:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Associated data length. Number of bytes of additional authenticated data that precede the message data in the input stream.\n\nUsage: Program before start; do not change while busy. The engine counts this many bytes of the input stream as associated data and pads them to a multiple of 16 bytes for Poly1305 itself.\n\nValues:\n0x0 no associated data (reset value);\n0x1 to 0xFFFF number of associated data bytes.\n\nUnit: byte\n\nLimits: 0 to 65535 bytes."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_wm",
+            "Offset": "0x000c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00010001",
+            "Description": "ChaCha watermark register. Sets the burst length that the DMA request outputs ask for.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:25]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "wm_rd",
+                    "Bit Type": "rw",
+                    "Bit Field": "[24:16]",
+                    "Reset Value": "0x1",
+                    "Description": "Read watermark. Number of data-width beats that one read request of the DMA channel asks the system DMA controller to read from the output window.\n\nUsage: Program before start when dma_en is set. The IP raises the read request only when that many beats are available in the output FIFO.\n\nValues:\n0x1 to 0x100 burst length in beats (reset value 0x1).\n\nUnit: beat of PARA_AXI_DW bits\n\nLimits: 1 to the smaller of the longest INCR burst that fits in 4 KB and the output FIFO depth; a larger value sets the len_err event."
+                },
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[15:9]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "wm_wr",
+                    "Bit Type": "rw",
+                    "Bit Field": "[8:0]",
+                    "Reset Value": "0x1",
+                    "Description": "Write watermark. Number of data-width beats that one write request of the DMA channel asks the system DMA controller to write into the input window.\n\nUsage: Program before start when dma_en is set. The IP raises the write request only when the input FIFO has room for the requested beats.\n\nValues:\n0x1 to 0x100 burst length in beats (reset value 0x1).\n\nUnit: beat of PARA_AXI_DW bits\n\nLimits: 1 to the smaller of the longest INCR burst that fits in 4 KB and the input FIFO depth; a larger value sets the len_err event."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_nonce0",
+            "Offset": "0x0010",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha nonce word 0 register. Holds 32 bits of the 96-bit nonce of RFC 8439.",
+            "Bits": [
+                {
+                    "Bit Name": "nonce_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce word 0. The 96-bit nonce is three 32-bit little-endian words; this register is word 0, where word 0 is the least significant.\n\nUsage: Program before start for every decryption, and for every encryption when the build parameter PARA_NONCE_HW is 0. The nonce shall be unique for each message under the same key and shall not be generated randomly. Ignored for encryption when PARA_NONCE_HW is 1.\n\nValues:\n0x0 to 0xFFFFFFFF nonce word 0 (reset value 0x0).\n\nUnit: none\n\nLimits: 32-bit value; do not change while busy."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_nonce1",
+            "Offset": "0x0014",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha nonce word 1 register. Holds 32 bits of the 96-bit nonce of RFC 8439.",
+            "Bits": [
+                {
+                    "Bit Name": "nonce_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce word 1. The 96-bit nonce is three 32-bit little-endian words; this register is word 1, where word 0 is the least significant.\n\nUsage: Program before start for every decryption, and for every encryption when the build parameter PARA_NONCE_HW is 0. The nonce shall be unique for each message under the same key and shall not be generated randomly. Ignored for encryption when PARA_NONCE_HW is 1.\n\nValues:\n0x0 to 0xFFFFFFFF nonce word 1 (reset value 0x0).\n\nUnit: none\n\nLimits: 32-bit value; do not change while busy."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_nonce2",
+            "Offset": "0x0018",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha nonce word 2 register. Holds 32 bits of the 96-bit nonce of RFC 8439.",
+            "Bits": [
+                {
+                    "Bit Name": "nonce_w",
+                    "Bit Type": "rw",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce word 2. The 96-bit nonce is three 32-bit little-endian words; this register is word 2, where word 0 is the least significant.\n\nUsage: Program before start for every decryption, and for every encryption when the build parameter PARA_NONCE_HW is 0. The nonce shall be unique for each message under the same key and shall not be generated randomly. Ignored for encryption when PARA_NONCE_HW is 1.\n\nValues:\n0x0 to 0xFFFFFFFF nonce word 2 (reset value 0x0).\n\nUnit: none\n\nLimits: 32-bit value; do not change while busy."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_salt",
+            "Offset": "0x001c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha salt register. Holds the fixed 32-bit part of the hardware-managed nonce.",
+            "Bits": [
+                {
+                    "Bit Name": "salt",
+                    "Bit Type": "rw",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce salt. Upper 32 bits of the 96-bit nonce when the engine manages the nonce itself; the lower 64 bits are the hardware counter.\n\nUsage: Used only for encryption when the build parameter PARA_NONCE_HW is 1; program before the first encryption under a key.\n\nValues:\n0x0 to 0xFFFFFFFF salt value (reset value 0x0).\n\nUnit: none\n\nLimits: 32-bit value; do not change while busy."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_ctr_lo",
+            "Offset": "0x0020",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha counter low register. Holds the low word of the 64-bit hardware nonce counter.",
+            "Bits": [
+                {
+                    "Bit Name": "ctr",
+                    "Bit Type": "rwi",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce counter, bits 31 to 0. Software loads the start value and the engine increments the 64-bit counter after each encrypted message.\n\nUsage: Used only when the build parameter PARA_NONCE_HW is 1. Write both counter words before the first encryption after reset; the engine refuses to encrypt until a start value has been loaded.\n\nValues:\n0x0 to 0xFFFFFFFF counter bits 31 to 0 (reset value 0x0).\n\nUnit: message\n\nLimits: 32-bit value; a hardware load in the cycle of a software write has no effect, so write it only while idle."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_ctr_hi",
+            "Offset": "0x0024",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha counter high register. Holds the high word of the 64-bit hardware nonce counter.",
+            "Bits": [
+                {
+                    "Bit Name": "ctr",
+                    "Bit Type": "rwi",
+                    "Bit Field": "[31:0]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce counter, bits 63 to 32. Together with the low word it forms the 64-bit counter that is the lower part of the hardware-managed nonce.\n\nUsage: Used only when the build parameter PARA_NONCE_HW is 1. Write both counter words before the first encryption after reset.\n\nValues:\n0x0 to 0xFFFFFFFF counter bits 63 to 32 (reset value 0x0).\n\nUnit: message\n\nLimits: 32-bit value; write it only while idle."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_sts",
+            "Offset": "0x0028",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha status register. Reports the live state of the engine and of its window FIFOs.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:4]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "ctr_vld",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Counter valid. Set after software has loaded a start value into the hardware nonce counter since the last reset.\n\nUsage: Meaningful only when the build parameter PARA_NONCE_HW is 1; read it to check that encryption is allowed.\n\nValues:\n0x0 counter not loaded (reset value);\n0x1 counter loaded.\n\nUnit: none\n\nLimits: One-bit value; stays zero when PARA_NONCE_HW is 0."
+                },
+                {
+                    "Bit Name": "out_rdy",
+                    "Bit Type": "ro",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Output ready. Set while the output window FIFO holds at least a read-watermark burst, or the last shorter burst of a finished message.\n\nUsage: Poll in polling mode before reading a burst from the data window.\n\nValues:\n0x0 no burst available (reset value);\n0x1 burst available.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "in_rdy",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Input ready. Set while the input window FIFO has room for a write-watermark burst.\n\nUsage: Poll in polling mode before writing a burst to the data window.\n\nValues:\n0x0 not enough room (reset value);\n0x1 room for wm_wr beats.\n\nUnit: none\n\nLimits: One-bit value; the live value can change between the read and the next write."
+                },
+                {
+                    "Bit Name": "busy",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Busy. Set from the accepted start until the message is complete or aborted.\n\nUsage: Poll to detect completion when interrupts are not used; configuration registers are not changed while it is set.\n\nValues:\n0x0 engine idle (reset value);\n0x1 message in progress.\n\nUnit: none\n\nLimits: One-bit value."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_irq_raw",
+            "Offset": "0x002c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha raw interrupt register. Holds the raw event bits before masking.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "key_err",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Key store error event, raw. Set by hardware when the key store answered a key request with an error (empty or locked slot).\n\nUsage: Software writes one to clear the event after servicing it. A new event in the same cycle as a clear is kept.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "ctr_err",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce counter error event, raw. Set by hardware when an encryption was started in hardware nonce mode while the counter was not loaded or the counter would wrap, or, with the nonce check built in, a software nonce equals the previous encryption nonce on the same key slot.\n\nUsage: Software writes one to clear the event after servicing it. A new event in the same cycle as a clear is kept.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "axi_err",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Data window error event, raw. Set by hardware when the data window answered SLVERR for an underrun, an overrun, an unsupported burst or a non-secure access, or the AXI domain was reset while a message ran.\n\nUsage: Software writes one to clear the event after servicing it. A new event in the same cycle as a clear is kept.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "len_err",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Length or watermark error event, raw. Set by hardware when a length register above the allowed limit or a watermark above the allowed maximum was programmed at start.\n\nUsage: Software writes one to clear the event after servicing it. A new event in the same cycle as a clear is kept.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "tag_err",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Tag error event, raw. Set by hardware when a decryption finished and the received tag did not match the computed tag.\n\nUsage: Software writes one to clear the event after servicing it. A new event in the same cycle as a clear is kept.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "done",
+                    "Bit Type": "w1c",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Message done event, raw. Set by hardware when the engine finished a message and, for a decryption, the tag matched.\n\nUsage: Software writes one to clear the event after servicing it. A new event in the same cycle as a clear is kept.\n\nValues:\n0x0 no event (reset value);\n0x1 event pending.\n\nUnit: none\n\nLimits: One-bit value."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_irq_en",
+            "Offset": "0x0030",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha interrupt enable register. Selects which events reach the interrupt output.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "key_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Key store error interrupt enable. Lets the raw key_err event reach the interrupt output.\n\nUsage: Program before start; may be changed at any time.\n\nValues:\n0x0 event masked (reset value);\n0x1 event enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "ctr_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce counter error interrupt enable. Lets the raw ctr_err event reach the interrupt output.\n\nUsage: Program before start; may be changed at any time.\n\nValues:\n0x0 event masked (reset value);\n0x1 event enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "axi_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Data window error interrupt enable. Lets the raw axi_err event reach the interrupt output.\n\nUsage: Program before start; may be changed at any time.\n\nValues:\n0x0 event masked (reset value);\n0x1 event enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "len_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Length or watermark error interrupt enable. Lets the raw len_err event reach the interrupt output.\n\nUsage: Program before start; may be changed at any time.\n\nValues:\n0x0 event masked (reset value);\n0x1 event enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "tag_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Tag error interrupt enable. Lets the raw tag_err event reach the interrupt output.\n\nUsage: Program before start; may be changed at any time.\n\nValues:\n0x0 event masked (reset value);\n0x1 event enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "done",
+                    "Bit Type": "rw",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Message done interrupt enable. Lets the raw done event reach the interrupt output.\n\nUsage: Program before start; may be changed at any time.\n\nValues:\n0x0 event masked (reset value);\n0x1 event enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_irq_inj",
+            "Offset": "0x0034",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha interrupt injection register. Raises raw events from software for testing.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "key_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Key store error event injection. A rising edge of this bit raises the raw key_err event, for software testing of the interrupt path.\n\nUsage: Write zero and then one to inject; used in bring-up and driver tests only.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "ctr_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce counter error event injection. A rising edge of this bit raises the raw ctr_err event, for software testing of the interrupt path.\n\nUsage: Write zero and then one to inject; used in bring-up and driver tests only.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "axi_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Data window error event injection. A rising edge of this bit raises the raw axi_err event, for software testing of the interrupt path.\n\nUsage: Write zero and then one to inject; used in bring-up and driver tests only.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "len_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Length or watermark error event injection. A rising edge of this bit raises the raw len_err event, for software testing of the interrupt path.\n\nUsage: Write zero and then one to inject; used in bring-up and driver tests only.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "tag_err",
+                    "Bit Type": "rw",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Tag error event injection. A rising edge of this bit raises the raw tag_err event, for software testing of the interrupt path.\n\nUsage: Write zero and then one to inject; used in bring-up and driver tests only.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "done",
+                    "Bit Type": "rw",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Message done event injection. A rising edge of this bit raises the raw done event, for software testing of the interrupt path.\n\nUsage: Write zero and then one to inject; used in bring-up and driver tests only.\n\nValues:\n0x0 no injection (reset value);\n0x1 inject the event.\n\nUnit: none\n\nLimits: One-bit value."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_irq_sts",
+            "Offset": "0x0038",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha masked interrupt status register. Shows the enabled events that are pending.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:6]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "key_err",
+                    "Bit Type": "ro",
+                    "Bit Field": "[5]",
+                    "Reset Value": "0x0",
+                    "Description": "Key store error interrupt status. The raw key_err event after the enable mask, which drives the interrupt output.\n\nUsage: Read in the interrupt service routine; software never writes this field.\n\nValues:\n0x0 not pending (reset value);\n0x1 pending and enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "ctr_err",
+                    "Bit Type": "ro",
+                    "Bit Field": "[4]",
+                    "Reset Value": "0x0",
+                    "Description": "Nonce counter error interrupt status. The raw ctr_err event after the enable mask, which drives the interrupt output.\n\nUsage: Read in the interrupt service routine; software never writes this field.\n\nValues:\n0x0 not pending (reset value);\n0x1 pending and enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "axi_err",
+                    "Bit Type": "ro",
+                    "Bit Field": "[3]",
+                    "Reset Value": "0x0",
+                    "Description": "Data window error interrupt status. The raw axi_err event after the enable mask, which drives the interrupt output.\n\nUsage: Read in the interrupt service routine; software never writes this field.\n\nValues:\n0x0 not pending (reset value);\n0x1 pending and enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "len_err",
+                    "Bit Type": "ro",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "Length or watermark error interrupt status. The raw len_err event after the enable mask, which drives the interrupt output.\n\nUsage: Read in the interrupt service routine; software never writes this field.\n\nValues:\n0x0 not pending (reset value);\n0x1 pending and enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "tag_err",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Tag error interrupt status. The raw tag_err event after the enable mask, which drives the interrupt output.\n\nUsage: Read in the interrupt service routine; software never writes this field.\n\nValues:\n0x0 not pending (reset value);\n0x1 pending and enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                },
+                {
+                    "Bit Name": "done",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Message done interrupt status. The raw done event after the enable mask, which drives the interrupt output.\n\nUsage: Read in the interrupt service routine; software never writes this field.\n\nValues:\n0x0 not pending (reset value);\n0x1 pending and enabled.\n\nUnit: none\n\nLimits: One-bit value."
+                }
+            ]
+        },
+        {
+            "Register Name": "cha_cap",
+            "Offset": "0x003c",
+            "Repeat Mode": "NONE",
+            "Count or Default": "1",
+            "Offset Stride": "4",
+            "Maximum Count": "1",
+            "Reset Value": "0x00000000",
+            "Description": "ChaCha capability register. Reports the build configuration of the IP to the driver.",
+            "Bits": [
+                {
+                    "Bit Name": "reserved",
+                    "Bit Type": "ro",
+                    "Bit Field": "[31:8]",
+                    "Reset Value": "0x0",
+                    "Description": "This field is unused.\nRead-as-zero and write-ignored."
+                },
+                {
+                    "Bit Name": "core_log",
+                    "Bit Type": "ro",
+                    "Bit Field": "[7:5]",
+                    "Reset Value": "0x0",
+                    "Description": "Core count code. Base-2 logarithm of the build parameter PARA_CORE_NUM, the number of parallel ChaCha cores.\n\nUsage: Read once at initialisation for performance planning.\n\nValues:\n0x0 one core (reset value);\n0x1 two cores;\n0x2 four cores;\n0x3 eight cores.\n\nUnit: none\n\nLimits: Two bits used; values above 0x3 are not produced."
+                },
+                {
+                    "Bit Name": "dw_code",
+                    "Bit Type": "ro",
+                    "Bit Field": "[4:3]",
+                    "Reset Value": "0x0",
+                    "Description": "Data width code. Encodes the build parameter PARA_AXI_DW, the width of the AXI4 data window.\n\nUsage: Read once at initialisation to size bursts and watermarks.\n\nValues:\n0x0 32 bits (reset value);\n0x1 64 bits;\n0x2 128 bits;\n0x3 256 bits.\n\nUnit: none\n\nLimits: Two-bit constant."
+                },
+                {
+                    "Bit Name": "dma_en",
+                    "Bit Type": "ro",
+                    "Bit Field": "[2]",
+                    "Reset Value": "0x0",
+                    "Description": "DMA build option. Reflects the build parameter PARA_DMA_EN.\n\nUsage: Read once at initialisation to learn whether the DMA request outputs exist.\n\nValues:\n0x0 no DMA request logic (reset value);\n0x1 DMA request outputs present.\n\nUnit: none\n\nLimits: One-bit constant."
+                },
+                {
+                    "Bit Name": "hold_en",
+                    "Bit Type": "ro",
+                    "Bit Field": "[1]",
+                    "Reset Value": "0x0",
+                    "Description": "Tag-hold build option. Reflects the build parameter PARA_HOLD_EN.\n\nUsage: Read once at initialisation: when set, decrypted data is released only after the tag is verified.\n\nValues:\n0x0 decrypted data released as produced (reset value);\n0x1 decrypted data held until the tag is verified.\n\nUnit: none\n\nLimits: One-bit constant."
+                },
+                {
+                    "Bit Name": "nonce_hw",
+                    "Bit Type": "ro",
+                    "Bit Field": "[0]",
+                    "Reset Value": "0x0",
+                    "Description": "Hardware nonce build option. Reflects the build parameter PARA_NONCE_HW.\n\nUsage: Read once at initialisation to choose how the driver supplies the nonce.\n\nValues:\n0x0 nonce supplied by software (reset value);\n0x1 hardware-managed nonce counter.\n\nUnit: none\n\nLimits: One-bit constant."
+                }
+            ]
+        }
+    ]
+}
