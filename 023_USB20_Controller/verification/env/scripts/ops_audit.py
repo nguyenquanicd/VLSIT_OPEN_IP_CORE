@@ -5,7 +5,7 @@ seed, regenerated) and reports patterns that let a scenario pass without checkin
   - FLUSH: discards every DUT packet still queued, unchecked (an unexpected packet of the DUT is lost there)
   - bins without a check: a B (coverage bin) with no check operation since the previous B (the bin claims a scenario that was
     only stimulated)
-  - weak checks: R/P with mask 0, SOF with an interval window wider than 10 microframes, XN shorter than 20 cycles,
+  - weak checks: R/P with mask 0, SOF (n >= 2) with an interval window wider than 10 microframes, XN shorter than 20 cycles,
     WP with the whole mask 0
     python env/scripts/ops_audit.py      -> sim/ops_audit.md, sim/ops_audit.csv"""
 import csv
@@ -43,7 +43,7 @@ def audit(path):
             v = [int(x, 16) for x in t[1:] if all(c in '0123456789abcdefABCDEF' for c in x)]
             if op in ('R', 'P') and len(v) >= 3 and v[2] == 0:
                 st['weak'].append('%d:%s mask 0' % (n, op))
-            if op == 'SOF' and len(v) >= 3 and v[2] - v[1] > 10 * 125000 / 1:
+            if op == 'SOF' and len(v) >= 3 and v[0] >= 2 and v[2] - v[1] > 10 * 125000 / 1:   # n < 2: count only, no interval measured
                 st['weak'].append('%d:SOF window %d..%d ns' % (n, v[1], v[2]))
             if op == 'XN' and v and v[0] < 20:
                 st['weak'].append('%d:XN %d cycles' % (n, v[0]))

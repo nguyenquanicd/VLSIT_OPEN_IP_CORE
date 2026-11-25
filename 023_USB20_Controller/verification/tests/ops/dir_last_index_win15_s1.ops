@@ -47,6 +47,7 @@ W 10 1ffffff
 W 20 92
 IB 190
 W 2c 200000
+CHK DLI-WINBEYOND
 AW 1 f000 8 2 fd3c8220 6bc2f1e6 c70ef930 88e401dd fa23475 c3040d0b 710ed86e b077fde0
 B cg_param.win_beyond
 END

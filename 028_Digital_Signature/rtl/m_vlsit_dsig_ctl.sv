@@ -476,7 +476,8 @@ module m_vlsit_dsig_ctl #(
       w_f_badlen = 1'b1;
     if ((w_alg32 == LPARA_ALG_LMS) & ((reg_run_hsslvl == 4'd0) | ({28'd0, reg_run_hsslvl} > LPARA_HSS_MAX)))
       w_f_badlen = 1'b1;
-    if ({30'd0, reg_run_form} == LPARA_FORM_PREHASH) begin
+    // Key generation has no message: only signing and verification check the digest length.
+    if (({30'd0, reg_run_form} == LPARA_FORM_PREHASH) & (w_is_sign | w_is_vrfy)) begin
       if ((w_is_ecdsa | w_is_mldsa) & (reg_run_len_msg != w_dig_len))
         w_f_badlen = 1'b1;
       if (((w_alg32 == LPARA_ALG_ED25519PH) | (w_alg32 == LPARA_ALG_ED448PH)) &

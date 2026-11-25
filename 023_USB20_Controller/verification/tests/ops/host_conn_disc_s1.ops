@@ -39,9 +39,11 @@ W 10 1ffffff
 ID bb8
 W 10 20
 PIN 2 1
+CHK HCN-DISC
 P 10 20 20 bb8
 B cg_conn.hs_disc
 PIN 2 0
+CHK HCN-DISCSTS
 P 2c 0 1 bb8
 R 2c 0 2
 END

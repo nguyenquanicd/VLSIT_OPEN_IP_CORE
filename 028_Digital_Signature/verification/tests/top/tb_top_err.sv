@@ -4,6 +4,7 @@
 `timescale 1ns/1ps
 module tb_top_err;
   reg clk = 0; always #5 clk = ~clk;
+  reg clk_apb = 0; always #7 clk_apb = ~clk_apb;       // the APB clock is asynchronous to the core clock (PARA_CSR_ASYNC = 1)
   reg rst_n = 0;
   reg psel = 0, penable = 0, pwrite = 0; reg [15:0] paddr = 0; reg [31:0] pwdata = 0;
   wire pready, pslverr; wire [31:0] prdata;
@@ -13,10 +14,10 @@ module tb_top_err;
   wire awready, wready, bvalid, arready, rvalid, rlast; wire [3:0] bid, rid; wire [1:0] bresp, rresp; wire [63:0] rdata;
 
   m_vlsit_dsig_top #(
-    .PARA_EN_ECDSA_P256(1), .PARA_OP_KGEN(32'h20), .PARA_OP_SIGN(32'h20), .PARA_OP_VRFY(32'h20), .PARA_BUF_BYTES(1024), .PARA_EN_AXI(1),
+    .PARA_EN_ED25519(1), .PARA_EN_ED25519PH(1), .PARA_EN_ECDSA_P256(1), .PARA_OP_KGEN(32'h20), .PARA_OP_SIGN(32'h24), .PARA_OP_VRFY(32'h24), .PARA_BUF_BYTES(1024), .PARA_EN_AXI(1),
     .PARA_EN_KEYIF(1), .PARA_EN_KEYREG(0), .PARA_ECDSA_NONCE(0), .PARA_EN_VAS(0), .PARA_EN_LOG(1), .PARA_EN_LOCK(1), .PARA_CSR_ASYNC(1)
   ) dut (
-    .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk), .i_rst_n_apb(rst_n),
+    .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk_apb), .i_rst_n_apb(rst_n),
     .i_apb_psel(psel), .i_apb_penable(penable), .i_apb_pwrite(pwrite), .i_apb_paddr(paddr), .i_apb_pwdata(pwdata), .i_apb_pstrb(4'hF), .i_apb_pprot(3'd0),
     .o_apb_pready(pready), .o_apb_pslverr(pslverr), .o_apb_prdata(prdata), .i_protect_en(1'b0), .i_slverr_en(1'b0),
     .i_axi_awvalid(1'b0), .o_axi_awready(awready), .i_axi_awid(4'd0), .i_axi_awaddr(16'd0), .i_axi_awlen(8'd0), .i_axi_awsize(3'd3), .i_axi_awburst(2'b01),
@@ -36,17 +37,17 @@ module tb_top_err;
   endtask
   task automatic apb_w(input [15:0] a, input [31:0] d);
     begin
-      @(posedge clk); #1 psel = 1; penable = 0; pwrite = 1; paddr = a; pwdata = d;
-      @(posedge clk); #1 penable = 1;
-      @(posedge clk); while (!pready) @(posedge clk);
+      @(posedge clk_apb); #1 psel = 1; penable = 0; pwrite = 1; paddr = a; pwdata = d;
+      @(posedge clk_apb); #1 penable = 1;
+      @(posedge clk_apb); while (!pready) @(posedge clk_apb);
       #1 psel = 0; penable = 0; pwrite = 0;
     end
   endtask
   task automatic apb_r(input [15:0] a, output [31:0] d);
     begin
-      @(posedge clk); #1 psel = 1; penable = 0; pwrite = 0; paddr = a;
-      @(posedge clk); #1 penable = 1;
-      @(posedge clk); while (!pready) @(posedge clk);
+      @(posedge clk_apb); #1 psel = 1; penable = 0; pwrite = 0; paddr = a;
+      @(posedge clk_apb); #1 penable = 1;
+      @(posedge clk_apb); while (!pready) @(posedge clk_apb);
       d = prdata; #1 psel = 0; penable = 0;
     end
   endtask
@@ -68,8 +69,8 @@ module tb_top_err;
   initial begin : main
     repeat (6) @(posedge clk); #1 rst_n = 1; repeat (4) @(posedge clk);
     apb_r(16'h000, rd); check(rd == 32'h0001_0000, "version 1.0");
-    apb_r(16'h004, rd); check(rd == 32'h0000_0020, "capability of the algorithms: P-256 only");
-    apb_r(16'h010, rd); check(rd == 32'h0000_0020, "capability of verification");
+    apb_r(16'h004, rd); check(rd == 32'h0000_0025, "capability of the algorithms: Ed25519, Ed25519ph and P-256");
+    apb_r(16'h010, rd); check(rd == 32'h0000_0024, "capability of verification: operation mask and built algorithms");
     apb_r(16'h024, rd); check(rd[2] && rd[5] && !rd[6], "capability: AXI4 and key port built, key registers not built");
     apb_w(16'h0AC, 32'h0001_0001);         // key and entropy time-out of one unit (1024 clocks)
     // 1. start while the IP is not enabled: algdis (bit 0), result flags clear
@@ -106,6 +107,21 @@ module tb_top_err;
     wait_idle(20000);
     apb_r(16'h074, sts); check(!sts[0] && !sts[8], "abort: idle without a result");
     apb_r(16'h078, errv); check(!errv[8], "abort before the time-out raises no key time-out");
+    // 4b. Ed25519ph takes the digest as the message: the pure form is rejected, the prehash form is accepted by the check
+    apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);
+    apb_w(16'h044, 32'h24);
+    apb_w(16'h050, (1 << 8) | 2);          // alg Ed25519ph, op sign, form pure
+    apb_w(16'h058, 32'd64); apb_w(16'h060, 0); apb_w(16'h064, 256); apb_w(16'h068, 512); apb_w(16'h06C, 768);
+    apb_w(16'h070, 32'd1);
+    wait_idle(5000);
+    apb_r(16'h078, errv); check(errv[1] && !errv[8], "Ed25519ph in the pure form: dsig_err.opuns");
+    apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);
+    apb_w(16'h050, (1 << 12) | (1 << 8) | 2);   // form prehash
+    apb_w(16'h058, 32'd63);
+    apb_w(16'h070, 32'd1);
+    wait_idle(5000);
+    apb_r(16'h078, errv); check(errv[2] && !errv[1], "Ed25519ph with a digest of 63 bytes: dsig_err.badlen");
+    apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);
     // 5. lock of the enable bits: a later change of dsig_alg_en sets dsig_err.lockv
     apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);
     apb_w(16'h04C, 32'd1);

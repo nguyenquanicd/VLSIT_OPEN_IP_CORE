@@ -54,6 +54,7 @@ W 444 100080
 W 404 481040
 IB 12c
 TK 1 7b 1 0
+CHK DEG-ABORT
 DT 3 1 40 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7
 XN 190
 IB 12c

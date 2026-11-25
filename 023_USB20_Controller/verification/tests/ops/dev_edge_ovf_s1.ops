@@ -57,6 +57,7 @@ W 40 140000
 IB 64
 W 10 2000
 TK 1 12 1 0
+CHK DEG-OVF
 DT 3 0 64 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd fa f f0 16 9d c9 57 56 74 6 66 76 cf b0 b4 eb 89 2 c4 42 69 da 1c f6 ba 66 d3 f8 b6 d4 b1 0 a9 ea e 75 5a
 XN 190
 IB 12c
@@ -65,6 +66,7 @@ B cg_err.fifo
 W 10 2000
 W 40 1000000
 IB 64
+CHK DEG-OVFREC
 TK 1 12 1 0
 DT 3 0 40 5c 2e 82 10 24 2a 8 e7 7 8f 7f 89 38 5e b0 94 23 55 51 82 56 8b 96 e8 a4 fe f2 3a c 9f c5 af d7 60 84 37 81 6b dd a 73 9 cb 4a 12 52 e4 da 70 e6 72 f ca a4 da 1e 98 40 6c 18 9c 24 27 9e
 XH 2 190

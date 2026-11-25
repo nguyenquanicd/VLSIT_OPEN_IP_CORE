@@ -105,6 +105,18 @@ module tb_top_pq;
   endtask
 
   reg [7:0] resb [0:8191];
+  // +PROGRESS=<n>: print the states every n cycles (diagnostic)
+  integer prog_n;
+  initial begin
+    if ($value$plusargs("PROGRESS=%d", prog_n))
+      forever begin
+        repeat (prog_n) @(posedge clk);
+        $display("PROGRESS t=%0t ctl %0d lat %0d pc %0d vas %0b hs_req %b grant %b", $time, dut.u_ctl.reg_fsm_ctl_current_state,
+                 dut.g_lat.u_lat.reg_fsm_lat_current_state, dut.g_lat.u_lat.reg_pc, dut.g_lat.u_lat.reg_vas,
+                 dut.w_lat_hs_req, dut.w_hq_grant);
+        $fflush;
+      end
+  end
   initial begin : main
     if (!$value$plusargs("DIR=%s", dir)) dir = "vec";
     if (!$value$plusargs("KIND=%s", kind)) kind = "lat";
@@ -161,7 +173,9 @@ module tb_top_pq;
           else if (v_op == 2) begin
             if (sts[9] != v_ok[0]) begin ok = 0; $display("VEC %0d: sigok %0b, expected %0d", v_i, sts[9], v_ok); end
           end else begin
-            axi_read_res(16384, (v_el + 7) / 8, 0);
+            // AXI4 INCR bursts are at most 256 beats: read the result in pieces
+            for (j = 0; j < (v_el + 7) / 8; j = j + 256)
+              axi_read_res(16384 + 8 * j, ((v_el + 7) / 8 - j > 256) ? 256 : ((v_el + 7) / 8 - j), 8 * j);
             for (j = 0; j < v_el; j = j + 1)
               if (expb[j] != resb[j]) begin ok = 0; $display("VEC %0d: result byte %0d is %02x, expected %02x", v_i, j, expb[j], resb[j]); j = v_el; end
           end

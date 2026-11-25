@@ -32,7 +32,13 @@ module tb_xreg;
   int seq = 0, n_free0 = 0, n_free0_acc = 0;
   int last_seq_seen [NS];
   logic [31:0] cur [NS];
-  task automatic chk(input bit c, input string m); checks++; if (!c) begin errors++; $display("FAIL @%0t: %s", $time, m); end endtask
+  // Checkpoint IDs of the header (tests/usb20/tc_t_fml_cdc_xreg.txt, R-286, 2026-11-25): each check counts under its ID; the log
+  // lists every ID with its first time and count (CHKPT and CHKPT_END lines, as the operation harnesses do).
+  int cp_cnt [string]; longint cp_t0 [string];
+  task automatic chk(input string id, input bit c, input string m);
+    checks++; if (!cp_cnt.exists(id)) begin cp_cnt[id] = 0; cp_t0[id] = $time; end cp_cnt[id]++;
+    if (!c) begin errors++; $display("FAIL @%0t: %s: %s", $time, id, m); end
+  endtask
 
   // bus-side stimulus: bursts of writes, some at free = 0
   always @(posedge clk_bus) begin
@@ -48,11 +54,12 @@ module tb_xreg;
         accepted++; sent_word[seq] = wr_word; sent_slot[seq] = wr_slot;
         seq++;
       end
-      chk(xq_free <= 6'd8, $sformatf("xq_free = %0d above 8", xq_free));
-      chk(!(xq_ovf && xq_free != 0 && 0), "ovf with free entries");
+      chk("XRG-FREE", xq_free <= 6'd8, $sformatf("xq_free = %0d above 8", xq_free));
+      // a former check "ovf with free entries" here had a constant-false term (&& 0) and checked nothing; removed 2026-11-25,
+      // the condition is checked by XRG-OVF below
     end
     if (rst_n && wr_en && xq_free == 0) begin n_free0++; if (!xq_ovf) n_free0_acc++; end
-    if (rst_n && wr_en && xq_ovf) chk(xq_free == 0, $sformatf("write dropped (xq_ovf) while xq_free = %0d", xq_free));
+    if (rst_n && wr_en && xq_ovf) chk("XRG-OVF", xq_free == 0, $sformatf("write dropped (xq_ovf) while xq_free = %0d", xq_free));
   end
   // CLK-PHY: every value that appears in a shadow slot is a whole accepted word, in order
   always @(posedge clk_phy) begin
@@ -63,7 +70,7 @@ module tb_xreg;
           bit found; found = 0;
           for (int q = last_seq_seen[s] + 1; q < seq && !found; q++)
             if (sent_slot.exists(q) && sent_slot[q] == s && sent_word[q] === w) begin found = 1; last_seq_seen[s] = q; end
-          chk(found, $sformatf("slot %0d took value %08x that is not a later accepted write (torn, stale or dropped word)", s, w));
+          chk("XRG-WORD", found, $sformatf("slot %0d took value %08x that is not a later accepted write (torn, stale or dropped word)", s, w));
           cur[s] = w;
         end
       end
@@ -79,7 +86,7 @@ module tb_xreg;
     end
   end
   always @(posedge clk_bus) if (ld_en && ld_kind == 4'd1) begin
-    chk(ld_slot < NA, "update for a slot that does not exist");
+    chk("XRG-SLOT", ld_slot < NA, "update for a slot that does not exist");
     if (ld_slot < NA && ld_val[3]) begin set_pending[ld_slot] = 0; sets_seen++; end
   end
 
@@ -94,15 +101,17 @@ module tb_xreg;
     for (int s = 0; s < NS; s++) begin
       int lastq; lastq = -1;
       for (int q = 0; q < seq; q++) if (sent_slot[q] == s) lastq = q;
-      if (lastq >= 0) chk(shadow[s*32 +: 32] === sent_word[lastq], $sformatf("slot %0d final value %08x expected %08x", s, shadow[s*32 +: 32], sent_word[lastq]));
+      if (lastq >= 0) chk("XRG-FINAL", shadow[s*32 +: 32] === sent_word[lastq], $sformatf("slot %0d final value %08x expected %08x", s, shadow[s*32 +: 32], sent_word[lastq]));
     end
-    chk(xq_free == 6'd8, $sformatf("xq_free = %0d after the FIFO drained, expected 8", xq_free));
-    chk(accepted > 50, "too few accepted writes: the test did not exercise the crossing");
-    chk(dropped > 0 || pb >= pp, "no write was dropped at xq_free = 0 although the bus side is faster");
-    chk(sets_seen >= sets_sent - NA, $sformatf("event sets lost: %0d sent, %0d seen", sets_sent, sets_seen));
+    chk("XRG-DRAIN", xq_free == 6'd8, $sformatf("xq_free = %0d after the FIFO drained, expected 8", xq_free));
+    chk("XRG-ACTIVITY", accepted > 50, "too few accepted writes: the test did not exercise the crossing");
+    chk("XRG-ACTIVITY", dropped > 0 || pb >= pp, "no write was dropped at xq_free = 0 although the bus side is faster");
+    chk("XRG-EVENT", sets_seen >= sets_sent - NA, $sformatf("event sets lost: %0d sent, %0d seen", sets_sent, sets_seen));
     // REQ-REG-002: a write while xq_free = 0 shall be dropped and set xq_ovf
-    chk(n_free0_acc == 0, $sformatf("%0d of %0d write(s) at xq_free = 0 were accepted instead of dropped", n_free0_acc, n_free0));
+    chk("XRG-DROP", n_free0_acc == 0, $sformatf("%0d of %0d write(s) at xq_free = 0 were accepted instead of dropped", n_free0_acc, n_free0));
     $display("XREG accepted=%0d dropped=%0d sets_sent=%0d sets_seen=%0d", accepted, dropped, sets_sent, sets_seen);
+    foreach (cp_cnt[id]) begin $display("CHKPT @%0d: %s", cp_t0[id], id); $display("CHKPT_END %s checks=%0d", id, cp_cnt[id]); end
+    $display("CHECKPOINTS reached=%0d", cp_cnt.num());
     $display("RESULT %s checks=%0d errors=%0d", (errors == 0 && checks > 0) ? "PASS" : "FAIL", checks, errors);
     $finish;
   end

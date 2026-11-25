@@ -1,0 +1,34 @@
+Testcase header of t_dev_pipe_equiv (configuration sweep: it reuses the device generators on the pipelined build; written 2026-11-25).
+
+Test ID and title: t_dev_pipe_equiv - the device scenarios pass unchanged with the pipeline registers enabled (PIPE = 1)
+Priority and rationale: P2. The pipeline options add one cycle each to the turn-around path (DEC-003); DEC-029 requires every option to be
+  functionally transparent, checked by running the device tests with PIPE = 0 and 1.
+Purpose: show that enumeration, bulk, error handling, high-bandwidth iso, scatter-gather, suspend/LPM, random traffic and the corner cases
+  give the same observable results on dev_utmi8_axim_pipe as on dev_utmi8_axim, in particular the response gaps.
+Requirements and features: REQ-FUNC-006 (response gap); DEC-003 and DEC-029 (pipeline options, transparency); plus the requirements of each member
+  generator (gen_dev_enum_bulk_dma, gen_fi_bus_errors, gen_dev_iso_int_mix, gen_dev_sg_dma, gen_dev_suspend_lpm_reset, gen_dev_rand_perf
+  rand, gen_dev_edge sections len/pid/gap/tmo/abort/ovf).
+DUT configuration and preconditions: build dev_utmi8_axim_pipe (ROLE device, UTMI+ 8 bit, TSCALE 256, -GPIPE=1); preconditions as in the
+  member generators.
+Software flow: the software flow of each member generator, unchanged (see the header of each gen_*.py): device bring-up, endpoint arming,
+  polling and clearing of the endpoint and interrupt flags, memory compare.
+Stimulus: the operation files of the member generators with the testlist seeds (enum 1 2, rand 1 2 3, others 1).
+Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
+  DEB-BOUT | REQ-FUNC-004, 005 | bulk OUT through the pipelined path | PING ACK, ACK per packet, data and residue as without the pipeline | TB XH, MC, R | 400 CLK-PHY | a handshake or the data differ
+  DEB-NYET | REQ-FUNC-005, 027 | receive FIFO full with the pipeline | NYET, PING NAK, OUT NAK exactly as without it | TB XH | 400 CLK-PHY | the extra stage lets a packet into a full FIFO
+  FBE-TMO | REQ-FUNC-025 | IN data not acknowledged | time-out flag with the pipeline latency | TB R | 300 CLK-PHY | no time-out
+  DIM-HBISO | REQ-FUNC-009 | high-bandwidth iso IN | DATA2/DATA1/DATA0 order and payloads | TB XD, GAP | 2000 CLK-PHY | order or data changed
+  DSG-SGWB | REQ-FUNC-036 | scatter-gather list end | descriptor write-back unchanged | TB MC, R | end of list | write-back differs
+  DSL-SUSP | REQ-FUNC-018 | idle bus | suspend timing unchanged | TB WP, GAP, P, R | 10 ms scaled | timer shifted by the pipeline
+  DRP-OUTMEM | REQ-IF-006 | random OUT transfers | memory and residue correct | TB MC, R | per transfer | data lost in the pipeline
+  DEG-GAP | REQ-FUNC-006 | zero-length and maximum OUT | ACK within 1 to 24 cycles despite the extra stages | TB XH, GAP | 400 CLK-PHY | gap beyond 192 bit times
+Shared checkpoints also reached: DBU-VER, DBR-CHIRP, DBR-HS, DBU-ENUM.
+Expected outcome: every member operation file passes on the pipelined build with all its checkpoints reached.
+Defect/fault targeted: pipeline stage changing a response gap, ordering or a flag timing.
+Checker/oracle: the member generators (headers list their oracles); harness checks unchanged.
+Reproducibility: cd tests/usb20; python gen_dev_enum_bulk_dma.py SEED (and the other member generators with their arguments); from
+  verification: python env/scripts/run.py sim t_dev_pipe_equiv dev_utmi8_axim_pipe tests/ops/dev_enum_bulk_dma_sSEED.ops +seed=SEED
+Waveform: N/A: outside the ten priority tests of R-283 (sim/waveform_index.csv). To capture one: python env/scripts/build.py BUILD --trace,
+  then run.py sim with the trace build and +vcd (+vcd_from=NS +vcd_to=NS for a window).
+Evidence: runs of t_dev_pipe_equiv in sim/index.csv (CHKPT lines in sim.log); review row in docs/testcase_review.csv.
+AI-generated candidate (R-117).

@@ -36,9 +36,21 @@ python env/scripts/run_builds.py                                  # t_dir_param_
 python env/scripts/run_coverage.py                                # code coverage -> sim/coverage/code_coverage_*.txt
 python env/scripts/update_vplan.py --since rNNNN                  # status and evidence columns of plan_vplan.csv
 python env/scripts/make_report.py --since rNNNN                   # verification_report.md
+python env/scripts/header_check.py                                # testcase headers and checkpoints (R-281/R-286) -> sim/header_check.md
+python env/scripts/ops_audit.py                                   # static scenario audit -> sim/ops_audit.md
+python env/scripts/oracle_audit.py                                # negative controls of every scenario -> sim/oracle_audit.md
+python env/scripts/testcase_review.py --since rNNNN               # testcase quality + review ledger -> docs/testcase_quality.md, testcase_review.csv
+python env/scripts/priority_waves.py [test ...]                   # waveforms of the ten priority tests -> sim/waveform_index.csv
 ```
 
 Generators: `cd tests/usb20 && python gen_<name>.py <seed> [args]` writes `tests/ops/<name>_s<seed>.ops`.
+
+Testcase headers (2026-11-25): each generator starts with the R-281 header; its checkpoint table lists the IDs that the generator
+emits as op `CHK <id>` before the checks of that checkpoint. sim.log shows `CHKPT @t: <id>` and `CHKPT_END <id> checks=<n>`; a
+checkpoint without a check fails the run. Configuration-sweep tests have their header in `tests/usb20/tc_<test>.txt`; the shared
+bring-up checkpoints (DBR-, DBU-, HBU-) are catalogued in the docstrings of usb2lib.py, devlib.py and hostlib.py.
+Header testcase (2026-11-25): mỗi generator mở đầu bằng header R-281; mỗi ID checkpoint là một op `CHK` trong kịch bản, log ghi lại
+checkpoint đã chạm và số check của nó; checkpoint không có check làm run FAIL.
 
 Notes:
 - `rtl/filelist.f` lists the FIFO RAM cell `000_Common/rtl_cells/VLSIT_CELL_SRAM_1W1R.sv` (added 2026-11-24); the fault build

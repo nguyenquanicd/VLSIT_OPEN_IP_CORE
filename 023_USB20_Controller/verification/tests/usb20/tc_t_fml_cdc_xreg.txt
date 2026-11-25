@@ -1,0 +1,41 @@
+Testcase header of t_fml_cdc_xreg (unit test of the register crossing m_usb2_xreg with its own testbench env/tb/tb_xreg.sv; no
+operation file; written 2026-11-25). The checkpoint IDs are the first argument of every chk() call of tb_xreg.sv; the log lists
+each ID reached with its count (CHKPT and CHKPT_END lines).
+
+Test ID and title: t_fml_cdc_xreg - register crossing: whole words in order, command FIFO free count, drop and flag on full, event sets
+Priority and rationale: P1. Every CSR write to the CLK-PHY engines and every status event crosses here (REQ-REG-002/003, CDC-002); a torn
+  or reordered word is a silent configuration error. Run over five clock ratios (bus faster, slower and equal to CLK-PHY).
+Purpose: show that every accepted CSR write reaches its shadow slot as one whole 32-bit word, in write order, once; that o_xq_free stays in
+  0 to 8 and returns to 8; that a write at o_xq_free = 0 is dropped and flagged by o_xq_ovf; and that event sets from CLK-PHY arrive as
+  kind-1 updates without loss.
+Requirements and features: REQ-CLK-003; REQ-REG-002; ERR-016; CDC-002. Features cdc, csr_apb.
+DUT configuration and preconditions: build xreg (top tb_xreg, m_usb2_xreg with NS 8 shadow slots and NA 4 status words); clock periods
+  from +pb (CLK-BUS) and +pp (CLK-PHY) in ps with a random start phase; seed from +seed; 20000 CLK-BUS cycles.
+Software flow: N/A: unit test of a crossing block without a CSR file. The bus side writes slot/word pairs on 55 percent of the CLK-BUS
+  cycles (sequence number in the top byte), including writes while the FIFO is full; the PHY side pulses one event bit of a random
+  status word on 3 percent of the CLK-PHY cycles; after 20000 cycles the writes stop and the FIFO drains for 200 cycles.
+Stimulus: random writes and event pulses as above; clock ratios of testlist.csv: pb/pp = 10000/16667, 50000/16667, 3000/16667,
+  5000/33333, 16667/16667 ps.
+Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
+  XRG-FREE | REQ-REG-002 | every bus write | o_xq_free between 0 and 8 | tb_xreg chk | same cycle | count above 8
+  XRG-OVF | REQ-REG-002, ERR-016 | every write that o_xq_ovf flags | o_xq_free is 0 at that write | tb_xreg chk | same cycle | a write dropped while entries are free
+  XRG-DROP | REQ-REG-002 | writes presented at o_xq_free = 0 | none accepted (all dropped) | tb_xreg chk | end of run | a write accepted into a full FIFO
+  XRG-WORD | REQ-REG-003, CDC-002 | every change of a shadow slot in CLK-PHY | the new value is a whole accepted word of that slot, later than the previous one | tb_xreg chk | each CLK-PHY cycle | torn, stale, reordered or dropped word
+  XRG-FINAL | REQ-REG-003 | after the drain | each slot holds the last accepted word written to it | tb_xreg chk | 200 bus cycles after the stop | a write lost
+  XRG-DRAIN | REQ-REG-002 | after the drain | o_xq_free back to 8 | tb_xreg chk | 200 bus cycles | entries stuck
+  XRG-SLOT | REQ-CLK-003 | every kind-1 update | the slot number exists (below NA) | tb_xreg chk | each update | update to a non-existent slot
+  XRG-EVENT | REQ-CLK-003 | end of run | event sets seen >= sent - NA (at most one pending per word) | tb_xreg chk | end of run | an event lost
+  XRG-ACTIVITY | test sanity | end of run | more than 50 writes accepted; some dropped when the bus side is faster | tb_xreg chk | end of run | the stimulus did not exercise the crossing
+Shared checkpoints: none (own testbench).
+Expected outcome: RESULT PASS with all nine checkpoints reached for every clock ratio and seed.
+Known gaps: the reset domain crossing and the push of published words (i_pub) are not driven here (i_pub stays 0); they are covered by
+  t_dev_xreg_race and t_host_xreg_race. A check with a constant-false term ("ovf with free entries", always true) was removed on
+  2026-11-25; its intent is XRG-OVF.
+Defect/fault targeted: torn or reordered words in the crossing, free count off by one, a write accepted into a full FIFO, lost events.
+Checker/oracle: scoreboard of accepted writes (sequence number per slot) in tb_xreg.sv, written from REQ-REG-002/003; formal companion
+  harness of the crossing in env/formal.
+Reproducibility: from verification: python env/scripts/run.py sim t_fml_cdc_xreg xreg tests/ops/none.ops +seed=SEED +pb=10000 +pp=16667 (other rows: see
+  the extra column of testlist.csv)
+Waveform: N/A: outside the ten priority tests of R-283; build xreg with --trace and run with +vcd.
+Evidence: runs of t_fml_cdc_xreg in sim/index.csv (CHKPT lines in sim.log); review row in docs/testcase_review.csv.
+AI-generated candidate (R-117).

@@ -22,7 +22,7 @@ OPS = ['NOP', 'ADD', 'SUB', 'MUL', 'RED', 'MOV', 'LDI', 'LDC', 'SETM', 'POW', 'S
        'AND', 'OR', 'SHR', 'SHL', 'SETB', 'TRUNCE',
        'CALL', 'RET', 'JMP', 'BRF', 'BRN', 'END', 'ERR',
        'RDB', 'WRB', 'LDK', 'LDR',
-       'HDCLR', 'HDREG', 'HDIMM', 'HGO', 'HRD', 'HRDV', 'HMID', 'LDV']
+       'HDCLR', 'HDREG', 'HDIMM', 'HGO', 'HRD', 'HRDV', 'HMID', 'LDV', 'XORB']
 OPC = {n: i for i, n in enumerate(OPS)}
 
 AREA_MSG, AREA_SIG, AREA_PK, AREA_RES = 0, 1, 2, 3
@@ -114,6 +114,7 @@ class Asm:
     def hrdv(self, d): self.emit('HRDV', d)
     def hmid(self): self.emit('HMID')
     def ldv(self, d, sel): self.emit('LDV', d, imm=sel)
+    def xorb(self, d, a, byte): self.emit('XORB', d, a, imm=byte)
 
 
 class Fail(Exception):
@@ -312,6 +313,8 @@ class Machine:
                     data = self.head + bytes(self.buf[s + self.len_msg:s + self.len_msg + self.len_ctx]) + self.mid + bytes(self.buf[s:s + self.len_msg])
                 elif rb == 1:
                     data = self.head + bytes(self.buf[s:s + self.len_msg])
+                elif rb == 3:
+                    data = self.head + self.mid
                 else:
                     data = self.head
                 name = {1: 'sha256', 2: 'sha384', 3: 'sha512', 9: 'sha3_256', 10: 'sha3_384', 11: 'sha3_512'}.get(mode)
@@ -325,6 +328,8 @@ class Machine:
                 R[rd] = self._bytes_to_int(self.digest[off:off + ln], rb)
             elif op == 'HMID':
                 self.hsel = 1
+            elif op == 'XORB':
+                R[rd] = R[ra] ^ int.from_bytes(bytes([imm & 0xFF]) * 72, 'big')
             elif op == 'LDV':
                 R[rd] = (self.f_ph, self.len_ctx)[imm]
             elif op == 'HRDV':

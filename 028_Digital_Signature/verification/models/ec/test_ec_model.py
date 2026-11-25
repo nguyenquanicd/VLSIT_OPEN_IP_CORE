@@ -251,11 +251,14 @@ def test_ecdsa():
         m = run(c, P.prog_ecdsa(c, 'sign'), buf, key=x.to_bytes(nb, 'big'), pool=pool, msg_len=len(msg), op_hash=hop)
         assert m.ok and int.from_bytes(m.buf[600:600 + nb], 'big') == r and int.from_bytes(m.buf[600 + nb:600 + 2 * nb], 'big') == s, \
             '%s sign differs from RFC 6979 (%s, hash %d)' % (cname, msg, hop)
+        # deterministic nonce of RFC 6979 computed by the program: the signature must equal the vector
+        m = run(c, P.prog_ecdsa(c, 'sign', det=HASH_OF_OP[hop]), buf, key=x.to_bytes(nb, 'big'), msg_len=len(msg), op_hash=hop)
+        assert m.ok and int.from_bytes(m.buf[600:600 + nb], 'big') == r and int.from_bytes(m.buf[600 + nb:600 + 2 * nb], 'big') == s,             '%s deterministic sign differs from RFC 6979 (%s, hash %d)' % (cname, msg, hop)
         if hop == 0 and msg == b'sample':
             m = run(c, P.prog_ecdsa(c, 'keygen'), buf, key=x.to_bytes(nb, 'big'))
             assert int.from_bytes(m.buf[600:600 + nb], 'big') == ux and int.from_bytes(m.buf[600 + nb:600 + 2 * nb], 'big') == uy
         n += 1
-    print('ECDSA P-256/384/521: %d RFC 6979 vectors verify, sign (given k) and keygen OK' % n)
+    print('ECDSA P-256/384/521: %d RFC 6979 vectors verify, sign (given k), sign (RFC 6979 nonce by the program) and keygen OK' % n)
 
 
 def test_secp256k1():

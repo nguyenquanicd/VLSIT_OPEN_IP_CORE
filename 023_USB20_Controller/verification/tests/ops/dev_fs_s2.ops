@@ -38,6 +38,7 @@ B cg_chirp_d.fs_fallback
 B cg_speed.fs
 B cg_chirp_d.short
 SG 1 960
+CHK DFS-ROW
 XP 0 14 df
 B cg_ep.last
 W 490 2000
@@ -45,6 +46,7 @@ W 290 4000
 W 450 100080
 W 410 481040
 IB 190
+CHK DFS-OUT
 TK 1 7b 4 0
 DT 3 0 40 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
 XH 2 190
@@ -56,16 +58,19 @@ XH 2 190
 GAP 1 18
 I 3c
 IB bb8
+CHK DFS-MEM
 MC 2000 5e 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb 26 ae 4 61 36 1e 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf
 MW 4000 40 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d
 W 290 4000
 W 250 80040
 W 210 481040
 IB bb8
+CHK DFS-IN
 TK 9 7b 4 0
 XD 3 7d0 40 82 41 50 5e 0 c5 16 7e 4d 12 2 b0 39 92 ac fa f 9d e5 17 87 cd 4e f2 73 2f a1 34 c e5 41 c9 f9 a7 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d
 GAP 1 18
 HS 2
 IB 258
+CHK DFS-CLEAN
 R 10 0 12300
 END

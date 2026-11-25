@@ -2238,6 +2238,7 @@ ID ea6
 ID ea6
 ID ea6
 ID ea6
+CHK HED-ROLL
 SOFW 1
 B cg_sof.rollover
 FLUSH

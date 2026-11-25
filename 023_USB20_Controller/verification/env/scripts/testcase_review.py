@@ -5,11 +5,13 @@ For every simulation test of tests/usb20/testlist.csv it collects, from retained
   - the final runs since --since (simulation verdict and the executed check count from the RESULT line of sim.log);
   - the negative-control results of sim/oracle_audit.csv (GAP = passed although the control broke the DUT side);
   - the static flags of sim/ops_audit.csv (FLUSH count, bins without a check, weak checks);
-  - header compliance: R-281 asks for a structured header with checkpoints, R-286 for at least five documented check IDs;
-    the generators have a prose docstring only, so both are reported as gaps until the headers are written;
+  - header compliance (R-281, R-286) from sim/header_check.csv (env/scripts/header_check.py: fields, at least five documented
+    checkpoint IDs, every ID emitted and followed by a check) and the checkpoints actually reached: the distinct IDs of the CHKPT
+    lines in sim.log of the passing final runs (the harness fails a run whose checkpoint executed no check);
   - the waveform of the run when the priority list names the test (R-283; path and SHA-256 from sim/waveform_index.csv).
-The quality verdict is separate from the simulation result: invalid (a negative control showed a GAP), weak (passes but the
-header/check-ID gaps or static flags remain), not_run, or effective (no GAP, no flag, header complete). The engineer columns
+The quality verdict is separate from the simulation result: invalid (a negative control showed a GAP), not_run, weak (passes but
+the header check fails, fewer than five checkpoints were reached in passing runs, a weak check remains, or the header lists known
+gaps), or effective (none of these). FLUSH counts are reported for information. "effective" is an AI pre-review only. The engineer columns
 of the ledger stay 'pending': an AI cannot fill them (R-284).
     python env/scripts/testcase_review.py --since rNNNN      -> docs/testcase_quality.md, docs/testcase_review.csv"""
 import csv
@@ -50,6 +52,17 @@ def main():
     if os.path.exists(wp):
         for r in csv.DictReader(open(wp)):
             waves[r['test']] = r
+    hdr = {}
+    hp = os.path.join(P.SIMOUT, 'header_check.csv')
+    if os.path.exists(hp):
+        for r in csv.DictReader(open(hp)):
+            hdr[r['test']] = r
+    gaps_known = {}
+    for t, h in hdr.items():
+        hf = os.path.join(P.TESTS, h['header'])
+        if os.path.exists(hf):
+            txt = open(hf, encoding='utf-8').read()
+            gaps_known[t] = 'Known gaps' in txt[:txt.find('AI-generated candidate')]
     tests = []
     for r in rows:
         if r['test'] not in [t[0] for t in tests]:
@@ -61,13 +74,16 @@ def main():
         srcs = [(g, sha(os.path.join(P.TESTS, g))) for g in gens if os.path.exists(os.path.join(P.TESTS, g))]
         rl = runs.get(test, [])
         npass = sum(1 for _, v in rl if v.startswith('PASS'))
-        checks = []
-        for rid, _ in rl:
+        checks, reached = [], set()
+        for rid, v in rl:
             lp = os.path.join(P.run_dir(rid), 'sim.log')
             if os.path.exists(lp):
-                m = re.search(r'RESULT \w+ checks=(\d+)', open(lp, errors='ignore').read())
+                lt = open(lp, errors='ignore').read()
+                m = re.search(r'RESULT \w+ checks=(\d+)', lt)
                 if m:
                     checks.append(int(m.group(1)))
+                if v.startswith('PASS'):
+                    reached |= set(re.findall(r'CHKPT @\d+: (\S+)', lt))
         au = audit.get(test, [])
         gaps = ['%s:%s' % (a['control'], a['source']) for a in au if a['result'] == 'GAP']
         caught = sum(1 for a in au if a['result'] == 'caught')
@@ -75,16 +91,22 @@ def main():
         flush = sum(int(o['flush']) for o in oa)
         nochk = sum(int(o['bins_without_check']) for o in oa)
         weak = [o['weak checks'] for o in oa if o['weak checks']]
+        h = hdr.get(test, {})
+        hok = h.get('result') == 'pass'
         if not rl:
             verdict = 'not_run'
         elif gaps:
             verdict = 'invalid'
+        elif not hok or len(reached) < 5 or weak or gaps_known.get(test):
+            verdict = 'weak'
         else:
-            verdict = 'weak'                          # header (R-281) and check-ID list (R-286) not yet written for any generator
+            verdict = 'effective'
         w = waves.get(test, {})
         q_rows.append((test, ' '.join(gens), '%d/%d' % (npass, len(rl)), '%d..%d' % (min(checks), max(checks)) if checks else '-',
                        '%d caught, %d GAP' % (caught, len(gaps)) if au else 'not audited', '; '.join(gaps[:4]), flush, nochk,
-                       '; '.join(weak)[:120], 'no (prose docstring)', 'no', w.get('waveform', 'N/A (outside the priority set)'), verdict))
+                       '; '.join(weak)[:120], '%s (%s)' % (h.get('result', 'missing'), h.get('header', '-')),
+                       '%s listed, %d reached' % (h.get('checkpoints_listed', '0'), len(reached)), 'yes' if gaps_known.get(test) else 'no',
+                       w.get('waveform', 'N/A (outside the priority set)'), verdict))
         ledger.append([test, ' '.join(g for g, _ in srcs), ' '.join(h for _, h in srcs), w.get('waveform', 'N/A (outside the priority set of R-283)'),
                        w.get('sha256', 'N/A'), ' '.join(rid for rid, _ in rl[-6:]), ' '.join(sorted({x['target'] for x in rr})),
                        ' '.join(sorted({x['seeds'] for x in rr})), 'pending', 'pending', 'pending', 'pending', 'pending', 'pending',
@@ -100,8 +122,8 @@ def main():
           'Generated by `env/scripts/testcase_review.py --since r%04d`. The quality verdict is separate from the simulation result. '
           'GAP = a negative control (`env/scripts/oracle_audit.py`) broke the DUT side and the scenario still passed. '
           'The engineer review of every source and waveform (R-284) is pending in `testcase_review.csv`; no row is human-reviewed.' % since, '',
-          '| Test | Generators | Final runs PASS | Checks executed | Negative controls | GAPs | FLUSH | Bins without check | Weak checks | R-281 header | R-286 five check IDs | Waveform | Quality |',
-          '|---|---|---|---|---|---|---|---|---|---|---|---|---|']
+          '| Test | Generators | Final runs PASS | Checks executed | Negative controls | GAPs | FLUSH | Bins without check | Weak checks | R-281 header check | R-286 checkpoints (header / reached in passing runs) | Known gaps in header | Waveform | Quality |',
+          '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|']
     md += ['| %s |' % ' | '.join(str(x).replace('|', '/') for x in q) for q in q_rows]
     cnt = {}
     for q in q_rows:

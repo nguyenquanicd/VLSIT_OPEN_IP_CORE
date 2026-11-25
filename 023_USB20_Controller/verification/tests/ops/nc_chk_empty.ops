@@ -1,0 +1,6 @@
+# negative control of the CHK op (2026-11-25): EMPTY has no check and must fail the run
+CHK EMPTY
+I 10
+CHK FULL
+R 0 10000 ffff0000
+END

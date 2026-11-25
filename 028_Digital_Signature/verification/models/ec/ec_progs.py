@@ -328,7 +328,68 @@ def prog_ed448(c, op, vas=False):
     return a
 
 
-def prog_ecdsa(c, op, vas=False):
+HASH_LEN = {H_SHA256: (32, 64), H_SHA384: (48, 128), H_SHA512: (64, 128)}
+
+
+def rfc6979_k(a, c, hmode):
+    """k of RFC 6979 section 3.2 into R30 (HMAC_DRBG with the hash hmode). Inputs: R25 = x, R26 = bits2int(h1) mod q.
+    Uses R0 (K), R1 (V), R2/R3 (ipad/opad bytes), R4, R5 (temporaries), R6 = 0, R7 = 1, R8 (first block of T)."""
+    hlen, block = HASH_LEN[hmode]
+    rlen = c.nbytes
+    nblk = -(-c.nbits // (8 * hlen))
+    tbytes = -(-c.nbits // 8)
+
+    def pad(reg):
+        n = block - hlen
+        while n > 0:
+            ln = min(n, 72)
+            a.hdreg(reg, ln, BE)
+            n -= ln
+
+    def hmac(dst, parts):
+        a.xorb(4, 0, 0x36)
+        a.hdclr(); a.hdreg(4, hlen, BE); pad(2); a.hmid()
+        for r, ln in parts:
+            a.hdreg(r, ln, BE)
+        a.hgo(hmode, 3); a.hrdv(5)
+        a.xorb(4, 0, 0x5C)
+        a.hdclr(); a.hdreg(4, hlen, BE); pad(3); a.hmid(); a.hdreg(5, hlen, BE)
+        a.hgo(hmode, 3); a.hrdv(dst)
+
+    a.ldi(2, 0); a.xorb(2, 2, 0x36)
+    a.ldi(3, 0); a.xorb(3, 3, 0x5C)
+    a.ldi(6, 0); a.ldi(7, 1)
+    a.ldi(0, 0)                                         # K = 0x00 ... 00
+    a.ldi(1, 0); a.xorb(1, 1, 0x01)                     # V = 0x01 ... 01
+    for sep in (6, 7):
+        hmac(0, [(1, hlen), (sep, 1), (25, rlen), (26, rlen)])
+        hmac(1, [(1, hlen)])
+    a.label('K6979')
+    hmac(1, [(1, hlen)])
+    if nblk == 1:
+        a.trunce(30, 1)
+    else:
+        # T = V1 || V2 || ...; k = leftmost qlen bits of the first ceil(qlen / 8) bytes of T
+        a.mov(8, 1)
+        have = hlen
+        while have < tbytes:
+            hmac(1, [(1, hlen)])
+            take = min(hlen, tbytes - have)
+            a.shl(8, 8, 8 * take); a.shr(9, 1, 8 * (hlen - take)); a.or_(8, 8, 9)
+            have += take
+        a.shr(30, 8, 8 * tbytes - c.nbits)
+    a.ldc(16, 'N'); a.ltu(0, 30, 16); a.isz(1, 30); a.fnot(1, 1); a.fand(0, 0, 1)
+    a.brn(0, 'K6979_RETRY')
+    a.jmp('K6979_OK')
+    a.label('K6979_RETRY')
+    hmac(0, [(1, hlen), (6, 1)])
+    hmac(1, [(1, hlen)])
+    a.jmp('K6979')
+    a.label('K6979_OK')
+
+
+
+def prog_ecdsa(c, op, vas=False, det=None):
     a = Asm()
     nb = c.nbytes
     a.label('START')
@@ -376,12 +437,19 @@ def prog_ecdsa(c, op, vas=False):
     else:
         a.ldk(25, 0, nb, BE)                          # d
         a.ldc(16, 'N'); a.ltu(0, 25, 16); a.isz(1, 25); a.fnot(1, 1); a.fand(0, 0, 1); a.brn(0, 'BADKEY')
-        if op == 'sign':
+        if op == 'sign' and det is not None:
+            # deterministic nonce (RFC 6979) with the hash det; z = bits2int(H(m)) mod q
+            a.hdclr(); a.hgo(det, 1)
+            a.hrdv(26); a.trunce(26, 26)
+            a.setm(SEL_N); a.red(26, 26); a.setm(SEL_P)
+            rfc6979_k(a, c, det)
+        elif op == 'sign':
             a.ldr(17, 0, nb, BE); a.ldr(18, nb, 8, BE)
             a.setm(SEL_NM1); a.red(17, 17); a.red(18, 18)
             a.ldc(16, 'HIFACTOR'); a.mul(18, 18, 16); a.add(30, 17, 18)
             a.setm(SEL_N); a.ldi(16, 1); a.add(30, 30, 16)                  # k in 1..n-1
             a.setm(SEL_P)
+        if op == 'sign':
             a.call('LOADG')
             a.smul(30, c.nbits, 'DBL', 'ADD')
             a.ldc(16, 'PM2'); a.pow(20, 2, 16); a.mul(21, 0, 20)

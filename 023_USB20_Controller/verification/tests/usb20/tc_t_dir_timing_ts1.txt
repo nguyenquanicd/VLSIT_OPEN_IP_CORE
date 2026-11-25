@@ -1,0 +1,31 @@
+Testcase header of t_dir_timing_ts1 (configuration sweep: real timer values, PARA_USB2_TSCALE = 1; written 2026-11-25).
+
+Test ID and title: t_dir_timing_ts1 - chirp, suspend, remote wakeup, host reset and SOF timing at the real (unscaled) values
+Priority and rationale: P1. All other runs scale the timers by 16 or 256; only this test shows the real millisecond values of USB 2.0.
+Purpose: show that the device chirp (1.0 to 7.0 ms), suspend reversion (3.0 to 3.125 ms), remote-wakeup K (1 to 15 ms after 5 ms idle),
+  the host reset (50 to 52 ms) and the SOF interval (125 us +- 62.5 ns) hold with TSCALE = 1.
+Requirements and features: REQ-VER-002 (timer scaling); REQ-FUNC-010, 011, 013, 018, 019; USB 2.0 7.1.7.5 to 7.1.7.7. Member generators:
+  gen_dev_suspend_lpm_reset ts1, gen_dev_enum_bulk_dma ts1 (dev_utmi8_axim_ts1), gen_host_enum_bulk_dma ts1 (host_utmi8_axim_ts1).
+DUT configuration and preconditions: builds dev_utmi8_axim_ts1 and host_utmi8_axim_ts1 (TSCALE 1); preconditions of the member generators.
+Software flow: the software flow of each member generator (see their headers).
+Stimulus: the member operation files generated with the argument ts1 (us() returns real cycle counts).
+Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
+  DBR-CHIRP | REQ-FUNC-013 | device bus reset | chirp K of 1.0 to 7.0 ms real time | TB WP, XP, XC | 8 ms | chirp length outside the real window
+  DSL-SUSP | REQ-FUNC-018 | idle bus | full-speed row at 3.0 to 3.125 ms, suspend within 10 ms, real time | TB WP, GAP, P, R | 10 ms | timer value wrong at TSCALE 1
+  DSL-RWAKE | REQ-FUNC-019 | remote wakeup | K after 5 ms of idle, 1 to 15 ms long, real time | TB WP, GAP, XP, XC, P | 16 ms | timing wrong
+  DSL-RESUME | REQ-FUNC-018 | host resume of 20 ms | back to high speed within 500 us | TB WP, P, R | 500 us | resume timing wrong
+  HBU-RST50 | REQ-FUNC-011 | host port reset | reset ends 50 to 52 ms after it started, real time | TB P, TC, R | 60 ms | reset too short or long
+  HEB-SOF1 | REQ-FUNC-010 | SOF after enable | interval 125 us +- 62.5 ns (no scaling jitter at TSCALE 1) | TB SOF | 500 us | interval outside +- 62.5 ns
+  HEB-SOF2 | REQ-FUNC-010 | after the transfers | same SOF interval | TB SOF | 500 us | interval drift under traffic
+  DEB-BOUT | REQ-FUNC-004 | device bulk OUT at TSCALE 1 | ACKs and data | TB XH, MC, R | 400 CLK-PHY | data path depends on the timer scale
+Shared checkpoints: DBU-VER, DBR-HS, DBU-ENUM, HBU-VER, HBU-CONN, HBU-RSTDRV, HBU-CHIRP, HBU-RECOV.
+Expected outcome: all three member operation files pass at TSCALE 1 with their checkpoints reached.
+Defect/fault targeted: timer constants that are only right when scaled, SOF timer errors hidden by the scaled tolerance (FND-009).
+Checker/oracle: the member generators with real-time windows; harness TC/SOF/WP/XC/GAP.
+Reproducibility: cd tests/usb20; python gen_dev_suspend_lpm_reset.py 1 ts1; python gen_dev_enum_bulk_dma.py 1 ts1; python
+  gen_host_enum_bulk_dma.py 1 ts1; from verification: python env/scripts/run.py sim t_dir_timing_ts1 host_utmi8_axim_ts1
+  tests/ops/host_enum_bulk_dma_ts1_s1.ops +seed=1 (device rows on dev_utmi8_axim_ts1)
+Waveform: N/A: outside the ten priority tests of R-283 (sim/waveform_index.csv). To capture one: python env/scripts/build.py BUILD --trace,
+  then run.py sim with the trace build and +vcd (+vcd_from=NS +vcd_to=NS for a window).
+Evidence: runs of t_dir_timing_ts1 in sim/index.csv (CHKPT lines in sim.log); review row in docs/testcase_review.csv.
+AI-generated candidate (R-117).

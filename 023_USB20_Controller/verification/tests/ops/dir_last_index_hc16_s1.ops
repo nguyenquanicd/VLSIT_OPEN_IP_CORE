@@ -40,6 +40,7 @@ W 77c 1
 W 6fc 1000
 W 6bc 80040
 W 63c 80028840
+CHK DLI-HCIN
 XT 9 0 1 7530
 ID 8
 DT 3 0 40 44 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd
@@ -47,6 +48,7 @@ XH 2 7d0
 P 73c 1 1 384
 IB 258
 MC 1000 40 44 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd
+CHK DLI-HCIRQ
 P 10 80000 80000 190
 W 73c 1
 B cg_param.hc_max

@@ -42,6 +42,7 @@ W 650 20182
 W 6d0 1c00
 W 690 80040
 W 610 80560840
+CHK HED-BSPLIT
 XS 2 0 3 0 0 2 7530
 XT 1 5 1 bb8
 XD 3 bb8 40 44 20 82 3c fd e6 f1 c2 6b 30 f9 e c7 dd 1 e4 88 75 34 a2 f b d 4 c3 6e d8 e 71 e0 fd 77 b0 76 70 eb 94 b d5 33 5f 97 3d aa d8 61 9b 91 ff c9 11 f5 7c ce d4 58 bb bf 2c e0 37 53 c9 bd

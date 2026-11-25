@@ -43,6 +43,7 @@ W 6cc 1b00
 W 68c 80008
 W 78c 28
 W 60c 80579008
+CHK HED-PSPLIT
 XS 2 0 3 0 0 3 7530
 XT 9 5 2 bb8
 ID 8
@@ -66,6 +67,7 @@ SOFD 1 1
 SOFM
 B cg_psplit.uf_each
 B cg_psplit.third_cs
+CHK HED-PSPLIT4
 XS 2 0 3 0 0 3 753
 FLUSH
 END

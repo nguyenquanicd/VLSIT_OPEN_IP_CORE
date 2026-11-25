@@ -1,0 +1,29 @@
+Testcase header of t_ulpi_axis (configuration sweep: AXI-slave wrapper over ULPI; written 2026-11-25).
+
+Test ID and title: t_ulpi_axis - AXI4 slave windows, refused accesses and the request threshold on the ULPI + AXI-slave wrapper
+Priority and rationale: P2. The fourth wrapper combination (ULPI PHY, AXI slave) shares no harness top with the others.
+Purpose: show that the window traffic, the refused accesses and the req_thr behaviour of the AXI-slave tests hold on m_usb2_top_ulpi_axis.
+Requirements and features: REQ-FUNC-027; REQ-IF-003, 007, 009; ERR-008; DEC-010, 011, 038. Member generators: gen_dev_axis_win (seeds 1 2),
+  gen_fi_axis_err (seed 1), gen_dev_axis_thr (seed 1) on dev_ulpi_axis.
+DUT configuration and preconditions: build dev_ulpi_axis (tb_usb2_ulpi_axis with the ULPI PHY BFM).
+Software flow: the software flow of each member generator (see their headers).
+Stimulus: the member operation files.
+Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
+  DAW-WR | REQ-IF-007 | window write bursts | BRESP OKAY | TB AW | burst completes | refused or hung
+  DAW-INPKT | REQ-FUNC-004 | IN tokens over ULPI | DATA0/DATA1 with the written bytes | TB XD | 400 CLK-PHY | data or toggle wrong
+  DAW-RD | REQ-IF-007, 009 | window read of a queued OUT packet | rows, RRESP OKAY, RLAST | TB DR, AR | 600 bus cycles | wrong rows
+  DAW-FULL | REQ-FUNC-027 | write into a full region | held back (WREADY low) | TB DR, AW, AWS, XD | 400 bus cycles | overwrite
+  FAX-OUTSIDE | ERR-008 | access outside the windows | SLVERR with complete bursts, axi_err | TB AW, AR, P, R | 40 polls | no error or short burst
+  FAX-RECOVER | REQ-IF-007 | read through the right window after refusals | packet unchanged, request withdrawn | TB AR, DR, R | 80 bus cycles | side effect of a refused access
+  DAT-EQUAL | DEC-038 | exactly req_thr free rows | o_dma_req high | TB DR, AW | 40 bus cycles | off by one
+  DAT-BELOW | DEC-038 | fewer free rows than req_thr | o_dma_req low | TB DR, DX | 40 bus cycles | request below the threshold
+Shared checkpoints: DBU-VER, DBR-CHIRP, DBR-HS, DBU-ENUM.
+Expected outcome: all member operation files pass on the ULPI + AXI-slave wrapper with their checkpoints reached.
+Defect/fault targeted: wrapper-specific wiring of the AXI slave or the ULPI interface.
+Checker/oracle: the member generators; AXI master BFM and ULPI PHY BFM of the harness.
+Reproducibility: cd tests/usb20; python gen_dev_axis_win.py SEED; python gen_fi_axis_err.py 1; python gen_dev_axis_thr.py 1; from
+  verification: python env/scripts/run.py sim t_ulpi_axis dev_ulpi_axis tests/ops/dev_axis_win_sSEED.ops +seed=SEED
+Waveform: N/A: outside the ten priority tests of R-283 (sim/waveform_index.csv). To capture one: python env/scripts/build.py BUILD --trace,
+  then run.py sim with the trace build and +vcd (+vcd_from=NS +vcd_to=NS for a window).
+Evidence: runs of t_ulpi_axis in sim/index.csv (CHKPT lines in sim.log); review row in docs/testcase_review.csv.
+AI-generated candidate (R-117).

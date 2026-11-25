@@ -87,7 +87,9 @@ def scan(path):
 
 def main():
     os.chdir(P.V)
-    rows = [r for r in csv.DictReader(open(P.TESTLIST)) if r['kind'] == 'sim' and r['source'] != '-']
+    allsim = [r for r in csv.DictReader(open(P.TESTLIST)) if r['kind'] == 'sim']
+    rows = [r for r in allsim if r['source'] != '-']
+    tbonly = sorted({r['test'] for r in allsim if r['source'] == '-'})   # own testbench, no operation file: H1/H2 here, reach from sim.log
     lib_ids = {}
     for lib in LIBS:
         lib_ids.update(parse(docstring(os.path.join(P.TESTS, lib)))[1])
@@ -98,7 +100,7 @@ def main():
         gen_rows[g] = (f, rr)
         for t in re.findall(r'\bt_[a-z0-9_]+', f.get('Test ID and title', '')):
             headers.setdefault(t, (g, f, rr))
-    for t in sorted({r['test'] for r in rows}):
+    for t in sorted({r['test'] for r in rows} | set(tbonly)):
         tc = os.path.join(P.TESTS, 'tc_%s.txt' % t)
         if os.path.exists(tc):
             f, rr = parse(docstring(tc))
@@ -122,7 +124,7 @@ def main():
         for i in sorted(set(rr) - emitted_g.get(g, set())):
             errs.append(('H3', g, 'checkpoint %s of the header is never emitted by %s' % (i, g)))
     out = []
-    for t in sorted({r['test'] for r in rows}):
+    for t in sorted({r['test'] for r in rows} | set(tbonly)):
         if t not in headers:
             errs.append(('H1', t, 'no header names this test'))
             out.append((t, '-', 0, len(emitted_t.get(t, ())), 'no header'))
@@ -143,9 +145,11 @@ def main():
             errs.append(('H2', t, '%s documents %d checkpoint IDs (own rows and shared IDs, at least 5)' % (hf, len(set(rr) | sh))))
         known = set(rr)
         shared = len(set(re.findall(r'\bt_[a-z0-9_]+', f.get('Test ID and title', '')))) > 1
-        for i in sorted(set() if shared else known - emitted_t.get(t, set())):   # a header of several tests: H3 per generator
+        for i in sorted(set() if (shared or t in tbonly) else known - emitted_t.get(t, set())):   # a header of several tests: H3 per generator
             errs.append(('H3', t, '%s lists %s, which no operation file of the test emits' % (hf, i)))
         reach = emitted_t.get(t, set())
+        if t in tbonly:                                     # checkpoints are chk() IDs of the testbench, counted from sim.log
+            reach = set(rr)
         if len(reach) < 5:
             errs.append(('H5', t, 'the operation files reach %d distinct checkpoints (at least 5)' % len(reach)))
         ok = not [e for e in errs if e[1] in (t, hf)]

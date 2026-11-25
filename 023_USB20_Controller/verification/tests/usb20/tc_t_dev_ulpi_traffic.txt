@@ -1,0 +1,33 @@
+Testcase header of t_dev_ulpi_traffic (configuration sweep: the device generators on the ULPI wrapper; written 2026-11-25).
+
+Test ID and title: t_dev_ulpi_traffic - the device scenarios through the ULPI wrapper and the ULPI PHY BFM
+Priority and rationale: P1. ULPI is one of the two PHY interfaces of the product; the BFM presents virtual UTMI+ to the same checks.
+Purpose: show that enumeration (PHY register writes for the chirp), bulk, error handling (RxError as an RX CMD inside a packet), iso,
+  scatter-gather, suspend/resume/LPM (SuspendM through the function control register) and random traffic work over ULPI.
+Requirements and features: REQ-IF-003 (ULPI), REQ-IF-012 (mode control); ULPI 1.1; plus the requirements of each member generator
+  (gen_dev_enum_bulk_dma ulpi, gen_fi_bus_errors ulpi, gen_dev_iso_int_mix, gen_dev_sg_dma, gen_dev_suspend_lpm_reset ulpi,
+  gen_dev_rand_perf rand, gen_dev_edge sections with ulpi).
+DUT configuration and preconditions: build dev_ulpi_axim (m_usb2_top_ulpi_axim, ROLE device, TSCALE 256) with env/tb/ulpi_phy_bfm.sv.
+Software flow: the software flow of each member generator, unchanged (see the header of each gen_*.py).
+Stimulus: the member operation files with the testlist seeds; the BFM converts UTMI+ operations to ULPI bus cycles.
+Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
+  DEB-ID | section 11.3 u2_build | first reads | build fields report ULPI (phy_ulpi 1) | TB R | one access | wrong build field
+  DEB-ENUM | REQ-FUNC-013, REQ-IF-003 | bus reset over ULPI | busrst, enum, high speed (the chirp row reached through register writes) | TB P, R, XP | 400 polls | no high speed over ULPI
+  DEB-BOUT | REQ-FUNC-004 | bulk OUT over ULPI | ACKs, data, residue | TB XH, MC, R | 400 CLK-PHY | data lost in the ULPI receive path
+  FBE-RXERR | REQ-IF-003, REQ-ERR-001 | RxError delivered as an RX CMD inside the packet | no handshake, stuf_err | TB XN, R | 150 CLK-PHY | the RX CMD not treated as an error
+  DIM-HBISO | REQ-FUNC-009 | high-bandwidth iso IN over ULPI | PID order and payloads | TB XD, GAP | 2000 CLK-PHY | transmit path loses bytes
+  DSG-SGOUT | REQ-FUNC-036 | scatter-gather OUT | buffers as specified | TB XH, MC | per packet | data wrong
+  DSL-SUSP | REQ-FUNC-018, REQ-IF-012 | idle bus | full-speed row and SuspendM low written to the PHY in time | TB WP, GAP, P, R | 10 ms scaled | register write late or lost
+  DSL-RESUME | REQ-FUNC-018 | host resume | SuspendM high and high-speed row again | TB WP, P, R | 500 us scaled | the link does not leave low power
+  DEG-GAP | REQ-FUNC-006 | zero-length and maximum OUT over ULPI | response gap inside the window | TB XH, GAP | 400 CLK-PHY | ULPI turnaround makes the gap too long
+Shared checkpoints also reached: DBU-VER, DBR-CHIRP, DBR-HS.
+Expected outcome: every member operation file passes over ULPI with all its checkpoints reached; no ULPI bus violation (ULPI_ACTIVITY line).
+Known gaps: mutant M08 (a ULPI transmit starts before the mode register write, BUG-027) survives this test.
+Defect/fault targeted: ULPI register write ordering, RX CMD decoding, turnaround and abort handling in the traffic paths.
+Checker/oracle: the member generators; the ULPI PHY BFM with its bus checks (violations counted and failing).
+Reproducibility: cd tests/usb20; python gen_dev_enum_bulk_dma.py SEED ulpi (and the other member generators); from verification:
+  python env/scripts/run.py sim t_dev_ulpi_traffic dev_ulpi_axim tests/ops/dev_enum_bulk_dma_ulpi_sSEED.ops +seed=SEED
+Waveform: N/A: outside the ten priority tests of R-283 (sim/waveform_index.csv). To capture one: python env/scripts/build.py BUILD --trace,
+  then run.py sim with the trace build and +vcd (+vcd_from=NS +vcd_to=NS for a window).
+Evidence: runs of t_dev_ulpi_traffic in sim/index.csv (CHKPT lines in sim.log); review row in docs/testcase_review.csv.
+AI-generated candidate (R-117).

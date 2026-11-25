@@ -36,12 +36,14 @@ W 10 1ffffff
 B cg_conn.fs
 B cg_speed.fs
 ID 3345
+CHK HFS-SOF
 SOF 3 dbba 10c8e
 B cg_sof.fs
 MW 1000 28 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52
 W 6c0 1000
 W 680 80028
 W 600 80060840
+CHK HFS-OUT
 XT 1 0 1 7530
 XD 3 7530 28 1c 2e 2b b8 56 9d 80 6c 12 51 dc c9 be e3 89 12 e ba ee a3 c2 d8 54 5a 78 76 c 5a a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52
 ID 8
@@ -52,6 +54,7 @@ W 6c4 2000
 W 684 80018
 W 784 4
 W 604 80069040
+CHK HFS-IN
 XT 9 0 2 7530
 ID 8
 DT 3 0 18 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
@@ -59,5 +62,6 @@ XH 2 7d0
 P 704 1 1 190
 MC 2000 18 cc ec 7f fa 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0 9f 6a fa bb
 W 704 1
+CHK HFS-CLEAN
 R 10 0 1300
 END

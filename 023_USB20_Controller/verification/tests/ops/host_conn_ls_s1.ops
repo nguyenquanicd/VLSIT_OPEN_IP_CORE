@@ -1,5 +1,6 @@
 # scenario host_conn_ls seed 1
 WD ea60
+CHK HCN-VER
 R 0 10000 ffff0000
 W 40 1000000
 W 44 1000100
@@ -9,13 +10,16 @@ W 4 61
 W 28 400008
 LS 2
 ID 60216
+CHK HCN-LSCONN
 P 2c 1 1 7d0
 P 10 10 10 190
 W 10 10
 W 28 400009
 ID 2eb12
+CHK HCN-LSENUM
 P 10 80 80 bb8
 R 2c a e
+CHK HCN-LSROW
 XP 0 d8 df
 B cg_conn.ls
 END

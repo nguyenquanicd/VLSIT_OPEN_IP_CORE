@@ -41,6 +41,7 @@ W 6d4 20000
 W 694 80006
 W 794 4
 W 614 80028810
+CHK HRT-IN
 XT 9 0 1 7530
 ID 8
 HS a
@@ -48,6 +49,7 @@ XT 9 0 1 7530
 ID 8
 DT 3 0 6 be e3 89 12 e ba
 XH 2 7d0
+CHK HRT-INDONE
 P 714 1 1 384
 MC 20000 6 be e3 89 12 e ba
 W 714 7ff
@@ -58,6 +60,7 @@ MW 20050 20 a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa 8e ff b5 e8 ec b3 e9
 W 6d8 20050
 W 698 100020
 W 618 80031010
+CHK HRT-OUT
 XT 1 0 2 7530
 XD 3 7530 10 a6 58 45 b8 5d e4 d4 ba b5 b9 e4 52 cc ec 7f fa
 ID 8
@@ -78,6 +81,7 @@ XT 1 0 2 7530
 XD b 7530 10 8e ff b5 e8 ec b3 e9 f9 71 a6 55 89 f5 9e 9b d0
 ID 8
 HS 2
+CHK HRT-OUTDONE
 P 718 1 1 384
 W 718 7ff
 B cg_len.max
@@ -87,6 +91,7 @@ W 6dc 20ffc
 W 69c 180018
 W 79c 0
 W 61c 80039808
+CHK HRT-IN
 XT 9 0 3 7530
 ID 8
 HS a
@@ -102,6 +107,7 @@ XT 9 0 3 7530
 ID 8
 DT 3 0 8 c 2a 3a 22 c 14 a bf
 XH 2 7d0
+CHK HRT-INDONE
 P 71c 1 1 384
 MC 20ffc 18 19 8b 74 36 45 88 7d 6b 1e d8 10 1d b9 b8 58 7f c 2a 3a 22 c 14 a bf
 W 71c 7ff
@@ -112,6 +118,7 @@ MW 21fdc 1 ac
 W 6c0 21fdc
 W 680 80001
 W 600 80021010
+CHK HRT-OUT
 XT 1 0 2 7530
 XD 3 7530 1 ac
 ID 8
@@ -120,6 +127,7 @@ XT 1 0 2 7530
 XD 3 7530 1 ac
 ID 8
 HS 2
+CHK HRT-OUTDONE
 P 700 1 1 384
 W 700 7ff
 B cg_len.one
@@ -129,6 +137,7 @@ MW 22fdc 80 34 c e5 41 c9 f9 a7 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 1
 W 6d0 22fdc
 W 690 20100080
 W 610 80021040
+CHK HRT-OUT
 XT 1 0 2 7530
 XD b 7530 40 34 c e5 41 c9 f9 a7 49 ae 84 86 d6 9 47 1d 81 11 43 52 57 31 e8 76 10 7e 77 e3 25 80 29 74 b8 83 d8 8e 2 4d 12 c4 d1 52 38 2c 7b 34 33 a 5d 76 35 6f c ed e8 9e c2 6c 6b de d9 a 1a d6 5c
 ID 8
@@ -137,6 +146,7 @@ XT 1 0 2 7530
 XD 3 7530 40 30 f5 bb 9 3c bb 94 be 9d 9 d3 33 35 9c 65 8 e7 1e d2 f8 ed 6a 25 2 91 c be 9c 27 70 fb 62 3b bf c8 ed 47 b0 ca 3e 82 3e 3e 29 ab c8 6c 35 c f0 16 fe 94 b7 ea 48 bf 89 f7 f4 d6 fb 97 ca
 ID 8
 HS 2
+CHK HRT-OUTDONE
 P 710 1 1 384
 W 710 7ff
 B cg_len.max
@@ -146,10 +156,12 @@ W 6d0 230a4
 W 690 20080002
 W 790 4
 W 610 80039808
+CHK HRT-IN
 XT 9 0 3 7530
 ID 8
 DT b 0 2 4b d5
 XH 2 7d0
+CHK HRT-INDONE
 P 710 1 1 384
 MC 230a4 2 4b d5
 W 710 7ff
@@ -160,6 +172,7 @@ W 6c0 230f0
 W 680 20180030
 W 780 0
 W 600 80028810
+CHK HRT-IN
 XT 9 0 1 7530
 ID 8
 HS a
@@ -187,6 +200,7 @@ XT 9 0 1 7530
 ID 8
 DT b 0 10 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e 33 c7 66
 XH 2 7d0
+CHK HRT-INDONE
 P 700 1 1 384
 MC 230f0 30 39 4f d8 31 a8 7f 83 56 50 ec 78 ce b7 4a ee e1 f c4 5c c9 1b f7 8c cf 81 d3 f1 b8 a9 29 73 60 ce c3 5 a0 ed ee 5a 30 8 ce 6e c5 6e 33 c7 66
 W 700 7ff
@@ -197,6 +211,7 @@ MW 23168 100 68 25 b3 1 f8 21 f8 ab eb 88 eb e 28 b1 58 cf 82 45 1b 53 ff c3 ed 
 W 6cc 23168
 W 68c 20200100
 W 60c 80021040
+CHK HRT-OUT
 XT 1 0 2 7530
 XD b 7530 40 68 25 b3 1 f8 21 f8 ab eb 88 eb e 28 b1 58 cf 82 45 1b 53 ff c3 ed 96 4f 5 90 ef 0 bb 11 c3 e2 68 9d ff 44 f7 9a 27 84 a0 9b aa 9f c9 2f 6b c8 4c 2d 9d 14 77 ea 76 8e 1f 39 39 c2 ba 6d a3
 ID 8
@@ -233,6 +248,7 @@ XT 1 0 2 7530
 XD 3 7530 40 da 2f ac ee 19 f3 7b 21 f6 47 f 46 1e 18 66 3 ac 7a 47 be fb 0 43 3b 7e 37 ee 6c 1b 6e c2 ac c9 53 35 4d 6b 58 c1 67 98 ae dc 49 da 42 cb a0 99 32 33 f2 8b 91 fa 8f 75 d7 46 35 f 67 6c 63
 ID 8
 HS 2
+CHK HRT-OUTDONE
 P 70c 1 1 384
 W 70c 7ff
 B cg_len.max
@@ -242,6 +258,7 @@ W 6c0 232b0
 W 680 80040
 W 780 0
 W 600 80039840
+CHK HRT-IN
 XT 9 0 3 7530
 ID 8
 HS a
@@ -249,6 +266,7 @@ XT 9 0 3 7530
 ID 8
 DT 3 0 40 13 64 37 47 5f 2f ed 95 6a 50 a6 8d 22 d3 d4 11 e9 98 3e 8b 8 6d d6 aa 85 c8 66 dc 41 57 e5 e8 b1 c4 f2 82 61 f3 e3 62 f0 ac 9e 24 57 bd f1 71 41 9d 6a 99 32 6 e 65 a0 1d a3 83 af e1 24 d6
 XH 2 7d0
+CHK HRT-INDONE
 P 700 1 1 384
 MC 232b0 40 13 64 37 47 5f 2f ed 95 6a 50 a6 8d 22 d3 d4 11 e9 98 3e 8b 8 6d d6 aa 85 c8 66 dc 41 57 e5 e8 b1 c4 f2 82 61 f3 e3 62 f0 ac 9e 24 57 bd f1 71 41 9d 6a 99 32 6 e 65 a0 1d a3 83 af e1 24 d6
 W 700 7ff
@@ -259,6 +277,7 @@ MW 23338 20 8e 2a fd f5 79 4d 99 74 67 ab c8 d0 78 6d 1f 85 7f 46 c8 df 3d e9 c8
 W 6d0 23338
 W 690 100020
 W 610 80021810
+CHK HRT-OUT
 XT 1 0 3 7530
 XD 3 7530 10 8e 2a fd f5 79 4d 99 74 67 ab c8 d0 78 6d 1f 85
 ID 8
@@ -283,6 +302,7 @@ XT 1 0 3 7530
 XD b 7530 10 7f 46 c8 df 3d e9 c8 ca f3 c2 91 6e 7b 72 1c 2e
 ID 8
 HS 2
+CHK HRT-OUTDONE
 P 710 1 1 384
 W 710 7ff
 B cg_len.max
@@ -292,6 +312,7 @@ W 6c0 233a0
 W 680 180024
 W 780 4
 W 600 80029010
+CHK HRT-IN
 XT 9 0 2 7530
 ID 8
 HS a
@@ -319,6 +340,7 @@ XT 9 0 2 7530
 ID 8
 DT 3 0 4 b2 ba 8d f4
 XH 2 7d0
+CHK HRT-INDONE
 P 700 1 1 384
 MC 233a0 24 fc 23 eb 71 8f c f f5 15 42 48 69 a4 7b 18 4a 97 34 2c 45 df 47 11 9e 89 f2 18 b5 ae 31 b8 36 b2 ba 8d f4
 W 700 7ff
@@ -329,6 +351,7 @@ W 6c0 2340c
 W 680 180018
 W 780 0
 W 600 80028808
+CHK HRT-IN
 XT 9 0 1 7530
 ID 8
 HS a
@@ -350,6 +373,7 @@ XT 9 0 1 7530
 ID 8
 DT 3 0 8 b8 38 22 7c 77 61 34 3
 XH 2 7d0
+CHK HRT-INDONE
 P 700 1 1 384
 MC 2340c 18 db d6 7a 5d 53 17 8 b4 5c 96 a 14 7e 70 ce 20 b8 38 22 7c 77 61 34 3
 W 700 7ff
@@ -360,6 +384,7 @@ MW 2346c 100 42 eb be 1b 5d e1 df e4 53 fd 41 b3 4a b 80 5f 4d d3 80 e2 f0 ed 60
 W 6d0 2346c
 W 690 200100
 W 610 80021840
+CHK HRT-OUT
 XT 1 0 3 7530
 XD 3 7530 40 42 eb be 1b 5d e1 df e4 53 fd 41 b3 4a b 80 5f 4d d3 80 e2 f0 ed 60 d8 de 89 70 b4 10 ca e da 9a c f4 85 8a 7e ee e9 ba ec 7e 51 eb 93 b9 d6 38 7d c6 3b dd ec e8 2e c7 e7 b9 b2 54 4b 77 59
 ID 8
@@ -400,6 +425,7 @@ XT 1 0 3 7530
 XD b 7530 40 37 61 4f 71 e a5 3c 8b 35 be 24 45 b3 43 d8 64 9e a 8 ae 4c 25 18 46 fc d5 b7 f6 97 98 20 4d 3a 3 2e 49 b4 4f 99 42 2d 75 75 ab 2e 5f df 6b d2 13 ab db fe b0 5e 3c 15 40 c1 4a d7 72 89 3f
 ID 8
 HS 2
+CHK HRT-OUTDONE
 P 710 1 1 384
 W 710 7ff
 B cg_len.max
@@ -409,6 +435,7 @@ MW 235b4 40 cf e9 36 a0 76 18 b0 36 c9 9 3b 84 b4 7b ac d8 74 16 47 55 42 57 c8 
 W 6c8 235b4
 W 688 100040
 W 608 80030820
+CHK HRT-OUT
 XT 1 0 1 7530
 XD 3 7530 20 cf e9 36 a0 76 18 b0 36 c9 9 3b 84 b4 7b ac d8 74 16 47 55 42 57 c8 4d 35 99 da ed 3 38 d8 0
 ID 8
@@ -429,11 +456,13 @@ XT 1 0 1 7530
 XD b 7530 20 31 10 61 de 0 62 c2 a0 4f 59 89 88 83 77 9e 9e d5 ff f7 c5 96 c9 58 d7 96 eb d9 a4 24 4 82 d3
 ID 8
 HS 2
+CHK HRT-OUTDONE
 P 708 1 1 384
 W 708 7ff
 B cg_len.max
 B cg_axim.len1
 BP 0
+CHK HRT-CLEAN
 R 10 0 1b300
 B cg_fifo.map_max
 END

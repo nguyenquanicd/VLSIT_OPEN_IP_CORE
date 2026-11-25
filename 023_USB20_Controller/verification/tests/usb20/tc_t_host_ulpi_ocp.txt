@@ -1,0 +1,30 @@
+Testcase header of t_host_ulpi_ocp (configuration sweep: host over ULPI; written 2026-11-25).
+
+Test ID and title: t_host_ulpi_ocp - host port power and over-current, host bring-up and RxError over the ULPI wrapper
+Priority and rationale: P2. On ULPI, DrvVbus is a PHY register bit (0Ah) and the RxError is an RX CMD; both differ from UTMI+.
+Purpose: show the over-current rules of t_fi_ocp with DrvVbus through the PHY register, the host bring-up and transfers at TSCALE 1 over
+  ULPI, and the RxError handling of t_host_edge (rxerr) when the error arrives as an RX CMD inside the packet.
+Requirements and features: REQ-FUNC-034, 041; REQ-IF-003, 010; REQ-ERR-001; ULPI 1.1 (OTG control register 0Ah, RX CMD). Member
+  generators: gen_fi_ocp ulpi (host_ulpi_axim_ts16), gen_host_enum_bulk_dma ts1 (host_ulpi_axim_ts1), gen_host_edge rxerr ulpi (host_ulpi_axim_ts16).
+DUT configuration and preconditions: builds host_ulpi_axim_ts16 and host_ulpi_axim_ts1 with the ULPI PHY BFM.
+Software flow: the software flow of each member generator (see their headers).
+Stimulus: the member operation files with the testlist seeds.
+Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
+  FOC-ON | REQ-FUNC-041, REQ-IF-003 | hport vbus_drv | DrvVbus (PHY register 0Ah bit, shown on pin group 2) and pwr_en high | TB WP | 400 CLK-PHY | the register write is missing
+  FOC-TRIP | REQ-FUNC-034 | 16-cycle over-current | power off within 40 cycles; oc_act | TB XP, WP, R | 40 bus cycles | DrvVbus stays on over ULPI
+  FOC-REARM | REQ-FUNC-034 | ocur cleared | power returns only after vbus_drv is rewritten | TB XP, WP | 400 CLK-PHY | automatic re-arm
+  FOC-SWOFF | REQ-FUNC-041 | software power off | DrvVbus off through the PHY register | TB WP | 400 CLK-PHY | DrvVbus does not follow
+  HBU-RST50 | REQ-FUNC-011 | host reset over ULPI at TSCALE 1 | 50 to 52 ms | TB P, TC, R | 60 ms | wrong reset length
+  HEB-SOF1 | REQ-FUNC-010 | SOF over ULPI at TSCALE 1 | 125 us +- 62.5 ns | TB SOF | 500 us | SOF timing disturbed by ULPI
+  HEB-BIN | REQ-FUNC-015, 016 | bulk IN with NAK and a short packet over ULPI | retry, ACKs, residue, memory | TB XT, XH, P, R, MC | 2000 CLK-PHY | receive path errors over ULPI
+  HED-RXERR | REQ-IF-003, REQ-ERR-001 | RxError as an RX CMD inside the IN data | no ACK, retry, good data stored, xact_err | TB XT, XH, P, MC, R | 30000 CLK-PHY | the RX CMD error ignored
+Shared checkpoints: HBU-VER, HBU-CONN, HBU-RSTDRV, HBU-CHIRP, HBU-RECOV.
+Expected outcome: all member operation files pass over ULPI with their checkpoints reached; no ULPI bus violation.
+Defect/fault targeted: DrvVbus register write missing or late, RX CMD error decoding, ULPI timing of the host engine.
+Checker/oracle: the member generators; ULPI PHY BFM register model and bus checks.
+Reproducibility: cd tests/usb20; python gen_fi_ocp.py SEED ulpi; python gen_host_enum_bulk_dma.py 1 ts1; python gen_host_edge.py 1 rxerr ts16
+  ulpi; from verification: python env/scripts/run.py sim t_host_ulpi_ocp host_ulpi_axim_ts16 tests/ops/fi_ocp_sSEED.ops +seed=SEED
+Waveform: N/A: outside the ten priority tests of R-283 (sim/waveform_index.csv). To capture one: python env/scripts/build.py BUILD --trace,
+  then run.py sim with the trace build and +vcd (+vcd_from=NS +vcd_to=NS for a window).
+Evidence: runs of t_host_ulpi_ocp in sim/index.csv (CHKPT lines in sim.log); review row in docs/testcase_review.csv.
+AI-generated candidate (R-117).
