@@ -240,13 +240,21 @@ module tb_dvp_controller;
   // t_dvp_apb_protocol: CSR and FIFO_DATA traffic observed by the passive APB4 checker.
   task automatic t_apb_protocol();
     logic [31:0] r; bit e; int c; logic [31:0] d; bit ab;
+    // reset values of every register, read before any write (HDS section 11)
+    csr_r(A_VER, r);  expect_eq("reset value version", r, 32'h0001_0001);
+    csr_r(A_CTRL, r); expect_eq("reset value ctrl", r, 0);
+    csr_r(A_WM, r);   expect_eq("reset value watermark", r, 0);
+    csr_r(A_TO, r);   expect_eq("reset value timeout", r, 32'hFFFF_FFFF);
+    csr_r(A_STS, r);  expect_eq("reset value status (empty only)", r, 2);
+    csr_r(A_LVL, r);  expect_eq("reset value level", r, 0);
+    csr_r(A_FC, r);   expect_eq("reset value frame count", r, 0);
     for (int a = 0; a <= 6; a++) csr_r(16'(a * 4), r);
     csr_w(A_WM, 32'h0000_0005); csr_r(A_WM, r); expect_eq("wmark readback", r, 5);
     csr_w(A_WM, 32'hFFFF_FFFF); csr_r(A_WM, r);
     csr_w(A_WM, 0); csr_r(A_WM, r);
     csr_w(A_TO, 32'h1); csr_r(A_TO, r); expect_eq("timeout readback", r, 1);
     csr_w(A_TO, 32'h0000_0000); csr_r(A_TO, r);
-    csr_w(A_TO, 32'hFFFF_FFFF); csr_r(A_TO, r); expect_eq("timeout reset-value readback", r, 32'hFFFF_FFFF);
+    csr_w(A_TO, 32'hFFFF_FFFF); csr_r(A_TO, r); expect_eq("timeout write FFFFFFFF readback", r, 32'hFFFF_FFFF);
     csr_w(A_VER, 32'hFFFF_FFFF); csr_r(A_VER, r); expect_eq("version read-only", r, 32'h0001_0001);
     csr_w(A_CTRL, 32'hFFFF_FFF8); csr_r(A_CTRL, r);
     csr_w(A_FC, 32'hFFFF_FFFF); csr_r(A_FC, r); expect_eq("frame count read-only", r, 0);
@@ -477,6 +485,13 @@ module tb_dvp_controller;
     sensor_clock(1); safe_to();
     set_ctrl(0, 1);
     csr_w(A_CTRL, 32'h3); idle(24); csr_r(A_CTRL, r); expect_eq("mode unchanged while enabled", r[1], 0);
+    // mode change that also disables capture in the same write, capture enabled when the write is issued: the mode must not change
+    csr_w(A_CTRL, 32'h2); idle(24); csr_r(A_CTRL, r);
+    expect_eq("mode unchanged by a write that also disables capture", r[1], 0); expect_eq("capture disabled by that write", r[0], 0);
+    set_ctrl(0, 1);
+    csr_w(A_CTRL, 32'h1); csr_w(A_CTRL, 32'h2); idle(24); csr_r(A_CTRL, r);          // capture enabled one write earlier, before the sensor path reacts
+    expect_eq("mode unchanged right after capture was enabled", r[1], 0);
+    set_ctrl(0, 1);
     emit_frame(0, 1, 3, 0, 91, 1); idle(80);
     set_ctrl(0, 0);
     csr_w(A_CTRL, 32'h2); idle(24); csr_r(A_CTRL, r); expect_eq("mode unchanged with queued data", r[1], 0);
@@ -485,6 +500,10 @@ module tb_dvp_controller;
     csr_w(A_CTRL, 32'h2); idle(24); csr_r(A_CTRL, r); expect_eq("mode accepted when safe", r[1], 1);
     set_ctrl(1, 1);
     csr_w(A_CTRL, 32'h1); idle(24); csr_r(A_CTRL, r); expect_eq("mode unchanged back to continuous while enabled", r[1], 1);
+    set_ctrl(1, 1);
+    csr_w(A_CTRL, 32'h0); idle(24); csr_r(A_CTRL, r);                                  // gated: mode back plus capture off in one write while enabled
+    expect_eq("gated mode unchanged by a write that also disables capture", r[1], 1); expect_eq("gated capture disabled by that write", r[0], 0);
+    set_ctrl(1, 1);
     emit_frame(1, 1, 3, 0, 92, 1); idle(40);
     set_ctrl(1, 0);
     csr_w(A_CTRL, 32'h0); idle(24); csr_r(A_CTRL, r); expect_eq("gated mode unchanged with queued data", r[1], 1);

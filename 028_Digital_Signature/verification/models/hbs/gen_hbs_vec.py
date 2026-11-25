@@ -1,9 +1,10 @@
 """Vectors of the RTL test of the hash-based verification engine (verification/tests/hbs/tb_hbs.sv).
 For vector i the file <dir>/hbs_v<i>.hex holds the buffer image (one byte per line) and the line i of <dir>/hbs_vecs.txt
-holds the fields: i alg slh lmstype lmots hsslvl xmss len_msg len_ctx off_msg off_sig off_pk expect_ok nbytes.
+holds the fields: i alg slhmode lmstype lmots hsslvl xmss len_msg len_ctx off_msg off_sig off_pk expect_ok nbytes.
 Expected results: SLH-DSA signatures are made by OpenSSL 3.5 or later (independent); LMS/HSS and XMSS/XMSS^MT signatures are
 made by the signers of lms_ref.py and xmss_ref.py (self-made, see the notes there); corrupted inputs must be rejected.
-Usage: python gen_hbs_vec.py <dir> <set>   (sets: quick, slh, lms, xmss)"""
+slhmode = slh | form << 4 | hash << 6 (form 1: HashSLH-DSA, the message is the digest PH(M), hash = dsig_op.hash).
+Usage: python gen_hbs_vec.py <dir> <set>   (sets: quick, slh, lms, xmss, prehash)"""
 import os
 import subprocess
 import sys
@@ -42,9 +43,10 @@ def flip(b, i, m=4):
 
 
 class V:
-    def __init__(self, name, alg, msg, sig, pk, ok, ctx=b'', slh=0, lmstype=0, lmots=0, hsslvl=0, xmss=0):
+    def __init__(self, name, alg, msg, sig, pk, ok, ctx=b'', slh=0, lmstype=0, lmots=0, hsslvl=0, xmss=0, form=0, hcode=0):
         self.name, self.alg, self.msg, self.sig, self.pk, self.ok, self.ctx = name, alg, msg, sig, pk, ok, ctx
         self.slh, self.lmstype, self.lmots, self.hsslvl, self.xmss = slh, lmstype, lmots, hsslvl, xmss
+        self.form, self.hcode = form, hcode
 
     def image(self):
         assert len(self.msg) + len(self.ctx) <= OFF_PK and len(self.pk) <= OFF_SIG - OFF_PK
@@ -103,7 +105,26 @@ def xmss_vecs(sets):
     return out
 
 
+def prehash_vecs():
+    """HashSLH-DSA (FIPS 205 algorithm 25): signatures of OpenSSL with message-encoding 0 over M' built from the standard
+    (see test_hbs_slh_prehash.py)."""
+    import test_hbs_slh_prehash as TP
+    out = []
+    for idx, hcode, ctx in ((0, 0, b''), (1, 2, b'boot'), (6, 4, b''), (7, 3, b'boot')):
+        name = S.SETS[idx]['name']
+        dig = TP.HASHES[hcode][0](b'image %d' % idx).digest()
+        mp = bytes([1, len(ctx)]) + ctx + TP.OID_PREFIX + bytes([TP.HASHES[hcode][1]]) + dig
+        pk, sig = TP.make_raw(idx, mp)
+        nm = 'Hash' + name + ' hash %d%s ' % (hcode, ' ctx' if ctx else '')
+        out.append(V(nm + 'valid', 12, dig, sig, pk, 1, ctx=ctx, slh=idx, form=1, hcode=hcode))
+        out.append(V(nm + 'another hash code', 12, dig, sig, pk, 0, ctx=ctx, slh=idx, form=1, hcode=(hcode + 1) % 6))
+        out.append(V(nm + 'pure form', 12, dig, sig, pk, 0, ctx=ctx, slh=idx, form=0, hcode=hcode))
+    return out
+
+
 def build(name):
+    if name == 'prehash':
+        return prehash_vecs()
     if name == 'slh':
         return slh_vecs(list(range(12)), {0, 1, 6, 8})
     if name == 'lms':
@@ -123,7 +144,7 @@ def main(d, name):
             img = v.image()
             with open(os.path.join(d, 'hbs_v%d.hex' % i), 'w') as fx:
                 fx.write('\n'.join('%02x' % b for b in img) + '\n')
-            fh.write('%d %d %d %d %d %d %d %d %d %d %d %d %d %d\n' % (i, v.alg, v.slh, v.lmstype, v.lmots, v.hsslvl, v.xmss, len(v.msg), len(v.ctx),
+            fh.write('%d %d %d %d %d %d %d %d %d %d %d %d %d %d\n' % (i, v.alg, v.slh | (v.form << 4) | (v.hcode << 6), v.lmstype, v.lmots, v.hsslvl, v.xmss, len(v.msg), len(v.ctx),
                                                                    OFF_MSG, OFF_SIG, OFF_PK, v.ok, len(img)))
             fn.write('%d\t%s\n' % (i, v.name))
     print('%s: %d vectors' % (name, len(vecs)))

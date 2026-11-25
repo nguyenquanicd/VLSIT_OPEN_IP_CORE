@@ -1,0 +1,23 @@
+[tasks]
+bmc
+prove
+cover
+
+[options]
+bmc: mode bmc
+prove: mode prove
+cover: mode cover
+depth 20
+multiclock off
+
+[engines]
+smtbmc z3
+
+[script]
+read -formal -DVLSIT_SYNTHESIS -sv m_vlsit_csr_sync.sv m_vlsit_csr_dvp.sv f_csr.sv
+prep -top f_csr
+
+[files]
+../../../rtl/csr/m_vlsit_csr_dvp.sv
+../../../rtl/csr/m_vlsit_csr_sync.sv
+f_csr.sv

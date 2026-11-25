@@ -321,6 +321,7 @@ module m_vlsit_dsig_ctl #(
   logic [31:0]       w_min_len;
   logic [33:0]       w_msg_end;
   logic              w_uses_ctx;
+  logic              w_det;
   logic              w_needs_key;
   logic              w_needs_rng;
   logic              w_vas_en;
@@ -463,6 +464,9 @@ module m_vlsit_dsig_ctl #(
     if (PARA_EN_HYBRID[0] & w_is_vrfy & ((w_alg32 == LPARA_ALG_ED25519) | w_is_mldsa) &
         ({30'd0, reg_run_hybpol} == LPARA_POL_RSVD))
       w_f_opuns = 1'b1;
+    // The deterministic ECDSA nonce (RFC 6979) is built for the SHA-2 hashes only.
+    if (w_is_ecdsa & w_is_sign & w_det & (reg_run_hash > 3'd2))
+      w_f_opuns = 1'b1;
     // Ed25519ph and Ed448ph take the digest PH(M) as the message: only the prehash form exists.
     if (((w_alg32 == LPARA_ALG_ED25519PH) | (w_alg32 == LPARA_ALG_ED448PH)) & ({30'd0, reg_run_form} != LPARA_FORM_PREHASH))
       w_f_opuns = 1'b1;
@@ -478,7 +482,7 @@ module m_vlsit_dsig_ctl #(
       w_f_badlen = 1'b1;
     // Key generation has no message: only signing and verification check the digest length.
     if (({30'd0, reg_run_form} == LPARA_FORM_PREHASH) & (w_is_sign | w_is_vrfy)) begin
-      if ((w_is_ecdsa | w_is_mldsa) & (reg_run_len_msg != w_dig_len))
+      if ((w_is_ecdsa | w_is_mldsa | (w_alg32 == LPARA_ALG_SLHDSA)) & (reg_run_len_msg != w_dig_len))
         w_f_badlen = 1'b1;
       if (((w_alg32 == LPARA_ALG_ED25519PH) | (w_alg32 == LPARA_ALG_ED448PH)) &
           (reg_run_len_msg != LPARA_DIG_64))
@@ -512,6 +516,8 @@ module m_vlsit_dsig_ctl #(
                         ((PARA_ECDSA_NONCE == LPARA_NONCE_CSR) & ~reg_run_nonce[0]))) |
                        (w_is_mldsa & w_is_sign & reg_run_hedged) |
                        (PARA_EN_DPA_EC[0] & w_ec_group) | (PARA_EN_DPA_PQ[0] & w_is_mldsa);
+  // Deterministic ECDSA nonce: PARA_ECDSA_NONCE 1, or 2 with dsig_op.nonce bit 0.
+  assign w_det = (PARA_ECDSA_NONCE == 32'd1) | ((PARA_ECDSA_NONCE == LPARA_NONCE_CSR) & reg_run_nonce[0]);
   // Verify-after-sign runs only after a signing operation, and only when it is built.
   assign w_vas_en    = PARA_EN_VAS[0] & w_is_sign;
 

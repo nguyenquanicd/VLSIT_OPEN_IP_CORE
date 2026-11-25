@@ -15,7 +15,7 @@ module tb_top_err;
 
   m_vlsit_dsig_top #(
     .PARA_EN_ED25519(1), .PARA_EN_ED25519PH(1), .PARA_EN_ECDSA_P256(1), .PARA_OP_KGEN(32'h20), .PARA_OP_SIGN(32'h24), .PARA_OP_VRFY(32'h24), .PARA_BUF_BYTES(1024), .PARA_EN_AXI(1),
-    .PARA_EN_KEYIF(1), .PARA_EN_KEYREG(0), .PARA_ECDSA_NONCE(0), .PARA_EN_VAS(0), .PARA_EN_LOG(1), .PARA_EN_LOCK(1), .PARA_CSR_ASYNC(1)
+    .PARA_EN_KEYIF(1), .PARA_EN_KEYREG(0), .PARA_ECDSA_NONCE(2), .PARA_EN_VAS(0), .PARA_EN_LOG(1), .PARA_EN_LOCK(1), .PARA_CSR_ASYNC(1)
   ) dut (
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk_apb), .i_rst_n_apb(rst_n),
     .i_apb_psel(psel), .i_apb_penable(penable), .i_apb_pwrite(pwrite), .i_apb_paddr(paddr), .i_apb_pwdata(pwdata), .i_apb_pstrb(4'hF), .i_apb_pprot(3'd0),
@@ -121,6 +121,19 @@ module tb_top_err;
     apb_w(16'h070, 32'd1);
     wait_idle(5000);
     apb_r(16'h078, errv); check(errv[2] && !errv[1], "Ed25519ph with a digest of 63 bytes: dsig_err.badlen");
+    apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);
+    // 4c. deterministic ECDSA nonce: built for SHA-2 only, so SHA3-256 with dsig_op.nonce = 1 is unsupported; the reserved
+    //     nonce code 2 is unsupported as well
+    apb_w(16'h050, (3 << 24) | (1 << 20) | (1 << 8) | 5);   // P-256, sign, deterministic nonce, SHA3-256
+    apb_w(16'h058, 32'd4);
+    apb_w(16'h070, 32'd1);
+    wait_idle(5000);
+    apb_r(16'h078, errv); check(errv[1], "deterministic nonce with SHA3-256: dsig_err.opuns");
+    apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);
+    apb_w(16'h050, (2 << 20) | (1 << 8) | 5);               // reserved nonce code
+    apb_w(16'h070, 32'd1);
+    wait_idle(5000);
+    apb_r(16'h078, errv); check(errv[1], "reserved dsig_op.nonce code: dsig_err.opuns");
     apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);
     // 5. lock of the enable bits: a later change of dsig_alg_en sets dsig_err.lockv
     apb_w(16'h070, 32'd4); repeat (50) @(posedge clk);

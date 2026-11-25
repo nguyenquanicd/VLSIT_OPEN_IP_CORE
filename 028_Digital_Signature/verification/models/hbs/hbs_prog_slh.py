@@ -58,8 +58,9 @@ def emit_slh(a):
 
     L('SLH_START')
     E('LDS', 22, 0, 0, S_FORM)
-    E('ISZ', 2, 22)
-    E('BRN', 0, 2, 0, target='SLH_OPUNS')
+    E('LDI', 23, 0, 0, 2)
+    E('LTU', 2, 22, 23)
+    E('BRN', 0, 2, 0, target='SLH_OPUNS')           # forms 0 (pure) and 1 (pre-hash, HashSLH-DSA) are built
     E('LDS', 22, 0, 0, S_SLH)
     for name, f in (('N', F_N), ('HP', F_HP), ('D', F_D), ('A', F_A), ('K', F_K), ('LEN', F_LEN), ('M', F_M), ('HLEN', F_HLEN),
                     ('PADF', F_PADF), ('PADH', F_PADH)):
@@ -368,10 +369,27 @@ def emit_slh(a):
     L('SLH_HH_E')
     E('DST', 0, rARG2, rN)
     E('RET')
-    # MPRE + HMSG: message-hash input and digest (pure form: 0x00 || len(ctx) || ctx || M)
+    # MPRE + HMSG: message-hash input and digest, M' = form || len(ctx) || ctx || [OID of the hash] || M (FIPS 205
+    # algorithm 22 for the pure form 0, algorithm 23 for the pre-hash form 1 where M is the digest PH(M)); the OID goes to
+    # the mid segment of the hash feeder, between the context (first tail) and the message (second tail)
     L('SLH_MPRE')
-    E('LDI', 22, 0, 0, 0)
+    E('LDS', 22, 0, 0, S_FORM)
     E('HREG', 0, 22, 0, 1)
+    E('ISZ', 2, 22)
+    E('BRF', 0, 2, 0, target='SLH_MPRE_P')
+    for b in (0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02):
+        E('LDI', 22, 0, 0, b)
+        E('HMID', 0, 22, 0, 1)
+    # last arc: 1, 2, 3 for SHA-256, SHA-384, SHA-512 (dsig_op.hash 0 to 2), 8, 9, 10 for SHA3-256 to SHA3-512 (3 to 5)
+    E('LDS', 22, 0, 0, S_HASH)
+    E('LDI', 23, 0, 0, 3)
+    E('LTU', 2, 22, 23)
+    E('ADDI', 22, 22, 0, 1)
+    E('BRF', 0, 2, 0, target='SLH_MPRE_O')
+    E('ADDI', 22, 22, 0, 4)
+    L('SLH_MPRE_O')
+    E('HMID', 0, 22, 0, 1)
+    L('SLH_MPRE_P')
     E('LDS', 22, 0, 0, S_LEN_CTX)
     E('HREG', 0, 22, 0, 1)
     E('LDS', 23, 0, 0, S_LEN_MSG)

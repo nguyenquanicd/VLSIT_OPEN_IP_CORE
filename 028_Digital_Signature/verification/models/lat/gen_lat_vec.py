@@ -1,10 +1,11 @@
 """Vectors of the RTL test of the lattice engine (verification/tests/lat/tb_lat.sv).
 For vector i: <dir>/lat_v<i>.hex holds the buffer image (one byte per line), <dir>/lat_e<i>.hex the expected result bytes, and line i of
-<dir>/lat_vecs.txt the fields: i alg op hedged len_msg len_ctx off_msg off_sig off_pk off_res expect_ok exp_len vas nbytes key_hex pool_hex.
-alg 9 / 10 / 11 = ML-DSA-44 / 65 / 87; op 0 key generation, 1 sign, 2 verify; vas 1 = run the verify-after-sign afterwards.
+<dir>/lat_vecs.txt the fields: i alg op mode len_msg len_ctx off_msg off_sig off_pk off_res expect_ok exp_len vas nbytes key_hex pool_hex.
+alg 9 / 10 / 11 = ML-DSA-44 / 65 / 87; mode = hedged | form << 1 | hash << 3 (form 1: HashML-DSA, the message is the
+digest PH(M) and hash is dsig_op.hash); op 0 key generation, 1 sign, 2 verify; vas 1 = run the verify-after-sign afterwards.
 Expected values: OpenSSL 3.5 or later (public key from the seed, deterministic signatures, valid signatures); the reference model
 also OpenSSL (hextest-entropy) for the hedged signature.
-Usage: python gen_lat_vec.py <dir> <set>   (sets: quick, all)"""
+Usage: python gen_lat_vec.py <dir> <set>   (sets: quick, all, prehash)"""
 import os
 import sys
 
@@ -17,9 +18,10 @@ ALG = {44: 9, 65: 10, 87: 11}
 
 
 class V:
-    def __init__(self, name, level, op, msg=b'', ctx=b'', sig=b'', pk=b'', key=b'', pool=b'', hedged=0, ok=1, exp=b'', vas=0):
+    def __init__(self, name, level, op, msg=b'', ctx=b'', sig=b'', pk=b'', key=b'', pool=b'', hedged=0, ok=1, exp=b'', vas=0, form=0, hcode=0):
         self.name, self.level, self.op, self.msg, self.ctx, self.sig, self.pk = name, level, op, msg, ctx, sig, pk
         self.key, self.pool, self.hedged, self.ok, self.exp, self.vas = key, pool, hedged, ok, exp, vas
+        self.form, self.hcode = form, hcode
 
     def image(self):
         img = bytearray(OFF_SIG + len(self.sig))
@@ -72,7 +74,29 @@ def vecs_for(level, full):
     return out
 
 
+def prehash_vecs():
+    """HashML-DSA (FIPS 204 algorithms 4 and 5): expected values from OpenSSL with message-encoding 0 over M' built from the
+    standard (see test_lat_prehash.py)."""
+    import test_lat_prehash as TP
+    out = []
+    msg = b'firmware image of the prehash test'
+    for level, hcode, ctx in ((44, 0, b''), (44, 2, b'ctx-1'), (44, 3, b''), (65, 2, b''), (87, 1, b'')):
+        seed = bytes((i * 5 + level) % 256 for i in range(32))
+        dig = TP.HASHES[hcode][0](msg).digest()
+        pk, sig = TP.ossl_raw(level, seed, TP.mprime(hcode, dig, ctx))
+        nm = 'HashML-DSA-%d hash %d%s ' % (level, hcode, ' ctx' if ctx else '')
+        out.append(V(nm + 'sign + verify-after-sign', level, 1, msg=dig, ctx=ctx, key=seed, exp=sig, vas=1, form=1, hcode=hcode))
+        out.append(V(nm + 'verify valid', level, 2, msg=dig, ctx=ctx, sig=sig, pk=pk, ok=1, form=1, hcode=hcode))
+        if level == 44:
+            out.append(V(nm + 'verify with another hash code', level, 2, msg=dig, ctx=ctx, sig=sig, pk=pk, ok=0, form=1,
+                         hcode=(hcode + 1) % 3))
+            out.append(V(nm + 'verify in the pure form', level, 2, msg=dig, ctx=ctx, sig=sig, pk=pk, ok=0, form=0, hcode=hcode))
+    return out
+
+
 def build(name):
+    if name == 'prehash':
+        return prehash_vecs()
     if name == 'quick':
         return vecs_for(44, False)[:3] + vecs_for(44, False)[6:7]
     out = []
@@ -93,7 +117,7 @@ def main(d, name):
             with open(os.path.join(d, 'lat_e%d.hex' % i), 'w') as fx:
                 fx.write('\n'.join('%02x' % b for b in (v.exp or b'\x00')) + '\n')
             fh.write('%d %d %d %d %d %d %d %d %d %d %d %d %d %d %s %s\n' % (
-                i, ALG[v.level], v.op, v.hedged, len(v.msg), len(v.ctx), OFF_MSG, OFF_SIG, OFF_PK, OFF_RES, v.ok, len(v.exp), v.vas, len(img),
+                i, ALG[v.level], v.op, v.hedged | (v.form << 1) | (v.hcode << 3), len(v.msg), len(v.ctx), OFF_MSG, OFF_SIG, OFF_PK, OFF_RES, v.ok, len(v.exp), v.vas, len(img),
                 (v.key or bytes(1)).hex(), (v.pool or bytes(1)).hex()))
             fn.write('%d\t%s\n' % (i, v.name))
     print('%s: %d vectors' % (name, len(vecs)))

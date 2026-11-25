@@ -2,14 +2,14 @@
 """dvp_formal.py - runs the SymbiYosys obligations of t_dvp_control_formal (AI-generated candidate, R-117).
 
 Harnesses in env/formal/: f_apb_data (pop safety, exact timeout), f_dma_req (DMA request state), f_ctrl (mode guard, single-clock
-abstraction), f_flush (flush handshake, single-clock abstraction). Work directories are temporary; flat logs and formal_summary.json go to the output directory (default verification/sim/final).
+abstraction), f_flush (flush handshake, single-clock abstraction), f_csr (CSR event priority and per-field independence). Work directories are temporary; flat logs and formal_summary.json go to the output directory (default verification/sim/final).
 Usage: python dvp_formal.py [--out DIR] [--root TREE]   (--root runs the same harnesses on another copy of the repository layout)
 """
 import argparse, json, os, re, shutil, subprocess, sys, tempfile, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VER = os.path.dirname(os.path.dirname(HERE))
-JOBS = [('f_apb_data', ['bmc', 'prove', 'cover']), ('f_dma_req', ['bmc', 'prove', 'cover']), ('f_ctrl', ['bmc', 'cover']), ('f_flush', ['bmc', 'cover'])]
+JOBS = [('f_apb_data', ['bmc', 'prove', 'cover']), ('f_dma_req', ['bmc', 'prove', 'cover']), ('f_ctrl', ['bmc', 'cover']), ('f_flush', ['bmc', 'cover']), ('f_csr', ['bmc', 'prove', 'cover'])]
 PATHS = [r'C:\Tools\oss-cad-suite\bin', r'C:\Tools\oss-cad-suite\lib', r'C:\Users\PC\Tools\msys64\usr\bin']
 
 
@@ -50,7 +50,7 @@ def main():
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     rows = run_all(os.path.join(VER, 'env', 'formal'), a.out)
-    json.dump({'results': rows, 'note': 'f_ctrl and f_flush are bounded model checks (tied clocks); f_apb_data and f_dma_req are k-induction proofs; '
+    json.dump({'results': rows, 'note': 'f_ctrl and f_flush are bounded model checks (tied clocks); f_apb_data, f_dma_req and f_csr are k-induction proofs; '
                                         'timeout bounded to N <= 6 in f_apb_data; f_flush is a bounded model check (depth 30, tied clocks; k-induction did not converge)'},
               open(os.path.join(a.out, 'formal_summary.json'), 'w', encoding='utf-8'), indent=1)
     bad = [r for r in rows if r['result'] != 'PASS']

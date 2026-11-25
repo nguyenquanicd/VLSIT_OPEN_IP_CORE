@@ -107,7 +107,7 @@ module tb_lat;
         for (j = 0; j < klen / 2; j = j + 1) key[8*j +: 8] = hexbyte(keyhex, j, klen);
         for (j = 0; j < plen / 2; j = j + 1) pool[8*j +: 8] = hexbyte(poolhex, j, plen);
         alg = v_alg; op_op = v_op[1:0]; hedged = v_hd[0]; len_msg = v_lm; len_ctx = v_lc;
-        off_msg = v_om; off_sig = v_os; off_pk = v_op2; off_res = v_or; form = 0; hsh = 0;
+        off_msg = v_om; off_sig = v_os; off_pk = v_op2; off_res = v_or; form = v_hd[2:1]; hsh = v_hd[5:3];
         @(posedge clk); #1 start = 1; @(posedge clk); #1 start = 0;
         wait_result;
         if (cyc < 0) begin ok = 0; $display("VEC %0d TIMEOUT", v_i); end

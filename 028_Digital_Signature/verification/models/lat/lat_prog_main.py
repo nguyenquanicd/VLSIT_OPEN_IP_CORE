@@ -34,8 +34,10 @@ def emit_main(p):
     for r, f in zip(range(20, 32), (P_K, P_L, P_ETA, P_TAU, P_G1, P_G2, P_BETA, P_OMEGA, P_LAM4, P_CBITS, P_WBITS, P_ALPHA)):
         E('LDP', r, 0, 0, f)
     E('LDS', 0, 0, 0, S_FORM)
-    E('ISZ', 2, 0)
-    p.brn(2, 'LAT_OPUNS')                  # only the pure form is built
+    p.eqi(2, 0, 2)
+    p.brf(2, 'LAT_OPUNS')                  # forms 0 (pure) and 1 (pre-hash, HashML-DSA) are built
+    p.eqi(2, 0, 3)
+    p.brf(2, 'LAT_OPUNS')
     E('LDS', 0, 0, 0, S_OP)
     p.eqi(2, 0, 0)
     p.brf(2, 'LAT_KEYGEN')
@@ -206,7 +208,8 @@ def emit_main(p):
     L('L_HB_E')
     p.ret()
 
-    # MU: SCR_MU = SHAKE256(tr || 0x00 || len(ctx) || ctx || M, 64) with the context stored after the message
+    # MU: SCR_MU = SHAKE256(tr || M', 64), M' = form || len(ctx) || ctx || [OID of the hash] || M with the context stored
+    # after the message; form 0 is ML-DSA (FIPS 204 algorithm 2), form 1 HashML-DSA (algorithm 4, M is the digest PH(M))
     L('L_MU')
     p.ldi(0, 64)
     E('XSTART', 0, 0, 0, H_SHAKE256)
@@ -216,7 +219,7 @@ def emit_main(p):
     p.lw(2, 10, SCR_TR)
     E('XPUT', 0, 2)
     p.loop_lt(10, 1, 'MU_TR')
-    p.ldi(2, 0)
+    E('LDS', 2, 0, 0, S_FORM)
     E('XPUT', 0, 2)
     E('LDS', 3, 0, 0, S_LEN_CTX)
     E('XPUT', 0, 3)
@@ -232,6 +235,23 @@ def emit_main(p):
     p.addi(10, 10, 1)
     p.jmp('MU_C')
     L('MU_M0')
+    # DER encoding of the OID of the hash of dsig_op.hash: 2.16.840.1.101.3.4.2.x with x = 1, 2, 3 (SHA-256, SHA-384,
+    # SHA-512) and 8, 9, 10 (SHA3-256, SHA3-384, SHA3-512)
+    E('LDS', 2, 0, 0, S_FORM)
+    p.eqi(2, 2, 0)
+    p.brf(2, 'MU_M00')
+    for b in (0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02):
+        p.ldi(2, b)
+        E('XPUT', 0, 2)
+    E('LDS', 2, 0, 0, S_HASH)
+    p.ldi(5, 3)
+    p.ltu(3, 2, 5)
+    p.addi(2, 2, 1)
+    p.brf(3, 'MU_OID')
+    p.addi(2, 2, 4)
+    L('MU_OID')
+    E('XPUT', 0, 2)
+    L('MU_M00')
     p.ldi(10, 0)
     L('MU_M')
     p.ltu(2, 10, 4)

@@ -95,6 +95,7 @@ module m_vlsit_dsig_hbs #(
   localparam logic [31:0] LPARA_OP_HT2 = 6'd47,
   localparam logic [31:0] LPARA_OP_HGO = 6'd48,
   localparam logic [31:0] LPARA_OP_DST = 6'd49,
+  localparam logic [31:0] LPARA_OP_HMID = 6'd50,
   localparam logic [31:0] LPARA_MV_RLB = 4'd0,
   localparam logic [31:0] LPARA_MV_BLB = 4'd1,
   localparam logic [31:0] LPARA_MV_CPBR = 4'd2,
@@ -122,6 +123,7 @@ module m_vlsit_dsig_hbs #(
   input  wire  [5:0]         i_run_xmss,
   input  wire  [31:0]        i_run_len_msg,
   input  wire  [7:0]         i_run_len_ctx,
+  input  wire  [2:0]         i_run_hash,
   input  wire  [16:0]        i_run_off_msg,
   input  wire  [16:0]        i_run_off_sig,
   input  wire  [16:0]        i_run_off_pk,
@@ -189,6 +191,7 @@ module m_vlsit_dsig_hbs #(
   // Snapshot
   logic [3:0]    reg_alg;
   logic [1:0]    reg_form;
+  logic [2:0]    reg_hash;
   logic [3:0]    reg_slh;
   logic [4:0]    reg_lmstype;
   logic [3:0]    reg_lmots;
@@ -209,6 +212,8 @@ module m_vlsit_dsig_hbs #(
   // Hash head, tails and job
   logic [2047:0] reg_head;
   logic [8:0]    reg_head_len;
+  logic [127:0]  reg_mid;
+  logic [8:0]    reg_mid_len;
   logic [23:0]   reg_t1_addr;
   logic [23:0]   reg_t1_len;
   logic [23:0]   reg_t2_addr;
@@ -350,7 +355,7 @@ module m_vlsit_dsig_hbs #(
   // ---------------------------------------------------------------------------------------------
   assign w_t_area_base = 17'd0;
 
-  m_vlsit_dsig_hfeed #(.PARA_HEAD_BYTES(256), .PARA_DIG_BYTES(64), .PARA_TA_W(24)) u_hfeed (
+  m_vlsit_dsig_hfeed #(.PARA_HEAD_BYTES(256), .PARA_DIG_BYTES(64), .PARA_TA_W(24), .PARA_MID_BYTES(16)) u_hfeed (
     .i_clk_core     (i_clk_core),
     .i_rst_n_core   (i_rst_n_core),
     .i_clr          (i_clr),
@@ -363,8 +368,8 @@ module m_vlsit_dsig_hbs #(
     .i_tail_len     (reg_t1_len),
     .i_tail2_addr   (reg_t2_addr),
     .i_tail2_len    (reg_t2_len),
-    .i_mid          (64'd0),
-    .i_mid_len      (9'd0),
+    .i_mid          (reg_mid),
+    .i_mid_len      (reg_mid_len),
     .o_digest       (w_digest),
     .o_done         (w_hf_done),
     .o_busy         (),
@@ -549,6 +554,7 @@ module m_vlsit_dsig_hbs #(
       reg_ins       <= 64'd0;
       reg_alg       <= 4'd0;
       reg_form      <= 2'd0;
+      reg_hash      <= 3'd0;
       reg_slh       <= 4'd0;
       reg_lmstype   <= 5'd0;
       reg_lmots     <= 4'd0;
@@ -565,6 +571,8 @@ module m_vlsit_dsig_hbs #(
       reg_cleared   <= 1'b1;
       reg_head      <= 2048'd0;
       reg_head_len  <= 9'd0;
+      reg_mid       <= 128'd0;
+      reg_mid_len   <= 9'd0;
       reg_t1_addr   <= 24'd0;
       reg_t1_len    <= 24'd0;
       reg_t2_addr   <= 24'd0;
@@ -598,6 +606,8 @@ module m_vlsit_dsig_hbs #(
       reg_cleared   <= 1'b1;
       reg_head      <= 2048'd0;
       reg_head_len  <= 9'd0;
+      reg_mid       <= 128'd0;
+      reg_mid_len   <= 9'd0;
       reg_go        <= 1'b0;
       reg_mv_byte_a <= 8'd0;
       reg_mv_byte_b <= 8'd0;
@@ -610,6 +620,7 @@ module m_vlsit_dsig_hbs #(
           if (i_start) begin
             reg_alg       <= i_run_alg;
             reg_form      <= i_run_form;
+            reg_hash      <= i_run_hash;
             reg_slh       <= i_run_slh;
             reg_lmstype   <= i_run_lmstype;
             reg_lmots     <= i_run_lmots;
@@ -625,6 +636,7 @@ module m_vlsit_dsig_hbs #(
             reg_sigok     <= 1'b0;
             reg_cleared   <= 1'b0;
             reg_head_len  <= 9'd0;
+            reg_mid_len   <= 9'd0;
             reg_t1_len    <= 24'd0;
             reg_t2_len    <= 24'd0;
             // Unsupported algorithm: the group of the algorithm is not built.
@@ -671,6 +683,7 @@ module m_vlsit_dsig_hbs #(
                 4'd5:    reg_rf[w_rd] <= {60'd0, reg_lmots};
                 4'd6:    reg_rf[w_rd] <= {60'd0, reg_hsslvl};
                 4'd7:    reg_rf[w_rd] <= {58'd0, reg_xmss};
+                4'd9:    reg_rf[w_rd] <= {61'd0, reg_hash};
                 default: reg_rf[w_rd] <= {60'd0, reg_alg};
               endcase
             end
@@ -787,12 +800,18 @@ module m_vlsit_dsig_hbs #(
             LPARA_OP_HCLR: begin
               reg_head     <= 2048'd0;
               reg_head_len <= 9'd0;
+              reg_mid      <= 128'd0;
+              reg_mid_len  <= 9'd0;
               reg_t1_len   <= 24'd0;
               reg_t2_len   <= 24'd0;
             end
             LPARA_OP_HREG: begin
               reg_head     <= reg_head | (2048'(f_be(w_ra_v, w_imm[7:0])) << {reg_head_len, 3'b000});
               reg_head_len <= reg_head_len + {1'b0, w_imm[7:0]};
+            end
+            LPARA_OP_HMID: begin
+              reg_mid     <= reg_mid | (128'(f_be(w_ra_v, w_imm[7:0])) << {reg_mid_len, 3'b000});
+              reg_mid_len <= reg_mid_len + {1'b0, w_imm[7:0]};
             end
             LPARA_OP_HZERO: reg_head_len <= reg_head_len + {1'b0, w_ra_v[7:0]};
             LPARA_OP_HZERI: reg_head_len <= reg_head_len + {1'b0, w_imm[7:0]};
@@ -873,8 +892,10 @@ module m_vlsit_dsig_hbs #(
         ENUM_ST_HWAIT: begin
           reg_go <= 1'b0;
           if (w_hf_done) begin
-            reg_t1_len <= 24'd0;
-            reg_t2_len <= 24'd0;
+            reg_t1_len  <= 24'd0;
+            reg_t2_len  <= 24'd0;
+            reg_mid     <= 128'd0;
+            reg_mid_len <= 9'd0;
           end
         end
         default: begin

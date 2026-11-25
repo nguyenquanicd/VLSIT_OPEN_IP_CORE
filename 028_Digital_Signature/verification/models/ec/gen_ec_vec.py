@@ -3,12 +3,12 @@
 Every vector is a block of 1024 bytes, one byte per line in a $readmemh file:
   0 alg, 1 op (0 key generation, 1 sign, 2 verify, 3 sign then verify-after-sign, 4 sign, corrupt, then
   verify-after-sign), 2 hash of dsig_op.hash, 4..7 len_msg, 8..9 expected dsig_err flags, 10 expected
-  result of the check (sigok or vas ok), 11 number of result bytes to compare,
+  result of the check (sigok or vas ok), 11 number of result bytes to compare, 12 deterministic ECDSA nonce (1: RFC 6979, no pool),
   16..83 key (68 bytes), 84..179 random pool (96 bytes), 192..391 message, 400..539 signature area,
   544..683 public key area, 688..827 expected result area.
 The expected values are independent of the RTL: the RFC 8032 and RFC 6979 vectors, the verdict that a
 corrupted input must be rejected, and the textbook group law of ec_curves.py (secp256k1).
-Usage: python gen_ec_vec.py <set> <out.hex> <manifest.txt>   (sets: ed25519 ed448 edvar p256 p384 p521 k256 quick)"""
+Usage: python gen_ec_vec.py <set> <out.hex> <manifest.txt>   (sets: ed25519 ed448 edvar det p256 p384 p521 k256 quick)"""
 import hashlib
 import os
 import random
@@ -24,11 +24,12 @@ HASHF = [hashlib.sha256, hashlib.sha384, hashlib.sha512]
 
 
 class Vec:
-    def __init__(self, name, curve, op, hash_=0, msg=b'', sig=b'', pk=b'', key=b'', pool=b'', exp_ok=0, exp_err=0, exp_res=b'', ctx=b''):
+    def __init__(self, name, curve, op, hash_=0, msg=b'', sig=b'', pk=b'', key=b'', pool=b'', exp_ok=0, exp_err=0, exp_res=b'', ctx=b'', det=0):
         self.name, self.curve, self.op, self.hash = name, curve, op, hash_
         self.msg, self.sig, self.pk, self.key, self.pool = msg, sig, pk, key, pool
         self.exp_ok, self.exp_err, self.exp_res = exp_ok, exp_err, exp_res
         self.ctx = ctx
+        self.det = det
 
     def block(self):
         b = bytearray(BLK)
@@ -37,6 +38,7 @@ class Vec:
         b[4:8] = len(self.msg).to_bytes(4, 'little')
         b[8:10] = self.exp_err.to_bytes(2, 'little')
         b[10], b[11] = self.exp_ok, len(self.exp_res)
+        b[12] = self.det
         assert len(self.key) <= 68 and len(self.pool) <= 96 and len(self.msg) + len(self.ctx) <= 200 and len(self.sig) <= 140
         assert len(self.pk) <= 140 and len(self.exp_res) <= 140
         b[16:16 + len(self.key)] = self.key
@@ -133,6 +135,39 @@ def ecdsa_set(cname, per_curve=None):
     return out
 
 
+def det_set():
+    """ECDSA signing with the deterministic nonce of RFC 6979 computed by the engine: every RFC 6979 vector of A.2.5 to A.2.7
+    (SHA-256, SHA-384, SHA-512), no random pool; the signature must equal the vector. One verify-after-sign per curve."""
+    out = []
+    seen = set()
+    for (cn, x, ux, uy, hop, msg, k, r, s) in T.ecdsa_vectors():
+        c = CURVES[cn]
+        nb = c.nbytes
+        sig = r.to_bytes(nb, 'big') + s.to_bytes(nb, 'big')
+        tag = '%s hash%d %s det' % (cn, hop, msg.decode())
+        out.append(Vec(tag + ' sign', cn, 1, hash_=hop, msg=msg, key=x.to_bytes(nb, 'big'), exp_ok=1, exp_res=sig, det=1))
+        if cn not in seen:
+            seen.add(cn)
+            out.append(Vec(tag + ' sign+vas', cn, 3, hash_=hop, msg=msg, key=x.to_bytes(nb, 'big'), exp_ok=1, exp_res=sig, det=1))
+    # secp256k1 has no RFC 6979 vector: the nonce comes from the reference of RFC 6979 section 3.2 in test_rfc6979_retry.py
+    # (written from the text) and the signature from the textbook group law
+    import test_rfc6979_retry as R6
+    c = CURVES['secp256k1']
+    for hop, hname in ((0, 'sha256'), (1, 'sha384'), (2, 'sha512')):
+        d = 0x1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD + hop
+        msg = b'deterministic secp256k1 %d' % hop
+        h1 = getattr(hashlib, hname)(msg).digest()
+        k, _ = R6.ref_k(d, h1, c.n, 256, hname, c.n)
+        e = R6.bits2int(h1, 256) % c.n
+        Rp = mul(c, k, (c.gx, c.gy))
+        r = Rp[0] % c.n
+        s = pow(k, -1, c.n) * (e + r * d) % c.n
+        sig = r.to_bytes(32, 'big') + s.to_bytes(32, 'big')
+        out.append(Vec('secp256k1 hash%d det sign' % hop, 'secp256k1', 1, hash_=hop, msg=msg, key=d.to_bytes(32, 'big'), exp_ok=1,
+                       exp_res=sig, det=1))
+    return out
+
+
 def k256_set():
     out = []
     c = CURVES['secp256k1']
@@ -167,6 +202,8 @@ def build(setname):
         return ed_set('Ed25519', ed25519, 32, False)
     if setname == 'ed448':
         return ed_set('Ed448', ed448, 57, True)
+    if setname == 'det':
+        return det_set()
     if setname == 'edvar':
         return edvar_set()
     if setname == 'p256':

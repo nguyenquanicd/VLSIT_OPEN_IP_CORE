@@ -86,7 +86,9 @@ module dv_dvp_source #(
     o_data = d;
     #(T_APB_NS);
     o_clk = (EDGE == 0) ? 1'b1 : 1'b0;       // selected edge
-    #(T_APB_NS);
+    #(T_APB_NS / 2.0);
+    o_data = ~d;                              // the source registers the pixel at the selected edge; the pins carry the complement afterwards,
+    #(T_APB_NS / 2.0);                        // so a sampler on the other edge (or a late sampler) is detected
     o_clk = (EDGE == 0) ? 1'b0 : 1'b1;
     #(T_APB_NS * GATE_GAP_APB);
   endtask

@@ -3,6 +3,8 @@ elliptic-curve engine, from the programs of ec_progs.py (tested by test_ec_model
 
 Curve numbers: 0 Ed25519, 1 Ed448, 2 P-256, 3 P-384, 4 P-521, 5 secp256k1, 6 Ed25519 with the dom2 prefix (Ed25519ctx, Ed25519ph).
 Operation numbers: 0 key generation, 1 signing, 2 verification, 3 verify-after-sign.
+Each ECDSA signing program also exists with the deterministic nonce of RFC 6979, once per SHA-2 hash (entry
+selected by i_det and i_hsel = dsig_op.hash 0, 1, 2).
 Usage: python gen_ec_rom.py <output .sv>"""
 import os
 import sys
@@ -19,7 +21,11 @@ CNAMES = ['P', 'N', 'NM1', 'A', 'B', 'B3', 'D', 'GX', 'GY', 'GT', 'PM2', 'NM2', 
 CID = {n: i for i, n in enumerate(CNAMES)}
 
 
-def program(cname, op):
+DET_HASH = {0: 1, 1: 2, 2: 3}      # dsig_op.hash -> hash mode of the sequencer (SHA-256, SHA-384, SHA-512)
+ECDSA = ('P-256', 'P-384', 'P-521', 'secp256k1')
+
+
+def program(cname, op, det=None):
     c = CURVES['Ed25519' if cname == 'Ed25519dom' else cname]
     if cname == 'Ed25519dom':
         return P.prog_ed(c, 'verify' if op in ('verify', 'vas') else op, vas=(op == 'vas'), dom=True)
@@ -27,7 +33,7 @@ def program(cname, op):
         return P.prog_ed(c, 'verify' if op in ('verify', 'vas') else op, vas=(op == 'vas'))
     if cname == 'Ed448':
         return P.prog_ed448(c, 'verify' if op in ('verify', 'vas') else op, vas=(op == 'vas'))
-    return P.prog_ecdsa(c, 'verify' if op in ('verify', 'vas') else op, vas=(op == 'vas'))
+    return P.prog_ecdsa(c, 'verify' if op in ('verify', 'vas') else op, vas=(op == 'vas'), det=det)
 
 
 def encode(ins):
@@ -41,6 +47,7 @@ def encode(ins):
 def main(path):
     words = []
     entry = {}
+    dentry = {}
     for cname, cno in CURVE_NO:
         for op, ono in OPS_NO.items():
             asm = program(cname, op)
@@ -48,6 +55,13 @@ def main(path):
             code = asm.resolve(base)
             entry[(cno, ono)] = base + asm.labels['START']
             words += [encode(i) for i in code]
+        if cname in ECDSA:
+            for hsel, hmode in DET_HASH.items():
+                asm = program(cname, 'sign', det=hmode)
+                base = len(words)
+                code = asm.resolve(base)
+                dentry[(cno, hsel)] = base + asm.labels['START']
+                words += [encode(i) for i in code]
     n = len(words)
     L = []
     L.append('/*')
@@ -65,6 +79,8 @@ def main(path):
     L.append('  input  wire  [4:0]   i_cid,')
     L.append('  output logic [575:0] o_const,')
     L.append('  input  wire  [1:0]   i_op,')
+    L.append('  input  wire          i_det,')
+    L.append('  input  wire  [1:0]   i_hsel,')
     L.append('  output logic [12:0]  o_entry,')
     L.append('  input  wire  [3:0]   i_str_id,')
     L.append('  output logic [255:0] o_str,')
@@ -80,13 +96,16 @@ def main(path):
     L.append('    endcase')
     L.append('  end')
     L.append('')
-    L.append('  // Entry address of the program of an operation')
+    L.append('  // Entry address of the program of an operation (deterministic ECDSA signing has its own programs)')
     L.append('  always_comb begin : p_com_entry')
     L.append("    o_entry = 13'd0;")
-    L.append('    case ({i_curve, i_op})')
+    L.append('    case ({i_curve, i_op, i_det, i_hsel})')
     for (cno, ono), a in sorted(entry.items()):
-        L.append("      {3'd%d, 2'd%d}: o_entry = 13'd%d;" % (cno, ono, a))
-    L.append('      default: o_entry = 13\'d0;')
+        for det in (0, 1):
+            for hsel in range(4):
+                v = dentry.get((cno, hsel), a) if (det and ono == 1) else a
+                L.append("      {3'd%d, 2'd%d, 1'b%d, 2'd%d}: o_entry = 13'd%d;" % (cno, ono, det, hsel, v))
+    L.append("      default: o_entry = 13'd0;")
     L.append('    endcase')
     L.append('  end')
     L.append('')
@@ -121,7 +140,7 @@ def main(path):
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'common'))
     import rom_postfix
     rom_postfix.finish(path)
-    print('%d instructions, %d programs' % (n, len(entry)))
+    print('%d instructions, %d programs' % (n, len(entry) + len(dentry)))
     return 0
 
 

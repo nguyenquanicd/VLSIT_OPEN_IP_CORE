@@ -28,7 +28,7 @@ module tb_top_ec;
     .PARA_EN_ED25519(1), .PARA_EN_ED25519CTX(1), .PARA_EN_ED25519PH(1), .PARA_EN_ED448(1), .PARA_EN_ED448PH(1), .PARA_EN_ECDSA_P256(1), .PARA_EN_ECDSA_P384(1), .PARA_EN_ECDSA_P521(1), .PARA_EN_ECDSA_K256(1),
     .PARA_OP_KGEN(ALGMASK), .PARA_OP_SIGN(ALGMASK), .PARA_OP_VRFY(ALGMASK),
     .PARA_EN_PURE(1), .PARA_EN_PREHASH(1), .PARA_BUF_BYTES(1024), .PARA_EN_AXI(1), .PARA_EN_DMA(1), .PARA_EN_WIN(1),
-    .PARA_EN_KEYIF(1), .PARA_EN_KEYREG(1), .PARA_KEY_SRC(2), .PARA_ECDSA_NONCE(0), .PARA_EN_VAS(1), .PARA_EN_LOG(1),
+    .PARA_EN_KEYIF(1), .PARA_EN_KEYREG(1), .PARA_KEY_SRC(2), .PARA_ECDSA_NONCE(2), .PARA_EN_VAS(1), .PARA_EN_LOG(1),
     .PARA_CSR_ASYNC(0)
   ) dut (
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk), .i_rst_n_apb(rst_n),
@@ -130,7 +130,7 @@ module tb_top_ec;
         for (j = 0; j < 68; j = j + 1) key_vec[8*j +: 8] = vecmem[i*BLK + 16 + j];
         for (j = 0; j < 96; j = j + 1) pool_vec[8*j +: 8] = vecmem[i*BLK + 84 + j];
         axi_load(128);
-        apb_w(16'h050, (hsh << 24) | (((alg == 2 || alg == 4) ? 1 : 0) << 12) | ((vop == 3 ? 1 : vop) << 8) | alg);     // dsig_op: alg, op, form, hash
+        apb_w(16'h050, (hsh << 24) | (vecmem[i*BLK + 12][0] << 20) | (((alg == 2 || alg == 4) ? 1 : 0) << 12) | ((vop == 3 ? 1 : vop) << 8) | alg);     // dsig_op: alg, op, form, nonce, hash
         apb_w(16'h05C, vecmem[i*BLK + 3]);     // dsig_len_ctx
         apb_w(16'h058, lenm); apb_w(16'h060, 0); apb_w(16'h064, 256); apb_w(16'h068, 512); apb_w(16'h06C, 768);
         if ((vop == 0 || vop == 1 || vop == 3) && (i % 2 == 0))

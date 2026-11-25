@@ -73,6 +73,7 @@ module m_vlsit_dsig_ec #(
   localparam logic [31:0] LPARA_OP_HRDV = 6'd42,
   localparam logic [31:0] LPARA_OP_HMID = 6'd43,
   localparam logic [31:0] LPARA_OP_LDV = 6'd44,
+  localparam logic [31:0] LPARA_OP_XORB = 6'd45,
   localparam logic [31:0] LPARA_CID_NBITS = 5'd24,
   localparam logic [31:0] LPARA_CID_IDENT0 = 5'd20,
   localparam logic [31:0] LPARA_HMODE_OP = 5'd15,
@@ -94,6 +95,7 @@ module m_vlsit_dsig_ec #(
   input  wire  [2:0]         i_run_hash,
   input  wire  [31:0]        i_run_len_msg,
   input  wire  [7:0]         i_run_len_ctx,
+  input  wire                i_run_det,
   input  wire  [16:0]        i_run_off_msg,
   input  wire  [16:0]        i_run_off_sig,
   input  wire  [16:0]        i_run_off_pk,
@@ -185,6 +187,7 @@ module m_vlsit_dsig_ec #(
   logic [31:0]   reg_len_msg;
   logic [7:0]    reg_len_ctx;
   logic          reg_f_ph;
+  logic          reg_det;
   logic [16:0]   reg_off_msg;
   logic [16:0]   reg_off_sig;
   logic [16:0]   reg_off_pk;
@@ -223,7 +226,7 @@ module m_vlsit_dsig_ec #(
   logic          reg_go;
   logic [1023:0] reg_head;
   logic [8:0]    reg_head_len;
-  logic [1023:0] reg_mid;
+  logic [2047:0] reg_mid;
   logic [8:0]    reg_mid_len;
   logic          reg_hsel;
   logic [3:0]    reg_hmode;
@@ -286,6 +289,8 @@ module m_vlsit_dsig_ec #(
   logic [575:0]  w_hd_vec;
   logic [23:0]   w_ctx_addr;
   logic          w_htail_ctx;
+  logic          w_htail_mid;
+  logic [575:0]  w_xorb_pat;
   logic [19:0]   w_io_addr;
   logic [16:0]   w_area_base;
   logic [3:0]    w_hash_mode;
@@ -360,6 +365,8 @@ module m_vlsit_dsig_ec #(
     .i_cid     (w_cid),
     .o_const   (w_const),
     .i_op      (reg_op),
+    .i_det     (reg_det),
+    .i_hsel    (reg_hash[1:0]),
     .o_entry   (w_entry),
     .i_str_id  (w_imm[3:0]),
     .o_str     (w_str),
@@ -509,10 +516,12 @@ module m_vlsit_dsig_ec #(
     .o_wr_strb    (o_wr_strb)
   );
 
-  assign w_htail_ctx = reg_htail[1];
+  assign w_htail_ctx = (reg_htail == 2'd2);
+  assign w_htail_mid = reg_htail[1];
+  assign w_xorb_pat  = {72{w_imm[7:0]}};
   assign w_ctx_addr  = {7'd0, reg_off_msg} + reg_len_msg[23:0];
 
-  m_vlsit_dsig_hfeed #(.PARA_HEAD_BYTES(128), .PARA_DIG_BYTES(128), .PARA_TA_W(24), .PARA_MID_BYTES(128)) u_hfeed (
+  m_vlsit_dsig_hfeed #(.PARA_HEAD_BYTES(128), .PARA_DIG_BYTES(128), .PARA_TA_W(24), .PARA_MID_BYTES(256)) u_hfeed (
     .i_clk_core     (i_clk_core),
     .i_rst_n_core   (i_rst_n_core),
     .i_clr          (i_clr),
@@ -522,9 +531,9 @@ module m_vlsit_dsig_ec #(
     .i_head         (reg_head),
     .i_head_len     (reg_head_len),
     .i_mid          (reg_mid),
-    .i_mid_len      (w_htail_ctx ? reg_mid_len : 9'd0),
-    .i_tail_addr    (w_htail_ctx ? w_ctx_addr : (reg_htail[0] ? {7'd0, reg_off_msg} : 24'd0)),
-    .i_tail_len     (w_htail_ctx ? {16'd0, reg_len_ctx} : (reg_htail[0] ? reg_len_msg[23:0] : 24'd0)),
+    .i_mid_len      (w_htail_mid ? reg_mid_len : 9'd0),
+    .i_tail_addr    (w_htail_ctx ? w_ctx_addr : ((reg_htail == 2'd1) ? {7'd0, reg_off_msg} : 24'd0)),
+    .i_tail_len     (w_htail_ctx ? {16'd0, reg_len_ctx} : ((reg_htail == 2'd1) ? reg_len_msg[23:0] : 24'd0)),
     .i_tail2_addr   (w_htail_ctx ? {7'd0, reg_off_msg} : 24'd0),
     .i_tail2_len    (w_htail_ctx ? reg_len_msg[23:0] : 24'd0),
     .o_digest       (w_digest),
@@ -701,6 +710,9 @@ module m_vlsit_dsig_ec #(
       reg_hash      <= 3'd0;
       reg_vas       <= 1'b0;
       reg_len_msg   <= 32'd0;
+      reg_len_ctx   <= 8'd0;
+      reg_f_ph      <= 1'b0;
+      reg_det       <= 1'b0;
       reg_off_msg   <= 17'd0;
       reg_off_sig   <= 17'd0;
       reg_off_pk    <= 17'd0;
@@ -729,7 +741,7 @@ module m_vlsit_dsig_ec #(
       reg_go        <= 1'b0;
       reg_head      <= 1024'd0;
       reg_head_len  <= 9'd0;
-      reg_mid       <= 1024'd0;
+      reg_mid       <= 2048'd0;
       reg_mid_len   <= 9'd0;
       reg_hsel      <= 1'b0;
       reg_hmode     <= 4'd0;
@@ -754,7 +766,7 @@ module m_vlsit_dsig_ec #(
       reg_go        <= 1'b0;
       reg_head      <= 1024'd0;
       reg_head_len  <= 9'd0;
-      reg_mid       <= 1024'd0;
+      reg_mid       <= 2048'd0;
       reg_mid_len   <= 9'd0;
       reg_hsel      <= 1'b0;
       reg_dlen      <= 8'd0;
@@ -771,6 +783,7 @@ module m_vlsit_dsig_ec #(
             reg_len_msg   <= i_run_len_msg;
             reg_len_ctx   <= i_run_len_ctx;
             reg_f_ph      <= (i_run_alg == 4'd2) | (i_run_alg == 4'd4);
+            reg_det       <= i_run_det;
             reg_off_msg   <= i_run_off_msg;
             reg_off_sig   <= i_run_off_sig;
             reg_off_pk    <= i_run_off_pk;
@@ -888,13 +901,13 @@ module m_vlsit_dsig_ec #(
             LPARA_OP_HDCLR: begin
               reg_head     <= 1024'd0;
               reg_head_len <= 9'd0;
-              reg_mid      <= 1024'd0;
+              reg_mid      <= 2048'd0;
               reg_mid_len  <= 9'd0;
               reg_hsel     <= 1'b0;
             end
             LPARA_OP_HDREG: begin
               if (reg_hsel) begin
-                reg_mid     <= reg_mid | (1024'(w_hd_vec) << {reg_mid_len, 3'b000});
+                reg_mid     <= reg_mid | (2048'(w_hd_vec) << {reg_mid_len, 3'b000});
                 reg_mid_len <= reg_mid_len + {1'b0, w_imm[7:0]};
               end else begin
                 reg_head     <= reg_head | (1024'(w_hd_vec) << {reg_head_len, 3'b000});
@@ -903,7 +916,7 @@ module m_vlsit_dsig_ec #(
             end
             LPARA_OP_HDIMM: begin
               if (reg_hsel) begin
-                reg_mid     <= reg_mid | (1024'(w_str) << {reg_mid_len, 3'b000});
+                reg_mid     <= reg_mid | (2048'(w_str) << {reg_mid_len, 3'b000});
                 reg_mid_len <= reg_mid_len + {1'b0, w_str_len};
               end else begin
                 reg_head     <= reg_head | (1024'(w_str) << {reg_head_len, 3'b000});
@@ -912,6 +925,7 @@ module m_vlsit_dsig_ec #(
             end
             LPARA_OP_HMID: reg_hsel <= 1'b1;
             LPARA_OP_LDV:  reg_rf[w_rd] <= w_imm[0] ? 576'(reg_len_ctx) : 576'(reg_f_ph);
+            LPARA_OP_XORB: reg_rf[w_rd] <= w_ra_v ^ w_xorb_pat;
             LPARA_OP_HGO: begin
               reg_io_kind <= LPARA_IO_HGO;
               reg_go      <= 1'b1;

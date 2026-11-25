@@ -7,7 +7,7 @@ module tb_ec;
   reg clk = 0; always #5 clk = ~clk;
   reg rst_n = 0;
   reg clr, start, vas_start;
-  reg [3:0] alg; reg [1:0] op_op; reg [2:0] hsh; reg [31:0] len_msg; reg [7:0] len_ctx;
+  reg [3:0] alg; reg [1:0] op_op; reg [2:0] hsh; reg [31:0] len_msg; reg [7:0] len_ctx; reg det;
   reg [543:0] key; reg [767:0] pool;
   wire busy, done, err, sigok, vas_done, vas_ok, cleared; wire [11:0] err_flags;
   wire rd_en, wr_en; wire [6:0] rd_addr, wr_addr; reg [63:0] rd_data; reg rd_valid; wire [63:0] wr_data; wire [7:0] wr_strb;
@@ -17,7 +17,7 @@ module tb_ec;
 
   m_vlsit_dsig_ec #(.PARA_WA(7)) dut (
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clr(clr), .i_start(start), .i_vas_start(vas_start),
-    .i_run_alg(alg), .i_run_op(op_op), .i_run_hash(hsh), .i_run_len_msg(len_msg), .i_run_len_ctx(len_ctx),
+    .i_run_alg(alg), .i_run_op(op_op), .i_run_hash(hsh), .i_run_len_msg(len_msg), .i_run_len_ctx(len_ctx), .i_run_det(det),
     .i_run_off_msg(17'd0), .i_run_off_sig(17'd256), .i_run_off_pk(17'd512), .i_run_off_res(17'd768),
     .o_busy(busy), .o_done(done), .o_err(err), .o_err_flags(err_flags), .o_sigok(sigok), .o_vas_done(vas_done), .o_vas_ok(vas_ok), .o_cleared(cleared),
     .i_key(key), .i_pool(pool),
@@ -79,7 +79,7 @@ module tb_ec;
     if (!$value$plusargs("NVEC=%d", nvec)) nvec = 1;
     if (!$value$plusargs("MAXCYC=%d", maxcyc)) maxcyc = 40000000;
     $readmemh(vecpath, vecmem);
-    clr = 0; start = 0; vas_start = 0; alg = 0; op_op = 0; hsh = 0; len_msg = 0; len_ctx = 0; key = 0; pool = 0; rd_data = 0; rd_valid = 0;
+    clr = 0; start = 0; vas_start = 0; alg = 0; op_op = 0; hsh = 0; len_msg = 0; len_ctx = 0; det = 0; key = 0; pool = 0; rd_data = 0; rd_valid = 0;
     nfail = 0; tot_cycles = 0;
     repeat (4) @(posedge clk); #1 rst_n = 1; repeat (2) @(posedge clk);
     for (i = 0; i < nvec; i = i + 1) begin
@@ -95,6 +95,7 @@ module tb_ec;
       alg = vecmem[i*BLK + 0]; vop = vecmem[i*BLK + 1]; hsh = vecmem[i*BLK + 2];
       len_msg = {vecmem[i*BLK + 7], vecmem[i*BLK + 6], vecmem[i*BLK + 5], vecmem[i*BLK + 4]};
       len_ctx = vecmem[i*BLK + 3];
+      det = vecmem[i*BLK + 12][0];
       ex_err = vecmem[i*BLK + 8] + (vecmem[i*BLK + 9] << 8);
       ex_ok = vecmem[i*BLK + 10]; rl = vecmem[i*BLK + 11];
       op_op = (vop == 0) ? 2'd0 : ((vop == 2) ? 2'd2 : 2'd1);

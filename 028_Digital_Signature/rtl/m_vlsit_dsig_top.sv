@@ -166,8 +166,8 @@ module m_vlsit_dsig_top #(
   // Parameter values: 0; default is 0.
   // Parameter unit: code
   parameter logic [31:0] PARA_RNG_SRC = 0,
-  // Parameter Description: ECDSA nonce mode; the deterministic nonce of RFC 6979 is not built.
-  // Parameter values: 0 random or 2 selected by the CSR (the random nonce only); default is 0.
+  // Parameter Description: ECDSA nonce mode (deterministic: RFC 6979 with SHA-2 hashes).
+  // Parameter values: 0 random, 1 deterministic, 2 selected by dsig_op.nonce; default is 0.
   // Parameter unit: code
   parameter logic [31:0] PARA_ECDSA_NONCE = 0,
   // Parameter Description: verify-after-sign.
@@ -331,8 +331,8 @@ module m_vlsit_dsig_top #(
     if (PARA_EN_DPA_EC[0] | PARA_EN_DPA_PQ[0]) begin : g_chk_dpa
       m_vlsit_dsig_top_error_PARA_EN_DPA_EC_and_PARA_EN_DPA_PQ_are_not_built u_err ();
     end
-    if (PARA_ECDSA_NONCE == 32'd1) begin : g_chk_nonce
-      m_vlsit_dsig_top_error_ECDSA_nonce_RFC6979_is_not_built u_err ();
+    if (PARA_ECDSA_NONCE > 32'd2) begin : g_chk_nonce
+      m_vlsit_dsig_top_error_PARA_ECDSA_NONCE_must_be_0_1_or_2 u_err ();
     end
     if (PARA_RNG_SRC != 32'd0) begin : g_chk_rng
       m_vlsit_dsig_top_error_PARA_RNG_SRC_shall_be_0 u_err ();
@@ -429,6 +429,7 @@ module m_vlsit_dsig_top #(
   logic [1:0]   w_run_form;
   logic         w_run_hedged;
   logic [1:0]   w_run_nonce;
+  logic         w_run_det;
   logic [2:0]   w_run_hash;
   logic [3:0]   w_run_slh;
   logic [4:0]   w_run_lmstype;
@@ -1172,6 +1173,8 @@ module m_vlsit_dsig_top #(
   assign w_zero_done     = w_key_cleared & w_rng_cleared & w_ec_cleared & w_lat_cleared & w_hbs_cleared;
 
   // Start pulses of the engines: the control block gives one pulse for the group of the algorithm.
+  // Deterministic ECDSA nonce selected for the running operation
+  assign w_run_det       = (PARA_ECDSA_NONCE == 32'd1) | ((PARA_ECDSA_NONCE == 32'd2) & w_run_nonce[0]);
   assign w_ec_start      = w_eng_start[0];
   assign w_lat_start     = w_eng_start[1];
   assign w_hbs_start     = w_eng_start[2];
@@ -1194,6 +1197,7 @@ module m_vlsit_dsig_top #(
         .i_run_hash        (w_run_hash),
         .i_run_len_msg     (w_run_len_msg),
         .i_run_len_ctx     (w_run_len_ctx),
+        .i_run_det         (w_run_det),
         .i_run_off_msg     (w_run_off_msg),
         .i_run_off_sig     (w_run_off_sig),
         .i_run_off_pk      (w_run_off_pk),
@@ -1364,6 +1368,7 @@ module m_vlsit_dsig_top #(
         .i_run_xmss        (w_run_xmss),
         .i_run_len_msg     (w_run_len_msg),
         .i_run_len_ctx     (w_run_len_ctx),
+        .i_run_hash        (w_run_hash),
         .i_run_off_msg     (w_run_off_msg),
         .i_run_off_sig     (w_run_off_sig),
         .i_run_off_pk      (w_run_off_pk),

@@ -16,14 +16,14 @@ OPS = ['NOP', 'LDI', 'MOV', 'ADD', 'SUB', 'AND', 'OR', 'XOR', 'MUL', 'ADDI', 'SU
        'EQ', 'LTU', 'EQI', 'ISZ', 'FNOT', 'FAND', 'FOR', 'FSET',
        'BRF', 'BRN', 'JMP', 'CALL', 'RET', 'END', 'ERR',
        'RLB', 'RSB', 'BLB', 'CPBR', 'CPRR', 'CMPRR', 'XORR',
-       'HCLR', 'HREG', 'HRAM', 'HBUF', 'HZERO', 'HZERI', 'HT1', 'HT2', 'HGO', 'DST']
+       'HCLR', 'HREG', 'HRAM', 'HBUF', 'HZERO', 'HZERI', 'HT1', 'HT2', 'HGO', 'DST', 'HMID']
 OPC = {n: i for i, n in enumerate(OPS)}
 M64 = (1 << 64) - 1
 
 AREA_MSG, AREA_SIG, AREA_PK = 0, 1, 2
 TAB_SLH, TAB_LMS, TAB_OTS, TAB_XMSS = 0, 1, 2, 3
 # LDS selectors
-S_LEN_MSG, S_LEN_CTX, S_FORM, S_SLH, S_LMSTYPE, S_LMOTS, S_HSSLVL, S_XMSS, S_ALG = range(9)
+S_LEN_MSG, S_LEN_CTX, S_FORM, S_SLH, S_LMSTYPE, S_LMOTS, S_HSSLVL, S_XMSS, S_ALG, S_HASH = range(10)
 # hash modes (codes of the stream sequencer)
 H_SHA256, H_SHA512, H_SHAKE256 = 1, 3, 13
 
@@ -65,6 +65,7 @@ class Machine:
         self.R = [0] * 32
         self.F = [0] * 8
         self.head = bytearray()
+        self.mid = bytearray()               # bytes hashed between the first and the second tail (at most 16)
         self.tails = [None, None]           # (src, area, addr, len)
         self.dig = b''
         self.stack = []
@@ -181,6 +182,7 @@ class Machine:
                     self.ram[d + k] = self.ram[x + k] ^ self.ram[y + k]
             elif op == 'HCLR':
                 self.head = bytearray()
+                self.mid = bytearray()
                 self.tails = [None, None]
             elif op == 'HREG':
                 self.head += (R[ra] & ((1 << (8 * imm)) - 1)).to_bytes(imm, 'big')
@@ -194,6 +196,9 @@ class Machine:
                 self.head += bytes(R[ra] & 255)
             elif op == 'HZERI':
                 self.head += bytes(imm & 255)
+            elif op == 'HMID':
+                self.mid += (R[ra] & ((1 << (8 * imm)) - 1)).to_bytes(imm, 'big')
+                assert len(self.mid) <= 16
             elif op in ('HT1', 'HT2'):
                 src, area = imm & 1, (imm >> 1) & 3
                 self.tails[0 if op == 'HT1' else 1] = (src, area, R[ra], R[rb])
@@ -201,7 +206,9 @@ class Machine:
                 mode, outlen = imm & 15, R[ra] & 0xFFFF
                 assert len(self.head) <= 256
                 data = bytes(self.head)
-                for t in self.tails:
+                for ti, t in enumerate(self.tails):
+                    if ti == 1:
+                        data += bytes(self.mid)
                     if t and t[3]:
                         src, area, a, n = t
                         if src == 0:
@@ -216,6 +223,7 @@ class Machine:
                     self.dig = hashlib.shake_256(data).digest(outlen)
                 self.nhash += 1
                 self.tails = [None, None]
+                self.mid = bytearray()
             elif op == 'DST':
                 a, n = R[ra], R[rb]
                 self.ram[a:a + n] = self.dig[:n].ljust(n, b'\0')

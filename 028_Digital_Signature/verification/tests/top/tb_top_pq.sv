@@ -157,9 +157,10 @@ module tb_top_pq;
         // key into the write-only key registers (8 words of the seed)
         if (is_lat && (v_op == 0 || v_op == 1))
           for (j = 0; j < 8; j = j + 1) apb_w(16'h100 + 4*j, {hexbyte(keyhex, 4*j+3, klen), hexbyte(keyhex, 4*j+2, klen), hexbyte(keyhex, 4*j+1, klen), hexbyte(keyhex, 4*j, klen)});
-        if (is_lat) apb_w(16'h050, ((v_hd ? 1 : 0) << 16) | (v_op << 8) | v_alg);
-        else apb_w(16'h050, (2 << 8) | v_alg);
-        if (!is_lat) apb_w(16'h054, (h_x << 24) | (h_hl << 20) | (h_lo << 16) | (h_lt << 8) | h_slh);
+        // mode field of the vector list: hedged | form << 1 | hash << 3 (lattice), slh | form << 4 | hash << 6 (hash-based)
+        if (is_lat) apb_w(16'h050, (((v_hd >> 3) & 7) << 24) | ((v_hd & 1) << 16) | (((v_hd >> 1) & 3) << 12) | (v_op << 8) | v_alg);
+        else apb_w(16'h050, (((h_slh >> 6) & 7) << 24) | (((h_slh >> 4) & 3) << 12) | (2 << 8) | v_alg);
+        if (!is_lat) apb_w(16'h054, (h_x << 24) | (h_hl << 20) | (h_lo << 16) | (h_lt << 8) | (h_slh & 15));
         apb_w(16'h058, v_lm); apb_w(16'h05C, v_lc); apb_w(16'h060, v_om); apb_w(16'h064, v_os); apb_w(16'h068, v_op2); apb_w(16'h06C, v_or);
         apb_w(16'h070, 32'd1);             // dsig_cmd.start
         cyc = 0; sts = 32'd1;
