@@ -117,7 +117,7 @@ def prehash_vecs():
         pk, sig = TP.make_raw(idx, mp)
         nm = 'Hash' + name + ' hash %d%s ' % (hcode, ' ctx' if ctx else '')
         out.append(V(nm + 'valid', 12, dig, sig, pk, 1, ctx=ctx, slh=idx, form=1, hcode=hcode))
-        out.append(V(nm + 'another hash code', 12, dig, sig, pk, 0, ctx=ctx, slh=idx, form=1, hcode=(hcode + 1) % 6))
+        out.append(V(nm + 'another hash code', 12, dig, sig, pk, 0, ctx=ctx, slh=idx, form=1, hcode=(hcode + 3) % 6))   # same length
         out.append(V(nm + 'pure form', 12, dig, sig, pk, 0, ctx=ctx, slh=idx, form=0, hcode=hcode))
     return out
 

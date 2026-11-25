@@ -45,7 +45,7 @@ module tb_top_pq;
   reg [31:0] sts, errv, rd;
   reg [8*80-1:0] keyhex, poolhex;
   reg [8*200-1:0] dir, path, kind;
-  integer klen, plen, is_lat;
+  integer klen, plen, is_lat, p_form, p_hash, exp_err;
 
   function [7:0] hexbyte(input [8*80-1:0] s, input integer pos, input integer len);
     reg [7:0] c1, c2; integer v1, v2;
@@ -162,6 +162,9 @@ module tb_top_pq;
         else apb_w(16'h050, (((h_slh >> 6) & 7) << 24) | (((h_slh >> 4) & 3) << 12) | (2 << 8) | v_alg);
         if (!is_lat) apb_w(16'h054, (h_x << 24) | (h_hl << 20) | (h_lo << 16) | (h_lt << 8) | (h_slh & 15));
         apb_w(16'h058, v_lm); apb_w(16'h05C, v_lc); apb_w(16'h060, v_om); apb_w(16'h064, v_os); apb_w(16'h068, v_op2); apb_w(16'h06C, v_or);
+        p_form = is_lat ? ((v_hd >> 1) & 3) : ((h_slh >> 4) & 3);
+        p_hash = is_lat ? ((v_hd >> 3) & 7) : ((h_slh >> 6) & 7);
+        exp_err = ((p_form == 1) && (v_lm != ((p_hash % 3) == 0 ? 32 : ((p_hash % 3) == 1 ? 48 : 64)))) ? 4 : 0;
         apb_w(16'h070, 32'd1);             // dsig_cmd.start
         cyc = 0; sts = 32'd1;
         while (sts[0] && cyc < maxcyc) begin repeat (100) @(posedge clk); cyc = cyc + 100; apb_r(16'h074, sts); end
@@ -169,7 +172,9 @@ module tb_top_pq;
         apb_r(16'h074, sts); apb_r(16'h078, errv);
         if (cyc >= maxcyc) begin ok = 0; $display("VEC %0d TIMEOUT ctl %0d lat %0d pc %0d vas %0b", v_i, dut.u_ctl.reg_fsm_ctl_current_state, dut.g_lat.u_lat.reg_fsm_lat_current_state, dut.g_lat.u_lat.reg_pc, dut.g_lat.u_lat.reg_vas); end
         else begin
-          if (errv != 0) begin ok = 0; $display("VEC %0d: dsig_err %08x", v_i, errv); end
+          // pre-hash form: a digest whose length differs from the hash of dsig_op.hash is dsig_err.badlen (ERR-003)
+          if (exp_err != 0) begin if (errv != exp_err) begin ok = 0; $display("VEC %0d: dsig_err %08x, expected %08x", v_i, errv, exp_err); end end
+          else if (errv != 0) begin ok = 0; $display("VEC %0d: dsig_err %08x", v_i, errv); end
           else if (!sts[8]) begin ok = 0; $display("VEC %0d: no result valid", v_i); end
           else if (v_op == 2) begin
             if (sts[9] != v_ok[0]) begin ok = 0; $display("VEC %0d: sigok %0b, expected %0d", v_i, sts[9], v_ok); end

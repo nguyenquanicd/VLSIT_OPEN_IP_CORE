@@ -88,8 +88,9 @@ def prehash_vecs():
         out.append(V(nm + 'sign + verify-after-sign', level, 1, msg=dig, ctx=ctx, key=seed, exp=sig, vas=1, form=1, hcode=hcode))
         out.append(V(nm + 'verify valid', level, 2, msg=dig, ctx=ctx, sig=sig, pk=pk, ok=1, form=1, hcode=hcode))
         if level == 44:
+            # another hash with the same digest length (SHA-2 <-> SHA3): only the OID in M' differs
             out.append(V(nm + 'verify with another hash code', level, 2, msg=dig, ctx=ctx, sig=sig, pk=pk, ok=0, form=1,
-                         hcode=(hcode + 1) % 3))
+                         hcode=(hcode + 3) % 6))
             out.append(V(nm + 'verify in the pure form', level, 2, msg=dig, ctx=ctx, sig=sig, pk=pk, ok=0, form=0, hcode=hcode))
     return out
 
