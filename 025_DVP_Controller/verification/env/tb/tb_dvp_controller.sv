@@ -545,22 +545,31 @@ module tb_dvp_controller;
   endtask
 
   // t_dvp_performance_characterization: seeded legal traffic with random producer bursts and consumer stalls
+  // the source records every sample it drives (u_src.sent_q); overflow can only drop the newest samples, so the values read must be an
+  // in-order subsequence of that list
+  int perf_j = 0;
+  task automatic perf_check(input logic [31:0] v);
+    bit found; found = 0;
+    for (int k = perf_j; k < u_src.sent_q.size(); k++) if (32'(u_src.sent_q[k]) == v) begin found = 1; perf_j = k + 1; break; end
+    expect_eq("random test: a value read is the next expected sample in order", found, 1);
+  endtask
   task automatic t_perf_random(input bit gated);
-    logic [31:0] r, d; bit e; int c; int n; int unsigned lines, pix, hb, pat;
+    logic [31:0] r, d; bit e; int c; int n; int unsigned lines, pix, hb, pat; int sd; int rd_ok;
+    u_src.sent_q.delete(); perf_j = 0; rd_ok = 0;
     pclk_ns = 8.0 + 1.0 * rnd(25);
     sensor_clock(!gated); csr_w(A_WM, 1 + rnd(P_DEPTH)); dma_auto = 1; dma_lat = 1 + rnd(8);
     set_ctrl(gated, 1);
     csr_w(A_TO, 2 + rnd(6));
     for (int f = 0; f < 4; f++) begin
-      lines = 1 + rnd(3); pix = 1 + rnd(6); hb = rnd(4); pat = rnd(6);
+      lines = 1 + rnd(3); pix = 1 + rnd(6); hb = rnd(4); pat = rnd(6); sd = 1000 + rnd(50);
       fork
-        emit_frame(gated, lines, pix, pat, 1000 + rnd(50), hb);
+        emit_frame(gated, lines, pix, pat, sd, hb);
         begin
           int idle_n; logic [31:0] dd; bit ee; int cc; logic [31:0] rr;
           for (int i = 0; i < 40; i++) begin
             idle_n = rnd(20); idle(idle_n);
             csr_r(A_LVL, rr);
-            if (rr != 0) begin fifo_rd(dd, ee, cc); end
+            if (rr != 0) begin fifo_rd(dd, ee, cc); if (!ee) begin perf_check(dd); rd_ok++; end end
             if (rnd(8) == 0) csr_r(A_STS, rr);
           end
         end
@@ -568,8 +577,11 @@ module tb_dvp_controller;
       idle(60);
       if (rnd(3) == 0) csr_w(A_STS, 32'h8);
     end
-    drain(40, n);
-    csr_r(A_FC, r);
+    csr_w(A_TO, 3);
+    for (int i = 0; i < 80; i++) begin fifo_rd(d, e, c); if (e) break; perf_check(d); rd_ok++; end
+    csr_r(A_FC, r); expect_eq("random test: one frame count per frame", r, 4);
+    csr_r(A_LVL, r); expect_eq("random test: empty at the end", r, 0);
+    expect_eq("random test: samples were read", rd_ok > 0, 1);
     dma_auto = 0;
   endtask
 
@@ -590,6 +602,26 @@ module tb_dvp_controller;
         for (int i = 0; i < 6; i++) u_src.cont_cycle(wv(8'h3C + i), 0, 0);
         u_src.cont_cycle(wv(8'h55), 1, 0); u_src.cont_cycle(wv(8'h66), 0, 0); u_src.cont_cycle(wv(8'h77), 1, 0); u_src.cont_cycle('0, 0, 0);
         idle(60); csr_r(A_LVL, r); expect_eq("only HREF-qualified samples", r, 2);
+      end
+      drain(8, n);
+      // pixels that arrive while VSYNC is still active: the frame is armed by the active edge of VSYNC, not by the end of the pulse
+      begin
+        logic [31:0] dv; bit ev; int cv;
+        if (!gated) begin
+          repeat (3) u_src.cont_cycle('0, 0, 1);
+          for (int i = 0; i < 4; i++) u_src.cont_cycle(wv(8'h21 + i), 1, 1);
+          repeat (3) u_src.cont_cycle('0, 0, 1);
+          repeat (6) u_src.cont_cycle('0, 0, 0);
+        end else begin
+          u_src.set_vsync(1); #(T_APB * 14); u_src.set_href(1);
+          for (int i = 0; i < 4; i++) u_src.gated_pixel(wv(8'h21 + i));
+          u_src.set_href(0); u_src.set_vsync(0); #(T_APB * 8);
+        end
+        idle(60); csr_r(A_LVL, r); expect_eq($sformatf("pixels inside an active VSYNC pulse are captured (mode %0d)", m), r, 4);
+        for (int i = 0; i < 4; i++) begin
+          fifo_rd(dv, ev, cv); expect_eq($sformatf("VSYNC-window sample %0d error", i), ev, 0);
+          expect_eq($sformatf("VSYNC-window sample %0d", i), dv, (32'h21 + i) & DMASK);
+        end
       end
       drain(8, n);
       set_ctrl(gated, 0);

@@ -31,10 +31,27 @@
   },
   {
    "name": "o_utmi_xcvrsel",
-   "wave": "=..|..|...|..=",
+   "wave": "==.|..|...|...",
    "data": [
     "FS",
     "HS"
+   ]
+  },
+  {
+   "name": "o_utmi_termsel",
+   "wave": "==.|..|...|...",
+   "data": [
+    "FS",
+    "HS"
+   ]
+  },
+  {
+   "name": "o_utmi_opmode",
+   "wave": "=..|=.|...|=..",
+   "data": [
+    "00",
+    "10",
+    "00"
    ]
   },
   {
@@ -50,7 +67,7 @@
   "text": "WF-009: host port reset and chirp handshake (OP-005, success)"
  },
  "foot": {
-  "text": "Not to scale. Host drives SE0 for at least 50 ms; device Chirp K is seen (cycles 4 and 5); the host sends alternating K and J chirps (cycles 7 to 11), then the port is enabled at high-speed."
+  "text": "Not to scale. Host drives SE0 for at least 50 ms with the high-speed terminations (XcvrSelect HS, TermSelect HS, OpMode 00b: host high-speed row of ULPI 1.1 Table 40, nothing transmitted, DEC-048); device Chirp K is seen (cycles 4 and 5) while the host listens in the host chirp row (OpMode 10b); the host sends alternating K and J chirps (cycles 7 to 11), then the port is enabled at high-speed."
  },
  "config": {
   "hscale": 1

@@ -1,0 +1,71 @@
+slh: 56 vectors
+lms: 50 vectors
+xmss: 32 vectors
+tb_hbs: 0 vectors, 0 failed, 0 protocol failures
+RESULT: PASS
+slh    FAIL  48/56 vectors, 115789595 cycles, 333 s
+    FAIL 0 SLH-DSA-SHA2-128s valid
+    FAIL 4 SLH-DSA-SHA2-128s valid with context
+    FAIL 6 SLH-DSA-SHA2-128f valid
+    FAIL 10 SLH-DSA-SHA2-128f valid with context
+    FAIL 12 SLH-DSA-SHA2-192s valid
+    FAIL 16 SLH-DSA-SHA2-192f valid
+    FAIL 20 SLH-DSA-SHA2-256s valid
+    FAIL 24 SLH-DSA-SHA2-256f valid
+VEC 0: sigok 0, expected 1
+VEC 0 FAIL cycles=717375
+VEC 4: sigok 0, expected 1
+VEC 4 FAIL cycles=761390
+VEC 6: sigok 0, expected 1
+VEC 6 FAIL cycles=2168601
+VEC 10: sigok 0, expected 1
+VEC 10 FAIL cycles=2227286
+VEC 12: sigok 0, expected 1
+VEC 12 FAIL cycles=1433763
+VEC 16: sigok 0, expected 1
+VEC 16 FAIL cycles=3900620
+VEC 20: sigok 0, expected 1
+VEC 20 FAIL cycles=2322036
+VEC 24: sigok 0, expected 1
+VEC 24 FAIL cycles=4675068
+lms    FAIL  43/50 vectors, 29492249 cycles, 319 s
+    FAIL 0 LMS 0 OTS 3 levels 1 valid
+    FAIL 5 LMS 0 OTS 3 levels 2 valid
+    FAIL 10 LMS 0 OTS 2 levels 1 valid
+    FAIL 15 LMS 0 OTS 1 levels 3 valid
+    FAIL 20 LMS 0 OTS 0 levels 1 valid
+    FAIL 25 LMS 5 OTS 7 levels 1 valid
+    FAIL 40 LMS 6 OTS 6 levels 1 valid
+VEC 0: sigok 0, expected 1
+VEC 0 FAIL cycles=1580499
+VEC 5: sigok 0, expected 1
+VEC 5 FAIL cycles=1493551
+VEC 10: sigok 0, expected 1
+VEC 10 FAIL cycles=193523
+VEC 15: sigok 0, expected 1
+VEC 15 FAIL cycles=108086
+VEC 20: sigok 0, expected 1
+VEC 20 FAIL cycles=125423
+VEC 25: sigok 0, expected 1
+VEC 25 FAIL cycles=1201949
+VEC 40: sigok 0, expected 1
+VEC 40 FAIL cycles=146598
+xmss   FAIL  26/32 vectors, 101635167 cycles, 292 s
+    FAIL 0 XMSSMT-SHA2_20/4_256 valid
+    FAIL 4 XMSSMT-SHA2_20/4_192 valid
+    FAIL 8 XMSSMT-SHA2_20/2_256 valid
+    FAIL 12 XMSSMT-SHA2_40/8_256 valid
+    FAIL 16 XMSSMT-SHA2_60/12_256 valid
+    FAIL 20 XMSS-SHA2_10_256 valid
+VEC 0: sigok 0, expected 1
+VEC 0 FAIL cycles=3313757
+VEC 4: sigok 0, expected 1
+VEC 4 FAIL cycles=2049339
+VEC 8: sigok 0, expected 1
+VEC 8 FAIL cycles=1616670
+VEC 12: sigok 0, expected 1
+VEC 12 FAIL cycles=6686554
+VEC 16: sigok 0, expected 1
+VEC 16 FAIL cycles=9698910
+VEC 20: sigok 0, expected 1
+VEC 20 FAIL cycles=919008

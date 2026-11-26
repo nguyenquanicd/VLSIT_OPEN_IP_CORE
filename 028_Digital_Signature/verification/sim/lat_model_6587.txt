@@ -1,0 +1,7 @@
+ML-DSA program: 1242 instructions
+ML-DSA-65 keygen ok (0 s)
+ML-DSA-65 verify ok (2 s)
+ML-DSA-65 sign + verify-after-sign ok (12563988 steps, 7 s)
+ML-DSA-87 keygen ok (7 s)
+ML-DSA-87 verify ok (9 s)
+ML-DSA-87 sign + verify-after-sign ok (7332532 steps, 12 s)

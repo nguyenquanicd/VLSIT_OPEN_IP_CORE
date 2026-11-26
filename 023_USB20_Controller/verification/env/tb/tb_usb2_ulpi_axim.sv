@@ -334,6 +334,34 @@ module tb_usb2_ulpi_axim;
       a_fail("a_utmi_mode", $sformatf("mode pins changed while a packet was on the bus: opmode %0d->%0d xcvr %0d->%0d term %0d->%0d pd %0d%0d->%0d%0d txvalid=%0b rxactive=%0b", opm_d, opmode, xcv_d, xcvrsel, term_d, termsel, dppd_d, dmpd_d, dppd, dmpd, utmi_txvalid, utmi_rxactive));
     opm_d <= opmode; xcv_d <= xcvrsel; term_d <= termsel; dppd_d <= dppd; dmpd_d <= dmpd;
   end
+  // a_phy_row (2026-11-25, DEC-048): XcvrSelect, TermSelect, OpMode and the pull-downs always form a defined row of ULPI 1.1
+  // Table 40 (reproduced in the Microchip USB3320 data sheet DS00001792E Table 5-1; the USB3500 UTMI+ data sheet has the same rows):
+  // OpMode 11b never; while SuspendM is low only a suspend row (full- or low-speed transceiver, TermSelect 1, OpMode 00b). The
+  // device row 00/0/10 (Test_J/Test_K of a device, USB 2.0 7.1.20) is accepted although the table lists it for the host only.
+  int act_phy_row = 0, phy_row_wait = 0;
+  // Line-state model of op LSR (2026-11-25): while ls_auto is set the line follows the PHY row like the resistor network does:
+  // SE0 under the host high-speed terminations, otherwise the idle state of the attached device (ls_dev 1: pull-up on D+ = J,
+  // 2: pull-up on D- = K in full-speed terms); op LS hands the line back to the scenario.
+  bit ls_auto = 0; int ls_dev = 1;
+  always @(posedge clk_phy) if (ls_auto)
+    utmi_linestate <= (xcvrsel == 2'b00 && !termsel && opmode != 2'b01 && dppd && dmpd) ? 2'b00 : ((ls_dev == 2) ? 2'b10 : 2'b01);
+  function automatic bit phy_row_ok(logic [1:0] x, logic t, logic [1:0] o, logic pdp, logic pdm, logic sn);
+    if (o == 2'b01) return 1'b1;                                   // tri-state drivers (non-driving), any setting
+    if (o == 2'b11 || pdp != pdm) return 1'b0;
+    if (!sn) return (x == 2'b01 || x == 2'b10) && t && (o == 2'b00);
+    if (pdp) return (x == 2'b00 && !t) || (x[0] && t && o == 2'b00) || (x == 2'b01 && t && o == 2'b10) || (x == 2'b10 && t) ||
+                    (x == 2'b01 && !t && o == 2'b00);                // host rows; the last one is power-up
+    return (x == 2'b00 && t && o == 2'b10) || (x == 2'b00 && !t) || ((x == 2'b01 || x == 2'b10) && t);   // peripheral rows
+  endfunction
+  always @(posedge clk_phy) begin
+    if (!rst_n) phy_row_wait <= 0;
+    else if (phy_row_wait < 8) phy_row_wait <= phy_row_wait + 1;     // the mode registers load in the first cycles after reset
+    else if (!$isunknown({xcvrsel, termsel, opmode, dppd, dmpd, suspend_n})) begin
+      act_phy_row++;
+      if (!phy_row_ok(xcvrsel, termsel, opmode, dppd, dmpd, suspend_n))
+        a_fail("a_phy_row", $sformatf("undefined PHY row xcvr %b term %b opmode %b pd %b%b suspend_n %b", xcvrsel, termsel, opmode, dppd, dmpd, suspend_n));
+    end
+  end
   always @(posedge clk_bus) if (rst_n) begin
     act_irq_lvl++;
     if (int_usb !== irq_exp) a_fail("a_irq_level", "o_int_usb is not the registered OR of the enabled status bits");
@@ -365,6 +393,7 @@ module tb_usb2_ulpi_axim;
     $fclose(fd_bin);
     $display("ACTIVITY2 a_utmi_w16=%0d a_utmi_mode=%0d a_irq_level=%0d", act_utmi_w16, act_utmi_mode, act_irq_lvl); $display("ULPI_ACTIVITY a_ulpi_bus_cycles=%0d violations=%0d", n_ulpi_chk, n_ulpi_viol); $display("ACTIVITY a_utmi_tx=%0d a_axim=%0d a_apb=%0d sof_cnt=%0d sof_min_ns=%0.1f sof_max_ns=%0.1f", act_utmi_tx, act_axim, act_apb, sof_cnt, sof_min, sof_max);
     if (nc_dead || nc_silent || nc_data || nc_mem) $display("NC dead=%0d silent=%0d data=%0d mem=%0d dut_packets=%0d data_flips=%0d mem_flips=%0d", nc_dead, nc_silent, nc_data, nc_mem, nc_pkt_n, nc_data_n, nc_mem_n);
+    $display("PHY_ROW a_phy_row_cycles=%0d", act_phy_row);
     $display("CHECKPOINTS reached=%0d", cp_n);
     $display("RESULT %s checks=%0d errors=%0d", (errors == 0 && checks > 0) ? "PASS" : "FAIL", checks, errors);
     $finish;
@@ -461,7 +490,12 @@ module tb_usb2_ulpi_axim;
         "MW": begin a = rdi(); n = rdi(); for (int i = 0; i < n; i++) mem[a + i] = 8'(rdi()); end
         "MC": begin a = rdi(); n = rdi(); k = 0; for (int i = 0; i < n; i++) begin d = rdi(); if (mem[a + i] != 8'(d)) begin k++; if (k == 1) m = i; end end
           chk(k == 0, $sformatf("line %0d: memory at %05x: %0d byte(s) differ, first at offset %0d", line_no, a, k, m)); end
-        "LS": begin d = rdi(); utmi_linestate <= d[1:0]; end
+        "LS": begin d = rdi(); ls_auto = 0; utmi_linestate <= d[1:0]; end
+        "LSR": begin a = rdi(); d = rdi();                                                 // line state that the PHY row gives with the attached
+          k = (xcvrsel == 2'b00 && !termsel && opmode != 2'b01 && dppd && dmpd) ? 0 : ((d == 2) ? 2 : 1);   // device (d: 1 pull-up on D+, 2 on D-):
+          chk(k == a, $sformatf("line %0d: the PHY row xcvr %b term %b opmode %b gives line state %0d, expected %0d", line_no, xcvrsel, termsel, opmode, k, a));
+          utmi_linestate <= k[1:0]; ls_dev = d; ls_auto = 1; end                        // SE0 only under the high-speed terminations;
+                                                                                       // from now on the line follows the row (until LS)
         "PIN": begin a = rdi(); d = rdi();
           case (a) 0: vbusvalid <= d[0]; 1: iddig <= d[0]; 2: hostdisc <= d[0]; 3: ovrcur_n <= d[0]; 4: slverr_en <= d[0]; 5: protect_en <= d[0];
             6: sessend <= d[0]; 7: avalid <= d[0]; 8: bvalid_pin <= d[0]; default: ; endcase end

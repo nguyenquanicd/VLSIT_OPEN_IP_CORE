@@ -10,7 +10,9 @@
  *                from the flops of the link, so TXValid and the data hold until TXReady with no
  *                extra cycle. The mode controls of the speed engine drive XcvrSelect,
  *                TermSelect, OpMode and the pull-downs and VBUS controls. In 8-bit mode the high
- *                byte is 0 and TXValidH is 0.
+ *                byte is 0 and TXValidH is 0. SuspendM is the OR of the speed-engine request and
+ *                the wake request of the always-on m_usb2_utmilp (CLK-BUS), so it can rise while
+ *                the PHY has stopped CLK-PHY (REQ-IF-015, DEC-049, CDC-008).
  */
 `timescale 1ns/1ps
 
@@ -83,6 +85,7 @@ module m_usb2_phyif_utmi #(
   input  wire         i_term_sel,
   input  wire  [1:0]  i_op_mode,
   input  wire         i_suspend_n,
+  input  wire         i_wake_aon,
   input  wire         i_dp_pd,
   input  wire         i_dm_pd,
   input  wire         i_drv_vbus,
@@ -150,7 +153,7 @@ module m_usb2_phyif_utmi #(
   assign o_utmi_opmode        = i_op_mode;
   assign o_utmi_xcvrsel       = i_xcvr_sel;
   assign o_utmi_termsel       = i_term_sel;
-  assign o_utmi_suspend_n     = i_suspend_n;
+  assign o_utmi_suspend_n     = i_suspend_n | i_wake_aon;
   assign o_utmi_databus16_8   = w_wide;
   assign o_utmi_bitstuff_en   = 1'b1;
   assign o_utmi_bitstuff_en_h = w_wide;

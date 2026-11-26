@@ -14,9 +14,9 @@ Stimulus: device ACK to the LPM token; idle line during L1.
 Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
   HL1-SOF | REQ-FUNC-010 | before the LPM request | at least 3 SOF at 125 us +-10 percent (scaled) | TB SOF | 500 us scaled | SOF missing
   HL1-LPM | REQ-FUNC-021, LPM ECN token format | hport.lpm_req written | EXT token to address 0, then the LPM token whose address/endpoint fields carry bLinkState 1, HIRD 5, bRemoteWake 1 | TB XT | 30000 CLK-PHY each | wrong token or attribute bits
-  HL1-ENTER | REQ-FUNC-021 | device ACK | irq_raw.lpm_evt and hsts.port_susp_sts set | TB P | 3000 polls each | no L1 entry
+  HL1-ENTER | REQ-FUNC-021, DEC-048 | device ACK | irq_raw.lpm_evt and hsts.port_susp_sts set; suspend row 01 / 1 / 00 with SuspendM 0 | TB P, XP | 3000 polls each | no L1 entry or the high-speed row kept
   HL1-QUIET | REQ-FUNC-021 (BUG-048) | port in L1 | no SOF for 2 ms (scaled) and no other packet | TB NSOF, XN | 2 ms scaled | any packet in L1
-  HL1-RESK | REQ-FUNC-021 | hport.port_res written | resume K of 40 us to 30 ms (scaled) | TB XC | 40 ms scaled | no resume K
+  HL1-RESK | REQ-FUNC-021, DEC-048 | hport.port_res written | resume row 01 / 1 / 10, resume K of 40 us to 30 ms (scaled) | TB WP, XC | 40 ms scaled | no resume K or the high-speed row
   HL1-EXIT | REQ-FUNC-021, 037 | end of the resume | at least one SOF within 3 ms; hsts.port_susp_sts 0 | TB SOF, P | 3 ms scaled, 400 polls | no SOF or status stays set
   HL1-SOF2 | REQ-FUNC-010 | after L1 | at least 3 SOF at the regular interval; no crc_err or pid_err | TB SOF, R | 500 us scaled | irregular SOF or error flag
 Shared checkpoints also reached: HBU-VER, HBU-CONN, HBU-RSTDRV, HBU-CHIRP, HBU-RST50, HBU-RECOV (hostlib.py).
@@ -56,6 +56,7 @@ s.hs(ACK)
 s.chk('HL1-ENTER')
 s.poll('irq_raw', tries=3000, lpm_evt=1)
 s.poll('hsts', tries=3000, port_susp_sts=1)
+s.xp(0, mode(1, 1, 0, pd=1), MODE_MASK | (1 << 5))              # L1: suspend row 01 / 1 / 00 with SuspendM 0 (DEC-048 PHY-02)
 s.emit('SOF', 0, 0, 0xFFFFFFF)
 s.chk('HL1-QUIET')
 s.emit('NSOF', us(2000))                                        # no SOF while the port is in L1 (SOF packets do not reach XN)
@@ -63,6 +64,7 @@ s.emit('XN', 20)
 s.bin('cg_sofphase.l1')
 s.w('hport', oc_en=1, vbus_drv=1, sof_en=1, port_res=1)
 s.chk('HL1-RESK')
+s.wp(0, mode(1, 1, 2, pd=1) | (1 << 5), MODE_MASK | (1 << 5), us(2000))   # resume row 01 / 1 / 10 (DEC-048 PHY-03)
 s.xc(us(40), us(30000), 0x00, us(40000))                        # L1 resume K, much shorter than the 20 ms of a selective suspend
 s.emit('SOF', 0, 0, 0xFFFFFFF)
 s.wait(us(3000))

@@ -1,0 +1,5 @@
+VEC 0 PASS
+VEC 1 PASS
+VEC 2 PASS
+tb_top_pq: 3 vectors, 0 failed
+RESULT: PASS

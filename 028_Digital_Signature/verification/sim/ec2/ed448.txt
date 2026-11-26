@@ -1,0 +1,49 @@
+0	Ed448 rfc0 verify ok
+1	Ed448 rfc0 verify bad S
+2	Ed448 rfc0 verify bad R
+3	Ed448 rfc0 sign
+4	Ed448 rfc0 keygen
+5	Ed448 rfc0 sign+vas
+6	Ed448 rfc0 sign+corrupt+vas
+7	Ed448 rfc0 verify S = L
+8	Ed448 rfc0 verify non-canonical A
+9	Ed448 rfc1 verify ok
+10	Ed448 rfc1 verify bad msg
+11	Ed448 rfc1 verify bad S
+12	Ed448 rfc1 verify bad R
+13	Ed448 rfc1 sign
+14	Ed448 rfc1 keygen
+15	Ed448 rfc1 sign+vas
+16	Ed448 rfc1 sign+corrupt+vas
+17	Ed448 rfc2 verify ok
+18	Ed448 rfc2 verify bad msg
+19	Ed448 rfc2 verify bad S
+20	Ed448 rfc2 verify bad R
+21	Ed448 rfc2 sign
+22	Ed448 rfc2 keygen
+23	Ed448 rfc2 sign+vas
+24	Ed448 rfc2 sign+corrupt+vas
+25	Ed448 rfc3 verify ok
+26	Ed448 rfc3 verify bad msg
+27	Ed448 rfc3 verify bad S
+28	Ed448 rfc3 verify bad R
+29	Ed448 rfc3 sign
+30	Ed448 rfc3 keygen
+31	Ed448 rfc3 sign+vas
+32	Ed448 rfc3 sign+corrupt+vas
+33	Ed448 rfc4 verify ok
+34	Ed448 rfc4 verify bad msg
+35	Ed448 rfc4 verify bad S
+36	Ed448 rfc4 verify bad R
+37	Ed448 rfc4 sign
+38	Ed448 rfc4 keygen
+39	Ed448 rfc4 sign+vas
+40	Ed448 rfc4 sign+corrupt+vas
+41	Ed448 rfc5 verify ok
+42	Ed448 rfc5 verify bad msg
+43	Ed448 rfc5 verify bad S
+44	Ed448 rfc5 verify bad R
+45	Ed448 rfc5 sign
+46	Ed448 rfc5 keygen
+47	Ed448 rfc5 sign+vas
+48	Ed448 rfc5 sign+corrupt+vas

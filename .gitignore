@@ -1,8 +1,8 @@
-# VLSIT Open IP Core generated output and tool artifacts.
+# Ignore tool-generated binaries, build state, coverage data, and logs; keep waveform files trackable.
 # Keep RTL, specifications, testcase sources, test generators, models, and flat verification documentation.
 # `rtl/filelist.f` is the sole active RTL filelist in each numbered IP.
 # `verification/` contains only docs, tests, models, env, and sim.
-# Simulation/build outputs and legacy run archives are not versioned.
+# Non-waveform simulation/build outputs and legacy run archives are not versioned.
 
 # --- whole-IP exclusions (deliberately not versioned) ----------------------
 /016_CAN_Controller/
@@ -16,12 +16,8 @@
 # Vendor datasheets and scientific papers; the manifest and report beside them stay versioned.
 /027_ChaCha/research/vlsit_sources/
 
-# --- simulation waveforms & sim data --------------------------------------
-*.vcd
-*.fst
-*.fsdb
-*.wlf
-*.vpd
+# --- simulator-generated data and archives (waveforms retained) -----------
+# VCD/FST/FSDB/WLF/VPD waveform files and waveform directories remain trackable.
 *.dat
 *.zip
 *.tar
@@ -71,11 +67,9 @@ obj*/
 obj_dir/
 coverage*/
 logs*/
-waveforms_sim/
 mutation/
 sanity_v2/
 work/
-sim/
 tmp/
 
 # --- synthesis directories: keep run scripts and README guides ------------

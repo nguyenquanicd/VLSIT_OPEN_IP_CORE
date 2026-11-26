@@ -2,12 +2,12 @@
 """dvp_mutation.py - mutation analysis of the DVP RTL against the regression and the formal obligations (AI-generated candidate, R-117).
 
 Every mutant is applied to a temporary copy of the RTL (the repository RTL is never changed): one exact-string edit per mutant (the edit must
-match exactly once), then the base-configuration regression tests (seed 1, first failing test stops the run) and the formal harnesses that
+match exactly once), then every simulation test of the base-configuration list (seed 1; no test stops the others, so the same pass gives the test-by-mutant kill matrix) and the formal harnesses that
 cover the mutated module. A mutant is KILLED when a test case fails or a formal task fails, SURVIVED otherwise. M00 is the unmutated control and
-must survive the whole pipeline. Flat results go to the output directory (default verification/sim/final): mutation_summary.json/csv, one log per mutant.
+must survive the whole pipeline. Flat results go to the output directory (default verification/sim/final): mutation_summary.json/csv, one log per mutant, killmatrix.json/csv.
 Usage: python dvp_mutation.py [--out DIR] [--only M01 M02 ...]
 """
-import argparse, csv, json, os, re, shutil, sys, tempfile, time
+import argparse, ast, csv, json, os, re, shutil, sys, tempfile, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -100,15 +100,26 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', default=os.path.join(R.VER, 'sim', 'final'))
     ap.add_argument('--only', nargs='*', default=[])
+    ap.add_argument('--resume', action='store_true', help='keep the finished results (KILLED or SURVIVED) found in the existing mutation_<id>.log files and run only the rest')
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     budget = json.load(open(os.path.join(R.ENVD, 'config', 'resource_budget.json'), encoding='utf-8'))
     results = []
+    matrix = {}      # mutant -> test -> FAIL (detected) or pass; every test runs, none stops the others
     for mid, cls, desc, edits, fnames, *cfg_opt in MUTANTS:
         if a.only and mid not in a.only:
             continue
         defines = R.CONFIGS[cfg_opt[0]][0] if cfg_opt else BASE_DEFINES
         R.preflight(budget, a.out)
+        prev = os.path.join(a.out, 'mutation_%s.log' % mid)
+        if a.resume and os.path.exists(prev):
+            last = [l for l in open(prev, encoding='utf-8', errors='replace').read().splitlines() if l.startswith('RESULT ')]
+            if last and last[-1].split()[1] in ('KILLED', 'SURVIVED'):
+                st = last[-1].split()[1]
+                kb = ast.literal_eval(last[-1].split(' ', 2)[2])
+                results.append({'id': mid, 'class': cls, 'description': desc, 'killed_by': kb, 'status': st})
+                print('%s %-22s %-9s %s (kept from the earlier run)' % (mid, cls, st, ', '.join(kb)), flush=True)
+                continue
         tmp = tempfile.mkdtemp(prefix='dvp_mut_')
         log = open(os.path.join(a.out, 'mutation_%s.log' % mid), 'w', encoding='utf-8')
         rec = {'id': mid, 'class': cls, 'description': desc, 'killed_by': [], 'status': 'SURVIVED'}
@@ -134,11 +145,11 @@ def main():
                     R.run([exe, '+TEST=' + t, '+SEED=1', '+TIMEOUT_NS=2000000'] + plus, cwd, lp, 300, 'mutant %s %s' % (mid, t))
                     r = R.parse_log(lp)
                     log.write('  sim %-40s %s errors=%d\n' % (t + (extra[0] if extra else ''), r['result'], r['errors']))
+                    matrix.setdefault(mid, {})[t + (extra[0] if extra else '')] = 'FAIL' if r['result'] != 'PASS' else 'pass'
                     if r['result'] != 'PASS':
                         rec['killed_by'].append('sim:' + t + (extra[0] if extra else ''))
                         first = next((l.strip() for l in open(lp, errors='replace') if l.startswith('DV_ERROR') or 'DV_TEST' in l), '')
                         log.write('    first message: %s\n' % first[:200])
-                        break
                 if fnames:
                     jobs = [(n, [t for t in FORMAL_ALL[n] if t != 'cover']) for n in fnames]
                     rows = F.run_all(os.path.join(tmp, IPN, 'verification', 'env', 'formal'), tmp, 'mut_', jobs)
@@ -158,6 +169,13 @@ def main():
     json.dump({'results': results, 'mutants': len(real), 'killed': len(killed), 'survived': [r['id'] for r in real if r['status'] == 'SURVIVED'],
                'build_fail': [r['id'] for r in real if r['status'] == 'BUILD_FAIL'], 'control': next((r['status'] for r in results if r['id'] == 'M00'), 'not run')},
               open(os.path.join(a.out, 'mutation_summary.json'), 'w', encoding='utf-8'), indent=1)
+    names = [t + (e[0] if e else '') for t, e in TESTS]
+    json.dump({'tests': names, 'matrix': matrix}, open(os.path.join(a.out, 'killmatrix.json'), 'w', encoding='utf-8'), indent=1)
+    with open(os.path.join(a.out, 'killmatrix.csv'), 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f); mids = list(matrix); w.writerow(['test'] + mids)
+        for n in names:
+            w.writerow([n] + [matrix[m].get(n, '') for m in mids])
+        w.writerow(['mutants detected'] + [sum(1 for n in names if matrix[m].get(n) == 'FAIL') for m in mids])
     with open(os.path.join(a.out, 'mutation_summary.csv'), 'w', newline='', encoding='utf-8') as f:
         w = csv.writer(f); w.writerow(['id', 'class', 'status', 'killed_by', 'description'])
         for r in results:

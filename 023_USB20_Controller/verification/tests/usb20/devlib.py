@@ -2,6 +2,7 @@
 
 Checkpoint catalogue (op CHK, R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
   DBU-VER | u2_version, section 11.3 | first APB read after reset | major version 1 | TB R | one APB access | other value or PSLVERR
+  DBU-OFF | DEC-048 (ULPI 1.1 Table 40 tri-state row, UTMI 1.05 OpMode 1) | core enabled, soft_conn still 0 | non-driving row (OpMode 01b, pull-downs off): the device is invisible on the bus | TB WP on the mode pins | 2000 CLK-PHY | an undefined row or a pull-up before soft_conn
   DBU-ENUM | REQ-FUNC-013, REQ-IF-008 | end of the bus reset and speed detection | irq_raw.busrst and irq_raw.enum set; sts.speed is the detected speed | TB P, R | 400 polls | a flag missing or a wrong speed"""
 from usb2lib import *
 
@@ -23,6 +24,8 @@ def dev_bringup(s, address=None, rx_size=0x100, ep_regions=((0, 16), (1, 64), (2
     if extra:
         extra(s)
     s.w('ctrl', core_en=1, dma_en=1, ahb_err_stop=1)
+    s.chk('DBU-OFF')
+    s.wp(0, mode(1, 0, 1), MODE_MASK, 2000)                 # soft-disconnected: non-driving row (DEC-048 PHY-05)
     s.w('dctrl', dev_addr=0, soft_conn=1)
     s.idle_bus(400)
     speed = dev_bus_reset(s, hub_chirp=hub_chirp, pairs=pairs)

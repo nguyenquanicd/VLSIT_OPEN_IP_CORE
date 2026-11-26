@@ -1,0 +1,8 @@
+request 0 (seed + generate) 3264 cycles
+request 1 (generate) 414 cycles
+request 2 (generate) 414 cycles
+request 3 (seed + generate) 1233 cycles
+request 4 (generate) 414 cycles
+request 5 (seed + generate) 1233 cycles
+tb_rng_drbg: 36 checks, 0 failed
+RESULT: PASS

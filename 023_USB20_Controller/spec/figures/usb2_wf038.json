@@ -1,0 +1,70 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p..................."
+  },
+  {
+   "name": "i_clk_phy",
+   "wave": "p...l........|.p...."
+  },
+  {
+   "name": "spd state (CLK-PHY)",
+   "wave": "=.=..........|..=...",
+   "data": [
+    "DV_FS",
+    "DV_SUSP",
+    "DV_RESM"
+   ]
+  },
+  {
+   "name": "reg_suspend_n",
+   "wave": "1.0..........|..1..."
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "=........=...|.....=",
+   "data": [
+    "J",
+    "K (host resume)",
+    "EOP"
+   ]
+  },
+  {
+   "name": "utmilp armed / idle",
+   "wave": "0...=........|...0..",
+   "data": [
+    "armed, idle = J"
+   ]
+  },
+  {
+   "name": "utmilp filter count",
+   "wave": "=........====|=.....",
+   "data": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "0"
+   ]
+  },
+  {
+   "name": "o_wake (utmilp)",
+   "wave": "0............|1..0.."
+  },
+  {
+   "name": "o_utmi_suspend_n",
+   "wave": "1.0..........|1....."
+  }
+ ],
+ "head": {
+  "text": "WF-038: UTMI+ device resume with CLK-PHY stopped (OP-009, success; DEC-049)"
+ },
+ "foot": {
+  "text": "Not to scale. The speed engine suspends (reg_suspend_n 0) and the PHY stops CLK-PHY. m_usb2_utmilp in CLK-BUS stores the idle line state, then counts 4 CLK-BUS cycles of a line different from it (host resume K) and sets o_wake, which raises SuspendM through the OR in m_usb2_phyif_utmi. The PHY restarts CLK-PHY within 5.6 ms (UTMI 1.05); the engine, still in DV_SUSP, sees the K and goes to DV_RESM; when the synchronized reg_suspend_n is 1, o_wake is cleared (hand-off, SVA-017). A reset SE0 instead of the K takes the same path to DV_RST."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

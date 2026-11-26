@@ -1,0 +1,4 @@
+p521: 12 vectors
+ed448: 49 vectors
+p521     PASS  12/12 vectors, 120734224 cycles, 588 s
+ed448    PASS  49/49 vectors, 464133135 cycles, 1767 s

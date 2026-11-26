@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite timestamp="2026-11-26T07:00:17" hostname="QTT" package="harb_mut" id="0" name="default" tests="10" errors="0" failures="2" time="0" skipped="9">
+<properties>
+<property name="os" value="Windows"/>
+<property name="expect" value="PASS"/>
+<property name="status" value="FAIL"/>
+</properties>
+<testcase classname="default" name="build execution" time="0">
+<failure type="FAIL" message="Task returned status FAIL." />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:33.5-33.46" time="0" type="ASSERT" location="harb_props.sv:33.5-33.46" id="_witness_.check_assert_harb_props_sv_33_136">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:35.5-35.45" time="0" type="ASSERT" location="harb_props.sv:35.5-35.45" id="_witness_.check_assert_harb_props_sv_35_140">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:36.5-36.47" time="0" type="ASSERT" location="harb_props.sv:36.5-36.47" id="_witness_.check_assert_harb_props_sv_36_144">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:37.5-37.39" time="0" type="ASSERT" location="harb_props.sv:37.5-37.39" id="_witness_.check_assert_harb_props_sv_37_148">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:38.5-38.40" time="0" type="ASSERT" location="harb_props.sv:38.5-38.40" id="_witness_.check_assert_harb_props_sv_38_152">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:39.5-39.98" time="0" type="ASSERT" location="harb_props.sv:39.5-39.98" id="_witness_.check_assert_harb_props_sv_39_156">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:40.5-40.114" time="0" type="ASSERT" location="harb_props.sv:40.5-40.114" id="_witness_.check_assert_harb_props_sv_40_162">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:44.5-44.38" time="0" type="ASSERT" location="harb_props.sv:44.5-44.38" id="_witness_.check_assert_harb_props_sv_44_174">
+<skipped />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:46.29-46.54" time="0" type="ASSERT" location="harb_props.sv:46.29-46.54" id="_witness_.check_assert_harb_props_sv_46_180" tracefile="engine_0\trace.vcd">
+<failure type="ASSERT" message="Property ASSERT in harb_props at harb_props.sv:46.29-46.54 failed. Trace file: engine_0\trace.vcd" />
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:48.32-48.63" time="0" type="ASSERT" location="harb_props.sv:48.32-48.63" id="_witness_.check_assert_harb_props_sv_48_191">
+<skipped />
+</testcase>
+<system-out>SBY  7:00:16 [harb_mut] Removing directory 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_mut'.
+SBY  7:00:16 [harb_mut] Copy 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\mut\m_vlsit_dsig_harb.sv' to 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_mut\src\m_vlsit_dsig_harb.sv'.
+SBY  7:00:16 [harb_mut] Copy 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_props.sv' to 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_mut\src\harb_props.sv'.
+SBY  7:00:16 [harb_mut] engine_0: smtbmc yices
+SBY  7:00:16 [harb_mut] base: starting process &quot;cd harb_mut/src&amp; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY  7:00:16 [harb_mut] base: finished (returncode=0)
+SBY  7:00:16 [harb_mut] prep: starting process &quot;cd harb_mut/model&amp; yosys -ql design_prep.log design_prep.ys&quot;
+SBY  7:00:16 [harb_mut] prep: finished (returncode=0)
+SBY  7:00:16 [harb_mut] smt2: starting process &quot;cd harb_mut/model&amp; yosys -ql design_smt2.log design_smt2.ys&quot;
+SBY  7:00:17 [harb_mut] smt2: finished (returncode=0)
+SBY  7:00:17 [harb_mut] engine_0: starting process &quot;cd harb_mut&amp; yosys-smtbmc -s yices --presat --unroll --noprogress -t 8  --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc model/design_smt2.smt2&quot;
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Solver: yices
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 0..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 0..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 1..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 1..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 2..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 2..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 3..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 3..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 4..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 4..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  BMC failed!
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Assert failed in harb_props: harb_props.sv:46.29-46.54 (_witness_.check_assert_harb_props_sv_46_180)
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to VCD file: engine_0/trace.vcd
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to Verilog testbench: engine_0/trace_tb.v
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to constraints file: engine_0/trace.smtc
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to Yosys witness file: engine_0/trace.yw
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Status: failed
+SBY  7:00:17 [harb_mut] engine_0: finished (returncode=1)
+SBY  7:00:17 [harb_mut] engine_0: Status returned by engine: FAIL
+SBY  7:00:17 [harb_mut] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:01 (1)
+SBY  7:00:17 [harb_mut] summary: Elapsed process time unvailable on Windows
+SBY  7:00:17 [harb_mut] summary: engine_0 (smtbmc yices) returned FAIL
+SBY  7:00:17 [harb_mut] summary: counterexample trace: harb_mut\engine_0\trace.vcd
+SBY  7:00:17 [harb_mut] summary:   failed assertion harb_props._witness_.check_assert_harb_props_sv_46_180 at harb_props.sv:46.29-46.54 step 4
+SBY  7:00:17 [harb_mut] DONE (FAIL, rc=2)
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+</testsuites>

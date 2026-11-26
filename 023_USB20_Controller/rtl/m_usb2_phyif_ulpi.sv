@@ -9,8 +9,9 @@
  *                disconnect, ID) and USB data bytes (dir with nxt). Transmit: TX CMD with the
  *                PID from the first stream byte, payload bytes accepted on nxt, stp after the
  *                last byte. Register access: the function control register 0x04 and the OTG
- *                control register 0x0A follow the mode inputs; u2_phy_acc reads or writes a
- *                register (immediate or extended address). Register operations start only when
+ *                control register 0x0A follow the mode inputs (DrvVbusExternal from
+ *                u2_hport.ext_vbus); u2_phy_acc reads or writes a register (immediate or
+ *                extended address). Register operations start only when
  *                the link is idle and the bus is free, and retry after an abort by a USB
  *                receive. o_lp_active tells the always-on logic that SuspendM was written to 0;
  *                o_ulpi_stp ORs the low-power stp.
@@ -74,6 +75,7 @@ module m_usb2_phyif_ulpi #(
   input  wire         i_dp_pd,
   input  wire         i_dm_pd,
   input  wire         i_drv_vbus,
+  input  wire         i_ext_vbus,
   input  wire         i_chrg_vbus,
   input  wire         i_dischrg_vbus,
   input  wire         i_id_pullup,
@@ -161,7 +163,10 @@ module m_usb2_phyif_ulpi #(
 
   // Wanted register values from the mode inputs (function control and OTG control registers).
   assign w_fc_want  = {1'b0, i_suspend_n, 1'b0, i_op_mode, i_term_sel, i_xcvr_sel};
-  assign w_otg_want = {1'b0, 1'b0, i_drv_vbus, i_chrg_vbus, i_dischrg_vbus, i_dm_pd, i_dp_pd, i_id_pullup};
+  // OTG Control: DrvVbusExternal (bit 6) follows DrvVbus when u2_hport.ext_vbus is 1, so a PHY
+  // that switches VBUS through its own enable pin (CPEN of TUSB1210) drives it (DEC-048 PHY-06);
+  // UseExternalVbusIndicator (bit 7) stays 0: the PHY takes VBUS valid from its own comparator.
+  assign w_otg_want = {1'b0, i_drv_vbus & i_ext_vbus, i_drv_vbus, i_chrg_vbus, i_dischrg_vbus, i_dm_pd, i_dp_pd, i_id_pullup};
   assign w_fc_pend  = (w_fc_want != reg_fc_wr);
   assign w_otg_pend = (w_otg_want != reg_otg_wr);
 

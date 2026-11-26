@@ -1,0 +1,30 @@
+VEC 0 PASS cycles=560050
+VEC 1 PASS cycles=557400
+VEC 2 PASS cycles=557400
+VEC 3 PASS cycles=557900
+VEC 4 PASS cycles=557900
+VEC 5 PASS cycles=557950
+VEC 6 PASS cycles=557950
+VEC 7 PASS cycles=50
+VEC 8 PASS cycles=269800
+VEC 9 PASS cycles=50
+VEC 10 PASS cycles=50
+VEC 11 PASS cycles=1034450
+VEC 12 PASS cycles=1034450
+VEC 13 PASS cycles=1034450
+VEC 14 PASS cycles=1034450
+VEC 15 PASS cycles=50
+VEC 16 PASS cycles=470150
+VEC 17 PASS cycles=50
+VEC 18 PASS cycles=50
+VEC 19 PASS cycles=50
+VEC 20 PASS cycles=50
+VEC 21 PASS cycles=1824750
+VEC 22 PASS cycles=1824750
+VEC 23 PASS cycles=562450
+VEC 24 PASS cycles=562950
+VEC 25 PASS cycles=563000
+dsig_cnt_ops = 18
+SMUL instructions: 34 on the blinded register R14, 32 on other registers; entropy words 24; new blinding values 18
+tb_top_ec: 26 vectors, 0 failed
+RESULT: PASS

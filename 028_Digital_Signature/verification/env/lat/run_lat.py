@@ -20,7 +20,7 @@ def main(argv):
     exe = SIM + '/obj/Vtb_lat.exe'
     procs = []
     for s in sets:
-        d = IP + '/verification/sim/lat_' + s
+        d = IP + '/verification/sim/lat_' + s + os.environ.get('LAT_SET_TAG', '')   # separate folders for the masked build
         subprocess.run([sys.executable, IP + '/verification/models/lat/gen_lat_vec.py', d, s], check=True)
         n = len(open(d + '/lat_vecs.txt').read().splitlines())
         log = open(d + '/run.log', 'w')

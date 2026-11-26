@@ -63,7 +63,8 @@
     input [3:0]  hsslvl,
     input [5:0]  xm,
     input [31:0] len_msg,
-    input [16:0] off_msg
+    input [16:0] off_msg,
+    input [7:0]  len_ctx
   );
     integer r;
     reg     bad;
@@ -89,6 +90,11 @@
           if (form == FORM_PREHASH && !P_EN_PREHASH[0]) bad = 1'b1;
           if ((f_is_ecdsa(alg) || form == FORM_PREHASH) && hash > 3'd5) bad = 1'b1;
           if (f_is_ecdsa(alg) && op == OP_SIGN && P_ECDSA_NONCE == 2 && nonce >= 2'd2) bad = 1'b1;
+          // ASM-024: the deterministic nonce (RFC 6979) is built for SHA-2 only
+          if (f_is_ecdsa(alg) && op == OP_SIGN && hash > 3'd2 &&
+              (P_ECDSA_NONCE == 1 || (P_ECDSA_NONCE == 2 && nonce == 2'd1))) bad = 1'b1;
+          // ASM-023: Ed25519ph and Ed448ph take the digest PH(M): prehash form only
+          if ((alg == ALG_ED25519PH || alg == ALG_ED448PH) && form != FORM_PREHASH) bad = 1'b1;
           if (P_EN_HYBRID[0] && op == OP_VRFY && (alg == ALG_ED25519 || f_is_mldsa(alg)) &&
               hybpol == 2'd3) bad = 1'b1;
           if (alg == ALG_SLHDSA && (slh >= 4'd12 || !P_SLH_SETS[slh])) bad = 1'b1;
@@ -105,15 +111,21 @@
       // 3. lengths: curve and hash pairing, HSS level count, prehash digest length
       if (r < 0) begin
         bad = 1'b0;
-        if (f_is_ecdsa(alg) && (f_dig_len(hash) * 8 < f_min_bits(alg))) bad = 1'b1;
+        // DEC-032 and the digest length: signing and verification only (key generation uses no message)
+        if (f_is_ecdsa(alg) && op != OP_KGEN && (f_dig_len(hash) * 8 < f_min_bits(alg))) bad = 1'b1;
         if (alg == ALG_LMS && (hsslvl < 4'd1 || hsslvl > 4'd8)) bad = 1'b1;
-        if (form == FORM_PREHASH && (f_is_ecdsa(alg) || f_is_mldsa(alg) || ((alg == ALG_ED25519PH || alg == ALG_ED448PH) && hash == 3'd2)) &&
+        if (form == FORM_PREHASH && op != OP_KGEN && (f_is_ecdsa(alg) || f_is_mldsa(alg) || alg == ALG_SLHDSA) &&
             (len_msg != f_dig_len(hash))) bad = 1'b1;
+        // ASM-023: the digest of Ed25519ph and Ed448ph has 64 bytes whatever the hash code
+        if (form == FORM_PREHASH && op != OP_KGEN && (alg == ALG_ED25519PH || alg == ALG_ED448PH) &&
+            len_msg != 32'd64) bad = 1'b1;
         if (bad) r = E_BADLEN;
       end
       // 4. region inside the buffer
       if (r < 0) begin
-        end_pos = {32'h0, len_msg} + {47'h0, off_msg};
+        // ASM-020: the context of Ed25519ctx/ph, Ed448(ph), ML-DSA and SLH-DSA follows the message
+        end_pos = {32'h0, len_msg} + {47'h0, off_msg} +
+                  (((alg >= 4'd1 && alg <= 4'd4) || f_is_mldsa(alg) || alg == ALG_SLHDSA) ? {56'h0, len_ctx} : 64'h0);
         if (end_pos > {32'h0, P_BUF_BYTES}) r = E_BUFOVF;
       end
       f_ref_err = r;
@@ -129,9 +141,10 @@
         nrand = (P_ECDSA_NONCE == 0) || (P_ECDSA_NONCE == 2 && nonce == 2'd0);
         if (f_is_ecdsa(alg) && nrand) f_ref_rng = 1'b1;
         if (f_is_mldsa(alg) && hedged) f_ref_rng = 1'b1;
-        if (f_is_ec(alg) && P_EN_DPA_EC[0]) f_ref_rng = 1'b1;
-        if (f_is_mldsa(alg) && P_EN_DPA_PQ[0]) f_ref_rng = 1'b1;
       end
+      // DEC-031: a masked engine needs random bytes for every operation of its group
+      if (f_is_ec(alg) && P_EN_DPA_EC[0]) f_ref_rng = 1'b1;
+      if (f_is_mldsa(alg) && P_EN_DPA_PQ[0]) f_ref_rng = 1'b1;
     end
   endfunction
 

@@ -1,0 +1,144 @@
+ed25519: 33 vectors
+ed448: 49 vectors
+p256: 32 vectors
+p384: 16 vectors
+p521: 12 vectors
+k256: 11 vectors
+ed25519  FAIL  17/33 vectors, 99085119 cycles, 604 s
+    FAIL 0 Ed25519 rfc0 verify ok
+    FAIL 3 Ed25519 rfc0 sign
+    FAIL 4 Ed25519 rfc0 keygen
+    FAIL 5 Ed25519 rfc0 sign+vas
+    FAIL 9 Ed25519 rfc1 verify ok
+    FAIL 13 Ed25519 rfc1 sign
+    FAIL 14 Ed25519 rfc1 keygen
+    FAIL 15 Ed25519 rfc1 sign+vas
+    FAIL 17 Ed25519 rfc2 verify ok
+    FAIL 21 Ed25519 rfc2 sign
+    FAIL 22 Ed25519 rfc2 keygen
+    FAIL 23 Ed25519 rfc2 sign+vas
+    FAIL 25 Ed25519 rfc3 verify ok
+    FAIL 29 Ed25519 rfc3 sign
+    FAIL 30 Ed25519 rfc3 keygen
+    FAIL 31 Ed25519 rfc3 sign+vas
+VEC 0: verify result 0, expected 1
+VEC 0 FAIL cycles=2409091
+VEC 3: result byte 0 is b4, expected e5
+VEC 3 FAIL cycles=2436905
+VEC 4: result byte 0 is 68, expected d7
+VEC 4 FAIL cycles=1231554
+VEC 5: result byte 0 is b4, expected e5
+VEC 5 FAIL cycles=6100149
+VEC 9: verify result 0, expected 1
+VEC 9 FAIL cycles=2358190
+VEC 13: result byte 0 is 32, expected 92
+VEC 13 FAIL cycles=2419943
+VEC 14: result byte 0 is e9, expected 3d
+VEC 14 FAIL cycles=1211758
+VEC 15: result byte 0 is 32, expected 92
+VEC 15 FAIL cycles=6142578
+VEC 17: verify result 0, expected 1
+VEC 17 FAIL cycles=2426062
+VEC 21: result byte 0 is 4d, expected 62
+VEC 21 FAIL cycles=2436911
+VEC 22: result byte 0 is f5, expected fc
+VEC 22 FAIL cycles=1206102
+VEC 23: result byte 0 is 4d, expected 62
+VEC 23 FAIL cycles=6086018
+VEC 25: verify result 0, expected 1
+VEC 25 FAIL cycles=2420509
+VEC 29: result byte 0 is 7c, expected dc
+VEC 29 FAIL cycles=2397443
+VEC 30: result byte 0 is da, expected ec
+VEC 30 FAIL cycles=1174994
+VEC 31: result byte 0 is 7c, expected dc
+VEC 31 FAIL cycles=5958985
+ed448    PASS  49/49 vectors, 464133135 cycles, 2165 s
+p256     FAIL  19/32 vectors, 92349806 cycles, 2164 s
+    FAIL 0 P-256 hash0 sample verify ok
+    FAIL 3 P-256 hash0 sample sign
+    FAIL 5 P-256 hash0 sample sign+vas
+    FAIL 12 P-256 hash0 test verify ok
+    FAIL 15 P-256 hash0 test sign
+    FAIL 16 P-256 hash1 sample verify ok
+    FAIL 19 P-256 hash1 sample sign
+    FAIL 20 P-256 hash1 test verify ok
+    FAIL 23 P-256 hash1 test sign
+    FAIL 24 P-256 hash2 sample verify ok
+    FAIL 27 P-256 hash2 sample sign
+    FAIL 28 P-256 hash2 test verify ok
+    FAIL 31 P-256 hash2 test sign
+VEC 0: verify result 0, expected 1
+VEC 0 FAIL cycles=3511828
+VEC 3: result byte 32 is 45, expected f7
+VEC 3 FAIL cycles=1865917
+VEC 5: result byte 32 is 45, expected f7
+VEC 5 FAIL cycles=7290093
+VEC 12: verify result 0, expected 1
+VEC 12 FAIL cycles=3573414
+VEC 15: result byte 32 is f5, expected 01
+VEC 15 FAIL cycles=1848321
+VEC 16: verify result 0, expected 1
+VEC 16 FAIL cycles=3665811
+VEC 19: result byte 32 is ff, expected 48
+VEC 19 FAIL cycles=1940718
+VEC 20: verify result 0, expected 1
+VEC 20 FAIL cycles=3661412
+VEC 23: result byte 32 is eb, expected 8d
+VEC 23 FAIL cycles=1879132
+VEC 24: verify result 0, expected 1
+VEC 24 FAIL cycles=3604227
+VEC 27: result byte 32 is 9e, expected 23
+VEC 27 FAIL cycles=1931922
+VEC 28: verify result 0, expected 1
+VEC 28 FAIL cycles=3630621
+VEC 31: result byte 32 is 1e, expected 39
+VEC 31 FAIL cycles=1835144
+p384     FAIL  11/16 vectors, 94328707 cycles, 2164 s
+    FAIL 0 P-384 hash1 sample verify ok
+    FAIL 3 P-384 hash1 sample sign
+    FAIL 5 P-384 hash1 sample sign+vas
+    FAIL 12 P-384 hash2 test verify ok
+    FAIL 15 P-384 hash2 test sign
+VEC 0: verify result 0, expected 1
+VEC 0 FAIL cycles=8162353
+VEC 3: result byte 48 is 0e, expected 99
+VEC 3 FAIL cycles=4294660
+VEC 5: result byte 48 is 0e, expected 99
+VEC 5 FAIL cycles=16542687
+VEC 12: verify result 0, expected 1
+VEC 12 FAIL cycles=7951955
+VEC 15: result byte 48 is c0, expected 97
+VEC 15 FAIL cycles=4274937
+p521     FAIL  9/12 vectors, 120992440 cycles, 2164 s
+    FAIL 0 P-521 hash2 sample verify ok
+    FAIL 3 P-521 hash2 sample sign
+    FAIL 5 P-521 hash2 sample sign+vas
+VEC 0: verify result 0, expected 1
+VEC 0 FAIL cycles=14715172
+VEC 3: result byte 66 is 01, expected 00
+VEC 3 FAIL cycles=7901042
+VEC 5: result byte 66 is 01, expected 00
+VEC 5 FAIL cycles=30721689
+k256     FAIL  4/11 vectors, 36782991 cycles, 2163 s
+    FAIL 0 secp256k1 rnd0 verify ok
+    FAIL 2 secp256k1 rnd0 sign
+    FAIL 4 secp256k1 rnd0 sign+vas
+    FAIL 5 secp256k1 rnd1 verify ok
+    FAIL 7 secp256k1 rnd1 sign
+    FAIL 8 secp256k1 rnd2 verify ok
+    FAIL 10 secp256k1 rnd2 sign
+VEC 0: verify result 0, expected 1
+VEC 0 FAIL cycles=3602658
+VEC 2: result byte 32 is e7, expected 54
+VEC 2 FAIL cycles=1921555
+VEC 4: result byte 32 is e7, expected 54
+VEC 4 FAIL cycles=7366481
+VEC 5: verify result 0, expected 1
+VEC 5 FAIL cycles=3664247
+VEC 7: result byte 32 is 44, expected 18
+VEC 7 FAIL cycles=1925957
+VEC 8: verify result 0, expected 1
+VEC 8 FAIL cycles=3593866
+VEC 10: result byte 32 is 68, expected d8
+VEC 10 FAIL cycles=1908364

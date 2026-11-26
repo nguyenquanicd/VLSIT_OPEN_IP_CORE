@@ -10,6 +10,8 @@ W 2d0 4001d0
 W 34 10
 W 14 1ffffff
 W 4 61
+CHK DBU-OFF
+WP 0 5 df 7d0
 W 20 80
 IB 190
 CHK DBR-CHIRP
@@ -88,6 +90,7 @@ W 10 400
 IB 1e
 R 10 0 400
 B cg_err.stuff
+B cg_ulpi.rxcmd_in_pkt
 CHK FBE-UNSUP
 RAW 0 4 78 12 0 0
 XN 96

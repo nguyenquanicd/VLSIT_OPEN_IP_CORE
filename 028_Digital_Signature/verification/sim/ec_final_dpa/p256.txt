@@ -1,0 +1,32 @@
+0	P-256 hash0 sample verify ok
+1	P-256 hash0 sample verify bad msg
+2	P-256 hash0 sample verify bad s
+3	P-256 hash0 sample sign
+4	P-256 hash0 sample keygen
+5	P-256 hash0 sample sign+vas
+6	P-256 hash0 sample sign+corrupt+vas
+7	P-256 hash0 sample verify r = 0
+8	P-256 hash0 sample verify s = n
+9	P-256 hash0 sample verify point not on curve
+10	P-256 hash0 sample sign d = 0 (BADKEY)
+11	P-256 hash0 sample sign d = n (BADKEY)
+12	P-256 hash0 test verify ok
+13	P-256 hash0 test verify bad msg
+14	P-256 hash0 test verify bad s
+15	P-256 hash0 test sign
+16	P-256 hash1 sample verify ok
+17	P-256 hash1 sample verify bad msg
+18	P-256 hash1 sample verify bad s
+19	P-256 hash1 sample sign
+20	P-256 hash1 test verify ok
+21	P-256 hash1 test verify bad msg
+22	P-256 hash1 test verify bad s
+23	P-256 hash1 test sign
+24	P-256 hash2 sample verify ok
+25	P-256 hash2 sample verify bad msg
+26	P-256 hash2 sample verify bad s
+27	P-256 hash2 sample sign
+28	P-256 hash2 test verify ok
+29	P-256 hash2 test verify bad msg
+30	P-256 hash2 test verify bad s
+31	P-256 hash2 test sign

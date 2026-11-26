@@ -1,0 +1,12 @@
+slh: 56 vectors
+lms: 50 vectors
+xmss: 32 vectors
+prehash: 12 vectors
+rfc8554: 3 vectors
+tb_hbs: 0 vectors, 0 failed, 0 protocol failures
+RESULT: PASS
+slh    PASS  56/56 vectors, 115082213 cycles, 4576 s
+lms    PASS  50/50 vectors, 32373195 cycles, 4558 s
+xmss   PASS  32/32 vectors, 101095977 cycles, 428 s
+prehash PASS  12/12 vectors, 14730135 cycles, 344 s
+rfc8554 PASS  3/3 vectors, 7641822 cycles, 341 s

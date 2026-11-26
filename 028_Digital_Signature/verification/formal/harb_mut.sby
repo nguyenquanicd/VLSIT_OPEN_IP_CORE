@@ -1,0 +1,15 @@
+[options]
+mode bmc
+depth 8
+
+[engines]
+smtbmc yices
+
+[script]
+read_verilog -sv -formal m_vlsit_dsig_harb.sv
+read_verilog -sv -formal harb_props.sv
+prep -top harb_props
+
+[files]
+mut/m_vlsit_dsig_harb.sv
+harb_props.sv

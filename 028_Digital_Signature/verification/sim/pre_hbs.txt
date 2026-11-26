@@ -1,0 +1,14 @@
+VEC 0 PASS cycles=766303
+VEC 1 PASS cycles=761414
+VEC 2 PASS cycles=732045
+VEC 3 PASS cycles=2173600
+VEC 4 PASS cycles=2080691
+VEC 5 PASS cycles=2134386
+VEC 6 PASS cycles=535295
+VEC 7 PASS cycles=522574
+VEC 8 PASS cycles=547986
+VEC 9 PASS cycles=1459617
+VEC 10 PASS cycles=1424636
+VEC 11 PASS cycles=1462768
+tb_hbs: 12 vectors, 0 failed, 0 protocol failures
+RESULT: PASS

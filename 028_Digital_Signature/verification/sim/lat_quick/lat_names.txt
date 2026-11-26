@@ -1,0 +1,4 @@
+0	ML-DSA-44 key generation
+1	ML-DSA-44 verify valid
+2	ML-DSA-44 verify corrupted z
+3	ML-DSA-44 sign deterministic + verify-after-sign

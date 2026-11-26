@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2030" height="731" viewBox="10 -141 2030 731" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="-141" width="2030" height="731" fill="#FFFFFF"/>
+<ellipse cx="170" cy="70" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="170" y="77" text-anchor="middle">ENUM_ST_HP_NODEV</text>
+<ellipse cx="170" cy="270" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="170" y="277" text-anchor="middle">ENUM_ST_HP_DEBNC</text>
+<ellipse cx="170" cy="470" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="170" y="477" text-anchor="middle">ENUM_ST_HP_RESET</text>
+<ellipse cx="1445" cy="470" rx="160" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1445" y="477" text-anchor="middle">ENUM_ST_HP_CHIRP_DET</text>
+<ellipse cx="1860" cy="270" rx="150" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1860" y="277" text-anchor="middle">ENUM_ST_HP_CHIRP_TX</text>
+<ellipse cx="1455" cy="70" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1455" y="77" text-anchor="middle">ENUM_ST_HP_EN_HS</text>
+<ellipse cx="970" cy="270" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="970" y="277" text-anchor="middle">ENUM_ST_HP_EN_FS</text>
+<ellipse cx="975" cy="470" rx="130" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="975" y="477" text-anchor="middle">ENUM_ST_HP_EN_LS</text>
+<ellipse cx="1405" cy="270" rx="125" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1405" y="277" text-anchor="middle">ENUM_ST_HP_SUSP</text>
+<ellipse cx="1005" cy="70" rx="140" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1005" y="77" text-anchor="middle">ENUM_ST_HP_RESUME</text>
+<ellipse cx="550" cy="270" rx="110" ry="30" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="550" y="277" text-anchor="middle">ENUM_ST_HP_OC</text>
+<path d="M 170 100 L 156 170 L 170 240" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="170,240 161.763,229.41 173.53,227.056" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="64.95" y="124" width="196.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="163" y="142" text-anchor="middle">non-SE0 on D+ or D-</text>
+<path d="M 170 240 L 184 170 L 170 100" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="170,100 178.237,110.59 166.47,112.944" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="128.45" y="194" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="177" y="212" text-anchor="middle">SE0 again</text>
+<path d="M 170 300 L 170 440" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="170,440 164,428 176,428" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="81.85" y="359" width="176.3" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="170" y="377" text-anchor="middle">stable &amp; prst</text>
+<path d="M 300 470 L 792.5 560 L 1285 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1285,470 1274.27,478.059 1272.12,466.255" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="383.85" y="504" width="324.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="546.25" y="522" text-anchor="middle">SE0 driven &amp; not LS &amp; hs allowed</text>
+<path d="M 300 470 L 845 470" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="845,470 833,476 833,464" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="439.8" y="459" width="265.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="572.5" y="477" text-anchor="middle">LS device &amp; reset &gt;= 50 ms</text>
+<path d="M 1605 470 L 1652.5 470 L 1652.5 270 L 1710 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1710,270 1698,276 1698,264" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1559.4" y="359" width="186.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1652.5" y="377" text-anchor="middle">device K &gt;= 2.5 us</text>
+<path d="M 1379.91 442.594 L 1032.48 296.308" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1032.48,296.308 1045.87,295.435 1041.21,306.494" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1078.45" y="358.451" width="255.5" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1206.2" y="376.451" text-anchor="middle">no chirp &amp; reset &gt;= 50 ms</text>
+<path d="M 1710 270 L 1657.5 270 L 1657.5 70 L 1585 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1585,70 1597,64 1597,76" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1524.8" y="159" width="265.4" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1657.5" y="177" text-anchor="middle">K/J chirps done, reset end</text>
+<path d="M 1447.51 99.9502 L 1412.49 240.054" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1412.49,240.054 1409.58,226.957 1421.22,229.867" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1381.45" y="159.002" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1430" y="177.002" text-anchor="middle">port_susp</text>
+<path d="M 1100 270 L 1280 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1280,270 1268,276 1268,264" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1141.45" y="259" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1190" y="277" text-anchor="middle">port_susp</text>
+<path d="M 1032.78 443.126 L 1347.68 296.66" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1347.68,296.66 1339.33,307.161 1334.27,296.28" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1141.68" y="358.893" width="97.1" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1190.23" y="376.893" text-anchor="middle">port_susp</text>
+<path d="M 1350.91 242.954 L 1060.15 97.5744" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060.15,97.5744 1073.57,97.5744 1068.2,108.308" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1161.93" y="159.264" width="87.2" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1205.53" y="177.264" text-anchor="middle">port_res</text>
+<path d="M 1145 70 L 1325 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1325,70 1313,76 1313,64" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1117.15" y="59" width="235.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1235" y="77" text-anchor="middle">resume &gt;= 20 ms, was HS</text>
+<path d="M 999.754 99.9789 L 975.246 240.024" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="975.246,240.024 971.404,227.169 983.225,229.238" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="869.65" y="159.001" width="235.7" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="987.5" y="177.001" text-anchor="middle">resume &gt;= 20 ms, was FS</text>
+<path d="M 1455 40 L 1455 -100 L 170 -100 L 170 40" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="170,40 164,28 176,28" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="759" y="-111" width="107" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="812.5" y="-93" text-anchor="middle">disconnect</text>
+<path d="M 881.824 247.956 L 258.176 92.0441" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="258.176,92.0441 271.273,89.1337 268.362,100.775" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="506.6" y="159" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="570" y="177" text-anchor="middle">SE0 &gt; 2.5 us</text>
+<path d="M 920.242 442.791 L 612.549 189.402 L 224.758 97.2088" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="224.758,97.2088 237.82,94.147 235.045,105.822" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="355.254" y="132.305" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="418.654" y="150.305" text-anchor="middle">SE0 &gt; 2.5 us</text>
+<path d="M 1361.11 90.7494 L 635.464 251.113" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="635.464,251.113 645.887,242.665 648.476,254.382" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="934.887" y="159.931" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="998.287" y="177.931" text-anchor="middle">over-current</text>
+<path d="M 840 270 L 660 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="660,270 672,264 672,276" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="686.6" y="259" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="750" y="277" text-anchor="middle">over-current</text>
+<path d="M 917.762 443.064 L 605.157 295.956" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="605.157,295.956 618.57,295.637 613.46,306.494" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="698.059" y="358.51" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="761.459" y="376.51" text-anchor="middle">over-current</text>
+<path d="M 1280 270 L 970 180 L 660 270" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="660,270 669.851,260.892 673.197,272.416" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="1061.6" y="214" width="126.8" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="1125" y="232" text-anchor="middle">over-current</text>
+<path d="M 499.391 243.364 L 222.203 97.475" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="222.203,97.475 235.616,97.7545 230.028,108.373" fill="#000000" stroke="#000000" stroke-width="1"/>
+<rect x="203.347" y="159.419" width="314.9" height="22" fill="#FFFFFF" stroke="none"/>
+<text x="360.797" y="177.419" text-anchor="middle">flag cleared &amp; vbus_drv written</text>
+</svg>

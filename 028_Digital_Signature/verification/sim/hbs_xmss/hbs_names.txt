@@ -1,0 +1,32 @@
+0	XMSSMT-SHA2_20/4_256 valid
+1	XMSSMT-SHA2_20/4_256 corrupted signature
+2	XMSSMT-SHA2_20/4_256 wrong message
+3	XMSSMT-SHA2_20/4_256 wrong root
+4	XMSSMT-SHA2_20/4_192 valid
+5	XMSSMT-SHA2_20/4_192 corrupted signature
+6	XMSSMT-SHA2_20/4_192 wrong message
+7	XMSSMT-SHA2_20/4_192 wrong root
+8	XMSSMT-SHA2_20/2_256 valid
+9	XMSSMT-SHA2_20/2_256 corrupted signature
+10	XMSSMT-SHA2_20/2_256 wrong message
+11	XMSSMT-SHA2_20/2_256 wrong root
+12	XMSSMT-SHA2_40/8_256 valid
+13	XMSSMT-SHA2_40/8_256 corrupted signature
+14	XMSSMT-SHA2_40/8_256 wrong message
+15	XMSSMT-SHA2_40/8_256 wrong root
+16	XMSSMT-SHA2_60/12_256 valid
+17	XMSSMT-SHA2_60/12_256 corrupted signature
+18	XMSSMT-SHA2_60/12_256 wrong message
+19	XMSSMT-SHA2_60/12_256 wrong root
+20	XMSS-SHA2_10_256 valid
+21	XMSS-SHA2_10_256 corrupted signature
+22	XMSS-SHA2_10_256 wrong message
+23	XMSS-SHA2_10_256 wrong root
+24	XMSS-SHAKE256_10_256 valid
+25	XMSS-SHAKE256_10_256 corrupted signature
+26	XMSS-SHAKE256_10_256 wrong message
+27	XMSS-SHAKE256_10_256 wrong root
+28	XMSS-SHAKE256_10_192 valid
+29	XMSS-SHAKE256_10_192 corrupted signature
+30	XMSS-SHAKE256_10_192 wrong message
+31	XMSS-SHAKE256_10_192 wrong root

@@ -1,0 +1,12 @@
+0	P-521 hash2 sample verify ok
+1	P-521 hash2 sample verify bad msg
+2	P-521 hash2 sample verify bad s
+3	P-521 hash2 sample sign
+4	P-521 hash2 sample keygen
+5	P-521 hash2 sample sign+vas
+6	P-521 hash2 sample sign+corrupt+vas
+7	P-521 hash2 sample verify r = 0
+8	P-521 hash2 sample verify s = n
+9	P-521 hash2 sample verify point not on curve
+10	P-521 hash2 sample sign d = 0 (BADKEY)
+11	P-521 hash2 sample sign d = n (BADKEY)

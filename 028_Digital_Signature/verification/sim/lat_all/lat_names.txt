@@ -1,0 +1,25 @@
+0	ML-DSA-44 key generation
+1	ML-DSA-44 verify valid
+2	ML-DSA-44 verify corrupted z
+3	ML-DSA-44 verify corrupted c
+4	ML-DSA-44 verify wrong message
+5	ML-DSA-44 verify corrupted hint
+6	ML-DSA-44 sign deterministic + verify-after-sign
+7	ML-DSA-44 verify with context
+8	ML-DSA-44 sign with context
+9	ML-DSA-44 sign hedged
+10	ML-DSA-44 verify empty message
+11	ML-DSA-65 key generation
+12	ML-DSA-65 verify valid
+13	ML-DSA-65 verify corrupted z
+14	ML-DSA-65 verify corrupted c
+15	ML-DSA-65 verify wrong message
+16	ML-DSA-65 verify corrupted hint
+17	ML-DSA-65 sign deterministic + verify-after-sign
+18	ML-DSA-87 key generation
+19	ML-DSA-87 verify valid
+20	ML-DSA-87 verify corrupted z
+21	ML-DSA-87 verify corrupted c
+22	ML-DSA-87 verify wrong message
+23	ML-DSA-87 verify corrupted hint
+24	ML-DSA-87 sign deterministic + verify-after-sign

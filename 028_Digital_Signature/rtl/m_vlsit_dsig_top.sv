@@ -162,8 +162,8 @@ module m_vlsit_dsig_top #(
   // Parameter values: 0 port, 1 registers, 2 registers if loaded else the port; default is 2.
   // Parameter unit: code
   parameter logic [31:0] PARA_KEY_SRC = 2,
-  // Parameter Description: random source; only the entropy port (0) is built.
-  // Parameter values: 0; default is 0.
+  // Parameter Description: random source: 0 entropy port, 1 Hash_DRBG (SHA-512) seeded by it.
+  // Parameter values: 0 or 1; default is 0.
   // Parameter unit: code
   parameter logic [31:0] PARA_RNG_SRC = 0,
   // Parameter Description: ECDSA nonce mode (deterministic: RFC 6979 with SHA-2 hashes).
@@ -174,12 +174,12 @@ module m_vlsit_dsig_top #(
   // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
   parameter logic [31:0] PARA_EN_VAS = 0,
-  // Parameter Description: masking of the elliptic-curve operations (not built, keep 0).
-  // Parameter values: 0; default is 0.
+  // Parameter Description: scalar blinding of the secret elliptic-curve scalar multiplications.
+  // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
   parameter logic [31:0] PARA_EN_DPA_EC = 0,
-  // Parameter Description: masking of lattice and hash-based operations (not built, keep 0).
-  // Parameter values: 0; default is 0.
+  // Parameter Description: masking of the linear secret products of ML-DSA signing (DEC-049).
+  // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
   parameter logic [31:0] PARA_EN_DPA_PQ = 0,
   // Parameter Description: hybrid verification.
@@ -227,6 +227,23 @@ module m_vlsit_dsig_top #(
   localparam logic [31:0] LPARA_HAS_LAT = {31'd0, |LPARA_CAP_ALG[11:9]},
   localparam logic [31:0] LPARA_HAS_HBS = {31'd0, |LPARA_CAP_ALG[14:12]},
   localparam logic [31:0] LPARA_WA = $clog2(PARA_BUF_BYTES / 8),
+  localparam logic [31:0] LPARA_BUF_EC = PARA_EN_ECDSA_P521[0] ? 32'd264 : (PARA_EN_ECDSA_P384[0] ? 32'd192 :
+                                         (PARA_EN_ED448[0] ? 32'd171 : ((PARA_EN_ECDSA_P256[0] | PARA_EN_ECDSA_K256[0]) ? 32'd128 :
+                                         (PARA_EN_ED25519[0] ? 32'd96 : 32'd0)))),
+  localparam logic [31:0] LPARA_BUF_ML = PARA_EN_MLDSA87[0] ? 32'd7219 : (PARA_EN_MLDSA65[0] ? 32'd5261 :
+                                         (PARA_EN_MLDSA44[0] ? 32'd3732 : 32'd0)),
+  localparam logic [31:0] LPARA_BUF_SLH = PARA_EN_SLHDSA[0] ? (PARA_SLHDSA_SETS[5] ? 32'd49920 :
+                                          PARA_SLHDSA_SETS[11] ? 32'd49920 :
+                                          PARA_SLHDSA_SETS[3] ? 32'd35712 :
+                                          PARA_SLHDSA_SETS[9] ? 32'd35712 :
+                                          PARA_SLHDSA_SETS[4] ? 32'd29856 :
+                                          PARA_SLHDSA_SETS[10] ? 32'd29856 :
+                                          PARA_SLHDSA_SETS[1] ? 32'd17120 :
+                                          PARA_SLHDSA_SETS[7] ? 32'd17120 :
+                                          PARA_SLHDSA_SETS[2] ? 32'd16272 :
+                                          PARA_SLHDSA_SETS[8] ? 32'd16272 :
+                                          PARA_SLHDSA_SETS[0] ? 32'd7888 :
+                                          PARA_SLHDSA_SETS[6] ? 32'd7888 : 32'd0) : 32'd0,
   localparam logic [31:0] LPARA_MULW_CODE = (PARA_MUL_W == 32'd128) ? 32'd2 : ((PARA_MUL_W == 32'd64) ? 32'd1 : 32'd0)
 ) (
   // Clocks and resets
@@ -328,14 +345,39 @@ module m_vlsit_dsig_top #(
     if (PARA_EN_ED448PH[0] & ~PARA_EN_ED448[0]) begin : g_chk_ed448var
       m_vlsit_dsig_top_error_Ed448ph_needs_PARA_EN_ED448 u_err ();
     end
-    if (PARA_EN_DPA_EC[0] | PARA_EN_DPA_PQ[0]) begin : g_chk_dpa
-      m_vlsit_dsig_top_error_PARA_EN_DPA_EC_and_PARA_EN_DPA_PQ_are_not_built u_err ();
+    if (PARA_EN_DPA_PQ[0] & (LPARA_CAP_ALG[11:9] == 3'd0)) begin : g_chk_dpa
+      m_vlsit_dsig_top_error_PARA_EN_DPA_PQ_needs_ML_DSA u_err ();
     end
     if (PARA_ECDSA_NONCE > 32'd2) begin : g_chk_nonce
       m_vlsit_dsig_top_error_PARA_ECDSA_NONCE_must_be_0_1_or_2 u_err ();
     end
-    if (PARA_RNG_SRC != 32'd0) begin : g_chk_rng
-      m_vlsit_dsig_top_error_PARA_RNG_SRC_shall_be_0 u_err ();
+    if (PARA_RNG_SRC > 32'd1) begin : g_chk_rng
+      m_vlsit_dsig_top_error_PARA_RNG_SRC_shall_be_0_or_1 u_err ();
+    end
+    if ((PARA_EN_AXI[0] | PARA_EN_WIN[0]) == 1'b0) begin : g_chk_port
+      m_vlsit_dsig_top_error_one_of_PARA_EN_AXI_and_PARA_EN_WIN_shall_be_1 u_err ();
+    end
+    if ((PARA_ECDSA_NONCE != 32'd0) & (LPARA_CAP_ALG[8:5] == 4'd0)) begin : g_chk_nonce_ecdsa
+      m_vlsit_dsig_top_error_PARA_ECDSA_NONCE_needs_an_ECDSA_curve u_err ();
+    end
+    if (PARA_EN_DPA_EC[0] & (LPARA_CAP_ALG[8:0] == 9'd0)) begin : g_chk_dpa_ec
+      m_vlsit_dsig_top_error_PARA_EN_DPA_EC_needs_an_elliptic_curve_algorithm u_err ();
+    end
+    if (PARA_EN_HYBRID[0] & ~(LPARA_CAP_VRFY[0] & (LPARA_CAP_VRFY[11:9] != 3'd0))) begin : g_chk_hybrid
+      m_vlsit_dsig_top_error_PARA_EN_HYBRID_needs_Ed25519_and_ML_DSA_verification u_err ();
+    end
+    if (PARA_EN_VAS[0] & (LPARA_CAP_SIGN == 32'd0)) begin : g_chk_vas
+      m_vlsit_dsig_top_error_PARA_EN_VAS_needs_a_signing_path u_err ();
+    end
+    if ((((PARA_OP_KGEN | PARA_OP_SIGN | PARA_OP_VRFY) & ~LPARA_CAP_ALG) != 32'd0) |
+        (((PARA_OP_KGEN | PARA_OP_SIGN) & 32'h0000_7000) != 32'd0)) begin : g_chk_op
+      m_vlsit_dsig_top_error_PARA_OP_masks_name_an_algorithm_or_operation_not_built u_err ();
+    end
+    if ((PARA_MUL_W != 32'd32) & (PARA_MUL_W != 32'd64) & (PARA_MUL_W != 32'd128)) begin : g_chk_mulw
+      m_vlsit_dsig_top_error_PARA_MUL_W_shall_be_32_64_or_128 u_err ();
+    end
+    if ((PARA_BUF_BYTES < LPARA_BUF_EC) | (PARA_BUF_BYTES < LPARA_BUF_ML) | (PARA_BUF_BYTES < LPARA_BUF_SLH)) begin : g_chk_buf
+      m_vlsit_dsig_top_error_PARA_BUF_BYTES_smaller_than_signature_and_public_key u_err ();
     end
     if ((PARA_EN_KEYIF[0] | PARA_EN_KEYREG[0]) == 1'b0) begin : g_chk_key
       if ((LPARA_CAP_KGEN | LPARA_CAP_SIGN) != 32'd0) begin : g_chk_key_needed
@@ -530,21 +572,30 @@ module m_vlsit_dsig_top #(
   logic [LPARA_WA-1:0] w_hbs_rd_addr;
 
   // Hash requesters, packed in the order of the arbiter: 0 elliptic curve, 1 lattice, 2 hash-based
-  logic [2:0]   w_hq_req;
-  logic [2:0]   w_hq_start;
-  logic [11:0]  w_hq_mode;
-  logic [47:0]  w_hq_outlen;
-  logic [2:0]   w_hq_in_valid;
-  logic [191:0] w_hq_in_data;
-  logic [11:0]  w_hq_in_nb;
-  logic [2:0]   w_hq_in_last;
-  logic [2:0]   w_hq_out_ready;
-  logic [2:0]   w_hq_grant;
-  logic [2:0]   w_hq_in_ready;
-  logic [2:0]   w_hq_out_valid;
-  logic [191:0] w_hq_out_data;
-  logic [11:0]  w_hq_out_nb;
-  logic [2:0]   w_hq_out_last;
+  logic [3:0]   w_hq_req;
+  logic [3:0]   w_hq_start;
+  logic [15:0]  w_hq_mode;
+  logic [63:0]  w_hq_outlen;
+  logic [3:0]   w_hq_in_valid;
+  logic [255:0] w_hq_in_data;
+  logic [15:0]  w_hq_in_nb;
+  logic [3:0]   w_hq_in_last;
+  logic [3:0]   w_hq_out_ready;
+  logic [3:0]   w_hq_grant;
+  logic [3:0]   w_hq_in_ready;
+  logic [3:0]   w_hq_out_valid;
+  logic [255:0] w_hq_out_data;
+  logic [15:0]  w_hq_out_nb;
+  logic [3:0]   w_hq_out_last;
+  logic         w_rng_hs_req;
+  logic         w_rng_hs_start;
+  logic [3:0]   w_rng_hs_mode;
+  logic [15:0]  w_rng_hs_outlen;
+  logic         w_rng_hs_in_valid;
+  logic [63:0]  w_rng_hs_in_data;
+  logic [3:0]   w_rng_hs_in_nb;
+  logic         w_rng_hs_in_last;
+  logic         w_rng_hs_out_ready;
 
   // Hash sequencer side of the arbiter
   logic         w_hs_job_start;
@@ -1159,7 +1210,22 @@ module m_vlsit_dsig_top #(
     .o_ready           (w_rng_ready),
     .o_due             (w_rng_due),
     .o_pool            (w_pool),
-    .o_cleared         (w_rng_cleared)
+    .o_cleared         (w_rng_cleared),
+    .o_hs_req          (w_rng_hs_req),
+    .i_hs_grant        (w_hq_grant[3]),
+    .o_hs_start        (w_rng_hs_start),
+    .o_hs_mode         (w_rng_hs_mode),
+    .o_hs_outlen       (w_rng_hs_outlen),
+    .o_hs_in_valid     (w_rng_hs_in_valid),
+    .o_hs_in_data      (w_rng_hs_in_data),
+    .o_hs_in_nb        (w_rng_hs_in_nb),
+    .o_hs_in_last      (w_rng_hs_in_last),
+    .i_hs_in_ready     (w_hq_in_ready[3]),
+    .i_hs_out_valid    (w_hq_out_valid[3]),
+    .i_hs_out_data     (w_hq_out_data[255:192]),
+    .i_hs_out_nb       (w_hq_out_nb[15:12]),
+    .i_hs_out_last     (w_hq_out_last[3]),
+    .o_hs_out_ready    (w_rng_hs_out_ready)
   );
 
   // Engine feedback to the control block: only the engine that reports drives each field.
@@ -1185,7 +1251,9 @@ module m_vlsit_dsig_top #(
   generate
     if (LPARA_HAS_EC != 32'd0) begin : g_ec
       m_vlsit_dsig_ec #(
-        .PARA_WA           (LPARA_WA)
+        .PARA_WA           (LPARA_WA),
+        .PARA_EN_DPA       (PARA_EN_DPA_EC),
+        .PARA_MUL_W        (PARA_MUL_W)
       ) u_ec (
         .i_clk_core        (i_clk_core),
         .i_rst_n_core      (i_rst_n_core),
@@ -1267,7 +1335,8 @@ module m_vlsit_dsig_top #(
   generate
     if (LPARA_HAS_LAT != 32'd0) begin : g_lat
       m_vlsit_dsig_lat #(
-        .PARA_WA           (LPARA_WA)
+        .PARA_WA           (LPARA_WA),
+        .PARA_EN_DPA       (PARA_EN_DPA_PQ)
       ) u_lat (
         .i_clk_core        (i_clk_core),
         .i_rst_n_core      (i_rst_n_core),
@@ -1420,18 +1489,19 @@ module m_vlsit_dsig_top #(
   endgenerate
 
   // Hash arbiter and stream sequencer
-  assign w_hq_req       = {w_hbs_hs_req, w_lat_hs_req, w_ec_hs_req};
-  assign w_hq_start     = {w_hbs_hs_start, w_lat_hs_start, w_ec_hs_start};
-  assign w_hq_mode      = {w_hbs_hs_mode, w_lat_hs_mode, w_ec_hs_mode};
-  assign w_hq_outlen    = {w_hbs_hs_outlen, w_lat_hs_outlen, w_ec_hs_outlen};
-  assign w_hq_in_valid  = {w_hbs_hs_in_valid, w_lat_hs_in_valid, w_ec_hs_in_valid};
-  assign w_hq_in_data   = {w_hbs_hs_in_data, w_lat_hs_in_data, w_ec_hs_in_data};
-  assign w_hq_in_nb     = {w_hbs_hs_in_nb, w_lat_hs_in_nb, w_ec_hs_in_nb};
-  assign w_hq_in_last   = {w_hbs_hs_in_last, w_lat_hs_in_last, w_ec_hs_in_last};
-  assign w_hq_out_ready = {w_hbs_hs_out_ready, w_lat_hs_out_ready, w_ec_hs_out_ready};
+  // requester 0 elliptic curve, 1 lattice, 2 hash-based, 3 random block (Hash_DRBG)
+  assign w_hq_req       = {w_rng_hs_req, w_hbs_hs_req, w_lat_hs_req, w_ec_hs_req};
+  assign w_hq_start     = {w_rng_hs_start, w_hbs_hs_start, w_lat_hs_start, w_ec_hs_start};
+  assign w_hq_mode      = {w_rng_hs_mode, w_hbs_hs_mode, w_lat_hs_mode, w_ec_hs_mode};
+  assign w_hq_outlen    = {w_rng_hs_outlen, w_hbs_hs_outlen, w_lat_hs_outlen, w_ec_hs_outlen};
+  assign w_hq_in_valid  = {w_rng_hs_in_valid, w_hbs_hs_in_valid, w_lat_hs_in_valid, w_ec_hs_in_valid};
+  assign w_hq_in_data   = {w_rng_hs_in_data, w_hbs_hs_in_data, w_lat_hs_in_data, w_ec_hs_in_data};
+  assign w_hq_in_nb     = {w_rng_hs_in_nb, w_hbs_hs_in_nb, w_lat_hs_in_nb, w_ec_hs_in_nb};
+  assign w_hq_in_last   = {w_rng_hs_in_last, w_hbs_hs_in_last, w_lat_hs_in_last, w_ec_hs_in_last};
+  assign w_hq_out_ready = {w_rng_hs_out_ready, w_hbs_hs_out_ready, w_lat_hs_out_ready, w_ec_hs_out_ready};
 
   m_vlsit_dsig_harb #(
-    .PARA_NREQ         (3)
+    .PARA_NREQ         (4)
   ) u_harb (
     .i_clk_core        (i_clk_core),
     .i_rst_n_core      (i_rst_n_core),

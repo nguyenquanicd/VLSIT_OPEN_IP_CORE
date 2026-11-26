@@ -1,0 +1,56 @@
+0	SLH-DSA-SHA2-128s valid
+1	SLH-DSA-SHA2-128s corrupted signature
+2	SLH-DSA-SHA2-128s wrong message
+3	SLH-DSA-SHA2-128s wrong root
+4	SLH-DSA-SHA2-128s valid with context
+5	SLH-DSA-SHA2-128s context missing
+6	SLH-DSA-SHA2-128f valid
+7	SLH-DSA-SHA2-128f corrupted signature
+8	SLH-DSA-SHA2-128f wrong message
+9	SLH-DSA-SHA2-128f wrong root
+10	SLH-DSA-SHA2-128f valid with context
+11	SLH-DSA-SHA2-128f context missing
+12	SLH-DSA-SHA2-192s valid
+13	SLH-DSA-SHA2-192s corrupted signature
+14	SLH-DSA-SHA2-192s wrong message
+15	SLH-DSA-SHA2-192s wrong root
+16	SLH-DSA-SHA2-192f valid
+17	SLH-DSA-SHA2-192f corrupted signature
+18	SLH-DSA-SHA2-192f wrong message
+19	SLH-DSA-SHA2-192f wrong root
+20	SLH-DSA-SHA2-256s valid
+21	SLH-DSA-SHA2-256s corrupted signature
+22	SLH-DSA-SHA2-256s wrong message
+23	SLH-DSA-SHA2-256s wrong root
+24	SLH-DSA-SHA2-256f valid
+25	SLH-DSA-SHA2-256f corrupted signature
+26	SLH-DSA-SHA2-256f wrong message
+27	SLH-DSA-SHA2-256f wrong root
+28	SLH-DSA-SHAKE-128s valid
+29	SLH-DSA-SHAKE-128s corrupted signature
+30	SLH-DSA-SHAKE-128s wrong message
+31	SLH-DSA-SHAKE-128s wrong root
+32	SLH-DSA-SHAKE-128s valid with context
+33	SLH-DSA-SHAKE-128s context missing
+34	SLH-DSA-SHAKE-128f valid
+35	SLH-DSA-SHAKE-128f corrupted signature
+36	SLH-DSA-SHAKE-128f wrong message
+37	SLH-DSA-SHAKE-128f wrong root
+38	SLH-DSA-SHAKE-192s valid
+39	SLH-DSA-SHAKE-192s corrupted signature
+40	SLH-DSA-SHAKE-192s wrong message
+41	SLH-DSA-SHAKE-192s wrong root
+42	SLH-DSA-SHAKE-192s valid with context
+43	SLH-DSA-SHAKE-192s context missing
+44	SLH-DSA-SHAKE-192f valid
+45	SLH-DSA-SHAKE-192f corrupted signature
+46	SLH-DSA-SHAKE-192f wrong message
+47	SLH-DSA-SHAKE-192f wrong root
+48	SLH-DSA-SHAKE-256s valid
+49	SLH-DSA-SHAKE-256s corrupted signature
+50	SLH-DSA-SHAKE-256s wrong message
+51	SLH-DSA-SHAKE-256s wrong root
+52	SLH-DSA-SHAKE-256f valid
+53	SLH-DSA-SHAKE-256f corrupted signature
+54	SLH-DSA-SHAKE-256f wrong message
+55	SLH-DSA-SHAKE-256f wrong root

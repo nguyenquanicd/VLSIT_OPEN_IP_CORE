@@ -37,3 +37,9 @@ set_false_path -from [get_ports i_ovrcur_n] -to [get_cells -hierarchical *u_ocp*
 
 # CDC-007: ULPI inputs in low power mode go to the two-flop synchronizers of m_usb2_ulpilp.
 set_false_path -from [get_ports {i_ulpi_dir i_ulpi_data[3:0]}] -to [get_cells -hierarchical *u_ulpilp*sync*]
+
+# EXC-006 and CDC-008 (DEC-049): UTMI+ LineState is asynchronous while the PHY has stopped CLK-PHY; it also
+# feeds the two-flop synchronizer of the always-on m_usb2_utmilp (the CLK-PHY path of the link is timed by usb2_io.sdc).
+# The CLK-PHY flop reg_suspend_n to its CLK-BUS synchronizer and the CLK-BUS wake flop to o_utmi_suspend_n are
+# cut by the clock groups of EXC-001.
+set_false_path -from [get_ports {i_utmi_linestate[*]}] -to [get_cells -hierarchical *u_utmilp*u_sync_ls*]

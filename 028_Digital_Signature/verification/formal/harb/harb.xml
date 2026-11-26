@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite timestamp="2026-11-26T07:00:15" hostname="QTT" package="harb" id="0" name="default" tests="10" errors="0" failures="0" time="0" skipped="0">
+<properties>
+<property name="os" value="Windows"/>
+<property name="expect" value="PASS"/>
+<property name="status" value="PASS"/>
+</properties>
+<testcase classname="default" name="build execution" time="0">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:33.5-33.46" time="0" type="ASSERT" location="harb_props.sv:33.5-33.46" id="_witness_.check_assert_harb_props_sv_33_137">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:35.5-35.45" time="0" type="ASSERT" location="harb_props.sv:35.5-35.45" id="_witness_.check_assert_harb_props_sv_35_141">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:36.5-36.47" time="0" type="ASSERT" location="harb_props.sv:36.5-36.47" id="_witness_.check_assert_harb_props_sv_36_145">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:37.5-37.39" time="0" type="ASSERT" location="harb_props.sv:37.5-37.39" id="_witness_.check_assert_harb_props_sv_37_149">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:38.5-38.40" time="0" type="ASSERT" location="harb_props.sv:38.5-38.40" id="_witness_.check_assert_harb_props_sv_38_153">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:39.5-39.98" time="0" type="ASSERT" location="harb_props.sv:39.5-39.98" id="_witness_.check_assert_harb_props_sv_39_157">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:40.5-40.114" time="0" type="ASSERT" location="harb_props.sv:40.5-40.114" id="_witness_.check_assert_harb_props_sv_40_163">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:44.5-44.38" time="0" type="ASSERT" location="harb_props.sv:44.5-44.38" id="_witness_.check_assert_harb_props_sv_44_175">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:46.29-46.54" time="0" type="ASSERT" location="harb_props.sv:46.29-46.54" id="_witness_.check_assert_harb_props_sv_46_181">
+</testcase>
+<testcase classname="default" name="Property ASSERT in harb_props at harb_props.sv:48.32-48.63" time="0" type="ASSERT" location="harb_props.sv:48.32-48.63" id="_witness_.check_assert_harb_props_sv_48_192">
+</testcase>
+<system-out>SBY  7:00:14 [harb] Removing directory 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb'.
+SBY  7:00:14 [harb] Copy 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\..\..\rtl\m_vlsit_dsig_harb.sv' to 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb\src\m_vlsit_dsig_harb.sv'.
+SBY  7:00:14 [harb] Copy 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_props.sv' to 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb\src\harb_props.sv'.
+SBY  7:00:14 [harb] engine_0: smtbmc yices
+SBY  7:00:14 [harb] base: starting process &quot;cd harb/src&amp; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY  7:00:15 [harb] base: finished (returncode=0)
+SBY  7:00:15 [harb] prep: starting process &quot;cd harb/model&amp; yosys -ql design_prep.log design_prep.ys&quot;
+SBY  7:00:15 [harb] prep: finished (returncode=0)
+SBY  7:00:15 [harb] smt2: starting process &quot;cd harb/model&amp; yosys -ql design_smt2.log design_smt2.ys&quot;
+SBY  7:00:15 [harb] smt2: finished (returncode=0)
+SBY  7:00:15 [harb] engine_0.basecase: starting process &quot;cd harb&amp; yosys-smtbmc -s yices --presat --unroll --noprogress -t 8  --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc model/design_smt2.smt2&quot;
+SBY  7:00:15 [harb] engine_0.induction: starting process &quot;cd harb&amp; yosys-smtbmc -s yices --presat --unroll -i --noprogress -t 8  --append 0 --dump-vcd engine_0/trace_induct.vcd --dump-yw engine_0/trace_induct.yw --dump-vlogtb engine_0/trace_induct_tb.v --dump-smtc engine_0/trace_induct.smtc model/design_smt2.smt2&quot;
+SBY  7:00:15 [harb] engine_0.induction: ##   0:00:00  Solver: yices
+SBY  7:00:15 [harb] engine_0.induction: ##   0:00:00  Trying induction in step 8..
+SBY  7:00:15 [harb] engine_0.induction: ##   0:00:00  Trying induction in step 7..
+SBY  7:00:15 [harb] engine_0.induction: ##   0:00:00  Trying induction in step 6..
+SBY  7:00:15 [harb] engine_0.induction: ##   0:00:00  Temporal induction successful.
+SBY  7:00:15 [harb] engine_0.induction: ##   0:00:00  Status: passed
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Solver: yices
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 0..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 0..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 1..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 1..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 2..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 2..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 3..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 3..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 4..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 4..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 5..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 5..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 6..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 6..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assumptions in step 7..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Checking assertions in step 7..
+SBY  7:00:15 [harb] engine_0.basecase: ##   0:00:00  Status: passed
+SBY  7:00:15 [harb] engine_0.induction: finished (returncode=0)
+SBY  7:00:15 [harb] engine_0.induction: Status returned by engine for induction: pass
+SBY  7:00:15 [harb] engine_0.basecase: finished (returncode=0)
+SBY  7:00:15 [harb] engine_0.basecase: Status returned by engine for basecase: pass
+SBY  7:00:15 [harb] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:01 (1)
+SBY  7:00:15 [harb] summary: Elapsed process time unvailable on Windows
+SBY  7:00:15 [harb] summary: engine_0 (smtbmc yices) returned pass for basecase
+SBY  7:00:15 [harb] summary: engine_0 (smtbmc yices) returned pass for induction
+SBY  7:00:15 [harb] summary: engine_0 did not produce any traces
+SBY  7:00:15 [harb] summary: successful proof by k-induction.
+SBY  7:00:15 [harb] DONE (PASS, rc=0)
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+</testsuites>

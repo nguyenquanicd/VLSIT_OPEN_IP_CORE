@@ -1,0 +1,4 @@
+all: 25 vectors
+tb_lat: 0 vectors, 0 failed, 0 protocol failures
+RESULT: PASS
+all    PASS  25/25 vectors, 20334967 cycles, 120 s

@@ -1,0 +1,2045 @@
+{
+  "$schema": "https://raw.githubusercontent.com/YosysHQ/yosys/main/misc/jny.schema.json",
+  "generator": "Yosys 0.69+274 (git sha1 7513f8df8, Release, GNU /usr/bin/x86_64-w64-mingw32-g++ 15.2.1)",
+  "version": "0.0.1",
+  "invocation": "write_jny -no-connections ../model/design.json ",
+  "features": ["attributes", "properties"],
+  "modules": [
+      {
+        "name": "$paramod\\m_vlsit_dsig_harb\\PARA_NREQ=s32'00000000000000000000000000000100",
+        "cell_sorts": [
+          {
+            "type": "$reduce_or",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$reduce_or$m_vlsit_dsig_harb.sv:131$216",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:131.25-131.47"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$reduce_or$m_vlsit_dsig_harb.sv:134$218",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:134.25-134.46"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$reduce_or$m_vlsit_dsig_harb.sv:137$220",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:137.25-137.45"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$reduce_or$m_vlsit_dsig_harb.sv:138$222",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:138.25-138.47"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$mux",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [64, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [64, 0]
+                },
+                {
+                  "name": "S",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [64, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$procmux$366",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$procmux$369",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$procmux$372",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$procmux$375",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$procmux$378",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$381",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$384",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$387",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$390",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$procmux$393",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$procmux$396",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$procmux$399",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$procmux$402",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$405",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$408",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$411",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:105.13-105.19|m_vlsit_dsig_harb.sv:105.9-106.68"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$413",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:89.14-89.26|m_vlsit_dsig_harb.sv:89.10-90.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procmux$416",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:78.11-78.19|m_vlsit_dsig_harb.sv:78.7-81.10"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$procmux$419",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:78.11-78.19|m_vlsit_dsig_harb.sv:78.7-81.10"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$422",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:78.11-78.19|m_vlsit_dsig_harb.sv:78.7-81.10"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000010"
+                  }
+                },
+                {
+                  "name": "$procmux$428",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:78.11-78.19|m_vlsit_dsig_harb.sv:78.7-81.10"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$431",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:78.11-78.19|m_vlsit_dsig_harb.sv:78.7-81.10"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$437",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:78.11-78.19|m_vlsit_dsig_harb.sv:78.7-81.10"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$440",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:78.11-78.19|m_vlsit_dsig_harb.sv:78.7-81.10"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$445",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34|m_vlsit_dsig_harb.sv:74.7-75.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$448",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34|m_vlsit_dsig_harb.sv:74.7-75.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$451",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34|m_vlsit_dsig_harb.sv:74.7-75.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$454",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34|m_vlsit_dsig_harb.sv:74.7-75.28"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:145$301",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:145.42-145.72"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:145$306",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:145.42-145.72"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:145$311",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:145.42-145.72"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:145$316",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:145.42-145.72"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:146$302",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:146.42-146.69"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:146$307",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:146.42-146.69"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:146$312",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:146.42-146.69"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$ternary$m_vlsit_dsig_harb.sv:146$317",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:146.42-146.69"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$or",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$235",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$238",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$241",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$254",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000010000",
+                    "Y_WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$257",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000010000",
+                    "Y_WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$260",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000010000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000010000",
+                    "Y_WIDTH": "00000000000000000000000000010000"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$273",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$276",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$279",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$292",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000001000000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000001000000",
+                    "Y_WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$295",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000001000000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000001000000",
+                    "Y_WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$or$m_vlsit_dsig_harb.sv:106$298",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:106.17-106.67"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000001000000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000001000000",
+                    "Y_WIDTH": "00000000000000000000000001000000"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$adff",
+            "ports": [
+                {
+                  "name": "ARST",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "CLK",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "D",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Q",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$procdff$466",
+                  "attributes": {
+                    "always_ff": "00000000000000000000000000000001",
+                    "src": "m_vlsit_dsig_harb.sv:86.3-91.6"
+                  },
+                  "parameters": {
+                    "ARST_POLARITY": "00000000000000000000000000000000",
+                    "ARST_VALUE": "0000",
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$and",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:131$215",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:131.27-131.46"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:134$217",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:134.27-134.45"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:137$219",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:137.27-137.44"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:138$221",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:138.27-138.46"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:143$299",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:143.42-143.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:143$304",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:143.42-143.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:143$309",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:143.42-143.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:143$314",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:143.42-143.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:144$300",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:144.42-144.65"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:144$305",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:144.42-144.65"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:144$310",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:144.42-144.65"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:144$315",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:144.42-144.65"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:147$303",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:147.42-147.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:147$308",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:147.42-147.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:147$313",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:147.42-147.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:147$318",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:147.42-147.64"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:74$207",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:74$208",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:74$209",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:74$210",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:74.11-74.34"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$and$m_vlsit_dsig_harb.sv:97$214",
+                  "attributes": {
+                    "src": "m_vlsit_dsig_harb.sv:97.18-97.35"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                }
+            ]
+          }
+        ],
+        "attributes": {
+            "dynports": "00000000000000000000000000000001",
+            "hdlname": "m_vlsit_dsig_harb",
+            "src": "m_vlsit_dsig_harb.sv:19.1-151.10"
+        }
+      },
+      {
+        "name": "harb_props",
+        "cell_sorts": [
+          {
+            "type": "$sub",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$sub$harb_props.sv:33$138",
+                  "attributes": {
+                    "src": "harb_props.sv:33.23-33.35"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$mux",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "S",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$procmux$339",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:48.9-48.30|harb_props.sv:48.5-48.64"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$341",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:42.29-42.45|harb_props.sv:42.25-49.6"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$344",
+                  "attributes": {
+                    "src": "harb_props.sv:46.9-46.27|harb_props.sv:46.5-46.55"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$346",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:42.29-42.45|harb_props.sv:42.25-49.6"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$349",
+                  "attributes": {
+                    "full_case": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:42.29-42.45|harb_props.sv:42.25-49.6"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procmux$351",
+                  "attributes": {
+                    "src": "harb_props.sv:31.19-31.24|harb_props.sv:31.15-41.6"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:26$188",
+                  "attributes": {
+                    "src": "harb_props.sv:26.65-26.89"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:26$189",
+                  "attributes": {
+                    "src": "harb_props.sv:26.48-26.89"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:26$190",
+                  "attributes": {
+                    "src": "harb_props.sv:26.31-26.89"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:26$191",
+                  "attributes": {
+                    "src": "harb_props.sv:26.14-26.89"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:39$158",
+                  "attributes": {
+                    "src": "harb_props.sv:39.76-39.96"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:39$159",
+                  "attributes": {
+                    "src": "harb_props.sv:39.60-39.96"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:39$160",
+                  "attributes": {
+                    "src": "harb_props.sv:39.44-39.96"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:39$161",
+                  "attributes": {
+                    "src": "harb_props.sv:39.28-39.96"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000000000011"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:40$164",
+                  "attributes": {
+                    "src": "harb_props.sv:40.87-40.112"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:40$165",
+                  "attributes": {
+                    "src": "harb_props.sv:40.67-40.112"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:40$166",
+                  "attributes": {
+                    "src": "harb_props.sv:40.47-40.112"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                },
+                {
+                  "name": "$ternary$harb_props.sv:40$167",
+                  "attributes": {
+                    "src": "harb_props.sv:40.27-40.112"
+                  },
+                  "parameters": {
+                    "WIDTH": "00000000000000000000000001000000"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$paramod\\m_vlsit_dsig_harb\\PARA_NREQ=s32'00000000000000000000000000000100",
+            "ports": [
+                {
+                  "name": "i_clk_core",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "i_in_data",
+                  "direction": "io",
+                  "range": [256, 0]
+                },
+                {
+                  "name": "i_in_last",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "i_in_nb",
+                  "direction": "io",
+                  "range": [16, 0]
+                },
+                {
+                  "name": "i_in_ready",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "i_in_valid",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "i_job_mode",
+                  "direction": "io",
+                  "range": [16, 0]
+                },
+                {
+                  "name": "i_job_outlen",
+                  "direction": "io",
+                  "range": [64, 0]
+                },
+                {
+                  "name": "i_job_start",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "i_out_data",
+                  "direction": "io",
+                  "range": [64, 0]
+                },
+                {
+                  "name": "i_out_last",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "i_out_nb",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "i_out_ready",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "i_out_valid",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "i_req",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "i_rst_n_core",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "o_grant",
+                  "direction": "",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "o_in_data",
+                  "direction": "",
+                  "range": [64, 0]
+                },
+                {
+                  "name": "o_in_last",
+                  "direction": "",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "o_in_nb",
+                  "direction": "",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "o_in_ready",
+                  "direction": "",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "o_in_valid",
+                  "direction": "",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "o_job_mode",
+                  "direction": "",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "o_job_outlen",
+                  "direction": "",
+                  "range": [16, 0]
+                },
+                {
+                  "name": "o_job_start",
+                  "direction": "",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "o_out_data",
+                  "direction": "",
+                  "range": [256, 0]
+                },
+                {
+                  "name": "o_out_last",
+                  "direction": "",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "o_out_nb",
+                  "direction": "",
+                  "range": [16, 0]
+                },
+                {
+                  "name": "o_out_ready",
+                  "direction": "",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "o_out_valid",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "dut",
+                  "attributes": {
+                    "src": "harb_props.sv:16.38-22.111"
+                  },
+                  "parameters": {
+
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$dff",
+            "ports": [
+                {
+                  "name": "CLK",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "D",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Q",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$procdff$458",
+                  "attributes": {
+                    "src": "harb_props.sv:29.3-29.84"
+                  },
+                  "parameters": {
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procdff$459",
+                  "attributes": {
+                    "src": "harb_props.sv:29.3-29.84"
+                  },
+                  "parameters": {
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$procdff$460",
+                  "attributes": {
+                    "src": "harb_props.sv:29.3-29.84"
+                  },
+                  "parameters": {
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$procdff$461",
+                  "attributes": {
+                    "src": "harb_props.sv:13.3-13.39"
+                  },
+                  "parameters": {
+                    "CLK_POLARITY": "1",
+                    "WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$reduce_or",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$reduce_or$harb_props.sv:35$143",
+                  "attributes": {
+                    "src": "harb_props.sv:35.27-35.44"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$reduce_or$harb_props.sv:36$147",
+                  "attributes": {
+                    "src": "harb_props.sv:36.28-36.46"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$reduce_or$harb_props.sv:48$184",
+                  "attributes": {
+                    "src": "harb_props.sv:48.11-48.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$not",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$not$harb_props.sv:38$154",
+                  "attributes": {
+                    "src": "harb_props.sv:38.26-38.30"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$not$harb_props.sv:44$176",
+                  "attributes": {
+                    "src": "harb_props.sv:44.22-44.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$check",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "ARGS",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "EN",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "TRG",
+                  "direction": "io",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_33_137",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_33_137",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:33.5-33.46"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_35_141",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_35_141",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:35.5-35.45"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111110",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_36_145",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_36_145",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:36.5-36.47"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111101",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_37_149",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_37_149",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:37.5-37.39"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111100",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_38_153",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_38_153",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:38.5-38.40"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111011",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_39_157",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_39_157",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:39.5-39.98"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111010",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_40_163",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_40_163",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:40.5-40.114"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111001",
+                    "TRG_ENABLE": "00000000000000000000000000000000",
+                    "TRG_POLARITY": true,
+                    "TRG_WIDTH": "00000000000000000000000000000000"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_44_175",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_44_175",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:44.5-44.38"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111111",
+                    "TRG_ENABLE": "00000000000000000000000000000001",
+                    "TRG_POLARITY": "1",
+                    "TRG_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_46_181",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_46_181",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:46.29-46.54"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111110",
+                    "TRG_ENABLE": "00000000000000000000000000000001",
+                    "TRG_POLARITY": "1",
+                    "TRG_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "_witness_.check_assert_harb_props_sv_48_192",
+                  "attributes": {
+                    "hdlname": "_witness_ check_assert_harb_props_sv_48_192",
+                    "keep": "00000000000000000000000000000001",
+                    "src": "harb_props.sv:48.32-48.63"
+                  },
+                  "parameters": {
+                    "ARGS_WIDTH": "00000000000000000000000000000000",
+                    "FLAVOR": "assert",
+                    "FORMAT": true,
+                    "PRIORITY": "11111111111111111111111111111101",
+                    "TRG_ENABLE": "00000000000000000000000000000001",
+                    "TRG_POLARITY": "1",
+                    "TRG_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$logic_and",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$logic_and$harb_props.sv:42$172",
+                  "attributes": {
+                    "src": "harb_props.sv:42.29-42.45"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$eq",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [0, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$eq$harb_props.sv:35$144",
+                  "attributes": {
+                    "src": "harb_props.sv:35.13-35.44"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:36$148",
+                  "attributes": {
+                    "src": "harb_props.sv:36.13-36.46"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000001",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000001",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:39$162",
+                  "attributes": {
+                    "src": "harb_props.sv:39.13-39.97"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000011",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:40$168",
+                  "attributes": {
+                    "src": "harb_props.sv:40.13-40.113"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000001000000",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000001000000",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:46$182",
+                  "attributes": {
+                    "src": "harb_props.sv:46.37-46.53"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:48$193",
+                  "attributes": {
+                    "src": "harb_props.sv:48.40-48.62"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$logic_not",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [0, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$eq$harb_props.sv:33$140",
+                  "attributes": {
+                    "src": "harb_props.sv:33.13-33.45"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:37$152",
+                  "attributes": {
+                    "src": "harb_props.sv:37.13-37.38"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:38$156",
+                  "attributes": {
+                    "src": "harb_props.sv:38.13-38.39"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                },
+                {
+                  "name": "$eq$harb_props.sv:44$178",
+                  "attributes": {
+                    "src": "harb_props.sv:44.13-44.37"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000001"
+                  }
+                }
+            ]
+          },
+          {
+            "type": "$and",
+            "ports": [
+                {
+                  "name": "A",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "B",
+                  "direction": "io",
+                  "range": [4, 0]
+                },
+                {
+                  "name": "Y",
+                  "direction": "",
+                  "range": [4, 0]
+                }
+            ],
+            "cells": [
+                {
+                  "name": "$and$harb_props.sv:24$134",
+                  "attributes": {
+                    "src": "harb_props.sv:24.20-24.31"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$harb_props.sv:33$139",
+                  "attributes": {
+                    "src": "harb_props.sv:33.14-33.36"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$harb_props.sv:35$142",
+                  "attributes": {
+                    "src": "harb_props.sv:35.29-35.43"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$harb_props.sv:36$146",
+                  "attributes": {
+                    "src": "harb_props.sv:36.30-36.45"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$harb_props.sv:37$151",
+                  "attributes": {
+                    "src": "harb_props.sv:37.14-37.29"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$harb_props.sv:38$155",
+                  "attributes": {
+                    "src": "harb_props.sv:38.14-38.30"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$harb_props.sv:44$177",
+                  "attributes": {
+                    "src": "harb_props.sv:44.14-44.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                },
+                {
+                  "name": "$and$harb_props.sv:48$183",
+                  "attributes": {
+                    "src": "harb_props.sv:48.13-48.28"
+                  },
+                  "parameters": {
+                    "A_SIGNED": "00000000000000000000000000000000",
+                    "A_WIDTH": "00000000000000000000000000000100",
+                    "B_SIGNED": "00000000000000000000000000000000",
+                    "B_WIDTH": "00000000000000000000000000000100",
+                    "Y_WIDTH": "00000000000000000000000000000100"
+                  }
+                }
+            ]
+          }
+        ],
+        "attributes": {
+            "keep": "00000000000000000000000000000001",
+            "top": "00000000000000000000000000000001",
+            "src": "harb_props.sv:6.1-50.10"
+        }
+      }
+  ]
+}

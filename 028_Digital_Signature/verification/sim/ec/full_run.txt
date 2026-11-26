@@ -1,0 +1,54 @@
+ed25519: 33 vectors
+ed448: 49 vectors
+p256: 32 vectors
+p384: 16 vectors
+p521: 12 vectors
+k256: 11 vectors
+ed25519  PASS  33/33 vectors, 98638295 cycles, 483 s
+ed448    FAIL  37/49 vectors, 203076855 cycles, 912 s
+    FAIL 0 Ed448 rfc0 verify ok
+    FAIL 5 Ed448 rfc0 sign+vas
+    FAIL 9 Ed448 rfc1 verify ok
+    FAIL 15 Ed448 rfc1 sign+vas
+    FAIL 17 Ed448 rfc2 verify ok
+    FAIL 23 Ed448 rfc2 sign+vas
+    FAIL 25 Ed448 rfc3 verify ok
+    FAIL 31 Ed448 rfc3 sign+vas
+    FAIL 33 Ed448 rfc4 verify ok
+    FAIL 39 Ed448 rfc4 sign+vas
+    FAIL 41 Ed448 rfc5 verify ok
+    FAIL 47 Ed448 rfc5 sign+vas
+VEC 0: verify result 0, expected 1
+VEC 0 FAIL cycles=1740
+VEC 5: vas ok 0, expected 1
+VEC 5 FAIL cycles=11188537
+VEC 9: verify result 0, expected 1
+VEC 9 FAIL cycles=1743
+VEC 15: vas ok 0, expected 1
+VEC 15 FAIL cycles=11183595
+VEC 17: verify result 0, expected 1
+VEC 17 FAIL cycles=1746
+VEC 23: vas ok 0, expected 1
+VEC 23 FAIL cycles=11337085
+VEC 25: verify result 0, expected 1
+VEC 25 FAIL cycles=1772
+VEC 31: vas ok 0, expected 1
+VEC 31 FAIL cycles=11238117
+VEC 33: verify result 0, expected 1
+VEC 33 FAIL cycles=1772
+VEC 39: vas ok 0, expected 1
+VEC 39 FAIL cycles=11485667
+VEC 41: verify result 0, expected 1
+VEC 41 FAIL cycles=1788
+VEC 47: vas ok 0, expected 1
+VEC 47 FAIL cycles=11248069
+p256     PASS  32/32 vectors, 92741317 cycles, 912 s
+p384     PASS  16/16 vectors, 94558832 cycles, 912 s
+p521     FAIL  10/12 vectors, 46471163 cycles, 912 s
+    FAIL 0 P-521 hash2 sample verify ok
+    FAIL 5 P-521 hash2 sample sign+vas
+VEC 0: verify result 0, expected 1
+VEC 0 FAIL cycles=101
+VEC 5: vas ok 0, expected 1
+VEC 5 FAIL cycles=15490186
+k256     PASS  11/11 vectors, 36888567 cycles, 911 s

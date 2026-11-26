@@ -1,7 +1,7 @@
 """t_fi_ocp: over-current input of the host port (fault injection). Also used by t_host_ulpi_ocp (argument ulpi).
 Pins of group 2 are {DrvVbus, o_vbus_pwr_en}.
 
-Test ID and title: t_fi_ocp - over-current filter (15 cycles ignored, 16 trip), power off within 2 cycles, re-arm rules, oc_en 0, software off
+Test ID and title: t_fi_ocp (its ULPI part with FOC-EXTVBUS also runs in t_host_ulpi_ocp) - over-current filter (15 cycles ignored, 16 trip), power off within 2 cycles, re-arm rules, oc_en 0, software off
 Priority and rationale: P1. Port power protection is a safety function; kills M07 (BUG-024, DrvVbus not following the power-off).
 Purpose: show that with oc_en the input low for 16 consecutive CLK-BUS cycles turns o_vbus_pwr_en and DrvVbus off within 2 cycles and sets
   ocur and oc_act; shorter pulses change nothing; the port stays off until software clears ocur and writes vbus_drv again; a persistent
@@ -25,6 +25,7 @@ Functional checkpoints and assertions (R-286; ID | requirement | trigger | expec
   FOC-PERSIST | BUG-003 | re-arm while the input is still low | power stays off; on only after the input is high and a new re-arm | TB WP, XP | 100 bus cycles | power returns into a persistent short
   FOC-DISABLED | REQ-FUNC-034 | 60-cycle pulse with oc_en 0 | power stays on, ocur 0 | TB XP, R | 40 bus cycles | the input acts while disabled
   FOC-SWOFF | REQ-FUNC-041 | hport vbus_drv 0 | both pins off | TB WP | 400 CLK-PHY | DrvVbus does not follow (BUG-024 class)
+  FOC-EXTVBUS | DEC-048 PHY-06, u2_hport.ext_vbus | ULPI builds only (argument ulpi, t_host_ulpi_ocp): vbus_drv with ext_vbus 0, then 1, then vbus_drv 0 | OTG Control read through u2_phy_acc: bits 6:5 = 01b, 11b, 00b | TB P, R | 2000 polls per read | DrvVbusExternal not written or not following DrvVbus
 Shared checkpoints: none (no bring-up).
 Expected outcome: the power state follows the filter and re-arm rules exactly.
 Defect/fault targeted: DrvVbus not following the over-current power-off (M07, BUG-024); filter length off by one; automatic re-arm;
@@ -129,4 +130,18 @@ s.chk('FOC-SWOFF')
 s.w('hport', oc_en=0, vbus_drv=0)
 s.wp(2, 0, 3, 400)
 s.bin('cg_ocin.async_edge')
+if 'ulpi' in sys.argv:
+    # u2_hport.ext_vbus (DEC-048 PHY-06): OTG Control (0Ah) bit 6 DrvVbusExternal follows DrvVbus (bit 5) only when ext_vbus is 1
+    def otg_read(bits):
+        s.idle_bus(400)
+        s.w('phy_acc', reg_addr=0x0A, rd_wr=0, start=1)
+        s.poll('phy_acc', tries=2000, start=0, busy=0)
+        s.emit('R', addr('phy_acc'), bits << 16, 0x60 << 16)
+    s.chk('FOC-EXTVBUS')
+    s.w('hport', oc_en=0, vbus_drv=1)
+    otg_read(0x20)                                       # DrvVbus 1, DrvVbusExternal 0 (ext_vbus 0)
+    s.w('hport', oc_en=0, vbus_drv=1, ext_vbus=1)
+    otg_read(0x60)                                       # both 1: the PHY drives its CPEN pin
+    s.w('hport', oc_en=0, vbus_drv=0, ext_vbus=1)
+    otg_read(0x00)                                       # DrvVbusExternal follows DrvVbus off
 print(s.save('ops/fi_ocp_s%d.ops' % seed))

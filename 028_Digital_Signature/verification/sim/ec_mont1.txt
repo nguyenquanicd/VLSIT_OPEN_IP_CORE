@@ -1,0 +1,4 @@
+quick: 10 vectors
+ct: 30 vectors
+quick    PASS  10/10 vectors, 2177864 cycles, 22 s
+ct       PASS  30/30 vectors, 7054629 cycles, 97 s

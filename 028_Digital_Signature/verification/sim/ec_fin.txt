@@ -1,0 +1,18 @@
+ed25519: 33 vectors
+ed448: 49 vectors
+edvar: 68 vectors
+det: 26 vectors
+ct: 30 vectors
+p256: 32 vectors
+p384: 16 vectors
+p521: 12 vectors
+k256: 11 vectors
+ed25519  PASS  33/33 vectors, 128541675 cycles, 1054 s
+ed448    PASS  49/49 vectors, 598865298 cycles, 12679 s
+edvar    PASS  68/68 vectors, 487891036 cycles, 12679 s
+det      PASS  26/26 vectors, 203611080 cycles, 12679 s
+ct       PASS  30/30 vectors, 141450132 cycles, 12678 s
+p256     PASS  32/32 vectors, 121202880 cycles, 12678 s
+p384     PASS  16/16 vectors, 123429678 cycles, 12677 s
+p521     PASS  12/12 vectors, 158362546 cycles, 12677 s
+k256     PASS  11/11 vectors, 48092838 cycles, 12677 s

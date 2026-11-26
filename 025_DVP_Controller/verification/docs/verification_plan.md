@@ -231,7 +231,7 @@ The table shows the planned functional bins first introduced by each test in the
 |---:|---|---:|---|
 | 1 | t_dvp_gated_e2e | 7 | cg_gated_apb_pop_count; cg_gated_fifo_order; cg_gated_first_pixel_phase; cg_gated_href_without_clock; cg_gated_pixel_spacing_margin; cg_gated_toggle_both_edges; cg_gated_zero_extend |
 | 2 | t_dvp_continuous_e2e | 5 | cg_apb_one_read_one_pop; cg_continuous_capture_qualified; cg_continuous_fifo_order; cg_dma_watermark_ack_rearm; cg_sample_zero_extend |
-| 3 | t_dvp_control_formal | 5 | cg_formal_dma_cover; cg_formal_flush_cover; cg_formal_mode_guard_cover; cg_formal_pop_cover; cg_formal_timeout_cover |
+| 3 | t_dvp_control_formal | 6 | cg_formal_csr_cover; cg_formal_dma_cover; cg_formal_flush_cover; cg_formal_mode_guard_cover; cg_formal_pop_cover; cg_formal_timeout_cover |
 | 4 | t_dvp_apb_protocol | 7 | cg_apb_access_completion; cg_apb_error_terminal; cg_apb_read_strobe_low; cg_apb_setup_fields; cg_apb_wait_stability; cg_csr_access_reset; cg_csr_v11_fields |
 | 5 | t_dvp_flush_handshake | 3 | cg_flush_handshake_by_mode; cg_flush_invalid_and_blocked_read; cg_flush_retains_status |
 | 6 | t_dvp_overflow | 2 | cg_fifo_full_error_recovery; cg_overflow_drop_newest_set_dominant |

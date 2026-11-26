@@ -1,0 +1,18 @@
+VEC 0 PASS cycles=496077 clear=32769
+VEC 1 PASS cycles=612605 clear=32769
+VEC 2 PASS cycles=612606 clear=32769
+VEC 3 PASS cycles=612568 clear=32769
+VEC 4 PASS cycles=496507 clear=32769
+VEC 5 PASS cycles=613080 clear=32769
+VEC 6 PASS cycles=613081 clear=32769
+VEC 7 PASS cycles=613024 clear=32769
+VEC 8 PASS cycles=496105 clear=32769
+VEC 9 PASS cycles=612640 clear=32769
+VEC 10 PASS cycles=612639 clear=32769
+VEC 11 PASS cycles=612602 clear=32769
+VEC 12 PASS cycles=721639 clear=32769
+VEC 13 PASS cycles=934465 clear=32769
+VEC 14 PASS cycles=1028247 clear=32769
+VEC 15 PASS cycles=1414162 clear=32769
+tb_lat: 16 vectors, 0 failed, 0 protocol failures
+RESULT: PASS

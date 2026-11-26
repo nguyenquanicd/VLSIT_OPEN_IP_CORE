@@ -14,6 +14,7 @@ from ec_isa import *
 
 def consts(c):
     k = {}
+    k['BIG'] = 1 << 575
     k['P'], k['N'], k['NM1'] = c.p, c.n, c.n - 1
     k['A'] = c.a
     k['PM2'], k['NM2'] = c.p - 2, c.n - 2
@@ -130,6 +131,26 @@ def ed_encode(asm, c):
     asm.ret()
 
 
+_BL = [0]
+
+
+def smul_secret(a, c, k, nbits):
+    """Scalar multiplication by a secret scalar in register k. With masking of the elliptic-curve engine (LDV 2 = 1,
+    PARA_EN_DPA_EC) the scalar is blinded first (Coron): k' = k + r n with a 48-bit r from the random pool (bytes 88 to 93),
+    so k' G = k G while the bits that are processed change for every operation. Uses R14, R15 and flag F0."""
+    _BL[0] += 1
+    plain, done = 'SMS_P%d' % _BL[0], 'SMS_E%d' % _BL[0]
+    a.ldv(14, 2); a.isz(0, 14); a.brf(0, plain)
+    a.setm(SEL_BIG)
+    a.ldr(14, 88, 6, BE); a.ldc(15, 'N'); a.mul(14, 14, 15); a.add(14, 14, k)
+    a.setm(SEL_P)
+    a.smul(14, max(nbits, c.nbits + 48) + 1, 'DBL', 'ADD')
+    a.jmp(done)
+    a.label(plain)
+    a.smul(k, nbits, 'DBL', 'ADD')
+    a.label(done)
+
+
 def ed_hash(a, parts, dom):
     """SHA-512 of [dom2(f, ctx)] || parts || message; dom2 = prefix, f, len(ctx) in the head, the context as the first tail,
     the parts as the mid segment, the message as the second tail."""
@@ -157,7 +178,7 @@ def prog_ed(c, op, vas=False, dom=False):
             a.hdclr(); a.hdreg(24, nb, LE); a.hgo(H_SHA512, 0)
             a.hrd(25, 0, 32, LE)
             a.ldc(16, 'CLAMP_AND'); a.and_(25, 25, 16); a.ldc(16, 'CLAMP_OR'); a.or_(25, 25, 16)
-            a.call('LOADG'); a.smul(25, 255, 'DBL', 'ADD'); a.call('ENC'); a.mov(26, 19)
+            a.call('LOADG'); smul_secret(a, c, 25, 255); a.call('ENC'); a.mov(26, 19)
         a.rdb(24, sigarea, 0, nb, LE)           # R encoded
         a.rdb(25, sigarea, nb, nb, LE)          # S
         if not vas:
@@ -209,7 +230,7 @@ def prog_ed(c, op, vas=False, dom=False):
         a.hrd(25, 0, 32, LE); a.hrd(26, 32, 32, LE)
         a.ldc(16, 'CLAMP_AND'); a.and_(25, 25, 16); a.ldc(16, 'CLAMP_OR'); a.or_(25, 25, 16)
         a.call('LOADG')
-        a.smul(25, 255, 'DBL', 'ADD')
+        smul_secret(a, c, 25, 255)
         a.call('ENC'); a.mov(27, 19)                         # encoded A
         if op == 'keygen':
             a.wrb(27, AREA_RES, 0, nb, LE)
@@ -217,7 +238,7 @@ def prog_ed(c, op, vas=False, dom=False):
             ed_hash(a, [(26, 32)], dom)
             a.hrd(31, 0, 64, LE); a.setm(SEL_N); a.red(31, 31); a.setm(SEL_P)     # r
             a.call('LOADG')
-            a.smul(31, 253, 'DBL', 'ADD')
+            smul_secret(a, c, 31, 253)
             a.call('ENC'); a.mov(30, 19)                     # encoded R
             ed_hash(a, [(30, nb), (27, nb)], dom)
             a.hrd(12, 0, 64, LE); a.setm(SEL_N); a.red(12, 12)       # k
@@ -261,7 +282,7 @@ def prog_ed448(c, op, vas=False):
             a.hdclr(); a.hdreg(24, nb, LE); a.hgo(H_SHAKE256, 0, 114)
             a.hrd(25, 0, nb, LE)
             a.ldc(16, 'CLAMP_AND'); a.and_(25, 25, 16); a.ldc(16, 'CLAMP_OR'); a.or_(25, 25, 16)
-            a.call('LOADG'); a.smul(25, 448, 'DBL', 'ADD'); a.call('ENC'); a.mov(26, 19)
+            a.call('LOADG'); smul_secret(a, c, 25, 448); a.call('ENC'); a.mov(26, 19)
         a.rdb(24, sigarea, 0, nb, LE)
         a.rdb(25, sigarea, nb, nb, LE)
         if not vas:
@@ -308,14 +329,14 @@ def prog_ed448(c, op, vas=False):
         a.hrd(25, 0, nb, LE); a.hrd(26, nb, nb, LE)
         a.ldc(16, 'CLAMP_AND'); a.and_(25, 25, 16); a.ldc(16, 'CLAMP_OR'); a.or_(25, 25, 16)
         a.call('LOADG')
-        a.smul(25, 448, 'DBL', 'ADD')
+        smul_secret(a, c, 25, 448)
         a.call('ENC'); a.mov(27, 19)
         if op == 'keygen':
             a.wrb(27, AREA_RES, 0, nb, LE)
         else:
             hash_to_scalar(31, [(26, nb)], 1)                # r
             a.call('LOADG')
-            a.smul(31, 446, 'DBL', 'ADD')
+            smul_secret(a, c, 31, 446)
             a.call('ENC'); a.mov(30, 19)
             hash_to_scalar(12, [(30, nb), (27, nb)], 1)      # k
             a.setm(SEL_N); a.red(25, 25)
@@ -400,7 +421,7 @@ def prog_ecdsa(c, op, vas=False, det=None):
         sigarea = AREA_RES if vas else AREA_SIG
         if vas:
             a.ldk(25, 0, nb, BE)
-            a.call('LOADG'); a.smul(25, c.nbits, 'DBL', 'ADD')
+            a.call('LOADG'); smul_secret(a, c, 25, c.nbits)
             a.ldc(16, 'PM2'); a.pow(20, 2, 16); a.mul(21, 0, 20); a.mul(22, 1, 20)
             a.mov(8, 21); a.mov(9, 22)
         a.rdb(24, sigarea, 0, nb, BE); a.rdb(25, sigarea, nb, nb, BE)
@@ -451,7 +472,7 @@ def prog_ecdsa(c, op, vas=False, det=None):
             a.setm(SEL_P)
         if op == 'sign':
             a.call('LOADG')
-            a.smul(30, c.nbits, 'DBL', 'ADD')
+            smul_secret(a, c, 30, c.nbits)
             a.ldc(16, 'PM2'); a.pow(20, 2, 16); a.mul(21, 0, 20)
             a.setm(SEL_N); a.red(27, 21)                                  # r
             a.isz(4, 27); a.brf(4, 'BADPT')
@@ -463,7 +484,7 @@ def prog_ecdsa(c, op, vas=False, det=None):
             a.wrb(27, AREA_RES, 0, nb, BE); a.wrb(22, AREA_RES, nb, nb, BE)
         else:
             a.call('LOADG')
-            a.smul(25, c.nbits, 'DBL', 'ADD')
+            smul_secret(a, c, 25, c.nbits)
             a.ldc(16, 'PM2'); a.pow(20, 2, 16); a.mul(21, 0, 20); a.mul(22, 1, 20)
             a.wrb(21, AREA_RES, 0, nb, BE); a.wrb(22, AREA_RES, nb, nb, BE)
         a.fset(7, 1); a.end()

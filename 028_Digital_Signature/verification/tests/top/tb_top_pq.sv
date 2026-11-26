@@ -2,6 +2,9 @@
 // SLH-DSA, LMS/HSS, XMSS (hash-based engine) through APB4, AXI4, the key registers and the hash arbiter, with the buffer
 // images of gen_lat_vec.py or gen_hbs_vec.py. Plusargs: +DIR=<vector directory> +KIND=lat|hbs +NVEC +FIRST +MAXCYC.
 `timescale 1ns/1ps
+`ifndef TB_DPA_PQ
+  `define TB_DPA_PQ 0
+`endif
 module tb_top_pq;
   reg clk = 0; always #5 clk = ~clk;
   reg rst_n = 0;
@@ -21,7 +24,7 @@ module tb_top_pq;
     .PARA_LMS_SETS(32'hFFFFF), .PARA_LMOTS_SETS(32'hFFFF), .PARA_EN_XMSS(1), .PARA_XMSS_SETS_LO(32'hFFFFFFFF), .PARA_XMSS_SETS_HI(32'hFFF),
     .PARA_OP_KGEN(32'h0000_0E00), .PARA_OP_SIGN(32'h0000_0E00), .PARA_OP_VRFY(32'h0000_7E00),
     .PARA_EN_PURE(1), .PARA_EN_PREHASH(1), .PARA_BUF_BYTES(65536), .PARA_EN_AXI(1), .PARA_EN_DMA(0), .PARA_EN_WIN(1),
-    .PARA_EN_KEYIF(0), .PARA_EN_KEYREG(1), .PARA_KEY_SRC(1), .PARA_ECDSA_NONCE(0), .PARA_EN_VAS(1), .PARA_EN_LOG(1), .PARA_CSR_ASYNC(0)
+    .PARA_EN_KEYIF(0), .PARA_EN_KEYREG(1), .PARA_KEY_SRC(1), .PARA_ECDSA_NONCE(0), .PARA_EN_VAS(1), .PARA_EN_LOG(1), .PARA_CSR_ASYNC(0), .PARA_EN_DPA_PQ(`TB_DPA_PQ)
   ) dut (
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk), .i_rst_n_apb(rst_n),
     .i_apb_psel(psel), .i_apb_penable(penable), .i_apb_pwrite(pwrite), .i_apb_paddr(paddr), .i_apb_pwdata(pwdata), .i_apb_pstrb(pstrb), .i_apb_pprot(pprot),
@@ -151,6 +154,7 @@ module tb_top_pq;
         plen = 0; while (plen < 80 && poolhex[8*plen +: 8] != 0) plen = plen + 1;
         pool_vec = 0;
         for (j = 0; j < plen / 2; j = j + 1) pool_vec[8*j +: 8] = hexbyte(poolhex, j, plen);
+        if (`TB_DPA_PQ) for (j = 32; j < 64; j = j + 1) pool_vec[8*j +: 8] = $urandom;    // mask seed of PARA_EN_DPA_PQ
         // buffer image through AXI4 (2 KB bursts)
         n_words = (v_nb + 7) / 8;
         for (j = 0; j < n_words; j = j + 256) axi_load(8 * j, (n_words - j > 256) ? 256 : (n_words - j));

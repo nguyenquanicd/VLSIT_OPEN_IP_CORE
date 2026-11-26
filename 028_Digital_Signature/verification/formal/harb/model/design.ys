@@ -1,0 +1,9 @@
+# running in harb/src/
+read_verilog -sv -formal m_vlsit_dsig_harb.sv
+read_verilog -sv -formal harb_props.sv
+prep -top harb_props
+
+hierarchy -smtcheck
+rename -witness
+write_jny -no-connections ../model/design.json
+write_rtlil ../model/design.il

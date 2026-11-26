@@ -1,0 +1,4 @@
+det: 24 vectors
+quick: 10 vectors
+det      PASS  24/24 vectors, 144856880 cycles, 1155 s
+quick    PASS  10/10 vectors, 29421467 cycles, 1155 s

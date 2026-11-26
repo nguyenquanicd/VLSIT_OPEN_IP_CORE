@@ -1,0 +1,4 @@
+p384full: 32 vectors
+p521full: 32 vectors
+p384full PASS  32/32 vectors, 209586875 cycles, 1158 s
+p521full PASS  32/32 vectors, 385035886 cycles, 2423 s

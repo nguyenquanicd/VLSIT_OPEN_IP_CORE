@@ -1,0 +1,2 @@
+hseq: 493 vectors, 0 failed
+RESULT: PASS

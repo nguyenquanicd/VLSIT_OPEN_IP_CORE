@@ -15,7 +15,10 @@ module tb_lat;
   wire [0:0] g, ir, ov, ol; wire [63:0] od; wire [3:0] onb;
   wire s_job_start, s_in_valid, s_in_last, s_out_ready, s_in_ready, s_out_valid, s_out_last; wire [3:0] s_mode, s_in_nb, s_out_nb; wire [15:0] s_outlen; wire [63:0] s_in_data, s_out_data;
 
-  m_vlsit_dsig_lat #(.PARA_WA(13)) dut (
+`ifndef TB_DPA
+  `define TB_DPA 0
+`endif
+  m_vlsit_dsig_lat #(.PARA_WA(13), .PARA_EN_DPA(`TB_DPA)) dut (
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clr(clr), .i_start(start), .i_vas_start(vas_start), .i_run_alg(alg), .i_run_op(op_op),
     .i_run_form(form), .i_run_hedged(hedged), .i_run_hash(hsh), .i_run_len_msg(len_msg), .i_run_len_ctx(len_ctx),
     .i_run_off_msg(off_msg), .i_run_off_sig(off_sig), .i_run_off_pk(off_pk), .i_run_off_res(off_res),
@@ -52,7 +55,10 @@ module tb_lat;
   end
 
   reg [7:0] expb [0:8191];
-  integer nvec, first, maxcyc, i, j, fd, rc, nfail, cyc, ok, zf, wait_clr;
+  integer nvec, first, maxcyc, i, j, fd, rc, nfail, cyc, ok, zf, wait_clr, op_cyc, vas_cyc;
+  // monitor of PARA_EN_DPA_PQ: writes into the mask polynomial (words 31744 to 31999, polynomial 124 of lat_prog.py)
+  integer n_mask_wr = 0, n_mask_vec = 0, mask_wr_q = 0, mask_wr_op = 0;
+  always @(posedge clk) if (dut.w_ram_we && dut.w_ram_waddr >= 31744 && dut.w_ram_waddr < 32000) n_mask_wr = n_mask_wr + 1;
   integer v_i, v_alg, v_op, v_hd, v_lm, v_lc, v_om, v_os, v_op2, v_or, v_ok, v_el, v_vas, v_nb;
   reg [8*80-1:0] keyhex, poolhex;
   reg [8*200-1:0] dir, path;
@@ -106,10 +112,14 @@ module tb_lat;
         key = 0; pool = 0;
         for (j = 0; j < klen / 2; j = j + 1) key[8*j +: 8] = hexbyte(keyhex, j, klen);
         for (j = 0; j < plen / 2; j = j + 1) pool[8*j +: 8] = hexbyte(poolhex, j, plen);
+        // PARA_EN_DPA_PQ: a fresh mask seed in the pool bytes 32 to 63 (the results must not change)
+        if (`TB_DPA) for (j = 32; j < 64; j = j + 1) pool[8*j +: 8] = $urandom;
         alg = v_alg; op_op = v_op[1:0]; hedged = v_hd[0]; len_msg = v_lm; len_ctx = v_lc;
         off_msg = v_om; off_sig = v_os; off_pk = v_op2; off_res = v_or; form = v_hd[2:1]; hsh = v_hd[5:3];
+        mask_wr_q = n_mask_wr;
         @(posedge clk); #1 start = 1; @(posedge clk); #1 start = 0;
         wait_result;
+        op_cyc = cyc; vas_cyc = 0;      // cycles of the operation itself (the verify-after-sign runs are counted apart)
         if (cyc < 0) begin ok = 0; $display("VEC %0d TIMEOUT", v_i); end
         else begin
           if (err) begin ok = 0; $display("VEC %0d: error flags %0h", v_i, err_flags); end
@@ -122,6 +132,7 @@ module tb_lat;
             if (v_vas) begin
               @(posedge clk); #1 vas_start = 1; @(posedge clk); #1 vas_start = 0;
               wait_result;
+              vas_cyc = cyc;
               if (cyc < 0) begin ok = 0; $display("VEC %0d VAS TIMEOUT", v_i); end
               else if (!vas_done || !vas_ok) begin ok = 0; $display("VEC %0d: verify-after-sign vas_done %0b vas_ok %0b", v_i, vas_done, vas_ok); end
               else begin
@@ -135,6 +146,7 @@ module tb_lat;
             end
           end
         end
+        mask_wr_op = n_mask_wr - mask_wr_q;      // writes of the operation and its verify-after-sign runs, before the clear
         // clear, wait for the empty flag, and check the word RAM
         @(posedge clk); #1 clr = 1; wait_clr = 0;
         while (!cleared && wait_clr < 100000) begin @(posedge clk); #1 wait_clr = wait_clr + 1; end
@@ -143,11 +155,18 @@ module tb_lat;
         for (j = 0; j < 32768; j = j + 1) if (dut.reg_wram[j] != 32'd0) zf = zf + 1;
         for (j = 0; j < 32; j = j + 1) if (dut.reg_rf[j] != 32'd0) zf = zf + 1;
         if (zf != 0 || !cleared || busy) begin ok = 0; $display("VEC %0d: not zeroized after clear (%0d, flag %0b)", v_i, zf, cleared); end
+        // a signing vector must use the mask polynomial exactly when the build masks (PARA_EN_DPA_PQ)
+        if (v_op == 1) begin
+          if (`TB_DPA && mask_wr_op == 0) begin ok = 0; $display("VEC %0d: PARA_EN_DPA_PQ 1 but no mask written", v_i); end
+          if (!`TB_DPA && mask_wr_op != 0) begin ok = 0; $display("VEC %0d: mask written without PARA_EN_DPA_PQ", v_i); end
+          if (mask_wr_op != 0) n_mask_vec = n_mask_vec + 1;
+        end
         if (!ok) nfail = nfail + 1;
-        $display("VEC %0d %s cycles=%0d clear=%0d", v_i, ok ? "PASS" : "FAIL", cyc, wait_clr);
+        $display("VEC %0d %s cycles=%0d vas=%0d clear=%0d", v_i, ok ? "PASS" : "FAIL", op_cyc, vas_cyc, wait_clr);
       end
     end
     if (proto_fail != 0) nfail = nfail + 1;
+    $display("masking monitor: %0d signing vectors wrote the mask polynomial", n_mask_vec);
     $display("tb_lat: %0d vectors, %0d failed, %0d protocol failures", nvec, nfail, proto_fail);
     if (nfail == 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

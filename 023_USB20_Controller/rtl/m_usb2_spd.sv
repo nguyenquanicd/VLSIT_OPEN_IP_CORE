@@ -12,9 +12,17 @@
  *                reset with the host chirp sequence, speed result, suspend, resume and
  *                disconnect. Chirp and test J and K are sent as a byte stream (K = 0x00, J =
  *                0xFF) with OpMode 2, the test packet as the 53-byte pattern of REF-001 7.1.20
- *                through the link. The SE0 drive of a host reset with OpMode 3 is an assumption
- *                to confirm with the PHY datasheet (TBD-015). All times are in microseconds,
- *                scaled by the CLK-PHY frequency and divided by PARA_USB2_TSCALE for simulation.
+ *                through the link. The PHY mode rows (XcvrSelect, TermSelect, OpMode, pull-downs)
+ *                are the defined rows of ULPI 1.1 Table 40 (DEC-048): the SE0 of a host port reset
+ *                comes from the high-speed terminations, suspend and resume use the full-speed
+ *                rows, and a soft-disconnected device uses the non-driving row; OpMode 11b is never
+ *                driven. The port speed after a reset without the high-speed handshake is the speed
+ *                of the connect, since the line is SE0 at the end of the reset (BUG-051). A
+ *                suspended host port resumes on a device K and reports a disconnect on SE0 after
+ *                the reversion window; the device chirp K lasts 1.2 ms; o_suspend_n_reg feeds
+ *                the always-on UTMI+ wake detector (DEC-049).
+ *                All times are in microseconds, scaled by the CLK-PHY frequency and
+ *                divided by PARA_USB2_TSCALE for simulation.
  */
 `timescale 1ns/1ps
 
@@ -41,16 +49,12 @@ module m_usb2_spd #(
   // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
   parameter logic [31:0] PARA_USB2_PIPE_MODE = 0,
-  // Parameter Description: OpMode that the host drives for the SE0 of a port reset (TBD-015:
-  // confirm with
-  // the PHY datasheet).
-  // Parameter values: 0 to 3; default is 3.
-  // Parameter unit: none
-  parameter logic [31:0] PARA_USB2_RST_OPMODE = 3,
   localparam logic [31:0] LPARA_SH        = $clog2(PARA_USB2_TSCALE),
   localparam logic [31:0] LPARA_T_RSTDET  = (32'd3 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_FILT    = (32'd3 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
-  localparam logic [31:0] LPARA_T_CHIRPK  = (32'd1600 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
+  // Device chirp K of 1.2 ms (DEC-049 Q3): with a PHY that takes the 5.6 ms of UTMI 1.05 to restart
+  // its clock after a reset that starts in suspend, the chirp still ends before TUCHEND (7.0 ms).
+  localparam logic [31:0] LPARA_T_CHIRPK  = (32'd1200 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_CHWAIT  = (32'd2500 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_IDLE    = (32'd3000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_RWAKE   = (32'd10000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
@@ -65,6 +69,9 @@ module m_usb2_spd #(
   localparam logic [31:0] LPARA_T_HRSE0   = (32'd3000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_HRST    = (32'd50000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_HRSM    = (32'd20000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
+  // Suspended host port: an SE0 is a disconnect only after the time that a high-speed device has
+  // to revert to full-speed and show J (3.125 ms, REF-001 7.1.7.6), with margin (DEC-049 Q2).
+  localparam logic [31:0] LPARA_T_HSUSPW  = (32'd4000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_DBNC    = (32'd100000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_TPKT    = (32'd100 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_TMR_W     = 28,
@@ -108,6 +115,7 @@ module m_usb2_spd #(
   output logic        o_term_sel,
   output logic [1:0]  o_op_mode,
   output logic        o_suspend_n,
+  output logic        o_suspend_n_reg,
   output logic        o_dp_pd,
   output logic        o_dm_pd,
   output logic        o_drv_vbus,
@@ -222,6 +230,7 @@ module m_usb2_spd #(
   logic                        w_ls_se0;
   logic                        w_ls_j;
   logic                        w_ls_k;
+  logic                        w_port_k;
   logic                        w_test_on;
   logic [2:0]                  w_test_mode;
   logic                        w_stream_on;
@@ -240,6 +249,8 @@ module m_usb2_spd #(
   assign w_ls_se0 = (i_linestate == 2'b00);
   assign w_ls_j   = (i_linestate == 2'b01);
   assign w_ls_k   = (i_linestate == 2'b10);
+  // K of the host port speed: on a low-speed port the idle is 10b and the K is 01b.
+  assign w_port_k = (reg_speed == 2'd2) ? w_ls_j : w_ls_k;
 
   // Role: the CSR override, the ID pin in a dual-role build, or the fixed role of the build.
   assign w_role_host = (PARA_USB2_ROLE == 32'd1) ? 1'b1 :
@@ -466,9 +477,16 @@ module m_usb2_spd #(
             default: w_fsm_hp_nxt_state = ENUM_ST_HP_EN;
           endcase
         end
+        // A suspended port also resumes on a device K (remote wakeup; K of the port speed: J and K
+        // swap on a low-speed port) and reports a disconnect on an SE0 after the reversion window
+        // of a high-speed device (REQ-FUNC-016, REQ-FUNC-020, DEC-049 Q2).
         ENUM_ST_HP_SUSP: begin
-          if (w_edge_pres)
-            w_fsm_hp_nxt_state = ENUM_ST_HP_RESM;
+          casez ({w_edge_pres, (reg_flt == '0), w_port_k, (w_ls_se0 & (reg_htmr == '0))})
+            4'b1???: w_fsm_hp_nxt_state = ENUM_ST_HP_RESM;
+            4'b011?: w_fsm_hp_nxt_state = ENUM_ST_HP_RESM;
+            4'b01?1: w_fsm_hp_nxt_state = ENUM_ST_HP_OFF;
+            default: w_fsm_hp_nxt_state = ENUM_ST_HP_SUSP;
+          endcase
         end
         ENUM_ST_HP_RESM: begin
           if (reg_htmr == '0)
@@ -581,6 +599,7 @@ module m_usb2_spd #(
             reg_cnt_kj   <= 4'd0;
             reg_hchirp_j <= 1'b0;
           end
+          ENUM_ST_HP_SUSP:  reg_htmr <= LPARA_T_HSUSPW[LPARA_TMR_W-1:0];
           ENUM_ST_HP_RESM:  reg_htmr <= LPARA_T_HRSM[LPARA_TMR_W-1:0];
           default:       reg_htmr <= reg_htmr;
         endcase
@@ -722,7 +741,9 @@ module m_usb2_spd #(
         endcase
         if ((reg_fsm_hp_current_state == ENUM_ST_HP_RSTW) & (w_fsm_hp_nxt_state == ENUM_ST_HP_EN) &
             (reg_cnt_kj < LPARA_PAIRS[3:0]))
-          reg_speed <= (i_linestate == 2'b10) ? 2'd2 : 2'd1;
+          // No high-speed handshake: keep the low-speed result of the connect, else full-speed.
+          // The line is SE0 under the reset row here, so it cannot be sampled (BUG-051, DEC-048).
+          reg_speed <= (reg_speed == 2'd2) ? 2'd2 : 2'd1;
         if ((reg_fsm_hp_current_state == ENUM_ST_HP_RESM) & (w_fsm_hp_nxt_state == ENUM_ST_HP_EN))
           reg_evt_resume <= 1'b1;
       end
@@ -807,9 +828,12 @@ module m_usb2_spd #(
           w_xcvr_sel = 2'b00;
           w_term_sel = 1'b0;
         end
+        // Suspend (also L1) of a high- or full-speed device: full-speed row with the D+ pull-up
+        // kept, so the hub does not see a disconnect; reg_hs keeps the speed for the resume
+        // (USB 2.0 7.1.7.6, ULPI 1.1 Table 40 peripheral suspend row, DEC-048 PHY-04).
         ENUM_ST_DV_SUSP: begin
-          w_xcvr_sel  = reg_hs ? 2'b00 : 2'b01;
-          w_term_sel  = ~reg_hs;
+          w_xcvr_sel  = 2'b01;
+          w_term_sel  = 1'b1;
           w_suspend_n = 1'b0;
         end
         ENUM_ST_DV_RWAKE: begin
@@ -817,8 +841,11 @@ module m_usb2_spd #(
           w_term_sel = 1'b1;
           w_op_mode  = 2'b10;
         end
+        // Not connected (soft_conn = 0 or no VBUS): non-driving row, all terminations removed
+        // (UTMI 1.05 OpMode 1 soft disconnect, ULPI 1.1 Table 40 tri-state row, DEC-048 PHY-05).
         default: begin
           w_xcvr_sel = 2'b01;
+          w_op_mode  = 2'b01;
         end
       endcase
     end else begin
@@ -827,10 +854,12 @@ module m_usb2_spd #(
           w_xcvr_sel = 2'b01;
           w_term_sel = 1'b1;
         end
+        // Port reset: the SE0 comes from the high-speed terminations (45 ohm on D+ and D-) with
+        // nothing transmitted, the host high-speed row of ULPI 1.1 Table 40; OpMode 11b is
+        // optional in UTMI+ and ULPI and not implemented by common PHYs (DEC-048 PHY-01).
         ENUM_ST_HP_SE0: begin
-          w_xcvr_sel = 2'b01;
-          w_term_sel = 1'b1;
-          w_op_mode  = PARA_USB2_RST_OPMODE[1:0];
+          w_xcvr_sel = 2'b00;
+          w_term_sel = 1'b0;
         end
         ENUM_ST_HP_LISTK, ENUM_ST_HP_CHIRP: begin
           w_xcvr_sel = 2'b00;
@@ -838,25 +867,28 @@ module m_usb2_spd #(
           w_op_mode  = 2'b10;
         end
         ENUM_ST_HP_RSTW: begin
-          // Rest of the 50 ms reset: a high-speed port keeps the high-speed idle (SE0 under the
-          // high-speed terminations); a full- or low-speed port keeps driving SE0, otherwise the
-          // bus returned to idle when the listen window ended (REQ-FUNC-011, BUG-047).
-          w_xcvr_sel = (reg_speed == 2'd0) ? 2'b00 : 2'b01;
-          w_term_sel = (reg_speed != 2'd0);
-          w_op_mode  = (reg_speed == 2'd0) ? 2'b00 : PARA_USB2_RST_OPMODE[1:0];
+          // Rest of the 50 ms reset: SE0 under the high-speed terminations for every speed, so
+          // the bus does not return to idle when the listen window ends (REQ-FUNC-011, BUG-047,
+          // DEC-048 PHY-01).
+          w_xcvr_sel = 2'b00;
+          w_term_sel = 1'b0;
         end
         ENUM_ST_HP_EN: begin
           w_xcvr_sel = (reg_speed == 2'd0) ? 2'b00 : ((reg_speed == 2'd2) ? 2'b10 : 2'b01);
           w_term_sel = (reg_speed != 2'd0);
         end
+        // Suspend and resume of the port: full-speed rows also for a high-speed port (the
+        // high-speed terminations would hold the line at SE0 and reset the device; resume K is
+        // full-speed signaling); a low-speed port uses the low-speed rows (USB 2.0 7.1.7.6,
+        // 7.1.7.7, ULPI 1.1 Table 40 host suspend and resume rows, DEC-048 PHY-02, PHY-03).
         ENUM_ST_HP_SUSP: begin
-          w_xcvr_sel  = (reg_speed == 2'd0) ? 2'b00 : ((reg_speed == 2'd2) ? 2'b10 : 2'b01);
-          w_term_sel  = (reg_speed != 2'd0);
+          w_xcvr_sel  = (reg_speed == 2'd2) ? 2'b10 : 2'b01;
+          w_term_sel  = 1'b1;
           w_suspend_n = 1'b0;
         end
         ENUM_ST_HP_RESM: begin
-          w_xcvr_sel = (reg_speed == 2'd0) ? 2'b00 : ((reg_speed == 2'd2) ? 2'b10 : 2'b01);
-          w_term_sel = (reg_speed != 2'd0);
+          w_xcvr_sel = (reg_speed == 2'd2) ? 2'b10 : 2'b01;
+          w_term_sel = 1'b1;
           w_op_mode  = 2'b10;
         end
         default: begin
@@ -885,9 +917,11 @@ module m_usb2_spd #(
   // Optional register stage on the mode outputs (PARA_USB2_PIPE_MODE).
   always_ff @(posedge i_clk_phy, negedge i_rst_n_core) begin : p_ff_mode
     if (!i_rst_n_core) begin
+      // Reset value: the non-driving row (OpMode 01b) of ULPI 1.1 Table 40, so a soft reset never
+      // shows an undefined row on the PHY pins (DEC-048 PHY-05).
       reg_xcvr_sel  <= 2'b01;
       reg_term_sel  <= 1'b0;
-      reg_op_mode   <= 2'b00;
+      reg_op_mode   <= 2'b01;
       reg_suspend_n <= 1'b1;
       reg_dp_pd     <= 1'b0;
       reg_dm_pd     <= 1'b0;
@@ -907,6 +941,9 @@ module m_usb2_spd #(
   assign o_term_sel  = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_term_sel : w_term_sel;
   assign o_op_mode   = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_op_mode : w_op_mode;
   assign o_suspend_n = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_suspend_n : w_suspend_n;
+  // Registered suspend request for the always-on wake detector (a synchronizer source must be a
+  // flop, BUG-045; DEC-049).
+  assign o_suspend_n_reg = reg_suspend_n;
   assign o_dp_pd     = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_dp_pd : w_dp_pd;
   assign o_dm_pd     = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_dm_pd : w_dm_pd;
   assign o_id_pullup = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_id_pullup : w_id_pullup;

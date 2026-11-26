@@ -37,6 +37,7 @@ m_vlsit_dsig_harb.sv
 m_vlsit_dsig_hfeed.sv
 m_vlsit_dsig_brd.sv
 m_vlsit_dsig_bwr.sv
+m_vlsit_dsig_mmul.sv
 m_vlsit_dsig_ec_rom.sv
 m_vlsit_dsig_ec.sv
 m_vlsit_dsig_hbs_rom.sv
@@ -47,5 +48,6 @@ m_vlsit_dsig_buf.sv
 m_vlsit_dsig_ctl.sv
 m_vlsit_dsig_axi.sv
 m_vlsit_dsig_key.sv
+m_vlsit_dsig_drbg.sv
 m_vlsit_dsig_rng.sv
 m_vlsit_dsig_top.sv

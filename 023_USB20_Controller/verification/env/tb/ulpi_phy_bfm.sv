@@ -129,6 +129,7 @@ module ulpi_phy_bfm (
           if (nxt) begin
             n_regw++;
             if (raddr == 6'h04) reg_func <= data_from_link;
+            if (raddr == 6'h04 && data_from_link[4:3] == 2'b11) begin n_viol++; viol_id = 7; end   // OpMode 11b: optional, not implemented (USB3320 6.2.4.5, TUSB1210 7.5.5)
             if (raddr == 6'h0A) reg_otg <= data_from_link;
             nxt <= 0; st <= S_REGW4;
           end

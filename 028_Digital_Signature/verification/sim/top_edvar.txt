@@ -1,0 +1,68 @@
+0	Ed25519ctx var0 verify ok
+1	Ed25519ctx var0 verify bad msg
+2	Ed25519ctx var0 verify bad ctx
+3	Ed25519ctx var0 verify ctx dropped
+4	Ed25519ctx var0 verify bad S
+5	Ed25519ctx var0 sign
+6	Ed25519ctx var0 keygen
+7	Ed25519ctx var0 sign+vas
+8	Ed25519ctx var0 sign+corrupt+vas
+9	Ed25519ctx var1 verify ok
+10	Ed25519ctx var1 verify bad msg
+11	Ed25519ctx var1 verify bad ctx
+12	Ed25519ctx var1 verify ctx dropped
+13	Ed25519ctx var1 verify bad S
+14	Ed25519ctx var1 sign
+15	Ed25519ctx var1 keygen
+16	Ed25519ctx var1 sign+vas
+17	Ed25519ctx var1 sign+corrupt+vas
+18	Ed25519ctx var2 verify ok
+19	Ed25519ctx var2 verify bad msg
+20	Ed25519ctx var2 verify bad ctx
+21	Ed25519ctx var2 verify ctx dropped
+22	Ed25519ctx var2 verify bad S
+23	Ed25519ctx var2 sign
+24	Ed25519ctx var2 keygen
+25	Ed25519ctx var2 sign+vas
+26	Ed25519ctx var2 sign+corrupt+vas
+27	Ed25519ctx var3 verify ok
+28	Ed25519ctx var3 verify bad msg
+29	Ed25519ctx var3 verify bad ctx
+30	Ed25519ctx var3 verify ctx dropped
+31	Ed25519ctx var3 verify bad S
+32	Ed25519ctx var3 sign
+33	Ed25519ctx var3 keygen
+34	Ed25519ctx var3 sign+vas
+35	Ed25519ctx var3 sign+corrupt+vas
+36	Ed25519ph var4 verify ok
+37	Ed25519ph var4 verify bad msg
+38	Ed25519ph var4 verify bad S
+39	Ed25519ph var4 sign
+40	Ed25519ph var4 keygen
+41	Ed25519ph var4 sign+vas
+42	Ed25519ph var4 sign+corrupt+vas
+43	Ed448 var5 verify ok
+44	Ed448 var5 verify bad msg
+45	Ed448 var5 verify bad ctx
+46	Ed448 var5 verify ctx dropped
+47	Ed448 var5 verify bad S
+48	Ed448 var5 sign
+49	Ed448 var5 keygen
+50	Ed448 var5 sign+vas
+51	Ed448 var5 sign+corrupt+vas
+52	Ed448ph var6 verify ok
+53	Ed448ph var6 verify bad msg
+54	Ed448ph var6 verify bad S
+55	Ed448ph var6 sign
+56	Ed448ph var6 keygen
+57	Ed448ph var6 sign+vas
+58	Ed448ph var6 sign+corrupt+vas
+59	Ed448ph var7 verify ok
+60	Ed448ph var7 verify bad msg
+61	Ed448ph var7 verify bad ctx
+62	Ed448ph var7 verify ctx dropped
+63	Ed448ph var7 verify bad S
+64	Ed448ph var7 sign
+65	Ed448ph var7 keygen
+66	Ed448ph var7 sign+vas
+67	Ed448ph var7 sign+corrupt+vas

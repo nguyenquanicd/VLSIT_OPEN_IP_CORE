@@ -1,0 +1,32 @@
+PASS  legal   defaults                                      
+PASS  legal   tb_top_ec configuration                       
+PASS  legal   tb_top_pq configuration                       
+PASS  legal   hybrid, RNG_SRC 1, DPA_EC, nonce 1            
+PASS  legal   nonce 1 with P-256                            
+PASS  legal   DPA_PQ with ML-DSA-44                         
+PASS  legal   PARA_MUL_W 32                                 
+PASS  legal   PARA_MUL_W 128                                
+PASS  illegal PARA_AXI_DW 32                                PARA_AXI_DW_shall_be_64
+PASS  illegal no message form                               one_of_PARA_EN_PURE_and_PARA_EN_PREHASH_shall_be_1
+PASS  illegal DMA without AXI4                              PARA_EN_DMA_needs_PARA_EN_AXI
+PASS  illegal SLH-DSA without sets                          PARA_EN_SLHDSA_needs_a_nonzero_PARA_SLHDSA_SETS
+PASS  illegal LMS without LM-OTS sets                       PARA_EN_LMS_needs_nonzero
+PASS  illegal XMSS without sets                             PARA_EN_XMSS_needs_nonzero_PARA_XMSS_SETS
+PASS  illegal Ed25519ph without Ed25519                     Ed25519ctx_and_Ed25519ph_need_PARA_EN_ED25519
+PASS  illegal Ed448ph without Ed448                         Ed448ph_needs_PARA_EN_ED448
+PASS  illegal DPA_PQ without ML-DSA                         PARA_EN_DPA_PQ_needs_ML_DSA
+PASS  illegal nonce code 3                                  PARA_ECDSA_NONCE_must_be_0_1_or_2
+PASS  illegal RNG_SRC 2                                     PARA_RNG_SRC_shall_be_0_or_1
+PASS  illegal no AXI4 and no window                         one_of_PARA_EN_AXI_and_PARA_EN_WIN_shall_be_1
+PASS  illegal nonce without ECDSA                           PARA_ECDSA_NONCE_needs_an_ECDSA_curve
+PASS  illegal DPA_EC without curve                          PARA_EN_DPA_EC_needs_an_elliptic_curve_algorithm
+PASS  illegal hybrid without ML-DSA                         PARA_EN_HYBRID_needs_Ed25519_and_ML_DSA
+PASS  illegal VAS without signing                           PARA_EN_VAS_needs_a_signing_path
+PASS  illegal operation mask of an algorithm not built      PARA_OP_masks_name_an_algorithm
+PASS  illegal signing of SLH-DSA                            PARA_OP_masks_name_an_algorithm
+PASS  illegal PARA_MUL_W 48                                 PARA_MUL_W_shall_be_32_64_or_128
+PASS  illegal buffer too small for ML-DSA-87                PARA_BUF_BYTES_smaller_than_signature_and_public_key
+PASS  illegal buffer too small for SLH-DSA-SHA2-256f        PARA_BUF_BYTES_smaller_than_signature_and_public_key
+PASS  illegal signing without key source                    signing_or_key_generation_needs_PARA_EN_KEYIF_or_PARA_EN_KEYREG
+run_params: 8 legal, 22 illegal, 0 failed
+RESULT: PASS

@@ -1,0 +1,6 @@
+ct: 30 vectors
+det: 26 vectors
+ed448: 49 vectors
+ct       PASS  30/30 vectors, 157942008 cycles, 1530 s
+det      PASS  26/26 vectors, 222028271 cycles, 10574 s
+ed448    PASS  49/49 vectors, 624394824 cycles, 12744 s

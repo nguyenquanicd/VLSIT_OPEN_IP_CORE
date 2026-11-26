@@ -6,6 +6,7 @@ module tb_top_err;
   reg clk = 0; always #5 clk = ~clk;
   reg clk_apb = 0; always #7 clk_apb = ~clk_apb;       // the APB clock is asynchronous to the core clock (PARA_CSR_ASYNC = 1)
   reg rst_n = 0;
+  reg rst_apb_n = 1;        // separate APB reset for the reset-domain-crossing check (section 7.3, RST-APB)
   reg psel = 0, penable = 0, pwrite = 0; reg [15:0] paddr = 0; reg [31:0] pwdata = 0;
   wire pready, pslverr; wire [31:0] prdata;
   wire key_req; wire [4:0] key_idx; wire ent_req; wire irq, alarm;
@@ -17,7 +18,7 @@ module tb_top_err;
     .PARA_EN_ED25519(1), .PARA_EN_ED25519PH(1), .PARA_EN_ECDSA_P256(1), .PARA_OP_KGEN(32'h20), .PARA_OP_SIGN(32'h24), .PARA_OP_VRFY(32'h24), .PARA_BUF_BYTES(1024), .PARA_EN_AXI(1),
     .PARA_EN_KEYIF(1), .PARA_EN_KEYREG(0), .PARA_ECDSA_NONCE(2), .PARA_EN_VAS(0), .PARA_EN_LOG(1), .PARA_EN_LOCK(1), .PARA_CSR_ASYNC(1)
   ) dut (
-    .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk_apb), .i_rst_n_apb(rst_n),
+    .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk_apb), .i_rst_n_apb(rst_n & rst_apb_n),
     .i_apb_psel(psel), .i_apb_penable(penable), .i_apb_pwrite(pwrite), .i_apb_paddr(paddr), .i_apb_pwdata(pwdata), .i_apb_pstrb(4'hF), .i_apb_pprot(3'd0),
     .o_apb_pready(pready), .o_apb_pslverr(pslverr), .o_apb_prdata(prdata), .i_protect_en(1'b0), .i_slverr_en(1'b0),
     .i_axi_awvalid(1'b0), .o_axi_awready(awready), .i_axi_awid(4'd0), .i_axi_awaddr(16'd0), .i_axi_awlen(8'd0), .i_axi_awsize(3'd3), .i_axi_awburst(2'b01),
@@ -144,6 +145,27 @@ module tb_top_err;
     repeat (50) @(posedge clk);
     apb_r(16'h078, errv); check(errv[10], "change of the enables after the lock: dsig_err.lockv");
     apb_r(16'h048, rd); check(rd[5], "dsig_alg_act keeps the held value");
+    // 6. reset-domain crossing of the CSR (RST-APB alone, section 7.3): a reset of the APB side in the middle of a write of
+    //    dsig_tmo leaves dsig_tmo at its old or its new value (the register domain writes only on the rising edge of the
+    //    synchronized request) and leaves the other registers unchanged
+    apb_w(16'h0AC, 32'h0003_0003);
+    apb_r(16'h048, rd);
+    begin : rdc
+      reg [31:0] act_before, tmo_after, act_after;
+      act_before = rd;
+      @(posedge clk_apb); #1 psel = 1; penable = 0; pwrite = 1; paddr = 16'h0AC; pwdata = 32'h0005_0005;
+      @(posedge clk_apb); #1 penable = 1;
+      @(posedge clk_apb); @(posedge clk_apb);
+      #1 rst_apb_n = 0; psel = 0; penable = 0; pwrite = 0;
+      repeat (3) @(posedge clk_apb); #1 rst_apb_n = 1;
+      repeat (20) @(posedge clk);
+      apb_r(16'h0AC, tmo_after);
+      check(tmo_after == 32'h0003_0003 || tmo_after == 32'h0005_0005, "RST-APB in a write: dsig_tmo keeps the old or the new value");
+      apb_r(16'h048, act_after);
+      check(act_after == act_before, "RST-APB in a write: dsig_alg_act unchanged");
+      apb_w(16'h0AC, 32'h0007_0007); apb_r(16'h0AC, rd);
+      check(rd == 32'h0007_0007, "after RST-APB the CSR handshake works again");
+    end
     $display("tb_top_err: %0d checks, %0d failed", ncheck, nfail);
     if (nfail == 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

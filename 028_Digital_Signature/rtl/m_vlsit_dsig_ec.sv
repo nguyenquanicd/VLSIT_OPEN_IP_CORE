@@ -29,6 +29,15 @@ module m_vlsit_dsig_ec #(
   // Parameter values: 4 to 16; default is 7.
   // Parameter unit: bit
   parameter logic [31:0] PARA_WA = 7,
+  // Parameter Description: scalar blinding of the secret scalar multiplications (PARA_EN_DPA_EC).
+  // Parameter values: 0 or 1; default is 0.
+  // Parameter unit: none
+  parameter logic [31:0] PARA_EN_DPA = 0,
+  // Parameter Description: digit width of the Montgomery multiplier (odd moduli p and n).
+  // Parameter values: 32, 64 or 128; default is 64.
+  // Parameter unit: bit
+  parameter logic [31:0] PARA_MUL_W = 64,
+  localparam logic [31:0] LPARA_MULW_CODE = (PARA_MUL_W == 32'd128) ? 32'd2 : ((PARA_MUL_W == 32'd32) ? 32'd0 : 32'd1),
   localparam logic [31:0] LPARA_OP_ADD = 6'd1,
   localparam logic [31:0] LPARA_OP_SUB = 6'd2,
   localparam logic [31:0] LPARA_OP_MUL = 6'd3,
@@ -161,7 +170,8 @@ module m_vlsit_dsig_ec #(
     ENUM_ST_POW   = 4'd5,
     ENUM_ST_SMUL  = 4'd6,
     ENUM_ST_IOW   = 4'd7,
-    ENUM_ST_FIN   = 4'd8
+    ENUM_ST_FIN   = 4'd8,
+    ENUM_ST_MM    = 4'd9
   } ec_state_type_def;
 
   // Kinds of waiting I/O operations
@@ -205,6 +215,19 @@ module m_vlsit_dsig_ec #(
   logic [575:0]  reg_acc;
   logic [9:0]    reg_cnt;
   logic          reg_mul_ret;
+  // Montgomery path: odd modulus, constants of the modulus, phase (0: a b R^-1, 1: times R^2 R^-1)
+  logic          reg_modd;
+  logic [127:0]  reg_mp;
+  logic [575:0]  reg_r2;
+  logic [4:0]    reg_nd;
+  logic          reg_mm_ph;
+  logic          reg_mm_go;
+  logic [575:0]  reg_mm_t;
+  logic [127:0]  w_rom_mp;
+  logic [575:0]  w_rom_r2;
+  logic [4:0]    w_rom_nd;
+  logic          w_mm_done;
+  logic [575:0]  w_mm_r;
 
   // Power
   logic [575:0]  reg_pw_acc;
@@ -220,6 +243,8 @@ module m_vlsit_dsig_ec #(
   logic [1:0]    reg_sm_c;
   logic [1:0]    reg_sm_ph;
   logic          reg_sm_call;
+  logic          reg_sm_bitq;
+  logic [2303:0] reg_sm_sh;
 
   // I/O
   logic [1:0]    reg_io_kind;
@@ -370,7 +395,29 @@ module m_vlsit_dsig_ec #(
     .o_entry   (w_entry),
     .i_str_id  (w_imm[3:0]),
     .o_str     (w_str),
-    .o_str_len (w_str_len)
+    .o_str_len (w_str_len),
+    .i_msel    (w_imm[0]),
+    .i_mulw    (LPARA_MULW_CODE[1:0]),
+    .o_mp      (w_rom_mp),
+    .o_r2      (w_rom_r2),
+    .o_nd      (w_rom_nd)
+  );
+
+  // Digit-serial Montgomery multiplier (phase 0: a b R^-1; phase 1: times R^2 R^-1, so a b mod m)
+  m_vlsit_dsig_mmul #(
+    .PARA_MUL_W   (PARA_MUL_W)
+  ) u_mmul (
+    .i_clk_core   (i_clk_core),
+    .i_rst_n_core (i_rst_n_core),
+    .i_clr        (i_clr),
+    .i_start      (reg_mm_go),
+    .i_a          (reg_mm_ph ? reg_mm_t : reg_ma),
+    .i_b          (reg_mm_ph ? reg_r2 : reg_mb),
+    .i_m          (reg_m),
+    .i_mp         (reg_mp),
+    .i_nd         (reg_nd),
+    .o_done       (w_mm_done),
+    .o_r          (w_mm_r)
   );
 
   assign w_op  = w_ins[63:58];
@@ -598,7 +645,7 @@ module m_vlsit_dsig_ec #(
       end
       ENUM_ST_EXEC: begin
         case (w_op)
-          LPARA_OP_MUL:  w_fsm_ec_nxt_state = ENUM_ST_MUL;
+          LPARA_OP_MUL:  w_fsm_ec_nxt_state = reg_modd ? ENUM_ST_MM : ENUM_ST_MUL;
           LPARA_OP_RED:  w_fsm_ec_nxt_state = ENUM_ST_RED;
           LPARA_OP_POW: begin
             if (!w_e_zero && (w_e_msb != 10'd0))
@@ -629,10 +676,18 @@ module m_vlsit_dsig_ec #(
         if (reg_cnt == 10'd0)
           w_fsm_ec_nxt_state = ENUM_ST_EXEC;
       end
+      ENUM_ST_MM: begin
+        if (w_mm_done & reg_mm_ph) begin
+          if (reg_mul_ret)
+            w_fsm_ec_nxt_state = ENUM_ST_POW;
+          else
+            w_fsm_ec_nxt_state = ENUM_ST_EXEC;
+        end
+      end
       ENUM_ST_POW: begin
         case (reg_pw_ph)
-          2'd0:    w_fsm_ec_nxt_state = ENUM_ST_MUL;
-          2'd1:    w_fsm_ec_nxt_state = ENUM_ST_MUL;
+          2'd0:    w_fsm_ec_nxt_state = reg_modd ? ENUM_ST_MM : ENUM_ST_MUL;
+          2'd1:    w_fsm_ec_nxt_state = reg_modd ? ENUM_ST_MM : ENUM_ST_MUL;
           default: begin
             if (reg_pw_i == 10'd0)
               w_fsm_ec_nxt_state = ENUM_ST_EXEC;
@@ -643,10 +698,7 @@ module m_vlsit_dsig_ec #(
         case (reg_sm_ph)
           2'd0:    w_fsm_ec_nxt_state = ENUM_ST_SMUL;
           2'd1:    w_fsm_ec_nxt_state = ENUM_ST_EXEC;
-          2'd2: begin
-            if (w_sm_bit)
-              w_fsm_ec_nxt_state = ENUM_ST_EXEC;
-          end
+          2'd2:    w_fsm_ec_nxt_state = ENUM_ST_EXEC;
           default: begin
             if (reg_sm_i == 10'd0)
               w_fsm_ec_nxt_state = ENUM_ST_EXEC;
@@ -726,6 +778,13 @@ module m_vlsit_dsig_ec #(
       reg_acc       <= 576'd0;
       reg_cnt       <= 10'd0;
       reg_mul_ret   <= 1'b0;
+      reg_modd      <= 1'b0;
+      reg_mp        <= 128'd0;
+      reg_r2        <= 576'd0;
+      reg_nd        <= 5'd0;
+      reg_mm_ph     <= 1'b0;
+      reg_mm_go     <= 1'b0;
+      reg_mm_t      <= 576'd0;
       reg_pw_acc    <= 576'd0;
       reg_pw_i      <= 10'd0;
       reg_pw_ph     <= 2'd0;
@@ -737,6 +796,8 @@ module m_vlsit_dsig_ec #(
       reg_sm_c      <= 2'd0;
       reg_sm_ph     <= 2'd0;
       reg_sm_call   <= 1'b0;
+      reg_sm_bitq   <= 1'b0;
+      reg_sm_sh     <= 2304'd0;
       reg_io_kind   <= 2'd0;
       reg_go        <= 1'b0;
       reg_head      <= 1024'd0;
@@ -762,7 +823,11 @@ module m_vlsit_dsig_ec #(
       reg_mb        <= 576'd0;
       reg_acc       <= 576'd0;
       reg_pw_acc    <= 576'd0;
+      reg_mm_t      <= 576'd0;
+      reg_mm_go     <= 1'b0;
       reg_sm_call   <= 1'b0;
+      reg_sm_bitq   <= 1'b0;
+      reg_sm_sh     <= 2304'd0;
       reg_go        <= 1'b0;
       reg_head      <= 1024'd0;
       reg_head_len  <= 9'd0;
@@ -812,6 +877,8 @@ module m_vlsit_dsig_ec #(
               reg_acc     <= 576'd0;
               reg_cnt     <= reg_mbits - 10'd1;
               reg_mul_ret <= 1'b0;
+              reg_mm_go   <= reg_modd;
+              reg_mm_ph   <= 1'b0;
             end
             LPARA_OP_RED: begin
               reg_mb  <= w_ra_v;
@@ -824,6 +891,10 @@ module m_vlsit_dsig_ec #(
             LPARA_OP_SETM: begin
               reg_m     <= w_const;
               reg_mbits <= w_mbits_new;
+              reg_modd  <= (w_imm[4:1] == 4'd0);
+              reg_mp    <= w_rom_mp;
+              reg_r2    <= w_rom_r2;
+              reg_nd    <= w_rom_nd;
             end
             LPARA_OP_POW: begin
               if (w_e_zero)
@@ -924,7 +995,14 @@ module m_vlsit_dsig_ec #(
               end
             end
             LPARA_OP_HMID: reg_hsel <= 1'b1;
-            LPARA_OP_LDV:  reg_rf[w_rd] <= w_imm[0] ? 576'(reg_len_ctx) : 576'(reg_f_ph);
+            LPARA_OP_LDV: begin
+              case (w_imm[1:0])
+                2'd0:    reg_rf[w_rd] <= 576'(reg_f_ph);
+                2'd1:    reg_rf[w_rd] <= 576'(reg_len_ctx);
+                2'd2:    reg_rf[w_rd] <= 576'(PARA_EN_DPA[0]);
+                default: reg_rf[w_rd] <= 576'd0;
+              endcase
+            end
             LPARA_OP_XORB: reg_rf[w_rd] <= w_ra_v ^ w_xorb_pat;
             LPARA_OP_HGO: begin
               reg_io_kind <= LPARA_IO_HGO;
@@ -962,6 +1040,25 @@ module m_vlsit_dsig_ec #(
           if (reg_cnt == 10'd0)
             reg_rf[w_ri_rd] <= w_mul_next;
         end
+        ENUM_ST_MM: begin
+          reg_mm_go <= 1'b0;
+          if (w_mm_done) begin
+            if (!reg_mm_ph) begin
+              // a b R^-1: multiply by R^2 to leave the Montgomery form
+              reg_mm_t  <= w_mm_r;
+              reg_mm_ph <= 1'b1;
+              reg_mm_go <= 1'b1;
+            end else if (reg_mul_ret) begin
+              reg_pw_acc <= w_mm_r;
+              if (reg_pw_ph == 2'd0)
+                reg_pw_ph <= w_pw_bit ? 2'd1 : 2'd2;
+              else
+                reg_pw_ph <= 2'd2;
+            end else begin
+              reg_rf[w_ri_rd] <= w_mm_r;
+            end
+          end
+        end
         ENUM_ST_POW: begin
           case (reg_pw_ph)
             2'd0: begin
@@ -970,6 +1067,8 @@ module m_vlsit_dsig_ec #(
               reg_acc     <= 576'd0;
               reg_cnt     <= reg_mbits - 10'd1;
               reg_mul_ret <= 1'b1;
+              reg_mm_go   <= reg_modd;
+              reg_mm_ph   <= 1'b0;
             end
             2'd1: begin
               reg_ma      <= reg_rf[w_ri_ra];
@@ -977,6 +1076,8 @@ module m_vlsit_dsig_ec #(
               reg_acc     <= 576'd0;
               reg_cnt     <= reg_mbits - 10'd1;
               reg_mul_ret <= 1'b1;
+              reg_mm_go   <= reg_modd;
+              reg_mm_ph   <= 1'b0;
             end
             default: begin
               if (reg_pw_i == 10'd0) begin
@@ -1002,13 +1103,22 @@ module m_vlsit_dsig_ec #(
               reg_sm_ph   <= 2'd2;
             end
             2'd2: begin
-              reg_sm_ph <= 2'd3;
-              if (w_sm_bit) begin
-                reg_pc      <= reg_sm_add;
-                reg_sm_call <= 1'b1;
-              end
+              // double-and-add-always: ADD runs for every bit; the accumulator before ADD is kept
+              // and put back in phase 3 when the bit is 0, so the time does not depend on the
+              // scalar (REQ-SEC-002)
+              reg_sm_ph   <= 2'd3;
+              reg_pc      <= reg_sm_add;
+              reg_sm_call <= 1'b1;
+              reg_sm_bitq <= w_sm_bit;
+              reg_sm_sh   <= {reg_rf[3], reg_rf[2], reg_rf[1], reg_rf[0]};
             end
             default: begin
+              if (!reg_sm_bitq) begin
+                reg_rf[0] <= reg_sm_sh[575:0];
+                reg_rf[1] <= reg_sm_sh[1151:576];
+                reg_rf[2] <= reg_sm_sh[1727:1152];
+                reg_rf[3] <= reg_sm_sh[2303:1728];
+              end
               if (reg_sm_i == 10'd0) begin
                 reg_pc <= reg_sm_ret;
               end else begin

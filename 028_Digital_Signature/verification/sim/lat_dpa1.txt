@@ -1,0 +1,7 @@
+all: 25 vectors
+prehash: 16 vectors
+masking monitor: 0 signing vectors wrote the mask polynomial
+tb_lat: 0 vectors, 0 failed, 0 protocol failures
+RESULT: PASS
+all    PASS  25/25 vectors, 58585174 cycles, 155 s
+prehash PASS  16/16 vectors, 26970839 cycles, 152 s

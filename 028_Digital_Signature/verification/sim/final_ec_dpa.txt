@@ -1,0 +1,12 @@
+ct: 30 vectors
+det: 26 vectors
+ed25519: 33 vectors
+ed448: 49 vectors
+p256: 32 vectors
+k256: 11 vectors
+ct       PASS  30/30 vectors, 7914279 cycles, 103 s
+det      PASS  26/26 vectors, 11064918 cycles, 150 s
+ed25519  PASS  33/33 vectors, 7705272 cycles, 150 s
+ed448    PASS  49/49 vectors, 28164746 cycles, 295 s
+p256     PASS  32/32 vectors, 7264651 cycles, 294 s
+k256     PASS  11/11 vectors, 2921368 cycles, 294 s

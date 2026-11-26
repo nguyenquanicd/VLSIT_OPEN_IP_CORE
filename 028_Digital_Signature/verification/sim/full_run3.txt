@@ -1,0 +1,8 @@
+ed25519: 33 vectors
+p256: 32 vectors
+p384: 16 vectors
+k256: 11 vectors
+ed25519  PASS  33/33 vectors, 98638295 cycles, 448 s
+p256     PASS  32/32 vectors, 92741317 cycles, 453 s
+p384     PASS  16/16 vectors, 94558832 cycles, 490 s
+k256     PASS  11/11 vectors, 36888567 cycles, 490 s

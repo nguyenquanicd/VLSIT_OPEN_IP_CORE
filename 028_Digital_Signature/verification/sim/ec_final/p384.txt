@@ -1,0 +1,16 @@
+0	P-384 hash1 sample verify ok
+1	P-384 hash1 sample verify bad msg
+2	P-384 hash1 sample verify bad s
+3	P-384 hash1 sample sign
+4	P-384 hash1 sample keygen
+5	P-384 hash1 sample sign+vas
+6	P-384 hash1 sample sign+corrupt+vas
+7	P-384 hash1 sample verify r = 0
+8	P-384 hash1 sample verify s = n
+9	P-384 hash1 sample verify point not on curve
+10	P-384 hash1 sample sign d = 0 (BADKEY)
+11	P-384 hash1 sample sign d = n (BADKEY)
+12	P-384 hash2 test verify ok
+13	P-384 hash2 test verify bad msg
+14	P-384 hash2 test verify bad s
+15	P-384 hash2 test sign

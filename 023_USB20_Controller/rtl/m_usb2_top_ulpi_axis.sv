@@ -84,10 +84,6 @@ module m_usb2_top_ulpi_axis #(
   // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
   parameter logic [31:0] PARA_USB2_PIPE_MODE = 0,
-  // Parameter Description: OpMode driven by the host for the SE0 of a port reset (TBD-015).
-  // Parameter values: 0 to 3; default is 3.
-  // Parameter unit: none
-  parameter logic [31:0] PARA_USB2_RST_OPMODE = 3,
   // Parameter Description: register slice on the AXI4 slave read data channel.
   // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
@@ -194,7 +190,6 @@ module m_usb2_top_ulpi_axis #(
     .PARA_USB2_PIPE_RX (PARA_USB2_PIPE_RX),
     .PARA_USB2_PIPE_CRC (PARA_USB2_PIPE_CRC),
     .PARA_USB2_PIPE_MODE (PARA_USB2_PIPE_MODE),
-    .PARA_USB2_RST_OPMODE (PARA_USB2_RST_OPMODE),
     .PARA_USB2_PIPE_AXS (PARA_USB2_PIPE_AXS),
     .PARA_USB2_PIPE_XREG (PARA_USB2_PIPE_XREG),
     .PARA_USB2_TSCALE (PARA_USB2_TSCALE)

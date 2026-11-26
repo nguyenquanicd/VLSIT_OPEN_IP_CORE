@@ -1,0 +1,51 @@
+VEC 0 PASS cycles=6763300
+VEC 1 PASS cycles=6763300
+VEC 2 PASS cycles=6730700
+VEC 3 PASS cycles=6857450
+VEC 4 PASS cycles=6771950
+VEC 5 PASS cycles=6747550
+VEC 6 PASS cycles=6780100
+VEC 7: dsig_err 00000004 on sign or keygen
+VEC 7: no result valid
+VEC 7: result byte 0 is 00, expected 21
+VEC 7 FAIL cycles=50
+VEC 8: dsig_err 00000004 on sign or keygen
+VEC 8: no result valid
+VEC 8: result byte 0 is 00, expected 21
+VEC 8 FAIL cycles=50
+VEC 9: dsig_err 00000004 on sign or keygen
+VEC 9: no result valid
+VEC 9: result byte 0 is 00, expected 6d
+VEC 9 FAIL cycles=50
+VEC 10 PASS cycles=15324700
+VEC 11 PASS cycles=15391700
+VEC 12 PASS cycles=15416100
+VEC 13 PASS cycles=15385650
+VEC 14: dsig_err 00000004 on sign or keygen
+VEC 14: no result valid
+VEC 14: result byte 0 is 00, expected 01
+VEC 14 FAIL cycles=50
+VEC 15: dsig_err 00000004 on sign or keygen
+VEC 15: no result valid
+VEC 15: result byte 0 is 00, expected 01
+VEC 15 FAIL cycles=50
+VEC 16: dsig_err 00000004 on sign or keygen
+VEC 16: no result valid
+VEC 16: result byte 1 is 00, expected 0e
+VEC 16 FAIL cycles=50
+VEC 17: dsig_err 00000004 on sign or keygen
+VEC 17: no result valid
+VEC 17: result byte 0 is 00, expected 01
+VEC 17 FAIL cycles=50
+VEC 18: dsig_err 00000004 on sign or keygen
+VEC 18: no result valid
+VEC 18: result byte 0 is 00, expected 01
+VEC 18 FAIL cycles=50
+VEC 19 PASS cycles=27985950
+VEC 20 PASS cycles=28035400
+VEC 21 PASS cycles=6895150
+VEC 22 PASS cycles=6793800
+VEC 23 PASS cycles=6875300
+dsig_cnt_ops = 16
+tb_top_ec: 24 vectors, 8 failed
+RESULT: FAIL

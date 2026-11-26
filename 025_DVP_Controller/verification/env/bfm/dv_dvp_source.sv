@@ -47,6 +47,9 @@ module dv_dvp_source #(
     o_clk = (EDGE == 0) ? 1'b0 : 1'b1;
   endtask
 
+  // every qualified sample the source actually drove in `frame`, in order (known answer for tests that cannot predict the values)
+  logic [W-1:0] sent_q [$];
+
   function automatic logic [W-1:0] pixel(input int l, input int p, input int pat, input int seed);
     logic [W-1:0] v;
     case (pat)
@@ -106,7 +109,7 @@ module dv_dvp_source #(
       repeat (4) cont_cycle('0, 0, 1);
       repeat (6) cont_cycle('0, 0, 0);
       for (int l = 0; l < n_lines; l++) begin
-        for (int p = 0; p < n_pix; p++) cont_cycle(pixel(l, p, pat, seed + l), 1, 0);
+        for (int p = 0; p < n_pix; p++) begin logic [W-1:0] v; v = pixel(l, p, pat, seed + l); sent_q.push_back(v); cont_cycle(v, 1, 0); end
         repeat (hblank) cont_cycle('0, 0, 0);
       end
       repeat (3) cont_cycle('0, 0, 0);
@@ -114,7 +117,7 @@ module dv_dvp_source #(
       set_vsync(1); #(T_APB_NS * VS_APB_CYC); set_vsync(0); #(T_APB_NS * 8);
       for (int l = 0; l < n_lines; l++) begin
         set_href(1); #(T_APB_NS * 4);
-        for (int p = 0; p < n_pix; p++) gated_pixel(pixel(l, p, pat, seed + l));
+        for (int p = 0; p < n_pix; p++) begin logic [W-1:0] v; v = pixel(l, p, pat, seed + l); sent_q.push_back(v); gated_pixel(v); end
         set_href(0); #(T_APB_NS * 4 * (hblank + 1));
       end
     end

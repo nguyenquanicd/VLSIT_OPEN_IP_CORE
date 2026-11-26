@@ -1,0 +1,65 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p....................."
+  },
+  {
+   "name": "i_clk_phy",
+   "wave": "l........|p......|...."
+  },
+  {
+   "name": "hp state (CLK-PHY)",
+   "wave": "=........|...=...|.=..",
+   "data": [
+    "HP_SUSP",
+    "HP_RESM",
+    "HP_EN"
+   ]
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "=..=.....|.......|.==.",
+   "data": [
+    "J",
+    "K (device)",
+    "EOP",
+    "J"
+   ]
+  },
+  {
+   "name": "o_wake (utmilp)",
+   "wave": "0.....1..|...0...|...."
+  },
+  {
+   "name": "o_utmi_suspend_n",
+   "wave": "0.....1..|.......|...."
+  },
+  {
+   "name": "o_utmi_opmode",
+   "wave": "=........|...=...|.=..",
+   "data": [
+    "00b",
+    "10b (drive K)",
+    "00b"
+   ]
+  },
+  {
+   "name": "o_utmi_txvalid",
+   "wave": "0........|...1...|0..."
+  },
+  {
+   "name": "irq_raw.resume",
+   "wave": "0........|.......|..1."
+  }
+ ],
+ "head": {
+  "text": "WF-039: host remote wake of a suspended port (OP-009, success; DEC-049 Q2)"
+ },
+ "foot": {
+  "text": "Not to scale. The suspended device drives K for 1 to 15 ms (remote wakeup). With CLK-PHY stopped, m_usb2_utmilp sees the line leave J for 4 CLK-BUS cycles and raises SuspendM; with CLK-PHY running this step is not needed. Once CLK-PHY runs, the speed engine filters the K for 2.5 us and goes from HP_SUSP to HP_RESM: the host drives resume K (OpMode 10b) for 20 ms, ends it with a low-speed EOP (full- or low-speed port) or high-speed idle, returns to HP_EN, raises irq_raw.resume and sends SOF within 3 ms (REQ-FUNC-020). An SE0 longer than 2.5 us in HP_SUSP is a disconnect (HP_OFF, irq_raw.disc)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

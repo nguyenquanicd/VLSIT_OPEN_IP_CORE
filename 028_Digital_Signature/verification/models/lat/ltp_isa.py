@@ -22,7 +22,7 @@ OPC = {n: i for i, n in enumerate(OPS)}
 
 AREA_MSG, AREA_SIG, AREA_PK, AREA_RES = 0, 1, 2, 3
 # LDS selectors
-S_LEN_MSG, S_LEN_CTX, S_FORM, S_OP, S_LEVEL, S_HEDGED, S_HASH = range(7)
+S_LEN_MSG, S_LEN_CTX, S_FORM, S_OP, S_LEVEL, S_HEDGED, S_HASH, S_DPA = range(8)
 # LDP fields of the parameter table
 (P_K, P_L, P_ETA, P_TAU, P_LAM4, P_G1, P_G2, P_BETA, P_OMEGA, P_CBITS, P_WBITS, P_ALPHA, P_M, P_GB, P_G2B) = range(1, 16)
 H_SHAKE128, H_SHAKE256 = 12, 13
@@ -164,7 +164,7 @@ class Machine:
             elif op == 'LDP':
                 R[rd] = self.T[self.snap[S_LEVEL]][imm]
             elif op == 'LDS':
-                R[rd] = self.snap[imm] & M32
+                R[rd] = self.snap.get(imm, 0) & M32     # a selector that the snapshot does not give reads 0 (S_DPA: no masking)
             elif op == 'EQ':
                 F[rd & 7] = int(R[ra] == R[rb])
             elif op == 'LTU':

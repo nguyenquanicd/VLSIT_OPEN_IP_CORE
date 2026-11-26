@@ -1,0 +1,16 @@
+0	HashML-DSA-44 hash 0 sign + verify-after-sign
+1	HashML-DSA-44 hash 0 verify valid
+2	HashML-DSA-44 hash 0 verify with another hash code
+3	HashML-DSA-44 hash 0 verify in the pure form
+4	HashML-DSA-44 hash 2 ctx sign + verify-after-sign
+5	HashML-DSA-44 hash 2 ctx verify valid
+6	HashML-DSA-44 hash 2 ctx verify with another hash code
+7	HashML-DSA-44 hash 2 ctx verify in the pure form
+8	HashML-DSA-44 hash 3 sign + verify-after-sign
+9	HashML-DSA-44 hash 3 verify valid
+10	HashML-DSA-44 hash 3 verify with another hash code
+11	HashML-DSA-44 hash 3 verify in the pure form
+12	HashML-DSA-65 hash 2 sign + verify-after-sign
+13	HashML-DSA-65 hash 2 verify valid
+14	HashML-DSA-87 hash 1 sign + verify-after-sign
+15	HashML-DSA-87 hash 1 verify valid

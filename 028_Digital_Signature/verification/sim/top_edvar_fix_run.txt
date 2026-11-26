@@ -1,0 +1,8 @@
+VEC 0 PASS cycles=1127250
+VEC 1 PASS cycles=3404100
+VEC 2 PASS cycles=3404050
+VEC 3 PASS cycles=5530800
+VEC 4 PASS cycles=5530800
+dsig_cnt_ops = 5
+tb_top_ec: 5 vectors, 0 failed
+RESULT: PASS

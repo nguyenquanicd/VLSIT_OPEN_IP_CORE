@@ -1,0 +1,157 @@
+{
+ "page_name": "FSM_HOST_PORT",
+ "out_name": "usb2_fsm_host_port.drawio",
+ "function": "host_port",
+ "initial": "ENUM_ST_HP_NODEV",
+ "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+ "states": [
+  {
+   "name": "ENUM_ST_HP_NODEV"
+  },
+  {
+   "name": "ENUM_ST_HP_DEBNC"
+  },
+  {
+   "name": "ENUM_ST_HP_RESET"
+  },
+  {
+   "name": "ENUM_ST_HP_CHIRP_DET"
+  },
+  {
+   "name": "ENUM_ST_HP_CHIRP_TX"
+  },
+  {
+   "name": "ENUM_ST_HP_EN_HS"
+  },
+  {
+   "name": "ENUM_ST_HP_EN_FS"
+  },
+  {
+   "name": "ENUM_ST_HP_EN_LS"
+  },
+  {
+   "name": "ENUM_ST_HP_SUSP"
+  },
+  {
+   "name": "ENUM_ST_HP_RESUME"
+  },
+  {
+   "name": "ENUM_ST_HP_OC"
+  }
+ ],
+ "transitions": [
+  {
+   "src": "ENUM_ST_HP_NODEV",
+   "dst": "ENUM_ST_HP_DEBNC",
+   "label": "non-SE0 on D+ or D-"
+  },
+  {
+   "src": "ENUM_ST_HP_DEBNC",
+   "dst": "ENUM_ST_HP_NODEV",
+   "label": "SE0 again"
+  },
+  {
+   "src": "ENUM_ST_HP_DEBNC",
+   "dst": "ENUM_ST_HP_RESET",
+   "label": "stable & prst"
+  },
+  {
+   "src": "ENUM_ST_HP_RESET",
+   "dst": "ENUM_ST_HP_CHIRP_DET",
+   "label": "SE0 driven & not LS & hs allowed"
+  },
+  {
+   "src": "ENUM_ST_HP_RESET",
+   "dst": "ENUM_ST_HP_EN_LS",
+   "label": "LS device & reset >= 50 ms"
+  },
+  {
+   "src": "ENUM_ST_HP_CHIRP_DET",
+   "dst": "ENUM_ST_HP_CHIRP_TX",
+   "label": "device K >= 2.5 us"
+  },
+  {
+   "src": "ENUM_ST_HP_CHIRP_DET",
+   "dst": "ENUM_ST_HP_EN_FS",
+   "label": "no chirp & reset >= 50 ms"
+  },
+  {
+   "src": "ENUM_ST_HP_CHIRP_TX",
+   "dst": "ENUM_ST_HP_EN_HS",
+   "label": "K/J chirps done, reset end"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_HS",
+   "dst": "ENUM_ST_HP_SUSP",
+   "label": "port_susp"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_FS",
+   "dst": "ENUM_ST_HP_SUSP",
+   "label": "port_susp"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_LS",
+   "dst": "ENUM_ST_HP_SUSP",
+   "label": "port_susp"
+  },
+  {
+   "src": "ENUM_ST_HP_SUSP",
+   "dst": "ENUM_ST_HP_RESUME",
+   "label": "port_res"
+  },
+  {
+   "src": "ENUM_ST_HP_RESUME",
+   "dst": "ENUM_ST_HP_EN_HS",
+   "label": "resume >= 20 ms, was HS"
+  },
+  {
+   "src": "ENUM_ST_HP_RESUME",
+   "dst": "ENUM_ST_HP_EN_FS",
+   "label": "resume >= 20 ms, was FS"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_HS",
+   "dst": "ENUM_ST_HP_NODEV",
+   "label": "disconnect"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_FS",
+   "dst": "ENUM_ST_HP_NODEV",
+   "label": "SE0 > 2.5 us"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_LS",
+   "dst": "ENUM_ST_HP_NODEV",
+   "label": "SE0 > 2.5 us"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_HS",
+   "dst": "ENUM_ST_HP_OC",
+   "label": "over-current"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_FS",
+   "dst": "ENUM_ST_HP_OC",
+   "label": "over-current"
+  },
+  {
+   "src": "ENUM_ST_HP_EN_LS",
+   "dst": "ENUM_ST_HP_OC",
+   "label": "over-current"
+  },
+  {
+   "src": "ENUM_ST_HP_SUSP",
+   "dst": "ENUM_ST_HP_OC",
+   "label": "over-current"
+  },
+  {
+   "src": "ENUM_ST_HP_OC",
+   "dst": "ENUM_ST_HP_NODEV",
+   "label": "flag cleared & vbus_drv written"
+  }
+ ],
+ "layout": {
+  "margin": 40
+ }
+}

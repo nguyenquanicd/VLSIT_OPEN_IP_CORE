@@ -1,0 +1,50 @@
+0	LMS 0 OTS 3 levels 1 valid
+1	LMS 0 OTS 3 levels 1 corrupted signature
+2	LMS 0 OTS 3 levels 1 wrong message
+3	LMS 0 OTS 3 levels 1 wrong key
+4	LMS 0 OTS 3 levels 1 wrong LMS type
+5	LMS 0 OTS 3 levels 2 valid
+6	LMS 0 OTS 3 levels 2 corrupted signature
+7	LMS 0 OTS 3 levels 2 wrong message
+8	LMS 0 OTS 3 levels 2 wrong key
+9	LMS 0 OTS 3 levels 2 wrong LMS type
+10	LMS 0 OTS 2 levels 1 valid
+11	LMS 0 OTS 2 levels 1 corrupted signature
+12	LMS 0 OTS 2 levels 1 wrong message
+13	LMS 0 OTS 2 levels 1 wrong key
+14	LMS 0 OTS 2 levels 1 wrong LMS type
+15	LMS 0 OTS 1 levels 3 valid
+16	LMS 0 OTS 1 levels 3 corrupted signature
+17	LMS 0 OTS 1 levels 3 wrong message
+18	LMS 0 OTS 1 levels 3 wrong key
+19	LMS 0 OTS 1 levels 3 wrong LMS type
+20	LMS 0 OTS 0 levels 1 valid
+21	LMS 0 OTS 0 levels 1 corrupted signature
+22	LMS 0 OTS 0 levels 1 wrong message
+23	LMS 0 OTS 0 levels 1 wrong key
+24	LMS 0 OTS 0 levels 1 wrong LMS type
+25	LMS 5 OTS 7 levels 1 valid
+26	LMS 5 OTS 7 levels 1 corrupted signature
+27	LMS 5 OTS 7 levels 1 wrong message
+28	LMS 5 OTS 7 levels 1 wrong key
+29	LMS 5 OTS 7 levels 1 wrong LMS type
+30	LMS 10 OTS 11 levels 2 valid
+31	LMS 10 OTS 11 levels 2 corrupted signature
+32	LMS 10 OTS 11 levels 2 wrong message
+33	LMS 10 OTS 11 levels 2 wrong key
+34	LMS 10 OTS 11 levels 2 wrong LMS type
+35	LMS 15 OTS 14 levels 1 valid
+36	LMS 15 OTS 14 levels 1 corrupted signature
+37	LMS 15 OTS 14 levels 1 wrong message
+38	LMS 15 OTS 14 levels 1 wrong key
+39	LMS 15 OTS 14 levels 1 wrong LMS type
+40	LMS 6 OTS 6 levels 1 valid
+41	LMS 6 OTS 6 levels 1 corrupted signature
+42	LMS 6 OTS 6 levels 1 wrong message
+43	LMS 6 OTS 6 levels 1 wrong key
+44	LMS 6 OTS 6 levels 1 wrong LMS type
+45	LMS 11 OTS 10 levels 2 valid
+46	LMS 11 OTS 10 levels 2 corrupted signature
+47	LMS 11 OTS 10 levels 2 wrong message
+48	LMS 11 OTS 10 levels 2 wrong key
+49	LMS 11 OTS 10 levels 2 wrong LMS type

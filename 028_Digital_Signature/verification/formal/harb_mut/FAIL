@@ -1,0 +1,6 @@
+Elapsed clock time [H:MM:SS (secs)]: 0:00:01 (1)
+Elapsed process time unvailable on Windows
+engine_0 (smtbmc yices) returned FAIL
+counterexample trace: engine_0\trace.vcd
+counterexample trace: engine_0\trace.yw
+  failed assertion harb_props._witness_.check_assert_harb_props_sv_46_180 at harb_props.sv:46.29-46.54 step 4

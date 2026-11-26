@@ -476,7 +476,7 @@ module m_vlsit_dsig_ctl #(
   // a prehash digest whose length does not match the hash.
   always_comb begin : p_com_f_badlen
     w_f_badlen = 1'b0;
-    if (w_is_ecdsa & (w_dig_len < w_min_len))
+    if (w_is_ecdsa & (w_is_sign | w_is_vrfy) & (w_dig_len < w_min_len))
       w_f_badlen = 1'b1;
     if ((w_alg32 == LPARA_ALG_LMS) & ((reg_run_hsslvl == 4'd0) | ({28'd0, reg_run_hsslvl} > LPARA_HSS_MAX)))
       w_f_badlen = 1'b1;

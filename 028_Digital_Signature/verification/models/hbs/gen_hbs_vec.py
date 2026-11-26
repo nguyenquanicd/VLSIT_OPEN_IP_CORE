@@ -4,7 +4,7 @@ holds the fields: i alg slhmode lmstype lmots hsslvl xmss len_msg len_ctx off_ms
 Expected results: SLH-DSA signatures are made by OpenSSL 3.5 or later (independent); LMS/HSS and XMSS/XMSS^MT signatures are
 made by the signers of lms_ref.py and xmss_ref.py (self-made, see the notes there); corrupted inputs must be rejected.
 slhmode = slh | form << 4 | hash << 6 (form 1: HashSLH-DSA, the message is the digest PH(M), hash = dsig_op.hash).
-Usage: python gen_hbs_vec.py <dir> <set>   (sets: quick, slh, lms, xmss, prehash)"""
+Usage: python gen_hbs_vec.py <dir> <set>   (sets: quick, slh, lms, xmss, prehash, rfc8554)"""
 import os
 import subprocess
 import sys
@@ -122,7 +122,20 @@ def prehash_vecs():
     return out
 
 
+def rfc8554_vecs():
+    """RFC 8554 Appendix F Test Case 1 (HSS, 2 levels, LMS_SHA256_M32_H5 and LMOTS_SHA256_N32_W8 on both levels): independent
+    expected values. Test Case 2 uses different types on its two levels, which the IP does not support (ASM-021)."""
+    import rfc8554_vectors as R
+    pub, msg, sig = R.test_cases()[1]
+    nm = 'RFC 8554 test case 1 '
+    return [V(nm + 'valid', 13, msg, sig, pub, 1, lmstype=0, lmots=3, hsslvl=2),
+            V(nm + 'corrupted signature', 13, msg, flip(sig, 100, 1), pub, 0, lmstype=0, lmots=3, hsslvl=2),
+            V(nm + 'wrong message', 13, msg + b'!', sig, pub, 0, lmstype=0, lmots=3, hsslvl=2)]
+
+
 def build(name):
+    if name == 'rfc8554':
+        return rfc8554_vecs()
     if name == 'prehash':
         return prehash_vecs()
     if name == 'slh':

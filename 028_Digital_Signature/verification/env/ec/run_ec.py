@@ -33,11 +33,16 @@ def build(trace=False):
     exe = SIM + '/obj/Vtb_ec.exe'
     files = [HASH + '/%s.sv' % m for m in RTL]
     files += [IP + '/rtl/' + f for f in ['m_vlsit_sha_eng.sv', 'm_vlsit_dsig_hseq.sv', 'm_vlsit_dsig_harb.sv', 'm_vlsit_dsig_hfeed.sv',
-                                         'm_vlsit_dsig_brd.sv', 'm_vlsit_dsig_bwr.sv', 'm_vlsit_dsig_ec_rom.sv', 'm_vlsit_dsig_ec.sv']]
+                                         'm_vlsit_dsig_brd.sv', 'm_vlsit_dsig_bwr.sv', 'm_vlsit_dsig_mmul.sv', 'm_vlsit_dsig_ec_rom.sv', 'm_vlsit_dsig_ec.sv']]
     files.append(IP + '/verification/tests/ec/tb_ec.sv')
+    mf = os.environ.get('MUT_FILE')     # mutated copy of one RTL file (env/misc/run_mutants.py)
+    if mf:
+        files = [mf if os.path.basename(f) == os.path.basename(mf) else f for f in files]
     cmd = [VBIN, '--binary', '--timing', '-O2', '-Wno-fatal', '-Wno-lint', '-Wno-style', '--top-module', 'tb_ec', '--x-assign', '0', '--x-initial', '0']
     if trace:
         cmd.append('--trace')
+    if os.environ.get('EC_DPA'):
+        cmd += ['-DTB_DPA=1']           # build the engine with PARA_EN_DPA = 1 (scalar blinding)
     cmd += ['-Mdir', SIM + '/obj', '-j', '4', '-CFLAGS', '-O2 -std=gnu++17', '-LDFLAGS', '-static-libstdc++ -static-libgcc', '-o', 'Vtb_ec'] + files
     r = subprocess.run(cmd, capture_output=True, text=True, env=env_for(SIM))
     open(SIM + '/build.log', 'w').write(r.stdout + r.stderr)
@@ -59,7 +64,7 @@ def main(argv):
         subprocess.run([sys.executable, IP + '/verification/models/ec/gen_ec_vec.py', s, hexf, man], check=True)
         n = len(open(man).read().splitlines())
         log = open(SIM + '/%s.log' % s, 'w')
-        p = subprocess.Popen([exe, '+VEC=' + hexf, '+NVEC=%d' % n], stdout=log, stderr=subprocess.STDOUT, env=env_for(SIM), cwd=SIM)
+        p = subprocess.Popen([exe, '+VEC=' + hexf, '+NVEC=%d' % n] + (['+CT'] if s == 'ct' else []), stdout=log, stderr=subprocess.STDOUT, env=env_for(SIM), cwd=SIM)
         procs.append((s, n, p, log, time.time()))
     rc = 0
     for s, n, p, log, t0 in procs:

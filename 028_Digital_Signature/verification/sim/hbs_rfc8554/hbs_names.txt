@@ -1,0 +1,3 @@
+0	RFC 8554 test case 1 valid
+1	RFC 8554 test case 1 corrupted signature
+2	RFC 8554 test case 1 wrong message

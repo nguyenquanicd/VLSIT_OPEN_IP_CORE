@@ -1,0 +1,9 @@
+quick: 10 vectors
+edvar: 68 vectors
+det: 26 vectors
+system test images written to C:/HQuan/102_MyGithub/VLSIT_OPEN_IP_CORE/028_Digital_Signature/verification/sim/sys
+quick: 19 vectors
+wave 4
+top_ec_quick   exit 0   514 s
+top_ec_edvar   exit 1   614 s
+top_ec_det     exit 1   614 s

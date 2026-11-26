@@ -8,7 +8,7 @@ Every vector is a block of 1024 bytes, one byte per line in a $readmemh file:
   544..683 public key area, 688..827 expected result area.
 The expected values are independent of the RTL: the RFC 8032 and RFC 6979 vectors, the verdict that a
 corrupted input must be rejected, and the textbook group law of ec_curves.py (secp256k1).
-Usage: python gen_ec_vec.py <set> <out.hex> <manifest.txt>   (sets: ed25519 ed448 edvar det p256 p384 p521 k256 quick)"""
+Usage: python gen_ec_vec.py <set> <out.hex> <manifest.txt>   (sets: ed25519 ed448 edvar det ct p256 p384 p521 k256 quick)"""
 import hashlib
 import os
 import random
@@ -148,6 +148,10 @@ def det_set():
         out.append(Vec(tag + ' sign', cn, 1, hash_=hop, msg=msg, key=x.to_bytes(nb, 'big'), exp_ok=1, exp_res=sig, det=1))
         if cn not in seen:
             seen.add(cn)
+            if cn in ('P-384', 'P-521'):
+                # key generation uses no hash: the curve and hash pairing must not reject it (hash code 0)
+                out.append(Vec('%s keygen with hash code 0' % cn, cn, 0, hash_=0, key=x.to_bytes(nb, 'big'), exp_ok=1,
+                               exp_res=ux.to_bytes(nb, 'big') + uy.to_bytes(nb, 'big')))
             out.append(Vec(tag + ' sign+vas', cn, 3, hash_=hop, msg=msg, key=x.to_bytes(nb, 'big'), exp_ok=1, exp_res=sig, det=1))
     # secp256k1 has no RFC 6979 vector: the nonce comes from the reference of RFC 6979 section 3.2 in test_rfc6979_retry.py
     # (written from the text) and the signature from the textbook group law
@@ -165,6 +169,56 @@ def det_set():
         sig = r.to_bytes(32, 'big') + s.to_bytes(32, 'big')
         out.append(Vec('secp256k1 hash%d det sign' % hop, 'secp256k1', 1, hash_=hop, msg=msg, key=d.to_bytes(32, 'big'), exp_ok=1,
                        exp_res=sig, det=1))
+    return out
+
+
+def ed_pub(cname, seed):
+    """Public key from the definition of RFC 8032 sections 5.1.5 and 5.2.5 with the textbook Edwards group law of
+    ec_curves.py (independent of the engine programs)."""
+    c = CURVES[cname]
+    if cname == 'Ed25519':
+        h = hashlib.sha512(seed).digest()[:32]
+        a = bytearray(h); a[0] &= 248; a[31] &= 127; a[31] |= 64
+    else:
+        h = hashlib.shake_256(seed).digest(114)[:57]
+        a = bytearray(h); a[0] &= 252; a[55] |= 128; a[56] = 0
+    s = int.from_bytes(a, 'little')
+    x, y = mul(c, s, (c.gx, c.gy))
+    nb = c.nbytes
+    return (y | ((x & 1) << (8 * nb - 1))).to_bytes(nb, 'little')
+
+
+def ct_set():
+    """REQ-SEC-002: key generation with three keys of very different Hamming weight per curve (ECDSA: d = 1, n - 1, random;
+    EdDSA: three random seeds) and ECDSA signing with the nonces k = 1, n - 1 and a random one. The test bench checks the
+    results (textbook group law) and that the cycle count is the same inside each group of curve and operation."""
+    out = []
+    rnd = random.Random(6979)
+    for cname in ('Ed25519', 'Ed448'):
+        for i in range(3):
+            seed = bytes(rnd.randrange(256) for _ in range(CURVES[cname].nbytes))
+            out.append(Vec('%s ct keygen %d' % (cname, i), cname, 0, key=seed, exp_ok=1, exp_res=ed_pub(cname, seed)))
+    msg = b'constant time'
+    for cname in ('P-256', 'P-384', 'P-521', 'secp256k1'):
+        c = CURVES[cname]
+        nb = c.nbytes
+        hop = {'P-384': 1, 'P-521': 2}.get(cname, 0)
+        e = int.from_bytes(HASHF[hop](msg).digest(), 'big')
+        hl = 8 * HASHF[hop]().digest_size
+        if hl > c.nbits:
+            e >>= hl - c.nbits
+        for i, d in enumerate((1, c.n - 1, rnd.randrange(2, c.n - 1))):
+            Q = mul(c, d, (c.gx, c.gy))
+            out.append(Vec('%s ct keygen d%d' % (cname, i), cname, 0, hash_=hop, key=d.to_bytes(nb, 'big'), exp_ok=1,
+                           exp_res=Q[0].to_bytes(nb, 'big') + Q[1].to_bytes(nb, 'big')))
+        d = rnd.randrange(2, c.n - 1)
+        for i, k in enumerate((1, c.n - 1, rnd.randrange(2, c.n - 1))):
+            Rp = mul(c, k, (c.gx, c.gy))
+            r = Rp[0] % c.n
+            sg = pow(k, -1, c.n) * (e % c.n + r * d) % c.n
+            pool = (k - 1).to_bytes(nb, 'big') + bytes(8)
+            out.append(Vec('%s ct sign k%d' % (cname, i), cname, 1, hash_=hop, msg=msg, key=d.to_bytes(nb, 'big'), pool=pool,
+                           exp_ok=1, exp_res=r.to_bytes(nb, 'big') + sg.to_bytes(nb, 'big')))
     return out
 
 
@@ -202,6 +256,8 @@ def build(setname):
         return ed_set('Ed25519', ed25519, 32, False)
     if setname == 'ed448':
         return ed_set('Ed448', ed448, 57, True)
+    if setname == 'ct':
+        return ct_set()
     if setname == 'det':
         return det_set()
     if setname == 'edvar':

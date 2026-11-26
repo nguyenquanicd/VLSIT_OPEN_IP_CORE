@@ -9,7 +9,7 @@ Single record of the human decisions of this verification flow (consolidated 202
 | G0 — plan | APPROVED | Nguyen Quan | 2026-11-23 | Plan, vplan, requirement index and test list. Permitted input freeze and preparation of G1 only. |
 | G1 — environment architecture | APPROVED | Nguyen Quan (verification lead and design lead) | 2026-11-24 | Environment architecture of [architecture.md](architecture.md). Permitted environment code, resource budget and checker qualification only. |
 | G3 — block plan/model | APPROVED | Nguyen Quan (verification lead) | 2026-11-24 | Independent model/checker qualification ([checker_qualification.md](checker_qualification.md)) and the resource budget (per-run output cap 512 MiB). Permitted the stimulus campaign. Accepted limits: qualification uses synthetic traffic. |
-| G5 — coverage closure | PENDING | verification lead | — | Not requested. Formal, mutation and coverage have been run (verification_report.md section 5) but M10 and M21 survive and the toggle target is unmet. |
+| G5 — coverage closure | PENDING | verification lead | — | Not requested. Formal, mutation and coverage have been run (verification_report.md section 5) but M10 survives and the toggle target is unmet. |
 | G6 — sign-off | PENDING | project lead | — | Not requested. No sign-off is claimed anywhere in this folder. |
 
 ## Decisions and answered questions (user Nguyen Quan)

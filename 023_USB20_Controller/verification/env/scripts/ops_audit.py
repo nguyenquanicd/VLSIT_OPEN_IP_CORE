@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import vpaths as P  # noqa: E402
 
 CHECK = {'R', 'RS', 'RANY', 'P', 'XD', 'XH', 'XT', 'XS', 'XN', 'XC', 'XP', 'WP', 'MC', 'GAP', 'GAPB', 'SOF', 'SOFW', 'SOFR', 'SOFD',
-         'SOFQ', 'NSOF', 'WSOF', 'XR', 'DR', 'DX', 'AR', 'AW', 'AWS', 'AWJ', 'XK', 'TC', 'WS'}   # XK, TC, WS added 2026-11-25
+         'SOFQ', 'NSOF', 'WSOF', 'XR', 'DR', 'DX', 'AR', 'AW', 'AWS', 'AWJ', 'XK', 'TC', 'WS', 'LSR'}   # XK, TC, WS added 2026-11-25
 
 
 def audit(path):

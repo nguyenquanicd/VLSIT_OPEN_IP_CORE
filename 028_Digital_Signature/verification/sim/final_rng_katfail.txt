@@ -1,0 +1,2 @@
+tb_rng_drbg: 6 checks, 0 failed
+RESULT: PASS

@@ -28,6 +28,7 @@ OPC = {n: i for i, n in enumerate(OPS)}
 AREA_MSG, AREA_SIG, AREA_PK, AREA_RES = 0, 1, 2, 3
 LE, BE = 0, 1
 SEL_P, SEL_N, SEL_NM1 = 0, 1, 2
+SEL_BIG = 26          # constant id of BIG = 2^575: modulus for plain integer arithmetic (scalar blinding)
 
 # error codes of ERR (bit numbers of dsig_err flags)
 ERR_BADKEY, ERR_BADPT = 3, 4
@@ -122,7 +123,7 @@ class Fail(Exception):
 
 
 class Machine:
-    def __init__(self, curve, consts, strings, buf, key=b'', pool=b'', off=None, len_msg=0, op_hash=0, curve_kind=None, len_ctx=0, f_ph=0):
+    def __init__(self, curve, consts, strings, buf, key=b'', pool=b'', off=None, len_msg=0, op_hash=0, curve_kind=None, len_ctx=0, f_ph=0, dpa=0):
         self.c = curve
         self.consts = consts          # name -> int
         self.strings = strings        # id -> bytes
@@ -141,6 +142,7 @@ class Machine:
         self.hsel = 0
         self.len_ctx = len_ctx
         self.f_ph = f_ph
+        self.dpa = dpa
         self.digest = b''
         self.dlen = 0
         self.stack = []
@@ -159,6 +161,8 @@ class Machine:
             self.M = c.p
         elif sel == SEL_N:
             self.M = c.n
+        elif sel == SEL_BIG:
+            self.M = 1 << 575
         else:
             self.M = c.n - 1
         self.mbits = self.M.bit_length()
@@ -222,8 +226,11 @@ class Machine:
                     R[i] = self.consts['IDENT%d' % i]
                 for i in range(nbits - 1, -1, -1):
                     self.run(code, dbl)
-                    if (k >> i) & 1:
-                        self.run(code, add)
+                    # double-and-add-always (as the RTL): ADD for every bit, the accumulator is put back when the bit is 0
+                    keep = R[0:4]
+                    self.run(code, add)
+                    if not (k >> i) & 1:
+                        R[0:4] = keep
             elif op == 'EQ':
                 F[rd] = int(R[ra] == R[rb])
             elif op == 'LTU':
@@ -331,7 +338,7 @@ class Machine:
             elif op == 'XORB':
                 R[rd] = R[ra] ^ int.from_bytes(bytes([imm & 0xFF]) * 72, 'big')
             elif op == 'LDV':
-                R[rd] = (self.f_ph, self.len_ctx)[imm]
+                R[rd] = (self.f_ph, self.len_ctx, self.dpa)[imm]
             elif op == 'HRDV':
                 R[rd] = int.from_bytes(self.digest, 'big')
             else:

@@ -1,0 +1,55 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p..................."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_abort",
+    "wave": "0.10................"
+   },
+   {
+    "name": "i_hw_clr_dsig_cmd_abort",
+    "wave": "0.10................"
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=..=.........=......",
+    "data": [
+     "ENUM_ST_RUN",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE"
+    ]
+   },
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "1............0......"
+   }
+  ],
+  [
+   "secret state",
+   {
+    "name": "w_key_nonzero",
+    "wave": "1...0..............."
+   },
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "0..................."
+   }
+  ]
+ ],
+ "head": {
+  "text": "Corner: abort during a running operation clears the key (simulated)"
+ },
+ "foot": {
+  "text": "Simulated by tb_dsig_p1 from dump wf_007_abort.vcd, window from clock edge 64; MATCH with the figure of the specification."
+ },
+ "config": {
+  "hscale": 1
+ }
+}

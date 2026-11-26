@@ -1,0 +1,39 @@
+VEC 0 PASS cycles=2201850
+VEC 1 PASS cycles=2204500
+VEC 2 PASS cycles=2222800
+VEC 3 TIMEOUT
+VEC 3: key store or pool not empty after the operation
+VEC 3 FAIL cycles=60000000
+AXI load: bresp 10
+VEC 4 TIMEOUT
+VEC 4: key store or pool not empty after the operation
+VEC 4: dsig_cmd.clr did not clear err/result
+VEC 4 FAIL cycles=60000000
+AXI load: bresp 10
+VEC 5 TIMEOUT
+VEC 5: key store or pool not empty after the operation
+VEC 5: dsig_cmd.clr did not clear err/result
+VEC 5 FAIL cycles=60000000
+AXI load: bresp 10
+VEC 6 TIMEOUT
+VEC 6: key store or pool not empty after the operation
+VEC 6: dsig_cmd.clr did not clear err/result
+VEC 6 FAIL cycles=60000000
+AXI load: bresp 10
+VEC 7 TIMEOUT
+VEC 7: key store or pool not empty after the operation
+VEC 7: dsig_cmd.clr did not clear err/result
+VEC 7 FAIL cycles=60000000
+AXI load: bresp 10
+VEC 8 TIMEOUT
+VEC 8: key store or pool not empty after the operation
+VEC 8: dsig_cmd.clr did not clear err/result
+VEC 8 FAIL cycles=60000000
+AXI load: bresp 10
+VEC 9 TIMEOUT
+VEC 9: key store or pool not empty after the operation
+VEC 9: dsig_cmd.clr did not clear err/result
+VEC 9 FAIL cycles=60000000
+dsig_cnt_ops = 4
+tb_top_ec: 10 vectors, 13 failed
+RESULT: FAIL

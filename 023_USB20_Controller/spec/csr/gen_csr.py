@@ -229,7 +229,10 @@ reg("hport", "0x28", "USB 2.0 host port control register. Controls reset, suspen
          "Write before prst.", "0x0 high-speed allowed (reset value)", "0x1 full-speed only"),
     flag("oc_en", 22, "Over-current protection enable. Lets the over-current input switch the port power off.",
          "Set before vbus_drv in host role; clear when no power switch with an over-current flag is fitted.", "0x0 over-current input ignored (reset value)", "0x1 over-current protection on"),
-    rsv("[31:23]")])
+    flag("ext_vbus", 23, "ULPI external VBUS drive. Sets DrvVbusExternal in the OTG Control register of a ULPI PHY together with DrvVbus.",
+         "Set in ULPI builds when the PHY switches VBUS through its own supply-enable pin (for example CPEN of TUSB1210); keep 0 when o_vbus_pwr_en drives the switch; no effect in UTMI+ builds (DEC-048, section 14.5).",
+         "0x0 DrvVbusExternal written 0 (reset value)", "0x1 DrvVbusExternal written equal to DrvVbus"),
+    rsv("[31:24]")])
 reg("hsts", "0x2C", "USB 2.0 host port status register. Reports the connect state, speed and frame number of the root port.", [
     flag("port_conn", 0, "Port connect status. Shows that a device is attached to the root port.", "Read after the conn or disc interrupt.", "0x0 no device (reset value)", "0x1 device attached", "ro"),
     flag("port_en", 1, "Port enable status. Shows that the port is enabled after reset.", "Read after the rst interrupt.", "0x0 disabled (reset value)", "0x1 enabled", "ro"),

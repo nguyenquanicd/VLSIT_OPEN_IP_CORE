@@ -4,6 +4,12 @@
 // The vectors are those of gen_ec_vec.py (RFC 8032, RFC 6979 and rejection cases).
 // Plusargs: +VEC=<hex file> +NVEC=<count> +MAXCYC=<cycles per operation>.
 `timescale 1ns/1ps
+`ifndef TB_RNG_SRC
+  `define TB_RNG_SRC 0
+`endif
+`ifndef TB_DPA_EC
+  `define TB_DPA_EC 0
+`endif
 module tb_top_ec;
   localparam int BLK = 1024;
   reg clk = 0; always #5 clk = ~clk;
@@ -29,7 +35,7 @@ module tb_top_ec;
     .PARA_OP_KGEN(ALGMASK), .PARA_OP_SIGN(ALGMASK), .PARA_OP_VRFY(ALGMASK),
     .PARA_EN_PURE(1), .PARA_EN_PREHASH(1), .PARA_BUF_BYTES(1024), .PARA_EN_AXI(1), .PARA_EN_DMA(1), .PARA_EN_WIN(1),
     .PARA_EN_KEYIF(1), .PARA_EN_KEYREG(1), .PARA_KEY_SRC(2), .PARA_ECDSA_NONCE(2), .PARA_EN_VAS(1), .PARA_EN_LOG(1),
-    .PARA_CSR_ASYNC(0)
+    .PARA_CSR_ASYNC(0), .PARA_RNG_SRC(`TB_RNG_SRC), .PARA_EN_DPA_EC(`TB_DPA_EC)
   ) dut (
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clk_apb(clk), .i_rst_n_apb(rst_n),
     .i_apb_psel(psel), .i_apb_penable(penable), .i_apb_pwrite(pwrite), .i_apb_paddr(paddr), .i_apb_pwdata(pwdata), .i_apb_pstrb(pstrb), .i_apb_pprot(pprot),
@@ -46,6 +52,23 @@ module tb_top_ec;
 
   // Entropy word counter: restarts when the request drops, advances with every word taken
   always @(posedge clk) if (!rst_n) ent_idx <= 0; else if (ent_req) ent_idx <= ent_idx + 1; else ent_idx <= 0;
+
+  // Monitors of the features under test: scalar multiplications (blinded = scalar register R14, see ec_progs.smul_secret),
+  // entropy words taken, distinct blinding values of the pool
+  integer n_smul_blind = 0, n_smul_plain = 0, n_ent_words = 0, n_r_change = 0;
+  reg [3:0] ec_st_q = 0; reg [47:0] r_prev = 0;
+  always @(posedge clk) begin
+    ec_st_q <= dut.g_ec.u_ec.reg_fsm_ec_current_state;
+    // start of a SMUL instruction: entry into ENUM_ST_SMUL from ENUM_ST_EXEC in phase 0 (not the returns from DBL and ADD)
+    if (dut.g_ec.u_ec.reg_fsm_ec_current_state == 4'd6 && ec_st_q == 4'd2 && dut.g_ec.u_ec.reg_sm_ph == 2'd0) begin
+      if (dut.g_ec.u_ec.reg_sm_k == 5'd14) n_smul_blind = n_smul_blind + 1; else n_smul_plain = n_smul_plain + 1;
+    end
+    if (ent_req) n_ent_words = n_ent_words + 1;
+    if (dut.w_rng_done) begin
+      if (dut.w_pool[8*88 +: 48] != r_prev && dut.w_pool[8*88 +: 48] != 48'd0) n_r_change = n_r_change + 1;
+      r_prev <= dut.w_pool[8*88 +: 48];
+    end
+  end
 
   reg [7:0] vecmem [0:1048575];
   reg [7:0] bmem [0:1023];
@@ -121,6 +144,8 @@ module tb_top_ec;
       alg = vecmem[i*BLK + 0]; vop = vecmem[i*BLK + 1]; hsh = vecmem[i*BLK + 2];
       lenm = {vecmem[i*BLK + 7], vecmem[i*BLK + 6], vecmem[i*BLK + 5], vecmem[i*BLK + 4]};
       ex_err = vecmem[i*BLK + 8] + (vecmem[i*BLK + 9] << 8); ex_ok = vecmem[i*BLK + 10]; rl = vecmem[i*BLK + 11];
+      // curve and hash pairing of the control block (DEC-032): P-384 needs a digest of at least 48 bytes, P-521 of 64
+      if (vop != 0 && ((alg == 6 && (hsh % 3) == 0) || (alg == 7 && (hsh % 3) != 2))) ex_err = 4;
       if (vop == 4) begin $display("VEC %0d SKIP", i); end
       else begin
         for (j = 0; j < 1024; j = j + 1) bmem[j] = 8'd0;
@@ -174,6 +199,17 @@ module tb_top_ec;
       end
     end
     apb_r(16'h09C, rd); $display("dsig_cnt_ops = %0d", rd);
+    $display("SMUL instructions: %0d on the blinded register R14, %0d on other registers; entropy words %0d; new blinding values %0d",
+             n_smul_blind, n_smul_plain, n_ent_words, n_r_change);
+    if (`TB_DPA_EC) begin
+      if (n_smul_blind == 0) begin nfail = nfail + 1; $display("FAIL: PARA_EN_DPA_EC 1 but no blinded scalar multiplication"); end
+      if (n_r_change < 2) begin nfail = nfail + 1; $display("FAIL: the blinding random does not change between operations"); end
+    end else if (n_smul_blind != 0) begin nfail = nfail + 1; $display("FAIL: blinded scalar multiplication without PARA_EN_DPA_EC"); end
+    if (`TB_RNG_SRC) begin
+      apb_r(16'h0A8, rd);
+      if (!rd[8]) begin nfail = nfail + 1; $display("FAIL: dsig_rng.ready is 0 with PARA_RNG_SRC 1"); end
+      if (n_ent_words != 24) begin nfail = nfail + 1; $display("FAIL: %0d entropy words with PARA_RNG_SRC 1 (one seed = 24)", n_ent_words); end
+    end
     $display("tb_top_ec: %0d vectors, %0d failed", nvec, nfail);
     if (nfail == 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

@@ -431,6 +431,7 @@ module m_vlsit_csr_usb2 #(
   input  wire  [10:0]                            i_u2_dsts_frame_num,
 
   // Register u2_hport
+  output logic                                   o_u2_hport_ext_vbus,
   output logic                                   o_u2_hport_oc_en,
   output logic                                   o_u2_hport_hs_dis,
   output logic [6:0]                             o_u2_hport_lpm_addr,
@@ -1033,6 +1034,8 @@ module m_vlsit_csr_usb2 #(
   logic [LPARA_DATA_W-1:0] w_u2_dctrl_value;
   logic [LPARA_DATA_W-1:0] w_u2_dsts_value;
   logic w_we_u2_hport;
+  logic reg_u2_hport_ext_vbus;
+  logic w_u2_hport_ext_vbus_nxt;
   logic reg_u2_hport_oc_en;
   logic w_u2_hport_oc_en_nxt;
   logic reg_u2_hport_hs_dis;
@@ -2624,6 +2627,9 @@ module m_vlsit_csr_usb2 #(
     w_u2_dsts_value[10:0] = i_u2_dsts_frame_num;
   end
 
+  // u2_hport_ext_vbus next value (rw): update only byte lanes selected by the bus strobe.
+  assign w_u2_hport_ext_vbus_nxt = (w_we_u2_hport & (|w_wmask[23])) ? ((reg_wdata[23] & w_wmask[23]) | (reg_u2_hport_ext_vbus & ~w_wmask[23])) : reg_u2_hport_ext_vbus;
+
   // u2_hport_oc_en next value (rw): update only byte lanes selected by the bus strobe.
   assign w_u2_hport_oc_en_nxt = (w_we_u2_hport & (|w_wmask[22])) ? ((reg_wdata[22] & w_wmask[22]) | (reg_u2_hport_oc_en & ~w_wmask[22])) : reg_u2_hport_oc_en;
 
@@ -2671,6 +2677,7 @@ module m_vlsit_csr_usb2 #(
   // Register u2_hport: flops of the writable fields, reset to the field reset values.
   always_ff @(posedge w_clk_reg, negedge w_rst_n_reg) begin : p_ff_u2_hport
     if (!w_rst_n_reg) begin
+      reg_u2_hport_ext_vbus <= 1'h0;
       reg_u2_hport_oc_en <= 1'h0;
       reg_u2_hport_hs_dis <= 1'h0;
       reg_u2_hport_lpm_addr <= 7'h0;
@@ -2684,6 +2691,7 @@ module m_vlsit_csr_usb2 #(
       reg_u2_hport_port_susp <= 1'h0;
       reg_u2_hport_prst <= 1'h0;
     end else begin
+      reg_u2_hport_ext_vbus <= w_u2_hport_ext_vbus_nxt;
       reg_u2_hport_oc_en <= w_u2_hport_oc_en_nxt;
       reg_u2_hport_hs_dis <= w_u2_hport_hs_dis_nxt;
       reg_u2_hport_lpm_addr <= w_u2_hport_lpm_addr_nxt;
@@ -2700,6 +2708,7 @@ module m_vlsit_csr_usb2 #(
   end
 
   // Register u2_hport: output ports follow the flops.
+  assign o_u2_hport_ext_vbus = reg_u2_hport_ext_vbus;
   assign o_u2_hport_oc_en = reg_u2_hport_oc_en;
   assign o_u2_hport_hs_dis = reg_u2_hport_hs_dis;
   assign o_u2_hport_lpm_addr = reg_u2_hport_lpm_addr;
@@ -2716,6 +2725,7 @@ module m_vlsit_csr_usb2 #(
   // Register u2_hport: read value from the fields; reserved bits read as 0.
   always_comb begin : p_com_u2_hport_value
     w_u2_hport_value = '0;
+    w_u2_hport_value[23] = reg_u2_hport_ext_vbus;
     w_u2_hport_value[22] = reg_u2_hport_oc_en;
     w_u2_hport_value[21] = reg_u2_hport_hs_dis;
     w_u2_hport_value[20:14] = reg_u2_hport_lpm_addr;

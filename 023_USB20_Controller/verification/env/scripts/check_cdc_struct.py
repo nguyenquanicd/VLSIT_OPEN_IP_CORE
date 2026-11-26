@@ -1,5 +1,5 @@
 """a_cdc_struct (REQ-CLK-002): structural check that every wire that crosses between the CLK-BUS and the CLK-PHY domain in rtl/m_usb2_core.sv
-goes through a crossing structure (m_usb2_xreg, m_usb2_cdc_fifo, reset block, ULPI wake detector or a VLSIT synchronizer cell). Each instance is
+goes through a crossing structure (m_usb2_xreg, m_usb2_cdc_fifo, reset block, ULPI or UTMI+ wake detector or a VLSIT synchronizer cell). Each instance is
 assigned a domain from the clock input it is connected to (i_clk_bus or i_clk_phy); a wire driven by an output of an instance of one domain and
 read by an input of an instance of the other domain, where neither instance is a crossing structure, is a violation. Connections only: no
 timing, no combinational analysis inside the modules; it does not replace a CDC tool run (vlsit-cdc-review).
@@ -10,7 +10,7 @@ import sys
 
 IP = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))   # verification/env/scripts -> IP
 RTL = os.path.normpath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(IP, 'rtl')
-CROSSING = ('m_usb2_xreg', 'm_usb2_cdc_fifo', 'm_usb2_rst', 'm_usb2_ulpilp', 'm_usb2_cfgchk')
+CROSSING = ('m_usb2_xreg', 'm_usb2_cdc_fifo', 'm_usb2_rst', 'm_usb2_ulpilp', 'm_usb2_utmilp', 'm_usb2_cfgchk')   # utmilp: DEC-049, CDC-008
 SYNC_PREFIX = ('VLSIT_CELL', 'm_vlsit_')
 ORIG = os.path.join(IP, 'rtl')
 

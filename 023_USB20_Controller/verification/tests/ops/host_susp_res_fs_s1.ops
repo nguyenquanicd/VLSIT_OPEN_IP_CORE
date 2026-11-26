@@ -17,14 +17,14 @@ P 10 10 10 190
 W 10 10
 W 28 400009
 CHK HBU-RSTDRV
-WP 0 d7 df fa0
+WP 0 c0 df fa0
 TM
-LS 0
+LSR 0 1
 ID 3057
 CHK HBU-RST50
 WP 0 d4 df 36ee8
 TC 2dc6a 2f9b8
-LS 1
+LSR 1 1
 P 10 80 80 bb8
 R 2c 6 e
 W 10 82
@@ -41,6 +41,7 @@ W 28 40001a
 CHK HSR-SUSP
 P 2c 10 10 bb8
 P 10 4 4 190
+XP 0 d4 ff
 SOF 0 0 fffffff
 CHK HSR-QUIET
 NSOF 3a98
@@ -49,6 +50,7 @@ B cg_sofphase.suspend
 W 10 4
 W 28 40001c
 CHK HSR-RESK
+WP 0 f6 ff 1d4c
 XC 11da5 36ee8 0 40164
 B cg_hres.fs
 SOF 0 0 fffffff
@@ -61,6 +63,7 @@ P 10 8 8 190
 R 2c 2 12
 ID 3345
 CHK HSR-SOF2
+XP 0 f4 ff
 SOF 3 dbba 10c8e
 R 10 0 1300
 END

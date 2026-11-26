@@ -137,6 +137,10 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 | REF-010 | AMBA AXI Protocol Specification v1.0 (AXI3 era, `vlsit_axi_amba_axi_ihi0022b_v1_0.md`) | burst rules, channel handshake | The only AXI text available; the profile is limited to its behavior and uses no AXI4-only feature (ASM-007) |
 | REF-011 | DWC_otg USB 2.0 Hi-Speed OTG Databook 5.00b, Synopsys, July 2024 | chapter 3 Configuration Parameters | Design reference for configuration choices only; not copied and not normative |
 | REF-012 | TI AM335x Technical Reference Manual, spruh73q, chapter 16 USB; Espressif ESP32-S3 Technical Reference Manual v1.8, chapter 32; Raspberry Pi RP2040 Datasheet, section 4.1 | feature lists only | Reference SoC manuals read on 2026-11-20 for the features of FEAT-017 to FEAT-023; not copied, not normative, copyright holders restrict redistribution |
+| REF-013 | TI TUSB1210 Stand-Alone USB Transceiver Chip Silicon, data sheet SLLSE09J, November 2009, revised July 2021 | sections 5, 6.6, 6.7, 6.13, 6.14, 7.3.1.1, 7.4.1, 7.5 | External ULPI PHY of the integration example of section 14.5; read on 2026-11-25; not normative for the IP |
+| REF-014 | Microchip USB3320 Hi-Speed USB 2.0 ULPI transceiver, data sheet DS00001792E (`research/phy_microchip_usb3320.md`) | Table 5-1 (= ULPI 1.1 Table 40), 6.2.4.4, 6.2.4.5 | Defined PHY rows; OpMode 11b optional and not implemented; read on 2026-11-25; not normative for the IP, copyright of Microchip |
+| REF-015 | Microchip USB3500 Hi-Speed USB host, device or OTG PHY with UTMI+ interface, data sheet DS00002103A (`research/phy_microchip_usb3500.md`) | Table 2-1 (OpMode), Table 5-1, 6.2, 6.4 | UTMI+ PHY rows and OpMode 11b reserved; read on 2026-11-25 |
+| REF-016 | USB 2.0 Transceiver Macrocell Interface (UTMI) Specification, Version 1.05, Intel, 3/29/2001 (official copy, `research/utmi_1_05_intel.md`) | 4.1 OpMode, 5.16 operational modes | OpMode 0 to 2, 3 reserved, mode 1 soft disconnect; read on 2026-11-25 |
 
 ### ECN applicability (USB 2.0 package, 2024-09-27)
 
@@ -193,11 +197,11 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 | REQ-FUNC-013 | A high-speed capable device shall send Chirp K for 1.0 to 7.0 ms starting from reset time T0, shall move to the high-speed Default state within 500 us of detecting K-J-K-J-K-J, and shall return to full-speed Default if the sequence is not seen 1.0 to 2.5 ms after its own chirp. | REF-001 section 7.1.7.5 | Device roles | Simulation |
 | REQ-FUNC-014 | After receiving a packet the host shall wait at least 8 bit times in high-speed before transmitting, shall keep at least 88 bit times between its own back-to-back packets and at most 192 bit times for a response; in full-speed and low-speed the host shall provide at least 2 bit times of J and at most 7.5 bit times for a response. | REF-001 section 7.1.18 | Host roles | Simulation with timing checker |
 | REQ-FUNC-015 | The host shall schedule the periodic (isochronous and interrupt) channels of a (micro)frame before the non-periodic channels, shall not start a transaction that cannot finish before the next SOF, shall keep periodic transactions within 80 % of a high-speed microframe and 90 % of a full-speed or low-speed frame, and shall refuse to arm a periodic channel that would exceed the limit (ch_en is cleared and frm_ovr is set). | REF-001 section 5.7.4 | Host roles | Simulation |
-| REQ-FUNC-016 | The host shall detect disconnect and connect in full-speed and low-speed by SE0 or non-SE0 for 2.5 us and in high-speed by the PHY HostDisconnect indication evaluated at each SOF, and shall switch to full-speed on a high-speed disconnect. | REF-006 section 2.2.1.10, REF-001 section 7.1.7.3 | Host roles | Simulation |
+| REQ-FUNC-016 | The host shall detect disconnect and connect in full-speed and low-speed by SE0 or non-SE0 for 2.5 us and in high-speed by the PHY HostDisconnect indication evaluated at each SOF, and shall switch to full-speed on a high-speed disconnect; a suspended port (which uses the full- or low-speed suspend row) shall report a disconnect after SE0 for 2.5 us (DEC-049). | REF-006 section 2.2.1.10, REF-001 section 7.1.7.3 | Host roles | Simulation |
 | REQ-FUNC-017 | When PARA_USB2_SPLIT_EN = 1 the host shall issue start-split and complete-split transactions with the SPLIT token (PID 1000B), shall accept NYET and the ERR handshake from the hub, and shall use the UTMI+ level 3 preamble path for low-speed devices behind a hub. | REF-001 section 8.4.2, 11.17 to 11.21; REF-006 section 2 | Host roles with split | Simulation |
 | REQ-FUNC-018 | A device shall enter suspend after more than 3.0 ms of constant idle and shall draw suspend current within 10 ms of bus inactivity; a high-speed device shall revert to full-speed no later than 3.125 ms after the start of idle and sample the line 100 to 875 us after reversion. | REF-001 section 7.1.7.6 | Device roles | Simulation |
 | REQ-FUNC-019 | A device with remote wakeup enabled shall wait until the bus has been idle for 5 ms before driving resume and shall drive resume for 1 to 15 ms. | REF-001 section 7.1.7.7 | Device roles | Simulation |
-| REQ-FUNC-020 | The host shall drive resume for at least 20 ms, end it with a low-speed EOP when the port was in low-speed or full-speed or with a transition to high-speed idle when it was in high-speed, and shall send SOF within 3 ms afterward. | REF-001 section 7.1.7.7 | Host roles | Simulation |
+| REQ-FUNC-020 | The host shall drive resume for at least 20 ms, end it with a low-speed EOP when the port was in low-speed or full-speed or with a transition to high-speed idle when it was in high-speed, and shall send SOF within 3 ms afterward; a suspended port that sees K for 2.5 us (remote wakeup of the device) shall start this resume by itself, within the 1 ms that a hub has to reflect the resume (REF-001 7.1.7.7), and report `irq_raw.resume` (DEC-049). | REF-001 section 7.1.7.7 | Host roles | Simulation |
 | REQ-FUNC-021 | When PARA_USB2_LPM_EN = 1 the controller shall decode the EXT token (PID 0000B) followed by the LPM token (SubPID 0011B) with bmAttributes bLinkState, HIRD and bRemoteWake, and shall answer with a handshake, shall begin L1 within 10 us after sending the ACK, and as host shall issue the LPM transaction and wait at least 10 us after the end of resume signaling before addressing the device (values as read from a partly garbled table of REF-008, ASM-001). | REF-008 sections 2.1, 2.2, 4.1 | LPM builds | Simulation |
 | REQ-FUNC-022 | The controller shall support the test selectors 0x01 Test_J, 0x02 Test_K, 0x03 Test_SE0_NAK, 0x04 Test_Packet and, for the host port only, 0x05 Test_Force_Enable; a device shall enter the selected mode no later than 3 ms after the status stage of SetFeature(TEST_MODE), shall answer an invalid selector with a request error, and shall leave the mode only by power cycle or reset of i_rst_n_phy; Test_Packet shall send the packet of REF-001 section 7.1.20 repeatedly and Test_SE0_NAK shall answer valid IN tokens with NAK. | REF-001 sections 7.1.20, 9.4.9; USB ECN TEST_MODE selector values | All roles | Simulation |
 | REQ-FUNC-023 | In dual-role builds the controller shall act as host when the ID indication is mini-A, as device when it is mini-B, shall change role only after session end and detach, and shall let a CSR field override the PHY indication. | REF-002; REF-006 section 2.2.1; user answer 2026-11-20 | PARA_USB2_ROLE = 2 | Simulation |
@@ -230,9 +234,10 @@ The USB 2.0 Controller is a synthesizable digital link layer that lets an SoC ac
 | REQ-IF-009 | For each DMA channel `o_dma_req` shall rise when the mapped FIFO crosses its threshold, shall stay high until the DMA controller finishes the burst, and `i_dma_ack` shall be a one-cycle pulse per burst. | User answer 2026-11-20 | AXI-slave wrappers | Simulation |
 | REQ-IF-010 | `i_ovrcur_n` shall be an asynchronous active-low input synchronized and filtered in CLK-BUS (CDC-006), and `o_vbus_pwr_en` shall be a registered output of CLK-BUS that is 0 whenever the port power is off. | REF-001 section 7.2.1.2.1 | All wrappers | Simulation, CDC analysis |
 | REQ-IF-011 | In ULPI builds the link shall enter low power mode by writing SuspendM = 0 in the Function Control register, may stop CLK-PHY at least five cycles after the PHY accepted the write, and shall leave the mode by asserting stp asynchronously until the PHY has dropped dir after at least five clock cycles, then releasing stp in the cycle after dir falls; while the clock is stopped the wake detector of `m_usb2_ulpilp` in CLK-BUS shall watch LineState and the interrupt indication on data[3:0]. | REF-007 sections 3.9.1 to 3.9.3 | ULPI wrappers | Protocol checker, simulation |
-| REQ-IF-012 | The UTMI+ wrapper shall drive XcvrSelect, TermSelect, OpMode, DpPulldown and DmPulldown with the values of the table of section 6.3 for each bus state, and shall change them only while the bus is idle. | REF-006 sections 2.2.1.11, 2.3.1, 2.4.1, 3.1 | UTMI+ wrappers | Protocol checker |
+| REQ-IF-012 | The UTMI+ wrapper, and the ULPI wrapper through the Function Control and OTG Control registers, shall drive XcvrSelect, TermSelect, OpMode, DpPulldown and DmPulldown with the values of the table of section 6.3 for each bus state, use only defined rows of ULPI 1.1 Table 40 and never OpMode 11b, and shall change them only while the bus is idle. | REF-006 sections 2.2.1.11, 2.3.1, 2.4.1, 3.1; ULPI 1.1 Table 40 via REF-014 Table 5-1; DEC-048 | UTMI+ and ULPI wrappers | Protocol checker, assertion a_phy_row |
 | REQ-IF-013 | In ULPI builds the role controller shall take the ID indication from bit 6 of the RX CMD byte, valid 50 ms after IdPullup is set in the OTG Control register of the PHY, and the initialization flow shall write IdPullup, DpPulldown and DmPulldown there for the selected role. | REF-007 sections 3.8.1, 4.2 | ULPI wrappers, dual-role | Simulation |
 | REQ-IF-014 | With win_en = 1 the DMA shall transfer only buffers and descriptors whose addresses lie between u2_dma_wbase and u2_dma_wlim; a violation shall stop the transfer before any AXI access to the address, set dma_err and mark the descriptor err. | Review F-018 | AXI-master wrappers | Simulation |
+| REQ-IF-015 | A UTMI+ build shall negate SuspendM without CLK-PHY: while the speed engine holds SuspendM low, a line state that differs from the idle line state stored at suspend entry for 4 CLK-BUS cycles (resume K, reset SE0, remote-wake K or disconnect SE0), or a software wake request (`u2_dctrl.rmt_wake` with `rmt_wake_en`, `u2_hport.port_res`), shall raise `o_utmi_suspend_n` from always-on logic in CLK-BUS, and the IP shall hand SuspendM back to the speed engine only after the engine has left suspend. | UTMI 1.05 (REF-016) p. 21 and p. 48: the PHY may power down its clock in suspend, starts CLK at most 5.6 ms after SuspendM negation, and the SIE negates SuspendM combinatorially on the J to SE0 change; DEC-049 | UTMI+ wrappers | Simulation with the PHY clock-stop model, assertion SVA-017, mutation |
 | REQ-CLK-001 | CLK-PHY shall be supplied by the PHY at 60 MHz (8-bit UTMI+ or ULPI) or 30 MHz (16-bit UTMI+) and the controller shall stay functional while CLK-BUS is asynchronous to it. | REF-006 Table 1, REF-007 | All wrappers | Simulation, CDC |
 | REQ-CLK-002 | Every crossing between CLK-PHY and CLK-BUS shall use a structure listed in section 7.2. | REF-003 | All wrappers | CDC analysis |
 | REQ-CLK-003 | Every CSR field that CLK-PHY consumes or produces shall cross through the register command FIFO (CLK-BUS to CLK-PHY) or the register update FIFO (CLK-PHY to CLK-BUS) of section 7.2; a multi-bit value shall never cross as unqualified levels, and each register shall be delivered as one whole 32-bit word. | REF-003 | All wrappers | CDC analysis, simulation |
@@ -274,6 +279,7 @@ The controller is a structural top (`m_usb2_core`) inside four fixed-profile wra
 | Block | Responsibility | Inputs / outputs | Clock/reset domain | State or storage |
 |---|---|---|---|---|
 | `m_usb2_phyif_utmi` / `m_usb2_phyif_ulpi` | Present one internal byte stream and control interface to the link; the ULPI block builds TX CMD, decodes RX CMD, runs PHY register access and turnaround | UTMI+ or ULPI pins; internal Tx and Rx stream, line state, mode control | CLK-PHY / i_rst_n_phy | Byte registers, ULPI FSM |
+| `m_usb2_utmilp` | UTMI+ builds only: always-on wake detector that raises SuspendM while CLK-PHY is stopped (REQ-IF-015, DEC-049) | raw `i_utmi_linestate`, `reg_suspend_n` of the speed engine, software wake request; wake request ORed into `o_utmi_suspend_n` | CLK-BUS (always on, RST-BUS) | stored idle line state, filter counter, hand-off flags |
 | `m_usb2_lnk` | Frame packets with SYNC-less byte stream, check PID, CRC5, CRC16, run the bus turn-around timers | Stream from the PHY block; transaction requests from device and host engines | CLK-PHY | Packet shift registers, timers |
 | `m_usb2_dev` | Device address, endpoint match, data toggle, handshake choice, PING and NYET, high-bandwidth isochronous, control transfer SETUP handling | Link packets, FIFO status, endpoint CSR configuration | CLK-PHY | Per-endpoint toggle and status |
 | `m_usb2_host` | Channel scheduler, per-channel transaction engine, SOF generation, split handling (optional) | Link packets, channel CSR configuration, FIFO status | CLK-PHY | Channel state, frame counter |
@@ -832,7 +838,7 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | `o_utmi_opmode` | Output | 2 | Operational mode (OpMode): normal, non-driving, disable bit stuffing and NRZI, or no SYNC and EOP | CLK-PHY | data (static between packets) | 00 | stable before o_utmi_txvalid rises | UTMI+ wrappers |
 | `o_utmi_xcvrsel` | Output | 2 | Transceiver select (XcvrSelect): high-speed, full-speed, low-speed or preamble mode | CLK-PHY | data (static between packets) | full-speed | changed only while the bus is idle | UTMI+ wrappers |
 | `o_utmi_termsel` | Output | 1 | Termination select (TermSelect): full-speed pull-up or high-speed termination | CLK-PHY | level | full-speed | changed only while the bus is idle | UTMI+ wrappers |
-| `o_utmi_suspend_n` | Output | 1 | Active-low suspend request to the PHY (SuspendM, UTMI+ name) | CLK-PHY | level | 1 (active) | changed by the suspend controller | UTMI+ wrappers |
+| `o_utmi_suspend_n` | Output | 1 | Active-low suspend request to the PHY (SuspendM, UTMI+ name); OR of the speed-engine request (CLK-PHY flop) and the wake request of the always-on `m_usb2_utmilp` (CLK-BUS flop), so it can rise while the PHY has stopped CLK-PHY (REQ-IF-015, DEC-049) | CLK-PHY (CLK-BUS while the PHY clock is stopped) | level | 1 (active) | changed by the suspend controller; raised asynchronously to CLK-PHY by the wake detector | UTMI+ wrappers |
 | `o_utmi_databus16_8` | Output | 1 | Selects 16-bit (1) or 8-bit (0) data interface (DataBus16_8) | CLK-PHY | static | PARA_USB2_UTMI_W = 16 | constant after reset | UTMI+ wrappers |
 | `o_utmi_bitstuff_en` | Output | 1 | Transmit bit-stuffing enable for the low byte (TxBitstuffEnable) | CLK-PHY | level | 1 | stable during a packet | UTMI+ wrappers |
 | `o_utmi_bitstuff_en_h` | Output | 1 | Transmit bit-stuffing enable for the high byte (TxBitstuffEnableH) | CLK-PHY | level | 1 | stable during a packet | UTMI+ wrappers |
@@ -933,24 +939,71 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | DMA handshake | `o_dma_req` high until the burst is acknowledged by a one-cycle `i_dma_ack` | Acknowledge without request | Ignore the pulse and count a DMA error | REQ-IF-009 |
 | Over-current input | `i_ovrcur_n` high in normal operation; low for 16 CLK-BUS cycles means over-current | Glitch shorter than 16 cycles; flag low while `oc_en` = 0 | Ignore the glitch; ignore the flag when disabled; otherwise power off and set `ocur` | REQ-FUNC-034, REQ-IF-010 |
 | ULPI low power mode | Link writes SuspendM = 0; the PHY asserts dir with nxt low and drives data[3:0]; the link wakes the PHY with stp | Data driven by the link while the PHY is in low power mode; stp released before dir falls | Link releases the bus, wake detector in CLK-BUS asserts stp asynchronously until dir falls | REQ-IF-011 |
+| UTMI+ suspend with the PHY clock stopped | The speed engine drives SuspendM low; the PHY may stop CLK-PHY (UTMI 1.05). The always-on wake detector in CLK-BUS raises SuspendM on a line change of 4 CLK-BUS cycles or a software wake request and hands SuspendM back to the engine once the engine has left suspend | A glitch on LineState shorter than 4 CLK-BUS cycles; a line change that ends before the engine sees it | Glitch ignored; a short change wakes the PHY, the engine stays suspended, and SuspendM falls again when the line is back at idle for 4 cycles | REQ-IF-015 |
 
-**UTMI+ control values (REQ-IF-012).** Source: REF-006 sections 2.2.1.11, 2.3.1, 2.4.1 and 3.1 (unofficial copy, ASM-001). XcvrSelect: 00b high-speed, 01b full-speed, 10b low-speed, 11b low-speed packet on a full-speed bus (level 3 preamble). OpMode: 00b normal with SYNC and EOP appended, 01b non-driving, 10b disable bit stuffing and NRZI (chirp and resume), 11b normal without automatic SYNC and EOP (valid only with XcvrSelect = 00b). The encoding of chirp K and chirp J on DataOut during OpMode = 10b is fixed by REF-006 section 3.1 and shall be transcribed from the official copy.
+**UTMI+ and ULPI control values (REQ-IF-012, DEC-048).** Source: the defined rows of ULPI 1.1 Table 40 (section 4.4), as
+reproduced in the Microchip USB3320 data sheet Table 5-1 (REF-014, whose note 1 says it is the same table); the USB3500 UTMI+
+data sheet (REF-015) has the same rows, and UTMI 1.05 (REF-016) defines OpMode 0 to 2 with 3 reserved. A combination that is
+not in the table is not ensured by a PHY (REF-014 note 5-1). XcvrSelect: 00b high-speed, 01b full-speed, 10b low-speed, 11b
+low-speed packet on a full-speed bus (level 3 preamble). OpMode: 00b normal with SYNC and EOP appended, 01b non-driving (all
+terminations removed), 10b disable bit stuffing and NRZI (chirp, resume, Test_J and Test_K). OpMode 11b (normal without
+automatic SYNC and EOP) is optional in UTMI+ and ULPI and not implemented by common PHYs (REF-013 7.5.5, REF-014 6.2.4.5,
+REF-015 Table 2-1); the IP never drives it (DEC-048). The same values reach a ULPI PHY through the Function Control (04h) and
+OTG Control (0Ah) registers. The encoding of chirp K and chirp J on DataOut during OpMode = 10b is fixed by REF-006 section 3.1.
 
-| Bus state | XcvrSelect | TermSelect | OpMode | DpPulldown, DmPulldown | Note |
-|---|---|---|---|---|---|
-| Device attached, full-speed idle | 01b | 1 (FS) | 00b | 0, 0 | pull-up on D+ |
-| Device chirp and wait for the hub chirps | 00b | 1 | 10b | 0, 0 | high-speed transceiver with the full-speed termination kept until K-J-K-J-K-J is seen (UTMI 1.05 high-speed detection handshake, T1 to T7); TXReady must be answered for chirp data (REF-006 2.1.1.4) |
-| Device high-speed active | 00b | 0 (HS) | 00b | 0, 0 | after K-J-K-J-K-J |
-| Device suspend | 01b | 1 | 00b | 0, 0 | SuspendM low; TermSelect stays FS so the pull-up stays powered |
-| Device resume signaling | 01b | 1 | 10b | 0, 0 | OpMode returns to 00b only after the TX end delay |
-| Host reset (SE0) and chirp | 01b | 1 | 10b during chirp | 1, 1 | host sends alternating chirp K and J |
-| Host high-speed | 00b | 0 | 00b | 1, 1 | |
-| Host full-speed | 01b | 1 | 00b | 1, 1 | |
-| Host low-speed direct | 10b | 1 | 00b | 1, 1 | UTMI+ level 2 |
-| Host low-speed behind a hub | 11b | 1 | 00b | 1, 1 | UTMI+ level 3, preamble at full-speed |
-| Test mode Test_J, Test_K | 00b | 0 | 10b | per role | continuous stream of FFh (J) or 00h (K) without bit stuffing and NRZI (UTMI 1.05, OpMode 10b); the speed state is held |
-| Test mode Test_SE0_NAK, Test_Packet | 00b | 0 | 00b | per role | the speed state is held until reset or power cycle |
-| Link loopback (lpbk = 1) | 01b | 1 | 01b | per role | PHY pins idle (non-driving) |
+| Bus state of the IP (RTL state) | XcvrSelect | TermSelect | OpMode | DpPulldown, DmPulldown | SuspendM | Table 40 row and note |
+|---|---|---|---|---|---|---|
+| Device not connected: soft_conn = 0 or no VBUS (`DV_OFF`) | 01b | 0 | 01b | 0, 0 | 1 | tri-state drivers; non-driving, the device is invisible (UTMI 1.05 OpMode 1 soft disconnect; DEC-048 PHY-05) |
+| Device attached, full-speed idle and active, reset detect, full-speed check after 3 ms idle, resume detect (`DV_FS`, `DV_RST`, `DV_FSCHK`, `DV_RESM`) | 01b | 1 | 00b | 0, 0 | 1 | peripheral full-speed; pull-up on D+ |
+| Device chirp and wait for the hub chirps (`DV_CHK`, `DV_CHJ`) | 00b | 1 | 10b | 0, 0 | 1 | peripheral chirp; full-speed termination kept until K-J-K-J-K-J is seen (UTMI 1.05 high-speed detection handshake, T1 to T7); TXReady must be answered for chirp data |
+| Device high-speed active (`DV_HS`) | 00b | 0 | 00b | 0, 0 | 1 | peripheral high-speed |
+| Device suspend and L1, also after high-speed operation (`DV_SUSP`) | 01b | 1 | 00b | 0, 0 | 0 | peripheral HS/FS suspend; the D+ pull-up stays on, so the hub does not see a disconnect (USB 2.0 7.1.7.6; DEC-048 PHY-04) |
+| Device remote-wakeup signaling (`DV_RWAKE`) | 01b | 1 | 10b | 0, 0 | 1 | peripheral HS/FS resume; OpMode returns to 00b only after the TX end delay |
+| Host not connected, debounce, connected full-speed idle (`HP_OFF`, `HP_DBNC`, `HP_CONN`) | 01b | 1 | 00b | 1, 1 | 1 | host full-speed |
+| Host port reset: SE0 and the rest of the 50 ms (`HP_SE0`, `HP_RSTW`) | 00b | 0 | 00b | 1, 1 | 1 | host high-speed row with nothing transmitted: the 45 ohm terminations hold D+ and D- at SE0 for a device of any speed (DEC-048 PHY-01, closes TBD-017); the line is SE0 when the reset ends, so the speed of a port without the high-speed handshake is the speed found at the connect (BUG-051) |
+| Host listen window and host chirp (`HP_LISTK`, `HP_CHIRP`) | 00b | 0 | 10b | 1, 1 | 1 | host chirp; the host sends alternating chirp K and J |
+| Host high-speed enabled (`HP_EN`, speed HS) | 00b | 0 | 00b | 1, 1 | 1 | host high-speed |
+| Host full-speed enabled (`HP_EN`, speed FS) | 01b | 1 | 00b | 1, 1 | 1 | host full-speed |
+| Host low-speed direct (`HP_EN`, speed LS) | 10b | 1 | 00b | 1, 1 | 1 | host low-speed (UTMI+ level 2) |
+| Host low-speed behind a hub | 11b | 1 | 00b | 1, 1 | 1 | host full-speed row with XcvrSelect 11b (UTMI+ level 3, preamble at full-speed) |
+| Host port suspended or in L1, high- or full-speed port (`HP_SUSP`) | 01b | 1 | 00b | 1, 1 | 0 | host HS/FS suspend; the high-speed terminations would hold SE0 and reset the device (USB 2.0 7.1.7.6; DEC-048 PHY-02) |
+| Host port suspended, low-speed port (`HP_SUSP`) | 10b | 1 | 00b | 1, 1 | 0 | host LS suspend |
+| Host resume signaling, high- or full-speed port (`HP_RESM`) | 01b | 1 | 10b | 1, 1 | 1 | host HS/FS resume; resume K is full-speed signaling (USB 2.0 7.1.7.7; DEC-048 PHY-03); a high-speed port returns to the high-speed row after the resume |
+| Host resume signaling, low-speed port (`HP_RESM`) | 10b | 1 | 10b | 1, 1 | 1 | host LS resume |
+| Test mode Test_J, Test_K | 00b | 0 | 10b | per role | 1 | host Test_J/Test_K row; for a device the same values (USB 2.0 7.1.20); continuous stream of FFh (J) or 00h (K) without bit stuffing and NRZI; the speed state is held |
+| Test mode Test_SE0_NAK, Test_Packet | 00b | 0 | 00b | per role | 1 | high-speed row of the role; the speed state is held until reset or power cycle |
+| Link loopback (lpbk = 1) | 01b | 1 | 01b | per role | 1 | tri-state drivers; PHY pins idle (non-driving) |
+
+Verification of the table: the testbench assertion `a_phy_row` (SVA-016) checks in every CLK-PHY cycle of every simulation that
+the pins (UTMI+) or the virtual pins built from the PHY registers (ULPI) form a row of Table 40, and only a suspend row while
+SuspendM is low; the ULPI PHY model rejects a Function Control write with OpMode 11b; the scenarios check the rows of host reset,
+suspend and resume and of device suspend and soft disconnect, and derive the host reset SE0 from the row instead of forcing it
+(TEST-038).
+
+**SuspendM and the PHY clock in UTMI+ builds (REQ-IF-015, DEC-049).** Why this exists: a UTMI+ PHY may power down its
+oscillator while SuspendM is low and restarts CLK-PHY only after SuspendM is negated, at most 5.6 ms later (UTMI 1.05,
+REF-016 p. 21 and p. 48; USB3500, REF-015, needs at most 3.5 ms). Every state machine of the speed engine runs on CLK-PHY, so
+without a clock it cannot see the host resume K, a reset SE0, a remote-wake K or a disconnect, and it cannot act on a resume
+written by software (the register command waits in the CDC-001 FIFO). UTMI 1.05 p. 48 therefore has the link negate SuspendM
+without the PHY clock. The ULPI builds already do this with `m_usb2_ulpilp` (REQ-IF-011, CDC-007); the UTMI+ builds use the
+same idea in `m_usb2_utmilp`, which runs on CLK-BUS (the CSR clock, which section 7.1 requires to keep running).
+
+How it works: `o_utmi_suspend_n = reg_suspend_n (speed engine, CLK-PHY) OR o_wake (m_usb2_utmilp, CLK-BUS)`.
+
+| Step | Condition in CLK-BUS (after the library synchronizers) | Action of `m_usb2_utmilp` | Why |
+|---|---|---|---|
+| Arm | synchronized `reg_suspend_n` falls (suspend or L1) | after 4 cycles store the synchronized LineState as the idle value | the idle value is J of the port speed (01b full or high speed, 10b low speed), so no speed information is needed |
+| Line wake | armed and LineState differs from the idle value for 4 consecutive cycles | set `o_wake` | resume K, reset SE0, remote-wake K or disconnect SE0; the 4-cycle filter rejects glitches only, because the engine filters again (2.5 us) once its clock runs |
+| Software wake | armed, wake request = 1 (`rmt_wake` with `rmt_wake_en` for a device, `port_res` for a host) and no software wake yet in this suspend period | set `o_wake` | a request written while CLK-PHY is stopped must start the PHY clock; one wake per period, as in DEC-022 |
+| Hand-off | `o_wake` = 1 and synchronized `reg_suspend_n` = 1 | clear `o_wake` | the engine has left suspend and drives SuspendM alone; the pin cannot glitch because one input of the OR is already 1 (SVA-017) |
+| Spurious wake | `o_wake` = 1 from a line wake, the engine still suspended, LineState back at the idle value for 4 cycles | clear `o_wake`, stay armed | SuspendM falls again and the PHY may stop its clock; nothing else changes |
+| Leave | synchronized `reg_suspend_n` = 1 | disarmed, `o_wake` = 0 | normal operation |
+
+Delay: 2 synchronizer cycles, 4 filter cycles and 1 output cycle, at most 0.23 us at the slowest CLK-BUS of 30 MHz; this is
+negligible against the 5.6 ms clock start of the PHY. After the wake the engine finds its state intact: a device in `DV_SUSP`
+sees the K (at least 20 ms) or the SE0 (at least 10 ms) and goes to `DV_RESM` or `DV_RST`; a host in `HP_SUSP` sees the
+remote-wake K and starts the resume, or sees the disconnect SE0, or receives the `port_res` command from the CDC-001 FIFO.
+Waveforms WF-038 (device resume) and WF-039 (host remote wake).
 
 ### 6.4 Interrupts and events
 
@@ -969,8 +1022,8 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 
 | Domain | Clock port | Edge | Frequency range | Source | Relationship to other clocks | Gating policy |
 |---|---|---|---|---|---|---|
-| CLK-PHY | `i_clk_phy` | Rising | 60 MHz (8-bit UTMI+ and ULPI) or 30 MHz (16-bit UTMI+); the PHY may stop it in ULPI low power mode | PHY | Asynchronous to CLK-BUS | Stopped only by the PHY; no internal gating in the first release |
-| CLK-BUS | `i_clk_bus` | Rising | At least 30 MHz for high-speed 32-bit data; 100 MHz or faster recommended for REQ-PERF-001 (ASM-008) | SoC clock controller | Asynchronous to CLK-PHY | Controlled by the SoC; the CSR must stay clocked |
+| CLK-PHY | `i_clk_phy` | Rising | 60 MHz (8-bit UTMI+ and ULPI) or 30 MHz (16-bit UTMI+); the PHY may stop it in UTMI+ suspend (SuspendM = 0) and in ULPI low power mode | PHY | Asynchronous to CLK-BUS | Stopped only by the PHY; no internal gating in the first release |
+| CLK-BUS | `i_clk_bus` | Rising | At least 30 MHz for high-speed 32-bit data; 100 MHz or faster recommended for REQ-PERF-001 (ASM-008) | SoC clock controller | Asynchronous to CLK-PHY | Controlled by the SoC; the CSR and the always-on wake detectors (`m_usb2_utmilp`, `m_usb2_ulpilp`) must stay clocked, also during USB suspend |
 
 ### 7.2 CDC and RDC
 
@@ -983,6 +1036,7 @@ The four wrappers are `m_usb2_top_utmi_axim`, `m_usb2_top_utmi_axis`, `m_usb2_to
 | CDC-005 | CLK-BUS → CLK-PHY | Soft-reset request | Pulse synchronizer inside `m_usb2_rst` | Reset controller | CDC tool |
 | CDC-006 | asynchronous → CLK-BUS | `i_ovrcur_n` | Two-flop synchronizer followed by a 16-cycle filter counter in `m_usb2_ocp` | Reset in CLK-BUS | set_false_path to the synchronizer, CDC tool |
 | CDC-007 | asynchronous → CLK-BUS and CLK-BUS → pin | ULPI `i_ulpi_dir`, `i_ulpi_data[3:0]` in low power mode; `o_ulpi_stp` wake request | Two-flop synchronizers on the inputs inside `m_usb2_ulpilp`; the wake request drives `o_ulpi_stp` through a glitch-free hand-off from the CLK-PHY driver | Always-on logic in CLK-BUS, reset by i_rst_n_bus | set_false_path on the inputs, CDC tool; the hand-off is held by assertion SVA-014 |
+| CDC-008 | asynchronous → CLK-BUS, CLK-PHY → CLK-BUS and CLK-BUS → pin | UTMI+ `i_utmi_linestate[1:0]` (asynchronous while the PHY clock is stopped), `reg_suspend_n` of `m_usb2_spd`; `o_utmi_suspend_n` wake request | Two-flop library synchronizers in `m_usb2_utmilp` (the LineState bits are compared with the stored idle value only after a 4-cycle stable filter, so a skew between the two bits cannot give a false wake); the source of the `reg_suspend_n` synchronizer is a flop (BUG-045 rule); the wake flop is ORed with the CLK-PHY flop on the pin and falls only when the CLK-PHY flop is 1 or both requests are meant low | Always-on logic in CLK-BUS, reset by i_rst_n_bus | set_false_path on the synchronizer inputs (EXC-006), CDC tool; the hand-off is held by assertion SVA-017 |
 
 ### 7.3 Reset domains and sequencing
 
@@ -995,7 +1049,7 @@ Sources: pin resets, and a CSR soft-reset field that resets the CLK-PHY domain t
 
 ### 7.4 Power intent (if applicable)
 
-N/A: no power domain is defined inside the IP, so no isolation or retention applies; whole-IP power gating is an SoC decision (ASM-016). The IP supports USB suspend and LPM L1 states that stop the PHY clock; the clock-stop and restart sequence uses UTMI+ SuspendM (REF-006) or ULPI low power mode (REQ-IF-011). The CSR domain stays clocked.
+N/A: no power domain is defined inside the IP, so no isolation or retention applies; whole-IP power gating is an SoC decision (ASM-016). The IP supports USB suspend and LPM L1 states that stop the PHY clock; the clock-stop and restart sequence uses UTMI+ SuspendM (REF-006) or ULPI low power mode (REQ-IF-011). UTMI+ sequence (REQ-IF-015, DEC-049): the speed engine drives SuspendM low; the PHY may stop CLK-PHY; `m_usb2_utmilp` in CLK-BUS watches LineState and the software wake request, raises SuspendM, the PHY restarts CLK-PHY within 5.6 ms, the engine leaves suspend and takes SuspendM back (section 6.3). ULPI sequence: `m_usb2_ulpilp` asserts stp (REQ-IF-011, DEC-022). Both detectors need CLK-BUS during suspend. The CSR domain stays clocked.
 
 ## 8. Parameters and elaboration configurations
 
@@ -1209,40 +1263,66 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
   "out_name": "usb2_fsm_host_port.drawio",
   "function": "host_port",
   "initial": "ENUM_ST_HP_NODEV",
+  "reset": {
+    "signal": "i_rst_n_phy",
+    "active_level": "low"
+  },
   "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
   "states": [
     {
-      "name": "ENUM_ST_HP_NODEV"
+      "name": "ENUM_ST_HP_NODEV",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_DEBNC"
+      "name": "ENUM_ST_HP_DEBNC",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_RESET"
+      "name": "ENUM_ST_HP_RESET",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_CHIRP_DET"
+      "name": "ENUM_ST_HP_CHIRP_DET",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_CHIRP_TX"
+      "name": "ENUM_ST_HP_CHIRP_TX",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_EN_HS"
+      "name": "ENUM_ST_HP_EN_HS",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_EN_FS"
+      "name": "ENUM_ST_HP_EN_FS",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_EN_LS"
+      "name": "ENUM_ST_HP_EN_LS",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_SUSP"
+      "name": "ENUM_ST_HP_SUSP",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_RESUME"
+      "name": "ENUM_ST_HP_RESUME",
+      "conditional_exit": true,
+      "hold_conditions": []
     },
     {
-      "name": "ENUM_ST_HP_OC"
+      "name": "ENUM_ST_HP_OC",
+      "conditional_exit": true,
+      "hold_conditions": []
     }
   ],
   "transitions": [
@@ -1307,6 +1387,16 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
       "label": "port_res"
     },
     {
+      "src": "ENUM_ST_HP_SUSP",
+      "dst": "ENUM_ST_HP_RESUME",
+      "label": "device K >= 2.5 us (remote wake)"
+    },
+    {
+      "src": "ENUM_ST_HP_SUSP",
+      "dst": "ENUM_ST_HP_NODEV",
+      "label": "SE0 > 2.5 us (disconnect)"
+    },
+    {
       "src": "ENUM_ST_HP_RESUME",
       "dst": "ENUM_ST_HP_EN_HS",
       "label": "resume >= 20 ms, was HS"
@@ -1315,6 +1405,11 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
       "src": "ENUM_ST_HP_RESUME",
       "dst": "ENUM_ST_HP_EN_FS",
       "label": "resume >= 20 ms, was FS"
+    },
+    {
+      "src": "ENUM_ST_HP_RESUME",
+      "dst": "ENUM_ST_HP_EN_LS",
+      "label": "resume >= 20 ms, was LS"
     },
     {
       "src": "ENUM_ST_HP_EN_HS",
@@ -1355,6 +1450,61 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
       "src": "ENUM_ST_HP_OC",
       "dst": "ENUM_ST_HP_NODEV",
       "label": "flag cleared & vbus_drv written"
+    },
+    {
+      "src": "ENUM_ST_HP_NODEV",
+      "dst": "ENUM_ST_HP_NODEV",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_DEBNC",
+      "dst": "ENUM_ST_HP_DEBNC",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_RESET",
+      "dst": "ENUM_ST_HP_RESET",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_CHIRP_DET",
+      "dst": "ENUM_ST_HP_CHIRP_DET",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_CHIRP_TX",
+      "dst": "ENUM_ST_HP_CHIRP_TX",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_EN_HS",
+      "dst": "ENUM_ST_HP_EN_HS",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_EN_FS",
+      "dst": "ENUM_ST_HP_EN_FS",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_EN_LS",
+      "dst": "ENUM_ST_HP_EN_LS",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_SUSP",
+      "dst": "ENUM_ST_HP_SUSP",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_RESUME",
+      "dst": "ENUM_ST_HP_RESUME",
+      "label": ""
+    },
+    {
+      "src": "ENUM_ST_HP_OC",
+      "dst": "ENUM_ST_HP_OC",
+      "label": ""
     }
   ],
   "layout": {
@@ -1368,16 +1518,16 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 
 | Mode/state | Entry condition | Behavior | Exit condition | Outputs / side effects |
 |---|---|---|---|---|
-| `ENUM_ST_HP_NODEV` | reset; SE0 again (DEBNC); disconnect (EN_HS); SE0 > 2.5 us (EN_FS); SE0 > 2.5 us (EN_LS); flag cleared & vbus_drv written (OC) | No device attached: pull-downs on, watches D+ and D- | non-SE0 on D+ or D- (to DEBNC) | host_sts.port_conn = 0 |
+| `ENUM_ST_HP_NODEV` | reset; SE0 again (DEBNC); disconnect (EN_HS); SE0 > 2.5 us (EN_FS); SE0 > 2.5 us (EN_LS); SE0 > 2.5 us (disconnect) (SUSP); flag cleared & vbus_drv written (OC) | No device attached: pull-downs on, watches D+ and D- | non-SE0 on D+ or D- (to DEBNC) | host_sts.port_conn = 0 |
 | `ENUM_ST_HP_DEBNC` | non-SE0 on D+ or D- (NODEV) | Attach debounce: waits for stable connect | SE0 again (to NODEV); stable & prst (to RESET) | conn interrupt after debounce |
 | `ENUM_ST_HP_RESET` | stable & prst (DEBNC) | Drives SE0 reset: reset of at least 50 ms in total | SE0 driven & not LS & hs allowed (to CHIRP_DET); LS device & reset >= 50 ms (to EN_LS) | bus reset on root port, rstbusy |
 | `ENUM_ST_HP_CHIRP_DET` | SE0 driven & not LS & hs allowed (RESET) | Watches for the device Chirp K: timer for K of at least 2.5 us | device K >= 2.5 us (to CHIRP_TX); no chirp & reset >= 50 ms (to EN_FS) | hs termination off |
 | `ENUM_ST_HP_CHIRP_TX` | device K >= 2.5 us (CHIRP_DET) | Sends alternating Chirp K and J: each chirp 40 to 60 us, ends 100 to 500 us before reset end | K/J chirps done, reset end (to EN_HS) | OpMode = chirp |
 | `ENUM_ST_HP_EN_HS` | K/J chirps done, reset end (CHIRP_TX); resume >= 20 ms, was HS (RESUME) | Port enabled at high-speed: SOF every 125 us, channels scheduled | port_susp (to SUSP); disconnect (to NODEV); over-current (to OC) | enum_done, port_speed = HS |
 | `ENUM_ST_HP_EN_FS` | no chirp & reset >= 50 ms (CHIRP_DET); resume >= 20 ms, was FS (RESUME) | Port enabled at full-speed: SOF every 1 ms | port_susp (to SUSP); SE0 > 2.5 us (to NODEV); over-current (to OC) | enum_done, port_speed = FS |
-| `ENUM_ST_HP_EN_LS` | LS device & reset >= 50 ms (RESET) | Port enabled at low-speed: keep-alive and LS traffic through preamble or direct | port_susp (to SUSP); SE0 > 2.5 us (to NODEV); over-current (to OC) | enum_done, port_speed = LS |
-| `ENUM_ST_HP_SUSP` | port_susp (EN_HS); port_susp (EN_FS); port_susp (EN_LS) | Port suspended: no SOF, device suspends after 3 ms | port_res (to RESUME); over-current (to OC) | suspend interrupt |
-| `ENUM_ST_HP_RESUME` | port_res (SUSP) | Drives resume K: at least 20 ms, then EOP or HS idle | resume >= 20 ms, was HS (to EN_HS); resume >= 20 ms, was FS (to EN_FS) | resume interrupt |
+| `ENUM_ST_HP_EN_LS` | LS device & reset >= 50 ms (RESET); resume >= 20 ms, was LS (RESUME) | Port enabled at low-speed: keep-alive and LS traffic through preamble or direct | port_susp (to SUSP); SE0 > 2.5 us (to NODEV); over-current (to OC) | enum_done, port_speed = LS |
+| `ENUM_ST_HP_SUSP` | port_susp (EN_HS); port_susp (EN_FS); port_susp (EN_LS) | Port suspended: no SOF, device suspends after 3 ms; SuspendM low, so the PHY may stop CLK-PHY; `m_usb2_utmilp` (UTMI+) or `m_usb2_ulpilp` (ULPI) wakes the PHY on a line change or `port_res` (DEC-049) | port_res (to RESUME); device K >= 2.5 us, remote wake (to RESUME); SE0 > 2.5 us, disconnect (to NODEV); over-current (to OC) | suspend interrupt; disconnect interrupt on the SE0 exit |
+| `ENUM_ST_HP_RESUME` | port_res (SUSP); device K >= 2.5 us, remote wake (SUSP) | Drives resume K: at least 20 ms, then EOP or HS idle; after a remote wake the host takes over the K of the device without a gap | resume >= 20 ms, was HS (to EN_HS); resume >= 20 ms, was FS (to EN_FS); resume >= 20 ms, was LS (to EN_LS) | resume interrupt |
 | `ENUM_ST_HP_OC` | over-current (EN_HS); over-current (EN_FS); over-current (EN_LS); over-current (SUSP) | Port power cut after over-current: o_vbus_pwr_en and o_utmi_drvvbus low, port disabled | flag cleared & vbus_drv written (to NODEV) | ocur interrupt, oc_act = 1 |
 
 #### 10.1.3 Link packet receiver (`m_usb2_lnk`, state register `reg_fsm_pkt_rx_current_state`)
@@ -2202,6 +2352,8 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 | WF-035 | OP-020 port over-current, power off and restore | error | i_ovrcur_n, filter, o_vbus_pwr_en, ocur, vbus_drv | figures/usb2_wf035.svg | 2026-11-20 |
 | WF-036 | OP-021 scatter-gather descriptor read, burst and write-back | success | AXI read and write-back channels, DMA state | figures/usb2_wf036.svg | 2026-11-20 |
 | WF-037 | OP-022 link loopback self-test | success | lpbk, internal streams, packet counters | figures/usb2_wf037.svg | 2026-11-20 |
+| WF-038 | OP-009 UTMI+ device resume with CLK-PHY stopped (DEC-049) | success | i_clk_phy, i_clk_bus, spd state, reg_suspend_n, linestate, utmilp state, o_wake, o_utmi_suspend_n | figures/usb2_wf038.svg | 2026-11-26 |
+| WF-039 | OP-009 host remote wake of a suspended port (DEC-049 Q2) | success | i_clk_phy, port state, linestate, o_wake, o_utmi_suspend_n, opmode, txvalid, resume flag | figures/usb2_wf039.svg | 2026-11-26 |
 
 ![WF-001 OP-001 device reset and chirp to high-speed](figures/usb2_wf001.svg)
 
@@ -2778,10 +2930,27 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
   },
   {
    "name": "o_utmi_xcvrsel",
-   "wave": "=..|..|...|..=",
+   "wave": "==.|..|...|...",
    "data": [
     "FS",
     "HS"
+   ]
+  },
+  {
+   "name": "o_utmi_termsel",
+   "wave": "==.|..|...|...",
+   "data": [
+    "FS",
+    "HS"
+   ]
+  },
+  {
+   "name": "o_utmi_opmode",
+   "wave": "=..|=.|...|=..",
+   "data": [
+    "00",
+    "10",
+    "00"
    ]
   },
   {
@@ -2797,7 +2966,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
   "text": "WF-009: host port reset and chirp handshake (OP-005, success)"
  },
  "foot": {
-  "text": "Not to scale. Host drives SE0 for at least 50 ms; device Chirp K is seen (cycles 4 and 5); the host sends alternating K and J chirps (cycles 7 to 11), then the port is enabled at high-speed."
+  "text": "Not to scale. Host drives SE0 for at least 50 ms with the high-speed terminations (XcvrSelect HS, TermSelect HS, OpMode 00b: host high-speed row of ULPI 1.1 Table 40, nothing transmitted, DEC-048); device Chirp K is seen (cycles 4 and 5) while the host listens in the host chirp row (OpMode 10b); the host sends alternating K and J chirps (cycles 7 to 11), then the port is enabled at high-speed."
  },
  "config": {
   "hscale": 1
@@ -3111,6 +3280,20 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
    "wave": "1.0|..1..|...."
   },
   {
+   "name": "o_utmi_xcvrsel",
+   "wave": "=..|.....|....",
+   "data": [
+    "FS"
+   ]
+  },
+  {
+   "name": "o_utmi_termsel",
+   "wave": "=..|.....|....",
+   "data": [
+    "FS"
+   ]
+  },
+  {
    "name": "u2_dctrl.rmt_wake",
    "wave": "0..|.1...|0..."
   },
@@ -3131,7 +3314,7 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
   "text": "WF-014: device suspend and remote wakeup (OP-009, success)"
  },
  "foot": {
-  "text": "Not to scale. 3 ms idle, suspend; after 5 ms idle software sets rmt_wake, the device drives K for 1 to 15 ms; hardware clears rmt_wake."
+  "text": "Not to scale. 3 ms idle, suspend; after 5 ms idle software sets rmt_wake, the device drives K for 1 to 15 ms; hardware clears rmt_wake. XcvrSelect and TermSelect stay in the full-speed row while suspended, also for a device that was in high-speed operation, so the D+ pull-up stays on (peripheral suspend row of ULPI 1.1 Table 40, DEC-048)."
  },
  "config": {
   "hscale": 1
@@ -4750,6 +4933,155 @@ Eight finite-state machines are specified. Each has its diagram, and one table w
 
 *Figure 10-45. OP-022 link loopback self-test (success). Source: `figures/usb2_wf037.json`.*
 
+![WF-038 OP-009 UTMI+ device resume with CLK-PHY stopped](figures/usb2_wf038.svg)
+
+```wavedrom
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p..................."
+  },
+  {
+   "name": "i_clk_phy",
+   "wave": "p...l........|.p...."
+  },
+  {
+   "name": "spd state (CLK-PHY)",
+   "wave": "=.=..........|..=...",
+   "data": [
+    "DV_FS",
+    "DV_SUSP",
+    "DV_RESM"
+   ]
+  },
+  {
+   "name": "reg_suspend_n",
+   "wave": "1.0..........|..1..."
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "=........=...|.....=",
+   "data": [
+    "J",
+    "K (host resume)",
+    "EOP"
+   ]
+  },
+  {
+   "name": "utmilp armed / idle",
+   "wave": "0...=........|...0..",
+   "data": [
+    "armed, idle = J"
+   ]
+  },
+  {
+   "name": "utmilp filter count",
+   "wave": "=........====|=.....",
+   "data": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "0"
+   ]
+  },
+  {
+   "name": "o_wake (utmilp)",
+   "wave": "0............|1..0.."
+  },
+  {
+   "name": "o_utmi_suspend_n",
+   "wave": "1.0..........|1....."
+  }
+ ],
+ "head": {
+  "text": "WF-038: UTMI+ device resume with CLK-PHY stopped (OP-009, success; DEC-049)"
+ },
+ "foot": {
+  "text": "Not to scale. The speed engine suspends (reg_suspend_n 0) and the PHY stops CLK-PHY. m_usb2_utmilp in CLK-BUS stores the idle line state, then counts 4 CLK-BUS cycles of a line different from it (host resume K) and sets o_wake, which raises SuspendM through the OR in m_usb2_phyif_utmi. The PHY restarts CLK-PHY within 5.6 ms (UTMI 1.05); the engine, still in DV_SUSP, sees the K and goes to DV_RESM; when the synchronized reg_suspend_n is 1, o_wake is cleared (hand-off, SVA-017). A reset SE0 instead of the K takes the same path to DV_RST."
+ },
+ "config": {
+  "hscale": 1
+ }
+}
+```
+
+*Figure 10-46. OP-009 UTMI+ device resume with CLK-PHY stopped (success). Source: `figures/usb2_wf038.json`.*
+
+![WF-039 OP-009 host remote wake of a suspended port](figures/usb2_wf039.svg)
+
+```wavedrom
+{
+ "signal": [
+  {
+   "name": "i_clk_bus",
+   "wave": "p....................."
+  },
+  {
+   "name": "i_clk_phy",
+   "wave": "l........|p......|...."
+  },
+  {
+   "name": "hp state (CLK-PHY)",
+   "wave": "=........|...=...|.=..",
+   "data": [
+    "HP_SUSP",
+    "HP_RESM",
+    "HP_EN"
+   ]
+  },
+  {
+   "name": "i_utmi_linestate",
+   "wave": "=..=.....|.......|.==.",
+   "data": [
+    "J",
+    "K (device)",
+    "EOP",
+    "J"
+   ]
+  },
+  {
+   "name": "o_wake (utmilp)",
+   "wave": "0.....1..|...0...|...."
+  },
+  {
+   "name": "o_utmi_suspend_n",
+   "wave": "0.....1..|.......|...."
+  },
+  {
+   "name": "o_utmi_opmode",
+   "wave": "=........|...=...|.=..",
+   "data": [
+    "00b",
+    "10b (drive K)",
+    "00b"
+   ]
+  },
+  {
+   "name": "o_utmi_txvalid",
+   "wave": "0........|...1...|0..."
+  },
+  {
+   "name": "irq_raw.resume",
+   "wave": "0........|.......|..1."
+  }
+ ],
+ "head": {
+  "text": "WF-039: host remote wake of a suspended port (OP-009, success; DEC-049 Q2)"
+ },
+ "foot": {
+  "text": "Not to scale. The suspended device drives K for 1 to 15 ms (remote wakeup). With CLK-PHY stopped, m_usb2_utmilp sees the line leave J for 4 CLK-BUS cycles and raises SuspendM; with CLK-PHY running this step is not needed. Once CLK-PHY runs, the speed engine filters the K for 2.5 us and goes from HP_SUSP to HP_RESM: the host drives resume K (OpMode 10b) for 20 ms, ends it with a low-speed EOP (full- or low-speed port) or high-speed idle, returns to HP_EN, raises irq_raw.resume and sends SOF within 3 ms (REQ-FUNC-020). An SE0 longer than 2.5 us in HP_SUSP is a disconnect (HP_OFF, irq_raw.disc)."
+ },
+ "config": {
+  "hscale": 1
+ }
+}
+```
+
+*Figure 10-47. OP-009 host remote wake of a suspended port (success). Source: `figures/usb2_wf039.json`.*
+
 Timing rules that apply to every waveform of this IP: all signals of CLK-PHY change after the rising edge of `i_clk_phy`; all signals of CLK-BUS change after the rising edge of `i_clk_bus`; a UTMI+ byte is accepted in the cycle where `o_utmi_txvalid` and `i_utmi_txready` are both high; a ULPI byte is accepted in the cycle where `i_ulpi_nxt` is high.
 
 ### 10.4 Arbitration, buffering, and throughput
@@ -4895,6 +5227,7 @@ flowchart TD
 | `u2_hc_cfg` bank | control out and status in | double buffer, termination, polling and interval of each channel | CLK-PHY via CDC-001 | `buf_cur` is status; others written before `ch_en` |
 | `u2_lpbk_sts`, `u2_ctrl.lpbk` | control out, hardware load, status in | loopback mux and packet counters | CLK-PHY via CDC-001 and CDC-002 | `clr` is rwi, cleared by hardware |
 | `u2_hport.oc_en`, `u2_hsts.oc_act`, `u2_irq_raw.ocur` | control out and status in, hardware load | over-current enable, input state and event | CLK-BUS (`m_usb2_ocp`) | The flag is w1c and is held until software clears it |
+| `u2_hport.ext_vbus` | control out | ULPI DrvVbusExternal: OTG Control bit 6 is written as DrvVbus AND ext_vbus (DEC-048 PHY-06) | CLK-PHY via CDC-001 (with the rest of `u2_hport`) | No effect in UTMI+ builds; set only when the PHY switches VBUS through its own enable pin |
 | `u2_dma_cfg.sg_mode`, `u2_build` extension fields | control out and status in | descriptor mode and build constants | CLK-BUS | Constants are tied from PARA_USB2_SG_EN, PARA_USB2_DBUF_EN and PARA_USB2_FIFO_DEPTH |
 
 A signal from a clock domain other than the register clock is carried by the register command FIFO and the register update FIFO of section 7.2, not synchronized bit by bit by the CSR. Rule for a software write that meets a hardware update of the same `rwi` field (REQ-REG-003): every software write to the register increments the generation tag of that register in CLK-BUS and sends the written word to CLK-PHY; an update entry from CLK-PHY carries the tag it was produced under and is applied only if the tag still equals the CSR-side tag, otherwise it is dropped because a newer software value is in flight. A `count-down` field such as xsize therefore never loses the software value, and a stale count never overwrites it. A hardware load to a `w1c` field wins over a software clear, so a new event is kept.
@@ -5020,6 +5353,7 @@ Use statically bounded, zero-based generate loops and declare the genvar in the 
 | `m_usb2_lpbk` | Loopback multiplexer and packet counters (inside the link) | `u_lpbk` in `m_usb2_lnk` | CLK-PHY | byte stream, counters |
 | `m_usb2_xreg` | Register command FIFO, register update FIFO, generation tags, shadow registers of CLK-PHY (CDC-001, CDC-002) | `u_xreg` | both | CSR write strobes and hardware loads, shadow registers, update stream |
 | `m_usb2_ulpilp` | ULPI low power wake detector and hand-off of `o_ulpi_stp` (always on, CDC-007) | `u_ulpilp` in `m_usb2_phyif_ulpi` | CLK-BUS | `i_ulpi_dir`, `i_ulpi_data[3:0]`, `o_ulpi_stp` request |
+| `m_usb2_utmilp` | UTMI+ wake detector with CLK-PHY stopped and hand-off of `o_utmi_suspend_n` (always on, CDC-008, DEC-049) | `u_utmilp` in `m_usb2_core` (UTMI+ branch) | CLK-BUS | raw `i_utmi_linestate`, `reg_suspend_n`, `o_utmi_suspend_n` request |
 | `m_usb2_cfgchk` | Elaboration check of the parameters and derivation of the bank counts (REQ-PARAM-003, REQ-PARAM-004) | `u_cfgchk` | none (elaboration) | parameters |
 | `m_usb2_regs` | Generated CSR integration: CSR instance, slot decode, hardware-load decode, `m_usb2_xreg` and `m_usb2_irq` instances (DEC-001, DEC-002) | `u_regs` | both | APB4, shadow words, published words, event sets, command clears |
 | `m_usb2_lnkrx`, `m_usb2_lnktx` | Packet receiver and packet transmitter of the link (DEC-005) | `u_rx`, `u_tx` in `m_usb2_lnk` | CLK-PHY | PHY byte lanes, packet events, payload stream |
@@ -5046,14 +5380,92 @@ The structural top holds only instances; the state of each function lives in the
 | Item | What the integrator provides or checks |
 |---|---|
 | Wrapper | choose one of `m_usb2_top_utmi_axim`, `_utmi_axis`, `_ulpi_axim`, `_ulpi_axis`; set the parameters of section 8 |
-| Clocks | `i_clk_phy` from the PHY (60 MHz or 30 MHz); `i_clk_bus` at 30 MHz or faster (100 MHz or faster for REQ-PERF-001); asynchronous groups of EXC-001 |
+| Clocks | `i_clk_phy` from the PHY (60 MHz or 30 MHz), which the PHY may stop in suspend; `i_clk_bus` at 30 MHz or faster (100 MHz or faster for REQ-PERF-001) and running during USB suspend (wake detectors, DEC-049); asynchronous groups of EXC-001 |
 | Resets | `i_rst_n_phy`, `i_rst_n_bus`; `o_phy_rst_n` to the PHY; release order in section 11.2 S01 to S03 |
 | Tie-offs | `i_protect_en`, `i_slverr_en` constants; `i_ovrcur_n` = 1 when no switch flag exists; `i_dft_test_en` = 0, `i_dft_scan_en` = 0 outside test; unused AXI or DMA ports of the other profile do not exist in the wrapper |
-| Pads | bidirectional `io_ulpi_data` pad wrapper driven by `o_ulpi_data_oe`, `o_ulpi_data`, `i_ulpi_data`; `o_ulpi_stp` must be a pin that the link can drive while CLK-PHY is stopped |
+| Pads | bidirectional `io_ulpi_data` pad wrapper driven by `o_ulpi_data_oe`, `o_ulpi_data`, `i_ulpi_data`; `o_ulpi_stp` and `o_utmi_suspend_n` must be pins that the link can drive while CLK-PHY is stopped; `i_utmi_linestate` must reach the IP while the PHY is suspended |
 | Macros | FIFO RAM macro of `LPARA_USB2_RAM_W` (+1 parity) bits and PARA_USB2_FIFO_DEPTH words, wrapped as `u_dont_touch_sram`; library synchronizer cells |
-| VBUS | `o_vbus_pwr_en` to the load switch and `i_ovrcur_n` from its flag; board filter (ASM-022) |
+| VBUS | `o_vbus_pwr_en` to the load switch and `i_ovrcur_n` from its flag; board filter (ASM-022); with a ULPI PHY that switches VBUS itself (CPEN), set `u2_hport.ext_vbus` (DEC-048) |
 | Interrupt and DMA | `o_int_usb` to the interrupt controller; DMA channel mapping for AXI-slave builds; address window of the SoC (u2_dma_wbase and wlim) |
 | Power-up checks | read `u2_version` and `u2_build`; wait for `u2_sts.phyclk_ok`; run the loopback self-test S19 if no PHY is wired yet |
+| External ULPI PHY | worked example for TI TUSB1210 (pins, clock mode, power-up, pad timing, VBUS options, open point TBD-018) in section 14.5 |
+
+### 14.5 Integration example: external ULPI PHY TI TUSB1210
+
+Status: integration guidance written on 2026-11-25 from the TUSB1210 datasheet (REF-013, SLLSE09J, revised July 2021) and the RTL of this IP. It has not been checked on silicon or on an FPGA board, and the ULPI PHY model of the verification environment does not model the TUSB1210-specific behavior listed in 14.5.6. Values quoted from REF-013 must be re-read from the datasheet revision used for the board.
+
+#### 14.5.1 Configuration
+
+| Item | Setting | Reason |
+|---|---|---|
+| Wrapper | `m_usb2_top_ulpi_axim` or `m_usb2_top_ulpi_axis` (PARA_USB2_PHY_IF = 1, PARA_USB2_UTMI_W = 8) | TUSB1210 has a 12-pin ULPI 8-bit SDR interface (REF-013 section 1); the IP supports only that ULPI mode (section 4, REQ-IF-003) |
+| ULPI clock mode | Output clock mode: TUSB1210 drives the 60 MHz CLOCK | The IP needs the PHY-supplied clock (ASM-009); its link-supplied clock mode is not implemented |
+| Reference clock of the PHY | 19.2 MHz (CFG tied to GND) or 26 MHz (CFG tied to VDDIO), square wave of 3.0 V to 3.6 V on REFCLK, 250 ppm, 600 ps rms jitter | REF-013 sections 6.13, 7.3.1.1.3; the PHY switches CLOCK to an output after it detects 4 REFCLK edges; a crystal is not supported |
+| PARA_USB2_ROLE | 0, 1 or 2 | Since DEC-048 every PHY row of the IP is a defined row of ULPI 1.1 Table 40, which TUSB1210 supports; the host port reset no longer uses OpMode 11b (TBD-017 closed) |
+
+#### 14.5.2 Pin connection
+
+| IP port | SoC pad | TUSB1210 pin | Notes |
+|---|---|---|---|
+| `i_clk_phy` | 1.8 V input, clock-capable pad | 26 CLOCK | 60 MHz from the PHY; source of CLK_PHY (define the clock at this pad) |
+| `i_ulpi_dir` | 1.8 V input | 31 DIR | PHY owns the data bus while high |
+| `i_ulpi_nxt` | 1.8 V input | 2 NXT | |
+| `o_ulpi_stp` | 1.8 V output | 29 STP | The PHY has an internal pull-up on STP in every mode (REF-013 section 7.4.1); the IP drives it low out of reset and drives it asynchronously in low power mode (REQ-IF-011), so the pad must be driven while CLK-PHY is stopped |
+| `o_ulpi_data[7:0]`, `i_ulpi_data[7:0]`, `o_ulpi_data_oe` | 8 bidirectional 1.8 V pads | 3, 4, 5, 6, 7, 9, 10, 13 DATA0 to DATA7 | The pad wrapper drives the pin while `o_ulpi_data_oe` = 1; the IP sets it to 0 whenever DIR is 1 |
+| `o_phy_rst_n` | 1.8 V output | 27 RESETB | Low resets the PHY logic and tri-states the ULPI bus; at least 0.2 us low, or 8 CLOCK cycles when CLOCK runs (REF-013 section 6.7); controlled by `u2_ctrl.phy_rst` (flow S03) |
+| `o_vbus_pwr_en` (host roles) | GPIO-type output | none: to the EN pin of the external 5 V load switch | Option A (recommended): this pin switches VBUS and follows the over-current rules of REQ-FUNC-034; leave CPEN unconnected and `u2_hport.ext_vbus` = 0 (14.5.6 item 2) |
+| `i_ovrcur_n` (host roles) | input (asynchronous, filtered in the IP, REQ-FUNC-034) | none: from the FAULT/OC output of the load switch | TUSB1210 has no over-current input pin; tie to 1 in device-only builds |
+| none | none | 11 CS | Tie to VDDIO (or drive from a 1.8 V GPIO to power the PHY down); low tri-states the ULPI bus |
+| none | none | 14 CFG | Strap: GND for 19.2 MHz, VDDIO for 26 MHz |
+| none | none | 1 REFCLK | 19.2 or 26 MHz, 3.3 V square-wave oscillator (not a 1.8 V SoC pad) |
+| none | none | 17 CPEN | Option A: leave unconnected. Option B: CPEN drives the switch; set `u2_hport.ext_vbus` = 1 so the IP writes DrvVbusExternal with DrvVbus (DEC-048 PHY-06); the over-current flag of the switch still goes to `i_ovrcur_n`, and the IP clears DrvVbus on over-current (REQ-FUNC-041) |
+| none | none | 18 DP, 19 DM, 22 VBUS, 23 ID | To the USB connector; VBUS is protected from -2 V to 20 V, DP/DM/ID tolerate a short to VBUS (REF-013 section 1); ID only for a micro-AB connector (dual-role) |
+| none | none | 21 VBAT, 28/30 VDD18, 32 VDDIO, 20 VDD33, 12 VDD15 | VBAT supply input; VDD18 and VDDIO 1.8 V inputs (VDDIO absolute maximum 1.98 V); VDD33 and VDD15 are internal LDO outputs that need only their filter capacitors (values in REF-013 section 8) |
+
+The ULPI pads of the SoC must be 1.8 V I/O: the TUSB1210 digital I/O run from VDDIO (1.8 V), with input thresholds of 0.35 x VDDIO and 0.65 x VDDIO on CS, CFG and RESETB (REF-013 section 6.7).
+
+#### 14.5.3 Power-up and software flow
+
+1. Supplies: VBAT, VDD18 and VDDIO on, CS high. The PHY needs 2.84 ms to 4.10 ms from CS to supplies OK (REF-013 Table 6-1, tDEL_CS_SUPPLYOK). Keep `u2_ctrl.phy_rst` = 1 (RESETB low) during that time.
+2. REFCLK running before RESETB is released (the PHY selects output clock mode from REFCLK edges).
+3. Flow S03 (section 11.2): write `u2_ctrl.phy_rst` = 0; the PLL locks and DIR falls 0.54 ms to 0.647 ms after RESETB rises (tDEL_RST_DIR; PLL lock 300 us typical). Poll `u2_sts.phyclk_ok` = 1. The ULPI adapter of the IP starts register commands only when DIR is low, so no extra wait is needed in software.
+4. Flow S05 (ULPI builds): the IP writes Function Control (04h) and OTG Control (0Ah) by itself from the mode of the speed engine. Writes that software adds through `u2_phy_acc` to other registers are kept, because the IP rewrites only 04h and 0Ah. TUSB1210 registers above 3Fh (VENDOR_SPECIFIC2 at 80h and up) are reachable: the adapter uses the extended register command for addresses above 3Fh.
+5. Optional identity check: read registers 02h and 03h through `u2_phy_acc`; TUSB1210 returns the product ID 1507h (REF-013 section 7.5.4).
+6. Dual-role builds: the IP sets IdPullup (OTG Control bit 0) and reads the ID from the RX CMD (REQ-IF-013); the plug is valid 50 ms later.
+
+#### 14.5.4 Interface timing (output clock mode)
+
+TUSB1210 values (REF-013 section 6.14, output clock column): link-to-PHY setup 6.0 ns minimum, hold 0.0 ns minimum; PHY output delay 1.2 ns minimum to 5.0 ns maximum after CLOCK. With the clock defined at the SoC clock pad and board delays Tclk (clock trace, PHY to SoC) and Td (data trace):
+
+| Constraint | Formula | Example, Tclk = Td = 0.5 ns |
+|---|---|---|
+| `set_input_delay -max` on DIR, NXT, DATA | 5.0 + Td,max - Tclk,min | 5.0 ns |
+| `set_input_delay -min` | 1.2 + Td,min - Tclk,max | 1.2 ns |
+| `set_output_delay -max` on STP, DATA | 6.0 + Td,max + Tclk,max | 7.0 ns |
+| `set_output_delay -min` | 0.0 + Td,min + Tclk,min | 1.0 ns |
+
+The generic budgets of `sdc/usb2_io.sdc` (input delay 10.667 ns maximum and 0 ns minimum, output delay 7.667 ns maximum and 0 ns minimum) are more pessimistic than these values as long as Td,max + Tclk,max is at most 1.667 ns; for longer traces replace them with the formulas above. STA of the integrated pads has not been run (section 17.1).
+
+#### 14.5.5 Low power
+
+The IP enters ULPI low power mode by writing SuspendM = 0 in Function Control (REQ-IF-011). In that mode TUSB1210 holds DIR high and shows LineState on DATA0 and DATA1 and the interrupt on DATA3 (REF-013 Table 7-2); the IP reads them through the synchronizers of `m_usb2_ulpilp` (CDC-007). The IP wakes the PHY by driving STP high asynchronously; TUSB1210 sets SuspendM back to 1 when it leaves low power mode (REF-013 section 7.5.5).
+
+#### 14.5.6 Differences that need attention
+
+1. Host port reset (TBD-017, closed by DEC-048): the SE0 of a host port reset used to be driven with the full-speed row and OpMode 11b, which TUSB1210 marks reserved ("No SYNC and EOP generation feature not supported", REF-013 section 7.5.5). Since DEC-048 the IP drives the host high-speed row 00b / 0 / 00b with nothing transmitted: the 45 ohm terminations hold the line at SE0. The other rows that DEC-048 corrected (host suspend and resume of a high-speed port, device suspend after high speed, device soft disconnect) also matter for this PHY, because TUSB1210 applies the termination resistors from the Function Control value (REF-013 section 7.5.5, TERMSELECT).
+2. VBUS switch: TUSB1210 drives CPEN only when both DrvVbus and DrvVbusExternal (OTG Control bits 5 and 6) are 1 (REF-013 section 7.5.11). Since DEC-048 the IP writes DrvVbusExternal = DrvVbus AND `u2_hport.ext_vbus`. Option A (recommended): `o_vbus_pwr_en` drives the load switch, CPEN is unconnected, ext_vbus = 0. Option B: CPEN drives the switch with ext_vbus = 1; the IP clears DrvVbus, and with it CPEN, on over-current (REQ-FUNC-034, 041), and `o_vbus_pwr_en` falls as well.
+3. AutoResume (TBD-018): Interface Control bit 4 is 1 after reset on TUSB1210, so the PHY transmits resume signaling by itself (REF-013 section 7.5.8). The Microchip USB3320 has the opposite default (0) and states that the bit should be enabled for host applications (USB3320 data sheet DS00001792E section 6.2.4.4). The IP drives resume itself and was verified with neither setting in the host role over ULPI, so the right setting is open (TBD-018); keep the PHY default until it is decided. Software can change the bit through `u2_phy_acc` (IFC_CTRL_SET 08h or IFC_CTRL_CLR 09h); the IP does not rewrite that register.
+4. VBUS valid: keep UseExternalVbusIndicator = 0 (the IP writes 0); the PHY then takes VBUS valid from its own comparator on the VBUS pin.
+5. Not used by the IP: UART (carkit) mode, 3-pin and 6-pin serial modes, HNP and SRP (VBUS charge and discharge bits are written 0 unless the CSR asks for them).
+
+#### 14.5.7 What remains to be verified
+
+| Item | How |
+|---|---|
+| Host reset and rows with a real PHY (DEC-048) | done in simulation: a_phy_row in every run, ULPI PHY model rejects OpMode 11b, host tests over ULPI (t_host_ulpi_ocp); to be confirmed on hardware |
+| AutoResume interaction (TBD-018) | ULPI host and device suspend tests with the PHY model in AutoResume mode |
+| Pad timing | STA of the integrated pads with the board delays of 14.5.4 |
+| Hardware | bring-up on an FPGA board with a TUSB1210 module: enumeration as a device and as a host (rows of DEC-048) |
 
 ## 15. Verification specification
 
@@ -5102,6 +5514,8 @@ Levels: block simulation of the link, engines and PHY adapters; interface protoc
 | TEST-035 | REQ-FUNC-040, REQ-IF-014 | Single-bit RAM faults injected on read of IN and OUT packets; DMA buffers and descriptors inside, on the edge of and outside the window | ram_par flag, packet aborted, no wrong data sent; transfers outside the window stopped before the AXI access | Fault injection, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
 | TEST-036 | REQ-PARAM-003, REQ-PARAM-004, REQ-VER-002 | Elaborate every configuration, derive the bank counts, reject too-small FIFO depths; run the reset and suspend tests with TSCALE = 256 and with TSCALE = 1 | Counts derived; illegal depth rejected; timings correct in both runs | Lint, elaboration, simulation | all configurations |
 | TEST-037 | REQ-VER-003 | Device role with a Linux host stack (CDC-ACM, mass storage) and host role with a Linux device (UVC, CDC-ACM) on an FPGA prototype with a USB PHY chip | Enumeration and data transfer pass | FPGA interoperability | CFG-DUAL-FULL |
+| TEST-038 | REQ-IF-012, REQ-FUNC-011, REQ-FUNC-018, REQ-FUNC-020 | Every simulation with the assertion a_phy_row; host reset row 00b / 0 / 00b with the line state derived from the row (SE0 for a full- and a low-speed device), host suspend 01b / 1 / 00b and resume 01b / 1 / 10b rows, device suspend and L1 row 01b / 1 / 00b, device soft-disconnect non-driving row; ULPI OTG Control bits 6:5 with u2_hport.ext_vbus 0 and 1 | Only defined rows of ULPI 1.1 Table 40; mutants M28 to M33 (the rows and the DrvVbusExternal write before DEC-048) killed | Assertion, directed, mutation | CFG-CAM-HOST, CFG-MIN, ULPI builds |
+| TEST-039 | REQ-IF-015, REQ-FUNC-016, REQ-FUNC-018, REQ-FUNC-019, REQ-FUNC-020, REQ-FUNC-013 | PHY clock-stop model (CLK-PHY stopped 8 cycles after SuspendM falls, restarted up to 5.6 ms after it rises): device resume by host K, device reset from suspend (chirp ends within 7.0 ms of the reset start), device remote wake, host `port_res`, host remote wake by the device K, host disconnect in suspend; LineState glitch shorter than 4 CLK-BUS cycles (no wake); short K that ends before the engine reacts (wake, then suspend again) | SuspendM raised without CLK-PHY, resume and traffic afterwards, no wake on a glitch, SuspendM low again after a spurious wake; mutants M35 to M39 killed | Directed, assertion SVA-017, mutation | UTMI+ device and host builds (`t_dir_clkstop`) |
 
 Cover reset and release, minimum and maximum parameters, backpressure, simultaneous events, ordering, errors, invalid inputs, boundaries and low-power transitions through the tests above.
 
@@ -5124,6 +5538,8 @@ Cover reset and release, minimum and maximum parameters, backpressure, simultane
 | SVA-013 | A hardware update whose generation tag differs from the CSR-side tag never changes the CSR field | REQ-REG-003 | Simulation, formal | Never fails |
 | SVA-014 | `o_ulpi_stp` has no glitch at the hand-off between CLK-PHY and the wake detector, and is released only in the cycle after `i_ulpi_dir` falls | REQ-IF-011 | Simulation | Never fails |
 | SVA-015 | A parity error aborts the packet and no wrong data is sent | REQ-FUNC-040 | Simulation, fault injection | Never fails |
+| SVA-016 | XcvrSelect, TermSelect, OpMode and the pull-downs always form a defined row of ULPI 1.1 Table 40, never OpMode 11b, and only a suspend row while SuspendM is low (`a_phy_row`) | REQ-IF-012, DEC-048 | Simulation (every run) | Never fails |
+| SVA-017 | `o_utmi_suspend_n` has no glitch at the hand-off between the speed engine and `m_usb2_utmilp`: the wake request falls only while the synchronized engine request is 1 or after the line has been back at idle for 4 cycles, and the pin has no pulse shorter than one CLK-BUS cycle (`a_susp_handoff`) | REQ-IF-015, DEC-049 | Simulation | Never fails |
 | COV-001 | Every PID type received and sent in each role | REQ-FUNC-002 | Functional coverage | 100 % |
 | COV-002 | Each FSM state and transition of section 10.1 | REQ-FUNC-001 | Code and functional coverage | 100 % of reachable |
 | COV-003 | Each speed and role combination, each endpoint type, each interrupt cause | REQ-FUNC-023 | Functional coverage | 100 % |
@@ -5189,6 +5605,7 @@ Maximum transition, capacitance and fanout come from the library; the SoC flow s
 | EXC-003 | set_false_path | `i_protect_en`, `i_slverr_en` | none | their destination registers | No timing relationship | All | Static after reset |
 | EXC-004 | set_false_path | asynchronous reset assertion paths | none | reset synchronizer inputs | No timing check on assertion | All | Release is synchronized and timed |
 | EXC-005 | set_false_path | `i_ovrcur_n` | none | first flop of the over-current synchronizer | No timing check; the filter and CDC-006 cover the crossing | All | Asynchronous input from an external power switch |
+| EXC-006 | set_false_path | `i_utmi_linestate` (UTMI+ builds) and `reg_suspend_n` of `m_usb2_spd` | none | first flops of the synchronizers in `u_utmilp` | No timing check; CDC-008 covers the crossing | UTMI+ builds | Asynchronous while the PHY clock is stopped; the 4-cycle filter makes the result independent of the bit skew |
 
 Illustrative SDC forms for this IP (exact objects are set when the RTL exists):
 
@@ -5243,11 +5660,11 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 | REQ-FUNC-013 | m_usb2_spd | TEST-007 | Directed back-to-back | CFG-DUAL-FULL |
 | REQ-FUNC-014 | m_usb2_lnk, m_usb2_host | TEST-004 | Directed with timing checker | all configurations |
 | REQ-FUNC-015 | m_usb2_host | TEST-006 | Directed with timing checker | CFG-CAM-HOST |
-| REQ-FUNC-016 | m_usb2_spd | TEST-006 | Directed with timing checker | CFG-CAM-HOST |
+| REQ-FUNC-016 | m_usb2_spd | TEST-006, TEST-039 | Directed with timing checker | CFG-CAM-HOST |
 | REQ-FUNC-017 | m_usb2_host | TEST-008 | Directed | CFG-CAM-HOST |
 | REQ-FUNC-018 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
 | REQ-FUNC-019 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
-| REQ-FUNC-020 | m_usb2_spd | TEST-009 | Directed | CFG-DUAL-FULL |
+| REQ-FUNC-020 | m_usb2_spd | TEST-009, TEST-039 | Directed | CFG-DUAL-FULL |
 | REQ-FUNC-021 | m_usb2_spd, m_usb2_dev, m_usb2_host | TEST-010 | Directed | CFG-DUAL-FULL |
 | REQ-FUNC-022 | m_usb2_spd | TEST-011 | Directed | all configurations |
 | REQ-FUNC-023 | m_usb2_spd | TEST-012 | Directed | CFG-DUAL-FULL |
@@ -5280,9 +5697,10 @@ set_false_path -from [get_ports {i_protect_en i_slverr_en}]
 | REQ-IF-009 | m_usb2_axs | TEST-018 | Protocol checker, directed | CFG-FC-DEV, CFG-MIN |
 | REQ-IF-010 | m_usb2_ocp | TEST-027 | Directed, CDC analysis | CFG-CAM-HOST |
 | REQ-IF-011 | m_usb2_phyif_ulpi (m_usb2_ulpilp) | TEST-031 | Directed with PHY model | CFG-FC-DEV, CFG-DUAL-FULL |
-| REQ-IF-012 | m_usb2_phyif_utmi, m_usb2_spd | TEST-032 | Protocol checker, directed | CFG-CAM-HOST, CFG-MIN |
+| REQ-IF-012 | m_usb2_phyif_utmi, m_usb2_phyif_ulpi, m_usb2_spd | TEST-032, TEST-038 | Protocol checker, assertion SVA-016, directed, mutation | CFG-CAM-HOST, CFG-MIN, ULPI builds |
 | REQ-IF-013 | m_usb2_phyif_ulpi, m_usb2_spd | TEST-031 | Directed with PHY model | CFG-FC-DEV, CFG-DUAL-FULL |
 | REQ-IF-014 | m_usb2_dma | TEST-035 | Fault injection, directed | CFG-CAM-HOST, CFG-DUAL-FULL |
+| REQ-IF-015 | m_usb2_utmilp, m_usb2_phyif_utmi, m_usb2_spd | TEST-039 | Directed with the PHY clock-stop model, assertion SVA-017, mutation | UTMI+ device and host builds |
 | REQ-CLK-001 | m_usb2_top_* | TEST-019 | Random, CDC and reset analysis | all configurations |
 | REQ-CLK-002 | m_usb2_cdc_* | TEST-019 | Random, CDC and reset analysis | all configurations |
 | REQ-CLK-003 | m_usb2_xreg | TEST-030 | Directed, random, formal, CDC analysis | all configurations |
@@ -5366,7 +5784,7 @@ This section lists the assumptions, dependencies and open decisions of the speci
 | DEC-006 | Decision | FIFO manager (`m_usb2_fifo`): one RAM of rows of four chunks (32 bit for 8-bit UTMI+, 64 bit for 16-bit UTMI+, parity bit per row), queues as rings (queue 0 receive region with a packet length queue of 8, one transmit ring per device IN endpoint, then host non-periodic and periodic). Every packet starts on a row boundary, so the maximum packet size of an IN endpoint or host OUT channel must be a multiple of the row size (4 or 8 bytes) except for the last packet. The bus port is credit based: the bus side writes rows (OP_WR), commits a packet (OP_COMMIT), reads rows of the head packet (OP_RD) and releases it (OP_POP); the manager returns packet events (tag, length) and credit events (queue, rows). The RAM is the library 1W1R macro; `PARA_USB2_RAM_1P` = 1 serializes the accesses for a single-port macro. | Resolves TBD-001 (single port with arbitration is an option, default is two ports) and TBD-002 (request threshold: credit of the queue). RAM word width is derived as `LPARA_USB2_RAM_W`. | Decided 2026-11-21; implemented in `m_usb2_fifo`, `m_usb2_cdc_fifo`; scratch simulation 8-bit and 16-bit rows, two and one port | spec owner | 2026-11-21 |
 | DEC-007 | Decision | Device engine (`m_usb2_dev`): tokens SOF, SETUP, OUT, IN, PING and the LPM extended token are handled; an OUT or SETUP packet goes into the receive region only when the room for a maximum packet and a packet length entry exist; ACK, NAK, NYET (high-speed bulk or control when the room for another packet is missing) and STALL follow the rules of REF-001 8.5; a toggle mismatch is answered with ACK and the data are dropped; IN sends the packet only when the queue holds all its rows, waits for the host ACK (timeout 160 cycles) and commits on ACK; commands (`set_nak`, `clr_nak`, `set_d0`, `set_d1`, `ep_dis`, `ep_en`) act on the rising edge of the shadow bit and are cleared through the clear mask; `ep_en` clears the NAK status; the transfer ends when `pkt_cnt` reaches 1 (a value of 0 means no packet limit), when `xsize` is used up, or on a short OUT packet; `zlp_en` sends a zero-length packet after a full last packet. Isochronous endpoints use DATA0 only and the high-bandwidth PID sequences (DATA1, DATA2, MDATA) are not implemented; `buf_cur` only toggles after each packet (the double buffer is provided by the ring). Test_SE0_NAK is not implemented. | Deviations from REQ-FUNC for high-bandwidth isochronous and for the double-buffer behavior | Decided 2026-11-21; implemented in `m_usb2_dev`; scratch full-chip simulation (SETUP, OUT, IN, NAK, done flags) | spec owner | 2026-11-21 |
 | DEC-008 | Decision | Host engine (`m_usb2_host`): SOF every (micro)frame from `u2_sof_cfg.uf_len` (full-speed frame is eight times longer); periodic channels (isochronous, interrupt) are served before non-periodic channels, lowest index first; a transaction starts only when the (micro)frame has more time left than (length + 48 bytes) times the byte time; of the OUT channels that share one host queue only the lowest armed one is served (head of line) and the DMA fills them in the same order; NAK delays the channel to the next (micro)frame, NYET starts the PING flow (high-speed), STALL halts the channel, a missing answer is an error and the third error halts the channel; interval polling counts microframes (high-speed) or frames; split transactions send the SPLIT token (start, then complete in a later microframe) before the normal token. Not implemented: high-bandwidth multi-transaction (`mc`), `poll_miss`, `frm_ovr`, `babble` and `iso_inc` flags of `u2_hc_int`, host LPM request (`u2_hport.lpm_req`), the host side of the 80 % and 90 % periodic limits beyond the time check. | Software must arm OUT channels of one class in channel order | Decided 2026-11-21; implemented in `m_usb2_host`; scratch simulation of connect, reset, SOF, OUT and IN | spec owner | 2026-11-21 |
-| DEC-009 | Decision | Speed engine (`m_usb2_spd`): device attach as full-speed, 3 us SE0 reset detect, device chirp K of 1.6 ms, host chirp KJ pairs counted (six changes), fallback to full-speed after 2.5 ms, high-speed idle of 3 ms goes back to the full-speed check (reset or suspend); suspend at 3 ms of idle J; resume on a non-J line; remote wake drives K for 10 ms; host: connect debounce 100 ms, port reset SE0 for 3 ms, listen window 2.5 ms for the device chirp, host chirp units of 50 us, reset total 50 ms, resume K 20 ms; Test_J, Test_K and Test_Packet (53-byte payload of REF-001 7.1.20 sent through the link) are generated; all times are in microseconds, multiplied by the CLK-PHY frequency and divided by `PARA_USB2_TSCALE`. The chirp and resume streams are bytes of 0x00 (K) and 0xFF (J) with OpMode 2. The drive of SE0 for a host reset uses OpMode 3 (assumption, TBD-015). | The chirp timing of the high-speed handshake is not simulated; role changes only while detached | Decided 2026-11-21; implemented in `m_usb2_spd` | spec owner | 2026-11-21 |
+| DEC-009 | Decision | Speed engine (`m_usb2_spd`): device attach as full-speed, 3 us SE0 reset detect, device chirp K of 1.2 ms (1.6 ms until 2026-11-26, changed by DEC-049 Q3: with a PHY that takes the full 5.6 ms of UTMI 1.05 to restart its clock after a reset that starts in suspend, 5.6 + 1.6 = 7.2 ms exceeded TUCHEND = 7.0 ms; 5.6 + 1.2 = 6.8 ms passes and 1.2 ms keeps 0.2 ms above TUCH = 1.0 ms), host chirp KJ pairs counted (six changes), fallback to full-speed after 2.5 ms, high-speed idle of 3 ms goes back to the full-speed check (reset or suspend); suspend at 3 ms of idle J; resume on a non-J line; a suspended host port resumes on a device K of 2.5 us and reports a disconnect on an SE0 of 2.5 us (DEC-049 Q2); remote wake drives K for 10 ms; host: connect debounce 100 ms, port reset SE0 for 3 ms, listen window 2.5 ms for the device chirp, host chirp units of 50 us, reset total 50 ms, resume K 20 ms; Test_J, Test_K and Test_Packet (53-byte payload of REF-001 7.1.20 sent through the link) are generated; all times are in microseconds, multiplied by the CLK-PHY frequency and divided by `PARA_USB2_TSCALE`. The chirp and resume streams are bytes of 0x00 (K) and 0xFF (J) with OpMode 2. The SE0 of a host reset is driven with the high-speed terminations and nothing transmitted (DEC-048; the first assumption of OpMode 3, TBD-015, is withdrawn). | The chirp timing of the high-speed handshake is not simulated; role changes only while detached | Decided 2026-11-21; implemented in `m_usb2_spd` | spec owner | 2026-11-21 |
 | DEC-010 | Decision | DMA (`m_usb2_dma`): one AXI beat is one RAM row, so the AXI data width equals four chunks of the UTMI+ width (32 bit for 8-bit UTMI+, 64 bit for 16-bit UTMI+; `m_usb2_cfgchk` flags other values); bursts are INCR, at most `burst_len` beats and never across 4 KB; the last beat of a received packet has write strobes; the buffer address moves forward by the padded size of the packet and is loaded into the `addr` field through the hardware load; buffer addresses must be aligned to the row size; the transmit fill reads packet by packet and waits for credit; scatter-gather descriptors (`PARA_USB2_SG_EN`, `sg_mode`) are not implemented and `PARA_USB2_SG_EN` must be 0. | Deviation from section 8, where the AXI data width was independent of the UTMI+ width | Decided 2026-11-21; implemented in `m_usb2_dma`; scratch simulation with 32-bit and 64-bit AXI | spec owner | 2026-11-21 |
 | DEC-011 | Decision | AXI slave windows (`m_usb2_axs`): channel c is the 4 KB window with address bits [15:12] = c; `u2_dma_map` selects direction and region (device IN endpoint number, 30 host non-periodic, 31 host periodic; for read channels the tag of the packets); a write channel writes one row per beat and commits at the last beat, a read channel reads the head packet of its region and releases it after the last row; `o_dma_req[c]` is high while the channel can move a packet and is withdrawn by `i_dma_ack[c]` (rule revised by DEC-036); an access to a channel that is not enabled or has the wrong direction gets SLVERR. | Software and the external DMA controller must read exactly the rows of the packet | Decided 2026-11-21; implemented in `m_usb2_axs`; scratch simulation with a window read and a window write | spec owner | 2026-11-21 |
 | DEC-012 | Decision | Structure and options: `m_usb2_core` holds the parameter check, resets, over-current block, CSR integration, PHY adapter, link, speed engine, engines, FIFO manager, crossing and DMA or AXI slave; the four wrappers fix `PARA_USB2_PHY_IF` and `PARA_USB2_DATA_IF`. Pipeline and resource options (all default 0, one cycle each): `PARA_USB2_PIPE_PHY_IN`, `PARA_USB2_PIPE_RX`, `PARA_USB2_PIPE_CRC`, `PARA_USB2_PIPE_XREG`, `PARA_USB2_RAM_1P`; build options: `PARA_USB2_NUM_EP`, `PARA_USB2_NUM_HC`, `PARA_USB2_FIFO_DEPTH`, `PARA_USB2_RAM_PAR_EN`, `PARA_USB2_AXI_ADDR_W`, `PARA_USB2_AXI_ID_W`, `PARA_USB2_NUM_DMA_CH`. `m_usb2_regs` and the core are generated by [gen_regs.py](../archive/rtl_generator/gen_regs.py) and [gen_core.py](../archive/rtl_generator/gen_core.py); the CSR files in `rtl/csr` come from the workbook and are not edited. A crossing of single bits (over-current state to CLK-PHY, PHY alive flag to CLK-BUS) uses the library synchronizer; the PHY alive flag is the release of the CLK-PHY reset, not a clock monitor. | The generated CSR files still have the findings NAM-07 and NAM-TBL of the rule checker (long generated names, field names with rst and clk); they must be fixed in the workbook or the generator | Decided 2026-11-21 | spec owner | 2026-11-21 |
@@ -5382,7 +5800,7 @@ This section lists the assumptions, dependencies and open decisions of the speci
 | DEC-022 | Decision | ULPI low-power wake request (`m_usb2_ulpilp`): the request is a level from the bus-side CSR (remote wake of a device: `u2_dctrl.rmt_wake` with `rmt_wake_en`; resume of a host port: `u2_hport.port_res`), because CLK-PHY may be stopped and the speed engine cannot run; one wake handshake is made for each low-power period, so a request that stays set until the speed engine clears it cannot start a second stp. Before this change the request was a CLK-PHY pulse of the speed engine, which cannot fire while the PHY clock is stopped and crossed into CLK-BUS without a synchronizer. | Verified for the host in `tb_host_ulpi` (SuspendM written to 0, clock stopped, stp held until dir rose and fell, port resumed, SuspendM written back to 1) and for the device in `tb_dev_ulpi_lp` (suspend, SuspendM = 0, clock stopped, remote wake request, stp held, wake handshake, `rmt_wake` cleared by hardware, resume flag) | Decided 2026-11-21 | spec owner | 2026-11-21 |
 | DEC-023 | Decision | PHY register access (`u2_phy_acc`): the access direction is passed to the ULPI adapter as written in the register (`rd_wr` = 1 is a write); the first integration inverted it, so a CSR write ran a read command on the ULPI bus. | Found with the ULPI host test that writes a PHY scratch register, reads it back and reads the vendor ID | Decided 2026-11-21 | spec owner | 2026-11-21 |
 | DEC-024 | Decision | ULPI register read data (`m_usb2_phyif_ulpi`): the data byte of a register read (dir high, nxt low, in the state that waits for it) is not decoded as an RX CMD; before this change the register value changed the line state, the VBUS state and RxActive of the link (a read of a register whose low bits are 00 looked like SE0 and disconnected the host port). | Found with the ULPI host test that reads PHY registers | Decided 2026-11-21 | spec owner | 2026-11-21 |
-| DEC-025 | Decision | Timing round (FPGA place-and-route, `syn/fpga.py`): (1) the scanner of `m_usb2_xreg` decides a push of a published word from the registered dirty flag (one cycle old) instead of the 32-bit comparison, which was the head of the longest path of CLK-PHY; a changed value is still pushed with its current value and an extra push of an unchanged value is harmless; (2) new option `PARA_USB2_PIPE_MODE` registers the PHY mode outputs of `m_usb2_spd` (transceiver select, termination, operation mode, suspend, pull-downs) at the cost of one cycle on those outputs; (3) the OpMode that the host drives for the SE0 of a port reset is the parameter `PARA_USB2_RST_OPMODE` (default 3), so the PHY datasheet answer of TBD-015 is a build value and not a code change. | The measured effect is in `RTL_REPORT.md` | Decided 2026-11-21 | spec owner | 2026-11-21 |
+| DEC-025 | Decision | Timing round (FPGA place-and-route, `syn/fpga.py`): (1) the scanner of `m_usb2_xreg` decides a push of a published word from the registered dirty flag (one cycle old) instead of the 32-bit comparison, which was the head of the longest path of CLK-PHY; a changed value is still pushed with its current value and an extra push of an unchanged value is harmless; (2) new option `PARA_USB2_PIPE_MODE` registers the PHY mode outputs of `m_usb2_spd` (transceiver select, termination, operation mode, suspend, pull-downs) at the cost of one cycle on those outputs; (3) the OpMode that the host drives for the SE0 of a port reset is the parameter `PARA_USB2_RST_OPMODE` (default 3), so the PHY datasheet answer of TBD-015 is a build value and not a code change; item (3) is superseded by DEC-048, which removes the parameter. | The measured effect is in `RTL_REPORT.md` | Decided 2026-11-21 | spec owner | 2026-11-21 |
 | DEC-026 | Decision | NYET decision of the device (`m_usb2_dev`): the free rows reported by the FIFO manager already count the rows of the packet that just ended, so the high-speed bulk OUT answers NYET when the free rows are fewer than a maximum packet; the first version subtracted the packet rows a second time, the 17-bit result wrapped around and the device answered ACK with a full FIFO. | Found with `tb_dev_nyet` (NYET, PING answered NAK while the FIFO is full and ACK after the drain) | Decided 2026-11-21 | spec owner | 2026-11-21 |
 | DEC-027 | Decision | Resource pass: the pointers and row counters of `m_usb2_fifo` and the credit counters of `m_usb2_dma` are as wide as the RAM needs (`clog2(rows)` bits for a pointer, one bit more for a count) and no longer 16 and 17 bits; the region base and size words of the CSR stay 16 bits wide. A region size larger than the RAM depth is a configuration error (it was undefined before). At the default depth of 1024 words and 8-bit UTMI+ `m_usb2_fifo` went from 13156 to 10001 generic cells (-24 %) and from 1307 to 989 flops. | Measured with `syn/area.py`; the regression passes unchanged | Decided 2026-11-21 | spec owner | 2026-11-21 |
 | DEC-028 | Decision | Latency budget, measured in simulation (`tb_dev_utmi`, trace of `rxactive`, `dat_end`, the device transmit request and `txvalid`): the first transmitted byte follows the fall of `rxactive` after 4 CLK-PHY cycles for a data packet and for a token (one cycle to the end of packet event, one to the transmit request, two to `txvalid`). At 60 MHz one cycle is 8 high-speed bit times, so the answer starts after 32 bit times, above the minimum of 8 and well below the maximum of 192 bit times of REF-001; a shorter path would only add timing risk, so no cycle is removed. The testbench measure of 8 cycles (11 with all pipeline options) includes its own receive-end delay. | The pipeline options add one cycle each on the paths they register | Decided 2026-11-21 | spec owner | 2026-11-21 |
@@ -5405,8 +5823,12 @@ This section lists the assumptions, dependencies and open decisions of the speci
 | DEC-045 | Decision | Time scaling and the host (closes FND-009): `PARA_USB2_TSCALE` is a simulation aid (REQ-VER-002) and must be 1 in every delivered netlist; at TSCALE > 1 the host frame-budget estimate is divided too and the SOF interval is not accurate, so host timing is verified only at TSCALE = 1 (`t_host_budget`, `t_host_enum_bulk_dma`, `t_dir_timing_ts1`). | A configuration with TSCALE > 1 must not be used for timing | Decided 2026-11-21 | spec owner | 2026-11-21 |
 | DEC-046 | Decision | REQ-ERR-002 restated (closes the open point left by DEC-043): the end-of-frame babble of the original text is the duty of the hubs (USB 2.0 8.7.4); the host detects the oversize-packet babble of DEC-043. The bins `cg_babble.hs` and `cg_babble.fs` mean the oversize-packet case (`t_host_babble`). | A device that keeps the bus active past the end of a frame is not detected by this host | Decided 2026-11-21 | spec owner | 2026-11-21 |
 | DEC-047 | Decision | Oversize OUT packet and isochronous error (verification round, BUG-040, BUG-041): a device drops an OUT data packet longer than the maximum packet size of the endpoint without any handshake and counts it as a bad packet (SETUP packets are exempt: endpoint 0 SETUP always carries 8 bytes); a host isochronous channel never retries after an error (no data, bad data, time-out): the packet slot is used up, iso_inc is set in the channel and global registers and the transfer ends at its last slot (REQ-FUNC-033); a periodic (interrupt or isochronous) split transaction sends at most three complete-splits, one per microframe, and starts again with a start-split when the third one was answered NYET or with an error (BUG-042, REQ-FUNC-038); in high-speed the host waits 7 CLK-PHY cycles (8-bit UTMI+, 2 cycles for 16-bit) before a packet that follows its own packet, which gives a measured gap of 96 bit times (BUG-043, REQ-FUNC-014). | USB 2.0 sections 5.6, 8.5.3 | Decided 2026-11-22 (agent, on the verification evidence; human confirmation pending) | spec owner | 2026-11-22 |
-| TBD-015 | Decision | Drive of SE0 for a host port reset and the PHY mode for it. | Section 10.1, DEC-009, DEC-025 | Resolved 2026-11-21 as a build parameter: `PARA_USB2_RST_OPMODE`, default 3 (author decision); a PHY datasheet that asks for another OpMode is a parameter value, not a design change | spec owner | 2026-11-21 |
+| DEC-048 | Decision | PHY rows checked against ULPI 1.1 Table 40 (REF-014 Table 5-1; REF-015, REF-016, REF-013; approved by the user 2026-11-25 after the review of the TUSB1210 integration). Five states of `m_usb2_spd` drove a combination that a PHY does not ensure; all now use a defined row (table of section 6.3): PHY-01 host port reset (`HP_SE0`, `HP_RSTW`): 01b / 1 / 11b replaced by 00b / 0 / 00b, the SE0 coming from the high-speed terminations with nothing transmitted (OpMode 11b is optional and not implemented by TUSB1210, USB3320, USB3500; with OpMode 11b and no transmit the line stayed J, so no device could be reset on such a PHY); `PARA_USB2_RST_OPMODE` removed from `m_usb2_spd`, `m_usb2_core` and the four wrappers. PHY-02 host suspend of a high-speed port: 00b / 0 / 00b replaced by 01b / 1 / 00b (the 45 ohm terminations held SE0, so a suspended device would see a reset). PHY-03 host resume of a high-speed port: 00b / 0 / 10b replaced by 01b / 1 / 10b (resume K is full-speed signaling). PHY-04 device suspend and L1 after high-speed operation: 00b / 0 / 00b replaced by 01b / 1 / 00b (the D+ pull-up was removed, the hub would see a disconnect; this also violated the earlier row of section 6.3). PHY-05 soft-disconnected device: 01b / 0 / 00b without pull-downs replaced by the non-driving row (OpMode 01b). PHY-06: new CSR field `u2_hport.ext_vbus` (bit 23, rw, reset 0; workbook, `m_vlsit_csr_usb2` regenerated with generator a8fb7d4 and the local guard patch, `m_usb2_regs` and `m_usb2_core` wired by hand): in ULPI builds OTG Control bit 6 DrvVbusExternal = DrvVbus AND ext_vbus, so a PHY that switches VBUS through its own pin (CPEN of TUSB1210) can drive it; UseExternalVbusIndicator stays 0. PHY-07 (AutoResume) stays open as TBD-018. Consequence found by regression (BUG-051, 2026-11-26): the end of a reset without the high-speed handshake no longer samples the line (SE0 under this row); the port keeps the low-speed result of the connect, otherwise full speed. Verification: assertion `a_phy_row` (SVA-016) in every simulation, ULPI PHY model rejects OpMode 11b, scenario checks and TEST-038, mutants M28 to M33. | Observable change on the PHY pins and registers in the states above; software sees no change except the new field; the parameter `PARA_USB2_RST_OPMODE` no longer exists | Decided 2026-11-25 (user approval of review/2026-11-25_phy_compat_change_plan.md: fix PHY-01 to PHY-05, remove the parameter, CSR bit for DrvVbusExternal, non-driving row) | spec owner | 2026-11-25 |
+| DEC-049 | Decision | UTMI+ wake from suspend with CLK-PHY stopped (closes FND-015, review F-005; plan review/2026-11-26_utmi_clkstop_wake_change_plan.md approved by the user 2026-11-26, option B with the recommended answers). Problem: a UTMI+ PHY may stop CLK-PHY while SuspendM is low (UTMI 1.05 p. 21 and p. 48, USB3500 TSTART up to 3.5 ms) and every wake decision of a UTMI+ build was made in CLK-PHY, so a suspended device could not see the host resume or a reset and a suspended host could not resume (`t_dir_clkstop` failed, runs r2108 and r2109; defect record BUG-052). Decision: new always-on module `m_usb2_utmilp` in CLK-BUS (section 6.3, CDC-008, EXC-006, SVA-017), the UTMI+ twin of `m_usb2_ulpilp`; `o_utmi_suspend_n` = engine request OR wake request. Rejected: an integration rule that the PHY keeps its clock (A: not UTMI 1.05 behavior, excludes most PHYs, PLL power in suspend) and a purely combinational wake (C: no glitch filter, pin-to-pin path through the PHY, harder STA, CDC and DFT sign-off). Answers: Q1 no wake output to the SoC power controller now (CLK-BUS stays on, section 7.1; can be added later); Q2 the host port in `HP_SUSP` resumes by itself on a device K of 2.5 us and reports a disconnect on an SE0 of 2.5 us (before, `HP_SUSP` left only on `port_res`, so a remote wakeup was lost with or without the clock; REQ-FUNC-016, REQ-FUNC-020); Q3 device chirp K 1.6 ms to 1.2 ms (DEC-009, TUCHEND); Q4 filter and settle lengths fixed at 4 CLK-BUS cycles (localparams, R-045). | New module and pin behavior in UTMI+ builds; host remote wakeup and disconnect in suspend; device chirp 0.4 ms shorter; no CSR change; ULPI builds unchanged except the host `HP_SUSP` exits and the chirp length | Decided 2026-11-26 (user: "Option B, write the change plan"; then "write the specification description clearly with explanations in the specification, then fix as you proposed" (message in Vietnamese)) | spec owner | 2026-11-26 |
+| TBD-015 | Decision | Drive of SE0 for a host port reset and the PHY mode for it. | Section 10.1, DEC-009, DEC-025 | Superseded 2026-11-25 by DEC-048: OpMode 11b is optional and not implemented by common PHYs; the reset SE0 uses the high-speed terminations and `PARA_USB2_RST_OPMODE` is removed (the decision of 2026-11-21 was an author assumption, not a datasheet answer) | spec owner | 2026-11-25 |
 | TBD-016 | Decision | Limits that remain after the verification rounds: the AXI data width is fixed to four chunks of the UTMI+ width (DEC-010); the scatter-gather `last` and `ioc` bits are kept but not interpreted and every packet has its own descriptor (DEC-013); synthesis was run with generic gates and on one FPGA family, and no ASIC library, ASIC STA, CDC, RDC or formal tool was run (the SDC files in `sdc/` are untested). | Sections 3, 8 and 10; DEC-010, DEC-013, DEC-025 | Resolved 2026-11-21 as recorded limits; every feature of the specification is implemented and simulated | spec owner | 2026-11-21 |
+| TBD-017 | Decision | Host port reset with a ULPI PHY that does not support OpMode 11b (TI TUSB1210, REF-013 section 7.5.5): the SE0 row of the speed engine uses XcvrSelect 01b, TermSelect 1 and OpMode = PARA_USB2_RST_OPMODE, so no parameter value gives a reset SE0 on such a PHY. Options: an option that drives the reset SE0 with the high-speed terminations (XcvrSelect 00b, TermSelect 0, OpMode 10b, as the chirp listen row), or a PHY with OpMode 11b. | Sections 10.1, 14.5.6; DEC-009, DEC-025, TBD-015 | Closed 2026-11-25 by DEC-048 (PHY-01): the reset SE0 now uses the host high-speed row 00b / 0 / 00b of ULPI 1.1 Table 40, which TUSB1210, USB3320 and USB3500 support; the host and dual-role builds are no longer blocked | spec owner | 2026-11-25 |
+| TBD-018 | Decision | ULPI PHY AutoResume (Interface Control bit 4, 1 after reset on TUSB1210): the IP drives resume signaling itself and was not verified with the PHY resuming by itself; the Microchip USB3320 data sheet recommends AutoResume = 1 for host applications (its default is 0). Keep the PHY default until decided (section 14.5.6). | Section 14.5.6; REQ-FUNC-018, REQ-FUNC-020 | Open (2026-11-25): verify the IP in the host role over ULPI with AutoResume 0 and 1, then fix the setting | spec owner | 2026-11-25 |
 
 ## 21. Glossary
 

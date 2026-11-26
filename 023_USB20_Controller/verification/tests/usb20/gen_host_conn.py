@@ -16,12 +16,13 @@ Functional checkpoints and assertions (R-286; ID | requirement | trigger | expec
   HCN-DISCSTS | REQ-FUNC-012 | HostDisconnect low again (disc) | hsts.port_conn 0 and port_en 0 | TB P, R | 3000 polls | port still enabled
   HCN-VER | section 11.3 | start (ls) | u2_version major 1 | TB R | one access | other value
   HCN-LSCONN | REQ-FUNC-012 | K on the line for the debounce (ls) | hsts.port_conn and irq_raw.conn | TB P | 2000 polls | no connect
+  HCN-LSRST | REQ-FUNC-011, DEC-048 | hport.prst with a low-speed device (ls) | reset row 00 / 0 / 00 gives SE0 with the D- pull-up; the reset ends in the low-speed row after 50 to 52 ms (scaled) and the line returns to low-speed idle | TB WP, TC, LSR | 60 ms scaled | no SE0, reset shorter than 50 ms or wrong end row
   HCN-LSENUM | REQ-FUNC-016 | after the reset (ls) | irq_raw.enum; hsts port_en 1 and port_speed 2 | TB P, R | 3000 polls | wrong speed (BUG-036 class)
   HCN-LSROW | section 6.3 | low-speed port enabled (ls) | mode pins XcvrSelect 10b, TermSelect 1, OpMode 00b, pull-downs on | TB XP | immediately | wrong row
 Shared checkpoints also reached: HBU-VER, HBU-CONN, HBU-RSTDRV, HBU-CHIRP, HBU-RST50, HBU-RECOV (disc part only).
 Expected outcome: (disc) disconnect reported and the port disabled; (ls) low-speed port enabled in the low-speed row.
-Known gaps: (disc) the return to the full-speed idle row is not checked; (ls) the reset duration is not measured (wait 51 ms, no TC).
-Defect/fault targeted: low-speed device taken for a high-speed candidate (M14, BUG-036); disconnect not clearing the port state.
+Known gaps: (disc) the return to the full-speed idle row is not checked.
+Defect/fault targeted: low-speed device taken for a high-speed candidate (M14, BUG-036); reset SE0 that a PHY cannot produce (M28); disconnect not clearing the port state.
 Checker/oracle: REQ-FUNC-012/016 and section 6.3 in this script; harness P/R/XP; qualified by M14.
 Reproducibility: cd tests/usb20; python gen_host_conn.py 1 disc ts16 (or 1 ls ts16); from verification:
   python env/scripts/run.py sim t_host_conn host_utmi8_axim_ts16 tests/ops/host_conn_disc_s1.ops +seed=1 (ls: host_conn_ls_s1.ops)
@@ -62,7 +63,13 @@ else:
     s.poll('irq_raw', conn=1)
     s.w1c('irq_raw', conn=1)
     s.w('hport', oc_en=1, vbus_drv=1, prst=1)
-    s.wait(us(51000))
+    s.chk('HCN-LSRST')
+    s.wp(0, mode(0, 0, 0, pd=1), MODE_MASK, 4000)              # reset SE0 with the HS terminations (Table 40, DEC-048 PHY-01)
+    s.emit('TM')
+    s.emit('LSR', 0, 2)                                        # the row gives SE0 with the low-speed device (pull-up on D-)
+    s.wp(0, mode(2, 1, 0, pd=1), MODE_MASK, us(60000))         # end of the reset: low-speed row
+    s.emit('TC', us(50000) - 2, us(52000))                     # REQ-FUNC-011: at least 50 ms
+    s.emit('LSR', 2, 2)                                        # low-speed idle (J of low speed) again
     s.chk('HCN-LSENUM')
     s.poll('irq_raw', enum=1, tries=3000)
     s.r('hsts', port_en=1, port_speed=2)

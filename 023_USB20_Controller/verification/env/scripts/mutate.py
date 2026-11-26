@@ -81,6 +81,21 @@ MUTANTS = [
       ("          casez ({(w_lpm_start & ~(reg_sof_pend & w_sof_en & ~i_host_quiet)), (reg_sof_pend & w_sof_en & ~i_host_quiet),", "          casez ({(w_lpm_start & ~(reg_sof_pend & w_sof_en)), (reg_sof_pend & w_sof_en),"),
       ("        reg_sof_pend <= ~i_host_quiet;          // a SOF due while the port is quiet is dropped", "        reg_sof_pend <= 1'b1;")],
      'host_utmi8_axim_ts16', ['gen_host_susp_res.py', 'ts16'], 't_host_susp_res', 'the host sends SOF while the port is suspended'),
+    # DEC-048 (2026-11-25): each mutant puts back one PHY row of the RTL before the ULPI 1.1 Table 40 review
+    ('M28', 'DEC-048 PHY-01', 'm_usb2_spd.sv', [("        ENUM_ST_HP_SE0: begin" + chr(10) + "          w_xcvr_sel = 2'b00;" + chr(10) + "          w_term_sel = 1'b0;" + chr(10) + "        end", "        ENUM_ST_HP_SE0: begin" + chr(10) + "          w_xcvr_sel = 2'b01;" + chr(10) + "          w_term_sel = 1'b1;" + chr(10) + "          w_op_mode  = 2'b11;" + chr(10) + "        end")],
+     'host_utmi8_axim_ts16', ['gen_host_enum_bulk_dma.py', 'ts16'], 't_host_enum_bulk_dma', 'host port reset SE0 driven with OpMode 11b and the full-speed row (no SE0 on a real PHY)'),
+    ('M29', 'DEC-048 PHY-02', 'm_usb2_spd.sv', [("          w_xcvr_sel  = (reg_speed == 2'd2) ? 2'b10 : 2'b01;" + chr(10) + "          w_term_sel  = 1'b1;" + chr(10) + "          w_suspend_n = 1'b0;", "          w_xcvr_sel  = (reg_speed == 2'd0) ? 2'b00 : ((reg_speed == 2'd2) ? 2'b10 : 2'b01);" + chr(10) + "          w_term_sel  = (reg_speed != 2'd0);" + chr(10) + "          w_suspend_n = 1'b0;")],
+     'host_utmi8_axim_ts16', ['gen_host_susp_res.py', 'ts16'], 't_host_susp_res', 'suspended high-speed host port keeps the high-speed terminations'),
+    ('M30', 'DEC-048 PHY-03', 'm_usb2_spd.sv', [("          w_xcvr_sel = (reg_speed == 2'd2) ? 2'b10 : 2'b01;" + chr(10) + "          w_term_sel = 1'b1;" + chr(10) + "          w_op_mode  = 2'b10;", "          w_xcvr_sel = (reg_speed == 2'd0) ? 2'b00 : ((reg_speed == 2'd2) ? 2'b10 : 2'b01);" + chr(10) + "          w_term_sel = (reg_speed != 2'd0);" + chr(10) + "          w_op_mode  = 2'b10;")],
+     'host_utmi8_axim_ts16', ['gen_host_susp_res.py', 'ts16'], 't_host_susp_res', 'resume of a high-speed host port driven with the high-speed row'),
+    ('M31', 'DEC-048 PHY-04', 'm_usb2_spd.sv', [("          w_xcvr_sel  = 2'b01;" + chr(10) + "          w_term_sel  = 1'b1;" + chr(10) + "          w_suspend_n = 1'b0;", "          w_xcvr_sel  = reg_hs ? 2'b00 : 2'b01;" + chr(10) + "          w_term_sel  = ~reg_hs;" + chr(10) + "          w_suspend_n = 1'b0;")],
+     'dev_utmi8_axim', ['gen_dev_suspend_lpm_reset.py'], 't_dev_suspend_lpm_reset', 'suspended high-speed device removes its D+ pull-up'),
+    ('M32', 'DEC-048 PHY-05', 'm_usb2_spd.sv', [("          w_xcvr_sel = 2'b01;" + chr(10) + "          w_op_mode  = 2'b01;" + chr(10) + "        end", "          w_xcvr_sel = 2'b01;" + chr(10) + "        end")],
+     'dev_utmi8_axim', ['gen_dev_enum_bulk_dma.py'], 't_dev_enum_bulk_dma', 'soft-disconnected device drives an undefined row instead of the non-driving row'),
+    ('M33', 'DEC-048 PHY-06', 'm_usb2_phyif_ulpi.sv', [("i_drv_vbus & i_ext_vbus, i_drv_vbus,", "1'b0, i_drv_vbus,")],
+     'host_ulpi_axim_ts16', ['gen_fi_ocp.py', 'ulpi'], 't_host_ulpi_ocp', 'DrvVbusExternal never written: the PHY cannot drive its CPEN pin'),
+    ('M34', 'BUG-051', 'm_usb2_spd.sv', [("reg_speed <= (reg_speed == 2'd2) ? 2'd2 : 2'd1;", "reg_speed <= (i_linestate == 2'b10) ? 2'd2 : 2'd1;")],
+     'host_utmi8_axim_ts16', ['gen_host_conn.py', 'ls', 'ts16'], 't_host_conn', 'speed sampled from the SE0 line at the reset end: a low-speed device becomes a full-speed port'),
 ]
 
 SEEDS = {'M11': '3'}                                    # scenario seed of a mutant (default 1)

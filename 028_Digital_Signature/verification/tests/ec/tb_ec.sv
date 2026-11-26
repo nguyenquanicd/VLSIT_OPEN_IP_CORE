@@ -4,6 +4,7 @@
 `timescale 1ns/1ps
 module tb_ec;
   localparam int BLK = 1024;
+  integer ct_ref [0:15][0:7]; reg ct_mode; integer ct_n = 0;
   reg clk = 0; always #5 clk = ~clk;
   reg rst_n = 0;
   reg clr, start, vas_start;
@@ -15,7 +16,10 @@ module tb_ec;
   wire [0:0] g, ir, ov, ol; wire [63:0] od; wire [3:0] onb;
   wire s_job_start, s_in_valid, s_in_last, s_out_ready, s_in_ready, s_out_valid, s_out_last; wire [3:0] s_mode, s_in_nb, s_out_nb; wire [15:0] s_outlen; wire [63:0] s_in_data, s_out_data;
 
-  m_vlsit_dsig_ec #(.PARA_WA(7)) dut (
+`ifndef TB_DPA
+  `define TB_DPA 0
+`endif
+  m_vlsit_dsig_ec #(.PARA_WA(7), .PARA_EN_DPA(`TB_DPA)) dut (
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clr(clr), .i_start(start), .i_vas_start(vas_start),
     .i_run_alg(alg), .i_run_op(op_op), .i_run_hash(hsh), .i_run_len_msg(len_msg), .i_run_len_ctx(len_ctx), .i_run_det(det),
     .i_run_off_msg(17'd0), .i_run_off_sig(17'd256), .i_run_off_pk(17'd512), .i_run_off_res(17'd768),
@@ -78,6 +82,8 @@ module tb_ec;
     if (!$value$plusargs("VEC=%s", vecpath)) vecpath = "ec_vec.hex";
     if (!$value$plusargs("NVEC=%d", nvec)) nvec = 1;
     if (!$value$plusargs("MAXCYC=%d", maxcyc)) maxcyc = 40000000;
+    ct_mode = $test$plusargs("CT");
+    for (i = 0; i < 16; i = i + 1) for (j = 0; j < 8; j = j + 1) ct_ref[i][j] = -1;
     $readmemh(vecpath, vecmem);
     clr = 0; start = 0; vas_start = 0; alg = 0; op_op = 0; hsh = 0; len_msg = 0; len_ctx = 0; det = 0; key = 0; pool = 0; rd_data = 0; rd_valid = 0;
     nfail = 0; tot_cycles = 0;
@@ -92,6 +98,8 @@ module tb_ec;
       for (j = 0; j < 1024; j = j + 1) snap[j] = bmem[j];
       for (j = 0; j < 68; j = j + 1) key[8*j +: 8] = vecmem[i*BLK + 16 + j];
       for (j = 0; j < 96; j = j + 1) pool[8*j +: 8] = vecmem[i*BLK + 84 + j];
+      // scalar blinding: a fresh 48-bit r in the pool bytes 88 to 93 (the results must not change)
+      if (`TB_DPA) for (j = 88; j < 94; j = j + 1) pool[8*j +: 8] = $urandom;
       alg = vecmem[i*BLK + 0]; vop = vecmem[i*BLK + 1]; hsh = vecmem[i*BLK + 2];
       len_msg = {vecmem[i*BLK + 7], vecmem[i*BLK + 6], vecmem[i*BLK + 5], vecmem[i*BLK + 4]};
       len_ctx = vecmem[i*BLK + 3];
@@ -136,13 +144,23 @@ module tb_ec;
       pulse_clr;
       zf = 0;
       for (j = 0; j < 32; j = j + 1) if (dut.reg_rf[j] != 576'd0) zf = zf + 1;
-      if (dut.reg_head != 1024'd0 || dut.reg_mid != 1024'd0 || dut.reg_acc != 576'd0 || dut.reg_ma != 576'd0 || dut.reg_mb != 576'd0 || dut.reg_pw_acc != 576'd0) zf = zf + 1;
+      if (dut.reg_head != 1024'd0 || dut.reg_mid != 2048'd0 || dut.reg_sm_sh != 2304'd0 || dut.reg_acc != 576'd0 || dut.reg_ma != 576'd0 || dut.reg_mb != 576'd0 || dut.reg_pw_acc != 576'd0) zf = zf + 1;
       if (zf != 0 || !cleared || busy) begin ok = 0; $display("VEC %0d: not zeroized after clear (%0d)", i, zf); end
+      // +CT (REQ-SEC-002): the cycle count must be the same for every vector of one algorithm and operation
+      if (ct_mode) begin
+        if (ct_ref[alg][vop] < 0) ct_ref[alg][vop] = tot_cycles;
+        else if (ct_ref[alg][vop] != tot_cycles) begin
+          ok = 0; $display("VEC %0d: %0d cycles, %0d for the first vector of this algorithm and operation (secret-dependent time)",
+                           i, tot_cycles, ct_ref[alg][vop]);
+        end
+        ct_n = ct_n + 1;
+      end
       if (!ok) nfail = nfail + 1;
       $display("VEC %0d %s cycles=%0d", i, ok ? "PASS" : "FAIL", tot_cycles);
       tot_cycles = 0;
     end
     if (proto_fail != 0) nfail = nfail + 1;
+    if (ct_mode) $display("constant-time check: %0d vectors compared by algorithm and operation", ct_n);
     $display("tb_ec: %0d vectors, %0d failed, %0d protocol failures", nvec, nfail, proto_fail);
     if (nfail == 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

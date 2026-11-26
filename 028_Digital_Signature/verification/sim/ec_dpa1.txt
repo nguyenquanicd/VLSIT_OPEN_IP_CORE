@@ -1,0 +1,11 @@
+quick: 10 vectors
+ed25519: 33 vectors
+ed448: 49 vectors
+det: 26 vectors
+p256: 32 vectors
+quick    PASS  10/10 vectors, 30971620 cycles, 246 s
+ed25519  PASS  33/33 vectors, 105620307 cycles, 3117 s
+ed448    FAIL  0/49 vectors, 0 cycles, 4680 s
+
+det      PASS  26/26 vectors, 170105747 cycles, 4679 s
+p256     PASS  32/32 vectors, 96357099 cycles, 4679 s

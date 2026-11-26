@@ -1238,8 +1238,15 @@
      "description": "Over-current protection enable. Lets the over-current input switch the port power off.\n\nUsage: Set before vbus_drv in host role; clear when no power switch with an over-current flag is fitted.\n\nValues:\n0x0 over-current input ignored (reset value);\n0x1 over-current protection on.\n\nUnit: none.\n\nLimits: none."
     },
     {
+     "name": "ext_vbus",
+     "bits": "[23]",
+     "type": "rw",
+     "reset": "0x0",
+     "description": "ULPI external VBUS drive. Sets DrvVbusExternal in the OTG Control register of a ULPI PHY together with DrvVbus.\n\nUsage: Set in ULPI builds when the PHY switches VBUS through its own supply-enable pin (for example CPEN of TUSB1210); keep 0 when o_vbus_pwr_en drives the switch; no effect in UTMI+ builds (DEC-048, section 14.5).\n\nValues:\n0x0 DrvVbusExternal written 0 (reset value);\n0x1 DrvVbusExternal written equal to DrvVbus.\n\nUnit: none.\n\nLimits: none."
+    },
+    {
      "name": "reserved",
-     "bits": "[31:23]",
+     "bits": "[31:24]",
      "type": "ro",
      "reset": "0x0",
      "description": ""

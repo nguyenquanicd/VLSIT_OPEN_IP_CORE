@@ -1,0 +1,11 @@
+LMS program: 268 instructions
+lms  0 ots  3 levels 1 ok (4598 hashes, 89112 steps, 1 s)
+lms  0 ots  3 levels 2 ok (8686 hashes, 168478 steps, 3 s)
+lms  0 ots  2 levels 1 ok (473 hashes, 12205 steps, 4 s)
+lms  0 ots  1 levels 3 ok (597 hashes, 29692 steps, 4 s)
+lms  0 ots  0 levels 1 ok (134 hashes, 14572 steps, 4 s)
+lms  5 ots  7 levels 1 ok (3578 hashes, 69372 steps, 5 s)
+lms 10 ots 11 levels 2 ok (9451 hashes, 173562 steps, 7 s)
+lms 15 ots 14 levels 1 ok (428 hashes, 10202 steps, 7 s)
+lms  6 ots  6 levels 1 ok (388 hashes, 9960 steps, 10 s)
+lms 11 ots 10 levels 2 ok (1031 hashes, 25118 steps, 19 s)

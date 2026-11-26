@@ -14,6 +14,7 @@ Functional checkpoints and assertions (R-286; ID | requirement | trigger | expec
   FOC-TRIP | REQ-FUNC-034 | 16-cycle over-current | power off within 40 cycles; oc_act | TB XP, WP, R | 40 bus cycles | DrvVbus stays on over ULPI
   FOC-REARM | REQ-FUNC-034 | ocur cleared | power returns only after vbus_drv is rewritten | TB XP, WP | 400 CLK-PHY | automatic re-arm
   FOC-SWOFF | REQ-FUNC-041 | software power off | DrvVbus off through the PHY register | TB WP | 400 CLK-PHY | DrvVbus does not follow
+  FOC-EXTVBUS | DEC-048 PHY-06, u2_hport.ext_vbus | vbus_drv with ext_vbus 0, then 1, then vbus_drv 0 | OTG Control bits 6:5 read through u2_phy_acc = 01b, 11b, 00b (DrvVbusExternal follows DrvVbus only when enabled) | TB P, R | 2000 polls per read | the PHY could not drive its CPEN pin
   HBU-RST50 | REQ-FUNC-011 | host reset over ULPI at TSCALE 1 | 50 to 52 ms | TB P, TC, R | 60 ms | wrong reset length
   HEB-SOF1 | REQ-FUNC-010 | SOF over ULPI at TSCALE 1 | 125 us +- 62.5 ns | TB SOF | 500 us | SOF timing disturbed by ULPI
   HEB-BIN | REQ-FUNC-015, 016 | bulk IN with NAK and a short packet over ULPI | retry, ACKs, residue, memory | TB XT, XH, P, R, MC | 2000 CLK-PHY | receive path errors over ULPI

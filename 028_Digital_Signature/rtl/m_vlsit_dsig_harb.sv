@@ -8,11 +8,11 @@
  *                hash stream sequencer to one requester at a time. A requester raises its
  *                request and holds it until it has finished with the sequencer (all its jobs);
  *                the grant stays with the owner until its request falls, then the next request
- *                in fixed priority order is granted (index 0 first: random block, lattice
- *                engine, hash-based engine, elliptic-curve engine). The grant is registered, so
- *                the owner sees it one cycle after its request. The stream signals of the owner
- *                go to the sequencer and the sequencer answers only the owner. Requirements:
- *                SVA-002, OP-008.
+ *                in fixed priority order is granted (index 0 first; in the top: elliptic-curve
+ *                engine, lattice engine, hash-based engine, random block). The grant is
+ *                registered, so the owner sees it one cycle after its request. The stream
+ *                signals of the owner go to the sequencer and the sequencer answers only the
+ *                owner. Requirements: SVA-002, OP-008.
  */
 `timescale 1ns/1ps
 

@@ -1,0 +1,4 @@
+quick: 10 vectors
+edvar: 68 vectors
+quick    PASS  10/10 vectors, 29421467 cycles, 166 s
+edvar    PASS  68/68 vectors, 374304402 cycles, 2399 s

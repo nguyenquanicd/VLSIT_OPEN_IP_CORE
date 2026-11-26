@@ -12,6 +12,8 @@ Checkpoint catalogue of the shared bus reset (op CHK, R-286; ID | requirement | 
 import json
 import os
 import random
+import sys
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REGS = json.load(open(os.path.join(HERE, '..', '..', '..', 'spec', 'csr', 'regs_usb2.json')))['registers']   # spec/csr of the IP
@@ -176,8 +178,18 @@ class Scn:
         self.emit('END')
         full = os.path.join(HERE, '..', path)
         os.makedirs(os.path.dirname(full), exist_ok=True)
-        with open(full, 'w', newline='\n') as f:
-            f.write('\n'.join(self.ops) + '\n')
+        # Retry (2026-11-26): on Windows the open failed now and then with OSError Errno 22 while another process held the
+        # file (regress_full_21/22, a different test each time); the content is unchanged, only the write is repeated.
+        for k in range(6):
+            try:
+                with open(full, 'w', newline='\n') as f:
+                    f.write('\n'.join(self.ops) + '\n')
+                break
+            except OSError as e:
+                if k == 5:
+                    raise
+                sys.stderr.write('save retry %d: %s\n' % (k + 1, e))
+                time.sleep(0.5 * (k + 1))
         return path
 
 

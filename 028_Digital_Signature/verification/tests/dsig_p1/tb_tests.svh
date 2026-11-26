@@ -99,7 +99,7 @@
       rd_pat = {32'hD15EA5E0, 15'h0, o_offm};
       if (o_offm < 17'd1024) bus_write(o_offm[9:3], rd_pat, 8'hFF);
       exp_ee = f_ref_err(t_ctrl_en, t_eff_en, o_alg, o_op, o_form, o_nonce, o_hash, o_hybpol,
-                         o_slh, o_lmst, o_lmots, o_hsslvl, o_xm, o_len, o_offm);
+                         o_slh, o_lmst, o_lmots, o_hsslvl, o_xm, o_len, o_offm, o_ctx);
       n_fail_before = n_fail;
       cmd_start;
       wait_op_done;
@@ -515,6 +515,30 @@
       cs(ALG_P256, OP_VRFY, FORM_PURE, 3'd0, 32'd0, 17'd1024);
       cs(ALG_P256, OP_VRFY, FORM_PURE, 3'd0, 32'd1, 17'd1024);
       cs(ALG_P256, OP_VRFY, FORM_PURE, 3'd0, 32'd10, 17'h1FFFF);
+      // ASM-023: Ed25519ph and Ed448ph only in the prehash form; 64-byte digest whatever the hash code; key generation
+      // has no message, so no length check
+      cs(ALG_ED25519PH, OP_SIGN, FORM_PURE, 3'd2, 32'd64, 17'd0);
+      cs(ALG_ED448PH, OP_VRFY, FORM_PURE, 3'd2, 32'd64, 17'd0);
+      cs(ALG_ED25519PH, OP_VRFY, FORM_PREHASH, 3'd0, 32'd64, 17'd0);
+      cs(ALG_ED25519PH, OP_VRFY, FORM_PREHASH, 3'd0, 32'd32, 17'd0);
+      cs(ALG_ED448PH, OP_KGEN, FORM_PREHASH, 3'd2, 32'd0, 17'd0);
+      // ASM-024: deterministic ECDSA nonce (dsig_op.nonce = 1 with PARA_ECDSA_NONCE 2) with SHA-2 only
+      set_default_op; o_alg = ALG_P256; o_op = OP_SIGN; o_nonce = 2'd1; o_hash = 3'd3; run_op;
+      set_default_op; o_alg = ALG_P256; o_op = OP_SIGN; o_nonce = 2'd1; o_hash = 3'd5; run_op;
+      set_default_op; o_alg = ALG_P521; o_op = OP_SIGN; o_nonce = 2'd1; o_hash = 3'd2; run_op;
+      set_default_op; o_alg = ALG_P256; o_op = OP_SIGN; o_nonce = 2'd0; o_hash = 3'd5; run_op;
+      // DEC-032 for signing and verification only: key generation of P-384 and P-521 with a short hash code is accepted
+      cs(ALG_P384, OP_KGEN, FORM_PURE, 3'd0, 32'd32, 17'd0);
+      cs(ALG_P521, OP_KGEN, FORM_PURE, 3'd1, 32'd32, 17'd0);
+      cs(ALG_P521, OP_SIGN, FORM_PURE, 3'd1, 32'd32, 17'd0);
+      // ASM-025: HashSLH-DSA digest length equal to the hash
+      cs(ALG_SLHDSA, OP_VRFY, FORM_PREHASH, 3'd0, 32'd33, 17'd0);
+      cs(ALG_SLHDSA, OP_VRFY, FORM_PREHASH, 3'd4, 32'd48, 17'd0);
+      // ASM-020: the context after the message is part of the region (Ed448, ML-DSA, SLH-DSA), not for ECDSA
+      set_default_op; o_alg = ALG_ED448; o_len = 32'd1000; o_ctx = 8'd30; run_op;
+      set_default_op; o_alg = ALG_ED448; o_len = 32'd1000; o_ctx = 8'd24; run_op;
+      set_default_op; o_alg = ALG_MLDSA44; o_hybpol = 2'd2; o_len = 32'd1000; o_ctx = 8'd25; run_op;
+      set_default_op; o_alg = ALG_P256; o_len = 32'd1000; o_ctx = 8'd200; run_op;
       // Priority of the checks (DEC-038): disabled > unsupported > length > buffer
       t_eff_en = 15'h7FFD; prog_alg_en(15'h7FFD); cyc(8);
       cs(ALG_ED25519CTX, OP_RSVD, FORM_PURE, 3'd0, 32'hFFFF_FFFF, 17'd0);
@@ -541,6 +565,7 @@
         set_default_op; o_alg = a[3:0]; o_op = OP_VRFY;
         o_hybpol = (a == 9) ? 2'd2 : 2'd1;
         if (a == 5 || a == 6 || a == 7 || a == 8) o_hash = 3'd5;
+        if (a == 2 || a == 4) begin o_form = FORM_PREHASH; o_hash = 3'd2; o_len = 32'd64; end
         k_eng_sigok = 1'b1; run_op;
         k_eng_sigok = 1'b0; run_op;
       end
@@ -548,7 +573,8 @@
       // Signing and key generation of every algorithm that supports them
       for (a = 0; a <= 11; a = a + 1) begin
         set_default_op; o_alg = a[3:0]; o_op = OP_SIGN;
-        if (a == 5 || a == 6 || a == 7 || a == 8) o_hash = 3'd5;
+        if (a == 5 || a == 6 || a == 7 || a == 8) o_hash = 3'd2;
+        if (a == 2 || a == 4) begin o_form = FORM_PREHASH; o_hash = 3'd2; o_len = 32'd64; end
         o_nonce = 2'd0; o_hedged = 1'b0; run_op;
         o_nonce = 2'd1; o_hedged = 1'b1; run_op;
         o_op = OP_KGEN; run_op;
@@ -563,7 +589,8 @@
       end
       // Engine result of different lengths and latencies
       k_eng_words = 1; k_eng_lat = 0; set_default_op; o_alg = ALG_ED448; o_op = OP_SIGN; run_op;
-      k_eng_words = 8; k_eng_lat = 40; set_default_op; o_alg = ALG_ED448PH; o_op = OP_SIGN; run_op;
+      k_eng_words = 8; k_eng_lat = 40; set_default_op; o_alg = ALG_ED448PH; o_op = OP_SIGN; o_form = FORM_PREHASH;
+      o_hash = 3'd2; o_len = 32'd64; run_op;
       k_eng_words = 4; k_eng_lat = 12;
       test_end;
     end

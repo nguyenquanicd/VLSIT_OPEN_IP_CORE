@@ -1,0 +1,2 @@
+hfeed: 500 vectors, 0 failed
+RESULT: PASS

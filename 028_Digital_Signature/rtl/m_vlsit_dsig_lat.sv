@@ -33,6 +33,10 @@ module m_vlsit_dsig_lat #(
   // Parameter values: 32768; default is 32768.
   // Parameter unit: word
   parameter logic [31:0] PARA_WORDS = 32768,
+  // Parameter Description: masking of the linear secret products of ML-DSA signing (DEC-049).
+  // Parameter values: 0 or 1; default is 0.
+  // Parameter unit: none
+  parameter logic [31:0] PARA_EN_DPA = 0,
   localparam logic [31:0] LPARA_WW = $clog2(PARA_WORDS),
   localparam logic [31:0] LPARA_OP_LDI = 6'd1,
   localparam logic [31:0] LPARA_OP_MOV = 6'd2,
@@ -665,7 +669,8 @@ module m_vlsit_dsig_lat #(
                 3'd3:    reg_rf[w_rd] <= {30'd0, reg_op};
                 3'd4:    reg_rf[w_rd] <= {28'd0, reg_alg};
                 3'd5:    reg_rf[w_rd] <= {31'd0, reg_hedged};
-                default: reg_rf[w_rd] <= {29'd0, reg_hash};
+                3'd6:    reg_rf[w_rd] <= {29'd0, reg_hash};
+                default: reg_rf[w_rd] <= {31'd0, PARA_EN_DPA[0]};
               endcase
             end
             LPARA_OP_EQ:   reg_f[w_rd[2:0]] <= (w_ra_v == w_rb_v);

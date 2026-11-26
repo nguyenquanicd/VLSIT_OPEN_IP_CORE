@@ -1,0 +1,10 @@
+AFIFO_MSYNC: tb_top_err.dut.u_csr.g_async_csr.u_wr_req_sync.u_sync.gen_sim_msync seed=1 enable=1 window=10% stages=2
+AFIFO_MSYNC: tb_top_err.dut.u_csr.g_async_csr.u_rd_req_sync.u_sync.gen_sim_msync seed=1 enable=1 window=10% stages=2
+AFIFO_MSYNC: tb_top_err.dut.u_csr.g_async_csr.u_wr_ack_sync.u_sync.gen_sim_msync seed=1 enable=1 window=10% stages=2
+AFIFO_MSYNC: tb_top_err.dut.u_csr.g_async_csr.u_rd_ack_sync.u_sync.gen_sim_msync seed=1 enable=1 window=10% stages=2
+tb_top_err: 27 checks, 0 failed
+RESULT: PASS
+AFIFO_MSYNC_STAT: tb_top_err.dut.u_csr.g_async_csr.u_wr_req_sync.u_sync.gen_sim_msync window_captures=0 old_value_captures=0
+AFIFO_MSYNC_STAT: tb_top_err.dut.u_csr.g_async_csr.u_rd_req_sync.u_sync.gen_sim_msync window_captures=0 old_value_captures=0
+AFIFO_MSYNC_STAT: tb_top_err.dut.u_csr.g_async_csr.u_wr_ack_sync.u_sync.gen_sim_msync window_captures=0 old_value_captures=0
+AFIFO_MSYNC_STAT: tb_top_err.dut.u_csr.g_async_csr.u_rd_ack_sync.u_sync.gen_sim_msync window_captures=0 old_value_captures=0

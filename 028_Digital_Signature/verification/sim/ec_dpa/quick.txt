@@ -1,0 +1,10 @@
+0	Ed25519 rfc0 verify ok
+1	Ed25519 rfc0 verify bad S
+2	Ed25519 rfc0 verify bad R
+3	Ed25519 rfc0 sign
+4	Ed25519 rfc0 keygen
+5	Ed25519 rfc0 sign+vas
+6	P-256 hash0 sample verify ok
+7	P-256 hash0 sample verify bad msg
+8	P-256 hash0 sample verify bad s
+9	P-256 hash0 sample sign

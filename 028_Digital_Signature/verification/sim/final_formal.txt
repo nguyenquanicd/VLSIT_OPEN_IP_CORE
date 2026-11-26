@@ -1,0 +1,2 @@
+harb proof: PASS (k-induction); mutant: FAIL as required
+RESULT: PASS

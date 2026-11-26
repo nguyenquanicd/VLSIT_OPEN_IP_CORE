@@ -6,7 +6,7 @@ Single consolidated version (2026-11-24). Earlier workspaces, run archives, snap
 
 | Path | Content |
 |---|---|
-| `docs/` (flat) | this index; [verification_plan.md](verification_plan.md), `vplan.csv`, `requirements.txt`; [architecture.md](architecture.md); [checker_qualification.md](checker_qualification.md); [decisions_and_gates.md](decisions_and_gates.md); [verification_report.md](verification_report.md) |
+| `docs/` (flat) | this index; [verification_plan.md](verification_plan.md), `vplan.csv`, `requirements.txt`; [architecture.md](architecture.md); [checker_qualification.md](checker_qualification.md); [test_review_notes.md](test_review_notes.md) (for the human test reviewer); [decisions_and_gates.md](decisions_and_gates.md); [verification_report.md](verification_report.md) |
 | `env/bfm/` | APB4 requester and DVP sensor source BFMs (project-local, not released VIP) |
 | `env/scoreboards/` | `dv_dvp_checker.sv`: passive checkers and the HDS-derived reference model on the public pins |
 | `env/tb/` | `tb_dvp_controller.sv` (DUT harness and the test tasks), `tb_qual_checker.sv` (checker qualification with a scripted DUT) |

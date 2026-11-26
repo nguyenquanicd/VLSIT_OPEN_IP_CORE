@@ -1,0 +1,9 @@
+{"figure": "wf_003_verify_start_done.json", "window_edge": 0, "compared": 168, "matched": 168, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_005_start_disabled.json", "window_edge": 0, "compared": 120, "matched": 120, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_007_abort.json", "window_edge": 64, "compared": 120, "matched": 120, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_008_window_access.json", "window_edge": 0, "compared": 248, "matched": 248, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_009_vas_mismatch.json", "window_edge": 26, "compared": 140, "matched": 140, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_011_hybrid_verify.json", "window_edge": 0, "compared": 352, "matched": 352, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_012_secret_clearing.json", "window_edge": 27, "compared": 96, "matched": 96, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_015_apb_write_read.json", "window_edge": 3, "compared": 70, "matched": 70, "missing_signals": [], "result": "MATCH", "differences": []}
+{"figure": "wf_016_apb_nonsecure_error.json", "window_edge": 2, "compared": 160, "matched": 160, "missing_signals": [], "result": "MATCH", "differences": []}

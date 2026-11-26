@@ -13,6 +13,8 @@ PS1H, PS2H, PT0H, PY, PYH, PW, PTMP, PCH, PCT, PA, PT1, PH = 0, 7, 15, 23, 30, 3
 NPOLY = 120
 SCR = 256 * NPOLY
 SCR_RHO, SCR_RHO2, SCR_K, SCR_TR, SCR_MU, SCR_RHOPP, SCR_CT, SCR_CT2 = (SCR + o for o in (0, 32, 96, 128, 192, 256, 320, 384))
+SCR_MSEED = SCR + 512                 # seed of the masks of PARA_EN_DPA_PQ (32 random bytes of the pool)
+PM, PT2 = 124, 125                    # mask polynomial and product temporary of PARA_EN_DPA_PQ (words SCR + 1024 to SCR + 1535)
 F_EMIT = 6
 INV256 = 8347681
 

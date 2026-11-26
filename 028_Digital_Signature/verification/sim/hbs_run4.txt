@@ -1,0 +1,8 @@
+slh: 56 vectors
+lms: 50 vectors
+xmss: 32 vectors
+tb_hbs: 0 vectors, 0 failed, 0 protocol failures
+RESULT: PASS
+slh    PASS  56/56 vectors, 115538810 cycles, 288 s
+lms    PASS  50/50 vectors, 32373195 cycles, 275 s
+xmss   PASS  32/32 vectors, 101095977 cycles, 258 s

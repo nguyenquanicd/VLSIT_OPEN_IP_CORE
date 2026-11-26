@@ -43,6 +43,7 @@ m_usb2_regs.sv
 m_usb2_rst.sv
 m_usb2_spd.sv
 m_usb2_ulpilp.sv
+m_usb2_utmilp.sv
 m_usb2_core.sv
 m_usb2_top_ulpi_axim.sv
 m_usb2_top_ulpi_axis.sv

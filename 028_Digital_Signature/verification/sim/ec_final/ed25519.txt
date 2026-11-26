@@ -1,0 +1,33 @@
+0	Ed25519 rfc0 verify ok
+1	Ed25519 rfc0 verify bad S
+2	Ed25519 rfc0 verify bad R
+3	Ed25519 rfc0 sign
+4	Ed25519 rfc0 keygen
+5	Ed25519 rfc0 sign+vas
+6	Ed25519 rfc0 sign+corrupt+vas
+7	Ed25519 rfc0 verify S = L
+8	Ed25519 rfc0 verify non-canonical A
+9	Ed25519 rfc1 verify ok
+10	Ed25519 rfc1 verify bad msg
+11	Ed25519 rfc1 verify bad S
+12	Ed25519 rfc1 verify bad R
+13	Ed25519 rfc1 sign
+14	Ed25519 rfc1 keygen
+15	Ed25519 rfc1 sign+vas
+16	Ed25519 rfc1 sign+corrupt+vas
+17	Ed25519 rfc2 verify ok
+18	Ed25519 rfc2 verify bad msg
+19	Ed25519 rfc2 verify bad S
+20	Ed25519 rfc2 verify bad R
+21	Ed25519 rfc2 sign
+22	Ed25519 rfc2 keygen
+23	Ed25519 rfc2 sign+vas
+24	Ed25519 rfc2 sign+corrupt+vas
+25	Ed25519 rfc3 verify ok
+26	Ed25519 rfc3 verify bad msg
+27	Ed25519 rfc3 verify bad S
+28	Ed25519 rfc3 verify bad R
+29	Ed25519 rfc3 sign
+30	Ed25519 rfc3 keygen
+31	Ed25519 rfc3 sign+vas
+32	Ed25519 rfc3 sign+corrupt+vas

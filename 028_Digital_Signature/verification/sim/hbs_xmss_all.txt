@@ -1,0 +1,7 @@
+XMSS program: 281 instructions
+XMSSMT-SHA2_20/4_192       ok (5876 hashes, 160280 steps, 1 s)
+XMSSMT-SHA2_40/8_256       ok (14288 hashes, 391696 steps, 4 s)
+XMSSMT-SHA2_60/12_256      ok (21589 hashes, 591502 steps, 9 s)
+XMSS-SHA2_10_256           ok (1790 hashes, 49206 steps, 20 s)
+XMSS-SHAKE256_10_256       ok (1835 hashes, 48511 steps, 32 s)
+XMSS-SHAKE256_10_192       ok (1366 hashes, 36231 steps, 41 s)

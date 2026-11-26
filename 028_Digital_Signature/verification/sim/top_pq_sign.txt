@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\env\misc\run_unit.py", line 71, in <module>
+    if __name__ == '__main__':
+                 ^^^^^^^^^^^^^^
+  File "C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\env\misc\run_unit.py", line 63, in main
+    return 2
+    ^^^^^^^^^
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1209, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1630, in _communicate
+    raise TimeoutExpired(self.args, orig_timeout)
+subprocess.TimeoutExpired: Command '['C:/HQuan/102_MyGithub/VLSIT_OPEN_IP_CORE/028_Digital_Signature/verification/sim/top_pq_r4/obj/Vtb_top_pq.exe', '+DIR=C:/HQuan/102_MyGithub/VLSIT_OPEN_IP_CORE/028_Digital_Signature/verification/sim/lat_quick', '+KIND=lat', '+FIRST=3', '+NVEC=1', '+MAXCYC=60000000']' timed out after 3000 seconds

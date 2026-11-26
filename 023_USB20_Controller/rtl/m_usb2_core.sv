@@ -8,7 +8,8 @@
  *                holds the parameter check, the resets, the over-current block, the CSR
  *                integration, the PHY adapter, the link, the speed engine, the device and host
  *                engines, the FIFO manager, its crossing and the DMA or the AXI slave. The four
- *                wrappers tie off the pins of the interfaces that a build does not have.
+ *                wrappers tie off the pins of the interfaces that a build does not have. UTMI+
+ *                builds hold the always-on wake detector m_usb2_utmilp (DEC-049).
  */
 `timescale 1ns/1ps
 
@@ -97,10 +98,6 @@ module m_usb2_core #(
   // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
   parameter logic [31:0] PARA_USB2_PIPE_MODE = 0,
-  // Parameter Description: OpMode driven by the host for the SE0 of a port reset (TBD-015).
-  // Parameter values: 0 to 3; default is 3.
-  // Parameter unit: none
-  parameter logic [31:0] PARA_USB2_RST_OPMODE = 3,
   // Parameter Description: register slice on the AXI4 slave read data channel.
   // Parameter values: 0 or 1; default is 0.
   // Parameter unit: none
@@ -369,6 +366,8 @@ module m_usb2_core #(
   logic w_term_sel;
   logic [1:0] w_op_mode;
   logic w_suspend_n;
+  logic w_suspend_n_reg;
+  logic w_wake_aon;
   logic w_dp_pd;
   logic w_dm_pd;
   logic w_drv_vbus;
@@ -815,6 +814,7 @@ module m_usb2_core #(
         .i_term_sel           (w_term_sel),
         .i_op_mode            (w_op_mode),
         .i_suspend_n          (w_suspend_n),
+        .i_wake_aon           (w_wake_aon),
         .i_dp_pd              (w_dp_pd),
         .i_dm_pd              (w_dm_pd),
         .i_drv_vbus           (w_drv_vbus),
@@ -832,6 +832,17 @@ module m_usb2_core #(
       assign o_ulpi_data    = 8'h00;
       assign o_ulpi_data_oe = 1'b0;
       assign w_stp_lp       = 1'b0;
+      // Always-on wake detector: raises SuspendM while the PHY has stopped CLK-PHY (REQ-IF-015,
+      // DEC-049, CDC-008).
+      m_usb2_utmilp u_utmilp (
+        .i_clk_bus        (i_clk_bus),
+        .i_rst_n_bus      (w_rst_n_bus),
+        .i_utmi_linestate (i_utmi_linestate),
+        .i_suspend_n_phy  (w_suspend_n_reg),
+        .i_wake_req       (w_wake_csr),
+        .o_wake           (w_wake_aon)
+      );
+      // No ULPI register access or low power mode in a UTMI+ build.
       assign w_lp_active    = 1'b0;
       assign w_reg_busy     = 1'b0;
       assign w_reg_done     = w_reg_start;
@@ -866,6 +877,7 @@ module m_usb2_core #(
         .i_dp_pd         (w_dp_pd),
         .i_dm_pd         (w_dm_pd),
         .i_drv_vbus      (w_drv_vbus),
+        .i_ext_vbus      (w_ph_hport[23]),   // u2_hport.ext_vbus (DEC-048 PHY-06)
         .i_chrg_vbus     (w_chrg_vbus),
         .i_dischrg_vbus  (w_dischrg_vbus),
         .i_id_pullup     (w_id_pullup),
@@ -892,6 +904,7 @@ module m_usb2_core #(
         .o_stp_lp    (w_stp_lp),
         .o_lp_sync   ()
       );
+      assign w_wake_aon = 1'b0;
       assign o_utmi_dataout = 16'h0000;
       assign o_utmi_opmode = 2'b00;
       assign o_utmi_xcvrsel = 2'b00;
@@ -1008,8 +1021,7 @@ module m_usb2_core #(
     .PARA_USB2_TSCALE  (PARA_USB2_TSCALE),
     .PARA_USB2_ROLE    (PARA_USB2_ROLE),
     .PARA_USB2_UTMI_W  (PARA_USB2_UTMI_W),
-    .PARA_USB2_PIPE_MODE (PARA_USB2_PIPE_MODE),
-    .PARA_USB2_RST_OPMODE (PARA_USB2_RST_OPMODE)
+    .PARA_USB2_PIPE_MODE (PARA_USB2_PIPE_MODE)
   ) u_spd (
     .i_clk_phy       (i_clk_phy),
     .i_rst_n_core    (w_rst_n_core),
@@ -1036,6 +1048,7 @@ module m_usb2_core #(
     .o_term_sel      (w_term_sel),
     .o_op_mode       (w_op_mode),
     .o_suspend_n     (w_suspend_n),
+    .o_suspend_n_reg (w_suspend_n_reg),
     .o_dp_pd         (w_dp_pd),
     .o_dm_pd         (w_dm_pd),
     .o_drv_vbus      (w_drv_vbus),

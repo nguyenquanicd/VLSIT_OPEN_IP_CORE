@@ -1,0 +1,4 @@
+SLH program: 373 instructions
+SLH-DSA-SHA2-128s      ok  (2115 hashes, 74433 steps)
+SLH-DSA-SHAKE-128s     ok  (2114 hashes, 72055 steps)
+SLH-DSA-SHAKE-192f     ok  (9042 hashes, 299370 steps)

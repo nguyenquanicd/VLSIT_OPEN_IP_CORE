@@ -22,12 +22,12 @@ Stimulus: host stops SOF (idle), J on the line, host K for 20 ms, an idle shorte
   plus LPM tokens with different attributes and addresses, an OUT after the soft reset.
 Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
   DSL-TRAFFIC | REQ-CLK-003, REQ-FUNC-004 | bulk OUT probe after each event | ACK and the 64 bytes in memory | TB XH, GAP, MC | 400 CLK-PHY | the device does not answer after the event
-  DSL-SUSP | REQ-FUNC-018 | last host packet, then idle | full-speed row between 3.0 and 3.125 ms (scaled), suspend_n low within 10 ms, irq_raw.suspend, sts.suspended, dsts.susp_det | TB WP, GAP, P, R | 3.125 ms and 10 ms scaled | early or late reversion, no suspend or flags missing
+  DSL-SUSP | REQ-FUNC-018 | last host packet, then idle | full-speed row between 3.0 and 3.125 ms (scaled), within 10 ms the suspend row 01 / 1 / 00 with SuspendM low (the D+ pull-up stays; DEC-048 PHY-04), irq_raw.suspend, sts.suspended, dsts.susp_det | TB WP, GAP, P, R | 3.125 ms and 10 ms scaled | early or late reversion, no suspend or flags missing
   DSL-RESUME | REQ-FUNC-018, REQ-IF-012 | host K for 20 ms, then SE0 | high-speed row with suspend_n high within 500 us; irq_raw.resume; sts.suspended 0 | TB WP, P, R | 500 us scaled | no return to high speed or flags wrong
   DSL-NOSUSP | REQ-FUNC-018 | idle of 2.8 ms, then a SOF | still the high-speed row and not suspended; irq_raw.suspend stays 0 | TB XP, R | at 2.8 ms | suspend before 3 ms of idle
   DSL-RWAKE | REQ-FUNC-019 | dctrl.rmt_wake during suspend | TXValid only after 300 us to 3 ms more (5 ms of idle in total), resume row, K for 1 to 15 ms, rmt_wake cleared by hardware | TB WP, GAP, XP, XC, P | 16 ms scaled | K too early, too short/long or the request not cleared
   DSL-RSTSUSP | REQ-RESET-002, REQ-FUNC-013 | SE0 during suspend | device chirp row and chirp of 1 to 7 ms, high speed after the host chirp, busrst and enum, sts speed 0 and suspended 0 | TB WP, XP, XC, P, R | 8 ms scaled | the device stays suspended or skips the handshake
-  DSL-L1 | REQ-FUNC-021 | LPM token (L1, HIRD 5, remote wake 1), lpm_cfg.resp ACK | ACK; suspend_n low within 600 CLK-PHY; lpm_evt; sts.suspended; dsts l1_state 1, lpm_hird 5, lpm_rwake 1 | TB XH, GAP, WP, P, R | 600 CLK-PHY | no ACK, no L1 or wrong attributes
+  DSL-L1 | REQ-FUNC-021 | LPM token (L1, HIRD 5, remote wake 1), lpm_cfg.resp ACK | ACK; suspend row 01 / 1 / 00 with SuspendM low within 600 CLK-PHY; lpm_evt; sts.suspended; dsts l1_state 1, lpm_hird 5, lpm_rwake 1 | TB XH, GAP, WP, P, R | 600 CLK-PHY | no ACK, no L1 or wrong attributes
   DSL-L1EXIT | REQ-FUNC-021 | host K for the HIRD time, then SE0 | dsts.l1_state returns to 0 | TB P | 400 polls | L1 not left
   DSL-LPMNYET | REQ-FUNC-021 | lpm_cfg.resp NYET | NYET to the LPM token; l1_state stays 0 | TB XH, R | 400 CLK-PHY | other handshake or L1 entered
   DSL-LPMSTALL | REQ-FUNC-021, LPM ECN | lpm_cfg.resp STALL; then resp ACK with bLinkState 3 | STALL in both cases; l1_state 0 | TB XH, R | 400 CLK-PHY | ACK to an unsupported link state
@@ -35,7 +35,7 @@ Functional checkpoints and assertions (R-286; ID | requirement | trigger | expec
   DSL-SWRST | REQ-RESET-001 | ctrl.swrst with core_en 0 | swrst self-clears; an OUT afterwards gets no answer | TB P, XN | 400 polls, 150 CLK-PHY | swrst stuck or the core still answers
 Shared checkpoints also reached: DBU-VER, DBR-CHIRP, DBR-HS, DBU-ENUM.
 Expected outcome: every low-power transition and the soft reset behave as listed; the probe transfer succeeds after each one.
-Defect/fault targeted: wrong idle timers (early/late suspend), resume not detected, remote wakeup too early or too long, reset ignored
+Defect/fault targeted: pull-up removed in suspend after high speed (M31, DEC-048 PHY-04); wrong idle timers (early/late suspend), resume not detected, remote wakeup too early or too long, reset ignored
   in suspend, LPM answers ignoring lpm_cfg or bLinkState, soft reset not stopping the core.
 Checker/oracle: timing windows from USB 2.0 and REQ-FUNC-018/019/021 (scaled), CSR description; harness WP/XP/XC/GAP/XH/XN/P/R/MC;
   negative-control audit.
@@ -83,7 +83,7 @@ def go_suspend():
     s.wp(0, mode(1, 1, 0), MODE_MASK, us(3125) + 40)       # full-speed termination no later than 3.125 ms
     s.gap(us(3000) - 12, us(3125) + 12)                    # and not before 3.0 ms (cycles waited, with harness margin)
     s.linestate(1)                                         # pull-up on D+: the line shows J
-    s.wp(0, 0, SUSP_N, us(10000 - 3000))                   # suspended within 10 ms of the start of idle
+    s.wp(0, mode(1, 1, 0), MODE_MASK | SUSP_N, us(10000 - 3000))   # suspended within 10 ms: full-speed row, pull-up kept (DEC-048 PHY-04)
     s.poll('irq_raw', suspend=1)
     s.r('sts', suspended=1)
     s.r('dsts', susp_det=1)
@@ -171,7 +171,7 @@ s.chk('DSL-L1')
 s.xh(ACK)
 s.gap(*dev_gap())
 s.emit('SG', 0, 300)
-s.wp(0, 0, SUSP_N, 600)                                    # L1 within 10 us (600 cycles) after the ACK
+s.wp(0, mode(1, 1, 0), MODE_MASK | SUSP_N, 600)           # L1 within 10 us (600 cycles): full-speed row, pull-up kept (DEC-048)
 s.linestate(1)                                            # full-speed termination in L1: the line shows J
 s.poll('irq_raw', lpm_evt=1)
 s.poll('sts', suspended=1)                                # the status word crosses to CLK-BUS

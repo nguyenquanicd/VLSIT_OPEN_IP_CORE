@@ -1,0 +1,26 @@
+quick: 10 vectors
+edvar: 68 vectors
+det: 26 vectors
+system test images written to C:/HQuan/102_MyGithub/VLSIT_OPEN_IP_CORE/028_Digital_Signature/verification/sim/sys
+quick: 19 vectors
+wave 1
+500 vectors
+493 vectors
+request 0: seed + generate
+request 1: generate
+request 2: generate
+request 3: seed + generate
+request 4: generate
+request 5: seed + generate
+p1             exit 0   147 s
+hfeed          exit 0   147 s
+hseq           exit 0   147 s
+axi            exit 0   147 s
+key_rng        exit 0   147 s
+rng_drbg       exit 0   147 s
+params         exit 0   147 s
+wave 3
+lat            exit 0   317 s
+hbs            exit 0   701 s
+31 rows, 6 PASS; written to C:/HQuan/102_MyGithub/VLSIT_OPEN_IP_CORE/028_Digital_Signature/verification/docs/COVERAGE_MATRIX.md
+RESULT: all jobs exited 0

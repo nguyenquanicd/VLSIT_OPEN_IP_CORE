@@ -15,15 +15,16 @@ Software flow:
 Stimulus: register writes only; the device partner is idle (J) during suspend.
 Functional checkpoints and assertions (R-286; ID | requirement | trigger | expected | checker | deadline | fails when):
   HSR-SOF | REQ-FUNC-010 | before the suspend | at least 3 SOF since the last check, interval 125 us (1 ms full speed) +-10 percent scaled | TB SOF | 500 us (3.5 ms fs) scaled | SOF missing or off interval
-  HSR-SUSP | REQ-FUNC-020 | hport.port_susp written | hsts.port_susp_sts and irq_raw.suspend set | TB P | 3000 and 400 polls | status or interrupt missing
+  HSR-SUSP | REQ-FUNC-020, DEC-048 | hport.port_susp written | hsts.port_susp_sts and irq_raw.suspend set; mode pins in the suspend row 01 / 1 / 00 with SuspendM 0 (also for a high-speed port: the high-speed terminations would hold SE0 and reset the device) | TB P, XP | 3000 and 400 polls | status, interrupt or row wrong
   HSR-QUIET | REQ-FUNC-020 (BUG-048) | port suspended | no SOF for 4 ms (scaled) and no other packet | TB NSOF, XN | 4 ms scaled | any packet while suspended
-  HSR-RESK | REQ-FUNC-020, USB 2.0 7.1.7.7 | hport.port_res written | resume K stream of 19.5 to 60 ms (scaled) | TB XC | 70 ms scaled | no resume K or shorter than 20 ms
+  HSR-RESK | REQ-FUNC-020, USB 2.0 7.1.7.7, DEC-048 | hport.port_res written | resume row 01 / 1 / 10 (full-speed signaling also for a high-speed port), resume K stream of 19.5 to 60 ms (scaled) | TB WP, XC | 70 ms scaled | no resume K, shorter than 20 ms or the high-speed row
   HSR-SOFRST | REQ-FUNC-020, 037 | end of the resume K | at least one SOF within 3 ms | TB SOF | 3 ms scaled | no SOF after the resume
   HSR-RESSTS | REQ-FUNC-020 | after the resume | irq_raw.resume set; hsts port_susp_sts 0 and port_en 1 | TB P, R | 400 polls | flag missing or the port disabled
-  HSR-SOF2 | REQ-FUNC-010 | after the resume | at least 3 SOF at the regular interval; no crc_err, pid_err or babble flag | TB SOF, R | 500 us scaled | irregular SOF or an error flag
+  HSR-SOF2 | REQ-FUNC-010 | after the resume | back in the speed row (00 / 0 / 00 high speed, 01 / 1 / 00 full speed); at least 3 SOF at the regular interval; no crc_err, pid_err or babble flag | TB XP, SOF, R | 500 us scaled | wrong row, irregular SOF or an error flag
 Shared checkpoints also reached: HBU-VER, HBU-CONN, HBU-RSTDRV, HBU-CHIRP (high speed only), HBU-RST50, HBU-RECOV (hostlib.py).
 Expected outcome: suspend silences the port, resume restores SOF; no error flags.
-Defect/fault targeted: SOF sent while suspended (M27, BUG-048); resume K too short; status not cleared after resume.
+Defect/fault targeted: SOF sent while suspended (M27, BUG-048); high-speed row kept in suspend or used for resume (M29, M30, DEC-048);
+  resume K too short; status not cleared after resume.
 Checker/oracle: timing values from USB 2.0 and REQ-FUNC-020 (scaled by TSCALE); harness SOF/NSOF/XN/XC/P/R; qualified by M27 and the
   negative-control audit.
 Reproducibility: cd tests/usb20; python gen_host_susp_res.py 1 ts16 (and 1 fs ts16); from verification:
@@ -54,6 +55,7 @@ s.w('hport', oc_en=1, vbus_drv=1, sof_en=1, port_susp=1)
 s.chk('HSR-SUSP')
 s.poll('hsts', tries=3000, port_susp_sts=1)
 s.poll('irq_raw', tries=400, suspend=1)
+s.xp(0, mode(1, 1, 0, pd=1), MODE_MASK | (1 << 5))              # suspend row 01 / 1 / 00 with SuspendM 0 also for a HS port (DEC-048 PHY-02)
 s.emit('SOF', 0, 0, 0xFFFFFFF)                                   # restart the SOF statistics
 s.chk('HSR-QUIET')
 s.emit('NSOF', us(4000))                                        # no SOF while suspended (SOF packets do not reach XN)
@@ -63,6 +65,7 @@ s.bin('cg_sofphase.suspend')
 s.w1c('irq_raw', suspend=1)
 s.w('hport', oc_en=1, vbus_drv=1, sof_en=1, port_res=1)
 s.chk('HSR-RESK')
+s.wp(0, mode(1, 1, 2, pd=1) | (1 << 5), MODE_MASK | (1 << 5), us(2000))   # resume row 01 / 1 / 10 (DEC-048 PHY-03)
 s.xc(us(19500), us(60000), 0x00, us(70000))                      # resume K stream
 s.bin('cg_hres.fs' if FS else 'cg_hres.hs')
 s.emit('SOF', 0, 0, 0xFFFFFFF)
@@ -75,6 +78,7 @@ s.poll('irq_raw', tries=400, resume=1)
 s.r('hsts', port_susp_sts=0, port_en=1)
 s.wait(max(3000, us(3500 if FS else 500)))
 s.chk('HSR-SOF2')
+s.xp(0, (mode(1, 1, 0, pd=1) if FS else mode(0, 0, 0, pd=1)) | (1 << 5), MODE_MASK | (1 << 5))   # back to the speed row
 s.emit('SOF', 3, LO, HI)
 s.r('irq_raw', crc_err=0, pid_err=0, babble=0)
 print(s.save('ops/host_susp_res%s_s%d.ops' % ('_fs' if FS else '', seed)))

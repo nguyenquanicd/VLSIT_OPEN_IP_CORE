@@ -1,0 +1,11 @@
+slh: 56 vectors
+lms: 50 vectors
+xmss: 32 vectors
+tb_hbs: 0 vectors, 0 failed, 0 protocol failures
+RESULT: PASS
+slh    FAIL  55/56 vectors, 115534655 cycles, 200 s
+    FAIL 18 SLH-DSA-SHA2-192f wrong message
+VEC 18: sigok 1, expected 0
+VEC 18 FAIL cycles=3804860
+lms    PASS  50/50 vectors, 32373195 cycles, 192 s
+xmss   PASS  32/32 vectors, 101095977 cycles, 170 s

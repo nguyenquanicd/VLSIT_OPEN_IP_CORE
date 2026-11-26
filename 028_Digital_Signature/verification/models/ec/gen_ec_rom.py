@@ -17,7 +17,7 @@ import ec_progs as P
 CURVE_NO = [('Ed25519', 0), ('Ed448', 1), ('P-256', 2), ('P-384', 3), ('P-521', 4), ('secp256k1', 5), ('Ed25519dom', 6)]
 OPS_NO = {'keygen': 0, 'sign': 1, 'verify': 2, 'vas': 3}
 CNAMES = ['P', 'N', 'NM1', 'A', 'B', 'B3', 'D', 'GX', 'GY', 'GT', 'PM2', 'NM2', 'P58', 'P34', 'SQRTM1', 'CLAMP_AND', 'CLAMP_OR',
-          'MASKY', 'HIFACTOR', 'TWO576', 'IDENT0', 'IDENT1', 'IDENT2', 'IDENT3', 'NBITS', 'PBITS']
+          'MASKY', 'HIFACTOR', 'TWO576', 'IDENT0', 'IDENT1', 'IDENT2', 'IDENT3', 'NBITS', 'PBITS', 'BIG']
 CID = {n: i for i, n in enumerate(CNAMES)}
 
 
@@ -84,7 +84,12 @@ def main(path):
     L.append('  output logic [12:0]  o_entry,')
     L.append('  input  wire  [3:0]   i_str_id,')
     L.append('  output logic [255:0] o_str,')
-    L.append('  output logic [7:0]   o_str_len')
+    L.append('  output logic [7:0]   o_str_len,')
+    L.append('  input  wire          i_msel,')
+    L.append('  input  wire  [1:0]   i_mulw,')
+    L.append('  output logic [127:0] o_mp,')
+    L.append('  output logic [575:0] o_r2,')
+    L.append('  output logic [4:0]   o_nd')
     L.append(');')
     L.append('')
     L.append('  // Program ROM')
@@ -132,6 +137,26 @@ def main(path):
         s = P.STRINGS[sid]
         L.append("      4'd%d: begin o_str = 256'h%s; o_str_len = 8'd%d; end" % (sid, int.from_bytes(s, 'little').to_bytes(32, 'big').hex(), len(s)))
     L.append("      default: o_str_len = 8'd0;")
+    L.append('    endcase')
+    L.append('  end')
+    L.append('')
+    L.append('  // Montgomery constants of the odd moduli p (i_msel 0) and n (i_msel 1) for the digit width')
+    L.append('  // of i_mulw (0: 32, 1: 64, 2: 128 bits): m_prime = -m^-1 mod 2^w, R2 = R^2 mod m with')
+    L.append('  // R = 2^(w nd), nd = ceil(bits(m) / w)')
+    L.append('  always_comb begin : p_com_mont')
+    L.append("    o_mp = 128'd0;")
+    L.append("    o_r2 = 576'd0;")
+    L.append("    o_nd = 5'd0;")
+    L.append('    case ({i_curve, i_msel, i_mulw})')
+    for cname, cno in CURVE_NO:
+        c = CURVES['Ed25519' if cname == 'Ed25519dom' else cname]
+        for msel, m in ((0, c.p), (1, c.n)):
+            for wc, w in ((0, 32), (1, 64), (2, 128)):
+                nd = -(-m.bit_length() // w)
+                mp = (-pow(m, -1, 1 << w)) % (1 << w)
+                r2 = pow(1 << (w * nd), 2, m)
+                L.append("      {3'd%d, 1'b%d, 2'd%d}: begin o_mp = 128'h%x; o_r2 = 576'h%x; o_nd = 5'd%d; end" % (cno, msel, wc, mp, r2, nd))
+    L.append("      default: o_nd = 5'd0;")
     L.append('    endcase')
     L.append('  end')
     L.append('')

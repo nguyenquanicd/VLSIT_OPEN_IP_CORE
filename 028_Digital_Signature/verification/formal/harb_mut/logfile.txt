@@ -1,0 +1,37 @@
+SBY  7:00:16 [harb_mut] Removing directory 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_mut'.
+SBY  7:00:16 [harb_mut] Copy 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\mut\m_vlsit_dsig_harb.sv' to 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_mut\src\m_vlsit_dsig_harb.sv'.
+SBY  7:00:16 [harb_mut] Copy 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_props.sv' to 'C:\HQuan\102_MyGithub\VLSIT_OPEN_IP_CORE\028_Digital_Signature\verification\formal\harb_mut\src\harb_props.sv'.
+SBY  7:00:16 [harb_mut] engine_0: smtbmc yices
+SBY  7:00:16 [harb_mut] base: starting process "cd harb_mut/src& yosys -ql ../model/design.log ../model/design.ys"
+SBY  7:00:16 [harb_mut] base: finished (returncode=0)
+SBY  7:00:16 [harb_mut] prep: starting process "cd harb_mut/model& yosys -ql design_prep.log design_prep.ys"
+SBY  7:00:16 [harb_mut] prep: finished (returncode=0)
+SBY  7:00:16 [harb_mut] smt2: starting process "cd harb_mut/model& yosys -ql design_smt2.log design_smt2.ys"
+SBY  7:00:17 [harb_mut] smt2: finished (returncode=0)
+SBY  7:00:17 [harb_mut] engine_0: starting process "cd harb_mut& yosys-smtbmc -s yices --presat --unroll --noprogress -t 8  --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc model/design_smt2.smt2"
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Solver: yices
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 0..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 0..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 1..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 1..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 2..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 2..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 3..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 3..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assumptions in step 4..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Checking assertions in step 4..
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  BMC failed!
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Assert failed in harb_props: harb_props.sv:46.29-46.54 (_witness_.check_assert_harb_props_sv_46_180)
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to VCD file: engine_0/trace.vcd
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to Verilog testbench: engine_0/trace_tb.v
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to constraints file: engine_0/trace.smtc
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Writing trace to Yosys witness file: engine_0/trace.yw
+SBY  7:00:17 [harb_mut] engine_0: ##   0:00:00  Status: failed
+SBY  7:00:17 [harb_mut] engine_0: finished (returncode=1)
+SBY  7:00:17 [harb_mut] engine_0: Status returned by engine: FAIL
+SBY  7:00:17 [harb_mut] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:01 (1)
+SBY  7:00:17 [harb_mut] summary: Elapsed process time unvailable on Windows
+SBY  7:00:17 [harb_mut] summary: engine_0 (smtbmc yices) returned FAIL
+SBY  7:00:17 [harb_mut] summary: counterexample trace: harb_mut\engine_0\trace.vcd
+SBY  7:00:17 [harb_mut] summary:   failed assertion harb_props._witness_.check_assert_harb_props_sv_46_180 at harb_props.sv:46.29-46.54 step 4
+SBY  7:00:17 [harb_mut] DONE (FAIL, rc=2)

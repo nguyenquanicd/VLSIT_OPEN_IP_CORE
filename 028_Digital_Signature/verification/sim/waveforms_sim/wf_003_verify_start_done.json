@@ -1,0 +1,62 @@
+{
+ "signal": [
+  {
+   "name": "i_clk_core",
+   "wave": "p......................."
+  },
+  [
+   "command",
+   {
+    "name": "o_dsig_cmd_start",
+    "wave": "0.10...................."
+   },
+   {
+    "name": "i_hw_clr_dsig_cmd_start",
+    "wave": "0.10...................."
+   }
+  ],
+  [
+   "control block",
+   {
+    "name": "reg_fsm_ctl_current_state",
+    "wave": "=..==........===........",
+    "data": [
+     "ENUM_ST_IDLE",
+     "ENUM_ST_CHECK",
+     "ENUM_ST_RUN",
+     "ENUM_ST_RESULT",
+     "ENUM_ST_CLEAR",
+     "ENUM_ST_IDLE"
+    ]
+   },
+   {
+    "name": "i_dsig_sts_busy",
+    "wave": "0..1...........0........"
+   }
+  ],
+  [
+   "result",
+   {
+    "name": "i_dsig_sts_resvld",
+    "wave": "0.............1........."
+   },
+   {
+    "name": "i_dsig_sts_sigok",
+    "wave": "0.............1........."
+   },
+   {
+    "name": "o_irq",
+    "wave": "0.............1........."
+   }
+  ]
+ ],
+ "head": {
+  "text": "OP-004, success: verification from start command to done (simulated)"
+ },
+ "foot": {
+  "text": "Simulated by tb_dsig_p1 from dump wf_003_verify_start_done.vcd, window from clock edge 0; MATCH with the figure of the specification."
+ },
+ "config": {
+  "hscale": 3
+ }
+}

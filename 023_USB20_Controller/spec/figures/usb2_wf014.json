@@ -25,6 +25,20 @@
    "wave": "1.0|..1..|...."
   },
   {
+   "name": "o_utmi_xcvrsel",
+   "wave": "=..|.....|....",
+   "data": [
+    "FS"
+   ]
+  },
+  {
+   "name": "o_utmi_termsel",
+   "wave": "=..|.....|....",
+   "data": [
+    "FS"
+   ]
+  },
+  {
    "name": "u2_dctrl.rmt_wake",
    "wave": "0..|.1...|0..."
   },
@@ -45,7 +59,7 @@
   "text": "WF-014: device suspend and remote wakeup (OP-009, success)"
  },
  "foot": {
-  "text": "Not to scale. 3 ms idle, suspend; after 5 ms idle software sets rmt_wake, the device drives K for 1 to 15 ms; hardware clears rmt_wake."
+  "text": "Not to scale. 3 ms idle, suspend; after 5 ms idle software sets rmt_wake, the device drives K for 1 to 15 ms; hardware clears rmt_wake. XcvrSelect and TermSelect stay in the full-speed row while suspended, also for a device that was in high-speed operation, so the D+ pull-up stays on (peripheral suspend row of ULPI 1.1 Table 40, DEC-048)."
  },
  "config": {
   "hscale": 1

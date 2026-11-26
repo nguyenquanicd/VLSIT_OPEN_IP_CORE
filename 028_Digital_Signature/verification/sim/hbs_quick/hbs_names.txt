@@ -1,0 +1,19 @@
+0	SLH-DSA-SHA2-128s valid
+1	SLH-DSA-SHA2-128s corrupted signature
+2	SLH-DSA-SHA2-128s wrong message
+3	SLH-DSA-SHA2-128s wrong root
+4	SLH-DSA-SHA2-128s valid with context
+5	SLH-DSA-SHA2-128s context missing
+6	SLH-DSA-SHAKE-128s valid
+7	SLH-DSA-SHAKE-128s corrupted signature
+8	SLH-DSA-SHAKE-128s wrong message
+9	SLH-DSA-SHAKE-128s wrong root
+10	LMS 0 OTS 3 levels 1 valid
+11	LMS 0 OTS 3 levels 1 corrupted signature
+12	LMS 0 OTS 3 levels 1 wrong message
+13	LMS 0 OTS 3 levels 1 wrong key
+14	LMS 0 OTS 3 levels 1 wrong LMS type
+15	XMSSMT-SHA2_20/4_256 valid
+16	XMSSMT-SHA2_20/4_256 corrupted signature
+17	XMSSMT-SHA2_20/4_256 wrong message
+18	XMSSMT-SHA2_20/4_256 wrong root

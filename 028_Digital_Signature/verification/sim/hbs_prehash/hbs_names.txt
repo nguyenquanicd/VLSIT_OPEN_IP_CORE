@@ -1,0 +1,12 @@
+0	HashSLH-DSA-SHA2-128s hash 0 valid
+1	HashSLH-DSA-SHA2-128s hash 0 another hash code
+2	HashSLH-DSA-SHA2-128s hash 0 pure form
+3	HashSLH-DSA-SHA2-128f hash 2 ctx valid
+4	HashSLH-DSA-SHA2-128f hash 2 ctx another hash code
+5	HashSLH-DSA-SHA2-128f hash 2 ctx pure form
+6	HashSLH-DSA-SHAKE-128s hash 4 valid
+7	HashSLH-DSA-SHAKE-128s hash 4 another hash code
+8	HashSLH-DSA-SHAKE-128s hash 4 pure form
+9	HashSLH-DSA-SHAKE-128f hash 3 ctx valid
+10	HashSLH-DSA-SHAKE-128f hash 3 ctx another hash code
+11	HashSLH-DSA-SHAKE-128f hash 3 ctx pure form

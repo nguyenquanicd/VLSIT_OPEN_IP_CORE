@@ -1,0 +1,24 @@
+0	P-256 hash0 sample det sign
+1	P-256 hash0 sample det sign+vas
+2	P-256 hash0 test det sign
+3	P-256 hash1 sample det sign
+4	P-256 hash1 test det sign
+5	P-256 hash2 sample det sign
+6	P-256 hash2 test det sign
+7	P-384 hash0 sample det sign
+8	P-384 hash0 sample det sign+vas
+9	P-384 hash0 test det sign
+10	P-384 hash1 sample det sign
+11	P-384 hash1 test det sign
+12	P-384 hash2 sample det sign
+13	P-384 hash2 test det sign
+14	P-521 hash0 sample det sign
+15	P-521 hash0 sample det sign+vas
+16	P-521 hash0 test det sign
+17	P-521 hash1 sample det sign
+18	P-521 hash1 test det sign
+19	P-521 hash2 sample det sign
+20	P-521 hash2 test det sign
+21	secp256k1 hash0 det sign
+22	secp256k1 hash1 det sign
+23	secp256k1 hash2 det sign
