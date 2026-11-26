@@ -13,3 +13,21 @@
 12	secp256k1 sha3_256 verify ok
 13	secp256k1 sha3_256 verify bad msg
 14	secp256k1 sha3_256 sign
+15	P-256 sha3_384 verify ok
+16	P-256 sha3_384 verify bad msg
+17	P-256 sha3_384 sign
+18	P-384 sha3_512 verify ok
+19	P-384 sha3_512 verify bad msg
+20	P-384 sha3_512 sign
+21	secp256k1 sha384 verify ok
+22	secp256k1 sha384 verify bad msg
+23	secp256k1 sha384 sign
+24	secp256k1 sha512 verify ok
+25	secp256k1 sha512 verify bad msg
+26	secp256k1 sha512 sign
+27	secp256k1 sha3_384 verify ok
+28	secp256k1 sha3_384 verify bad msg
+29	secp256k1 sha3_384 sign
+30	secp256k1 sha3_512 verify ok
+31	secp256k1 sha3_512 verify bad msg
+32	secp256k1 sha3_512 sign

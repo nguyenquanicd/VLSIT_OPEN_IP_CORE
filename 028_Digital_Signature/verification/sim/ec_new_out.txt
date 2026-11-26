@@ -1,0 +1,4 @@
+sha3: 33 vectors
+k256: 12 vectors
+sha3     PASS  33/33 vectors, 10493132 cycles, 123 s
+k256     PASS  12/12 vectors, 3324299 cycles, 123 s

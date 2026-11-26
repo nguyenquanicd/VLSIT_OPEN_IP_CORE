@@ -17,7 +17,7 @@ S = V + '/sim/'
 P1 = (S + 'regress/syn_async1.log', r'SUMMARY: tests=19 failed tests=0 checks=\d+ failed checks=0\s+assertion failures: 0, assertions never exercised: 0\s+RESULT: PASS')
 P1A = (S + 'regress/sim_async1_seed1.log', P1[1])
 P1S = (S + 'regress/syn_async0.log', P1[1])
-EC_N = {'p384full': 32, 'p521full': 32, 'ed25519': 33, 'ed448': 49, 'edvar': 68, 'det': 26, 'ct': 30, 'p256': 32, 'p384': 16, 'p521': 12, 'k256': 11, 'sha3': 15}
+EC_N = {'p384full': 32, 'p521full': 32, 'ed25519': 33, 'ed448': 49, 'edvar': 68, 'det': 26, 'ct': 30, 'p256': 32, 'p384': 16, 'p521': 12, 'k256': 12, 'sha3': 33}
 
 
 def ec(s, tag='ec_final'):
@@ -67,10 +67,10 @@ ROWS = [
      'tb_ec ed448 (49), edvar (68), tb_top_ec edvar (68, 60 run), tb_top_err', 'signature and key bytes, verify incl. bad context '
      'and dropped context, pure form -> opuns, 63-byte digest -> badlen', 'RFC 8032 sections 7.2 to 7.5',
      [ec('ed448'), ec('edvar'), TOP_EC_E, TOP_ERR]),
-    ('REQ-FUNC-004/005', 'ECDSA P-256, P-384, P-521, secp256k1, hash of dsig_op.hash', 'tb_ec p256 (32), p384 (16), p521 (12), k256 (11), p384full (32), p521full (32)',
+    ('REQ-FUNC-004/005', 'ECDSA P-256, P-384, P-521, secp256k1, hash of dsig_op.hash', 'tb_ec p256 (32), p384 (16), p521 (12), k256 (12), p384full (32), p521full (32)',
      'r and s bytes, verify, r = 0, s = n, point not on curve, BADKEY', 'RFC 6979 A.2.5 to A.2.7; textbook group law (secp256k1)',
      [ec('p256'), ec('p384'), ec('p521'), ec('k256'), ec('p384full'), ec('p521full')]),
-    ('REQ-FUNC-004/005, DEC-018', 'ECDSA with SHA3-256, SHA3-384, SHA3-512 (dsig_op.hash 3 to 5), given nonce', 'tb_ec sha3 (15)',
+    ('REQ-FUNC-004/005, DEC-018', 'ECDSA with SHA3-256, SHA3-384, SHA3-512 (dsig_op.hash 3 to 5), given nonce', 'tb_ec sha3 (33)',
      'verify ok, changed message rejected, r and s bytes of the signature', 'textbook group law, every signature verified by OpenSSL 3.6 when generated',
      [ec('sha3')]),
     ('REQ-FUNC-004/005', 'Deterministic ECDSA nonce RFC 6979 (ASM-024)', 'tb_ec det (26); tb_top_ec det with Hash_DRBG and blinding (26)',
@@ -151,6 +151,11 @@ ROWS = [
      'section 10.4', [(S + 'final_formal.txt', r'harb proof: PASS \(k-induction\); mutant: FAIL as required\s+RESULT: PASS')]),
     ('REQ-PERF-001/002', 'Verification time, signature rate', 'cycle counts of the engine logs (perf.py)', 'every limit of REQ-PERF-001 met; ML-DSA signing reported, not limited (DEC-048)', 'section 13, DEC-048',
      [(S + 'perf_out.txt', r'PERF.md written, 0 failing operations')]),
+    ('Functional coverage', 'Operation space of the specification: algorithm x operation x outcome, ECDSA curve x hash (DEC-032 pairs), nonce mode, ML-DSA set x form x mode, SLH-DSA set x form, verify-after-sign',
+     'func_cover.py over the vectors of the passing engine sets (docs/FUNC_COVERAGE.md)', '156 bins, every bin hit by at least one vector of a passing set',
+     'section 10, DEC-018, DEC-032', [(S + 'func_cover_out.txt', r'func_cover: 156 bins, 0 not hit'), ec('sha3'), ec('k256'), ec('p256'), ec('p384'), ec('p521'),
+      ec('ed25519'), ec('ed448'), ec('edvar'), ec('det'), ec('p384full'), ec('p521full'), lat('all', 25), lat('prehash', 16), lat('hedged', 5),
+      hbs('slh', 56), hbs('prehash', 12), hbs('lms', 50), hbs('xmss', 32), hbs('rfc8554', 3)]),
     ('Section 17 (SDC)', 'Timing constraints of the IP', 'sdc/m_vlsit_dsig_top.sdc, check_sdc.py', 'every port constrained, patterns match ports, no clock group over the bundled CSR data',
      'section 17.1', [(S + 'final_sdc.txt', r'check_sdc: 58 ports, 58 constrained, 0 failures\s+RESULT: PASS')]),
     ('Section 7.2, 7.3 (CDC, RDC)', 'CSR crossing and RST-APB alone', 'check_cdc.py (yosys netlist walk: no CDC tool is available), 3 mutants; cdc/CDC_RDC_NOTES.md; tb_top_err (asynchronous CSR, RST-APB in a write)',
@@ -158,7 +163,7 @@ ROWS = [
      [(S + 'final_cdc.txt', r'check_cdc: 98 flip-flop cells, 4 synchronizer cells, 7 crossing groups, 0 violations\s+mutant C1.*CAUGHT.*\s+mutant C2.*CAUGHT.*\s+mutant C3.*CAUGHT.*\s+check_cdc mutants: 3 of 3 caught\s+RESULT: PASS'), TOP_ERR, P1A]),
     ('REQ-PPA-001 (generic synthesis)', 'Blocks synthesize without latches', 'run_synth.py (yosys, no library)', 'cells and flip-flops per block, 0 latches',
      'section 13', [(S + 'synth_out.txt', r'RESULT: PASS')]),
-    ('Not run', 'Commercial CDC/RDC tool, STA, synthesis with a technology library, functional coverage', 'not available in this environment', '-', '-', []),
+    ('Not run', 'Commercial CDC/RDC tool, STA, synthesis with a technology library', 'not available in this environment', '-', '-', []),
 ]
 
 

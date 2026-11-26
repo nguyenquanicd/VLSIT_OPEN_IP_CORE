@@ -246,6 +246,7 @@ def k256_set():
         if i == 0:
             out.append(Vec(tag + ' keygen', 'secp256k1', 0, key=d.to_bytes(nb, 'big'), exp_ok=1, exp_res=pk))
             out.append(Vec(tag + ' sign+vas', 'secp256k1', 3, msg=msg, key=d.to_bytes(nb, 'big'), pool=pool, exp_ok=1, exp_res=sig))
+            out.append(Vec(tag + ' sign+corrupt+vas', 'secp256k1', 4, msg=msg, key=d.to_bytes(nb, 'big'), pool=pool, exp_ok=0))
     return out
 
 
@@ -290,7 +291,8 @@ def sha3_set():
     out = []
     rnd = random.Random(3202)
     pairs = [('P-256', 3, 'sha3_256'), ('P-384', 4, 'sha3_384'), ('P-521', 5, 'sha3_512'), ('P-256', 5, 'sha3_512'),
-             ('secp256k1', 3, 'sha3_256')]
+             ('secp256k1', 3, 'sha3_256'), ('P-256', 4, 'sha3_384'), ('P-384', 5, 'sha3_512'), ('secp256k1', 1, 'sha384'),
+             ('secp256k1', 2, 'sha512'), ('secp256k1', 4, 'sha3_384'), ('secp256k1', 5, 'sha3_512')]
     for cname, hop, hname in pairs:
         c = CURVES[cname]
         nb = c.nbytes

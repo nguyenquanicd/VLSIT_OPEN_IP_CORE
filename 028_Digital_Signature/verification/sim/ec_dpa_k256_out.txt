@@ -1,0 +1,2 @@
+k256: 12 vectors
+k256     PASS  12/12 vectors, 3527315 cycles, 42 s

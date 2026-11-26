@@ -1,0 +1,5 @@
+0	ML-DSA-65 sign hedged
+1	ML-DSA-87 sign hedged
+2	HashML-DSA-44 hash 2 sign hedged
+3	HashML-DSA-65 hash 0 sign hedged
+4	HashML-DSA-87 hash 1 sign hedged

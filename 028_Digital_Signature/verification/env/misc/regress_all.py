@@ -66,7 +66,7 @@ def wave2():
 
 
 def wave3():
-    return wait([job('lat', [PY, 'env/lat/run_lat.py', 'all', 'prehash'], {'UNIT_TAG': '_final'}),
+    return wait([job('lat', [PY, 'env/lat/run_lat.py', 'all', 'prehash', 'hedged'], {'UNIT_TAG': '_final'}),
                  job('hbs', [PY, 'env/hbs/run_hbs.py', 'slh', 'lms', 'xmss', 'prehash', 'rfc8554'], {'UNIT_TAG': '_final'}),
                  job('lat_dpa', [PY, 'env/lat/run_lat.py', 'all', 'prehash'], {'UNIT_TAG': '_dpa', 'LAT_SET_TAG': '_dpa', 'UNIT_DEFS': '-DTB_DPA=1'})])
 

@@ -95,7 +95,37 @@ def prehash_vecs():
     return out
 
 
+def hedged_vecs():
+    """Hedged signing (32 random bytes of the pool, OpenSSL hextest-entropy) for the cases that the other sets do not have:
+    pure form of ML-DSA-65 and ML-DSA-87, and HashML-DSA (pre-hash, message-encoding 0 over M') of all three sets."""
+    import test_lat_prehash as TP
+    import tempfile
+    out = []
+    msg = bytes(range(50))
+    for level in (65, 87):
+        seed = bytes((i * 7 + level) % 256 for i in range(32))
+        rnd = bytes((i * 11 + level) % 256 for i in range(32))
+        out.append(V('ML-DSA-%d sign hedged' % level, level, 1, msg=msg, key=seed, pool=rnd, hedged=1,
+                     exp=ossl_hedged(level, seed, msg, rnd), vas=0))
+    pre = b'firmware image of the hedged prehash test'
+    for level, hcode in ((44, 2), (65, 0), (87, 1)):
+        seed = bytes((i * 5 + level) % 256 for i in range(32))
+        rnd = bytes((i * 3 + level) % 256 for i in range(32))
+        dig = TP.HASHES[hcode][0](pre).digest()
+        d = tempfile.mkdtemp()
+        k, m, sg = (os.path.join(d, x) for x in ('k.pem', 'm.bin', 's.bin'))
+        T.ossl('genpkey', '-algorithm', 'ML-DSA-%d' % level, '-pkeyopt', 'hexseed:' + seed.hex(), '-out', k)
+        open(m, 'wb').write(TP.mprime(hcode, dig, b''))
+        T.ossl('pkeyutl', '-sign', '-inkey', k, '-rawin', '-in', m, '-out', sg, '-pkeyopt', 'message-encoding:0',
+               '-pkeyopt', 'hextest-entropy:' + rnd.hex())
+        out.append(V('HashML-DSA-%d hash %d sign hedged' % (level, hcode), level, 1, msg=dig, key=seed, pool=rnd, hedged=1,
+                     exp=open(sg, 'rb').read(), vas=0, form=1, hcode=hcode))
+    return out
+
+
 def build(name):
+    if name == 'hedged':
+        return hedged_vecs()
     if name == 'prehash':
         return prehash_vecs()
     if name == 'quick':

@@ -3,9 +3,10 @@
 2	secp256k1 rnd0 sign
 3	secp256k1 rnd0 keygen
 4	secp256k1 rnd0 sign+vas
-5	secp256k1 rnd1 verify ok
-6	secp256k1 rnd1 verify bad msg
-7	secp256k1 rnd1 sign
-8	secp256k1 rnd2 verify ok
-9	secp256k1 rnd2 verify bad msg
-10	secp256k1 rnd2 sign
+5	secp256k1 rnd0 sign+corrupt+vas
+6	secp256k1 rnd1 verify ok
+7	secp256k1 rnd1 verify bad msg
+8	secp256k1 rnd1 sign
+9	secp256k1 rnd2 verify ok
+10	secp256k1 rnd2 verify bad msg
+11	secp256k1 rnd2 sign

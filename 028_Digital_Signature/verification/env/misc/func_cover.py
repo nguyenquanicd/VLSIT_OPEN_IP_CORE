@@ -6,7 +6,7 @@ vector of a passing set has that combination. The bins are the combinations that
   B2  ECDSA curve x hash x {sign, verify}    (the legal pairs of DEC-032: digest at least as long as the curve needs)
   B3  ECDSA sign with a given nonce and with the deterministic nonce (RFC 6979), per curve
   B4  ML-DSA set x form {pure, pre-hash} x {deterministic, hedged} x {sign, verify}
-  B5  SLH-DSA parameter set x form x {valid, invalid}
+  B5  SLH-DSA parameter set x form x {valid, invalid}  (pre-hash: the four sets of security level 1)
   B6  EC sign + verify-after-sign: accepted and corrupted (verify-after-sign must reject), per curve
 Writes docs/FUNC_COVERAGE.md and prints the bins that no vector hits. Usage: python func_cover.py"""
 import os
@@ -61,8 +61,12 @@ def main():
             for hd in ('deterministic', 'hedged'):
                 bin_('B4', (s, f, hd, 'sign'))
             bin_('B4', (s, f, '-', 'verify'))
+    # pure form: all 12 sets. Pre-hash form: the four sets of security level 1 (SHA2 and SHAKE, small and fast); the pre-hash
+    # path (M' built from the OID and the digest) does not depend on n, h, d, so the other eight sets add no new behavior
     for k in range(12):
         for f in ('pure', 'pre-hash'):
+            if f == 'pre-hash' and k not in (0, 1, 6, 7):
+                continue
             for o in ('valid', 'invalid'):
                 bin_('B5', ('set %d' % k, f, o))
     # elliptic-curve vectors: blocks of 1024 bytes
@@ -88,7 +92,7 @@ def main():
                 hits[('B6', (alg, 'accepted' if op == 3 else 'corrupted, rejected'))] += 1
     # lattice vectors
     ML = {9: 'ML-DSA-44', 10: 'ML-DSA-65', 11: 'ML-DSA-87'}
-    for d in ('lat_all', 'lat_prehash'):
+    for d in ('lat_all', 'lat_prehash', 'lat_hedged'):
         p = '%s/%s/lat_vecs.txt' % (S, d)
         if not os.path.exists(p):
             continue

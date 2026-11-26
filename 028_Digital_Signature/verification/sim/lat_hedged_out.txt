@@ -1,0 +1,5 @@
+hedged: 5 vectors
+masking monitor: 0 signing vectors wrote the mask polynomial
+tb_lat: 0 vectors, 0 failed, 0 protocol failures
+RESULT: PASS
+hedged PASS  5/5 vectors, 24398515 cycles, 66 s
