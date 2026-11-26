@@ -4,3 +4,6 @@
 | mmul64 | m_vlsit_dsig_mmul | PARA_MUL_W=64 (synth -noabc) | synthesized | 471698 | 2377 | 0 |
 | mmul32 | m_vlsit_dsig_mmul | PARA_MUL_W=32 (synth -noabc) | synthesized | 239908 | 2345 | 0 |
 | axi | m_vlsit_dsig_axi | defaults | synthesized | 911 | 143 | 0 |
+| hfeed | m_vlsit_dsig_hfeed | defaults | synthesized | 24062 | 1883 | 0 |
+| harb | m_vlsit_dsig_harb | defaults | synthesized | 944 | 4 | 0 |
+RESULT: PASS
