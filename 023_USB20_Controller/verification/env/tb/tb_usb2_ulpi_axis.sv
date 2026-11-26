@@ -98,8 +98,12 @@ module tb_usb2_ulpi_axis;
 
   // ------------------------------------------------------------------ scoring
   int errors = 0, checks = 0, fd_bin;
+  // Check census (2026-11-27, audit of false PASS): number of times each scenario line executed a check, printed as CHKEXEC at the
+  // end; a check line that never runs cannot fail (UTMILP-LINE keeps this out of the ULPI variants only where it names DUT signals).
+  int chk_exec[int];
   task automatic chk(input bit c, input string m);
     checks++;
+    chk_exec[line_no] = chk_exec.exists(line_no) ? chk_exec[line_no] + 1 : 1;
     if (!c) begin errors++; $display("FAIL @%0t: %s", $time, m); if (stop1) finish_run(); end
   endtask
   // Functional checkpoint of the scenario (op CHK <id>, R-281/R-286, 2026-11-25): the log records each checkpoint reached and the
@@ -411,6 +415,7 @@ module tb_usb2_ulpi_axis;
     $display("ACTIVITY2 a_utmi_w16=%0d a_utmi_mode=%0d a_irq_level=%0d", act_utmi_w16, act_utmi_mode, act_irq_lvl); $display("ULPI_ACTIVITY a_ulpi_bus_cycles=%0d violations=%0d", n_ulpi_chk, n_ulpi_viol); $display("ACTIVITY a_utmi_tx=%0d a_axim=%0d a_apb=%0d sof_cnt=%0d sof_min_ns=%0.1f sof_max_ns=%0.1f", act_utmi_tx, act_axim, act_apb, sof_cnt, sof_min, sof_max);
     if (nc_dead || nc_silent || nc_data || nc_mem) $display("NC dead=%0d silent=%0d data=%0d mem=%0d dut_packets=%0d data_flips=%0d mem_flips=%0d", nc_dead, nc_silent, nc_data, nc_mem, nc_pkt_n, nc_data_n, nc_mem_n);
     $display("PHY_ROW a_phy_row_cycles=%0d", act_phy_row);
+    begin string cs = ""; foreach (chk_exec[ln]) cs = {cs, $sformatf(" %0d:%0d", ln, chk_exec[ln])}; $display("CHKEXEC%s", cs); end
     $display("CHECKPOINTS reached=%0d", cp_n);
     $display("RESULT %s checks=%0d errors=%0d", (errors == 0 && checks > 0) ? "PASS" : "FAIL", checks, errors);
     $finish;

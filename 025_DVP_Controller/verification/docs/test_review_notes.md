@@ -44,6 +44,8 @@ Known thin spots, measured: the random test has no own known-answer check; VSYNC
 | R-4 | `t_dvp_flush_race` (line 382) | A CTRL write while a flush is pending is accepted with OKAY and the request bit still clears | ERR-007, REQ-FUNC-010, DEC-033, DEC-034 | A write one cycle before the clear can start a second flush of an empty FIFO; the test does not check for it. Acceptable? |
 | R-5 | `t_dvp_apb_protocol` (line 243) | Reset values: version 0x00010001, CTRL 0, watermark 0, timeout 0xFFFFFFFF, status 0x2, level 0, frame count 0 | CSR workbook v1.1 | Confirm the workbook values are the intended ones |
 | R-6 | Generator 3.7 (outside this folder) | `w2c` is cleared only by a write whose strobes cover its byte lane | DEC-034 | I extended "events of one field do not affect another" to `w2c` on my own reading; veto if not wanted |
+| R-7 | `t_dvp_profiles` (VSYNC-window scenario, after the pattern loop) | Pixels that arrive while VSYNC is still active are captured; capture is switched off and on first so no frame is armed | REQ-FUNC-005/006: the frame is armed by the active edge of VSYNC | Is a sensor that sends valid pixels inside the VSYNC pulse in scope? It is what separates a wrong VSYNC polarity from the right one at the ports |
+| R-8 | `t_dvp_performance_characterization` and `dv_dvp_source.sv` `sent_q` | The values read must be an in-order subsequence of the samples the source actually drove; frame count 4; empty at the end | REQ-FUNC-003 (the newest sample is dropped on overflow, so order is kept) | The expectation comes from the source BFM, not from the DUT; my first version computed it in advance and was wrong because pattern 5 of the BFM is a stateful LFSR |
 
 ## 4. Formal harnesses (`env/formal/`)
 
@@ -68,7 +70,7 @@ The assumptions are listed in each harness header. Please read `f_flush.sv` line
 
 ## 6. Kill table
 
-Rows M11, MP6 and M00 were measured with the corrected testbench; every other row with the testbench before the test fixes of 2026-11-25 (a full rerun of the matrix takes hours). The control M00 detected nothing in both versions. 44 mutants, simulation only, one seed, build `base` except the `MP*` mutants (their own build).
+Rows M11, MP6 and M00 were measured with the corrected testbench; every other row with the testbench before the test fixes of 2026-11-25 (a full rerun of the matrix takes hours). The test improvements made afterwards (R-7, R-8) are not in this table; one later single run shows M18 detected by `profiles` as well. The complete matrix on the final testbench was not obtained (run stopped by low disk, see verification_report.md section 0). The control M00 detected nothing in both versions. 44 mutants, simulation only, one seed, build `base` except the `MP*` mutants (their own build).
 
 | Test | Mutants it detects | Detected by this test alone |
 |---|---:|---|

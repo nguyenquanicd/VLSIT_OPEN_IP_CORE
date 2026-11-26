@@ -2,6 +2,20 @@
 
 Block `m_dvp_controller` (HDS v0.3, CSR v1.1, APB4 Issue D). Verilator 5.053, plain SystemVerilog, 2026-11-24. Evidence: `../sim/final/` (one retained result set; `manifest.sha256` lists the hash of every source and output). AI-generated candidate (R-117): this report states measured results only (R-100). **It is not a closure and not a sign-off.**
 
+## 0. Status of the evidence (read first)
+
+The run of 2026-11-27 that was meant to regenerate the whole result set on the final testbench stopped by itself: free disk fell to about 2.3 GB, below the reviewed stop threshold of 2 GiB plus the 600 MB working set (R-279, decision Q-DISK-1), and the driver refuses to start a build under it. The threshold was not lowered (the user chose to stop). As a result:
+
+| Item | In `sim/final/` now | Source of the numbers quoted in this report |
+|---|---|---|
+| Checker qualification, parameter legality, scope review | PASS (retained logs) | same run |
+| Regression | **49 of 49 cases of the `base` configuration PASS** (331,268 checks); the other six configurations were not run | the 107-case figures (107 of 107 PASS, 565,265 checks) come from the last complete run, **not retained** |
+| Formal | 13 of 13 task logs and `formal_summary.json` (RTL and harnesses unchanged since the run that produced them) | same |
+| Mutation analysis | **not in `sim/final/`** | 43 of 44 mutants killed, from the last complete run, not retained |
+| Code coverage | **not in `sim/final/`** | DVP-owned line 93.3%, branch 96.3%, toggle 76.5%, from the last complete run, not retained |
+
+The last complete run used the testbench before these four later test improvements, so the numbers below describe that earlier testbench and must be regenerated before anyone relies on them: (1) `t_dvp_profiles` now has a scenario with pixels inside an active VSYNC pulse, started with no frame armed; (2) `t_dvp_performance_characterization` now checks its own reads against the samples the source drove (`dv_dvp_source.sv` `sent_q`), the frame count and the empty end state; (3) the mutation driver now runs every test for every mutant and writes `killmatrix.csv/json`; (4) the corrected gated BFM of the earlier test fixes. The commands to regenerate everything are in [test_review_notes.md](test_review_notes.md) section 7; allow 3 to 4 hours and at least 4 GB of free disk. Measured after the last improvement, on single runs: M18 (VSYNC polarity) is now detected by `t_dvp_profiles` as well as by `t_dvp_frame_counter`, the unmutated control (base build) still fails no test; before the last tweak of that scenario (switching capture off and on first) the unmutated RTL passed `t_dvp_profiles` in all four builds, after it only the base build was run, and the random test passed 6 seeds in both modes.
+
 ## 1. Summary
 
 | Item | Result |

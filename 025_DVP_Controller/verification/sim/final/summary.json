@@ -43,7 +43,7 @@
    "tb_assume": 0,
    "checks": 1441,
    "exit_code": 0,
-   "peak_ram_bytes": 6348800
+   "peak_ram_bytes": 6365184
   },
   {
    "config": "base",
@@ -68,7 +68,7 @@
    "tb_assume": 0,
    "checks": 1441,
    "exit_code": 0,
-   "peak_ram_bytes": 6348800
+   "peak_ram_bytes": 6356992
   },
   {
    "config": "base",
@@ -93,7 +93,7 @@
    "tb_assume": 0,
    "checks": 1441,
    "exit_code": 0,
-   "peak_ram_bytes": 6365184
+   "peak_ram_bytes": 6369280
   },
   {
    "config": "base",
@@ -118,7 +118,7 @@
    "tb_assume": 14,
    "checks": 744,
    "exit_code": 0,
-   "peak_ram_bytes": 6344704
+   "peak_ram_bytes": 6356992
   },
   {
    "config": "base",
@@ -143,7 +143,7 @@
    "tb_assume": 14,
    "checks": 744,
    "exit_code": 0,
-   "peak_ram_bytes": 6348800
+   "peak_ram_bytes": 6393856
   },
   {
    "config": "base",
@@ -168,7 +168,7 @@
    "tb_assume": 14,
    "checks": 744,
    "exit_code": 0,
-   "peak_ram_bytes": 6361088
+   "peak_ram_bytes": 6369280
   },
   {
    "config": "base",
@@ -193,7 +193,7 @@
    "tb_assume": 0,
    "checks": 1004,
    "exit_code": 0,
-   "peak_ram_bytes": 6352896
+   "peak_ram_bytes": 6381568
   },
   {
    "config": "base",
@@ -218,7 +218,7 @@
    "tb_assume": 0,
    "checks": 1004,
    "exit_code": 0,
-   "peak_ram_bytes": 6373376
+   "peak_ram_bytes": 6377472
   },
   {
    "config": "base",
@@ -243,7 +243,7 @@
    "tb_assume": 0,
    "checks": 1004,
    "exit_code": 0,
-   "peak_ram_bytes": 6352896
+   "peak_ram_bytes": 6365184
   },
   {
    "config": "base",
@@ -268,7 +268,7 @@
    "tb_assume": 24,
    "checks": 10182,
    "exit_code": 0,
-   "peak_ram_bytes": 6410240
+   "peak_ram_bytes": 6422528
   },
   {
    "config": "base",
@@ -293,7 +293,7 @@
    "tb_assume": 24,
    "checks": 10182,
    "exit_code": 0,
-   "peak_ram_bytes": 6406144
+   "peak_ram_bytes": 6393856
   },
   {
    "config": "base",
@@ -318,7 +318,7 @@
    "tb_assume": 24,
    "checks": 10182,
    "exit_code": 0,
-   "peak_ram_bytes": 6418432
+   "peak_ram_bytes": 6426624
   },
   {
    "config": "base",
@@ -343,7 +343,7 @@
    "tb_assume": 12,
    "checks": 9916,
    "exit_code": 0,
-   "peak_ram_bytes": 6430720
+   "peak_ram_bytes": 6434816
   },
   {
    "config": "base",
@@ -368,7 +368,7 @@
    "tb_assume": 12,
    "checks": 9916,
    "exit_code": 0,
-   "peak_ram_bytes": 6447104
+   "peak_ram_bytes": 6438912
   },
   {
    "config": "base",
@@ -393,7 +393,7 @@
    "tb_assume": 12,
    "checks": 9916,
    "exit_code": 0,
-   "peak_ram_bytes": 6426624
+   "peak_ram_bytes": 6430720
   },
   {
    "config": "base",
@@ -418,7 +418,7 @@
    "tb_assume": 18,
    "checks": 4055,
    "exit_code": 0,
-   "peak_ram_bytes": 6414336
+   "peak_ram_bytes": 6438912
   },
   {
    "config": "base",
@@ -468,7 +468,7 @@
    "tb_assume": 18,
    "checks": 4055,
    "exit_code": 0,
-   "peak_ram_bytes": 6414336
+   "peak_ram_bytes": 6426624
   },
   {
    "config": "base",
@@ -493,7 +493,7 @@
    "tb_assume": 3,
    "checks": 2093,
    "exit_code": 0,
-   "peak_ram_bytes": 6434816
+   "peak_ram_bytes": 6451200
   },
   {
    "config": "base",
@@ -518,7 +518,7 @@
    "tb_assume": 3,
    "checks": 2093,
    "exit_code": 0,
-   "peak_ram_bytes": 6434816
+   "peak_ram_bytes": 6426624
   },
   {
    "config": "base",
@@ -543,7 +543,7 @@
    "tb_assume": 3,
    "checks": 2093,
    "exit_code": 0,
-   "peak_ram_bytes": 6434816
+   "peak_ram_bytes": 6422528
   },
   {
    "config": "base",
@@ -568,7 +568,7 @@
    "tb_assume": 8,
    "checks": 1893,
    "exit_code": 0,
-   "peak_ram_bytes": 6406144
+   "peak_ram_bytes": 6418432
   },
   {
    "config": "base",
@@ -593,7 +593,7 @@
    "tb_assume": 8,
    "checks": 1893,
    "exit_code": 0,
-   "peak_ram_bytes": 6434816
+   "peak_ram_bytes": 6438912
   },
   {
    "config": "base",
@@ -618,7 +618,7 @@
    "tb_assume": 8,
    "checks": 1893,
    "exit_code": 0,
-   "peak_ram_bytes": 6414336
+   "peak_ram_bytes": 6430720
   },
   {
    "config": "base",
@@ -643,7 +643,7 @@
    "tb_assume": 3,
    "checks": 1555,
    "exit_code": 0,
-   "peak_ram_bytes": 6406144
+   "peak_ram_bytes": 6443008
   },
   {
    "config": "base",
@@ -668,7 +668,7 @@
    "tb_assume": 3,
    "checks": 1555,
    "exit_code": 0,
-   "peak_ram_bytes": 6402048
+   "peak_ram_bytes": 6418432
   },
   {
    "config": "base",
@@ -693,7 +693,7 @@
    "tb_assume": 3,
    "checks": 1555,
    "exit_code": 0,
-   "peak_ram_bytes": 6422528
+   "peak_ram_bytes": 6418432
   },
   {
    "config": "base",
@@ -718,7 +718,7 @@
    "tb_assume": 14,
    "checks": 5717,
    "exit_code": 0,
-   "peak_ram_bytes": 6500352
+   "peak_ram_bytes": 6537216
   },
   {
    "config": "base",
@@ -743,7 +743,7 @@
    "tb_assume": 14,
    "checks": 5717,
    "exit_code": 0,
-   "peak_ram_bytes": 6500352
+   "peak_ram_bytes": 6549504
   },
   {
    "config": "base",
@@ -768,7 +768,7 @@
    "tb_assume": 14,
    "checks": 5717,
    "exit_code": 0,
-   "peak_ram_bytes": 6512640
+   "peak_ram_bytes": 6496256
   },
   {
    "config": "base",
@@ -793,7 +793,7 @@
    "tb_assume": 3,
    "checks": 3250,
    "exit_code": 0,
-   "peak_ram_bytes": 6459392
+   "peak_ram_bytes": 6451200
   },
   {
    "config": "base",
@@ -818,7 +818,7 @@
    "tb_assume": 3,
    "checks": 3250,
    "exit_code": 0,
-   "peak_ram_bytes": 6434816
+   "peak_ram_bytes": 6443008
   },
   {
    "config": "base",
@@ -843,7 +843,7 @@
    "tb_assume": 3,
    "checks": 3250,
    "exit_code": 0,
-   "peak_ram_bytes": 6447104
+   "peak_ram_bytes": 6463488
   },
   {
    "config": "base",
@@ -866,9 +866,9 @@
    "result": "PASS",
    "errors": 0,
    "tb_assume": 16,
-   "checks": 3241,
+   "checks": 3907,
    "exit_code": 0,
-   "peak_ram_bytes": 6385664
+   "peak_ram_bytes": 6422528
   },
   {
    "config": "base",
@@ -891,9 +891,9 @@
    "result": "PASS",
    "errors": 0,
    "tb_assume": 16,
-   "checks": 3241,
+   "checks": 3907,
    "exit_code": 0,
-   "peak_ram_bytes": 6393856
+   "peak_ram_bytes": 6414336
   },
   {
    "config": "base",
@@ -916,9 +916,9 @@
    "result": "PASS",
    "errors": 0,
    "tb_assume": 16,
-   "checks": 3241,
+   "checks": 3907,
    "exit_code": 0,
-   "peak_ram_bytes": 6406144
+   "peak_ram_bytes": 6430720
   },
   {
    "config": "base",
@@ -943,7 +943,7 @@
    "tb_assume": 320,
    "checks": 49344,
    "exit_code": 0,
-   "peak_ram_bytes": 6402048
+   "peak_ram_bytes": 6414336
   },
   {
    "config": "base",
@@ -968,7 +968,7 @@
    "tb_assume": 320,
    "checks": 49380,
    "exit_code": 0,
-   "peak_ram_bytes": 6393856
+   "peak_ram_bytes": 6389760
   },
   {
    "config": "base",
@@ -993,7 +993,7 @@
    "tb_assume": 320,
    "checks": 49362,
    "exit_code": 0,
-   "peak_ram_bytes": 6389760
+   "peak_ram_bytes": 6397952
   },
   {
    "config": "base",
@@ -1019,7 +1019,7 @@
    "tb_assume": 0,
    "checks": 4478,
    "exit_code": 0,
-   "peak_ram_bytes": 6369280
+   "peak_ram_bytes": 6385664
   },
   {
    "config": "base",
@@ -1045,7 +1045,7 @@
    "tb_assume": 13,
    "checks": 4483,
    "exit_code": 0,
-   "peak_ram_bytes": 6356992
+   "peak_ram_bytes": 6377472
   },
   {
    "config": "base",
@@ -1071,7 +1071,7 @@
    "tb_assume": 0,
    "checks": 4676,
    "exit_code": 0,
-   "peak_ram_bytes": 6352896
+   "peak_ram_bytes": 6365184
   },
   {
    "config": "base",
@@ -1097,7 +1097,7 @@
    "tb_assume": 21,
    "checks": 4701,
    "exit_code": 0,
-   "peak_ram_bytes": 6340608
+   "peak_ram_bytes": 6369280
   },
   {
    "config": "base",
@@ -1123,7 +1123,7 @@
    "tb_assume": 0,
    "checks": 4542,
    "exit_code": 0,
-   "peak_ram_bytes": 6356992
+   "peak_ram_bytes": 6373376
   },
   {
    "config": "base",
@@ -1149,7 +1149,7 @@
    "tb_assume": 36,
    "checks": 4620,
    "exit_code": 0,
-   "peak_ram_bytes": 6336512
+   "peak_ram_bytes": 6381568
   },
   {
    "config": "base",
@@ -1175,7 +1175,7 @@
    "tb_assume": 0,
    "checks": 4697,
    "exit_code": 0,
-   "peak_ram_bytes": 6352896
+   "peak_ram_bytes": 6402048
   },
   {
    "config": "base",
@@ -1201,7 +1201,7 @@
    "tb_assume": 40,
    "checks": 4778,
    "exit_code": 0,
-   "peak_ram_bytes": 6340608
+   "peak_ram_bytes": 6369280
   },
   {
    "config": "base",
@@ -1227,7 +1227,7 @@
    "tb_assume": 0,
    "checks": 4470,
    "exit_code": 0,
-   "peak_ram_bytes": 6356992
+   "peak_ram_bytes": 6402048
   },
   {
    "config": "base",
@@ -1253,212 +1253,12 @@
    "tb_assume": 22,
    "checks": 4466,
    "exit_code": 0,
-   "peak_ram_bytes": 6328320
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_profiles_s1",
-   "test": "t_dvp_profiles",
-   "seed": 1,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=1",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=1",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 16,
-   "checks": 3241,
-   "exit_code": 0,
-   "peak_ram_bytes": 6410240
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_profiles_s2",
-   "test": "t_dvp_profiles",
-   "seed": 2,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=2",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=2",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 16,
-   "checks": 3241,
-   "exit_code": 0,
-   "peak_ram_bytes": 6373376
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_continuous_e2e_s1",
-   "test": "t_dvp_continuous_e2e",
-   "seed": 1,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=1",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=1",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 0,
-   "checks": 1441,
-   "exit_code": 0,
-   "peak_ram_bytes": 6352896
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_continuous_e2e_s2",
-   "test": "t_dvp_continuous_e2e",
-   "seed": 2,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=2",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=2",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 0,
-   "checks": 1441,
-   "exit_code": 0,
-   "peak_ram_bytes": 6336512
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_gated_e2e_s1",
-   "test": "t_dvp_gated_e2e",
-   "seed": 1,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=1",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=1",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 14,
-   "checks": 744,
-   "exit_code": 0,
-   "peak_ram_bytes": 6324224
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_gated_e2e_s2",
-   "test": "t_dvp_gated_e2e",
-   "seed": 2,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=2",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=2",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 14,
-   "checks": 744,
-   "exit_code": 0,
-   "peak_ram_bytes": 6340608
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_overflow_s1",
-   "test": "t_dvp_overflow",
-   "seed": 1,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=1",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=1",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 18,
-   "checks": 4055,
-   "exit_code": 0,
-   "peak_ram_bytes": 6406144
-  },
-  {
-   "config": "w10e1v0",
-   "defines": [
-    "P_W=10",
-    "P_EDGE=1",
-    "P_VS=0",
-    "P_HR=1",
-    "P_DEPTH=8"
-   ],
-   "case": "t_dvp_overflow_s2",
-   "test": "t_dvp_overflow",
-   "seed": 2,
-   "plusargs": [
-    "+AFIFO_MSYNC_SEED=2",
-    "+AFIFO_MSYNC_EN=1",
-    "+RSTSYNC_MSYNC_SEED=2",
-    "+RSTSYNC_MSYNC_EN=1"
-   ],
-   "result": "PASS",
-   "errors": 0,
-   "tb_assume": 18,
-   "checks": 4055,
-   "exit_code": 0,
-   "peak_ram_bytes": 6397952
+   "peak_ram_bytes": 6369280
   }
  ],
  "totals": {
-  "cases": 57,
-  "pass": 57,
+  "cases": 49,
+  "pass": 49,
   "not_pass": 0
  }
 }

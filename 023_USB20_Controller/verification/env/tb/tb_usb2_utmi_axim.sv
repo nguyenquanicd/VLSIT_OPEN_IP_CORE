@@ -91,8 +91,12 @@ module tb_usb2_utmi_axim;
 
   // ------------------------------------------------------------------ scoring
   int errors = 0, checks = 0, fd_bin;
+  // Check census (2026-11-27, audit of false PASS): number of times each scenario line executed a check, printed as CHKEXEC at the
+  // end; a check line that never runs cannot fail (UTMILP-LINE keeps this out of the ULPI variants only where it names DUT signals).
+  int chk_exec[int];
   task automatic chk(input bit c, input string m);
     checks++;
+    chk_exec[line_no] = chk_exec.exists(line_no) ? chk_exec[line_no] + 1 : 1;
     if (!c) begin errors++; $display("FAIL @%0t: %s", $time, m); if (stop1) finish_run(); end
   endtask
   // Functional checkpoint of the scenario (op CHK <id>, R-281/R-286, 2026-11-25): the log records each checkpoint reached and the
@@ -408,6 +412,7 @@ module tb_usb2_utmi_axim;
     if (nc_dead || nc_silent || nc_data || nc_mem) $display("NC dead=%0d silent=%0d data=%0d mem=%0d dut_packets=%0d data_flips=%0d mem_flips=%0d", nc_dead, nc_silent, nc_data, nc_mem, nc_pkt_n, nc_data_n, nc_mem_n);
     $display("PHY_ROW a_phy_row_cycles=%0d", act_phy_row);
     $display("UTMILP a_susp_handoff wakes=%0d handoffs=%0d spurious=%0d", act_wake, act_handoff, act_spur);   // UTMILP-LINE
+    begin string cs = ""; foreach (chk_exec[ln]) cs = {cs, $sformatf(" %0d:%0d", ln, chk_exec[ln])}; $display("CHKEXEC%s", cs); end
     $display("CHECKPOINTS reached=%0d", cp_n);
     $display("RESULT %s checks=%0d errors=%0d", (errors == 0 && checks > 0) ? "PASS" : "FAIL", checks, errors);
     $finish;
@@ -537,7 +542,7 @@ module tb_usb2_utmi_axim;
         "PCLKA": begin d = rdi(); pclk_auto = d[0]; end
         "PCLK": begin d = rdi(); pclk_on = d[0]; end
         "PCLKD": begin d = rdi(); pclk_dly = real'(d); end                                // PHY clock restart delay in ns (DEC-049)
-        "XWAKE": begin a = rdi(); d = rdi(); chk(act_wake >= a && act_spur >= d, $sformatf("line %0d: utmilp wakes %0d spurious %0d, expected at least %0d and %0d", line_no, act_wake, act_spur, a, d)); end   // UTMILP-LINE SVA-017 activity
+        "XWAKE": begin a = rdi(); d = rdi(); chk(act_wake == a && act_spur >= d, $sformatf("line %0d: utmilp wakes %0d spurious %0d, expected exactly %0d wakes and at least %0d spurious", line_no, act_wake, act_spur, a, d)); end   // UTMILP-LINE SVA-017 activity: exact wake count
         "CLK": begin d = rdi(); t_bus = real'(d) / 100.0; end
         "RST": begin d = rdi(); rst_n = 0; repeat (d) @(posedge clk_bus); rst_n = 1; repeat (20) @(posedge clk_bus); end
         "IPG": begin ipg = rdi(); end

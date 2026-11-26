@@ -89,6 +89,15 @@
 - FND-017 (checker weakness, fixed 2026-11-26): check_cdc_struct.py read the name of every port declared with a width as the type
   keyword ('logic'), so vector connections were never classified (26 of 99 ports of m_usb2_regs, 64 of 134 wires). Fixed parser;
   m_usb2_regs gets per-port domains (*_ph_* and o_xreg_busy on CLK-PHY). Result after the fix: 0 violations on 134 wires.
+- Results after DEC-049 (2026-11-26): rebuild of all builds PASS; full regression sim/regress_full_25.txt 194 runs, 0 not passing
+  (t_dir_clkstop 5 scenarios in the nightly tier, no longer open); parameter builds 0 FAIL (sim/run_builds_25.txt). Mutants M35 to
+  M40 (sim/mutate_wake_25.txt): M35, M37 to M40 killed; M36 (no glitch filter) first SURVIVED because XWAKE checked 'at least
+  0 wakes' and could not fail; XWAKE now checks the exact wake count and M36 is killed (r4819). header_check 50/50; testcase review
+  effective 38, weak 12; report 187 of 188 rows pass (the one open row is the AI review record r0647). Priority waveforms: only
+  tests 1 to 4 were regenerated (r4820 to r4823); tests 5 to 10 stopped at the disk guard R-279 (free disk 1.9 GB, limit 2.0 GB),
+  so sim/waveform_index.csv still holds the pre-DEC-049 waveforms (r4576 to r4585) for those six.
+- Open (2026-11-26): the host_port state diagram (spec/figures/usb2_fsm_host_port.drawio and .svg) was not redrawn for DEC-049; the layout check of the
+  tool failed with crossings (36 arrows on 11 states), the old picture is kept and the spec figure caption says so; the JSON and the state table are current.
 - CSR regeneration note (2026-11-25): the CSR generator repository moved to a5ec92e, whose rwi write priority differs from the
   delivered CSR (generated with a8fb7d4 plus a local VLSIT_SYNTHESIS guard). The new field was generated with a8fb7d4 and
   spec/csr/csr_guard.py; with the old workbook this flow reproduces the delivered file byte for byte, and the new file differs only

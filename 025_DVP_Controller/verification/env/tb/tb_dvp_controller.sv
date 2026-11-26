@@ -604,7 +604,9 @@ module tb_dvp_controller;
         idle(60); csr_r(A_LVL, r); expect_eq("only HREF-qualified samples", r, 2);
       end
       drain(8, n);
-      // pixels that arrive while VSYNC is still active: the frame is armed by the active edge of VSYNC, not by the end of the pulse
+      // pixels that arrive while VSYNC is still active: the frame is armed by the active edge of VSYNC, not by the end of the pulse;
+      // capture is switched off and on first so that no frame is armed by the earlier frames of this test
+      set_ctrl(gated, 0); set_ctrl(gated, 1);
       begin
         logic [31:0] dv; bit ev; int cv;
         if (!gated) begin

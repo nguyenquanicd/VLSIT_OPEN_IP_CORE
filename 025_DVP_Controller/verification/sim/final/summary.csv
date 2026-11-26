@@ -32,9 +32,9 @@ base,t_dvp_frame_counter_s3,PASS,0,5717,14,3
 base,t_dvp_mode_guard_s1,PASS,0,3250,3,1
 base,t_dvp_mode_guard_s2,PASS,0,3250,3,2
 base,t_dvp_mode_guard_s3,PASS,0,3250,3,3
-base,t_dvp_profiles_s1,PASS,0,3241,16,1
-base,t_dvp_profiles_s2,PASS,0,3241,16,2
-base,t_dvp_profiles_s3,PASS,0,3241,16,3
+base,t_dvp_profiles_s1,PASS,0,3907,16,1
+base,t_dvp_profiles_s2,PASS,0,3907,16,2
+base,t_dvp_profiles_s3,PASS,0,3907,16,3
 base,t_dvp_flush_race_s1,PASS,0,49344,320,1
 base,t_dvp_flush_race_s2,PASS,0,49380,320,2
 base,t_dvp_flush_race_s3,PASS,0,49362,320,3
@@ -48,11 +48,3 @@ base,t_dvp_performance_characterization_m0_s4,PASS,0,4697,0,4
 base,t_dvp_performance_characterization_m1_s4,PASS,0,4778,40,4
 base,t_dvp_performance_characterization_m0_s5,PASS,0,4470,0,5
 base,t_dvp_performance_characterization_m1_s5,PASS,0,4466,22,5
-w10e1v0,t_dvp_profiles_s1,PASS,0,3241,16,1
-w10e1v0,t_dvp_profiles_s2,PASS,0,3241,16,2
-w10e1v0,t_dvp_continuous_e2e_s1,PASS,0,1441,0,1
-w10e1v0,t_dvp_continuous_e2e_s2,PASS,0,1441,0,2
-w10e1v0,t_dvp_gated_e2e_s1,PASS,0,744,14,1
-w10e1v0,t_dvp_gated_e2e_s2,PASS,0,744,14,2
-w10e1v0,t_dvp_overflow_s1,PASS,0,4055,18,1
-w10e1v0,t_dvp_overflow_s2,PASS,0,4055,18,2
