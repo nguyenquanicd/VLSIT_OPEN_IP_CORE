@@ -11,7 +11,8 @@ For every simulation test of tests/usb20/testlist.csv it collects, from retained
   - the waveform of the run when the priority list names the test (R-283; path and SHA-256 from sim/waveform_index.csv).
 The quality verdict is separate from the simulation result: invalid (a negative control showed a GAP), not_run, weak (passes but
 the header check fails, fewer than five checkpoints were reached in passing runs, a weak check remains, or the header lists known
-gaps), or effective (none of these). FLUSH counts are reported for information. "effective" is an AI pre-review only. The engineer columns
+gaps), or unproven (none of these). FLUSH counts are reported for information. "unproven" (called "effective" until 2026-11-27)
+only means that this script found no static weakness: it does NOT show that the checks can detect a defect (review finding of 2026-11-27, report section 20). The engineer columns
 of the ledger stay 'pending': an AI cannot fill them (R-284).
     python env/scripts/testcase_review.py --since rNNNN      -> docs/testcase_quality.md, docs/testcase_review.csv"""
 import csv
@@ -100,7 +101,7 @@ def main():
         elif not hok or len(reached) < 5 or weak or gaps_known.get(test):
             verdict = 'weak'
         else:
-            verdict = 'effective'
+            verdict = 'unproven'
         w = waves.get(test, {})
         q_rows.append((test, ' '.join(gens), '%d/%d' % (npass, len(rl)), '%d..%d' % (min(checks), max(checks)) if checks else '-',
                        '%d caught, %d GAP' % (caught, len(gaps)) if au else 'not audited', '; '.join(gaps[:4]), flush, nochk,

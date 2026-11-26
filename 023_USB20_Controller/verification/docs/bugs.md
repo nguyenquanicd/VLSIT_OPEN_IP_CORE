@@ -54,11 +54,11 @@
   (hsts.port_speed 1, full-speed row 01/1/00 instead of the low-speed row 10/1/00). Before BUG-050 the low-speed reset row let the
   line show the low-speed idle, which hid the dependency. Fix: keep the low-speed result of the connect, otherwise full speed
   (a failed chirp falls back to full speed as before). Checkpoints HCN-LSRST, HCN-LSENUM, HCN-LSROW detect it.
-- Results after BUG-050 and BUG-051 (2026-11-26): rebuild of all 21 builds PASS (sim/rebuild_22.txt); full regression
-  sim/regress_full_22.txt 189 runs, 188 PASS, 1 GENERATOR FAILED (t_rand_dev16_traffic seed 2, OSError Errno 22 while writing the
-  .ops file; environment, rerun r4566-r4568 PASS, sim/regress_rand16_22.txt). The same Errno 22 hit t_fi_axi_err and
-  t_dev_ulpi_traffic in sim/regress_full_21.txt; it moves between tests and is not caused by the RTL (cause not found; a transient
-  lock of the file on Windows is suspected). Mutants M28 to M34 all KILLED by the intended check (sim/mutate_phy_22.txt,
+- Results after BUG-050 and BUG-051 (2026-11-26): rebuild of all 21 builds PASS (docs/verification_report.md section 20.5); full regression
+  docs/verification_report.md section 20.5 189 runs, 188 PASS, 1 GENERATOR FAILED (t_rand_dev16_traffic seed 2, OSError Errno 22 while writing the
+  .ops file; environment, rerun r4566-r4568 PASS, docs/verification_report.md section 20.5). The same Errno 22 hit t_fi_axi_err and
+  t_dev_ulpi_traffic in docs/verification_report.md section 20.5; it moves between tests and is not caused by the RTL (cause not found; a transient
+  lock of the file on Windows is suspected). Mutants M28 to M34 all KILLED by the intended check (docs/verification_report.md section 20.5,
   r4569-r4575): M28, M29, M31, M32 by a_phy_row; M30, M33, M34 by scenario checkpoints. header_check 50/50; testcase review
   effective 37, weak 12, not_run 1 (t_dir_clkstop, FND-015, unchanged).
 - ENV-2026-11-26 (environment, not RTL): Errno 22 at the .ops write. All generators write through usb2lib.Seq.save; it now
@@ -89,9 +89,9 @@
 - FND-017 (checker weakness, fixed 2026-11-26): check_cdc_struct.py read the name of every port declared with a width as the type
   keyword ('logic'), so vector connections were never classified (26 of 99 ports of m_usb2_regs, 64 of 134 wires). Fixed parser;
   m_usb2_regs gets per-port domains (*_ph_* and o_xreg_busy on CLK-PHY). Result after the fix: 0 violations on 134 wires.
-- Results after DEC-049 (2026-11-26): rebuild of all builds PASS; full regression sim/regress_full_25.txt 194 runs, 0 not passing
-  (t_dir_clkstop 5 scenarios in the nightly tier, no longer open); parameter builds 0 FAIL (sim/run_builds_25.txt). Mutants M35 to
-  M40 (sim/mutate_wake_25.txt): M35, M37 to M40 killed; M36 (no glitch filter) first SURVIVED because XWAKE checked 'at least
+- Results after DEC-049 (2026-11-26): rebuild of all builds PASS; full regression docs/verification_report.md section 20.5 194 runs, 0 not passing
+  (t_dir_clkstop 5 scenarios in the nightly tier, no longer open); parameter builds 0 FAIL (docs/verification_report.md section 20.5). Mutants M35 to
+  M40 (docs/verification_report.md section 20.5): M35, M37 to M40 killed; M36 (no glitch filter) first SURVIVED because XWAKE checked 'at least
   0 wakes' and could not fail; XWAKE now checks the exact wake count and M36 is killed (r4819). header_check 50/50; testcase review
   effective 38, weak 12; report 187 of 188 rows pass (the one open row is the AI review record r0647). Priority waveforms: only
   tests 1 to 4 were regenerated (r4820 to r4823); tests 5 to 10 stopped at the disk guard R-279 (free disk 1.9 GB, limit 2.0 GB),
