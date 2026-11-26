@@ -72,7 +72,7 @@ See the table in section 15.6 of the specification and the logs in `sim/`. Hones
   or untested corner with its risk). No toggle, branch or functional coverage.
 - Formal: only the hash arbiter is proven (SymbiYosys). No commercial CDC/RDC tool and no STA tool was run (`check_cdc.py` is a structural check of the one block with two clocks, see
   `../cdc/CDC_RDC_NOTES.md`); the SDC is checked only for port coverage and syntax patterns (`check_sdc.py`). Synthesis is generic yosys without a library
-  (`SYNTH.md`): cell counts are not an area, and the Montgomery multiplier was synthesized without abc (not optimized).
+  (`SYNTH.md`): cell counts are not an area, and the Montgomery multiplier uses a light abc script (strash, map) because the default abc script did not finish on the 64 x 521-bit datapath in 34 minutes.
 - The tops `tb_top_ec` and `tb_top_pq` were simulated with `PARA_CSR_ASYNC` 0 and `tb_top_err` with 1 (APB clock 14 ns, core clock 10 ns); the buffer word is 64 bits, other widths are not supported.
 - The sets exercised: Ed25519 and Ed448 (all RFC 8032 vectors up to 120 bytes), Ed25519ctx, Ed25519ph, Ed448 with context and Ed448ph (all RFC 8032 section 7.2 to 7.5 vectors, 68 vectors), P-256 (all RFC 6979 vectors), P-384 (two vectors), P-521 (one
   vector), secp256k1 (three random keys), ML-DSA-44 (11 vectors), ML-DSA-65 and 87 (7 each), SLH-DSA all 12 sets, LMS 10 combinations of type,

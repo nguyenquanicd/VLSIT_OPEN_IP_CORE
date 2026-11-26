@@ -139,6 +139,33 @@ module tb_hseq;
         end
       end
     end
+    // SHAKE with an output length of 0: the block returns at least one byte (header of m_vlsit_dsig_hseq): exactly one output
+    // beat of one byte with last, then busy 0, and the next job works
+    begin : zero_len
+      integer z_out, z_guard, z_bad;
+      z_out = 0; z_bad = 0;
+      @(posedge clk); #1 job_mode = 4'd12; job_outlen = 16'd0; job_start = 1;
+      @(posedge clk); #1 job_start = 0;
+      in_data = 64'h0000000000636261; in_nb = 4'd3; in_last = 1; in_valid = 1;
+      z_guard = 0;
+      while (!in_ready && z_guard < 1000) begin @(posedge clk); #1 z_guard = z_guard + 1; end
+      @(posedge clk); #1 in_valid = 0; in_last = 0; in_nb = 0; in_data = 0;
+      out_ready = 1;
+      for (z_guard = 0; z_guard < 3000; z_guard = z_guard + 1) begin
+        @(posedge clk); #1
+        if (out_valid) begin
+          z_out = z_out + 1;
+          if (out_nb != 4'd1 || !out_last) z_bad = 1;
+        end
+      end
+      if (z_out != 1 || z_bad || busy) begin
+        n_fail = n_fail + 1;
+        $display("FAIL SHAKE with output length 0: %0d beats, nb/last wrong %0d, busy %0d", z_out, z_bad, busy);
+      end
+      v_n = 1; v_mode = 12; v_len = 3; v_outlen = 8;
+      run_vec;
+      if (gotn != 8) begin n_fail = n_fail + 1; $display("FAIL job after the length-0 job gave %0d bytes", gotn); end
+    end
     $display("hseq: %0d vectors, %0d failed", n_vec, n_fail);
     if (n_fail == 0 && n_vec > 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

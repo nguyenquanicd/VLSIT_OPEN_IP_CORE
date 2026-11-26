@@ -51,7 +51,7 @@ TOP_HBS, TOP_HBSP = top('top_pq', '_fh', 19), top('top_pq', '_fhp', 12)
 TOP_ERR, TOP_SYS = top('top_err', '_fr', 27, 'checks'), top('top_sys', '_fs', 57, 'checks')
 AXI = unit('axi', '_final', r'tb_axi: 566 checks, 0 failed')
 KEY = unit('key_rng', '_final', r'tb_key_rng: 247 checks, 0 failed')
-DRBG = unit('rng_drbg', '_final', r'tb_rng_drbg: 36 checks, 0 failed')
+DRBG = unit('rng_drbg', '_final', r'tb_rng_drbg: 38 checks, 0 failed')
 KATF = unit('rng_drbg', '_katfail', r'tb_rng_drbg: 6 checks, 0 failed')
 HFEED = unit('hfeed', '_final', r'hfeed: 500 vectors, 0 failed')
 HSEQ = unit('hseq', '_final', r'hseq: \d+ vectors, 0 failed')
@@ -134,17 +134,17 @@ ROWS = [
     ('REQ-SEC-005', 'Clearing of the secrets', 'tb_ec and tb_lat (hierarchical checks after clr), phase 1 T16 and T10 (abort in ENUM_ST_RUN, ENUM_ST_RNG, ENUM_ST_VAS)', 'registers and word RAM '
      'zero; the lattice engine needs 32769 cycles (deviation from OP-006)', 'OP-006', [ec('ed25519'), lat('all', 25), P1]),
     ('REQ-SEC-006', 'Counters and log lock', 'phase 1 T13, tb_top_sys', 'cnt_ops, cnt_fail, log lock', 'DEC-033', [P1, TOP_SYS]),
-    ('REQ-SEC-007', 'Entropy port; Hash_DRBG (PARA_RNG_SRC 1) with its known-answer health test', 'tb_key_rng, tb_rng_drbg (36) and +KATFAIL (6), tb_top_err, tb_top_ec det',
+    ('REQ-SEC-007', 'Entropy port; Hash_DRBG (PARA_RNG_SRC 1) with its known-answer health test', 'tb_key_rng, tb_rng_drbg (38, incl. reseed with a clear) and +KATFAIL (6), tb_top_err, tb_top_ec det',
      'pool bytes, seed and reseed decisions, health test before first use and its error state, time-outs, one seed for the whole run', 'SP 800-90A model written from the text (sections 10.1.1, 10.3.1, 11.3)',
      [KEY, DRBG, KATF, TOP_ERR, TOP_EC_D]),
     ('REQ-PARAM-002, REQ-PERF', 'Montgomery multiplier of PARA_MUL_W 32, 64, 128', 'tb_mmul (132 vectors per width)',
      'result a b R^-1 mod m and nd + 1 cycles for the moduli p and n of every curve, edge operands', 'Python integers',
      [unit('mmul', '_w32', r'tb_mmul: w 32, 132 vectors, 0 failed'), unit('mmul', '_w64', r'tb_mmul: w 64, 132 vectors, 0 failed'),
       unit('mmul', '_w128', r'tb_mmul: w 128, 132 vectors, 0 failed')]),
-    ('Hash stack', 'hseq, hfeed (head, tails, mid)', 'tb_hseq, tb_hfeed (500)', 'digest bytes', 'Python hashlib', [HSEQ, HFEED]),
-    ('Checker strength', 'Defects put back into RTL copies', 'run_mutants.py (13 mutants: M1-M11 in one run, M12 and M13 in a second run); phase 1 run_mutation.py (40 mutants of the control block and buffer)', 'each mutant makes its test fail',
+    ('Hash stack', 'hseq, hfeed (head, tails, mid)', 'tb_hseq (493 vectors and a SHAKE job of length 0), tb_hfeed (500)', 'digest bytes', 'Python hashlib', [HSEQ, HFEED]),
+    ('Checker strength', 'Defects put back into RTL copies', 'run_mutants.py (15 mutants: M1-M11 in one run, M12-M15 in a second run); phase 1 run_mutation.py (40 mutants of the control block and buffer)', 'each mutant makes its test fail',
      'the defects found during the work', [(S + 'mutants.txt', r'run_mutants: 11 of 11 mutants killed\s+RESULT: PASS'),
-      (S + 'mutants_extra.txt', r'run_mutants: 2 of 2 mutants killed\s+RESULT: PASS'),
+      (S + 'mutants_extra.txt', r'run_mutants: 4 of 4 mutants killed\s+RESULT: PASS'),
       (V + '/docs/mutation_report.md', r'Caught 40 of 40\.')]),
     ('SVA-002, OP-008 (formal)', 'Hash arbiter: one owner, grant to a requester only, owner keeps the grant, fixed priority, stream isolation',
      'formal/harb.sby (SymbiYosys, k-induction) and a mutant', '28 assertions proven; the re-arbitrating mutant fails',

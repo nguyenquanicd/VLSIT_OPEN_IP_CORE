@@ -117,6 +117,10 @@ module tb_rng_drbg;
       @(posedge clk); #1 clr = 1; @(posedge clk); #1 clr = 0; @(posedge clk);
       check(pool == 768'd0 && cleared, "clear empties the pool");
     end
+    // a reseed command in the same cycle as a clear is kept (the command is a pulse): dsig_rng.due is set afterwards
+    check(!due, "before: due is clear after the last reseed");
+    @(posedge clk); #1 reseed = 1; clr = 1; @(posedge clk); #1 reseed = 0; clr = 0; @(posedge clk);
+    check(due && cleared && pool == 768'd0, "reseed with a clear in one cycle: pool empty and due set");
     $display("tb_rng_drbg: %0d checks, %0d failed", ncheck, nfail);
     if (nfail == 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

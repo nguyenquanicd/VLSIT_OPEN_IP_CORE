@@ -15,6 +15,8 @@ Mutants:
   M10 AXI4 write: refusal of the buffer in the middle of a burst ignored    -> tb_axi (mid-burst busy, DEC-050)
   M11 AXI4 read: refusal of the buffer in the middle of a burst ignored     -> tb_axi (mid-burst busy, DEC-050)
   M12 PARA_KEY_SRC 0 takes the key registers instead of the port            -> tb_key_rng (DEC-051)
+  M14 SHAKE output length 0 not raised to one byte (hseq)                  -> tb_hseq
+  M15 reseed lost when it coincides with a clear (rng)                      -> tb_rng_drbg
   M13 SHA3-256 (dsig_op.hash 3) mapped to SHA-256 in the EC engine          -> tb_ec sha3 (DEC-018)
 Usage: python run_mutants.py [M1 ...]"""
 import os
@@ -57,6 +59,10 @@ MUT['M11'] = ('m_vlsit_dsig_axi.sv', "            if (i_buf_rd_rej)\n           
 MUT['M12'] = ('m_vlsit_dsig_key.sv', "32'd0:   w_use_port = 1'b1;", "32'd0:   w_use_reg  = 1'b1;", None, 'key_rng')
 # M13: SHA3-256 of dsig_op.hash 3 mapped to SHA-256 in the elliptic-curve engine
 MUT['M13'] = ('m_vlsit_dsig_ec.sv', "3'd3:    w_hf_mode_map = 4'd9;", "3'd3:    w_hf_mode_map = 4'd1;", None, 'ec_sha3')
+# M14: SHAKE output length 0 not raised to 1 byte (hseq); M15: reseed command lost when it coincides with a clear (rng)
+MUT['M14'] = ('m_vlsit_dsig_hseq.sv', "reg_outlen    <= (i_job_outlen == 16'd0) ? 16'd1 : i_job_outlen;", "reg_outlen    <= i_job_outlen;", None, 'hseq')
+MUT['M15'] = ('m_vlsit_dsig_rng.sv', "      reg_go      <= 1'b0;\n      if (i_reseed)\n        reg_rs_pend <= 1'b1;\n",
+             "      reg_go      <= 1'b0;\n", None, 'rng_drbg')
 # M1: the restore stays, but ADD is skipped for a 0 bit (the original double-and-add): result right, time secret-dependent
 MUT['M1'] = ('m_vlsit_dsig_ec.sv', "          2'd2:    w_fsm_ec_nxt_state = ENUM_ST_EXEC;",
              "          2'd2:    w_fsm_ec_nxt_state = w_sm_bit ? ENUM_ST_EXEC : ENUM_ST_SMUL;", None, 'ec_ct')
@@ -104,6 +110,9 @@ def run(m):
     elif test == 'rng_drbg':
         cmd = [PY, 'env/misc/run_unit.py', 'rng_drbg', '+VEC=' + S + '/drbg_vec.txt']
         log = S + '/rng_drbg_mut_%s/run.log' % m
+    elif test == 'hseq':
+        cmd = [PY, 'env/misc/run_unit.py', 'hseq', '+VEC=' + S + '/hseq_final.txt']
+        log = S + '/hseq_mut_%s/run.log' % m
     elif test == 'top_sys':
         cmd = [PY, 'env/misc/run_unit.py', 'top_sys', '+DIR=' + S + '/sys']
         log = S + '/top_sys_mut_%s/run.log' % m

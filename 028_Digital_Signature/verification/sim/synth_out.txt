@@ -1,8 +1,8 @@
 | ctl | m_vlsit_dsig_ctl | defaults | synthesized | 1171 | 263 | 0 |
 | key | m_vlsit_dsig_key | PARA_EN_KEYIF=1, PARA_EN_KEYREG=1 | synthesized | 6389 | 585 | 0 |
 | rng_drbg | m_vlsit_dsig_rng | PARA_RNG_SRC=1 | synthesized | 74424 | 7461 | 0 |
-| mmul64 | m_vlsit_dsig_mmul | PARA_MUL_W=64 (synth -noabc) | synthesized | 471698 | 2377 | 0 |
-| mmul32 | m_vlsit_dsig_mmul | PARA_MUL_W=32 (synth -noabc) | synthesized | 239908 | 2345 | 0 |
+| mmul64 | m_vlsit_dsig_mmul | PARA_MUL_W=64 (light abc script) | synthesized | 503398 | 2377 | 0 |
+| mmul32 | m_vlsit_dsig_mmul | PARA_MUL_W=32 (light abc script) | synthesized | 256339 | 2345 | 0 |
 | axi | m_vlsit_dsig_axi | defaults | synthesized | 911 | 143 | 0 |
 | hfeed | m_vlsit_dsig_hfeed | defaults | synthesized | 24062 | 1883 | 0 |
 | harb | m_vlsit_dsig_harb | defaults | synthesized | 944 | 4 | 0 |

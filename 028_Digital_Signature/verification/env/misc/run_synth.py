@@ -32,11 +32,12 @@ def run(name):
     top, files, prm = BLOCKS[name]
     os.makedirs(S, exist_ok=True)
     chp = ' '.join('-set %s %d' % (k, v) for k, v in prm.items())
-    # the Montgomery multiplier is synthesized without abc (abc did not finish on the 64 x 521-bit datapath in 34 min);
-    # the cells are then the unoptimized yosys generic gates, which is stated in the table
+    # the Montgomery multiplier: the default abc script of synth did not finish on the 64 x 521-bit datapath in 34 minutes; it is
+    # mapped with a light script (strash, map) instead: structurally hashed and mapped to simple gates, not the default optimization
     sopt = ' -noabc' if name in NOABC else ''
+    tail = '; abc -g AND,NAND,OR,NOR,XOR,XNOR,MUX -script +strash;map; opt -fast; clean' if name in NOABC else ''
     rd = 'read_verilog -sv %s; ' % ' '.join(files) + ('chparam %s %s; ' % (chp, top) if prm else '')
-    script = rd + 'synth -top %s -flatten%s; stat' % (top, sopt)
+    script = rd + 'synth -top %s -flatten%s%s; stat' % (top, sopt, tail)
     log = S + '/%s.log' % name
     env = dict(os.environ)
     env['PATH'] = 'C:/Tools/oss-cad-suite/bin;C:/Tools/oss-cad-suite/lib;' + env.get('PATH', '')
@@ -61,7 +62,7 @@ def main(names):
         ok, cells, ffs, lat, err = run(n)
         nfail += not ok
         top, _, prm = BLOCKS[n]
-        lines.append('| %s | %s | %s | %s | %d | %d | %d |' % (n, top, (', '.join('%s=%d' % kv for kv in prm.items()) or 'defaults') + (' (synth -noabc)' if n in NOABC else ''),
+        lines.append('| %s | %s | %s | %s | %d | %d | %d |' % (n, top, (', '.join('%s=%d' % kv for kv in prm.items()) or 'defaults') + (' (light abc script)' if n in NOABC else ''),
                                                             'synthesized' if ok else 'FAILED: ' + err[:80], cells, ffs, lat))
         print(lines[-1], flush=True)
     open(V + '/docs/SYNTH.md', 'w', encoding='utf-8').write('\n'.join(lines) + '\n')

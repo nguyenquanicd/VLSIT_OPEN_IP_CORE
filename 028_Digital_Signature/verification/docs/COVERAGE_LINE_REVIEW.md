@@ -1,5 +1,8 @@
 # Review of the lines that the line coverage run does not hit
 
+Decision DEC-052 (user, 2026-11-26): the lines of groups A, B, C and F that no program or test can reach stay in the RTL and stay
+untested; they are not removed and no test-only engine program is written. This file is their record.
+
 Source: `COVERAGE_LINE.md` (Verilator line coverage of the top tests and the block unit tests, 2026-11-26) and the annotated
 files in `verification/sim/cov_annotate` (lines starting with `%000000`). The program ROMs are left out (see `COVERAGE_LINE.md`).
 Each never-hit line is put in one group below. "Phase 1" means the Icarus test of the CSR, control block and buffer
@@ -69,8 +72,8 @@ form code of 2 or 3, which the control block rejects first (`t_errors` lines 448
 | `m_vlsit_dsig_hbs.sv` 836 | table-2 address without a buffer offset | not used by the programs (every table-2 read is relative to a buffer field) | none for the current programs |
 | `m_vlsit_dsig_hbs.sv` 767 | byte compare of length 0 sets the equal flag | no program compares 0 bytes | none for the current programs |
 | `m_vlsit_dsig_hbs.sv` 857 | the buffer has no valid data when the engine reads it | the buffer answers every engine read in one cycle; the wait is for a slower buffer | low |
-| `m_vlsit_dsig_hseq.sv` 317, 318 | output phase with a digest length of 0 | no job asks for 0 output bytes (the engines always ask for a digest) | low |
-| `m_vlsit_dsig_rng.sv` 293 | reseed command in the same cycle as a clear | timing coincidence; the command is kept pending, the same code as line 299 that is hit | low |
+| `m_vlsit_dsig_hseq.sv` 317, 318 | output phase with a digest length of 0 | unreachable by design: a SHAKE length of 0 is raised to 1 byte at the job start (header of the block, line 371), the SHA modes have fixed non-zero lengths. The raise is tested (`tb_hseq`, length-0 job gives one byte; mutant M14) | none |
+| `m_vlsit_dsig_rng.sv` 293 (now hit) | reseed command in the same cycle as a clear | **gap closed**: `tb_rng_drbg` pulses both in one cycle and checks that `dsig_rng.due` is set and the pool is empty; mutant M15 | - |
 | `m_vlsit_sha_pad.sv` 84 | SHA3-224 block size | the IP never selects SHA3-224 (the hash library supports it) | none |
 | `m_vlsit_dsig_axi.sv` (now hit) | buffer busy in the middle of a burst | **gap closed**: `tb_axi` mid-burst test, mutants M10 and M11 (DEC-050) | - |
 | `m_vlsit_dsig_key.sv` 117, 118 (now hit) | `PARA_KEY_SRC` 0 and 1 | **gap closed**: `tb_key_rng` section 7, mutant M12 (DEC-051) | - |

@@ -85,6 +85,7 @@ SG 1 12c
 P 10 8 8 190
 R 8 0 10
 W 10 8
+B cg_ulpilp.exit
 W 4c4 1
 W 484 2100
 W 444 80040
