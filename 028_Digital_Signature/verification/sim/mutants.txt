@@ -1,4 +1,6 @@
 M1 KILLED    ['VEC 1 FAIL cycles=68936', 'VEC 2 FAIL cycles=67386']
+M10 KILLED    ['FAIL: mid-burst busy write: SLVERR after the buffer became busy (time 5676000)', 'RESULT: FAIL']
+M11 KILLED    ['FAIL: mid-burst busy read: SLVERR, zero data after busy (time 5866000)', 'FAIL: mid-burst busy read: SLVERR, zero data after busy (time 5896000)']
 M2 KILLED    ['FAIL: Ed25519ph in the pure form: dsig_err.opuns (time 47720000)', 'RESULT: FAIL']
 M3 KILLED    ['FAIL: deterministic nonce with SHA3-256: dsig_err.opuns (time 51220000)', 'RESULT: FAIL']
 M4 KILLED    ['FAIL: request 0: done pulse', 'FAIL: request 0: entropy read exactly when the generator is seeded']
@@ -7,5 +9,5 @@ M6 KILLED    ['FAIL: o_dma_out_req drops after i_dma_out_ack (time 2067525000)',
 M7 KILLED    ['FAIL: PARA_EN_DPA_EC 1 but no blinded scalar multiplication', 'RESULT: FAIL']
 M8 KILLED    ['VEC 8 FAIL cycles=50', 'VEC 16 FAIL cycles=50']
 M9 KILLED    ['VEC 3 FAIL cycles=4019946 vas=496072 clear=32769', 'RESULT: FAIL']
-run_mutants: 9 of 9 mutants killed
+run_mutants: 11 of 11 mutants killed
 RESULT: PASS

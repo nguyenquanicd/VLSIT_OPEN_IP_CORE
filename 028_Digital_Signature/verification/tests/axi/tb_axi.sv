@@ -132,6 +132,56 @@ module tb_axi;
     end
   endtask
 
+  // Eight-beat write and read bursts at byte 600; the busy input rises after beat 3, with idle cycles around the change so
+  // that the boundary does not depend on the pipeline of the block.
+  task automatic mid_burst_busy;
+    integer beat, lane, ok;
+    reg [63:0] d;
+    begin
+      @(posedge clk); #1 awvalid = 1; awid = 5; awaddr = 600; awlen = 7; awsize = 3; awburst = 1;
+      t = 0; while (!awready && t < 100) begin @(posedge clk); #1 t = t + 1; end
+      @(posedge clk); #1 awvalid = 0;
+      for (beat = 0; beat <= 7; beat = beat + 1) begin
+        if (beat == 4) begin
+          repeat (4) begin @(posedge clk); #1; end
+          busy = 1;
+          repeat (2) begin @(posedge clk); #1; end
+        end
+        for (lane = 0; lane < 8; lane = lane + 1) d[8*lane +: 8] = rnd(256);
+        if (beat < 4) for (lane = 0; lane < 8; lane = lane + 1) shadow[600 + 8 * beat + lane] = d[8*lane +: 8];
+        @(posedge clk); #1 wvalid = 1; wdata = d; wstrb = 8'hFF; wlast = (beat == 7);
+        t = 0; while (!wready && t < 100) begin @(posedge clk); #1 t = t + 1; end
+        @(posedge clk); #1 wvalid = 0; wlast = 0;
+      end
+      bready = 1;
+      t = 0; while (!bvalid && t < 100) begin @(posedge clk); #1 t = t + 1; end
+      check(bvalid && bid == 5, "mid-burst busy write: response with bid");
+      check(bresp == 2'b10, "mid-burst busy write: SLVERR after the buffer became busy");
+      @(posedge clk); #1 bready = 0;
+      nbad = nbad + 1;
+      busy = 0; repeat (2) begin @(posedge clk); #1; end
+      // read: beats 0 to 3 while idle, then busy
+      @(posedge clk); #1 arvalid = 1; arid = 6; araddr = 600; arlen = 7; arsize = 3; arburst = 1;
+      t = 0; while (!arready && t < 100) begin @(posedge clk); #1 t = t + 1; end
+      @(posedge clk); #1 arvalid = 0;
+      for (beat = 0; beat <= 7; beat = beat + 1) begin
+        rready = 1;
+        t = 0; while (!rvalid && t < 100) begin @(posedge clk); #1 t = t + 1; end
+        ok = rvalid && rid == 6 && rlast == (beat == 7);
+        if (beat < 4) begin
+          ok = ok && rresp == 2'b00;
+          for (lane = 0; lane < 8; lane = lane + 1) if (rdata[8*lane +: 8] != shadow[600 + 8 * beat + lane]) ok = 0;
+        end else
+          ok = ok && rresp == 2'b10 && rdata == 64'd0;
+        check(ok, beat < 4 ? "mid-burst busy read: OKAY and data before busy" : "mid-burst busy read: SLVERR, zero data after busy");
+        @(posedge clk); #1 rready = 0;
+        if (beat == 3) busy = 1;
+      end
+      nbad = nbad + 1;
+      busy = 0; repeat (2) begin @(posedge clk); #1; end
+    end
+  endtask
+
   task automatic compare_all;
     integer n, mism;
     begin
@@ -199,6 +249,9 @@ module tb_axi;
     axi_write(300, 3, 3, 1, 1, 0);
     axi_read(300, 3, 3, 1, 1, 0);
     busy = 0; repeat (2) @(posedge clk); #1;
+    // The buffer becomes busy in the middle of a burst (REQ-IF-002, ERR-007, DEC-050): the beats before stay written, the
+    // later beats write no byte, the burst ends with SLVERR and one buserr pulse; a read gives SLVERR and zero data after it
+    mid_burst_busy;
     // A write and a read at the same time on different words
     fork
       axi_write(400, 7, 3, 1, 2, 0);

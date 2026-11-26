@@ -1,0 +1,42 @@
+M03 ERROR pattern found 0 times
+M28 ERROR pattern found 0 times
+M05 CAUGHT (32 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: no error fla
+M02 CAUGHT (8 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: err flags of
+M04 CAUGHT (8 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: no error fla
+M01 CAUGHT (29 failed checks, 4 assertion failures) ASSERT FAIL @38085000: REQ-REG-001 SVA-004 an engine starts only for an enabled algorithm
+M06 CAUGHT (6 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: random block
+M07 CAUGHT (7 failed checks, 2 assertion failures) ASSERT FAIL @780245000: ERR-010 verify-after-sign mismatch sets the fault alarm
+M08 CAUGHT (104 failed checks, 0 assertion failures) [TEST-013 REQ-REG-001 ERR-001 start with IP and algorithm enable bits]: cnt_ops unchanged by a faili
+M09 CAUGHT (2 failed checks, 3 assertion failures) ASSERT FAIL @980505000: DEC-033 REQ-SEC-006 counters stop after the log lock
+M11 CAUGHT (24 failed checks, 0 assertion failures) [TEST-013 REQ-REG-001 ERR-001 start with IP and algorithm enable bits]: sts.sigok of a verification 
+M10 CAUGHT (3 failed checks, 1 assertion failures) ASSERT FAIL @947115000: ERR-011 lock violation sets the error and the alarm together
+M13 CAUGHT (142 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: engine group
+M12 CAUGHT (2 failed checks, 1 assertion failures) ASSERT FAIL @863705000: FSM-01 state transitions follow the table of section 10.1
+M14 CAUGHT (0 failed checks, 5 assertion failures) ASSERT FAIL @22585000: REQ-SEC-005 SVA-005 secrets are zero when ENUM_ST_CLEAR ends
+M15 CAUGHT (4 failed checks, 0 assertion failures) [TEST-030 REQ-SEC-007 ERR-008 ERR-009 key and entropy timeouts]: only keytmo is set (ERR-009) got=0x
+M17 CAUGHT (147 failed checks, 0 assertion failures) [TEST-013 REQ-REG-001 ERR-001 start with IP and algorithm enable bits]: sts.sigok of a verification 
+M18 CAUGHT (1 failed checks, 0 assertion failures) [TEST-028 REQ-SEC-005 OP-006 clearing of the secret state]: dsig_cmd.clr clears the key words within
+M19 CAUGHT (9 failed checks, 0 assertion failures) [TEST-023 DEC-035 recovery of an unused state encoding]: alarm.fault set by an unused state encoding
+M20 CAUGHT (2 failed checks, 1 assertion failures) ASSERT FAIL @824025000: ERR-008 entropy timeout sets the random-source alarm
+M21 CAUGHT (4 failed checks, 0 assertion failures) [TEST-023 REQ-FUNC-001 to 008 OP-002 OP-003 OP-004 flows of the control block]: random block start c
+M22 CAUGHT (76 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: verify-after
+M23 CAUGHT (13 failed checks, 0 assertion failures) [TEST-014 REQ-REG-002 ERR-011 DEC-034 lock of the algorithm enables]: dsig_lock.locked is 1 and req 
+M24 CAUGHT (2 failed checks, 0 assertion failures) [TEST-018 REQ-IF-003 interrupt mask, injection, clear, alarm]: the injection bit held at 1 does not 
+M25 CAUGHT (3 failed checks, 5 assertion failures) ASSERT FAIL @31505000: 6.4 irq_sts is the raw event masked by the enable
+M26 CAUGHT (5 failed checks, 5 assertion failures) ASSERT FAIL @780255000: 6.4 o_alarm high for fault or lock violation
+M27 CAUGHT (50 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: err flags of
+M29 CAUGHT (7 failed checks, 0 assertion failures) [TEST-028 REQ-SEC-005 S19 abort and reset during an operation]: abort in RNG: busy 0 and no result g
+M30 CAUGHT (2 failed checks, 0 assertion failures) [TEST-028 REQ-SEC-005 S19 abort and reset during an operation]: abort in VAS: busy 0 and no result (
+B01 CAUGHT (300 failed checks, 0 assertion failures) [TEST-033 TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 buffer, numbered example 1]: bus read equals the r
+B02 CAUGHT (181 failed checks, 5 assertion failures) ASSERT FAIL @550135000: 10.5 the window address advances by 4 after a window access
+B03 CAUGHT (1 failed checks, 0 assertion failures) [TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 ERR-012 commands and writes while busy]: the window read da
+B04 CAUGHT (1 failed checks, 0 assertion failures) [TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 ERR-012 commands and writes while busy]: bus write while bu
+B05 CAUGHT (79 failed checks, 0 assertion failures) [TEST-033 TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 buffer, numbered example 1]: example 1 step 2: byt
+B06 CAUGHT (5 failed checks, 0 assertion failures) [TEST-033 TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 buffer, numbered example 1]: example 1 step 5: win
+M16 CAUGHT (255 failed checks, 0 assertion failures) [TEST-013 REQ-REG-001 ERR-001 start with IP and algorithm enable bits]: operation did not complete (
+B07 CAUGHT (294 failed checks, 0 assertion failures) [TEST-009 TEST-010 TEST-023 REQ-FUNC-009 REQ-FUNC-010 REQ-ERR-001 errors of the check]: result word 
+B08 CAUGHT (1 failed checks, 0 assertion failures) [TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 ERR-012 commands and writes while busy]: a window write whi
+B09 CAUGHT (3 failed checks, 0 assertion failures) [TEST-033 TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 buffer, numbered example 1]: example 1 step 5: buf
+B10 CAUGHT (70 failed checks, 0 assertion failures) [TEST-033 TEST-017 TEST-020 REQ-IF-002 REQ-IF-005 buffer, numbered example 1]: example 1 step 3: win
+time 658 s
+caught 38 of 40

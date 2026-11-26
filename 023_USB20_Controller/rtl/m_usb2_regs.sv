@@ -221,7 +221,10 @@ module m_usb2_regs #(
   input  wire  [31:0]                           i_ph_clr_lpbk_sts,
   input  wire  [PARA_USB2_NEP1-1:0][31:0]       i_ph_clr_epi_ctl,
   input  wire  [PARA_USB2_NEP1-1:0][31:0]       i_ph_clr_epo_ctl,
-  input  wire  [PARA_USB2_NHC-1:0][31:0]        i_ph_clr_hc_ctrl
+  input  wire  [PARA_USB2_NHC-1:0][31:0]        i_ph_clr_hc_ctrl,
+
+  // Pending updates of the register crossing, CLK-PHY (DEC-049, BUG-053)
+  output logic                                  o_xreg_busy
 );
 
   // Internal signal declarations
@@ -1406,7 +1409,8 @@ module m_usb2_regs #(
     .o_shadow      (w_shadow),
     .i_pub         (w_pub_all),
     .i_set         (w_set_all),
-    .i_clr         (w_clr_all)
+    .i_clr         (w_clr_all),
+    .o_upd_busy    (o_xreg_busy)
   );
 
   // Update words of the crossing are registered once and decoded into the hardware loads.

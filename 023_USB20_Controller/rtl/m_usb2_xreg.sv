@@ -13,6 +13,7 @@
  *                while the FIFO is full; events of one bit that arrive twice before the push
  *                merge. xq_free is the number of free command entries, seen through a Gray pop
  *                counter. PARA_USB2_PIPE_XREG adds an output register stage on the shadow words.
+ *                o_upd_busy tells the speed engine that updates are still pending (BUG-053).
  */
 `timescale 1ns/1ps
 
@@ -77,7 +78,10 @@ module m_usb2_xreg #(
   // Published words, event sets and command clears of the engines (CLK-PHY)
   input  wire  [PARA_USB2_XREG_NA*LPARA_WORD_W-1:0] i_pub,
   input  wire  [PARA_USB2_XREG_NA*LPARA_WORD_W-1:0] i_set,
-  input  wire  [PARA_USB2_XREG_NA*LPARA_WORD_W-1:0] i_clr
+  input  wire  [PARA_USB2_XREG_NA*LPARA_WORD_W-1:0] i_clr,
+
+  // Updates of CLK-PHY not yet written into the update FIFO (DEC-049, BUG-053)
+  output logic                                      o_upd_busy
 );
 
   // Internal signal declarations
@@ -455,6 +459,11 @@ module m_usb2_xreg #(
       end
     end
   endgenerate
+
+  // Pending updates: a published word not yet pushed, a pending event set or command clear, or an
+  // entry in the output stage. The speed engine holds SuspendM high until this is 0, so the PHY
+  // cannot stop CLK-PHY before the suspend status and event have reached CLK-BUS (BUG-053).
+  assign o_upd_busy = (|w_dirty) | (|w_setany) | (|w_clrany) | ((PARA_USB2_PIPE_XREG != 32'd0) & reg_wr_v);
 
   // Scanner pointer and the update tag.
   always_ff @(posedge i_clk_phy, negedge i_rst_n_phy) begin : p_ff_scan

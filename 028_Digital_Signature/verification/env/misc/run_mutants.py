@@ -11,6 +11,11 @@ Mutants:
   M6 DMA output request ignores the acknowledge                             -> tb_top_sys
   M7 scalar blinding never taken (LDV 2 returns 0)                          -> tb_top_ec det with PARA_EN_DPA_EC (monitor)
   M8 curve and hash pairing applied to key generation (fixed bug put back)  -> phase 1 T05 is not used: tb_top_ec det (keygen P-384)
+  M9 ML-DSA masking never taken (LDS 6 default returns 0)                   -> tb_lat quick with PARA_EN_DPA_PQ (mask monitor)
+  M10 AXI4 write: refusal of the buffer in the middle of a burst ignored    -> tb_axi (mid-burst busy, DEC-050)
+  M11 AXI4 read: refusal of the buffer in the middle of a burst ignored     -> tb_axi (mid-burst busy, DEC-050)
+  M12 PARA_KEY_SRC 0 takes the key registers instead of the port            -> tb_key_rng (DEC-051)
+  M13 SHA3-256 (dsig_op.hash 3) mapped to SHA-256 in the EC engine          -> tb_ec sha3 (DEC-018)
 Usage: python run_mutants.py [M1 ...]"""
 import os
 import re
@@ -43,6 +48,15 @@ MUT = {
 }
 MUT['M9'] = ('m_vlsit_dsig_lat.sv', "                default: reg_rf[w_rd] <= {31'd0, PARA_EN_DPA[0]};",
              "                default: reg_rf[w_rd] <= 32'd0;", None, 'lat_dpa')
+# M10, M11: a refusal of the buffer in the middle of a burst is ignored (write, read): the burst would end with OKAY
+MUT['M10'] = ('m_vlsit_dsig_axi.sv', "          if (i_buf_wr_rej)\n            reg_werr <= 1'b1;\n        end\n        ENUM_ST_W_WAIT: begin\n          if (i_buf_wr_rej)\n            reg_werr <= 1'b1;",
+              "          if (1'b0)\n            reg_werr <= 1'b1;\n        end\n        ENUM_ST_W_WAIT: begin\n          if (1'b0)\n            reg_werr <= 1'b1;", None, 'axi')
+MUT['M11'] = ('m_vlsit_dsig_axi.sv', "            if (i_buf_rd_rej)\n              reg_rerr <= 1'b1;",
+              "            if (1'b0)\n              reg_rerr <= 1'b1;", None, 'axi')
+# M12: PARA_KEY_SRC 0 (port) takes the registers instead
+MUT['M12'] = ('m_vlsit_dsig_key.sv', "32'd0:   w_use_port = 1'b1;", "32'd0:   w_use_reg  = 1'b1;", None, 'key_rng')
+# M13: SHA3-256 of dsig_op.hash 3 mapped to SHA-256 in the elliptic-curve engine
+MUT['M13'] = ('m_vlsit_dsig_ec.sv', "3'd3:    w_hf_mode_map = 4'd9;", "3'd3:    w_hf_mode_map = 4'd1;", None, 'ec_sha3')
 # M1: the restore stays, but ADD is skipped for a 0 bit (the original double-and-add): result right, time secret-dependent
 MUT['M1'] = ('m_vlsit_dsig_ec.sv', "          2'd2:    w_fsm_ec_nxt_state = ENUM_ST_EXEC;",
              "          2'd2:    w_fsm_ec_nxt_state = w_sm_bit ? ENUM_ST_EXEC : ENUM_ST_SMUL;", None, 'ec_ct')
@@ -70,7 +84,11 @@ def run(m):
     env = dict(os.environ)
     env['UNIT_TAG'] = '_mut_' + m
     env['MUT_FILE'] = path
-    if test == 'ec_ct':
+    if test == 'ec_sha3':
+        env['EC_TAG'] = 'ec_mut_' + m
+        cmd = [PY, 'env/ec/run_ec.py', 'sha3']
+        log = S + '/ec_mut_%s/sha3.log' % m
+    elif test == 'ec_ct':
         env['EC_TAG'] = 'ec_mut_' + m
         cmd = [PY, 'env/ec/run_ec.py', 'ct']
         log = S + '/ec_mut_%s/ct.log' % m

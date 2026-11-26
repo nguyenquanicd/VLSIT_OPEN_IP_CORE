@@ -249,6 +249,71 @@ def k256_set():
     return out
 
 
+OPENSSL = os.environ.get('OPENSSL', 'C:/Users/PC/Tools/msys64/usr/bin/openssl.exe')
+CURVE_OID = {'P-256': '06082a8648ce3d030107', 'P-384': '06052b81040022', 'P-521': '06052b81040023',
+             'secp256k1': '06052b8104000a'}
+
+
+def _der(tag, body):
+    n = len(body)
+    ln = bytes([n]) if n < 128 else (bytes([0x81, n]) if n < 256 else bytes([0x82, n >> 8, n & 255]))
+    return bytes([tag]) + ln + body
+
+
+def _der_int(v):
+    b = v.to_bytes((v.bit_length() + 8) // 8, 'big')
+    return _der(0x02, b)
+
+
+def openssl_verify(cname, qx, qy, msg, r, s, hname):
+    """Independent check of an ECDSA signature with OpenSSL (dgst -verify over the message with the SHA3 hash)."""
+    import subprocess
+    import tempfile
+    nb = CURVES[cname].nbytes
+    spki = _der(0x30, _der(0x30, bytes.fromhex('06072a8648ce3d0201' + CURVE_OID[cname])) +
+                _der(0x03, b'\x00\x04' + qx.to_bytes(nb, 'big') + qy.to_bytes(nb, 'big')))
+    sig = _der(0x30, _der_int(r) + _der_int(s))
+    with tempfile.TemporaryDirectory() as d:
+        open(d + '/pub.der', 'wb').write(spki)
+        open(d + '/sig.der', 'wb').write(sig)
+        open(d + '/msg.bin', 'wb').write(msg)
+        p = subprocess.run([OPENSSL, 'dgst', '-' + hname.replace('_', '-'), '-verify', d + '/pub.der', '-keyform', 'DER',
+                            '-signature', d + '/sig.der', d + '/msg.bin'], capture_output=True, text=True)
+    return 'Verified OK' in p.stdout
+
+
+def sha3_set():
+    """DEC-018: ECDSA with the SHA3 hashes (dsig_op.hash 3, 4, 5 = SHA3-256, SHA3-384, SHA3-512) and a given nonce (pool).
+    The signature is computed with the textbook group law (e = leftmost bits of the digest, FIPS 186-5 section 6.4.1) and
+    then checked by OpenSSL (dgst -verify); a vector that OpenSSL does not verify stops the generator. Per pair: verify ok,
+    verify with a changed message, sign (the result must equal the signature)."""
+    out = []
+    rnd = random.Random(3202)
+    pairs = [('P-256', 3, 'sha3_256'), ('P-384', 4, 'sha3_384'), ('P-521', 5, 'sha3_512'), ('P-256', 5, 'sha3_512'),
+             ('secp256k1', 3, 'sha3_256')]
+    for cname, hop, hname in pairs:
+        c = CURVES[cname]
+        nb = c.nbytes
+        d = rnd.randrange(1, c.n)
+        k = rnd.randrange(2, c.n - 1)
+        msg = b'ECDSA %s with %s' % (cname.encode(), hname.encode())
+        dig = getattr(hashlib, hname)(msg).digest()
+        e = int.from_bytes(dig, 'big') >> max(0, 8 * len(dig) - c.n.bit_length())
+        R = mul(c, k, (c.gx, c.gy))
+        r = R[0] % c.n
+        s = pow(k, -1, c.n) * (e + r * d) % c.n
+        Q = mul(c, d, (c.gx, c.gy))
+        assert openssl_verify(cname, Q[0], Q[1], msg, r, s, hname), ('OpenSSL rejects', cname, hname)
+        sig = r.to_bytes(nb, 'big') + s.to_bytes(nb, 'big')
+        pk = Q[0].to_bytes(nb, 'big') + Q[1].to_bytes(nb, 'big')
+        pool = (k - 1).to_bytes(nb, 'big') + bytes(8)
+        tag = '%s %s' % (cname, hname)
+        out.append(Vec(tag + ' verify ok', cname, 2, hash_=hop, msg=msg, sig=sig, pk=pk, exp_ok=1))
+        out.append(Vec(tag + ' verify bad msg', cname, 2, hash_=hop, msg=flip(msg, 2), sig=sig, pk=pk, exp_ok=0))
+        out.append(Vec(tag + ' sign', cname, 1, hash_=hop, msg=msg, key=d.to_bytes(nb, 'big'), pool=pool, exp_ok=1, exp_res=sig))
+    return out
+
+
 def build(setname):
     ed25519 = T.ed25519_vectors()
     ed448 = T.ed448_vectors()
@@ -274,6 +339,8 @@ def build(setname):
         return ecdsa_set('P-521')
     if setname == 'k256':
         return k256_set()
+    if setname == 'sha3':
+        return sha3_set()
     if setname == 'quick':
         return (ed_set('Ed25519', ed25519[:1], 32, False)[:6] + ecdsa_set('P-256', per_curve=[(0, b'sample')])[:4])
     raise SystemExit('unknown set ' + setname)

@@ -1,0 +1,14 @@
+check_rdc: 102 flip-flop and synchronizer cells checked against the reset of their clock domain, 0 violations
+APB <- bundled data qualified by g_async_csr.w_rd_ack_bus : 1 flip-flop cells (o_apb_prdata ...) from reg_rdata
+APB <- synchronizer, driven directly by one flip-flop : 1 synchronizer cells (g_async_csr.w_rd_ack_bus ...) from g_async_csr.w_rd_ack
+APB <- synchronizer, driven directly by one flip-flop : 1 synchronizer cells (g_async_csr.w_wr_ack_bus ...) from g_async_csr.w_wr_ack
+REG <- bundled data qualified by g_async_csr.w_rd_req_reg : 1 flip-flop cells (reg_rdata ...) from reg_addr
+REG <- bundled data qualified by g_async_csr.w_wr_req_reg : 85 flip-flop cells (o_dsig_alarm_fault, o_dsig_alarm_lockv, o_dsig_alg_en_ed448 ...) from reg_addr, reg_wdata, w_wmask
+REG <- synchronizer, driven directly by one flip-flop : 1 synchronizer cells (g_async_csr.w_rd_req_reg ...) from g_async_csr.reg_rd_req
+REG <- synchronizer, driven directly by one flip-flop : 1 synchronizer cells (g_async_csr.w_wr_req_reg ...) from g_async_csr.reg_wr_req
+check_cdc: 98 flip-flop cells, 4 synchronizer cells, 7 crossing groups, 0 violations
+mutant C1 logic before a synchronizer: CAUGHT REG <- VIOLATION: logic before the synchronizer : 1 synchronizer cells (g_async_csr.w_wr_req_reg ...) from g_a
+mutant C2 register write enabled by an APB-domain signal: CAUGHT REG <- VIOLATION: crossing without a synchronized qualifier : 85 flip-flop cells (o_dsig_alarm_fault, o_dsig_a
+mutant C3 register-side flip-flop reset by the APB reset: CAUGHT REG <- RDC VIOLATION: g_async_csr.w_wr_req_reg is reset by i_rst_n_apb
+check_cdc mutants: 3 of 3 caught
+RESULT: PASS

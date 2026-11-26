@@ -1,0 +1,6 @@
+syn_async1               PASS  SUMMARY: tests=19 failed tests=0 checks=22786 failed checks=0 | assertion failures: 0, assertions never exercised: 0
+sim_async1_seed2         PASS  SUMMARY: tests=19 failed tests=0 checks=22879 failed checks=0 | assertion failures: 0, assertions never exercised: 0
+sim_async1_seed1         PASS  SUMMARY: tests=19 failed tests=0 checks=22752 failed checks=0 | assertion failures: 0, assertions never exercised: 0
+sim_async1_seed3         PASS  SUMMARY: tests=19 failed tests=0 checks=22905 failed checks=0 | assertion failures: 0, assertions never exercised: 0
+syn_async0               PASS  SUMMARY: tests=19 failed tests=0 checks=24786 failed checks=0 | assertion failures: 0, assertions never exercised: 0
+time 122 s

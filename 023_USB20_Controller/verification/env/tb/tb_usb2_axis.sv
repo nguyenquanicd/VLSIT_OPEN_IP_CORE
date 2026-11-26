@@ -47,7 +47,7 @@ module tb_usb2_axis;
   always #(T_PHY / 2.0) if (pclk_on) clk_phy = ~clk_phy;
   // PHY clock model of UTMI+ (REF-006 SuspendM): with PCLKA 1 the PHY stops CLKOUT 8 cycles after SuspendM falls and starts it
   // again 2 us after SuspendM rises (the link must raise SuspendM without CLK-PHY). Review 2026-11-22 F-005.
-  bit pclk_auto = 0; int pclk_lo = 0;
+  bit pclk_auto = 0; int pclk_lo = 0; real pclk_dly = 2000.0;    // PCLKD: restart delay in ns (UTMI 1.05 allows up to 5.6 ms)
   always #(t_bus / 2.0) clk_bus = ~clk_bus;
 
   // ------------------------------------------------------------------ DUT pins
@@ -278,7 +278,25 @@ module tb_usb2_axis;
   end
 
   always @(posedge clk_phy) if (pclk_auto && rst_n && !suspend_n) begin pclk_lo++; if (pclk_lo >= 8) pclk_on = 0; end else pclk_lo = 0;
-  always @(posedge suspend_n) if (pclk_auto && !pclk_on) begin #2000; pclk_on = 1; end
+  always @(posedge suspend_n) if (pclk_auto && !pclk_on) begin #(pclk_dly); pclk_on = 1; end
+  // UTMILP-BEGIN a_susp_handoff (SVA-017, DEC-049): the wake request of the always-on m_usb2_utmilp falls only when the
+  // synchronized engine request is 1 (hand-off) or, after a line wake, when the line is back at the stored idle value
+  // (spurious wake); o_utmi_suspend_n has no pulse shorter than one CLK-BUS period.
+  int act_handoff = 0, act_spur = 0, act_wake = 0; realtime sn_t = 0;
+  always @(posedge clk_bus) if (rst_n) begin
+    if (!dut.u_core.gen_utmi.u_utmilp.reg_wake && dut.u_core.gen_utmi.u_utmilp.w_wake_nxt) act_wake++;
+    if (dut.u_core.gen_utmi.u_utmilp.reg_wake && !dut.u_core.gen_utmi.u_utmilp.w_wake_nxt) begin
+      if (dut.u_core.gen_utmi.u_utmilp.w_susp_n_sync) act_handoff++;
+      else if (dut.u_core.gen_utmi.u_utmilp.reg_wake_line &&
+               dut.u_core.gen_utmi.u_utmilp.w_ls_sync == dut.u_core.gen_utmi.u_utmilp.reg_idle) act_spur++;
+      else a_fail("a_susp_handoff", "wake request released while the engine is suspended and the line is not idle");
+    end
+  end
+  always @(suspend_n) if (rst_n && $realtime > 0) begin
+    if (sn_t > 0 && ($realtime - sn_t) < t_bus) a_fail("a_susp_handoff", $sformatf("o_utmi_suspend_n pulse of %0.1f ns", $realtime - sn_t));
+    sn_t = $realtime;
+  end
+  // UTMILP-END
 
   // ------------------------------------------------------------------ mon_usb: packets from the DUT (transmit path of the link)
   byte unsigned cap [0:65535]; int cap_n = 0;
@@ -407,6 +425,7 @@ module tb_usb2_axis;
     $display("ACTIVITY2 a_utmi_w16=%0d a_utmi_mode=%0d a_irq_level=%0d", act_utmi_w16, act_utmi_mode, act_irq_lvl); $display("ACTIVITY a_utmi_tx=%0d a_axim=%0d a_apb=%0d sof_cnt=%0d sof_min_ns=%0.1f sof_max_ns=%0.1f", act_utmi_tx, act_axim, act_apb, sof_cnt, sof_min, sof_max);
     if (nc_dead || nc_silent || nc_data || nc_mem) $display("NC dead=%0d silent=%0d data=%0d mem=%0d dut_packets=%0d data_flips=%0d mem_flips=%0d", nc_dead, nc_silent, nc_data, nc_mem, nc_pkt_n, nc_data_n, nc_mem_n);
     $display("PHY_ROW a_phy_row_cycles=%0d", act_phy_row);
+    $display("UTMILP a_susp_handoff wakes=%0d handoffs=%0d spurious=%0d", act_wake, act_handoff, act_spur);   // UTMILP-LINE
     $display("CHECKPOINTS reached=%0d", cp_n);
     $display("RESULT %s checks=%0d errors=%0d", (errors == 0 && checks > 0) ? "PASS" : "FAIL", checks, errors);
     $finish;
@@ -535,6 +554,8 @@ module tb_usb2_axis;
         "WIN": begin win_lo = rdi(); win_hi = rdi(); win_on = 1; end
         "PCLKA": begin d = rdi(); pclk_auto = d[0]; end
         "PCLK": begin d = rdi(); pclk_on = d[0]; end
+        "PCLKD": begin d = rdi(); pclk_dly = real'(d); end                                // PHY clock restart delay in ns (DEC-049)
+        "XWAKE": begin a = rdi(); d = rdi(); chk(act_wake >= a && act_spur >= d, $sformatf("line %0d: utmilp wakes %0d spurious %0d, expected at least %0d and %0d", line_no, act_wake, act_spur, a, d)); end   // UTMILP-LINE SVA-017 activity
         "CLK": begin d = rdi(); t_bus = real'(d) / 100.0; end
         "RST": begin d = rdi(); rst_n = 0; repeat (d) @(posedge clk_bus); rst_n = 1; repeat (20) @(posedge clk_bus); end
         "IPG": begin ipg = rdi(); end

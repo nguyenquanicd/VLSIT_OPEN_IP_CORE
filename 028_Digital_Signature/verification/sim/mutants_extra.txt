@@ -1,0 +1,4 @@
+M12 KILLED    ['FAIL: KEY_SRC 0: port asked for words 0..7, registers set (time 43576000)', 'FAIL: KEY_SRC 0: key from the port words (time 43576000)']
+M13 KILLED    ['VEC 0 FAIL cycles=271734', 'VEC 2 FAIL cycles=143265']
+run_mutants: 2 of 2 mutants killed
+RESULT: PASS

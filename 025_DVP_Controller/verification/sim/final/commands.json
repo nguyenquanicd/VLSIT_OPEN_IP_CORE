@@ -1,0 +1,1379 @@
+[
+ {
+  "label": "version verilator",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--version"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification",
+  "timeout_s": 60,
+  "exit_code": 0,
+  "seconds": 0.264,
+  "peak_ram_bytes": 6066176,
+  "version_output": "Verilator 5.053 devel rev v5.052-352-gc265bd444 (mod)"
+ },
+ {
+  "label": "version python",
+  "argv": [
+   "C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+   "--version"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification",
+  "timeout_s": 60,
+  "exit_code": 0,
+  "seconds": 0.12,
+  "peak_ram_bytes": 5382144,
+  "version_output": "Python 3.12.10"
+ },
+ {
+  "label": "version g++",
+  "argv": [
+   "C:\\Users\\PC\\Tools\\msys64\\ucrt64\\bin\\g++.exe",
+   "--version"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification",
+  "timeout_s": 60,
+  "exit_code": 0,
+  "seconds": 0.191,
+  "peak_ram_bytes": 6103040,
+  "version_output": "g++.exe (Rev4, Built by MSYS2 project) 16.2.0"
+ },
+ {
+  "label": "qualification compile",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--binary",
+   "--timing",
+   "--x-initial-edge",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "tb_qual_checker",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\qual",
+   "-CFLAGS",
+   "-D_GLIBCXX_USE_CXX11_ABI=0",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\scoreboards/dv_dvp_checker.sv",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\tb/tb_qual_checker.sv"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env",
+  "timeout_s": 600,
+  "exit_code": 0,
+  "seconds": 266.842,
+  "peak_ram_bytes": 51798016
+ },
+ {
+  "label": "qualification run",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\qual\\Vtb_qual_checker.exe"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0",
+  "timeout_s": 600,
+  "exit_code": 0,
+  "seconds": 0.375,
+  "peak_ram_bytes": 6270976
+ },
+ {
+  "label": "parameter legality {'PARA_DVP_DATA_W': 8}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_DVP_DATA_W8",
+   "-GPARA_DVP_DATA_W=8",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 1.458,
+  "peak_ram_bytes": 33591296
+ },
+ {
+  "label": "parameter legality {'PARA_DVP_DATA_W': 10}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_DVP_DATA_W10",
+   "-GPARA_DVP_DATA_W=10",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.256,
+  "peak_ram_bytes": 26640384
+ },
+ {
+  "label": "parameter legality {'PARA_DVP_DATA_W': 12}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_DVP_DATA_W12",
+   "-GPARA_DVP_DATA_W=12",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.24,
+  "peak_ram_bytes": 26677248
+ },
+ {
+  "label": "parameter legality {'PARA_DVP_DATA_W': 9}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_DVP_DATA_W9",
+   "-GPARA_DVP_DATA_W=9",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.221,
+  "peak_ram_bytes": 26984448
+ },
+ {
+  "label": "parameter legality {'PARA_FIFO_DEPTH': 2}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_FIFO_DEPTH2",
+   "-GPARA_FIFO_DEPTH=2",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.224,
+  "peak_ram_bytes": 25939968
+ },
+ {
+  "label": "parameter legality {'PARA_FIFO_DEPTH': 8}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_FIFO_DEPTH8",
+   "-GPARA_FIFO_DEPTH=8",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.24,
+  "peak_ram_bytes": 26931200
+ },
+ {
+  "label": "parameter legality {'PARA_FIFO_DEPTH': 16}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_FIFO_DEPTH16",
+   "-GPARA_FIFO_DEPTH=16",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.277,
+  "peak_ram_bytes": 27037696
+ },
+ {
+  "label": "parameter legality {'PARA_FIFO_DEPTH': 1}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_FIFO_DEPTH1",
+   "-GPARA_FIFO_DEPTH=1",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.214,
+  "peak_ram_bytes": 25964544
+ },
+ {
+  "label": "parameter legality {'PARA_FIFO_DEPTH': 3}",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--lint-only",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "m_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\lint_PARA_FIFO_DEPTH3",
+   "-GPARA_FIFO_DEPTH=3",
+   "-f",
+   "filelist.f"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 120,
+  "exit_code": 0,
+  "seconds": 0.222,
+  "peak_ram_bytes": 26173440
+ },
+ {
+  "label": "build base",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--binary",
+   "--timing",
+   "--x-initial-edge",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "tb_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base",
+   "-CFLAGS",
+   "-D_GLIBCXX_USE_CXX11_ABI=0",
+   "-GP_W=8",
+   "-GP_EDGE=0",
+   "-GP_VS=1",
+   "-GP_HR=1",
+   "-GP_DEPTH=8",
+   "-f",
+   "filelist.f",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\bfm/dv_apb_requester.sv",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\bfm/dv_dvp_source.sv",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\scoreboards/dv_dvp_checker.sv",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\tb/tb_dvp_controller.sv"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 900,
+  "exit_code": 0,
+  "seconds": 231.651,
+  "peak_ram_bytes": 108675072
+ },
+ {
+  "label": "case base t_dvp_continuous_e2e_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_continuous_e2e",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.263,
+  "peak_ram_bytes": 6348800
+ },
+ {
+  "label": "case base t_dvp_continuous_e2e_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_continuous_e2e",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.05,
+  "peak_ram_bytes": 6348800
+ },
+ {
+  "label": "case base t_dvp_continuous_e2e_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_continuous_e2e",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.09,
+  "peak_ram_bytes": 6365184
+ },
+ {
+  "label": "case base t_dvp_gated_e2e_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_gated_e2e",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.028,
+  "peak_ram_bytes": 6344704
+ },
+ {
+  "label": "case base t_dvp_gated_e2e_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_gated_e2e",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.046,
+  "peak_ram_bytes": 6348800
+ },
+ {
+  "label": "case base t_dvp_gated_e2e_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_gated_e2e",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.076,
+  "peak_ram_bytes": 6361088
+ },
+ {
+  "label": "case base t_dvp_apb_protocol_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_apb_protocol",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.029,
+  "peak_ram_bytes": 6352896
+ },
+ {
+  "label": "case base t_dvp_apb_protocol_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_apb_protocol",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.028,
+  "peak_ram_bytes": 6373376
+ },
+ {
+  "label": "case base t_dvp_apb_protocol_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_apb_protocol",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.029,
+  "peak_ram_bytes": 6352896
+ },
+ {
+  "label": "case base t_dvp_timeout_boundary_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_timeout_boundary",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.112,
+  "peak_ram_bytes": 6410240
+ },
+ {
+  "label": "case base t_dvp_timeout_boundary_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_timeout_boundary",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.112,
+  "peak_ram_bytes": 6406144
+ },
+ {
+  "label": "case base t_dvp_timeout_boundary_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_timeout_boundary",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.111,
+  "peak_ram_bytes": 6418432
+ },
+ {
+  "label": "case base t_dvp_flush_handshake_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_flush_handshake",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.13,
+  "peak_ram_bytes": 6430720
+ },
+ {
+  "label": "case base t_dvp_flush_handshake_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_flush_handshake",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.153,
+  "peak_ram_bytes": 6447104
+ },
+ {
+  "label": "case base t_dvp_flush_handshake_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_flush_handshake",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.151,
+  "peak_ram_bytes": 6426624
+ },
+ {
+  "label": "case base t_dvp_overflow_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_overflow",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.106,
+  "peak_ram_bytes": 6414336
+ },
+ {
+  "label": "case base t_dvp_overflow_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_overflow",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.069,
+  "peak_ram_bytes": 6438912
+ },
+ {
+  "label": "case base t_dvp_overflow_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_overflow",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.05,
+  "peak_ram_bytes": 6414336
+ },
+ {
+  "label": "case base t_dvp_reset_recovery_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_reset_recovery",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.05,
+  "peak_ram_bytes": 6434816
+ },
+ {
+  "label": "case base t_dvp_reset_recovery_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_reset_recovery",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.089,
+  "peak_ram_bytes": 6434816
+ },
+ {
+  "label": "case base t_dvp_reset_recovery_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_reset_recovery",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.048,
+  "peak_ram_bytes": 6434816
+ },
+ {
+  "label": "case base t_dvp_dma_rearm_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_dma_rearm",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.069,
+  "peak_ram_bytes": 6406144
+ },
+ {
+  "label": "case base t_dvp_dma_rearm_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_dma_rearm",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.072,
+  "peak_ram_bytes": 6434816
+ },
+ {
+  "label": "case base t_dvp_dma_rearm_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_dma_rearm",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.048,
+  "peak_ram_bytes": 6414336
+ },
+ {
+  "label": "case base t_dvp_endpoint_errors_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_endpoint_errors",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.049,
+  "peak_ram_bytes": 6406144
+ },
+ {
+  "label": "case base t_dvp_endpoint_errors_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_endpoint_errors",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.05,
+  "peak_ram_bytes": 6402048
+ },
+ {
+  "label": "case base t_dvp_endpoint_errors_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_endpoint_errors",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.049,
+  "peak_ram_bytes": 6422528
+ },
+ {
+  "label": "case base t_dvp_frame_counter_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_frame_counter",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.07,
+  "peak_ram_bytes": 6500352
+ },
+ {
+  "label": "case base t_dvp_frame_counter_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_frame_counter",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.09,
+  "peak_ram_bytes": 6500352
+ },
+ {
+  "label": "case base t_dvp_frame_counter_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_frame_counter",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.096,
+  "peak_ram_bytes": 6512640
+ },
+ {
+  "label": "case base t_dvp_mode_guard_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_mode_guard",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.069,
+  "peak_ram_bytes": 6459392
+ },
+ {
+  "label": "case base t_dvp_mode_guard_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_mode_guard",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.05,
+  "peak_ram_bytes": 6434816
+ },
+ {
+  "label": "case base t_dvp_mode_guard_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_mode_guard",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.05,
+  "peak_ram_bytes": 6447104
+ },
+ {
+  "label": "case base t_dvp_profiles_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_profiles",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.07,
+  "peak_ram_bytes": 6385664
+ },
+ {
+  "label": "case base t_dvp_profiles_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_profiles",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.048,
+  "peak_ram_bytes": 6393856
+ },
+ {
+  "label": "case base t_dvp_profiles_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_profiles",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.068,
+  "peak_ram_bytes": 6406144
+ },
+ {
+  "label": "case base t_dvp_flush_race_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_flush_race",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.794,
+  "peak_ram_bytes": 6402048
+ },
+ {
+  "label": "case base t_dvp_flush_race_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_flush_race",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.628,
+  "peak_ram_bytes": 6393856
+ },
+ {
+  "label": "case base t_dvp_flush_race_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_flush_race",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.719,
+  "peak_ram_bytes": 6389760
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m0_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=0"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.228,
+  "peak_ram_bytes": 6369280
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m1_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.175,
+  "peak_ram_bytes": 6356992
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m0_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=0"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.193,
+  "peak_ram_bytes": 6352896
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m1_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.21,
+  "peak_ram_bytes": 6340608
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m0_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=0"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.23,
+  "peak_ram_bytes": 6356992
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m1_s3",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=3",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=3",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=3",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.187,
+  "peak_ram_bytes": 6336512
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m0_s4",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=4",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=4",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=4",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=0"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.235,
+  "peak_ram_bytes": 6352896
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m1_s4",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=4",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=4",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=4",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.215,
+  "peak_ram_bytes": 6340608
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m0_s5",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=5",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=5",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=5",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=0"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.246,
+  "peak_ram_bytes": 6356992
+ },
+ {
+  "label": "case base t_dvp_performance_characterization_m1_s5",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_base\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_performance_characterization",
+   "+SEED=5",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=5",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=5",
+   "+RSTSYNC_MSYNC_EN=1",
+   "+MODE=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.224,
+  "peak_ram_bytes": 6328320
+ },
+ {
+  "label": "build w10e1v0",
+  "argv": [
+   "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+   "--binary",
+   "--timing",
+   "--x-initial-edge",
+   "-Wno-fatal",
+   "-Wno-lint",
+   "-Wno-style",
+   "--top-module",
+   "tb_dvp_controller",
+   "-Mdir",
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0",
+   "-CFLAGS",
+   "-D_GLIBCXX_USE_CXX11_ABI=0",
+   "-GP_W=10",
+   "-GP_EDGE=1",
+   "-GP_VS=0",
+   "-GP_HR=1",
+   "-GP_DEPTH=8",
+   "-f",
+   "filelist.f",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\bfm/dv_apb_requester.sv",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\bfm/dv_dvp_source.sv",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\scoreboards/dv_dvp_checker.sv",
+   "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\verification\\env\\tb/tb_dvp_controller.sv"
+  ],
+  "cwd": "C:\\HQuan\\102_MyGithub\\VLSIT_OPEN_IP_CORE\\025_DVP_Controller\\rtl",
+  "timeout_s": 900,
+  "exit_code": 0,
+  "seconds": 274.861,
+  "peak_ram_bytes": 110305280
+ },
+ {
+  "label": "case w10e1v0 t_dvp_profiles_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_profiles",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.233,
+  "peak_ram_bytes": 6410240
+ },
+ {
+  "label": "case w10e1v0 t_dvp_profiles_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_profiles",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.079,
+  "peak_ram_bytes": 6373376
+ },
+ {
+  "label": "case w10e1v0 t_dvp_continuous_e2e_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_continuous_e2e",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.051,
+  "peak_ram_bytes": 6352896
+ },
+ {
+  "label": "case w10e1v0 t_dvp_continuous_e2e_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_continuous_e2e",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.053,
+  "peak_ram_bytes": 6336512
+ },
+ {
+  "label": "case w10e1v0 t_dvp_gated_e2e_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_gated_e2e",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.031,
+  "peak_ram_bytes": 6324224
+ },
+ {
+  "label": "case w10e1v0 t_dvp_gated_e2e_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_gated_e2e",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.032,
+  "peak_ram_bytes": 6340608
+ },
+ {
+  "label": "case w10e1v0 t_dvp_overflow_s1",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_overflow",
+   "+SEED=1",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=1",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=1",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.073,
+  "peak_ram_bytes": 6406144
+ },
+ {
+  "label": "case w10e1v0 t_dvp_overflow_s2",
+  "argv": [
+   "<tmp>\\dvp_regress_z1y0m8m0\\b_w10e1v0\\Vtb_dvp_controller.exe",
+   "+TEST=t_dvp_overflow",
+   "+SEED=2",
+   "+TIMEOUT_NS=2000000",
+   "+AFIFO_MSYNC_SEED=2",
+   "+AFIFO_MSYNC_EN=1",
+   "+RSTSYNC_MSYNC_SEED=2",
+   "+RSTSYNC_MSYNC_EN=1"
+  ],
+  "cwd": "<tmp>\\dvp_regress_z1y0m8m0\\cwd",
+  "timeout_s": 300,
+  "exit_code": 0,
+  "seconds": 0.072,
+  "peak_ram_bytes": 6397952
+ }
+]

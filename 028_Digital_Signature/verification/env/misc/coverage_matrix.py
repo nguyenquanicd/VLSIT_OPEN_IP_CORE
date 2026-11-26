@@ -17,7 +17,7 @@ S = V + '/sim/'
 P1 = (S + 'regress/syn_async1.log', r'SUMMARY: tests=19 failed tests=0 checks=\d+ failed checks=0\s+assertion failures: 0, assertions never exercised: 0\s+RESULT: PASS')
 P1A = (S + 'regress/sim_async1_seed1.log', P1[1])
 P1S = (S + 'regress/syn_async0.log', P1[1])
-EC_N = {'p384full': 32, 'p521full': 32, 'ed25519': 33, 'ed448': 49, 'edvar': 68, 'det': 26, 'ct': 30, 'p256': 32, 'p384': 16, 'p521': 12, 'k256': 11}
+EC_N = {'p384full': 32, 'p521full': 32, 'ed25519': 33, 'ed448': 49, 'edvar': 68, 'det': 26, 'ct': 30, 'p256': 32, 'p384': 16, 'p521': 12, 'k256': 11, 'sha3': 15}
 
 
 def ec(s, tag='ec_final'):
@@ -48,9 +48,9 @@ TOP_EC_Q, TOP_EC_E, TOP_EC_D, TOP_EC_DE = top('top_ec', '_fq', 10), top('top_ec'
     top('top_ec', '_fde', 20)
 TOP_LAT, TOP_LATP = top('top_pq', '_fl', 25), top('top_pq', '_flp', 16)
 TOP_HBS, TOP_HBSP = top('top_pq', '_fh', 19), top('top_pq', '_fhp', 12)
-TOP_ERR, TOP_SYS = top('top_err', '_fr', 27, 'checks'), top('top_sys', '_fs', r'\d+', 'checks')
-AXI = unit('axi', '_final', r'tb_axi: \d+ checks, 0 failed')
-KEY = unit('key_rng', '_final', r'tb_key_rng: 210 checks, 0 failed')
+TOP_ERR, TOP_SYS = top('top_err', '_fr', 27, 'checks'), top('top_sys', '_fs', 57, 'checks')
+AXI = unit('axi', '_final', r'tb_axi: 566 checks, 0 failed')
+KEY = unit('key_rng', '_final', r'tb_key_rng: 247 checks, 0 failed')
 DRBG = unit('rng_drbg', '_final', r'tb_rng_drbg: 36 checks, 0 failed')
 KATF = unit('rng_drbg', '_katfail', r'tb_rng_drbg: 6 checks, 0 failed')
 HFEED = unit('hfeed', '_final', r'hfeed: 500 vectors, 0 failed')
@@ -70,6 +70,9 @@ ROWS = [
     ('REQ-FUNC-004/005', 'ECDSA P-256, P-384, P-521, secp256k1, hash of dsig_op.hash', 'tb_ec p256 (32), p384 (16), p521 (12), k256 (11), p384full (32), p521full (32)',
      'r and s bytes, verify, r = 0, s = n, point not on curve, BADKEY', 'RFC 6979 A.2.5 to A.2.7; textbook group law (secp256k1)',
      [ec('p256'), ec('p384'), ec('p521'), ec('k256'), ec('p384full'), ec('p521full')]),
+    ('REQ-FUNC-004/005, DEC-018', 'ECDSA with SHA3-256, SHA3-384, SHA3-512 (dsig_op.hash 3 to 5), given nonce', 'tb_ec sha3 (15)',
+     'verify ok, changed message rejected, r and s bytes of the signature', 'textbook group law, every signature verified by OpenSSL 3.6 when generated',
+     [ec('sha3')]),
     ('REQ-FUNC-004/005', 'Deterministic ECDSA nonce RFC 6979 (ASM-024)', 'tb_ec det (26); tb_top_ec det with Hash_DRBG and blinding (26)',
      'r and s equal to RFC 6979 with no random pool; DEC-032 rejections expected at the top', 'RFC 6979 A.2.5 to A.2.7',
      [ec('det'), TOP_EC_D]),
@@ -88,14 +91,16 @@ ROWS = [
      'operations that are not built', 'section 8 and 11', [P1, TOP_ERR]),
     ('REQ-FUNC-010, REQ-ERR-001', 'Forms, lengths, region in the buffer, error priority', 'phase 1 T05 and T18 (constrained random)',
      'dsig_err against the reference model of the check (incl. ASM-020, 023, 024, 025, DEC-032)', 'section 10.1 and 12', [P1, P1A, P1S]),
-    ('REQ-FUNC-011', 'One shared hash engine', 'inspection: one m_vlsit_sha_eng in m_vlsit_dsig_top', '-', '-', []),
+    ('REQ-FUNC-011', 'One shared hash engine', 'check_hash_share.py (Verilator elaboration with every algorithm group built); tb_top_sys monitor',
+     'one instance of each hash core, all inside the one m_vlsit_sha_eng; one-hot arbiter grant; EC and lattice engines both served', 'section 10.4, DEC-003',
+     [(S + 'final_hash_share.txt', r'm_vlsit_sha_core256 +1: .*\s+m_vlsit_sha_core512 +1: .*\s+m_vlsit_sha_keccak +1: .*\s+m_vlsit_sha_eng +1: .*\s+check_hash_share: one instance.*\s+RESULT: PASS'), TOP_SYS]),
     ('REQ-FUNC-012', 'Hybrid verification', 'phase 1 T07 (engine models), tb_top_sys (real Ed25519 and ML-DSA-44)',
      'edok, mlok, sigok of numbered example 2, policies 1 and 2', 'DEC-030', [P1, TOP_SYS]),
     ('REQ-ERR-002', 'Invalid signature is not an error', 'every corrupted-signature vector of the engine and top tests', 'sigok 0 and '
      'dsig_err 0', 'REQ-ERR-002', [ec('p256'), TOP_SYS]),
     ('REQ-IF-001, REQ-CLK-001', 'APB4 CSR, synchronous and asynchronous', 'phase 1 T02/T03 with 29 APB4 assertions, three builds; tb_top_err '
      '(asynchronous, 14 ns against 10 ns)', 'register values, pready, pslverr, assertions', 'IHI 0024D, workbook', [P1, P1A, P1S, TOP_ERR]),
-    ('REQ-IF-002', 'AXI4 subordinate', 'tb_axi; every top test loads through AXI4', 'shadow memory, responses, SLVERR while busy',
+    ('REQ-IF-002', 'AXI4 subordinate', 'tb_axi; every top test loads through AXI4', 'shadow memory, responses, SLVERR while busy (also from the middle of a burst, DEC-050)',
      'IHI 0022 rules', [AXI]),
     ('REQ-IF-003', 'o_irq and o_alarm', 'phase 1 T14, tb_top_sys', 'mask, injection, write-1 clear, alarm', 'section 6.4', [P1, TOP_SYS]),
     ('REQ-IF-004', 'DMA request lines', 'tb_top_sys', 'input and output request rise and drop with the acknowledge', 'ASM-019', [TOP_SYS]),
@@ -107,7 +112,7 @@ ROWS = [
      'section 11, DEC-034', [P1, TOP_ERR]),
     ('REQ-RESET-001/002', 'Reset values; reset during an operation', 'phase 1 T10 (models), tb_top_sys (real Ed25519 signing)',
      'idle, no result, key store and engine registers zero, counters 0', 'section 10.1', [P1, TOP_SYS]),
-    ('REQ-SEC-001', 'Key port and write-only key registers', 'tb_key_rng (210), tb_top_ec (key port and registers in turn)',
+    ('REQ-SEC-001', 'Key port and write-only key registers', 'tb_key_rng (247, with PARA_KEY_SRC 0, 1 and 2), tb_top_ec (key port and registers in turn)',
      'key words, time-out, registers read 0', 'section 10.2, ASM-017', [KEY, TOP_EC_Q]),
     ('REQ-SEC-002', 'Time independent of secrets; invalid points rejected', 'tb_ec ct (30, +CT) plain and blinded; rejection vectors',
      'equal cycle count per curve and operation for d = 1, n - 1, random and k = 1, n - 1, random; results by textbook group law',
@@ -126,7 +131,7 @@ ROWS = [
       top('top_pq', '_fld', 25)]),
     ('REQ-FUNC-008 (RFC 8554)', 'LMS/HSS against the RFC 8554 test case 1', 'tb_hbs rfc8554 (3)', 'valid, corrupted, wrong message',
      'RFC 8554 Appendix F (independent)', [hbs('rfc8554', 3)]),
-    ('REQ-SEC-005', 'Clearing of the secrets', 'tb_ec and tb_lat (hierarchical checks after clr), phase 1 T16', 'registers and word RAM '
+    ('REQ-SEC-005', 'Clearing of the secrets', 'tb_ec and tb_lat (hierarchical checks after clr), phase 1 T16 and T10 (abort in ENUM_ST_RUN, ENUM_ST_RNG, ENUM_ST_VAS)', 'registers and word RAM '
      'zero; the lattice engine needs 32769 cycles (deviation from OP-006)', 'OP-006', [ec('ed25519'), lat('all', 25), P1]),
     ('REQ-SEC-006', 'Counters and log lock', 'phase 1 T13, tb_top_sys', 'cnt_ops, cnt_fail, log lock', 'DEC-033', [P1, TOP_SYS]),
     ('REQ-SEC-007', 'Entropy port; Hash_DRBG (PARA_RNG_SRC 1) with its known-answer health test', 'tb_key_rng, tb_rng_drbg (36) and +KATFAIL (6), tb_top_err, tb_top_ec det',
@@ -137,19 +142,23 @@ ROWS = [
      [unit('mmul', '_w32', r'tb_mmul: w 32, 132 vectors, 0 failed'), unit('mmul', '_w64', r'tb_mmul: w 64, 132 vectors, 0 failed'),
       unit('mmul', '_w128', r'tb_mmul: w 128, 132 vectors, 0 failed')]),
     ('Hash stack', 'hseq, hfeed (head, tails, mid)', 'tb_hseq, tb_hfeed (500)', 'digest bytes', 'Python hashlib', [HSEQ, HFEED]),
-    ('Checker strength', 'Defects put back into RTL copies', 'run_mutants.py (9 mutants)', 'each mutant makes its test fail',
-     'the defects found during the work', [(S + 'mutants.txt', r'run_mutants: 9 of 9 mutants killed\s+RESULT: PASS')]),
+    ('Checker strength', 'Defects put back into RTL copies', 'run_mutants.py (13 mutants: M1-M11 in one run, M12 and M13 in a second run); phase 1 run_mutation.py (40 mutants of the control block and buffer)', 'each mutant makes its test fail',
+     'the defects found during the work', [(S + 'mutants.txt', r'run_mutants: 11 of 11 mutants killed\s+RESULT: PASS'),
+      (S + 'mutants_extra.txt', r'run_mutants: 2 of 2 mutants killed\s+RESULT: PASS'),
+      (V + '/docs/mutation_report.md', r'Caught 40 of 40\.')]),
     ('SVA-002, OP-008 (formal)', 'Hash arbiter: one owner, grant to a requester only, owner keeps the grant, fixed priority, stream isolation',
      'formal/harb.sby (SymbiYosys, k-induction) and a mutant', '28 assertions proven; the re-arbitrating mutant fails',
      'section 10.4', [(S + 'final_formal.txt', r'harb proof: PASS \(k-induction\); mutant: FAIL as required\s+RESULT: PASS')]),
-    ('REQ-PERF-001/002', 'Verification time, signature rate', 'cycle counts of the engine logs', 'docs/PERF.md', 'section 13', []),
+    ('REQ-PERF-001/002', 'Verification time, signature rate', 'cycle counts of the engine logs (perf.py)', 'every limit of REQ-PERF-001 met; ML-DSA signing reported, not limited (DEC-048)', 'section 13, DEC-048',
+     [(S + 'perf_out.txt', r'PERF.md written, 0 failing operations')]),
     ('Section 17 (SDC)', 'Timing constraints of the IP', 'sdc/m_vlsit_dsig_top.sdc, check_sdc.py', 'every port constrained, patterns match ports, no clock group over the bundled CSR data',
      'section 17.1', [(S + 'final_sdc.txt', r'check_sdc: 58 ports, 58 constrained, 0 failures\s+RESULT: PASS')]),
-    ('Section 7.2, 7.3 (CDC, RDC)', 'CSR crossing and RST-APB alone', 'cdc/CDC_RDC_NOTES.md; tb_top_err (asynchronous CSR, RST-APB in a write)',
-     'structural list of crossings; old or new value after RST-APB in a write', 'section 7.2, 7.3', [TOP_ERR, P1A]),
+    ('Section 7.2, 7.3 (CDC, RDC)', 'CSR crossing and RST-APB alone', 'check_cdc.py (yosys netlist walk: no CDC tool is available), 3 mutants; cdc/CDC_RDC_NOTES.md; tb_top_err (asynchronous CSR, RST-APB in a write)',
+     'every crossing is a synchronizer fed by one flip-flop or bundled data qualified by a synchronized handshake; every flip-flop reset by the reset of its clock; old or new value after RST-APB in a write', 'section 7.2, 7.3',
+     [(S + 'final_cdc.txt', r'check_cdc: 98 flip-flop cells, 4 synchronizer cells, 7 crossing groups, 0 violations\s+mutant C1.*CAUGHT.*\s+mutant C2.*CAUGHT.*\s+mutant C3.*CAUGHT.*\s+check_cdc mutants: 3 of 3 caught\s+RESULT: PASS'), TOP_ERR, P1A]),
     ('REQ-PPA-001 (generic synthesis)', 'Blocks synthesize without latches', 'run_synth.py (yosys, no library)', 'cells and flip-flops per block, 0 latches',
      'section 13', [(S + 'synth_out.txt', r'RESULT: PASS')]),
-    ('Not run', 'CDC/RDC tool, STA, synthesis with a technology library, functional coverage', '-', '-', '-', []),
+    ('Not run', 'Commercial CDC/RDC tool, STA, synthesis with a technology library, functional coverage', 'not available in this environment', '-', '-', []),
 ]
 
 

@@ -13,6 +13,9 @@ RTL = os.path.normpath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(IP, '
 CROSSING = ('m_usb2_xreg', 'm_usb2_cdc_fifo', 'm_usb2_rst', 'm_usb2_ulpilp', 'm_usb2_utmilp', 'm_usb2_cfgchk')   # utmilp: DEC-049, CDC-008
 SYNC_PREFIX = ('VLSIT_CELL', 'm_vlsit_')
 ORIG = os.path.join(IP, 'rtl')
+# Blocks with ports in both domains: m_usb2_regs holds the crossing m_usb2_xreg; its *_ph_* ports (shadow words, published words,
+# event sets, command clears) and o_xreg_busy are on the CLK-PHY side, the other ports on the CLK-BUS side.
+PORT_DOM = {'m_usb2_regs': lambda q: 'phy' if (re.match(r'^[io]_ph_', q) or q in ('o_xreg_busy', 'i_clk_phy', 'i_rst_n_phy')) else 'bus'}
 
 
 def strip(t):
@@ -42,7 +45,9 @@ def ports_of(mod):
                 k = t.index('(', balanced(t, k))
             hdr = t[k:balanced(t, k)]
             res = {}
-            for x in re.finditer(r'\b(input|output)\b([^,;]*?)\b(\w+)\s*(?=,|$|\)|\[)', hdr):
+            # name = the last identifier before ',' or ')', after any packed or unpacked dimension (2026-11-26: the old pattern
+            # stopped at the type keyword of every port with a width, so vector ports were never classified, FND-017)
+            for x in re.finditer(r'\b(input|output)\b([^,;]*?)\b(\w+)\s*(?:\[[^\]]*\]\s*)*(?=,|$|\))', hdr):
                 res[x.group(3)] = x.group(1)
             return res
     return None
@@ -80,8 +85,9 @@ def main():
         crossing = mod in CROSSING or mod.startswith(SYNC_PREFIX)
         for port, expr in conns.items():
             dirn = pl.get(port)
+            pd = PORT_DOM[mod](port) if mod in PORT_DOM else d       # mixed-domain block: domain of the port
             for w in set(re.findall(r'\b(?:w|reg)_\w+', expr)):
-                (drivers if dirn == 'output' else readers).setdefault(w, []).append((name, mod, crossing, d))
+                (drivers if dirn == 'output' else readers).setdefault(w, []).append((name, mod, crossing, pd))
     viol = set()
     for w, rd in readers.items():
         for (dn, dmod, dcross, ddom) in drivers.get(w, []):

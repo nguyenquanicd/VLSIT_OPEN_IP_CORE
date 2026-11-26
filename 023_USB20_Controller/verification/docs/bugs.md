@@ -65,6 +65,30 @@
   retries the open up to 6 times (0.5 s steps) and reports each retry on stderr. Generated content is unchanged (host_conn_ls_s1
   and dev_enum_bulk_dma compared byte for byte with the run inputs of r4500 and r4577); header_check 50/50. The root cause (which
   process holds the file) is not identified.
+- BUG-052 (fixed 2026-11-26, RTL, DEC-049; was FND-015 from review F-005, runs r2108 and r2109): a UTMI+ build could not leave
+  suspend when the PHY stopped CLK-PHY (UTMI 1.05 p. 21 and p. 48 allow it and require the link to negate SuspendM without the
+  clock): every wake decision was in m_usb2_spd (CLK-PHY). Fix (plan review/2026-11-26_utmi_clkstop_wake_change_plan.md, option B,
+  answers Q1-Q4 recommended): new always-on m_usb2_utmilp in CLK-BUS (CDC-008, EXC-006, SVA-017); o_utmi_suspend_n = engine
+  request OR wake request. Found while planning: G-1 a suspended host port ignored the line (remote-wake K lost, disconnect not
+  reported) -> HP_SUSP exits on the K of the port speed and on SE0 after a 4 ms reversion window; G-2 device chirp 1.6 ms could
+  end after TUCHEND (7.0 ms) with a PHY that starts its clock in 5.6 ms -> 1.2 ms. Two design points found during the RTL work:
+  on a low-speed port the K is LineState 01b (J and K swap), and a high-speed device shows SE0 for up to 3 ms after the port
+  suspends, so the detector never stores SE0 as the idle value and the host ignores SE0 during the window. Harness: t_dir_clkstop
+  waited in CLK-PHY cycles while the clock was stopped (it could never pass); waits during clock stop now count CLK-BUS cycles
+  (op IB); new ops PCLKD (PHY clock start delay) and XWAKE (SVA-017 activity); five scenarios dev, devrst, host, hostrw,
+  hostdisc moved from the open tier to nightly; mutants M35 to M39.
+- BUG-053 (fixed 2026-11-26, RTL, found by t_dir_clkstop host, hostrw, hostdisc, runs r4593-r4595): the speed engine dropped
+  SuspendM in the first cycle of DV_SUSP / HP_SUSP. Status words and events reach CLK-BUS through the m_usb2_xreg scanner (one
+  slot per cycle, up to 169 slots), so with a PHY that stops CLK-PHY 8 cycles after SuspendM falls hsts.port_susp_sts stayed 0
+  for the whole suspend (poll failed after 3000 reads; the port itself was suspended and resumed correctly). The same applies to
+  sts.suspended, the suspend interrupt and the ULPI low power entry. Fix: m_usb2_xreg output o_upd_busy (published word not yet
+  pushed, pending event set or command clear, output stage full) through m_usb2_regs to m_usb2_spd; SuspendM falls only after 8
+  quiet cycles in suspend (reg_sq). Not caught before because no scenario stopped the PHY clock and then read the status. A first form also raised SuspendM again whenever the crossing became busy during suspend (LineState is a published field):
+  on a disconnect the SE0 raised SuspendM, the wake detector disarmed and could not re-arm on SE0, and the disconnect was never
+  reported (hostdisc r4603); only the first fall of a suspend period waits now.
+- FND-017 (checker weakness, fixed 2026-11-26): check_cdc_struct.py read the name of every port declared with a width as the type
+  keyword ('logic'), so vector connections were never classified (26 of 99 ports of m_usb2_regs, 64 of 134 wires). Fixed parser;
+  m_usb2_regs gets per-port domains (*_ph_* and o_xreg_busy on CLK-PHY). Result after the fix: 0 violations on 134 wires.
 - CSR regeneration note (2026-11-25): the CSR generator repository moved to a5ec92e, whose rwi write priority differs from the
   delivered CSR (generated with a8fb7d4 plus a local VLSIT_SYNTHESIS guard). The new field was generated with a8fb7d4 and
   spec/csr/csr_guard.py; with the old workbook this flow reproduces the delivered file byte for byte, and the new file differs only

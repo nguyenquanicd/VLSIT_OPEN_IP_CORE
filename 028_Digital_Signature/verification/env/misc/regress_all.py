@@ -58,7 +58,7 @@ def wave1():
 
 
 def wave2():
-    rc = wait([job('ec', [PY, 'env/ec/run_ec.py', 'ed25519', 'ed448', 'edvar', 'det', 'ct', 'p256', 'p384', 'p521', 'k256', 'p384full',
+    rc = wait([job('ec', [PY, 'env/ec/run_ec.py', 'ed25519', 'ed448', 'edvar', 'det', 'ct', 'p256', 'p384', 'p521', 'k256', 'sha3', 'p384full',
                     'p521full'], {'EC_TAG': 'ec_final'})])
     rc |= wait([job('ec_dpa', [PY, 'env/ec/run_ec.py', 'ct', 'det', 'ed25519', 'ed448', 'p256', 'k256'],
                     {'EC_TAG': 'ec_final_dpa', 'EC_DPA': '1'})])

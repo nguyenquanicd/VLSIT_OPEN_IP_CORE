@@ -1,0 +1,15 @@
+0	P-256 sha3_256 verify ok
+1	P-256 sha3_256 verify bad msg
+2	P-256 sha3_256 sign
+3	P-384 sha3_384 verify ok
+4	P-384 sha3_384 verify bad msg
+5	P-384 sha3_384 sign
+6	P-521 sha3_512 verify ok
+7	P-521 sha3_512 verify bad msg
+8	P-521 sha3_512 sign
+9	P-256 sha3_512 verify ok
+10	P-256 sha3_512 verify bad msg
+11	P-256 sha3_512 sign
+12	secp256k1 sha3_256 verify ok
+13	secp256k1 sha3_256 verify bad msg
+14	secp256k1 sha3_256 sign

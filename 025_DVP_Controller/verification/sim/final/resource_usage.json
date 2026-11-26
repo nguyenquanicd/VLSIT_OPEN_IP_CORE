@@ -1,0 +1,13 @@
+{
+ "budget": "env/config/resource_budget.json",
+ "simulation_jobs": 1,
+ "peak_ram_bytes_any_process": 110305280,
+ "ram_budget_bytes": 1073741824,
+ "ram_within_budget": true,
+ "disk_free_before_bytes": 7354687488,
+ "disk_free_after_bytes": 2655444992,
+ "disk_stop_free_bytes": 2147483648,
+ "retained_output_bytes": 742814,
+ "waveforms": "none captured",
+ "build_directory": "temporary, outside the repository, discarded after the run"
+}

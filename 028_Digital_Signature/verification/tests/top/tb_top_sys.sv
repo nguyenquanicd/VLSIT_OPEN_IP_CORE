@@ -8,6 +8,15 @@
 module tb_top_sys;
   reg clk = 0; always #5 clk = ~clk;
   reg rst_n = 0;
+  // REQ-FUNC-011 monitor: grant vector of the hash arbiter of the top (requesters EC, lattice, hash-based, random)
+  integer harb_multi = 0;
+  reg [3:0] harb_seen = 4'd0;
+  always @(posedge clk) begin
+    if (rst_n === 1'b1) begin
+      if ((dut.u_harb.o_grant & (dut.u_harb.o_grant - 4'd1)) != 4'd0) harb_multi = harb_multi + 1;
+      if (dut.u_harb.o_job_start) harb_seen = harb_seen | dut.u_harb.o_grant;
+    end
+  end
   reg psel = 0, penable = 0, pwrite = 0; reg [15:0] paddr = 0; reg [31:0] pwdata = 0;
   wire pready, pslverr; wire [31:0] prdata;
   reg awvalid = 0; wire awready; reg [15:0] awaddr = 0; reg [7:0] awlen = 0;
@@ -200,6 +209,9 @@ module tb_top_sys;
     apb_r(16'h074, sts); check(sts == 32'd0, "after the reset: idle, no result, edok and mlok 0 (REQ-RESET-001)");
     apb_r(16'h040, rd); check(rd[0] == 1'b0, "after the reset the IP enable is 0");
     apb_r(16'h09C, rd); check(rd == 0, "operation counter reset to 0");
+    // REQ-FUNC-011: one hash engine serves every requester; the arbiter grant is one-hot and both engines used it
+    check(harb_multi == 0, "REQ-FUNC-011: never two owners of the shared hash engine");
+    check(harb_seen[0] && harb_seen[1], "REQ-FUNC-011: the elliptic-curve and the lattice engine both used the shared hash engine");
     $display("tb_top_sys: %0d checks, %0d failed", ncheck, nfail);
     if (nfail == 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

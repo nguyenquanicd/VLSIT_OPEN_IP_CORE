@@ -46,7 +46,7 @@ module tb_usb2_ulpi_axim;
   always #(T_PHY / 2.0) if (pclk_on) clk_phy = ~clk_phy;
   // PHY clock model of UTMI+ (REF-006 SuspendM): with PCLKA 1 the PHY stops CLKOUT 8 cycles after SuspendM falls and starts it
   // again 2 us after SuspendM rises (the link must raise SuspendM without CLK-PHY). Review 2026-11-22 F-005.
-  bit pclk_auto = 0; int pclk_lo = 0;
+  bit pclk_auto = 0; int pclk_lo = 0; real pclk_dly = 2000.0;    // PCLKD: restart delay in ns (UTMI 1.05 allows up to 5.6 ms)
   always #(t_bus / 2.0) clk_bus = ~clk_bus;
 
   // ------------------------------------------------------------------ DUT pins
@@ -266,7 +266,7 @@ module tb_usb2_ulpi_axim;
   end
 
   always @(posedge clk_phy) if (pclk_auto && rst_n && !suspend_n) begin pclk_lo++; if (pclk_lo >= 8) pclk_on = 0; end else pclk_lo = 0;
-  always @(posedge suspend_n) if (pclk_auto && !pclk_on) begin #2000; pclk_on = 1; end
+  always @(posedge suspend_n) if (pclk_auto && !pclk_on) begin #(pclk_dly); pclk_on = 1; end
 
   // ------------------------------------------------------------------ mon_usb: packets from the DUT (transmit path of the link)
   byte unsigned cap [0:65535]; int cap_n = 0;
@@ -522,6 +522,7 @@ module tb_usb2_ulpi_axim;
         "WIN": begin win_lo = rdi(); win_hi = rdi(); win_on = 1; end
         "PCLKA": begin d = rdi(); pclk_auto = d[0]; end
         "PCLK": begin d = rdi(); pclk_on = d[0]; end
+        "PCLKD": begin d = rdi(); pclk_dly = real'(d); end                                // PHY clock restart delay in ns (DEC-049)
         "CLK": begin d = rdi(); t_bus = real'(d) / 100.0; end
         "RST": begin d = rdi(); rst_n = 0; repeat (d) @(posedge clk_bus); rst_n = 1; repeat (20) @(posedge clk_bus); end
         "IPG": begin ipg = rdi(); end

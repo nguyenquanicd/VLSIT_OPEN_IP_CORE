@@ -1,0 +1,6 @@
+m_vlsit_sha_core256    1: m_vlsit_dsig_top.u_hseq.u_eng.u_core256
+m_vlsit_sha_core512    1: m_vlsit_dsig_top.u_hseq.u_eng.u_core512
+m_vlsit_sha_keccak     1: m_vlsit_dsig_top.u_hseq.u_eng.u_keccak
+m_vlsit_sha_eng        1: m_vlsit_dsig_top.u_hseq.u_eng
+check_hash_share: one instance of each hash core, inside the one m_vlsit_sha_eng, with every algorithm group built
+RESULT: PASS

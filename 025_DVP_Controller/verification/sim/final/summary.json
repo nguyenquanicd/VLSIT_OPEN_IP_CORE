@@ -1,0 +1,1464 @@
+{
+ "steps": {
+  "checker_qualification": {
+   "status": "PASS",
+   "cases": 50,
+   "unexpected": 0,
+   "known_answer": 17,
+   "injected_faults": 33
+  },
+  "parameter_legality": {
+   "status": "PASS",
+   "cases": 9,
+   "mismatches": 0
+  },
+  "scope_review": {
+   "status": "PASS",
+   "ports": 18,
+   "extra": [],
+   "missing": []
+  }
+ },
+ "cases": [
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_continuous_e2e_s1",
+   "test": "t_dvp_continuous_e2e",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1441,
+   "exit_code": 0,
+   "peak_ram_bytes": 6348800
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_continuous_e2e_s2",
+   "test": "t_dvp_continuous_e2e",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1441,
+   "exit_code": 0,
+   "peak_ram_bytes": 6348800
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_continuous_e2e_s3",
+   "test": "t_dvp_continuous_e2e",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1441,
+   "exit_code": 0,
+   "peak_ram_bytes": 6365184
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_gated_e2e_s1",
+   "test": "t_dvp_gated_e2e",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 744,
+   "exit_code": 0,
+   "peak_ram_bytes": 6344704
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_gated_e2e_s2",
+   "test": "t_dvp_gated_e2e",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 744,
+   "exit_code": 0,
+   "peak_ram_bytes": 6348800
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_gated_e2e_s3",
+   "test": "t_dvp_gated_e2e",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 744,
+   "exit_code": 0,
+   "peak_ram_bytes": 6361088
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_apb_protocol_s1",
+   "test": "t_dvp_apb_protocol",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1004,
+   "exit_code": 0,
+   "peak_ram_bytes": 6352896
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_apb_protocol_s2",
+   "test": "t_dvp_apb_protocol",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1004,
+   "exit_code": 0,
+   "peak_ram_bytes": 6373376
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_apb_protocol_s3",
+   "test": "t_dvp_apb_protocol",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1004,
+   "exit_code": 0,
+   "peak_ram_bytes": 6352896
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_timeout_boundary_s1",
+   "test": "t_dvp_timeout_boundary",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 24,
+   "checks": 10182,
+   "exit_code": 0,
+   "peak_ram_bytes": 6410240
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_timeout_boundary_s2",
+   "test": "t_dvp_timeout_boundary",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 24,
+   "checks": 10182,
+   "exit_code": 0,
+   "peak_ram_bytes": 6406144
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_timeout_boundary_s3",
+   "test": "t_dvp_timeout_boundary",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 24,
+   "checks": 10182,
+   "exit_code": 0,
+   "peak_ram_bytes": 6418432
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_flush_handshake_s1",
+   "test": "t_dvp_flush_handshake",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 12,
+   "checks": 9916,
+   "exit_code": 0,
+   "peak_ram_bytes": 6430720
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_flush_handshake_s2",
+   "test": "t_dvp_flush_handshake",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 12,
+   "checks": 9916,
+   "exit_code": 0,
+   "peak_ram_bytes": 6447104
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_flush_handshake_s3",
+   "test": "t_dvp_flush_handshake",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 12,
+   "checks": 9916,
+   "exit_code": 0,
+   "peak_ram_bytes": 6426624
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_overflow_s1",
+   "test": "t_dvp_overflow",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 18,
+   "checks": 4055,
+   "exit_code": 0,
+   "peak_ram_bytes": 6414336
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_overflow_s2",
+   "test": "t_dvp_overflow",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 18,
+   "checks": 4055,
+   "exit_code": 0,
+   "peak_ram_bytes": 6438912
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_overflow_s3",
+   "test": "t_dvp_overflow",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 18,
+   "checks": 4055,
+   "exit_code": 0,
+   "peak_ram_bytes": 6414336
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_reset_recovery_s1",
+   "test": "t_dvp_reset_recovery",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 2093,
+   "exit_code": 0,
+   "peak_ram_bytes": 6434816
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_reset_recovery_s2",
+   "test": "t_dvp_reset_recovery",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 2093,
+   "exit_code": 0,
+   "peak_ram_bytes": 6434816
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_reset_recovery_s3",
+   "test": "t_dvp_reset_recovery",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 2093,
+   "exit_code": 0,
+   "peak_ram_bytes": 6434816
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_dma_rearm_s1",
+   "test": "t_dvp_dma_rearm",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 8,
+   "checks": 1893,
+   "exit_code": 0,
+   "peak_ram_bytes": 6406144
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_dma_rearm_s2",
+   "test": "t_dvp_dma_rearm",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 8,
+   "checks": 1893,
+   "exit_code": 0,
+   "peak_ram_bytes": 6434816
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_dma_rearm_s3",
+   "test": "t_dvp_dma_rearm",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 8,
+   "checks": 1893,
+   "exit_code": 0,
+   "peak_ram_bytes": 6414336
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_endpoint_errors_s1",
+   "test": "t_dvp_endpoint_errors",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 1555,
+   "exit_code": 0,
+   "peak_ram_bytes": 6406144
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_endpoint_errors_s2",
+   "test": "t_dvp_endpoint_errors",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 1555,
+   "exit_code": 0,
+   "peak_ram_bytes": 6402048
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_endpoint_errors_s3",
+   "test": "t_dvp_endpoint_errors",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 1555,
+   "exit_code": 0,
+   "peak_ram_bytes": 6422528
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_frame_counter_s1",
+   "test": "t_dvp_frame_counter",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 5717,
+   "exit_code": 0,
+   "peak_ram_bytes": 6500352
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_frame_counter_s2",
+   "test": "t_dvp_frame_counter",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 5717,
+   "exit_code": 0,
+   "peak_ram_bytes": 6500352
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_frame_counter_s3",
+   "test": "t_dvp_frame_counter",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 5717,
+   "exit_code": 0,
+   "peak_ram_bytes": 6512640
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_mode_guard_s1",
+   "test": "t_dvp_mode_guard",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 3250,
+   "exit_code": 0,
+   "peak_ram_bytes": 6459392
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_mode_guard_s2",
+   "test": "t_dvp_mode_guard",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 3250,
+   "exit_code": 0,
+   "peak_ram_bytes": 6434816
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_mode_guard_s3",
+   "test": "t_dvp_mode_guard",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 3,
+   "checks": 3250,
+   "exit_code": 0,
+   "peak_ram_bytes": 6447104
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_profiles_s1",
+   "test": "t_dvp_profiles",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 16,
+   "checks": 3241,
+   "exit_code": 0,
+   "peak_ram_bytes": 6385664
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_profiles_s2",
+   "test": "t_dvp_profiles",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 16,
+   "checks": 3241,
+   "exit_code": 0,
+   "peak_ram_bytes": 6393856
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_profiles_s3",
+   "test": "t_dvp_profiles",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 16,
+   "checks": 3241,
+   "exit_code": 0,
+   "peak_ram_bytes": 6406144
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_flush_race_s1",
+   "test": "t_dvp_flush_race",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 320,
+   "checks": 49344,
+   "exit_code": 0,
+   "peak_ram_bytes": 6402048
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_flush_race_s2",
+   "test": "t_dvp_flush_race",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 320,
+   "checks": 49380,
+   "exit_code": 0,
+   "peak_ram_bytes": 6393856
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_flush_race_s3",
+   "test": "t_dvp_flush_race",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 320,
+   "checks": 49362,
+   "exit_code": 0,
+   "peak_ram_bytes": 6389760
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m0_s1",
+   "test": "t_dvp_performance_characterization",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=0"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 4478,
+   "exit_code": 0,
+   "peak_ram_bytes": 6369280
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m1_s1",
+   "test": "t_dvp_performance_characterization",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 13,
+   "checks": 4483,
+   "exit_code": 0,
+   "peak_ram_bytes": 6356992
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m0_s2",
+   "test": "t_dvp_performance_characterization",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=0"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 4676,
+   "exit_code": 0,
+   "peak_ram_bytes": 6352896
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m1_s2",
+   "test": "t_dvp_performance_characterization",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 21,
+   "checks": 4701,
+   "exit_code": 0,
+   "peak_ram_bytes": 6340608
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m0_s3",
+   "test": "t_dvp_performance_characterization",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=0"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 4542,
+   "exit_code": 0,
+   "peak_ram_bytes": 6356992
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m1_s3",
+   "test": "t_dvp_performance_characterization",
+   "seed": 3,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=3",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=3",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 36,
+   "checks": 4620,
+   "exit_code": 0,
+   "peak_ram_bytes": 6336512
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m0_s4",
+   "test": "t_dvp_performance_characterization",
+   "seed": 4,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=4",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=4",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=0"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 4697,
+   "exit_code": 0,
+   "peak_ram_bytes": 6352896
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m1_s4",
+   "test": "t_dvp_performance_characterization",
+   "seed": 4,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=4",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=4",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 40,
+   "checks": 4778,
+   "exit_code": 0,
+   "peak_ram_bytes": 6340608
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m0_s5",
+   "test": "t_dvp_performance_characterization",
+   "seed": 5,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=5",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=5",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=0"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 4470,
+   "exit_code": 0,
+   "peak_ram_bytes": 6356992
+  },
+  {
+   "config": "base",
+   "defines": [
+    "P_W=8",
+    "P_EDGE=0",
+    "P_VS=1",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_performance_characterization_m1_s5",
+   "test": "t_dvp_performance_characterization",
+   "seed": 5,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=5",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=5",
+    "+RSTSYNC_MSYNC_EN=1",
+    "+MODE=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 22,
+   "checks": 4466,
+   "exit_code": 0,
+   "peak_ram_bytes": 6328320
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_profiles_s1",
+   "test": "t_dvp_profiles",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 16,
+   "checks": 3241,
+   "exit_code": 0,
+   "peak_ram_bytes": 6410240
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_profiles_s2",
+   "test": "t_dvp_profiles",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 16,
+   "checks": 3241,
+   "exit_code": 0,
+   "peak_ram_bytes": 6373376
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_continuous_e2e_s1",
+   "test": "t_dvp_continuous_e2e",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1441,
+   "exit_code": 0,
+   "peak_ram_bytes": 6352896
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_continuous_e2e_s2",
+   "test": "t_dvp_continuous_e2e",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 0,
+   "checks": 1441,
+   "exit_code": 0,
+   "peak_ram_bytes": 6336512
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_gated_e2e_s1",
+   "test": "t_dvp_gated_e2e",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 744,
+   "exit_code": 0,
+   "peak_ram_bytes": 6324224
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_gated_e2e_s2",
+   "test": "t_dvp_gated_e2e",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 14,
+   "checks": 744,
+   "exit_code": 0,
+   "peak_ram_bytes": 6340608
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_overflow_s1",
+   "test": "t_dvp_overflow",
+   "seed": 1,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=1",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=1",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 18,
+   "checks": 4055,
+   "exit_code": 0,
+   "peak_ram_bytes": 6406144
+  },
+  {
+   "config": "w10e1v0",
+   "defines": [
+    "P_W=10",
+    "P_EDGE=1",
+    "P_VS=0",
+    "P_HR=1",
+    "P_DEPTH=8"
+   ],
+   "case": "t_dvp_overflow_s2",
+   "test": "t_dvp_overflow",
+   "seed": 2,
+   "plusargs": [
+    "+AFIFO_MSYNC_SEED=2",
+    "+AFIFO_MSYNC_EN=1",
+    "+RSTSYNC_MSYNC_SEED=2",
+    "+RSTSYNC_MSYNC_EN=1"
+   ],
+   "result": "PASS",
+   "errors": 0,
+   "tb_assume": 18,
+   "checks": 4055,
+   "exit_code": 0,
+   "peak_ram_bytes": 6397952
+  }
+ ],
+ "totals": {
+  "cases": 57,
+  "pass": 57,
+  "not_pass": 0
+ }
+}

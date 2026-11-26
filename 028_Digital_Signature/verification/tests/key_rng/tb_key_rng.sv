@@ -13,6 +13,17 @@ module tb_key_rng;
     .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clr(clr), .i_start(k_start), .i_run_alg(k_alg), .i_tmo_key(k_tmo),
     .o_done(k_done), .o_tmo(k_tmo_o), .o_key_req(k_req), .o_key_idx(k_idx), .i_key_valid(k_valid), .i_key_data(k_data),
     .i_key_reg(k_reg), .o_key(k_key), .o_cleared(k_cleared));
+  // the fixed sources with both sources built (PARA_KEY_SRC 0: port, 1: registers; section 8, DEC-051), same inputs
+  wire p_done, p_req; wire [4:0] p_idx; wire [543:0] p_key;
+  wire g_done, g_req; wire [4:0] g_idx; wire [543:0] g_key;
+  m_vlsit_dsig_key #(.PARA_EN_KEYIF(1), .PARA_EN_KEYREG(1), .PARA_KEY_SRC(0)) ukey_p (
+    .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clr(clr), .i_start(k_start), .i_run_alg(k_alg), .i_tmo_key(k_tmo),
+    .o_done(p_done), .o_tmo(), .o_key_req(p_req), .o_key_idx(p_idx), .i_key_valid(k_valid), .i_key_data(k_data),
+    .i_key_reg(k_reg), .o_key(p_key), .o_cleared());
+  m_vlsit_dsig_key #(.PARA_EN_KEYIF(1), .PARA_EN_KEYREG(1), .PARA_KEY_SRC(1)) ukey_g (
+    .i_clk_core(clk), .i_rst_n_core(rst_n), .i_clr(clr), .i_start(k_start), .i_run_alg(k_alg), .i_tmo_key(k_tmo),
+    .o_done(g_done), .o_tmo(), .o_key_req(g_req), .o_key_idx(g_idx), .i_key_valid(k_valid), .i_key_data(k_data),
+    .i_key_reg(k_reg), .o_key(g_key), .o_cleared());
   // random block
   reg r_start = 0; reg [15:0] r_tmo = 1; wire r_done, r_tmo_o, r_req; reg r_valid = 0; reg [31:0] r_data = 0; reg reseed = 0;
   wire reseed_clr, r_ready, r_due; wire [767:0] r_pool; wire r_cleared;
@@ -139,6 +150,25 @@ module tb_key_rng;
     end
     pulse_clr;
     check(k_key == 544'd0 && !k_req && !k_done, "key: clear in the middle of a load stops it and empties the store");
+    // 7. fixed source with both built: register words not zero; source 0 still asks the port, source 1 never does
+    for (w = 0; w < 17; w = w + 1) k_reg[32*w +: 32] = word(55, w);
+    k_alg = 4'd0;
+    @(posedge clk); #1 k_start = 1; @(posedge clk); #1 k_start = 0;
+    pulses = 0; idx_ok = 1;
+    for (w = 0; w < 8; w = w + 1) begin
+      t = 0; while (!p_req && t < 50) begin @(posedge clk); #1 if (g_req) pulses = pulses + 1; t = t + 1; end
+      if (p_idx != w) idx_ok = 0;
+      k_data = word(66, w); k_valid = 1; @(posedge clk); #1 k_valid = 0; if (g_req) pulses = pulses + 1;
+    end
+    t = 0; while (!p_done && t < 50) begin @(posedge clk); #1 t = t + 1; end
+    check(idx_ok, "KEY_SRC 0: port asked for words 0..7, registers set");
+    for (w = 0; w < 17; w = w + 1)
+      check(p_key[32*w +: 32] == (w < 8 ? word(66, w) : 32'd0), "KEY_SRC 0: key from the port words");
+    check(pulses == 0, "KEY_SRC 1: no request on the port");
+    for (w = 0; w < 17; w = w + 1)
+      check(g_key[32*w +: 32] == (w < 8 ? word(55, w) : 32'd0), "KEY_SRC 1: key from the register words");
+    pulse_clr; k_reg = 544'd0;
+    check(p_key == 544'd0 && g_key == 544'd0, "KEY_SRC 0 and 1: store empty after i_clr");
     $display("tb_key_rng: %0d checks, %0d failed", ncheck, nfail);
     if (nfail == 0) $display("RESULT: PASS"); else $display("RESULT: FAIL");
     $finish;

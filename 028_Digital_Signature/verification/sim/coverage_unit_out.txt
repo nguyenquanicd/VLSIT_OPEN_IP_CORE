@@ -1,0 +1,27 @@
+key_rng        coverage.dat
+top_ec_quick   coverage.dat
+top_ec_edvar   coverage.dat
+top_ec_det     coverage.dat
+top_pq_lat     coverage.dat
+top_pq_latpre  coverage.dat
+top_pq_hbs     coverage.dat
+top_pq_hbspre  coverage.dat
+top_err        coverage.dat
+top_sys        coverage.dat
+axi            coverage.dat
+key_rng        coverage.dat
+rng_drbg       coverage.dat
+rng_katfail    coverage.dat
+hseq           coverage.dat
+hfeed          coverage.dat
+  :  41.3% (13306/32209)
+  toggle    :   0.0% (    0/    0)
+  branch    :  76.0% ( 3697/ 4862)
+  expr      :   0.0% (    0/    0)
+  fsm_state :   0.0% (    0/    0)
+  fsm_arc   :   0.0% (    0/    0)
+Annotation Summary:
+  lines with all attached points covered : 35.5%  (5436/15307)
+See lines with '%00' in C:/HQuan/102_MyGithub/VLSIT_OPEN_IP_CORE/028_Digital_Signature/verification/sim/cov_annotate
+
+docs/COVERAGE_LINE.md written: 23 files, 2339 of 2452 lines

@@ -368,6 +368,7 @@ module m_usb2_core #(
   logic w_suspend_n;
   logic w_suspend_n_reg;
   logic w_wake_aon;
+  logic w_xreg_busy;
   logic w_dp_pd;
   logic w_dm_pd;
   logic w_drv_vbus;
@@ -761,7 +762,8 @@ module m_usb2_core #(
     .i_ph_clr_lpbk_sts (w_clr_lpbk_sts),
     .i_ph_clr_epi_ctl (w_clr_epi_ctl),
     .i_ph_clr_epo_ctl (w_clr_epo_ctl),
-    .i_ph_clr_hc_ctrl (w_clr_hc_ctrl)
+    .i_ph_clr_hc_ctrl (w_clr_hc_ctrl),
+    .o_xreg_busy      (w_xreg_busy)
   );
 
   // PHY interface: UTMI+ or ULPI adapter with the same stream interface to the link.
@@ -1034,6 +1036,7 @@ module m_usb2_core #(
     .i_hport         (w_ph_hport),
     .i_pwr_en        (w_pwr_en_phy),
     .i_bus_act       (w_rx_busy | w_tx_busy),
+    .i_xreg_busy     (w_xreg_busy),
     .i_link_idle     (w_link_idle),
     .o_ch_data       (w_ch_data),
     .o_ch_valid      (w_ch_valid),

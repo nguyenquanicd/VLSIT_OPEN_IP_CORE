@@ -20,7 +20,8 @@
  *                of the connect, since the line is SE0 at the end of the reset (BUG-051). A
  *                suspended host port resumes on a device K and reports a disconnect on SE0 after
  *                the reversion window; the device chirp K lasts 1.2 ms; o_suspend_n_reg feeds
- *                the always-on UTMI+ wake detector (DEC-049).
+ *                the always-on UTMI+ wake detector (DEC-049). SuspendM falls only when the register
+ *                crossing has pushed every pending update (i_xreg_busy, BUG-053).
  *                All times are in microseconds, scaled by the CLK-PHY frequency and
  *                divided by PARA_USB2_TSCALE for simulation.
  */
@@ -74,6 +75,9 @@ module m_usb2_spd #(
   localparam logic [31:0] LPARA_T_HSUSPW  = (32'd4000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_DBNC    = (32'd100000 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
   localparam logic [31:0] LPARA_T_TPKT    = (32'd100 * PARA_USB2_CLK_MHZ) >> LPARA_SH,
+  // Quiet cycles of the register crossing before SuspendM falls (BUG-053).
+  localparam logic [31:0] LPARA_T_SQUIET  = 8,
+  localparam logic [31:0] LPARA_SQ_W      = 4,
   localparam logic [31:0] LPARA_TMR_W     = 28,
   localparam logic [31:0] LPARA_ONE       = 1,
   localparam logic [31:0] LPARA_PAIRS     = 6,
@@ -99,6 +103,7 @@ module m_usb2_spd #(
 
   // Link activity and the transmit side (chirp and test streams, test packet request)
   input  wire         i_bus_act,
+  input  wire         i_xreg_busy,
   input  wire         i_link_idle,
   output logic [15:0] o_ch_data,
   output logic [1:0]  o_ch_valid,
@@ -231,6 +236,8 @@ module m_usb2_spd #(
   logic                        w_ls_j;
   logic                        w_ls_k;
   logic                        w_port_k;
+  logic [LPARA_SQ_W-1:0]       reg_sq;
+  logic                        w_in_susp;
   logic                        w_test_on;
   logic [2:0]                  w_test_mode;
   logic                        w_stream_on;
@@ -834,7 +841,7 @@ module m_usb2_spd #(
         ENUM_ST_DV_SUSP: begin
           w_xcvr_sel  = 2'b01;
           w_term_sel  = 1'b1;
-          w_suspend_n = 1'b0;
+          w_suspend_n = (reg_sq != '0);
         end
         ENUM_ST_DV_RWAKE: begin
           w_xcvr_sel = 2'b01;
@@ -884,7 +891,7 @@ module m_usb2_spd #(
         ENUM_ST_HP_SUSP: begin
           w_xcvr_sel  = (reg_speed == 2'd2) ? 2'b10 : 2'b01;
           w_term_sel  = 1'b1;
-          w_suspend_n = 1'b0;
+          w_suspend_n = (reg_sq != '0);
         end
         ENUM_ST_HP_RESM: begin
           w_xcvr_sel = (reg_speed == 2'd2) ? 2'b10 : 2'b01;
@@ -941,6 +948,22 @@ module m_usb2_spd #(
   assign o_term_sel  = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_term_sel : w_term_sel;
   assign o_op_mode   = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_op_mode : w_op_mode;
   assign o_suspend_n = (PARA_USB2_PIPE_MODE != 32'd0) ? reg_suspend_n : w_suspend_n;
+  // SuspendM falls only after the register crossing has been quiet for LPARA_T_SQUIET cycles in
+  // suspend, so the suspend status and event reach CLK-BUS before the PHY may stop CLK-PHY
+  // (UTMI+ SuspendM and ULPI low power entry; BUG-053, DEC-049). Only the first fall of a suspend
+  // period waits: a status change during suspend (line state) must not raise SuspendM again.
+  assign w_in_susp = reg_role_host ? (reg_fsm_hp_current_state == ENUM_ST_HP_SUSP) :
+                                     (reg_fsm_dv_current_state == ENUM_ST_DV_SUSP);
+
+  always_ff @(posedge i_clk_phy, negedge i_rst_n_core) begin : p_ff_squiet
+    if (!i_rst_n_core)
+      reg_sq <= LPARA_T_SQUIET[LPARA_SQ_W-1:0];
+    else if (~w_in_susp | (i_xreg_busy & (reg_sq != '0)))
+      reg_sq <= LPARA_T_SQUIET[LPARA_SQ_W-1:0];
+    else if (reg_sq != '0)
+      reg_sq <= reg_sq - LPARA_ONE[LPARA_SQ_W-1:0];
+  end
+
   // Registered suspend request for the always-on wake detector (a synchronizer source must be a
   // flop, BUG-045; DEC-049).
   assign o_suspend_n_reg = reg_suspend_n;

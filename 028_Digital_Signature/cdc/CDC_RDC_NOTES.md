@@ -1,8 +1,14 @@
 # Clock and reset domain crossings of m_vlsit_dsig_top
 
-Structural analysis of the RTL and the simulation evidence. **No CDC or RDC tool (Spyglass, Questa CDC, VC CDC) was run**: the
-verification environment has none. The integrator's CDC/RDC sign-off remains to be done with such a tool and the SDC
-`sdc/m_vlsit_dsig_top.sdc`.
+Structural analysis of the RTL and the simulation evidence. **No commercial CDC or RDC tool (Spyglass, Questa CDC, VC CDC) was run**: the
+verification environment has none. What was run instead is `verification/env/misc/check_cdc.py`: it reads the real CSR RTL with yosys
+(`PARA_ASYNCHRONOUS` 1, synchronizer cells as black boxes), gives every flip-flop the domain of its clock and checks every crossing
+(7 groups found: 4 synchronizer cells each fed by one flip-flop without logic, and the bundled address/data/read-data flip-flops, each
+qualified by a synchronized request or acknowledge) and that every flip-flop is reset by the reset of its own clock domain (102 cells,
+0 violations). Three defects put into copies of the CSR are caught (logic before a synchronizer, a register write enabled by an
+APB-domain signal, a register-side flop reset by the APB reset). This is a structural check of this one block, not a sign-off: no
+metastability or reconvergence analysis, no waiver flow. The integrator's CDC/RDC sign-off with a tool and the SDC
+`sdc/m_vlsit_dsig_top.sdc` remains to be done.
 
 ## Clock domains
 

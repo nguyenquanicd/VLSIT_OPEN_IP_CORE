@@ -1,0 +1,122 @@
+{
+ "results": [
+  {
+   "harness": "f_apb_data",
+   "task": "bmc",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 17.9,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_apb_data",
+   "task": "prove",
+   "result": "PASS",
+   "proof": true,
+   "seconds": 5.6,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_apb_data",
+   "task": "cover",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 2.4,
+   "covers_reached": 3,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_dma_req",
+   "task": "bmc",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 2.6,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_dma_req",
+   "task": "prove",
+   "result": "PASS",
+   "proof": true,
+   "seconds": 2.8,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_dma_req",
+   "task": "cover",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 2.5,
+   "covers_reached": 4,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_ctrl",
+   "task": "bmc",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 34.7,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_ctrl",
+   "task": "cover",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 5.0,
+   "covers_reached": 3,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_flush",
+   "task": "bmc",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 285.5,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_flush",
+   "task": "cover",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 281.2,
+   "covers_reached": 5,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_csr",
+   "task": "bmc",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 3.7,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_csr",
+   "task": "prove",
+   "result": "PASS",
+   "proof": true,
+   "seconds": 3.6,
+   "covers_reached": 0,
+   "covers_unreached": 0
+  },
+  {
+   "harness": "f_csr",
+   "task": "cover",
+   "result": "PASS",
+   "proof": false,
+   "seconds": 1.5,
+   "covers_reached": 4,
+   "covers_unreached": 0
+  }
+ ],
+ "note": "f_ctrl and f_flush are bounded model checks (tied clocks); f_apb_data, f_dma_req and f_csr are k-induction proofs; timeout bounded to N <= 6 in f_apb_data; f_flush is a bounded model check (depth 30, tied clocks; k-induction did not converge)"
+}

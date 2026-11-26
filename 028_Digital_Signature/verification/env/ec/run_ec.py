@@ -1,5 +1,5 @@
 """Build tb_ec with Verilator (OSS CAD Suite on Windows) and run the vector sets of the EC engine test.
-Usage: python run_ec.py [set ...]   (sets: quick ed25519 ed448 edvar det p256 p384 p521 k256; default: all but quick)
+Usage: python run_ec.py [set ...]   (sets: quick ed25519 ed448 edvar det p256 p384 p521 k256 sha3; default: all but quick)
 The sets run in parallel processes; a log per set is kept in verification/sim/ec."""
 import os
 import re
@@ -54,7 +54,7 @@ def build(trace=False):
 
 
 def main(argv):
-    sets = argv or ['ed25519', 'ed448', 'edvar', 'det', 'p256', 'p384', 'p521', 'k256']
+    sets = argv or ['ed25519', 'ed448', 'edvar', 'det', 'p256', 'p384', 'p521', 'k256', 'sha3']
     exe = build()
     if not exe:
         return 2

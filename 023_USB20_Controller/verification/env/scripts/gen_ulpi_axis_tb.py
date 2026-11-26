@@ -13,6 +13,9 @@ SRC = os.path.join(P.TB, 'tb_usb2_axis.sv')
 DST = os.path.join(P.TB, 'tb_usb2_ulpi_axis.sv')
 
 s = open(SRC).read()
+# the UTMI+ always-on wake detector (DEC-049) does not exist in a ULPI build: drop its checker and report lines
+s = re.sub(r'  // UTMILP-BEGIN.*?// UTMILP-END\n', '', s, flags=re.S)
+s = re.sub(r'[^\n]*// UTMILP-LINE[^\n]*\n', '', s)
 s = s.replace('module tb_usb2_axis;', 'module tb_usb2_ulpi_axis;')
 # the transmit-ready of the harness is produced by the BFM (NXT), not by the harness
 s = s.replace('logic [15:0] utmi_dataout; logic utmi_txvalid, utmi_txvalidh, utmi_txready = 1;', 'logic [15:0] utmi_dataout; logic utmi_txvalid, utmi_txvalidh = 0, utmi_txready;')

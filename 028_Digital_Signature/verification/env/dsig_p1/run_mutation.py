@@ -36,7 +36,8 @@ M = [
      "w_alg_valid & ~PARA_CAP_ALG[w_alg_idx5]", 'REQ-REG-001 effective enable bit ignored'),
     ('M02', CTL, "      4'b01??: w_chk_flag = LPARA_ERRF_OPUNS[11:0];\n      4'b001?: w_chk_flag = LPARA_ERRF_BADLEN[11:0];",
      "      4'b0?1?: w_chk_flag = LPARA_ERRF_BADLEN[11:0];\n      4'b01??: w_chk_flag = LPARA_ERRF_OPUNS[11:0];", 'DEC-038 priority of the checks'),
-    ('M03', CTL, "if (w_is_ecdsa & (w_dig_len < w_min_len))", "if (w_is_ecdsa & (w_dig_len <= w_min_len))", 'DEC-032 curve and hash pairing'),
+    ('M03', CTL, "if (w_is_ecdsa & (w_is_sign | w_is_vrfy) & (w_dig_len < w_min_len))",
+     "if (w_is_ecdsa & (w_is_sign | w_is_vrfy) & (w_dig_len <= w_min_len))", 'DEC-032 curve and hash pairing'),
     ('M04', CTL, "({28'd0, reg_run_hsslvl} > LPARA_HSS_MAX)", "({28'd0, reg_run_hsslvl} >= LPARA_HSS_MAX)", 'ERR-003 HSS level count 1 to 8'),
     ('M05', CTL, "(w_msg_end > {2'b00, PARA_BUF_BYTES})", "(w_msg_end >= {2'b00, PARA_BUF_BYTES})", 'ERR-006 region fits the buffer'),
     ('M06', CTL, "((PARA_ECDSA_NONCE == LPARA_NONCE_CSR) & ~reg_run_nonce[0]))) |", "((PARA_ECDSA_NONCE == LPARA_NONCE_CSR)))) |", 'DEC-031 random nonce only when selected'),
@@ -65,7 +66,12 @@ M = [
     ('M25', CTL, "assign o_irq_sts     = i_irq_raw & i_irq_en;", "assign o_irq_sts     = i_irq_raw;", 'section 6.4 the mask of the events'),
     ('M26', CTL, "assign o_alarm       = (i_alarm_flags != 3'd0);", "assign o_alarm       = (i_alarm_flags != 3'd0) & (i_irq_en != 3'd0);", 'section 6.4 the alarm is not maskable'),
     ('M27', CTL, "w_f_opuns = w_f_opuns | ~PARA_CAP_SIGN[w_alg_idx5];", "w_f_opuns = w_f_opuns | 1'b0;", 'ERR-002 signing not built'),
-    ('M28', CTL, "if ((w_is_ecdsa | w_is_mldsa) & (reg_run_len_msg != w_dig_len))", "if ((w_is_ecdsa) & (reg_run_len_msg != w_dig_len))", 'ERR-003 prehash digest length of ML-DSA'),
+    ('M28', CTL, "if ((w_is_ecdsa | w_is_mldsa | (w_alg32 == LPARA_ALG_SLHDSA)) & (reg_run_len_msg != w_dig_len))",
+     "if ((w_is_ecdsa | (w_alg32 == LPARA_ALG_SLHDSA)) & (reg_run_len_msg != w_dig_len))", 'ERR-003 prehash digest length of ML-DSA'),
+    ('M29', CTL, "casez ({i_cmd_abort, i_rng_tmo, i_rng_done})\n          3'b1??:  w_fsm_ctl_nxt_state = ENUM_ST_CLEAR;",
+     "casez ({i_cmd_abort, i_rng_tmo, i_rng_done})\n          3'b1??:  w_fsm_ctl_nxt_state = ENUM_ST_RNG;", 'REQ-SEC-005 abort in ENUM_ST_RNG'),
+    ('M30', CTL, "casez ({i_cmd_abort, i_vas_done, i_vas_ok})\n          3'b1??:  w_fsm_ctl_nxt_state = ENUM_ST_CLEAR;",
+     "casez ({i_cmd_abort, i_vas_done, i_vas_ok})\n          3'b1??:  w_fsm_ctl_nxt_state = ENUM_ST_VAS;", 'REQ-SEC-005 abort in ENUM_ST_VAS'),
     ('B01', BUF, "w_wr_strb = i_axi_wr_strb;", "w_wr_strb = '1;", 'REQ-IF-002 byte strobes'),
     ('B02', BUF, "LPARA_WIN_STEP = 4", "LPARA_WIN_STEP = 8", 'section 10.5 window address adds 4'),
     ('B03', BUF, "assign o_win_rd_data  = {LPARA_GRP_W{~i_busy}} & reg_win_rd_data;", "assign o_win_rd_data  = reg_win_rd_data;", 'section 10.5 window read data are 0 while busy'),
@@ -172,13 +178,22 @@ def main():
                 results[mid] = ('CAUGHT' if caught else 'SURVIVED', nf, na, first, why)
                 print('%s %s (%d failed checks, %d assertion failures) %s' % (mid, results[mid][0], nf, na, first[:100]))
     print('time %d s' % (time.time() - t0))
+    if sel and os.path.exists(REPORT):
+        # keep the rows of the mutants that were not run this time
+        for line in open(REPORT, encoding='utf-8'):
+            c = [x.strip() for x in line.split('|')]
+            if len(c) > 6 and re.match(r'^[MB][0-9]{2}$', c[1]) and c[1] not in sel:
+                results[c[1]] = (c[3], int(c[4]), int(c[5]), c[6], c[2])
+        todo = list(M)
     ids = [m[0] for m in todo]
     caught = sum(1 for i in ids if results.get(i, ('',))[0] == 'CAUGHT')
     with open(REPORT, 'w', encoding='utf-8') as f:
         f.write('# Mutation run of the phase 1 testbench\n\n')
         f.write('Bugs injected into copies of the RTL (the delivered RTL is unchanged). CAUGHT = a failed check or assertion other than an\n')
         f.write('OPEN-n check (decision of the designer pending) or a run that did not finish.\n\n')
-        f.write('Caught %d of %d.\n\n' % (caught, len(ids)))
+        note = (' %s were run in a later call (pattern corrected or test added); the others come from the previous full run.'
+                % ', '.join(sel)) if sel else ''
+        f.write('Caught %d of %d.%s\n\n' % (caught, len(ids), note))
         f.write('| ID | Requirement broken | Result | Failed checks | Assertion failures | First failure |\n|---|---|---|---:|---:|---|\n')
         for i in ids:
             r = results.get(i)

@@ -96,6 +96,18 @@ MUTANTS = [
      'host_ulpi_axim_ts16', ['gen_fi_ocp.py', 'ulpi'], 't_host_ulpi_ocp', 'DrvVbusExternal never written: the PHY cannot drive its CPEN pin'),
     ('M34', 'BUG-051', 'm_usb2_spd.sv', [("reg_speed <= (reg_speed == 2'd2) ? 2'd2 : 2'd1;", "reg_speed <= (i_linestate == 2'b10) ? 2'd2 : 2'd1;")],
      'host_utmi8_axim_ts16', ['gen_host_conn.py', 'ls', 'ts16'], 't_host_conn', 'speed sampled from the SE0 line at the reset end: a low-speed device becomes a full-speed port'),
+    ('M35', 'DEC-049', 'm_usb2_utmilp.sv', [("assign o_wake       = reg_wake;", "assign o_wake       = 1'b0;")],
+     'dev_utmi8_axim', ['gen_dir_clkstop.py', 'dev'], 't_dir_clkstop', 'UTMI+ wake detector off: no SuspendM without CLK-PHY (FND-015)'),
+    ('M36', 'DEC-049', 'm_usb2_utmilp.sv', [("LPARA_UTMILP_FLT    = 4,", "LPARA_UTMILP_FLT    = 1,")],
+     'dev_utmi8_axim', ['gen_dir_clkstop.py', 'dev'], 't_dir_clkstop', 'no glitch filter: a 2-cycle K wakes the PHY'),
+    ('M37', 'DEC-049', 'm_usb2_utmilp.sv', [("casez ({(w_ls_sync != reg_idle), w_flt_end})", "casez ({1'b0, w_flt_end})")],
+     'dev_utmi8_axim', ['gen_dir_clkstop.py', 'dev'], 't_dir_clkstop', 'wake released before the engine took SuspendM and while the line is not idle'),
+    ('M38', 'DEC-049 Q2', 'm_usb2_spd.sv', [("4'b011?: w_fsm_hp_nxt_state = ENUM_ST_HP_RESM;", "4'b011?: w_fsm_hp_nxt_state = ENUM_ST_HP_SUSP;")],
+     'host_utmi8_axim_ts16', ['gen_dir_clkstop.py', 'hostrw', 'ts16'], 't_dir_clkstop', 'suspended host port ignores the remote-wake K'),
+    ('M39', 'DEC-049 Q3', 'm_usb2_spd.sv', [("(32'd1200 * PARA_USB2_CLK_MHZ)", "(32'd1600 * PARA_USB2_CLK_MHZ)")],
+     'dev_utmi8_axim', ['gen_dir_clkstop.py', 'devrst'], 't_dir_clkstop', 'device chirp 1.6 ms: ends after TUCHEND with a 5.6 ms PHY clock start'),
+    ('M40', 'BUG-053', 'm_usb2_spd.sv', [("    else if (~w_in_susp | (i_xreg_busy & (reg_sq != '0)))", "    else if (~w_in_susp)")],
+     'host_utmi8_axim_ts16', ['gen_dir_clkstop.py', 'host', 'ts16'], 't_dir_clkstop', 'SuspendM falls before the crossing pushed the suspend status'),
 ]
 
 SEEDS = {'M11': '3'}                                    # scenario seed of a mutant (default 1)

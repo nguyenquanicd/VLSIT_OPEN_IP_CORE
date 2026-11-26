@@ -817,6 +817,39 @@
       apb_expect("err after an abort of an idle IP", A_ERR, 32'h0);
       // The IP works after an abort
       set_default_op; o_alg = ALG_ED25519; o_op = OP_VRFY; run_op;
+      // An abort while the random block runs (ENUM_ST_RNG) and while verify-after-sign runs (ENUM_ST_VAS): the same
+      // outcome as in ENUM_ST_RUN (REQ-SEC-005, section 12); ECDSA P-256 signing with a random nonce passes both states
+      k_rng_lat = 400;
+      set_default_op; o_alg = ALG_P256; o_op = OP_SIGN;
+      clr_all; clear_flags; clear_counters; program_op; write_keys;
+      cmd_start;
+      cyc(80);
+      ck(n_rng_start == 1 && n_eng_start0 + n_eng_start1 + n_eng_start2 == 0, "abort in RNG: the random block runs, no engine yet");
+      cmd_abort;
+      cyc(500);
+      apb_r(A_STS, d);
+      ck32("abort in RNG: busy 0 and no result", d, 32'h0);
+      apb_r(A_IRQ_RAW, d);
+      ck32("abort in RNG: neither done nor error", d, 32'h0);
+      apb_expect("abort in RNG: no error flag", A_ERR, 32'h0);
+      ck(w_keys_nz === 1'b0, "abort in RNG: key words cleared");
+      ck(n_eng_start0 + n_eng_start1 + n_eng_start2 == 0, "abort in RNG: the engine is never started");
+      k_rng_lat = 6; k_vas_lat = 400;
+      set_default_op; o_alg = ALG_P256; o_op = OP_SIGN;
+      clr_all; clear_flags; clear_counters; program_op; write_keys;
+      cmd_start;
+      d = 0; while (n_vas_start == 0 && d < 2000) begin cyc(1); d = d + 1; end
+      cyc(20);
+      ck(n_vas_start == 1, "abort in VAS: verify-after-sign started");
+      cmd_abort;
+      cyc(500);
+      apb_r(A_STS, d);
+      ck32("abort in VAS: busy 0 and no result (signature suppressed)", d, 32'h0);
+      apb_r(A_IRQ_RAW, d);
+      ck32("abort in VAS: neither done nor error", d, 32'h0);
+      apb_expect("abort in VAS: no error flag", A_ERR, 32'h0);
+      ck(w_keys_nz === 1'b0, "abort in VAS: key words cleared");
+      k_vas_lat = 5;
       // Reset during an operation: no result, secrets cleared, registers at reset values (REQ-RESET-002)
       k_eng_lat = 300;
       set_default_op; o_alg = ALG_ED25519; o_op = OP_SIGN;
@@ -1027,6 +1060,7 @@
       apb_w(A_IRQ_EN, 32'h7);
       apb_w(A_IRQ_INJ, 32'h4);
       cyc(10);
+      apb_expect("dsig_irq_inj (rw) reads back the written bits", A_IRQ_INJ, 32'h4);
       apb_expect("injection raises irq_raw.sec", A_IRQ_RAW, 32'h4);
       ck(irq === 1'b1, "o_irq high for an injected enabled event");
       apb_w(A_IRQ_RAW, 32'h4);
